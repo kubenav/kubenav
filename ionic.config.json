@@ -1,0 +1,7 @@
+{
+  "name": "kubenav",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

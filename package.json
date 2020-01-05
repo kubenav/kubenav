@@ -1,0 +1,69 @@
+{
+  "name": "kubenav",
+  "version": "1.0.0",
+  "description": "kubenav - The navigator for your Kubernetes clusters.",
+  "author": "Rico Berger",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kubenav/kubenav.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kubenav/kubenav/issues"
+  },
+  "homepage": "https://kubenav.io",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "postinstall": "cd electron && npm install",
+    "server": "node scripts/server.js",
+    "resources": "cordova-res ios --splash-source resources/ios/splash.png --icon-source resources/ios/icon.png && cordova-res android --splash-source resources/android/splash.png --icon-source resources/android/icon.png --icon-background-source '#326ce5' && node scripts/resources.js"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@capacitor/android": "^1.4.0",
+    "@capacitor/core": "^1.4.0",
+    "@capacitor/ios": "^1.4.0",
+    "@ionic/react": "^4.11.7",
+    "@ionic/react-hooks": "0.0.5",
+    "@ionic/react-router": "^4.11.7",
+    "@kubenav/kubenav-plugin": "1.0.0",
+    "@kubernetes/client-node": "^0.11.0",
+    "@types/jest": "^24.0.24",
+    "@types/node": "^12.12.21",
+    "@types/react": "^16.9.16",
+    "@types/react-dom": "^16.9.1",
+    "@types/react-router": "^5.1.1",
+    "@types/react-router-dom": "^5.1.3",
+    "fast-json-patch": "^3.0.0-1",
+    "ionicons": "^4.6.3",
+    "js-yaml": "^3.13.1",
+    "react": "^16.10.2",
+    "react-ace": "^8.0.0",
+    "react-dom": "^16.10.2",
+    "react-router": "^5.1.0",
+    "react-router-dom": "^5.1.0",
+    "react-scripts": "3.3.0",
+    "typescript": "3.7.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^1.4.0",
+    "cordova-res": "^0.8.1"
+  }
+}

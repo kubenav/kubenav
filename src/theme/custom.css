@@ -1,0 +1,79 @@
+/* Set same height for cards */
+.default--card-equal-height {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 10px - 10px);
+}
+
+.default--card-equal-height .card-footer {
+  margin-top: auto;
+}
+
+.ios--card-equal-height {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 24px - 24px);
+}
+
+.ios-default--card-equal-height .card-footer {
+  margin-top: auto;
+}
+
+/* Lists without margin */
+.no-margin-list {
+  margin: 0;
+}
+
+/* Delete button */
+.delete-button {
+  color: var(--ion-color-danger) !important;
+}
+
+/* Unset the height for the chip component */
+.unset-chip-height {
+  height: unset;
+}
+
+/* Add bottom margin for p tag */
+.paragraph-margin-bottom {
+  margin-bottom: 20px !important;
+}
+
+/* Table */
+table {
+  min-width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 5px;
+  border-right: 1px solid var(--ion-color-light);
+  white-space: nowrap;
+}
+
+th:last-child, td:last-child {
+  border-right: none;
+}
+
+th {
+  border-bottom: 1px solid var(--ion-color-light);
+}
+
+.table {
+  padding: 5px;
+  overflow-x: auto;
+}
+
+/* Scroll to bottom button in editor */
+.editor-scroll-to-bottom-button {
+  position: absolute;
+  z-index: 999;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Segment wrapper */
+.segment-wrapper {
+  padding: 8px 16px;
+}

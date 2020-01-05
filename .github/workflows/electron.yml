@@ -1,0 +1,53 @@
+name: Electron
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    name: Build Electron Apps
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - name: Get Version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+          registry-url: 'https://npm.pkg.github.com'
+
+      - name: Install Ionic
+        run: |
+          npm install -g ionic
+
+      - name: Install Dependencies
+        run: |
+          npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.TOKEN }}
+
+      - name: Build Ionic App
+        run: |
+          ionic build
+        env:
+          REACT_APP_VERSION: ${{ steps.get_version.outputs.VERSION }}
+
+      - name: Update Electron App
+        run: |
+          npx cap sync electron
+
+      - name: Build and Publish Electron App
+        run: |
+          cd electron
+          npm run electron:release
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN }}

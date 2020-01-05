@@ -1,0 +1,92 @@
+{
+  "name": "kubenav",
+  "version": "1.0.0",
+  "description": "kubenav - The navigator for your Kubernetes clusters.",
+  "author": "Rico Berger",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kubenav/kubenav.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kubenav/kubenav/issues"
+  },
+  "homepage": "https://kubenav.io",
+  "main": "index.js",
+  "scripts": {
+    "electron:start": "electron ./",
+    "electron:build": "electron-builder",
+    "electron:release": "electron-builder --publish always"
+  },
+  "build": {
+    "appId": "io.kubenav.kubenav",
+    "artifactName": "${productName}-${version}-${platform}-amd64.${ext}",
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "tar.gz",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "tar.gz",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "tar.gz",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "vPrefixedTagName": false,
+        "releaseType": "release",
+        "publishAutoUpdate": false
+      }
+    ]
+  },
+  "dependencies": {
+    "@capacitor/electron": "^1.4.0",
+    "cors": "^2.8.5",
+    "electron-is-dev": "^1.1.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "electron": "^7.0.0",
+    "electron-builder": "^21.2.0"
+  }
+}

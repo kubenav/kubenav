@@ -1,0 +1,36 @@
+name: Changelog
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    name: Generate Changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Generate Changelog
+        uses: charmixer/auto-changelog-action@master
+        with:
+          token: ${{ secrets.TOKEN }}
+
+      - name: Commit
+        run: |
+          git config --local user.email "$CI_EMAIL"
+          git config --local user.name "$CI_USER"
+          git add CHANGELOG.md && git commit -m 'Updated CHANGELOG.md' && echo ::set-env name=push::1 || echo "No changes to CHANGELOG.md"
+        env:
+          CI_USER: ${{ secrets.GITHUB_USER }}
+          CI_EMAIL: ${{ secrets.GITHUB_EMAIL }}
+
+      - name: Push
+        if: env.push == 1
+        run: |
+          git push "https://$CI_USER:$CI_TOKEN@github.com/$GITHUB_REPOSITORY.git" HEAD:master
+        env:
+          CI_USER: ${{ secrets.GITHUB_USER }}
+          CI_TOKEN: ${{ secrets.TOKEN }}
