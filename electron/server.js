@@ -16,6 +16,7 @@ server.post('/request', function (req, res) {
   const postData = req.body;
 
   const options = {
+    method: postData.method,
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -62,7 +63,8 @@ server.post('/request', function (req, res) {
     res.json(error);
   });
 
-  request.end()
+  request.write(postData.body);
+  request.end();
 });
 
 module.exports = server;
