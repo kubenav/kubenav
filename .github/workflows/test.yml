@@ -30,6 +30,12 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.TOKEN }}
 
+      # - name: Test
+      #   run: |
+      #     npm run test
+      #   env:
+      #     CI: true
+
       - name: Lint
         run: |
           npm run lint
