@@ -1,0 +1,43 @@
+name: Test, Lint, Build
+
+on: [pull_request]
+
+jobs:
+  test:
+    name: Test, Lint, Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+          registry-url: 'https://npm.pkg.github.com'
+
+      - name: Install Ionic
+        run: |
+          npm install -g ionic
+
+      - name: Install Dependencies
+        run: |
+          npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.TOKEN }}
+
+      - name: Lint
+        uses: mooyoul/tslint-actions@v1.1.1
+        with:
+          token: ${{ secrets.TOKEN }}
+          pattern: 'src/**/*'
+
+      - name: Build
+        run: |
+          ionic build
+        env:
+          REACT_APP_VERSION: ${{ steps.get_version.outputs.VERSION }}
