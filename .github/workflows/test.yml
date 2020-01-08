@@ -37,8 +37,14 @@ jobs:
       #     CI: true
 
       - name: Lint
-        run: |
-          npm run lint
+        uses: mooyoul/tslint-actions@v1.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: 'src/**/*{.ts,.tsx}'
+
+      # - name: Lint
+      #   run: |
+      #     npm run lint
 
       - name: Build
         run: |
