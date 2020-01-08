@@ -18,7 +18,7 @@ import ItemOptions from '../components/kubernetes/ItemOptions';
 import CustomResourceItem from '../components/kubernetes/items/CustomResourceItem';
 import NamespacePopover from '../components/kubernetes/NamespacePopover';
 import { AppContext } from '../context';
-import { Context } from '../declarations';
+import { IContext } from '../declarations';
 
 interface IMatchParams {
   group: string;
@@ -33,7 +33,7 @@ const getURL = (namespace: string, group: string, version: string, name: string)
 };
 
 const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageProps> = ({ match }) => {
-  const context = useContext<Context>(AppContext);
+  const context = useContext<IContext>(AppContext);
 
   const [error, setError] = useState<string>('');
   const [showLoading, setShowLoading] = useState<boolean>(false);

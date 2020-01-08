@@ -16,7 +16,7 @@ import yaml from 'js-yaml';
 import React, { useContext, useState } from 'react';
 
 import { AppContext } from '../../context';
-import { Context } from '../../declarations';
+import { IContext } from '../../declarations';
 import Editor from '../misc/Editor';
 
 interface IEditItemProps {
@@ -25,7 +25,7 @@ interface IEditItemProps {
 }
 
 const EditItem: React.FunctionComponent<IEditItemProps> = ({ item, url }) => {
-  const context = useContext<Context>(AppContext);
+  const context = useContext<IContext>(AppContext);
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [error, setError] = useState<string>('');

@@ -12,16 +12,16 @@ import {
 import { V1NodeAffinity, V1PodAffinity, V1PodAntiAffinity } from '@kubernetes/client-node'
 import { close } from 'ionicons/icons';
 import yaml from 'js-yaml';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 
 import Editor from '../misc/Editor';
 
-interface AffinityProps {
+interface IAffinityProps {
   title: string
   affinity: V1NodeAffinity | V1PodAffinity | V1PodAntiAffinity;
 }
 
-const Affinity: React.FunctionComponent<AffinityProps> = ({ title, affinity }) => {
+const Affinity: React.FunctionComponent<IAffinityProps> = ({ title, affinity }) => {
   const [showModal, setShowModal] = useState(false);
 
   return (

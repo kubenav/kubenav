@@ -7,21 +7,21 @@ import {
 import { V1Container, V1ContainerStatus } from '@kubernetes/client-node'
 import React from 'react';
 
-import { ContainerMetrics } from '../../declarations';
+import { IContainerMetrics } from '../../declarations';
 import IonCardEqualHeight from '../misc/IonCardEqualHeight';
 import Container from './Container';
 
-interface ContainersProps {
+interface IContainersProps {
   containers: V1Container[];
   logs?: boolean;
-  metrics?: ContainerMetrics[];
+  metrics?: IContainerMetrics[];
   name?: string;
   namespace?: string;
   statuses?: V1ContainerStatus[];
   title: string;
 }
 
-const Containers: React.FunctionComponent<ContainersProps> = ({ containers, logs, metrics, name, namespace, statuses, title }) => {
+const Containers: React.FunctionComponent<IContainersProps> = ({ containers, logs, metrics, name, namespace, statuses, title }) => {
   const getContainerStatus = (name: string, containerStatuses: V1ContainerStatus[]): V1ContainerStatus|undefined => {
     if (containerStatuses.filter((containerStatus) => containerStatus.name === name).length === 1) {
       return containerStatuses.filter((containerStatus) => containerStatus.name === name)[0];
@@ -30,7 +30,7 @@ const Containers: React.FunctionComponent<ContainersProps> = ({ containers, logs
     return undefined
   };
 
-  const getContainerMetrics = (name: string, containerMetrics: ContainerMetrics[]): ContainerMetrics|undefined => {
+  const getContainerMetrics = (name: string, containerMetrics: IContainerMetrics[]): IContainerMetrics|undefined => {
     if (containerMetrics.filter((containerMetric) => containerMetric.name === name).length === 1) {
       return containerMetrics.filter((containerMetric) => containerMetric.name === name)[0];
     }

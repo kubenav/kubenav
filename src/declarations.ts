@@ -12,7 +12,7 @@ import {
 } from '@kubernetes/client-node';
 import React from 'react';
 
-export interface AppPage {
+export interface IAppPage {
   icon: string;
   singleText: string;
   pluralText: string;
@@ -22,20 +22,20 @@ export interface AppPage {
   detailsComponent: React.FunctionComponent<any>;
 }
 
-export interface AppPages {
-  [key: string]: AppPage
+export interface IAppPages {
+  [key: string]: IAppPage
 }
 
-export interface AppSection {
+export interface IAppSection {
   title: string;
-  pages: AppPages;
+  pages: IAppPages;
 }
 
-export interface AppSections {
-  [key: string]: AppSection
+export interface IAppSections {
+  [key: string]: IAppSection
 }
 
-export interface Cluster {
+export interface ICluster {
   id: string;
   name: string;
   url: string;
@@ -46,96 +46,96 @@ export interface Cluster {
   namespace: string;
 }
 
-export interface Clusters {
-  [key: string]: Cluster;
+export interface IClusters {
+  [key: string]: ICluster;
 }
 
-export interface ContainerMetrics {
+export interface IContainerMetrics {
   'name'?: string;
-  'usage'?: MetricsUsage;
+  'usage'?: IMetricsUsage;
 }
 
-export interface Context {
-  clusters: Clusters;
+export interface IContext {
+  clusters: IClusters;
   cluster: string;
 
-  addCluster: (newCluster: Cluster) => void;
+  addCluster: (newCluster: ICluster) => void;
   changeCluster: (id: string) => void;
   deleteCluster: (id: string) => void;
-  editCluster: (editCluster: Cluster) => void;
+  editCluster: (editCluster: ICluster) => void;
   setNamespace: (namespace: string) => void;
   request: (method: string, url: string, body: string) => Promise<any>;
 }
 
-export interface Kubeconfig {
-  clusters: KubeconfigClusterRef[];
-  contexts: KubeconfigContextRef[];
-  users: KubeconfigUserRef[];
+export interface IKubeconfig {
+  clusters: IKubeconfigClusterRef[];
+  contexts: IKubeconfigContextRef[];
+  users: IKubeconfigUserRef[];
 }
 
-export interface KubeconfigCluster {
+export interface IKubeconfigCluster {
   'certificate-authority-data': string;
   server: string;
 }
 
-export interface KubeconfigClusterRef {
-  cluster: KubeconfigCluster;
+export interface IKubeconfigClusterRef {
+  cluster: IKubeconfigCluster;
   name: string;
 }
 
-export interface KubeconfigContextRef {
-  context: KubeconfigContext;
+export interface IKubeconfigContextRef {
+  context: IKubeconfigContext;
   name: string;
 }
 
-export interface KubeconfigContext {
+export interface IKubeconfigContext {
   cluster: string;
   user: string;
 }
 
-export interface KubeconfigUser {
+export interface IKubeconfigUser {
   'client-certificate-data'?: string;
   'client-key-data'?: string;
   token?: string
 }
 
-export interface KubeconfigUserRef {
+export interface IKubeconfigUserRef {
   name: string;
-  user: KubeconfigUser;
+  user: IKubeconfigUser;
 }
 
-export interface MetricsUsage {
+export interface IMetricsUsage {
   [key: string]: string;
 }
 
-export interface NodeMetrics {
+export interface INodeMetrics {
   'apiVersion'?: string;
   'metadata'?: V1ObjectMeta;
   'timestamp'?: Date;
   'window'?: number;
-  'usage'?: MetricsUsage;
+  'usage'?: IMetricsUsage;
 }
 
-export interface NodeMetricsList {
+export interface INodeMetricsList {
   'apiVersion'?: string;
-  'items': Array<NodeMetrics>;
+  'items': Array<INodeMetrics>;
   'kind'?: string;
   'metadata'?: V1ListMeta;
 }
 
-export interface PodMetrics {
+export interface IPodMetrics {
   'apiVersion'?: string;
   'metadata'?: V1ObjectMeta;
   'timestamp'?: Date;
   'window'?: number;
-  'containers'?: Array<ContainerMetrics>;
+  'containers'?: Array<IContainerMetrics>;
 }
 
-export interface PodMetricsList {
+export interface IPodMetricsList {
   'apiVersion'?: string;
-  'items': Array<PodMetrics>;
+  'items': Array<IPodMetrics>;
   'kind'?: string;
   'metadata'?: V1ListMeta;
 }
 
-export type Condition = V1DeploymentCondition | V1JobCondition | V1NodeCondition | V1PodCondition | V1PersistentVolumeClaimCondition | V1ReplicaSetCondition | V1ReplicationControllerCondition | V1StatefulSetCondition;
+export type TCondition = V1DeploymentCondition | V1JobCondition | V1NodeCondition | V1PodCondition | V1PersistentVolumeClaimCondition | V1ReplicaSetCondition | V1ReplicationControllerCondition | V1StatefulSetCondition;

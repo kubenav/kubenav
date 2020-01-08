@@ -53,9 +53,9 @@ import EventItem from './components/kubernetes/items/EventItem';
 import NamespaceItem from './components/kubernetes/items/NamespaceItem';
 import NodeItem from './components/kubernetes/items/NodeItem';
 
-import { AppSections } from './declarations';
+import { IAppSections } from './declarations';
 
-export const sections: AppSections = {
+export const sections: IAppSections = {
   'workloads': {
     title: 'Workloads',
     pages: {

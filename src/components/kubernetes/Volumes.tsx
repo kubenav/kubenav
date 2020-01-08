@@ -11,11 +11,11 @@ import React from 'react';
 import IonCardEqualHeight from '../misc/IonCardEqualHeight';
 import Volume from './Volume';
 
-interface VolumesProps {
+interface IVolumesProps {
   volumes: V1Volume[];
 }
 
-const Volumes: React.FunctionComponent<VolumesProps> = ({ volumes }) => {
+const Volumes: React.FunctionComponent<IVolumesProps> = ({ volumes }) => {
   return (
     <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
       <IonCardEqualHeight>

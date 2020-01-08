@@ -8,13 +8,13 @@ import { RouteComponentProps } from 'react-router';
 
 import ItemStatus from '../ItemStatus';
 
-interface DaemonSetItemProps extends RouteComponentProps {
+interface IDaemonSetItemProps extends RouteComponentProps {
   item: V1DaemonSet;
   section: string;
   type: string;
 }
 
-const DaemonSetItem: React.FunctionComponent<DaemonSetItemProps> = ({ item, section, type }) => {
+const DaemonSetItem: React.FunctionComponent<IDaemonSetItemProps> = ({ item, section, type }) => {
   let status = '';
 
   if (item.status) {

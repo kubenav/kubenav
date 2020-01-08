@@ -13,13 +13,13 @@ import List from '../List';
 import Metadata from '../Metadata';
 import Row from '../Row';
 
-interface CronJobProps extends RouteComponentProps {
+interface ICronJobProps extends RouteComponentProps {
   item: V1beta1CronJob;
   section: string;
   type: string;
 }
 
-const CronJob: React.FunctionComponent<CronJobProps> = ({ item, type }) => {
+const CronJob: React.FunctionComponent<ICronJobProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>

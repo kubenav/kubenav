@@ -9,13 +9,13 @@ import { RouteComponentProps } from 'react-router';
 import { timeDifference } from '../../../utils';
 import { eventSource } from '../details/Event';
 
-interface EventItemProps extends RouteComponentProps {
+interface IEventItemProps extends RouteComponentProps {
   item: V1Event;
   section: string;
   type: string;
 }
 
-const EventItem: React.FunctionComponent<EventItemProps> = ({ item, section, type }) => {
+const EventItem: React.FunctionComponent<IEventItemProps> = ({ item, section, type }) => {
   return (
     <IonItem routerLink={`/kubernetes/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <IonLabel>

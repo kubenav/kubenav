@@ -6,13 +6,13 @@ import { V1RoleBinding } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-interface RoleBindingItemProps extends RouteComponentProps {
+interface IRoleBindingItemProps extends RouteComponentProps {
   item: V1RoleBinding;
   section: string;
   type: string;
 }
 
-const RoleBindingItem: React.FunctionComponent<RoleBindingItemProps> = ({ item, section, type }) => {
+const RoleBindingItem: React.FunctionComponent<IRoleBindingItemProps> = ({ item, section, type }) => {
   return (
     <IonItem routerLink={`/kubernetes/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <IonLabel>

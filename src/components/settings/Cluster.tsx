@@ -10,7 +10,7 @@ import { radioButtonOff, radioButtonOn, trash } from 'ionicons/icons';
 import React, {useContext, useEffect, useState} from 'react';
 
 import { AppContext } from '../../context';
-import { Cluster as ICluster, Context} from '../../declarations';
+import { ICluster, IContext} from '../../declarations';
 import EditCluster from './EditCluster';
 
 interface IClusterProps {
@@ -18,7 +18,7 @@ interface IClusterProps {
 }
 
 const Cluster: React.FunctionComponent<IClusterProps> = ({ cluster }) => {
-  const context = useContext<Context>(AppContext);
+  const context = useContext<IContext>(AppContext);
 
   const [status, setStatus] = useState<boolean>(false);
 

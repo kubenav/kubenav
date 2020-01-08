@@ -12,7 +12,7 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 
 import { AppContext } from '../../context';
-import { Context } from '../../declarations';
+import { IContext } from '../../declarations';
 import { sections } from '../../sections';
 
 interface IListProps {
@@ -25,7 +25,7 @@ interface IListProps {
 }
 
 const List: React.FunctionComponent<IListProps> = ({ name, section, type, namespace, selector, filter }) => {
-  const context = useContext<Context>(AppContext);
+  const context = useContext<IContext>(AppContext);
 
   const page = sections[section].pages[type];
   const Component = page.listItemComponent;

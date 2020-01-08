@@ -8,13 +8,13 @@ import { RouteComponentProps } from 'react-router';
 
 import ItemStatus from '../ItemStatus';
 
-interface ReplicationControllerItemProps extends RouteComponentProps {
+interface IReplicationControllerItemProps extends RouteComponentProps {
   item: V1ReplicationController;
   section: string;
   type: string;
 }
 
-const ReplicationControllerItem: React.FunctionComponent<ReplicationControllerItemProps> = ({ item, section, type }) => {
+const ReplicationControllerItem: React.FunctionComponent<IReplicationControllerItemProps> = ({ item, section, type }) => {
   let status = '';
 
   if (item.status) {

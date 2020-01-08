@@ -10,11 +10,11 @@ import Containers from './Containers';
 import Tolerations from './Tolerations';
 import Volumes from './Volumes';
 
-interface PodTemplateProps {
+interface IPodTemplateProps {
   template: V1PodTemplateSpec;
 }
 
-const PodTemplate: React.FunctionComponent<PodTemplateProps> = ({ template }) => {
+const PodTemplate: React.FunctionComponent<IPodTemplateProps> = ({ template }) => {
   return (
     <React.Fragment>
       <IonItemDivider>

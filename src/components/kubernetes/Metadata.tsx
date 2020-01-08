@@ -15,12 +15,12 @@ import React from 'react';
 import { isNamespaced, timeDifference } from '../../utils';
 import Row from './Row';
 
-interface MetadataProps {
+interface IMetadataProps {
   metadata: V1ObjectMeta;
   type: string;
 }
 
-const Metadata: React.FunctionComponent<MetadataProps> = ({ metadata, type }) => {
+const Metadata: React.FunctionComponent<IMetadataProps> = ({ metadata, type }) => {
   return (
     <IonRow>
       <IonCol>

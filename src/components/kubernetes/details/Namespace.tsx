@@ -10,13 +10,13 @@ import Metadata from '../Metadata';
 import Row from '../Row';
 import Status from '../Status';
 
-interface NamespaceProps extends RouteComponentProps {
+interface INamespaceProps extends RouteComponentProps {
   item: V1Namespace;
   section: string;
   type: string;
 }
 
-const Namespace: React.FunctionComponent<NamespaceProps> = ({ item, type }) => {
+const Namespace: React.FunctionComponent<INamespaceProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>

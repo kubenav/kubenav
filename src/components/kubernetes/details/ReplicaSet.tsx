@@ -16,13 +16,13 @@ import PodTemplate from '../PodTemplate';
 import Row from '../Row';
 import Status from '../Status';
 
-interface ReplicaSetProps extends RouteComponentProps {
+interface IReplicaSetProps extends RouteComponentProps {
   item: V1ReplicaSet;
   section: string;
   type: string;
 }
 
-const ReplicaSet: React.FunctionComponent<ReplicaSetProps> = ({ item, type }) => {
+const ReplicaSet: React.FunctionComponent<IReplicaSetProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>

@@ -6,15 +6,15 @@ import {
 } from '@ionic/react';
 import React from 'react';
 
-import { Condition as TCondition } from '../../declarations';
+import { TCondition } from '../../declarations';
 import { getProperty, timeDifference } from '../../utils';
 import IonCardEqualHeight from '../misc/IonCardEqualHeight';
 
-interface PodConditionsProps {
+interface IPodConditionsProps {
   conditions: TCondition[];
 }
 
-const Conditions: React.FunctionComponent<PodConditionsProps> = ({ conditions }) => {
+const Conditions: React.FunctionComponent<IPodConditionsProps> = ({ conditions }) => {
   return (
     <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
       <IonCardEqualHeight>

@@ -16,13 +16,13 @@ import PodTemplate from '../PodTemplate';
 import Row from '../Row';
 import Status from '../Status';
 
-interface StatefulSetProps extends RouteComponentProps {
+interface IStatefulSetProps extends RouteComponentProps {
   item: V1StatefulSet;
   section: string;
   type: string;
 }
 
-const StatefulSet: React.FunctionComponent<StatefulSetProps> = ({ item, type }) => {
+const StatefulSet: React.FunctionComponent<IStatefulSetProps> = ({ item, type }) => {
   const updateStrategy = (strategy: V1StatefulSetUpdateStrategy): string => {
     if (strategy.rollingUpdate && strategy.rollingUpdate.partition) {
       return `${strategy.type ? `${strategy.type}: ` : ''}Partition ${strategy.rollingUpdate.partition}`;

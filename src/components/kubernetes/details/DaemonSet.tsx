@@ -16,13 +16,13 @@ import PodTemplate from '../PodTemplate';
 import Row from '../Row';
 import Status from '../Status';
 
-interface DaemonSetProps extends RouteComponentProps {
+interface IDaemonSetProps extends RouteComponentProps {
   item: V1DaemonSet;
   section: string;
   type: string;
 }
 
-const DaemonSet: React.FunctionComponent<DaemonSetProps> = ({ item, type }) => {
+const DaemonSet: React.FunctionComponent<IDaemonSetProps> = ({ item, type }) => {
   const updateStrategy = (strategy: V1DaemonSetUpdateStrategy): string => {
     if (strategy.rollingUpdate && strategy.rollingUpdate.maxUnavailable) {
       return `${strategy.type ? `${strategy.type}: ` : ''}Max Unavailable ${strategy.rollingUpdate.maxUnavailable}`;

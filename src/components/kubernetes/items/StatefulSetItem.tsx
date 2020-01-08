@@ -8,13 +8,13 @@ import { RouteComponentProps } from 'react-router';
 
 import ItemStatus from '../ItemStatus';
 
-interface StatefulSetItemProps extends RouteComponentProps {
+interface IStatefulSetItemProps extends RouteComponentProps {
   item: V1StatefulSet;
   section: string;
   type: string;
 }
 
-const StatefulSetItem: React.FunctionComponent<StatefulSetItemProps> = ({ item, section, type }) => {
+const StatefulSetItem: React.FunctionComponent<IStatefulSetItemProps> = ({ item, section, type }) => {
   let status = '';
 
   if (item.status) {

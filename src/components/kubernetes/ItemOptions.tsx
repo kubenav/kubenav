@@ -7,12 +7,12 @@ import React from 'react';
 import DeleteItem from './DeleteItem';
 import EditItem from './EditItem';
 
-interface ItemOptionsProps {
+interface IItemOptionsProps {
   item: any;
   url: string;
 }
 
-const ItemOptions: React.FunctionComponent<ItemOptionsProps> = ({ item, url, children }) => {
+const ItemOptions: React.FunctionComponent<IItemOptionsProps> = ({ item, url, children }) => {
   return (
     <IonItemSliding>
       {children}

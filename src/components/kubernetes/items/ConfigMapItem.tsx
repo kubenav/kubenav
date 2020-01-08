@@ -6,13 +6,13 @@ import { V1ConfigMap } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-interface ConfigMapItemProps extends RouteComponentProps {
+interface IConfigMapItemProps extends RouteComponentProps {
   item: V1ConfigMap;
   section: string;
   type: string;
 }
 
-const ConfigMapItem: React.FunctionComponent<ConfigMapItemProps> = ({ item, section, type }) => {
+const ConfigMapItem: React.FunctionComponent<IConfigMapItemProps> = ({ item, section, type }) => {
   return (
     <IonItem routerLink={`/kubernetes/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <IonLabel>

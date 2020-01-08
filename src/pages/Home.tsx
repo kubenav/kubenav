@@ -18,11 +18,11 @@ import React, {useContext} from 'react';
 
 import Sections from '../components/misc/Sections';
 import { AppContext } from '../context';
-import { Context } from '../declarations';
+import { IContext } from '../declarations';
 import { sections } from '../sections';
 
 const Home: React.FunctionComponent = () => {
-  const context = useContext<Context>(AppContext);
+  const context = useContext<IContext>(AppContext);
 
   return (
     <IonPage>

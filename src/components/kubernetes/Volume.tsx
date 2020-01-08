@@ -16,11 +16,11 @@ import React, {useState} from 'react';
 
 import Editor from '../misc/Editor';
 
-interface VolumeProps {
+interface IVolumeProps {
   volume: V1Volume;
 }
 
-const Volume: React.FunctionComponent<VolumeProps> = ({ volume }) => {
+const Volume: React.FunctionComponent<IVolumeProps> = ({ volume }) => {
   const [showModal, setShowModal] = useState(false);
 
   let kind = '';

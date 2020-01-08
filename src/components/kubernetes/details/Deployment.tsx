@@ -17,13 +17,13 @@ import PodTemplate from '../PodTemplate';
 import Row from '../Row';
 import Status from '../Status';
 
-interface DeploymentProps extends RouteComponentProps {
+interface IDeploymentProps extends RouteComponentProps {
   item: V1Deployment;
   section: string;
   type: string;
 }
 
-const Deployment: React.FunctionComponent<DeploymentProps> = ({ item, type }) => {
+const Deployment: React.FunctionComponent<IDeploymentProps> = ({ item, type }) => {
   const updateStrategy = (strategy: V1DeploymentStrategy): string => {
     if (strategy.rollingUpdate && strategy.rollingUpdate.maxSurge && strategy.rollingUpdate.maxUnavailable) {
       return `${strategy.type ? `${strategy.type}: ` : ''}Max Surge ${strategy.rollingUpdate.maxSurge}, Max Unavailable ${strategy.rollingUpdate.maxUnavailable}`;

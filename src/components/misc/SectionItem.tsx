@@ -5,10 +5,10 @@ import {
 } from '@ionic/react';
 import React from 'react';
 
-import { AppPages } from '../../declarations';
+import { IAppPages } from '../../declarations';
 
 interface ISectionItemProps {
-  pages: AppPages;
+  pages: IAppPages;
   sectionKey: string;
   pageKey: string;
 }

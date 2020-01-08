@@ -21,22 +21,22 @@ import { close } from 'ionicons/icons';
 import yaml from 'js-yaml';
 import React, {useState} from 'react';
 
-import { ContainerMetrics } from '../../declarations';
+import { IContainerMetrics } from '../../declarations';
 import { formatResourceValue } from '../../utils';
 import Editor from '../misc/Editor';
 import Logs from './Logs';
 import Row from './Row';
 
-interface ContainerProps {
+interface IContainerProps {
   container: V1Container;
   logs?: boolean;
-  metrics?: ContainerMetrics;
+  metrics?: IContainerMetrics;
   name?: string;
   namespace?: string;
   status?: V1ContainerStatus;
 }
 
-const Container: React.FunctionComponent<ContainerProps> = ({ container, logs, metrics, name, namespace, status }) => {
+const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, metrics, name, namespace, status }) => {
   const [showModal, setShowModal] = useState(false);
 
   const containerState = (state: V1ContainerState): string => {

@@ -14,10 +14,10 @@ import { checkmark, options } from 'ionicons/icons';
 import React, {useContext, useEffect, useState} from 'react';
 
 import { AppContext } from '../../context';
-import { Context } from '../../declarations';
+import { IContext } from '../../declarations';
 
 const NamespacePopover: React.FunctionComponent = () => {
-  const context = useContext<Context>(AppContext);
+  const context = useContext<IContext>(AppContext);
 
   const [error, setError] = useState<string>('');
   const [showPopover, setShowPopover] = useState<boolean>(false);

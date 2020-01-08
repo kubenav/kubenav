@@ -1,5 +1,5 @@
 {
-  "defaultSeverity": "warning",
+  "defaultSeverity": "error",
   "extends": ["tslint-react"],
   "linterOptions": {
     "exclude": ["node_modules/**"]

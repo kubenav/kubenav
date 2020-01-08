@@ -13,13 +13,13 @@ import Editor from '../../misc/Editor';
 import List from '../List';
 import Metadata from '../Metadata';
 
-interface ClusterRoleProps extends RouteComponentProps {
+interface IClusterRoleProps extends RouteComponentProps {
   item: V1ClusterRole;
   section: string;
   type: string;
 }
 
-const ClusterRole: React.FunctionComponent<ClusterRoleProps> = ({ item, type }) => {
+const ClusterRole: React.FunctionComponent<IClusterRoleProps> = ({ item, type }) => {
   return (
     <IonGrid>
       {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}

@@ -14,13 +14,13 @@ import Metadata from '../Metadata';
 import Row from '../Row';
 import Status from '../Status';
 
-interface ServiceProps extends RouteComponentProps {
+interface IServiceProps extends RouteComponentProps {
   item: V1Service;
   section: string;
   type: string;
 }
 
-const Service: React.FunctionComponent<ServiceProps> = ({ item, type }) => {
+const Service: React.FunctionComponent<IServiceProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>

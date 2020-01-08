@@ -16,13 +16,13 @@ import PodTemplate from '../PodTemplate';
 import Row from '../Row';
 import Status from '../Status';
 
-interface ReplicationControllerProps extends RouteComponentProps {
+interface IReplicationControllerProps extends RouteComponentProps {
   item: V1ReplicationController;
   section: string;
   type: string;
 }
 
-const ReplicationController: React.FunctionComponent<ReplicationControllerProps> = ({ item, type }) => {
+const ReplicationController: React.FunctionComponent<IReplicationControllerProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>

@@ -20,13 +20,13 @@ import List from '../List';
 import Metadata from '../Metadata';
 import Row from '../Row';
 
-interface ClusterRoleBindingProps extends RouteComponentProps {
+interface IClusterRoleBindingProps extends RouteComponentProps {
   item: V1ClusterRoleBinding;
   section: string;
   type: string;
 }
 
-const ClusterRoleBinding: React.FunctionComponent<ClusterRoleBindingProps> = ({ item, type }) => {
+const ClusterRoleBinding: React.FunctionComponent<IClusterRoleBindingProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>

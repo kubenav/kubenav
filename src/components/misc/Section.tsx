@@ -5,11 +5,11 @@ import {
 } from '@ionic/react';
 import React from 'react';
 
-import { AppPages } from '../../declarations';
+import { IAppPages } from '../../declarations';
 import SectionItem from './SectionItem';
 
 interface ISectionProps {
-  pages: AppPages;
+  pages: IAppPages;
   title: string;
   sectionKey: string;
   isMenu: boolean;

@@ -4,11 +4,11 @@ import {
 import { radioButtonOn } from 'ionicons/icons';
 import React from 'react';
 
-interface ItemStatusProps {
+interface IItemStatusProps {
   status: string;
 }
 
-const ItemStatus: React.FunctionComponent<ItemStatusProps> = ({ status }) => {
+const ItemStatus: React.FunctionComponent<IItemStatusProps> = ({ status }) => {
   let color = '';
 
   switch (status) {

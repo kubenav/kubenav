@@ -12,10 +12,10 @@ import React, { useContext } from 'react';
 import AddCluster from '../components/settings/AddCluster';
 import Cluster from '../components/settings/Cluster';
 import { AppContext } from '../context';
-import { Context } from '../declarations';
+import { IContext } from '../declarations';
 
 const Clusters: React.FunctionComponent = () => {
-  const context = useContext<Context>(AppContext);
+  const context = useContext<IContext>(AppContext);
 
   return (
     <IonPage>

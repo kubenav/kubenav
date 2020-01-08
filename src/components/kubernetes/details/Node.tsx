@@ -14,7 +14,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { AppContext } from '../../../context';
-import { Context, NodeMetrics } from '../../../declarations';
+import { IContext, INodeMetrics } from '../../../declarations';
 import { formatBytes, formatResourceValue } from '../../../utils';
 import IonCardEqualHeight from '../../misc/IonCardEqualHeight';
 import Conditions from '../Conditions';
@@ -24,22 +24,22 @@ import Metadata from '../Metadata';
 import Row from '../Row';
 import Status from '../Status';
 
-interface NodeProps extends RouteComponentProps {
+interface INodeProps extends RouteComponentProps {
   item: V1Node;
   section: string;
   type: string;
 }
 
-const Node: React.FunctionComponent<NodeProps> = ({ item, type }) => {
-  const context = useContext<Context>(AppContext);
+const Node: React.FunctionComponent<INodeProps> = ({ item, type }) => {
+  const context = useContext<IContext>(AppContext);
 
-  const [metrics, setMetrics] = useState<NodeMetrics>();
+  const [metrics, setMetrics] = useState<INodeMetrics>();
 
   useEffect(() => {
     if (item.metadata && item.metadata.name) {
       (async() => {
         try {
-          const data: NodeMetrics = await context.request('GET', `/apis/metrics.k8s.io/v1beta1/nodes/${item.metadata!.name}`, '');
+          const data: INodeMetrics = await context.request('GET', `/apis/metrics.k8s.io/v1beta1/nodes/${item.metadata!.name}`, '');
           setMetrics(data)
         } catch (err) {
           // TODO: Implement error handling.

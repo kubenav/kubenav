@@ -6,7 +6,7 @@ import React from 'react';
 
 import { getProperty } from '../../utils';
 
-interface RowProps {
+interface IRowProps {
   objKey: string;
   obj: any;
   title: string;
@@ -14,7 +14,7 @@ interface RowProps {
   defaultValue?: string;
 }
 
-const Row: React.FunctionComponent<RowProps> = ({ objKey, obj, title, value, defaultValue }) => {
+const Row: React.FunctionComponent<IRowProps> = ({ objKey, obj, title, value, defaultValue }) => {
   const val = getProperty(obj, objKey);
 
   if (val || typeof val === 'number') {

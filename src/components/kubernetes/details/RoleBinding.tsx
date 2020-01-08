@@ -20,13 +20,13 @@ import List from '../List';
 import Metadata from '../Metadata';
 import Row from '../Row';
 
-interface RoleBindingProps extends RouteComponentProps {
+interface IRoleBindingProps extends RouteComponentProps {
   item: V1RoleBinding;
   section: string;
   type: string;
 }
 
-const RoleBinding: React.FunctionComponent<RoleBindingProps> = ({ item, type }) => {
+const RoleBinding: React.FunctionComponent<IRoleBindingProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>

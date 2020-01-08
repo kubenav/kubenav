@@ -17,13 +17,13 @@ import Data from '../Data';
 import Metadata from '../Metadata';
 import Row from '../Row';
 
-interface SecretProps extends RouteComponentProps {
+interface ISecretProps extends RouteComponentProps {
   item: V1Secret;
   section: string;
   type: string;
 }
 
-const Secret: React.FunctionComponent<SecretProps> = ({ item, type }) => {
+const Secret: React.FunctionComponent<ISecretProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>

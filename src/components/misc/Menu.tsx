@@ -14,11 +14,11 @@ import {
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
-import { AppSections } from '../../declarations';
+import { IAppSections } from '../../declarations';
 import Sections from './Sections'
 
 interface IMenuProps extends RouteComponentProps {
-  sections: AppSections;
+  sections: IAppSections;
 }
 
 const Menu: React.FunctionComponent<IMenuProps> = ({ sections }) => {

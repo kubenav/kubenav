@@ -13,13 +13,13 @@ import Metadata from '../Metadata';
 import Row from '../Row';
 import Status from '../Status';
 
-interface PersistentVolumeClaimProps extends RouteComponentProps {
+interface IPersistentVolumeClaimProps extends RouteComponentProps {
   item: V1PersistentVolumeClaim;
   section: string;
   type: string;
 }
 
-const PersistentVolumeClaim: React.FunctionComponent<PersistentVolumeClaimProps> = ({ item, type }) => {
+const PersistentVolumeClaim: React.FunctionComponent<IPersistentVolumeClaimProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>

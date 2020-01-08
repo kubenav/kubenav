@@ -14,7 +14,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { AppContext } from '../context';
-import { Context } from '../declarations';
+import { IContext } from '../declarations';
 import { sections } from '../sections';
 
 interface IMatchParams {
@@ -27,7 +27,7 @@ interface IMatchParams {
 interface IDetailsProps extends RouteComponentProps<IMatchParams> {}
 
 const Details: React.FunctionComponent<IDetailsProps> = ({ match }) => {
-  const context = useContext<Context>(AppContext);
+  const context = useContext<IContext>(AppContext);
 
   const page = sections[match.params.section].pages[match.params.type];
   const Component = page.detailsComponent;

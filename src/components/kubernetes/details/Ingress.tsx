@@ -16,13 +16,13 @@ import List from '../List';
 import Metadata from '../Metadata';
 import Row from '../Row';
 
-interface IngressProps extends RouteComponentProps {
+interface IIngressProps extends RouteComponentProps {
   item: NetworkingV1beta1Ingress;
   section: string;
   type: string;
 }
 
-const Ingress: React.FunctionComponent<IngressProps> = ({ item, type }) => {
+const Ingress: React.FunctionComponent<IIngressProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>

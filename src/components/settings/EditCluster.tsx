@@ -19,14 +19,14 @@ import { close, create } from 'ionicons/icons';
 import React, {useContext, useState} from 'react';
 
 import { AppContext } from '../../context';
-import { Cluster, Context } from '../../declarations';
+import { ICluster, IContext } from '../../declarations';
 
 interface IEditClusterProps {
-  cluster: Cluster;
+  cluster: ICluster;
 }
 
 const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) => {
-  const context = useContext<Context>(AppContext);
+  const context = useContext<IContext>(AppContext);
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [error, setError] = useState<string>('');

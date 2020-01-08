@@ -12,11 +12,11 @@ import React from 'react';
 
 import IonCardEqualHeight from '../misc/IonCardEqualHeight';
 
-interface TolerationProps {
+interface ITolerationProps {
   tolerations: V1Toleration[];
 }
 
-const Tolerations: React.FunctionComponent<TolerationProps> = ({ tolerations }) => {
+const Tolerations: React.FunctionComponent<ITolerationProps> = ({ tolerations }) => {
   return (
     <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
       <IonCardEqualHeight>

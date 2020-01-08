@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { AppSections } from '../../declarations';
+import { IAppSections } from '../../declarations';
 import Section from './Section'
 
 interface ISectionsProps {
-  sections: AppSections;
+  sections: IAppSections;
   isMenu: boolean;
 }
 

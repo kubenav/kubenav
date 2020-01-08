@@ -16,13 +16,13 @@ import Editor from '../../misc/Editor';
 import List from '../List';
 import Metadata from '../Metadata';
 
-interface RoleProps extends RouteComponentProps {
+interface IRoleProps extends RouteComponentProps {
   item: V1Role;
   section: string;
   type: string;
 }
 
-const Role: React.FunctionComponent<RoleProps> = ({ item, type }) => {
+const Role: React.FunctionComponent<IRoleProps> = ({ item, type }) => {
   return (
     <IonGrid>
       {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}

@@ -17,7 +17,7 @@ import { RouteComponentProps } from 'react-router';
 import ItemOptions from '../components/kubernetes/ItemOptions';
 import NamespacePopover from '../components/kubernetes/NamespacePopover';
 import { AppContext } from '../context';
-import { Context } from '../declarations';
+import { IContext } from '../declarations';
 import { sections } from '../sections';
 import { isNamespaced } from '../utils';
 
@@ -31,7 +31,7 @@ interface IMatchParams {
 interface IListProps extends RouteComponentProps<IMatchParams> {}
 
 const List: React.FunctionComponent<IListProps> = ({ match }) => {
-  const context = useContext<Context>(AppContext);
+  const context = useContext<IContext>(AppContext);
 
   const page = sections[match.params.section].pages[match.params.type];
   const Component = page.listItemComponent;

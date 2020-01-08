@@ -21,9 +21,9 @@ import yaml from 'js-yaml';
 import React, { useContext, useState } from 'react';
 
 import { AppContext } from '../../context';
-import { Context, Kubeconfig, KubeconfigCluster, KubeconfigClusterRef, KubeconfigUser, KubeconfigUserRef } from '../../declarations';
+import { IContext, IKubeconfig, IKubeconfigCluster, IKubeconfigClusterRef, IKubeconfigUser, IKubeconfigUserRef } from '../../declarations';
 
-const getKubeconfigCluster = (name: string, clusters: KubeconfigClusterRef[]): KubeconfigCluster|null => {
+const getKubeconfigCluster = (name: string, clusters: IKubeconfigClusterRef[]): IKubeconfigCluster|null => {
   for (let cluster of clusters) {
     if (cluster.name === name) {
       return cluster.cluster
@@ -33,7 +33,7 @@ const getKubeconfigCluster = (name: string, clusters: KubeconfigClusterRef[]): K
   return null
 };
 
-const getKubeconfigUser = (name: string, users: KubeconfigUserRef[]): KubeconfigUser|null => {
+const getKubeconfigUser = (name: string, users: IKubeconfigUserRef[]): IKubeconfigUser|null => {
   for (let user of users) {
     if (user.name === name) {
       return user.user;
@@ -44,7 +44,7 @@ const getKubeconfigUser = (name: string, users: KubeconfigUserRef[]): Kubeconfig
 };
 
 const AddCluster: React.FunctionComponent = () => {
-  const context = useContext<Context>(AppContext);
+  const context = useContext<IContext>(AppContext);
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -111,7 +111,7 @@ const AddCluster: React.FunctionComponent = () => {
           namespace: 'default',
         });
       } else if (type === 'kubeconfig') {
-        const config: Kubeconfig = yaml.safeLoad(kubeconfig);
+        const config: IKubeconfig = yaml.safeLoad(kubeconfig);
 
         for (let ctx of config.contexts) {
           const cluster = getKubeconfigCluster(ctx.context.cluster, config.clusters);

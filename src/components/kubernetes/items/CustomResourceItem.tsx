@@ -15,11 +15,11 @@ import React, { useState } from 'react';
 
 import Editor from '../../misc/Editor';
 
-interface CustomResourceItemProps {
+interface ICustomResourceItemProps {
   item: any;
 }
 
-const CustomResourceItem: React.FunctionComponent<CustomResourceItemProps> = ({ item }) => {
+const CustomResourceItem: React.FunctionComponent<ICustomResourceItemProps> = ({ item }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   return (

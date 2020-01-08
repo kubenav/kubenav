@@ -7,7 +7,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { AppContext } from '../../../context';
-import { Context, PodMetrics } from '../../../declarations';
+import { IContext, IPodMetrics } from '../../../declarations';
 import Affinities from '../Affinities';
 import Conditions from '../Conditions';
 import Configuration from '../Configuration';
@@ -19,22 +19,22 @@ import Status from '../Status';
 import Tolerations from '../Tolerations';
 import Volumes from '../Volumes';
 
-interface PodProps extends RouteComponentProps {
+interface IPodProps extends RouteComponentProps {
   item: V1Pod;
   section: string;
   type: string;
 }
 
-const Pod: React.FunctionComponent<PodProps> = ({ item, type }) => {
-  const context = useContext<Context>(AppContext);
+const Pod: React.FunctionComponent<IPodProps> = ({ item, type }) => {
+  const context = useContext<IContext>(AppContext);
 
-  const [metrics, setMetrics] = useState<PodMetrics>();
+  const [metrics, setMetrics] = useState<IPodMetrics>();
 
   useEffect(() => {
     if (item.metadata && item.metadata.namespace && item.metadata.name) {
       (async() => {
         try {
-          const data: PodMetrics = await context.request('GET', `/apis/metrics.k8s.io/v1beta1/namespaces/${item.metadata!.namespace}/pods/${item.metadata!.name}`, '');
+          const data: IPodMetrics = await context.request('GET', `/apis/metrics.k8s.io/v1beta1/namespaces/${item.metadata!.namespace}/pods/${item.metadata!.name}`, '');
           setMetrics(data)
         } catch (err) {
           // TODO: Implement error handling.
