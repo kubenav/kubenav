@@ -3,12 +3,12 @@ import React from 'react';
 import { AppSections } from '../../declarations';
 import Section from './Section'
 
-interface SectionsProps {
+interface ISectionsProps {
   sections: AppSections;
   isMenu: boolean;
 }
 
-const Sections: React.FunctionComponent<SectionsProps> = ({ sections, isMenu }) => {
+const Sections: React.FunctionComponent<ISectionsProps> = ({ sections, isMenu }) => {
   return (
     <React.Fragment>
       {Object.keys(sections).map(sectionKey =>

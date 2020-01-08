@@ -24,7 +24,7 @@ const CustomResourceItem: React.FunctionComponent<CustomResourceItemProps> = ({ 
 
   return (
     <React.Fragment>
-      <IonItem button onClick={() => setShowModal(true)}>
+      <IonItem button={true} onClick={() => setShowModal(true)}>
         <IonLabel>
           <h2>{item.metadata ? item.metadata.name : ''}</h2>
           <p>Namespace: {item.metadata ? item.metadata.namespace : '-'}</p>

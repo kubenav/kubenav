@@ -33,12 +33,30 @@ const Metadata: React.FunctionComponent<MetadataProps> = ({ metadata, type }) =>
               <Row obj={metadata} objKey="name" title="Name" />
               {isNamespaced(type) ? <Row obj={metadata} objKey="namespace" title="Namespace" /> : null}
               <Row obj={metadata} objKey="creationTimestamp" title="Age" value={(value) => timeDifference(new Date().getTime(), new Date(value.toString()).getTime())} />
-              <Row obj={metadata} objKey="labels" title="Labels" value={(value) => Object.keys(value).map((label) => <IonChip key={label} className="unset-chip-height">
-                <IonLabel>{label}: {value[label]}</IonLabel>
-              </IonChip>)} />
-              <Row obj={metadata} objKey="annotations" title="Annotations" value={(value) => Object.keys(value).map((annotation) => <IonChip key={annotation} className="unset-chip-height">
-                <IonLabel>{annotation}: {value[annotation]}</IonLabel>
-              </IonChip>)} />
+              <Row
+                obj={metadata}
+                objKey="labels"
+                title="Labels"
+                value={(value) => Object.keys(value).map((label) => {
+                  return (
+                    <IonChip key={label} className="unset-chip-height">
+                      <IonLabel>{label}: {value[label]}</IonLabel>
+                    </IonChip>
+                  )
+                })}
+              />
+              <Row
+                obj={metadata}
+                objKey="annotations"
+                title="Annotations"
+                value={(value) => Object.keys(value).map((annotation) => {
+                  return (
+                    <IonChip key={annotation} className="unset-chip-height">
+                      <IonLabel>{annotation}: {value[annotation]}</IonLabel>
+                    </IonChip>
+                  )
+                })}
+              />
             </IonGrid>
           </IonCardContent>
         </IonCard>

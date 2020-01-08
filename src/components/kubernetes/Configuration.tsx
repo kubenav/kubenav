@@ -18,7 +18,7 @@ const Configuration: React.FunctionComponent = ({ children }) => {
         </IonCardHeader>
         <IonCardContent>
           <IonGrid>
-            { children }
+            {children}
           </IonGrid>
         </IonCardContent>
       </IonCardEqualHeight>

@@ -9,15 +9,15 @@ import { RouteComponentProps } from 'react-router';
 import { AppContext } from '../../../context';
 import { Context, PodMetrics } from '../../../declarations';
 import Affinities from '../Affinities';
+import Conditions from '../Conditions';
 import Configuration from '../Configuration';
 import Containers from '../Containers';
 import List from '../List';
 import Metadata from '../Metadata';
-import Conditions from '../Conditions';
-import Volumes from '../Volumes';
 import Row from '../Row';
 import Status from '../Status';
 import Tolerations from '../Tolerations';
+import Volumes from '../Volumes';
 
 interface PodProps extends RouteComponentProps {
   item: V1Pod;
@@ -78,9 +78,11 @@ const Pod: React.FunctionComponent<PodProps> = ({ item, type }) => {
         {item.spec && item.spec.affinity ? <Affinities affinities={item.spec.affinity} /> : null}
       </IonRow>
 
-      {item.metadata && item.metadata.name && item.metadata.namespace ? <IonRow>
-        <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
-      </IonRow> : null}
+      {item.metadata && item.metadata.name && item.metadata.namespace ? (
+        <IonRow>
+          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+        </IonRow>
+      ) : null}
     </IonGrid>
   )
 };

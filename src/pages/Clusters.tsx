@@ -9,10 +9,10 @@ import {
 } from '@ionic/react';
 import React, { useContext } from 'react';
 
-import { AppContext } from '../context';
-import { Context } from '../declarations';
 import AddCluster from '../components/settings/AddCluster';
 import Cluster from '../components/settings/Cluster';
+import { AppContext } from '../context';
+import { Context } from '../declarations';
 
 const Clusters: React.FunctionComponent = () => {
   const context = useContext<Context>(AppContext);

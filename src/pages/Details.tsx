@@ -17,16 +17,16 @@ import { AppContext } from '../context';
 import { Context } from '../declarations';
 import { sections } from '../sections';
 
-interface MatchParams {
+interface IMatchParams {
   section: string;
   type: string;
   namespace: string;
   name: string;
 }
 
-interface DetailsProps extends RouteComponentProps<MatchParams> {}
+interface IDetailsProps extends RouteComponentProps<IMatchParams> {}
 
-const Details: React.FunctionComponent<DetailsProps> = ({ match }) => {
+const Details: React.FunctionComponent<IDetailsProps> = ({ match }) => {
   const context = useContext<Context>(AppContext);
 
   const page = sections[match.params.section].pages[match.params.type];

@@ -35,13 +35,17 @@ const CronJob: React.FunctionComponent<CronJobProps> = ({ item, type }) => {
 
       {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
 
-      {item.metadata && item.metadata.name && item.metadata.namespace ? <IonRow>
-        <List name="Jobs" section="workloads" type="jobs" namespace={item.metadata.namespace} filter={(job: V1Job) => job.metadata && job.metadata.ownerReferences && job.metadata.ownerReferences.length === 1 ? job.metadata.ownerReferences[0].name === item.metadata!.name : false} />
-      </IonRow> : null}
+      {item.metadata && item.metadata.name && item.metadata.namespace ? (
+        <IonRow>
+          <List name="Jobs" section="workloads" type="jobs" namespace={item.metadata.namespace} filter={(job: V1Job) => job.metadata && job.metadata.ownerReferences && job.metadata.ownerReferences.length === 1 ? job.metadata.ownerReferences[0].name === item.metadata!.name : false} />
+        </IonRow>
+      ) : null}
 
-      {item.metadata && item.metadata.name && item.metadata.namespace ? <IonRow>
-        <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
-      </IonRow> : null}
+      {item.metadata && item.metadata.name && item.metadata.namespace ? (
+        <IonRow>
+          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+        </IonRow>
+      ) : null}
 
       <IonItemDivider>
         <IonLabel>Job Template</IonLabel>

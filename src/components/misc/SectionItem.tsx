@@ -7,13 +7,13 @@ import React from 'react';
 
 import { AppPages } from '../../declarations';
 
-interface SectionItemProps {
+interface ISectionItemProps {
   pages: AppPages;
   sectionKey: string;
   pageKey: string;
 }
 
-const SectionItem: React.FunctionComponent<SectionItemProps> = ({ pages, sectionKey, pageKey }) => {
+const SectionItem: React.FunctionComponent<ISectionItemProps> = ({ pages, sectionKey, pageKey }) => {
   return (
     <IonItem routerLink={`/kubernetes/${sectionKey}/${pageKey}`} routerDirection="root">
       <IonAvatar slot="start">

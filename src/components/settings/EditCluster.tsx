@@ -21,11 +21,11 @@ import React, {useContext, useState} from 'react';
 import { AppContext } from '../../context';
 import { Cluster, Context } from '../../declarations';
 
-interface EditClusterProps {
+interface IEditClusterProps {
   cluster: Cluster;
 }
 
-const EditCluster: React.FunctionComponent<EditClusterProps> = ({ cluster }) => {
+const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) => {
   const context = useContext<Context>(AppContext);
 
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -112,27 +112,27 @@ const EditCluster: React.FunctionComponent<EditClusterProps> = ({ cluster }) => 
           <IonList lines="full">
             <IonItem>
               <IonLabel position="stacked">Name</IonLabel>
-              <IonInput type="text" required value={name} onInput={handleName} />
+              <IonInput type="text" required={true} value={name} onInput={handleName} />
             </IonItem>
             <IonItem>
               <IonLabel position="stacked">URL</IonLabel>
-              <IonInput type="text" inputmode="url" required value={url} onInput={handleURL} />
+              <IonInput type="text" inputmode="url" required={true} value={url} onInput={handleURL} />
             </IonItem>
             <IonItem>
               <IonLabel position="stacked">Certificate Authority Data</IonLabel>
-              <IonTextarea autoGrow value={certificateAuthorityData} onInput={handleCertificateAuthorityData} />
+              <IonTextarea autoGrow={true} value={certificateAuthorityData} onInput={handleCertificateAuthorityData} />
             </IonItem>
             <IonItem>
               <IonLabel position="stacked">Client Certificate Data</IonLabel>
-              <IonTextarea autoGrow value={clientCertificateData} onInput={handleClientCertificateData} />
+              <IonTextarea autoGrow={true} value={clientCertificateData} onInput={handleClientCertificateData} />
             </IonItem>
             <IonItem>
               <IonLabel position="stacked">Client Key Data</IonLabel>
-              <IonTextarea autoGrow value={clientKeyData} onInput={handleClientKeyData} />
+              <IonTextarea autoGrow={true} value={clientKeyData} onInput={handleClientKeyData} />
             </IonItem>
             <IonItem>
               <IonLabel position="stacked">Token</IonLabel>
-              <IonTextarea autoGrow value={token} onInput={handleToken} />
+              <IonTextarea autoGrow={true} value={token} onInput={handleToken} />
             </IonItem>
           </IonList>
         </IonContent>

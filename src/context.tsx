@@ -132,18 +132,20 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
   };
 
   return (
-    <AppContext.Provider value={{
-      clusters: clusters,
-      cluster: cluster,
+    <AppContext.Provider
+      value={{
+        clusters: clusters,
+        cluster: cluster,
 
-      addCluster: addCluster,
-      changeCluster: changeCluster,
-      deleteCluster: deleteCluster,
-      editCluster: editCluster,
-      setNamespace: setNamespace,
-      request: request,
-    }}>
-      { children }
+        addCluster: addCluster,
+        changeCluster: changeCluster,
+        deleteCluster: deleteCluster,
+        editCluster: editCluster,
+        setNamespace: setNamespace,
+        request: request,
+      }}
+    >
+      {children}
     </AppContext.Provider>
   )
 };

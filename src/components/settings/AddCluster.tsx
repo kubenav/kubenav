@@ -171,39 +171,43 @@ const AddCluster: React.FunctionComponent = () => {
             </IonSegment>
           </div>
 
-          {type === 'kubeconfig' ? <IonList lines="full">
-            <IonItem>
-              <IonLabel position="stacked">Kubeconfig</IonLabel>
-              <IonTextarea autoGrow value={kubeconfig} onInput={handleKubeconfig} />
-            </IonItem>
-          </IonList> : null}
+          {type === 'kubeconfig' ? (
+            <IonList lines="full">
+              <IonItem>
+                <IonLabel position="stacked">Kubeconfig</IonLabel>
+                <IonTextarea autoGrow={true} value={kubeconfig} onInput={handleKubeconfig} />
+              </IonItem>
+            </IonList>
+          ) : null}
 
-          {type === 'manual' ? <IonList lines="full">
-            <IonItem>
-              <IonLabel position="stacked">Name</IonLabel>
-              <IonInput type="text" required value={name} onInput={handleName} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">URL</IonLabel>
-              <IonInput type="text" inputmode="url" required value={url} onInput={handleURL} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Certificate Authority Data</IonLabel>
-              <IonTextarea autoGrow value={certificateAuthorityData} onInput={handleCertificateAuthorityData} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Client Certificate Data</IonLabel>
-              <IonTextarea autoGrow value={clientCertificateData} onInput={handleClientCertificateData} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Client Key Data</IonLabel>
-              <IonTextarea autoGrow value={clientKeyData} onInput={handleClientKeyData} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Token</IonLabel>
-              <IonTextarea autoGrow value={token} onInput={handleToken} />
-            </IonItem>
-          </IonList> : null}
+          {type === 'manual' ? (
+            <IonList lines="full">
+              <IonItem>
+                <IonLabel position="stacked">Name</IonLabel>
+                <IonInput type="text" required={true} value={name} onInput={handleName} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">URL</IonLabel>
+                <IonInput type="text" inputmode="url" required={true} value={url} onInput={handleURL} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Certificate Authority Data</IonLabel>
+                <IonTextarea autoGrow={true} value={certificateAuthorityData} onInput={handleCertificateAuthorityData} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Client Certificate Data</IonLabel>
+                <IonTextarea autoGrow={true} value={clientCertificateData} onInput={handleClientCertificateData} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Client Key Data</IonLabel>
+                <IonTextarea autoGrow={true} value={clientKeyData} onInput={handleClientKeyData} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Token</IonLabel>
+                <IonTextarea autoGrow={true} value={token} onInput={handleToken} />
+              </IonItem>
+            </IonList>
+          ) : null}
 
           {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header="Could not save" message={error} buttons={['OK']} /> : null}
         </IonContent>

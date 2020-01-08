@@ -16,7 +16,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "lint": "tslint -c tslint.json --project .",
+    "lint": "tslint -c tslint.json 'src/**/*{.ts,.tsx}'",
     "eject": "react-scripts eject",
     "postinstall": "cd electron && npm install",
     "server": "node scripts/server.js",

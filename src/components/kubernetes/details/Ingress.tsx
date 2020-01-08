@@ -34,66 +34,72 @@ const Ingress: React.FunctionComponent<IngressProps> = ({ item, type }) => {
       {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
 
       <IonRow>
-        {item.spec && item.spec.rules ? <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
-          <IonCardEqualHeight>
-            <IonCardHeader>
-              <IonCardTitle>Rules</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <IonGrid>
-                <IonRow>
-                  <IonCol><b>Host</b></IonCol>
-                  <IonCol><b>HTTP</b></IonCol>
-                </IonRow>
-              {item.spec.rules.map((rule, index) => {
-                return (
-                  <IonRow key={index}>
-                    <IonCol>{rule.host}</IonCol>
-                    <IonCol>{rule.http && rule.http.paths.map((path, index) => {
-                      return (
-                        <div key={index}>
-                          Path: {path.path}<br/>
-                          Service Name: {path.backend.serviceName}<br/>
-                          Service Port: {path.backend.servicePort}
-                        </div>
-                      )
-                    })}</IonCol>
+        {item.spec && item.spec.rules ? (
+          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+            <IonCardEqualHeight>
+              <IonCardHeader>
+                <IonCardTitle>Rules</IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent>
+                <IonGrid>
+                  <IonRow>
+                    <IonCol><b>Host</b></IonCol>
+                    <IonCol><b>HTTP</b></IonCol>
                   </IonRow>
-                )
-              })}
-              </IonGrid>
-            </IonCardContent>
-          </IonCardEqualHeight>
-        </IonCol> : null}
-
-        {item.spec && item.spec.tls ? <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
-          <IonCardEqualHeight>
-            <IonCardHeader>
-              <IonCardTitle>TLS</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <IonGrid>
-                <IonRow>
-                  <IonCol><b>Secret Name</b></IonCol>
-                  <IonCol><b>Hosts</b></IonCol>
-                </IonRow>
-                {item.spec.tls.map((tls, index) => {
+                {item.spec.rules.map((rule, index) => {
                   return (
                     <IonRow key={index}>
-                      <IonCol>{tls.secretName}</IonCol>
-                      <IonCol>{tls.hosts && tls.hosts.join(', ')}</IonCol>
+                      <IonCol>{rule.host}</IonCol>
+                      <IonCol>{rule.http && rule.http.paths.map((path, index) => {
+                        return (
+                          <div key={index}>
+                            Path: {path.path}<br/>
+                            Service Name: {path.backend.serviceName}<br/>
+                            Service Port: {path.backend.servicePort}
+                          </div>
+                        )
+                      })}</IonCol>
                     </IonRow>
                   )
                 })}
-              </IonGrid>
-            </IonCardContent>
-          </IonCardEqualHeight>
-        </IonCol> : null}
+                </IonGrid>
+              </IonCardContent>
+            </IonCardEqualHeight>
+          </IonCol>
+        ) : null}
+
+        {item.spec && item.spec.tls ? (
+          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+            <IonCardEqualHeight>
+              <IonCardHeader>
+                <IonCardTitle>TLS</IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent>
+                <IonGrid>
+                  <IonRow>
+                    <IonCol><b>Secret Name</b></IonCol>
+                    <IonCol><b>Hosts</b></IonCol>
+                  </IonRow>
+                  {item.spec.tls.map((tls, index) => {
+                    return (
+                      <IonRow key={index}>
+                        <IonCol>{tls.secretName}</IonCol>
+                        <IonCol>{tls.hosts && tls.hosts.join(', ')}</IonCol>
+                      </IonRow>
+                    )
+                  })}
+                </IonGrid>
+              </IonCardContent>
+            </IonCardEqualHeight>
+          </IonCol>
+        ) : null}
       </IonRow>
 
-      {item.metadata && item.metadata.name && item.metadata.namespace ? <IonRow>
-        <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
-      </IonRow> : null}
+      {item.metadata && item.metadata.name && item.metadata.namespace ? (
+        <IonRow>
+          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+        </IonRow>
+      ) : null}
     </IonGrid>
   )
 };

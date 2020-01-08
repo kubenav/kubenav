@@ -82,77 +82,85 @@ const Node: React.FunctionComponent<NodeProps> = ({ item, type }) => {
       {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
 
       <IonRow>
-        {item.status && item.status.capacity && item.status.allocatable ? <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
-          <IonCardEqualHeight>
-            <IonCardHeader>
-              <IonCardTitle>Resources</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <div className="table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Key</th>
-                      <th>Capacity</th>
-                      <th>Allocatable</th>
-                      <th>Usage</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Object.keys(item.status.capacity).map((key) => {
-                      return (
-                        <tr key={key}>
-                          <td>{key}</td>
-                          <td>{formatResourceValue(key, item.status!.capacity![key])}</td>
-                          <td>{formatResourceValue(key, item.status!.allocatable![key])}</td>
-                          <td>{metrics && metrics.usage ? formatResourceValue(key, metrics.usage[key]) : null}</td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </IonCardContent>
-          </IonCardEqualHeight>
-        </IonCol> : null}
+        {item.status && item.status.capacity && item.status.allocatable ? (
+          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+            <IonCardEqualHeight>
+              <IonCardHeader>
+                <IonCardTitle>Resources</IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent>
+                <div className="table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Key</th>
+                        <th>Capacity</th>
+                        <th>Allocatable</th>
+                        <th>Usage</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.keys(item.status.capacity).map((key) => {
+                        return (
+                          <tr key={key}>
+                            <td>{key}</td>
+                            <td>{formatResourceValue(key, item.status!.capacity![key])}</td>
+                            <td>{formatResourceValue(key, item.status!.allocatable![key])}</td>
+                            <td>{metrics && metrics.usage ? formatResourceValue(key, metrics.usage[key]) : null}</td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </IonCardContent>
+            </IonCardEqualHeight>
+          </IonCol>
+        ) : null}
 
         {item.status && item.status.conditions ? <Conditions conditions={item.status.conditions} /> : null}
       </IonRow>
 
-      {item.metadata && item.metadata.name ? <IonRow>
-        <List name="Pods" section="workloads" type="pods" namespace="" selector={`fieldSelector=spec.nodeName=${item.metadata.name}`} />
-      </IonRow> : null}
+      {item.metadata && item.metadata.name ? (
+        <IonRow>
+          <List name="Pods" section="workloads" type="pods" namespace="" selector={`fieldSelector=spec.nodeName=${item.metadata.name}`} />
+        </IonRow>
+      ) : null}
 
-      {item.metadata && item.metadata.name ? <IonRow>
-        <List name="Events" section="cluster" type="events" namespace="" selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
-      </IonRow> : null}
+      {item.metadata && item.metadata.name ? (
+        <IonRow>
+          <List name="Events" section="cluster" type="events" namespace="" selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+        </IonRow>
+      ) : null}
 
-      {item.status && item.status.images ? <IonRow>
-        <IonCol>
-          <IonCardEqualHeight>
-            <IonCardHeader>
-              <IonCardTitle>Images</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <IonList>
-                {item.status.images.map((image, index) => {
-                  return (
-                    <IonItem key={index}>
-                      <IonLabel>
-                        <h2>{imageName(image.names, false)}</h2>
-                        <p>
-                          {image.sizeBytes ? `Size: ${formatBytes(image.sizeBytes, false)} | ` : null}
-                          {imageName(image.names, true)}
-                        </p>
-                      </IonLabel>
-                    </IonItem>
-                  )
-                })}
-              </IonList>
-            </IonCardContent>
-          </IonCardEqualHeight>
-        </IonCol>
-      </IonRow> : null}
+      {item.status && item.status.images ? (
+        <IonRow>
+          <IonCol>
+            <IonCardEqualHeight>
+              <IonCardHeader>
+                <IonCardTitle>Images</IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent>
+                <IonList>
+                  {item.status.images.map((image, index) => {
+                    return (
+                      <IonItem key={index}>
+                        <IonLabel>
+                          <h2>{imageName(image.names, false)}</h2>
+                          <p>
+                            {image.sizeBytes ? `Size: ${formatBytes(image.sizeBytes, false)} | ` : null}
+                            {imageName(image.names, true)}
+                          </p>
+                        </IonLabel>
+                      </IonItem>
+                    )
+                  })}
+                </IonList>
+              </IonCardContent>
+            </IonCardEqualHeight>
+          </IonCol>
+        </IonRow>
+      ) : null}
     </IonGrid>
   )
 };

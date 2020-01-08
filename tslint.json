@@ -1,3 +1,18 @@
 {
-  "extends": ["tslint-react"]
+  "defaultSeverity": "warning",
+  "extends": ["tslint-react"],
+  "linterOptions": {
+    "exclude": ["node_modules/**"]
+  },
+  "rules": {
+    "indent": [true, "spaces", 2],
+    "interface-name": true,
+    "jsx-no-lambda": false,
+    "jsx-no-multiline-js": false,
+    "max-line-length": false,
+    "no-consecutive-blank-lines": true,
+    "object-literal-sort-keys": false,
+    "ordered-imports": true,
+    "quotemark": [true, "single", "jsx-double"]
+  }
 }

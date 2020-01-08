@@ -37,9 +37,18 @@ const Deployment: React.FunctionComponent<DeploymentProps> = ({ item, type }) =>
       <IonRow>
         <Configuration>
           <Row obj={item} objKey="spec.strategy" title="Update Strategy" value={updateStrategy} />
-          <Row obj={item} objKey="spec.selector.matchLabels" title="Selectors" value={(value) => Object.keys(value).map((label) => <IonChip key={label} className="unset-chip-height">
-            <IonLabel>{label}: {value[label]}</IonLabel>
-          </IonChip>)} />
+          <Row
+            obj={item}
+            objKey="spec.selector.matchLabels"
+            title="Selectors"
+            value={(value) => Object.keys(value).map((label) => {
+              return (
+                <IonChip key={label} className="unset-chip-height">
+                  <IonLabel>{label}: {value[label]}</IonLabel>
+                </IonChip>
+              )
+            })}
+          />
           <Row obj={item} objKey="spec.minReadySeconds" title="Min Ready Seconds" />
           <Row obj={item} objKey="spec.revisionHistoryLimit" title="Revision History Limit" />
           <Row obj={item} objKey="spec.replicas" title="Replicas" />
@@ -56,17 +65,23 @@ const Deployment: React.FunctionComponent<DeploymentProps> = ({ item, type }) =>
 
       {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
 
-      {item.status && item.status.conditions ? <IonRow>
-        <Conditions conditions={item.status.conditions} />
-      </IonRow> : null}
+      {item.status && item.status.conditions ? (
+        <IonRow>
+          <Conditions conditions={item.status.conditions} />
+        </IonRow>
+      ) : null}
 
-      {item.metadata && item.metadata.namespace && item.spec && item.spec.selector ? <IonRow>
-        <List name="Pods" section="workloads" type="pods" namespace={item.metadata.namespace} selector={`labelSelector=${labelSelector(item.spec.selector)}`} />
-      </IonRow> : null}
+      {item.metadata && item.metadata.namespace && item.spec && item.spec.selector ? (
+        <IonRow>
+          <List name="Pods" section="workloads" type="pods" namespace={item.metadata.namespace} selector={`labelSelector=${labelSelector(item.spec.selector)}`} />
+        </IonRow>
+      ) : null}
 
-      {item.metadata && item.metadata.name && item.metadata.namespace ? <IonRow>
-        <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
-      </IonRow> : null}
+      {item.metadata && item.metadata.name && item.metadata.namespace ? (
+        <IonRow>
+          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+        </IonRow>
+      ) : null}
 
       {item.spec && item.spec.template ? <PodTemplate template={item.spec.template} /> : null}
     </IonGrid>

@@ -20,9 +20,11 @@ const ServiceAccount: React.FunctionComponent<ServiceAccountProps> = ({ item, ty
     <IonGrid>
       {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
 
-      {item.metadata && item.metadata.name && item.metadata.namespace ? <IonRow>
-        <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
-      </IonRow> : null}
+      {item.metadata && item.metadata.name && item.metadata.namespace ? (
+        <IonRow>
+          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+        </IonRow>
+      ) : null}
     </IonGrid>
   )
 };

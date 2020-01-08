@@ -15,7 +15,7 @@ interface ItemOptionsProps {
 const ItemOptions: React.FunctionComponent<ItemOptionsProps> = ({ item, url, children }) => {
   return (
     <IonItemSliding>
-      { children }
+      {children}
 
       <IonItemOptions side="end">
         <EditItem item={item} url={url} />

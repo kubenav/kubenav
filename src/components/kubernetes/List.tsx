@@ -11,11 +11,11 @@ import {
 } from '@ionic/react';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { sections } from '../../sections';
-import { Context } from '../../declarations';
 import { AppContext } from '../../context';
+import { Context } from '../../declarations';
+import { sections } from '../../sections';
 
-interface ListProps {
+interface IListProps {
   name: string;
   section: string;
   type: string;
@@ -24,7 +24,7 @@ interface ListProps {
   filter?: (item: any) => boolean;
 }
 
-const List: React.FunctionComponent<ListProps> = ({ name, section, type, namespace, selector, filter }) => {
+const List: React.FunctionComponent<IListProps> = ({ name, section, type, namespace, selector, filter }) => {
   const context = useContext<Context>(AppContext);
 
   const page = sections[section].pages[type];
@@ -65,14 +65,18 @@ const List: React.FunctionComponent<ListProps> = ({ name, section, type, namespa
           </IonCardHeader>
           <IonCardContent>
             <IonList>
-              {showLoading ? <IonItem>
-                <IonSpinner slot="end" />
-                <IonLabel>Loading...</IonLabel>
-              </IonItem> : null}
+              {showLoading ? (
+                <IonItem>
+                  <IonSpinner slot="end" />
+                  <IonLabel>Loading...</IonLabel>
+                </IonItem>
+              ) : null}
 
-              {alert !== '' ? <IonItem>
-                <IonLabel>Could not load {page.pluralText}</IonLabel>
-              </IonItem> : null}
+              {alert !== '' ? (
+                <IonItem>
+                  <IonLabel>Could not load {page.pluralText}</IonLabel>
+                </IonItem>
+              ) : null}
 
               {items.filter(filter ? filter : () => true).map((item, index) => {
                 return (

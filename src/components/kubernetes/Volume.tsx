@@ -38,8 +38,8 @@ const Volume: React.FunctionComponent<VolumeProps> = ({ volume }) => {
     <React.Fragment>
       <IonItem onClick={() => setShowModal(true)}>
         <IonLabel>
-          <h2>{ volume.name }</h2>
-          <p>{ kind }</p>
+          <h2>{volume.name}</h2>
+          <p>{kind}</p>
         </IonLabel>
       </IonItem>
 

@@ -4,11 +4,10 @@ import {
   V1ListMeta,
   V1NodeCondition,
   V1ObjectMeta,
-  V1PodCondition,
   V1PersistentVolumeClaimCondition,
+  V1PodCondition,
   V1ReplicaSetCondition,
   V1ReplicationControllerCondition,
-  V1APIResourceList,
   V1StatefulSetCondition
 } from '@kubernetes/client-node';
 import React from 'react';

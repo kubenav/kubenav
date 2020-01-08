@@ -40,9 +40,11 @@ const PersistentVolume: React.FunctionComponent<PersistentVolumeProps> = ({ item
 
       {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
 
-      {item.metadata && item.metadata.name ? <IonRow>
-        <List name="Events" section="cluster" type="events" namespace="" selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
-      </IonRow> : null}
+      {item.metadata && item.metadata.name ? (
+        <IonRow>
+          <List name="Events" section="cluster" type="events" namespace="" selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+        </IonRow>
+      ) : null}
     </IonGrid>
   )
 };

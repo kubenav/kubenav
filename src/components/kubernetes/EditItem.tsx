@@ -12,19 +12,19 @@ import {
 } from '@ionic/react';
 import * as jsonpatch from 'fast-json-patch';
 import { close, create } from 'ionicons/icons';
-import React, { useContext, useState } from 'react';
 import yaml from 'js-yaml';
+import React, { useContext, useState } from 'react';
 
 import { AppContext } from '../../context';
 import { Context } from '../../declarations';
 import Editor from '../misc/Editor';
 
-interface EditItemProps {
+interface IEditItemProps {
   item: any;
   url: string;
 }
 
-const EditItem: React.FunctionComponent<EditItemProps> = ({ item, url }) => {
+const EditItem: React.FunctionComponent<IEditItemProps> = ({ item, url }) => {
   const context = useContext<Context>(AppContext);
 
   const [showModal, setShowModal] = useState<boolean>(false);

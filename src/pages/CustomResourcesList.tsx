@@ -14,25 +14,25 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import CustomResourceItem from '../components/kubernetes/items/CustomResourceItem';
 import ItemOptions from '../components/kubernetes/ItemOptions';
+import CustomResourceItem from '../components/kubernetes/items/CustomResourceItem';
 import NamespacePopover from '../components/kubernetes/NamespacePopover';
 import { AppContext } from '../context';
 import { Context } from '../declarations';
 
-interface MatchParams {
+interface IMatchParams {
   group: string;
   version: string;
   name: string;
 }
 
-interface CustomResourcesListPageProps extends RouteComponentProps<MatchParams> {}
+interface ICustomResourcesListPageProps extends RouteComponentProps<IMatchParams> {}
 
 const getURL = (namespace: string, group: string, version: string, name: string): string => {
   return namespace ? `/apis/${group}/${version}/namespaces/${namespace}/${name}` : `/apis/${group}/${version}/${name}`
 };
 
-const CustomResourcesListPage: React.FunctionComponent<CustomResourcesListPageProps> = ({ match }) => {
+const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageProps> = ({ match }) => {
   const context = useContext<Context>(AppContext);
 
   const [error, setError] = useState<string>('');
@@ -88,7 +88,7 @@ const CustomResourcesListPage: React.FunctionComponent<CustomResourcesListPagePr
         <IonList>
           {match.url === url && items ? items.map((item, index) => {
             return (
-              <ItemOptions key={index} item={item} url={ `${getURL(item.metadata ? item.metadata.namespace : '', match.params.group, match.params.version, match.params.name)}/${item.metadata ? item.metadata.name : ''}`}>
+              <ItemOptions key={index} item={item} url={`${getURL(item.metadata ? item.metadata.namespace : '', match.params.group, match.params.version, match.params.name)}/${item.metadata ? item.metadata.name : ''}`}>
                 <CustomResourceItem item={item} />
               </ItemOptions>
             )

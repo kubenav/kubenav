@@ -10,7 +10,7 @@ import {
   IonSpinner,
 } from '@ionic/react';
 import { V1Namespace, V1NamespaceList } from '@kubernetes/client-node';
-import { options, checkmark } from 'ionicons/icons';
+import { checkmark, options } from 'ionicons/icons';
 import React, {useContext, useEffect, useState} from 'react';
 
 import { AppContext } from '../../context';
@@ -52,25 +52,32 @@ const NamespacePopover: React.FunctionComponent = () => {
 
   return (
     <IonButtons slot="primary">
-      {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header="Could not get namespaces" message={error} buttons={['OK']} /> : <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
-        {namespaces ? <IonList>
-          <IonItem onClick={() => setAllNamespaces()}>
-            {context.clusters[context.cluster].namespace === '' ? <IonIcon slot="end" color='primary' icon={checkmark} /> : null}
-            <IonLabel>All Namespaces</IonLabel>
-          </IonItem>
-
-          {namespaces.items.map((namespace, index) => {
-            return (
-              <IonItem key={index} onClick={() => setNamespace(namespace)}>
-                {namespace.metadata && context.clusters[context.cluster].namespace === namespace.metadata.name ? <IonIcon slot="end" color='primary' icon={checkmark} /> : null}
-                <IonLabel>{namespace.metadata ? namespace.metadata.name : ''}</IonLabel>
+      {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header="Could not get namespaces" message={error} buttons={['OK']} /> : (
+        <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
+          {namespaces ? (
+            <IonList>
+              <IonItem onClick={() => setAllNamespaces()}>
+                {context.clusters[context.cluster].namespace === '' ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
+                <IonLabel>All Namespaces</IonLabel>
               </IonItem>
-            )
-          })} </IonList> : <IonItem>
-            <IonLabel>Loading ...</IonLabel>
-          <IonSpinner/>
-        </IonItem>}
-      </IonPopover>}
+
+              {namespaces.items.map((namespace, index) => {
+                return (
+                  <IonItem key={index} onClick={() => setNamespace(namespace)}>
+                    {namespace.metadata && context.clusters[context.cluster].namespace === namespace.metadata.name ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
+                    <IonLabel>{namespace.metadata ? namespace.metadata.name : ''}</IonLabel>
+                  </IonItem>
+                )
+              })}
+            </IonList>
+          ) : (
+            <IonItem>
+              <IonLabel>Loading ...</IonLabel>
+              <IonSpinner/>
+            </IonItem>
+          )}
+        </IonPopover>
+      )}
 
       <IonButton onClick={(e) => { e.persist(); setShowPopover(true); setPopoverEvent(e)}}>
         <IonIcon slot="icon-only" icon={options} />

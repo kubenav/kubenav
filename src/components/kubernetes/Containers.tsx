@@ -42,7 +42,7 @@ const Containers: React.FunctionComponent<ContainersProps> = ({ containers, logs
     <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
       <IonCardEqualHeight>
         <IonCardHeader>
-          <IonCardTitle>{ title }</IonCardTitle>
+          <IonCardTitle>{title}</IonCardTitle>
         </IonCardHeader>
         <IonCardContent>
           <IonList>

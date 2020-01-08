@@ -21,16 +21,16 @@ import { Context } from '../declarations';
 import { sections } from '../sections';
 import { isNamespaced } from '../utils';
 
-interface MatchParams {
+interface IMatchParams {
   section: string;
   type: string;
   namespace: string;
   name: string;
 }
 
-interface ListProps extends RouteComponentProps<MatchParams> {}
+interface IListProps extends RouteComponentProps<IMatchParams> {}
 
-const List: React.FunctionComponent<ListProps> = ({ match }) => {
+const List: React.FunctionComponent<IListProps> = ({ match }) => {
   const context = useContext<Context>(AppContext);
 
   const page = sections[match.params.section].pages[match.params.type];
@@ -78,8 +78,7 @@ const List: React.FunctionComponent<ListProps> = ({ match }) => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle>{page.pluralText}</IonTitle>
-          {isNamespaced(match.params.type) ?
-            <NamespacePopover /> : null}
+          {isNamespaced(match.params.type) ? <NamespacePopover /> : null}
         </IonToolbar>
       </IonHeader>
       <IonContent>
