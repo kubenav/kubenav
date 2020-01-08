@@ -6,13 +6,13 @@ import { V1Service } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-interface ServiceItemProps extends RouteComponentProps {
+interface IServiceItemProps extends RouteComponentProps {
   item: V1Service;
   section: string;
   type: string;
 }
 
-const ServiceItem: React.FunctionComponent<ServiceItemProps> = ({ item, section, type }) => {
+const ServiceItem: React.FunctionComponent<IServiceItemProps> = ({ item, section, type }) => {
   return (
     <IonItem routerLink={`/kubernetes/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <IonLabel>

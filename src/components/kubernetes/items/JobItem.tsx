@@ -8,13 +8,13 @@ import { RouteComponentProps } from 'react-router';
 
 import ItemStatus from '../ItemStatus';
 
-interface JobItemProps extends RouteComponentProps {
+interface IJobItemProps extends RouteComponentProps {
   item: V1Job;
   section: string;
   type: string;
 }
 
-const JobItem: React.FunctionComponent<JobItemProps> = ({ item, section, type }) => {
+const JobItem: React.FunctionComponent<IJobItemProps> = ({ item, section, type }) => {
   let status = 'success';
 
   if (item.status) {

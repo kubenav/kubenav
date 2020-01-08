@@ -1,14 +1,14 @@
 import React from 'react';
 
-import { AppSections } from '../../declarations';
+import { IAppSections } from '../../declarations';
 import Section from './Section'
 
-interface SectionsProps {
-  sections: AppSections;
+interface ISectionsProps {
+  sections: IAppSections;
   isMenu: boolean;
 }
 
-const Sections: React.FunctionComponent<SectionsProps> = ({ sections, isMenu }) => {
+const Sections: React.FunctionComponent<ISectionsProps> = ({ sections, isMenu }) => {
   return (
     <React.Fragment>
       {Object.keys(sections).map(sectionKey =>

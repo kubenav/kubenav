@@ -8,13 +8,13 @@ import { RouteComponentProps } from 'react-router';
 
 import ItemStatus from '../ItemStatus';
 
-interface DeploymentItemProps extends RouteComponentProps {
+interface IDeploymentItemProps extends RouteComponentProps {
   item: V1Deployment;
   section: string;
   type: string;
 }
 
-const DeploymentItem: React.FunctionComponent<DeploymentItemProps> = ({ item, section, type }) => {
+const DeploymentItem: React.FunctionComponent<IDeploymentItemProps> = ({ item, section, type }) => {
   let status = '';
 
   if (item.status) {

@@ -12,13 +12,13 @@ import Metadata from '../Metadata';
 import Row from '../Row';
 import Status from '../Status';
 
-interface PersistentVolumeProps extends RouteComponentProps {
+interface IPersistentVolumeProps extends RouteComponentProps {
   item: V1PersistentVolume;
   section: string;
   type: string;
 }
 
-const PersistentVolume: React.FunctionComponent<PersistentVolumeProps> = ({ item, type }) => {
+const PersistentVolume: React.FunctionComponent<IPersistentVolumeProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>
@@ -40,9 +40,11 @@ const PersistentVolume: React.FunctionComponent<PersistentVolumeProps> = ({ item
 
       {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
 
-      {item.metadata && item.metadata.name ? <IonRow>
-        <List name="Events" section="cluster" type="events" namespace="" selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
-      </IonRow> : null}
+      {item.metadata && item.metadata.name ? (
+        <IonRow>
+          <List name="Events" section="cluster" type="events" namespace="" selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+        </IonRow>
+      ) : null}
     </IonGrid>
   )
 };

@@ -16,11 +16,11 @@ import React, {useState} from 'react';
 
 import Editor from '../misc/Editor';
 
-interface VolumeProps {
+interface IVolumeProps {
   volume: V1Volume;
 }
 
-const Volume: React.FunctionComponent<VolumeProps> = ({ volume }) => {
+const Volume: React.FunctionComponent<IVolumeProps> = ({ volume }) => {
   const [showModal, setShowModal] = useState(false);
 
   let kind = '';
@@ -38,8 +38,8 @@ const Volume: React.FunctionComponent<VolumeProps> = ({ volume }) => {
     <React.Fragment>
       <IonItem onClick={() => setShowModal(true)}>
         <IonLabel>
-          <h2>{ volume.name }</h2>
-          <p>{ kind }</p>
+          <h2>{volume.name}</h2>
+          <p>{kind}</p>
         </IonLabel>
       </IonItem>
 

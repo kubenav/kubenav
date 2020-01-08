@@ -31,13 +31,13 @@ export const eventSource = (value: V1EventSource): string => {
   return '';
 };
 
-interface EventProps extends RouteComponentProps {
+interface IEventProps extends RouteComponentProps {
   item: V1Event;
   section: string;
   type: string;
 }
 
-const Event: React.FunctionComponent<EventProps> = ({ item, type }) => {
+const Event: React.FunctionComponent<IEventProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>

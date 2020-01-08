@@ -3,13 +3,13 @@ import { isPlatform } from '@ionic/react';
 import { KubenavPlugin as KubenavWebPlugin } from '@kubenav/kubenav-plugin';
 import React, { useState } from 'react';
 
-import { Cluster, Clusters, Context } from './declarations';
+import { ICluster, IClusters, IContext } from './declarations';
 import { isBase64, isJSON, randomString } from './utils';
 
 const { KubenavPlugin } = Plugins;
 const SERVER = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:14122';
 
-export const AppContext = React.createContext<Context>({
+export const AppContext = React.createContext<IContext>({
   clusters: {},
   cluster: '',
 
@@ -24,10 +24,10 @@ export const AppContext = React.createContext<Context>({
 export const AppContextConsumer = AppContext.Consumer;
 
 export const AppContextProvider: React.FunctionComponent = ({ children }) => {
-  const [clusters, setClusters] = useState<Clusters>(() => localStorage.getItem('clusters') === null ? {} : JSON.parse(localStorage.getItem('clusters') as string) as Cluster[]);
+  const [clusters, setClusters] = useState<IClusters>(() => localStorage.getItem('clusters') === null ? {} : JSON.parse(localStorage.getItem('clusters') as string) as ICluster[]);
   const [cluster, setCluster] = useState<string>(() => localStorage.getItem('cluster') !== null && localStorage.getItem('cluster') !== '' ? localStorage.getItem('cluster') as string : Object.keys(clusters).length > 0 ? Object.keys(clusters)[0] : '');
 
-  const addCluster = (newCluster: Cluster) => {
+  const addCluster = (newCluster: ICluster) => {
     let id = '';
     const checkID = (id: string): boolean => {
       return clusters.hasOwnProperty(id) || id === '';
@@ -74,7 +74,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
     }
   };
 
-  const editCluster = (editCluster: Cluster) => {
+  const editCluster = (editCluster: ICluster) => {
     editCluster.url = editCluster.url.slice(-1) === '/' ? editCluster.url.slice(0, -1) : editCluster.url;
     editCluster.certificateAuthorityData = isBase64(editCluster.certificateAuthorityData) ? atob(editCluster.certificateAuthorityData) : editCluster.certificateAuthorityData;
     editCluster.clientCertificateData = isBase64(editCluster.clientCertificateData) ? atob(editCluster.clientCertificateData) : editCluster.clientCertificateData;
@@ -132,18 +132,20 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
   };
 
   return (
-    <AppContext.Provider value={{
-      clusters: clusters,
-      cluster: cluster,
+    <AppContext.Provider
+      value={{
+        clusters: clusters,
+        cluster: cluster,
 
-      addCluster: addCluster,
-      changeCluster: changeCluster,
-      deleteCluster: deleteCluster,
-      editCluster: editCluster,
-      setNamespace: setNamespace,
-      request: request,
-    }}>
-      { children }
+        addCluster: addCluster,
+        changeCluster: changeCluster,
+        deleteCluster: deleteCluster,
+        editCluster: editCluster,
+        setNamespace: setNamespace,
+        request: request,
+      }}
+    >
+      {children}
     </AppContext.Provider>
   )
 };

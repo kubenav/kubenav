@@ -6,20 +6,20 @@ import { V1PersistentVolumeClaim } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import List from '../List';
-import Metadata from '../Metadata';
 import Conditions from '../Conditions';
 import Configuration from '../Configuration';
+import List from '../List';
+import Metadata from '../Metadata';
 import Row from '../Row';
 import Status from '../Status';
 
-interface PersistentVolumeClaimProps extends RouteComponentProps {
+interface IPersistentVolumeClaimProps extends RouteComponentProps {
   item: V1PersistentVolumeClaim;
   section: string;
   type: string;
 }
 
-const PersistentVolumeClaim: React.FunctionComponent<PersistentVolumeClaimProps> = ({ item, type }) => {
+const PersistentVolumeClaim: React.FunctionComponent<IPersistentVolumeClaimProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>
@@ -39,13 +39,17 @@ const PersistentVolumeClaim: React.FunctionComponent<PersistentVolumeClaimProps>
 
       {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
 
-      {item.status && item.status.conditions ? <IonRow>
-        <Conditions conditions={item.status.conditions} />
-      </IonRow> : null}
+      {item.status && item.status.conditions ? (
+        <IonRow>
+          <Conditions conditions={item.status.conditions} />
+        </IonRow>
+      ) : null}
 
-      {item.metadata && item.metadata.name && item.metadata.namespace ? <IonRow>
-        <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
-      </IonRow> : null}
+      {item.metadata && item.metadata.name && item.metadata.namespace ? (
+        <IonRow>
+          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+        </IonRow>
+      ) : null}
     </IonGrid>
   )
 };

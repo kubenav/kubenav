@@ -5,26 +5,28 @@ import {
 } from '@ionic/react';
 import React from 'react';
 
-import { AppPages } from '../../declarations';
+import { IAppPages } from '../../declarations';
 import SectionItem from './SectionItem';
 
-interface SectionProps {
-  pages: AppPages;
+interface ISectionProps {
+  pages: IAppPages;
   title: string;
   sectionKey: string;
   isMenu: boolean;
 }
 
-const Section: React.FunctionComponent<SectionProps> = ({ pages, title, sectionKey, isMenu }) => {
+const Section: React.FunctionComponent<ISectionProps> = ({ pages, title, sectionKey, isMenu }) => {
   return (
     <React.Fragment>
       <IonListHeader>
         <IonLabel>{title}</IonLabel>
       </IonListHeader>
       {Object.keys(pages).map(pageKey =>
-        isMenu ? <IonMenuToggle key={pageKey} autoHide={false}>
-          <SectionItem pages={pages} sectionKey={sectionKey} pageKey={pageKey} />
-        </IonMenuToggle> : <SectionItem key={pageKey} pages={pages} sectionKey={sectionKey} pageKey={pageKey} />
+        isMenu ? (
+          <IonMenuToggle key={pageKey} autoHide={false}>
+            <SectionItem pages={pages} sectionKey={sectionKey} pageKey={pageKey} />
+          </IonMenuToggle>
+        ) : <SectionItem key={pageKey} pages={pages} sectionKey={sectionKey} pageKey={pageKey} />
       )}
     </React.Fragment>
   )

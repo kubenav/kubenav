@@ -14,17 +14,17 @@ import { close, list, refresh } from 'ionicons/icons';
 import React, {useContext, useEffect, useState} from 'react';
 
 import { AppContext } from '../../context';
-import { Context } from '../../declarations';
+import { IContext } from '../../declarations';
 import Editor from '../misc/Editor';
 
-interface LogsProps {
+interface ILogsProps {
   name: string;
   namespace: string;
   container: string;
 }
 
-const Logs: React.FunctionComponent<LogsProps> = ({ name, namespace, container }) => {
-  const context = useContext<Context>(AppContext);
+const Logs: React.FunctionComponent<ILogsProps> = ({ name, namespace, container }) => {
+  const context = useContext<IContext>(AppContext);
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showLoading, setShowLoading] = useState<boolean>(false);

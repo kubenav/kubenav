@@ -38,24 +38,24 @@ import IngressItem from './components/kubernetes/items/IngressItem';
 import ServiceItem from './components/kubernetes/items/ServiceItem';
 
 import ConfigMapItem from './components/kubernetes/items/ConfigMapItem';
-import PersistentVolumeItem from './components/kubernetes/items/PersistentVolumeItem';
 import PersistentVolumeClaimItem from './components/kubernetes/items/PersistentVolumeClaimItem';
+import PersistentVolumeItem from './components/kubernetes/items/PersistentVolumeItem';
 import SecretItem from './components/kubernetes/items/SecretItem';
 import ServiceAccountItem from './components/kubernetes/items/ServiceAccountItem';
 
-import ClusterRoleItem from './components/kubernetes/items/ClusterRoleItem';
 import ClusterRoleBindingItem from './components/kubernetes/items/ClusterRoleBindingItem';
-import RoleItem from './components/kubernetes/items/RoleItem';
+import ClusterRoleItem from './components/kubernetes/items/ClusterRoleItem';
 import RoleBindingItem from './components/kubernetes/items/RoleBindingItem';
+import RoleItem from './components/kubernetes/items/RoleItem';
 
 import CustomResourceDefinitionItem from './components/kubernetes/items/CustomResourceDefinitionItem';
 import EventItem from './components/kubernetes/items/EventItem';
 import NamespaceItem from './components/kubernetes/items/NamespaceItem';
 import NodeItem from './components/kubernetes/items/NodeItem';
 
-import { AppSections } from './declarations';
+import { IAppSections } from './declarations';
 
-export const sections: AppSections = {
+export const sections: IAppSections = {
   'workloads': {
     title: 'Workloads',
     pages: {

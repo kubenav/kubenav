@@ -8,13 +8,13 @@ import { RouteComponentProps } from 'react-router';
 
 import ItemStatus from '../ItemStatus';
 
-interface PodItemProps extends RouteComponentProps {
+interface IPodItemProps extends RouteComponentProps {
   item: V1Pod;
   section: string;
   type: string;
 }
 
-const PodItem: React.FunctionComponent<PodItemProps> = ({ item, section, type }) => {
+const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }) => {
   const getPodStatus = (pod: V1Pod): string => {
     if (pod.status && pod.status.phase === 'Failed') {
       return 'danger';

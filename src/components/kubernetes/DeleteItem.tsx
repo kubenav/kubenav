@@ -7,15 +7,15 @@ import { trash } from 'ionicons/icons';
 import React, {useContext, useState} from 'react';
 
 import { AppContext } from '../../context';
-import { Context } from '../../declarations';
+import { IContext } from '../../declarations';
 
-interface DeleteItemProps {
+interface IDeleteItemProps {
   item: any;
   url: string;
 }
 
-const DeleteItem: React.FunctionComponent<DeleteItemProps> = ({ item, url }) => {
-  const context = useContext<Context>(AppContext);
+const DeleteItem: React.FunctionComponent<IDeleteItemProps> = ({ item, url }) => {
+  const context = useContext<IContext>(AppContext);
 
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [error, setError] = useState<string>('');

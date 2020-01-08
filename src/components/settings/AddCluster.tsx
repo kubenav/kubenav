@@ -21,9 +21,9 @@ import yaml from 'js-yaml';
 import React, { useContext, useState } from 'react';
 
 import { AppContext } from '../../context';
-import { Context, Kubeconfig, KubeconfigCluster, KubeconfigClusterRef, KubeconfigUser, KubeconfigUserRef } from '../../declarations';
+import { IContext, IKubeconfig, IKubeconfigCluster, IKubeconfigClusterRef, IKubeconfigUser, IKubeconfigUserRef } from '../../declarations';
 
-const getKubeconfigCluster = (name: string, clusters: KubeconfigClusterRef[]): KubeconfigCluster|null => {
+const getKubeconfigCluster = (name: string, clusters: IKubeconfigClusterRef[]): IKubeconfigCluster|null => {
   for (let cluster of clusters) {
     if (cluster.name === name) {
       return cluster.cluster
@@ -33,7 +33,7 @@ const getKubeconfigCluster = (name: string, clusters: KubeconfigClusterRef[]): K
   return null
 };
 
-const getKubeconfigUser = (name: string, users: KubeconfigUserRef[]): KubeconfigUser|null => {
+const getKubeconfigUser = (name: string, users: IKubeconfigUserRef[]): IKubeconfigUser|null => {
   for (let user of users) {
     if (user.name === name) {
       return user.user;
@@ -44,7 +44,7 @@ const getKubeconfigUser = (name: string, users: KubeconfigUserRef[]): Kubeconfig
 };
 
 const AddCluster: React.FunctionComponent = () => {
-  const context = useContext<Context>(AppContext);
+  const context = useContext<IContext>(AppContext);
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -111,7 +111,7 @@ const AddCluster: React.FunctionComponent = () => {
           namespace: 'default',
         });
       } else if (type === 'kubeconfig') {
-        const config: Kubeconfig = yaml.safeLoad(kubeconfig);
+        const config: IKubeconfig = yaml.safeLoad(kubeconfig);
 
         for (let ctx of config.contexts) {
           const cluster = getKubeconfigCluster(ctx.context.cluster, config.clusters);
@@ -171,39 +171,43 @@ const AddCluster: React.FunctionComponent = () => {
             </IonSegment>
           </div>
 
-          {type === 'kubeconfig' ? <IonList lines="full">
-            <IonItem>
-              <IonLabel position="stacked">Kubeconfig</IonLabel>
-              <IonTextarea autoGrow value={kubeconfig} onInput={handleKubeconfig} />
-            </IonItem>
-          </IonList> : null}
+          {type === 'kubeconfig' ? (
+            <IonList lines="full">
+              <IonItem>
+                <IonLabel position="stacked">Kubeconfig</IonLabel>
+                <IonTextarea autoGrow={true} value={kubeconfig} onInput={handleKubeconfig} />
+              </IonItem>
+            </IonList>
+          ) : null}
 
-          {type === 'manual' ? <IonList lines="full">
-            <IonItem>
-              <IonLabel position="stacked">Name</IonLabel>
-              <IonInput type="text" required value={name} onInput={handleName} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">URL</IonLabel>
-              <IonInput type="text" inputmode="url" required value={url} onInput={handleURL} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Certificate Authority Data</IonLabel>
-              <IonTextarea autoGrow value={certificateAuthorityData} onInput={handleCertificateAuthorityData} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Client Certificate Data</IonLabel>
-              <IonTextarea autoGrow value={clientCertificateData} onInput={handleClientCertificateData} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Client Key Data</IonLabel>
-              <IonTextarea autoGrow value={clientKeyData} onInput={handleClientKeyData} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Token</IonLabel>
-              <IonTextarea autoGrow value={token} onInput={handleToken} />
-            </IonItem>
-          </IonList> : null}
+          {type === 'manual' ? (
+            <IonList lines="full">
+              <IonItem>
+                <IonLabel position="stacked">Name</IonLabel>
+                <IonInput type="text" required={true} value={name} onInput={handleName} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">URL</IonLabel>
+                <IonInput type="text" inputmode="url" required={true} value={url} onInput={handleURL} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Certificate Authority Data</IonLabel>
+                <IonTextarea autoGrow={true} value={certificateAuthorityData} onInput={handleCertificateAuthorityData} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Client Certificate Data</IonLabel>
+                <IonTextarea autoGrow={true} value={clientCertificateData} onInput={handleClientCertificateData} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Client Key Data</IonLabel>
+                <IonTextarea autoGrow={true} value={clientKeyData} onInput={handleClientKeyData} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Token</IonLabel>
+                <IonTextarea autoGrow={true} value={token} onInput={handleToken} />
+              </IonItem>
+            </IonList>
+          ) : null}
 
           {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header="Could not save" message={error} buttons={['OK']} /> : null}
         </IonContent>

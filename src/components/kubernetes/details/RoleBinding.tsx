@@ -20,13 +20,13 @@ import List from '../List';
 import Metadata from '../Metadata';
 import Row from '../Row';
 
-interface RoleBindingProps extends RouteComponentProps {
+interface IRoleBindingProps extends RouteComponentProps {
   item: V1RoleBinding;
   section: string;
   type: string;
 }
 
-const RoleBinding: React.FunctionComponent<RoleBindingProps> = ({ item, type }) => {
+const RoleBinding: React.FunctionComponent<IRoleBindingProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>
@@ -38,28 +38,34 @@ const RoleBinding: React.FunctionComponent<RoleBindingProps> = ({ item, type }) 
 
       {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
 
-      {item.subjects ? <IonRow>
-        <IonCol>
-          <IonCard>
-            <IonCardHeader>
-              <IonCardTitle>Subjects</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <IonList>
-                {item.subjects.map((subject, index) => <IonItem key={index} routerLink={subjectLink(subject)} routerDirection="forward">
-                  <IonLabel>
-                    <h2>{subject.kind ? `${subject.kind}: ` : ''}{subject.namespace ? `${subject.namespace}/` : ''}{subject.name}</h2>
-                  </IonLabel>
-                </IonItem>)}
-              </IonList>
-            </IonCardContent>
-          </IonCard>
-        </IonCol>
-      </IonRow> : null}
+      {item.subjects ? (
+        <IonRow>
+          <IonCol>
+            <IonCard>
+              <IonCardHeader>
+                <IonCardTitle>Subjects</IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent>
+                <IonList>
+                  {item.subjects.map((subject, index) => (
+                    <IonItem key={index} routerLink={subjectLink(subject)} routerDirection="forward">
+                      <IonLabel>
+                        <h2>{subject.kind ? `${subject.kind}: ` : ''}{subject.namespace ? `${subject.namespace}/` : ''}{subject.name}</h2>
+                      </IonLabel>
+                    </IonItem>
+                  ))}
+                </IonList>
+              </IonCardContent>
+            </IonCard>
+          </IonCol>
+        </IonRow>
+      ) : null}
 
-      {item.metadata && item.metadata.name && item.metadata.namespace ? <IonRow>
-        <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
-      </IonRow> : null}
+      {item.metadata && item.metadata.name && item.metadata.namespace ? (
+        <IonRow>
+          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+        </IonRow>
+      ) : null}
     </IonGrid>
   )
 };

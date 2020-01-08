@@ -17,13 +17,13 @@ import Data from '../Data';
 import Metadata from '../Metadata';
 import Row from '../Row';
 
-interface SecretProps extends RouteComponentProps {
+interface ISecretProps extends RouteComponentProps {
   item: V1Secret;
   section: string;
   type: string;
 }
 
-const Secret: React.FunctionComponent<SecretProps> = ({ item, type }) => {
+const Secret: React.FunctionComponent<ISecretProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>
@@ -34,35 +34,39 @@ const Secret: React.FunctionComponent<SecretProps> = ({ item, type }) => {
 
       {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
 
-      {item.data ? <IonRow>
-        <IonCol>
-          <IonCard>
-            <IonCardHeader>
-              <IonCardTitle>Data</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <IonList>
-                {Object.keys(item.data).map((key) => <Data key={key} name={key} data={atob(item.data![key])}/>)}
-              </IonList>
-            </IonCardContent>
-          </IonCard>
-        </IonCol>
-      </IonRow> : null}
+      {item.data ? (
+        <IonRow>
+          <IonCol>
+            <IonCard>
+              <IonCardHeader>
+                <IonCardTitle>Data</IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent>
+                <IonList>
+                  {Object.keys(item.data).map((key) => <Data key={key} name={key} data={atob(item.data![key])}/>)}
+                </IonList>
+              </IonCardContent>
+            </IonCard>
+          </IonCol>
+        </IonRow>
+      ) : null}
 
-      {item.stringData ? <IonRow>
-        <IonCol>
-          <IonCard>
-            <IonCardHeader>
-              <IonCardTitle>String Data</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <IonList>
-                {Object.keys(item.stringData).map((key) => <Data key={key} name={key} data={item.stringData![key]}/>)}
-              </IonList>
-            </IonCardContent>
-          </IonCard>
-        </IonCol>
-      </IonRow> : null}
+      {item.stringData ? (
+        <IonRow>
+          <IonCol>
+            <IonCard>
+              <IonCardHeader>
+                <IonCardTitle>String Data</IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent>
+                <IonList>
+                  {Object.keys(item.stringData).map((key) => <Data key={key} name={key} data={item.stringData![key]}/>)}
+                </IonList>
+              </IonCardContent>
+            </IonCard>
+          </IonCol>
+        </IonRow>
+      ) : null}
     </IonGrid>
   )
 };

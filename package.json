@@ -16,6 +16,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "lint": "tslint -c tslint.json 'src/**/*{.ts,.tsx}'",
     "eject": "react-scripts eject",
     "postinstall": "cd electron && npm install",
     "server": "node scripts/server.js",
@@ -64,6 +65,8 @@
   },
   "devDependencies": {
     "@capacitor/cli": "^1.4.0",
-    "cordova-res": "^0.8.1"
+    "cordova-res": "^0.8.1",
+    "tslint": "^5.20.1",
+    "tslint-react": "^4.1.0"
   }
 }

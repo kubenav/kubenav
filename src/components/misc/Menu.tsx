@@ -14,14 +14,14 @@ import {
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
-import { AppSections } from '../../declarations';
+import { IAppSections } from '../../declarations';
 import Sections from './Sections'
 
-interface MenuProps extends RouteComponentProps {
-  sections: AppSections;
+interface IMenuProps extends RouteComponentProps {
+  sections: IAppSections;
 }
 
-const Menu: React.FunctionComponent<MenuProps> = ({ sections }) => {
+const Menu: React.FunctionComponent<IMenuProps> = ({ sections }) => {
   return (
     <IonMenu contentId="main" type="overlay">
       <IonHeader>

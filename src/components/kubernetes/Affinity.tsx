@@ -16,19 +16,19 @@ import React, { useState } from 'react';
 
 import Editor from '../misc/Editor';
 
-interface AffinityProps {
+interface IAffinityProps {
   title: string
   affinity: V1NodeAffinity | V1PodAffinity | V1PodAntiAffinity;
 }
 
-const Affinity: React.FunctionComponent<AffinityProps> = ({ title, affinity }) => {
+const Affinity: React.FunctionComponent<IAffinityProps> = ({ title, affinity }) => {
   const [showModal, setShowModal] = useState(false);
 
   return (
     <React.Fragment>
       <IonItem onClick={() => setShowModal(true)}>
         <IonLabel>
-          <h2>{ title }</h2>
+          <h2>{title}</h2>
         </IonLabel>
       </IonItem>
 
@@ -38,7 +38,7 @@ const Affinity: React.FunctionComponent<AffinityProps> = ({ title, affinity }) =
             <IonButtons slot="start" onClick={() => setShowModal(false)}>
               <IonIcon slot="icon-only" icon={close} />
             </IonButtons>
-            <IonTitle>{ title }</IonTitle>
+            <IonTitle>{title}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>

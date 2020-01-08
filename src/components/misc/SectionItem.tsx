@@ -5,15 +5,15 @@ import {
 } from '@ionic/react';
 import React from 'react';
 
-import { AppPages } from '../../declarations';
+import { IAppPages } from '../../declarations';
 
-interface SectionItemProps {
-  pages: AppPages;
+interface ISectionItemProps {
+  pages: IAppPages;
   sectionKey: string;
   pageKey: string;
 }
 
-const SectionItem: React.FunctionComponent<SectionItemProps> = ({ pages, sectionKey, pageKey }) => {
+const SectionItem: React.FunctionComponent<ISectionItemProps> = ({ pages, sectionKey, pageKey }) => {
   return (
     <IonItem routerLink={`/kubernetes/${sectionKey}/${pageKey}`} routerDirection="root">
       <IonAvatar slot="start">

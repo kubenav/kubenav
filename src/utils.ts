@@ -71,8 +71,8 @@ export const formatResourceValue = (type: string, value: string): string => {
 };
 
 export const getProperty = (obj: any, key: string) => {
-  return key.split(".").reduce((o, x) => {
-    return (typeof o == "undefined" || o === null) ? o : o[x];
+  return key.split('.').reduce((o, x) => {
+    return (typeof o == 'undefined' || o === null) ? o : o[x];
   }, obj);
 };
 
@@ -120,7 +120,7 @@ export const matchLabels = (labels: {[key: string]: string}): string => {
     selectors.push(`${label}=${labels[label]}`);
   }
 
-  return selectors.join(",");
+  return selectors.join(',');
 };
 
 export const randomString = (length: number): string => {

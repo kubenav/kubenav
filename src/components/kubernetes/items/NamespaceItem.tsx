@@ -6,13 +6,13 @@ import { V1Namespace } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-interface NamespaceItemProps extends RouteComponentProps {
+interface INamespaceItemProps extends RouteComponentProps {
   item: V1Namespace;
   section: string;
   type: string;
 }
 
-const NamespaceItem: React.FunctionComponent<NamespaceItemProps> = ({ item, section, type }) => {
+const NamespaceItem: React.FunctionComponent<INamespaceItemProps> = ({ item, section, type }) => {
   return (
     <IonItem routerLink={`/kubernetes/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <IonLabel>

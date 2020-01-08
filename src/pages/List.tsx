@@ -17,21 +17,21 @@ import { RouteComponentProps } from 'react-router';
 import ItemOptions from '../components/kubernetes/ItemOptions';
 import NamespacePopover from '../components/kubernetes/NamespacePopover';
 import { AppContext } from '../context';
-import { Context } from '../declarations';
+import { IContext } from '../declarations';
 import { sections } from '../sections';
 import { isNamespaced } from '../utils';
 
-interface MatchParams {
+interface IMatchParams {
   section: string;
   type: string;
   namespace: string;
   name: string;
 }
 
-interface ListProps extends RouteComponentProps<MatchParams> {}
+interface IListProps extends RouteComponentProps<IMatchParams> {}
 
-const List: React.FunctionComponent<ListProps> = ({ match }) => {
-  const context = useContext<Context>(AppContext);
+const List: React.FunctionComponent<IListProps> = ({ match }) => {
+  const context = useContext<IContext>(AppContext);
 
   const page = sections[match.params.section].pages[match.params.type];
   const Component = page.listItemComponent;
@@ -78,8 +78,7 @@ const List: React.FunctionComponent<ListProps> = ({ match }) => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle>{page.pluralText}</IonTitle>
-          {isNamespaced(match.params.type) ?
-            <NamespacePopover /> : null}
+          {isNamespaced(match.params.type) ? <NamespacePopover /> : null}
         </IonToolbar>
       </IonHeader>
       <IonContent>

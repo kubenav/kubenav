@@ -14,12 +14,12 @@ import React, { useState } from 'react';
 
 import Editor from '../misc/Editor';
 
-interface DataProps {
+interface IDataProps {
   name: string;
   data: string;
 }
 
-const Data: React.FunctionComponent<DataProps> = ({ name, data }) => {
+const Data: React.FunctionComponent<IDataProps> = ({ name, data }) => {
   const [showModal, setShowModal] = useState(false);
 
   return (

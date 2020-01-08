@@ -8,13 +8,13 @@ import { RouteComponentProps } from 'react-router';
 
 import ItemStatus from '../ItemStatus';
 
-interface ReplicaSetItemProps extends RouteComponentProps {
+interface IReplicaSetItemProps extends RouteComponentProps {
   item: V1ReplicaSet;
   section: string;
   type: string;
 }
 
-const ReplicaSetItem: React.FunctionComponent<ReplicaSetItemProps> = ({ item, section, type }) => {
+const ReplicaSetItem: React.FunctionComponent<IReplicaSetItemProps> = ({ item, section, type }) => {
   let status = '';
 
   if (item.status) {

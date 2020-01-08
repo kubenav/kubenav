@@ -5,18 +5,18 @@ import { V1Namespace } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import Configuration from '../Configuration';
 import Metadata from '../Metadata';
-import Configuration from "../Configuration";
-import Row from "../Row";
-import Status from "../Status";
+import Row from '../Row';
+import Status from '../Status';
 
-interface NamespaceProps extends RouteComponentProps {
+interface INamespaceProps extends RouteComponentProps {
   item: V1Namespace;
   section: string;
   type: string;
 }
 
-const Namespace: React.FunctionComponent<NamespaceProps> = ({ item, type }) => {
+const Namespace: React.FunctionComponent<INamespaceProps> = ({ item, type }) => {
   return (
     <IonGrid>
       <IonRow>

@@ -12,11 +12,11 @@ import React from 'react';
 
 import IonCardEqualHeight from '../misc/IonCardEqualHeight';
 
-interface TolerationProps {
+interface ITolerationProps {
   tolerations: V1Toleration[];
 }
 
-const Tolerations: React.FunctionComponent<TolerationProps> = ({ tolerations }) => {
+const Tolerations: React.FunctionComponent<ITolerationProps> = ({ tolerations }) => {
   return (
     <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
       <IonCardEqualHeight>
@@ -25,11 +25,13 @@ const Tolerations: React.FunctionComponent<TolerationProps> = ({ tolerations }) 
         </IonCardHeader>
         <IonCardContent>
           <IonList>
-            {tolerations.filter((toleration) => !!toleration.key).map((toleration, index) => <IonItem key={index}>
-              <IonLabel class="ion-text-wrap">
-                <h2>Schedule on nodes with {toleration.key}{toleration.effect ? `: ${toleration.effect} taint.`: '.'} {toleration.tolerationSeconds ? `Evict after ${toleration.tolerationSeconds} seconds.` : ''}</h2>
-              </IonLabel>
-            </IonItem>)}
+            {tolerations.filter((toleration) => !!toleration.key).map((toleration, index) => (
+              <IonItem key={index}>
+                <IonLabel class="ion-text-wrap">
+                  <h2>Schedule on nodes with {toleration.key}{toleration.effect ? `: ${toleration.effect} taint.`: '.'} {toleration.tolerationSeconds ? `Evict after ${toleration.tolerationSeconds} seconds.` : ''}</h2>
+                </IonLabel>
+              </IonItem>
+            ))}
           </IonList>
         </IonCardContent>
       </IonCardEqualHeight>

@@ -8,13 +8,13 @@ import { RouteComponentProps } from 'react-router';
 
 import { timeDifference } from '../../../utils';
 
-interface CronJobItemProps extends RouteComponentProps {
+interface ICronJobItemProps extends RouteComponentProps {
   item: V1beta1CronJob;
   section: string;
   type: string;
 }
 
-const CronJobItem: React.FunctionComponent<CronJobItemProps> = ({ item, section, type }) => {
+const CronJobItem: React.FunctionComponent<ICronJobItemProps> = ({ item, section, type }) => {
   return (
     <IonItem routerLink={`/kubernetes/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <IonLabel>

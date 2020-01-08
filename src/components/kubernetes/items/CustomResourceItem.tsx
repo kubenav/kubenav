@@ -15,16 +15,16 @@ import React, { useState } from 'react';
 
 import Editor from '../../misc/Editor';
 
-interface CustomResourceItemProps {
+interface ICustomResourceItemProps {
   item: any;
 }
 
-const CustomResourceItem: React.FunctionComponent<CustomResourceItemProps> = ({ item }) => {
+const CustomResourceItem: React.FunctionComponent<ICustomResourceItemProps> = ({ item }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   return (
     <React.Fragment>
-      <IonItem button onClick={() => setShowModal(true)}>
+      <IonItem button={true} onClick={() => setShowModal(true)}>
         <IonLabel>
           <h2>{item.metadata ? item.metadata.name : ''}</h2>
           <p>Namespace: {item.metadata ? item.metadata.namespace : '-'}</p>

@@ -9,23 +9,23 @@ import {
 import { radioButtonOff, radioButtonOn, trash } from 'ionicons/icons';
 import React, {useContext, useEffect, useState} from 'react';
 
-import { Cluster as ICluster, Context} from '../../declarations';
 import { AppContext } from '../../context';
+import { ICluster, IContext} from '../../declarations';
 import EditCluster from './EditCluster';
 
-interface ClusterProps {
+interface IClusterProps {
   cluster: ICluster;
 }
 
-const Cluster: React.FunctionComponent<ClusterProps> = ({ cluster }) => {
-  const context = useContext<Context>(AppContext);
+const Cluster: React.FunctionComponent<IClusterProps> = ({ cluster }) => {
+  const context = useContext<IContext>(AppContext);
 
   const [status, setStatus] = useState<boolean>(false);
 
   useEffect(() => {
     (async() => {
       try {
-        await context.request("GET", "/api/v1", "");
+        await context.request('GET', '/api/v1', '');
         setStatus(true);
       } catch (err) {
         setStatus(false);

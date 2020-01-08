@@ -16,13 +16,13 @@ import {
 } from '@ionic/react';
 import React, {useContext} from 'react';
 
-import { AppContext } from '../context';
-import { Context } from '../declarations';
 import Sections from '../components/misc/Sections';
+import { AppContext } from '../context';
+import { IContext } from '../declarations';
 import { sections } from '../sections';
 
 const Home: React.FunctionComponent = () => {
-  const context = useContext<Context>(AppContext);
+  const context = useContext<IContext>(AppContext);
 
   return (
     <IonPage>
@@ -36,7 +36,8 @@ const Home: React.FunctionComponent = () => {
       </IonHeader>
       <IonContent>
         <IonList>
-          {context.cluster !== '' ? <IonCard>
+          {context.cluster !== '' ? (
+            <IonCard>
               <img alt="kubenav" src="/assets/card-header.png" />
               <IonCardHeader>
                   <IonCardSubtitle>Welcome to kubenav</IonCardSubtitle>
@@ -50,19 +51,22 @@ const Home: React.FunctionComponent = () => {
                   <Sections sections={sections} isMenu={false} />
                 </IonList>
               </IonCardContent>
-          </IonCard> : <IonCard>
-            <img alt="kubenav" src="/assets/card-header.png" />
-            <IonCardHeader>
-              <IonCardSubtitle>Welcome to kubenav</IonCardSubtitle>
-              <IonCardTitle>Introduction</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <p className="paragraph-margin-bottom">
-                Welcome to the kubenav app. After you added a cluster you can start the exploration of them within the kubenav app. To add a new Kubernetes cluster to the app use the button <b>Add a Cluster</b> or the <b>Clusters</b> item from the menu.
-              </p>
-              <IonButton expand="block" routerLink="/settings/clusters" routerDirection="none">Add a Cluster</IonButton>
-            </IonCardContent>
-          </IonCard>}
+            </IonCard>
+          ) : (
+            <IonCard>
+              <img alt="kubenav" src="/assets/card-header.png" />
+              <IonCardHeader>
+                <IonCardSubtitle>Welcome to kubenav</IonCardSubtitle>
+                <IonCardTitle>Introduction</IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent>
+                <p className="paragraph-margin-bottom">
+                  Welcome to the kubenav app. After you added a cluster you can start the exploration of them within the kubenav app. To add a new Kubernetes cluster to the app use the button <b>Add a Cluster</b> or the <b>Clusters</b> item from the menu.
+                </p>
+                <IonButton expand="block" routerLink="/settings/clusters" routerDirection="none">Add a Cluster</IonButton>
+              </IonCardContent>
+            </IonCard>
+          )}
         </IonList>
       </IonContent>
     </IonPage>

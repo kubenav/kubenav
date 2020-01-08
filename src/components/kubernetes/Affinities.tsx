@@ -11,11 +11,11 @@ import React from 'react';
 import IonCardEqualHeight from '../misc/IonCardEqualHeight';
 import Affinity from './Affinity';
 
-interface AffinitiesProps {
+interface IAffinitiesProps {
   affinities: V1Affinity;
 }
 
-const Affinities: React.FunctionComponent<AffinitiesProps> = ({ affinities }) => {
+const Affinities: React.FunctionComponent<IAffinitiesProps> = ({ affinities }) => {
   const title = (affinity: string): string => {
     return affinity[0].toUpperCase() + affinity.slice(1);
   };

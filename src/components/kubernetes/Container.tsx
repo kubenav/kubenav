@@ -21,22 +21,22 @@ import { close } from 'ionicons/icons';
 import yaml from 'js-yaml';
 import React, {useState} from 'react';
 
-import { ContainerMetrics } from '../../declarations';
+import { IContainerMetrics } from '../../declarations';
 import { formatResourceValue } from '../../utils';
 import Editor from '../misc/Editor';
 import Logs from './Logs';
 import Row from './Row';
 
-interface ContainerProps {
+interface IContainerProps {
   container: V1Container;
   logs?: boolean;
-  metrics?: ContainerMetrics;
+  metrics?: IContainerMetrics;
   name?: string;
   namespace?: string;
   status?: V1ContainerStatus;
 }
 
-const Container: React.FunctionComponent<ContainerProps> = ({ container, logs, metrics, name, namespace, status }) => {
+const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, metrics, name, namespace, status }) => {
   const [showModal, setShowModal] = useState(false);
 
   const containerState = (state: V1ContainerState): string => {
@@ -92,9 +92,11 @@ const Container: React.FunctionComponent<ContainerProps> = ({ container, logs, m
           </IonLabel>
         </IonItem>
 
-        {logs && name && namespace ? <IonItemOptions side="end">
-          <Logs name={name} namespace={namespace} container={container.name} />
-        </IonItemOptions> : null}
+        {logs && name && namespace ? (
+          <IonItemOptions side="end">
+            <Logs name={name} namespace={namespace} container={container.name} />
+          </IonItemOptions>
+        ) : null}
       </IonItemSliding>
 
       <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
@@ -129,135 +131,153 @@ const Container: React.FunctionComponent<ContainerProps> = ({ container, logs, m
               </IonCol>
             </IonRow>
 
-            {status ? <IonRow>
-              <IonCol>
-                <IonCard>
-                  <IonCardHeader>
-                    <IonCardTitle>Status</IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <IonGrid>
-                      <Row obj={status} objKey="state" title="State" value={(state) => containerState(state)} />
-                      <Row obj={status} objKey="lastState" title="Last State" value={(lastState) => containerState(lastState)} />
-                      <Row obj={status} objKey="ready" title="Ready" value={(ready) => ready ? 'true' : 'false'} defaultValue="false" />
-                      <Row obj={status} objKey="restartCount" title="Restart Count" />
-                    </IonGrid>
-                  </IonCardContent>
-                </IonCard>
-              </IonCol>
-            </IonRow>: null}
+            {status ? (
+              <IonRow>
+                <IonCol>
+                  <IonCard>
+                    <IonCardHeader>
+                      <IonCardTitle>Status</IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <IonGrid>
+                        <Row obj={status} objKey="state" title="State" value={(state) => containerState(state)} />
+                        <Row obj={status} objKey="lastState" title="Last State" value={(lastState) => containerState(lastState)} />
+                        <Row obj={status} objKey="ready" title="Ready" value={(ready) => ready ? 'true' : 'false'} defaultValue="false" />
+                        <Row obj={status} objKey="restartCount" title="Restart Count" />
+                      </IonGrid>
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
+            ) : null}
 
-            {container.env ? <IonRow>
-              <IonCol>
-                <IonCard>
-                  <IonCardHeader>
-                    <IonCardTitle>Environment Variables</IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <IonGrid>
-                      {container.env.map((env, index) => <IonRow key={index}>
-                        <IonCol size="auto"><b>{env.name}:</b></IonCol>
-                        {env.value ? <IonCol>{env.value}</IonCol> : null}
-                        {env.valueFrom ? <IonCol>Source: {envValueFrom(env.valueFrom)}</IonCol> : null}
-                      </IonRow>)}
-                    </IonGrid>
-                  </IonCardContent>
-                </IonCard>
-              </IonCol>
-            </IonRow>: null}
+            {container.env ? (
+              <IonRow>
+                <IonCol>
+                  <IonCard>
+                    <IonCardHeader>
+                      <IonCardTitle>Environment Variables</IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <IonGrid>
+                        {container.env.map((env, index) => (
+                          <IonRow key={index}>
+                            <IonCol size="auto"><b>{env.name}:</b></IonCol>
+                            {env.value ? <IonCol>{env.value}</IonCol> : null}
+                            {env.valueFrom ? <IonCol>Source: {envValueFrom(env.valueFrom)}</IonCol> : null}
+                          </IonRow>
+                        ))}
+                      </IonGrid>
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
+            ) : null}
 
-            {container.volumeMounts ? <IonRow>
-              <IonCol>
-                <IonCard>
-                  <IonCardHeader>
-                    <IonCardTitle>Volume Mounts</IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <IonGrid>
-                      {container.volumeMounts.map((volume, index) => <IonRow key={index}>
-                        <IonCol size="auto"><b>{volume.name}:</b></IonCol>
-                        <IonCol>{volume.mountPath} {volume.readOnly ? '(ro)' : ''}</IonCol>
-                      </IonRow>)}
-                    </IonGrid>
-                  </IonCardContent>
-                </IonCard>
-              </IonCol>
-            </IonRow>: null}
+            {container.volumeMounts ? (
+              <IonRow>
+                <IonCol>
+                  <IonCard>
+                    <IonCardHeader>
+                      <IonCardTitle>Volume Mounts</IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <IonGrid>
+                        {container.volumeMounts.map((volume, index) => (
+                          <IonRow key={index}>
+                            <IonCol size="auto"><b>{volume.name}:</b></IonCol>
+                            <IonCol>{volume.mountPath} {volume.readOnly ? '(ro)' : ''}</IonCol>
+                          </IonRow>
+                        ))}
+                      </IonGrid>
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
+            ) : null}
 
-            {resources.length > 0 ? <IonRow>
-              <IonCol>
-                <IonCard>
-                  <IonCardHeader>
-                    <IonCardTitle>Resources</IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <div className="table">
-                      <table>
-                        <thead>
-                          <tr>
-                            <th> </th>
-                            <th>Requests</th>
-                            <th>Limits</th>
-                            <th>Usage</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {resources.map((resource, index) => {
-                            return (
-                              <tr key={index}>
-                                <td>{resource}</td>
-                                <td>{container.resources && container.resources.requests ? formatResourceValue(resource, container.resources.requests[resource]) : null}</td>
-                                <td>{container.resources && container.resources.limits ? formatResourceValue(resource, container.resources.limits[resource]) : null}</td>
-                                <td>{metrics && metrics.usage ? formatResourceValue(resource, metrics.usage[resource]) : null}</td>
-                              </tr>
-                            )
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
-                  </IonCardContent>
-                </IonCard>
-              </IonCol>
-            </IonRow>: null}
+            {resources.length > 0 ? (
+              <IonRow>
+                <IonCol>
+                  <IonCard>
+                    <IonCardHeader>
+                      <IonCardTitle>Resources</IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <div className="table">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th />
+                              <th>Requests</th>
+                              <th>Limits</th>
+                              <th>Usage</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {resources.map((resource, index) => {
+                              return (
+                                <tr key={index}>
+                                  <td>{resource}</td>
+                                  <td>{container.resources && container.resources.requests ? formatResourceValue(resource, container.resources.requests[resource]) : null}</td>
+                                  <td>{container.resources && container.resources.limits ? formatResourceValue(resource, container.resources.limits[resource]) : null}</td>
+                                  <td>{metrics && metrics.usage ? formatResourceValue(resource, metrics.usage[resource]) : null}</td>
+                                </tr>
+                              )
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
+            ) : null}
 
-            {container.livenessProbe ? <IonRow>
-              <IonCol>
-                <IonCard>
-                  <IonCardHeader>
-                    <IonCardTitle>Liveness Probe</IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <Editor readOnly={true} value={yaml.safeDump(container.livenessProbe)} />
-                  </IonCardContent>
-                </IonCard>
-              </IonCol>
-            </IonRow>: null}
+            {container.livenessProbe ? (
+              <IonRow>
+                <IonCol>
+                  <IonCard>
+                    <IonCardHeader>
+                      <IonCardTitle>Liveness Probe</IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <Editor readOnly={true} value={yaml.safeDump(container.livenessProbe)} />
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
+            ): null}
 
-            {container.readinessProbe ? <IonRow>
-              <IonCol>
-                <IonCard>
-                  <IonCardHeader>
-                    <IonCardTitle>Readiness Probe</IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <Editor readOnly={true} value={yaml.safeDump(container.readinessProbe)} />
-                  </IonCardContent>
-                </IonCard>
-              </IonCol>
-            </IonRow>: null}
+            {container.readinessProbe ? (
+              <IonRow>
+                <IonCol>
+                  <IonCard>
+                    <IonCardHeader>
+                      <IonCardTitle>Readiness Probe</IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <Editor readOnly={true} value={yaml.safeDump(container.readinessProbe)} />
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
+            ): null}
 
-            {container.securityContext ? <IonRow>
-              <IonCol>
-                <IonCard>
-                  <IonCardHeader>
-                    <IonCardTitle>Security Context</IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <Editor readOnly={true} value={yaml.safeDump(container.securityContext)} />
-                  </IonCardContent>
-                </IonCard>
-              </IonCol>
-            </IonRow>: null}
+            {container.securityContext ? (
+              <IonRow>
+                <IonCol>
+                  <IonCard>
+                    <IonCardHeader>
+                      <IonCardTitle>Security Context</IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <Editor readOnly={true} value={yaml.safeDump(container.securityContext)} />
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
+            ) : null}
           </IonGrid>
         </IonContent>
       </IonModal>

@@ -8,7 +8,7 @@ import 'ace-builds/src-noconflict/mode-text';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-solarized_dark';
 
-interface EditorProps {
+interface IEditorProps {
   onChange?: (newValue: string) => void;
   readOnly: boolean;
   mode?: string;
@@ -17,7 +17,7 @@ interface EditorProps {
   scrollToBottomButton?: boolean;
 }
 
-const Editor: React.FunctionComponent<EditorProps> = ({ onChange, readOnly, mode, value, fullHeight, scrollToBottomButton }) => {
+const Editor: React.FunctionComponent<IEditorProps> = ({ onChange, readOnly, mode, value, fullHeight, scrollToBottomButton }) => {
   const editor = useRef<AceEditor>(null);
 
   const [showScrollToBottomButton, setShowScrollToBottomButton] = useState<boolean>(scrollToBottomButton === true);
@@ -56,9 +56,11 @@ const Editor: React.FunctionComponent<EditorProps> = ({ onChange, readOnly, mode
 
   return (
     <React.Fragment>
-      {showScrollToBottomButton ? <div className="editor-scroll-to-bottom-button">
-        <IonButton size="small" onClick={() => scrollToBottom()}>Scroll to Bottom</IonButton>
-      </div> : null}
+      {showScrollToBottomButton ? (
+        <div className="editor-scroll-to-bottom-button">
+          <IonButton size="small" onClick={() => scrollToBottom()}>Scroll to Bottom</IonButton>
+        </div>
+      ) : null}
 
       <AceEditor
         height="100%"
@@ -78,7 +80,6 @@ const Editor: React.FunctionComponent<EditorProps> = ({ onChange, readOnly, mode
         value={value}
         width="100%"
       />
-
 
     </React.Fragment>
   )
