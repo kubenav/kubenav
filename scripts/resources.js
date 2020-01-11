@@ -98,9 +98,8 @@ function copyImages(sourcePath, targetPath, images) {
   }
 }
 
-// NOTE: Currently there is no iOS version of kubenav, so we do not need to copy the icons and splashes.
-// copyImages(SOURCE_IOS_ICON, TARGET_IOS_ICON, IOS_ICONS);
-// copyImages(SOURCE_IOS_SPLASH, TARGET_IOS_SPLASH, IOS_SPLASHES);
+copyImages(SOURCE_IOS_ICON, TARGET_IOS_ICON, IOS_ICONS);
+copyImages(SOURCE_IOS_SPLASH, TARGET_IOS_SPLASH, IOS_SPLASHES);
 
 copyImages(SOURCE_ANDROID_ICON, TARGET_ANDROID_ICON, ANDROID_ICONS);
 copyImages(SOURCE_ANDROID_SPLASH, TARGET_ANDROID_SPLASH, ANDROID_SPLASHES);
