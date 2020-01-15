@@ -22,6 +22,7 @@ import React, { useContext, useState } from 'react';
 
 import { AppContext } from '../../context';
 import { IContext, IKubeconfig, IKubeconfigCluster, IKubeconfigClusterRef, IKubeconfigUser, IKubeconfigUserRef } from '../../declarations';
+import Editor from '../misc/Editor';
 
 const getKubeconfigCluster = (name: string, clusters: IKubeconfigClusterRef[]): IKubeconfigCluster|null => {
   for (let cluster of clusters) {
@@ -85,10 +86,6 @@ const AddCluster: React.FunctionComponent = () => {
     setToken(event.target.value);
   };
 
-  const handleKubeconfig = (event) => {
-    setKubeconfig(event.target.value);
-  };
-
   const addCluster = () => {
     if (type === 'manual' && name === '') {
       setError('Name is required')
@@ -96,28 +93,36 @@ const AddCluster: React.FunctionComponent = () => {
       setError('URL is required')
     } else if (type === 'manual' && !url.startsWith('https://')) {
       setError('Invalid URL')
-    } else if (type === 'manual' && kubeconfig === '') {
+    } else if (type === 'manual' && certificateAuthorityData === '') {
+      setError('Certificate Authority Data is required')
+    } else if (type === 'manual' && clientCertificateData === '' && clientKeyData === '' && token === '') {
+      setError('Client Certificate Data and Client Key Data or Token is required')
+    } else if (type === 'kubeconfig' && kubeconfig === '') {
       setError('Kubeconfig is required')
     } else {
-      if (type === 'manual') {
-        context.addCluster({
-          id: '',
-          name: name,
-          url: url,
-          certificateAuthorityData: certificateAuthorityData,
-          clientCertificateData: clientCertificateData,
-          clientKeyData: clientKeyData,
-          token: token,
-          namespace: 'default',
-        });
-      } else if (type === 'kubeconfig') {
-        const config: IKubeconfig = yaml.safeLoad(kubeconfig);
+      try {
+        if (type === 'manual') {
+          context.addCluster({
+            id: '',
+            name: name,
+            url: url,
+            certificateAuthorityData: certificateAuthorityData,
+            clientCertificateData: clientCertificateData,
+            clientKeyData: clientKeyData,
+            token: token,
+            namespace: 'default',
+          });
+        } else if (type === 'kubeconfig') {
+          const config: IKubeconfig = yaml.safeLoad(kubeconfig);
 
-        for (let ctx of config.contexts) {
-          const cluster = getKubeconfigCluster(ctx.context.cluster, config.clusters);
-          const user = getKubeconfigUser(ctx.context.user, config.users);
+          for (let ctx of config.contexts) {
+            const cluster = getKubeconfigCluster(ctx.context.cluster, config.clusters);
+            const user = getKubeconfigUser(ctx.context.user, config.users);
 
-          if (ctx.name !== '' && cluster !== null && user !== null) {
+            if (ctx.name === '' || cluster === null || user === null || !cluster.server || !cluster['certificate-authority-data'] || !((user['client-certificate-data'] && user['client-key-data']) || user.token)) {
+              throw new Error('Invalid kubeconfig');
+            }
+
             context.addCluster({
               id: '',
               name: ctx.name,
@@ -130,16 +135,18 @@ const AddCluster: React.FunctionComponent = () => {
             });
           }
         }
-      }
 
-      setError('');
-      setName('');
-      setURL('');
-      setCertificateAuthorityData('');
-      setClientCertificateData('');
-      setClientKeyData('');
-      setToken('');
-      setShowModal(false);
+        setError('');
+        setName('');
+        setURL('');
+        setCertificateAuthorityData('');
+        setClientCertificateData('');
+        setClientKeyData('');
+        setToken('');
+        setShowModal(false);
+      } catch (err) {
+        setError(err.message);
+      }
     }
   };
 
@@ -172,12 +179,7 @@ const AddCluster: React.FunctionComponent = () => {
           </div>
 
           {type === 'kubeconfig' ? (
-            <IonList lines="full">
-              <IonItem>
-                <IonLabel position="stacked">Kubeconfig</IonLabel>
-                <IonTextarea autoGrow={true} value={kubeconfig} onInput={handleKubeconfig} />
-              </IonItem>
-            </IonList>
+            <Editor readOnly={false} value={kubeconfig} fullHeight={true} mode="yaml" onChange={(newValue: string) => setKubeconfig(newValue)} />
           ) : null}
 
           {type === 'manual' ? (
