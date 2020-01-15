@@ -64,7 +64,7 @@ export interface IContext {
   deleteCluster: (id: string) => void;
   editCluster: (editCluster: ICluster) => void;
   setNamespace: (namespace: string) => void;
-  request: (method: string, url: string, body: string) => Promise<any>;
+  request: (method: string, url: string, body: string, alternativeCluster?: ICluster) => Promise<any>;
 }
 
 export interface IKubeconfig {

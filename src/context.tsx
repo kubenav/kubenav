@@ -96,8 +96,8 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
     localStorage.setItem('clusters', JSON.stringify(updatedClusters));
   };
 
-  const request = async(method: string, url: string, body: string) => {
-    if (cluster === '') {
+  const request = async(method: string, url: string, body: string, alternativeCluster?: ICluster) => {
+    if (cluster === '' && alternativeCluster === undefined) {
       throw new Error('Select an active cluster');
     }
 
@@ -113,12 +113,12 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
       let data = await plugin.request({
         server: SERVER,
         method: method,
-        url: clusters[cluster].url + url,
+        url: alternativeCluster ? alternativeCluster.url : clusters[cluster].url + url,
         body: body,
-        certificateAuthorityData: clusters[cluster].certificateAuthorityData,
-        clientCertificateData: clusters[cluster].clientCertificateData,
-        clientKeyData: clusters[cluster].clientKeyData,
-        token: clusters[cluster].token,
+        certificateAuthorityData: alternativeCluster ? alternativeCluster.certificateAuthorityData : clusters[cluster].certificateAuthorityData,
+        clientCertificateData: alternativeCluster ? alternativeCluster.clientCertificateData : clusters[cluster].clientCertificateData,
+        clientKeyData: alternativeCluster ? alternativeCluster.clientKeyData : clusters[cluster].clientKeyData,
+        token: alternativeCluster ? alternativeCluster.token : clusters[cluster].token,
       });
 
       if (isJSON(data.data)) {
