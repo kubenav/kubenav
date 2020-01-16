@@ -1,5 +1,4 @@
 import {
-  IonAlert,
   IonBackButton,
   IonButtons,
   IonContent,
@@ -17,6 +16,7 @@ import { RouteComponentProps } from 'react-router';
 import ItemOptions from '../components/kubernetes/ItemOptions';
 import CustomResourceItem from '../components/kubernetes/items/CustomResourceItem';
 import NamespacePopover from '../components/kubernetes/NamespacePopover';
+import LoadingErrorCard from '../components/misc/LoadingErrorCard';
 import { AppContext } from '../context';
 import { IContext } from '../declarations';
 
@@ -48,7 +48,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
     })();
 
     return () => {};
-  }, [match, context.clusters]); /* eslint-disable-line */
+  }, [match, context.clusters, context.cluster]); /* eslint-disable-line */
 
   const doRefresh = async (event) => {
     event.detail.complete();
@@ -59,11 +59,16 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
     setShowLoading(true);
 
     try {
+      if (!context.clusters || !context.cluster) {
+        throw new Error('Select an active cluster');
+      }
+
       const namespace = context.clusters[context.cluster].namespace;
       const data: any = await context.request('GET', getURL(namespace, match.params.group, match.params.version, match.params.name), '');
+      setError('');
       setItems(data.items);
     } catch (err) {
-      setError(err);
+      setError(err.message);
     }
 
     setShowLoading(false);
@@ -81,19 +86,20 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header={`Could not get ${match.params.name}`} message={error} buttons={['OK']} /> : null}
         {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
         <IonRefresher slot="fixed"  onIonRefresh={doRefresh} />
 
-        <IonList>
-          {match.url === url && items ? items.map((item, index) => {
-            return (
-              <ItemOptions key={index} item={item} url={`${getURL(item.metadata ? item.metadata.namespace : '', match.params.group, match.params.version, match.params.name)}/${item.metadata ? item.metadata.name : ''}`}>
-                <CustomResourceItem item={item} />
-              </ItemOptions>
-            )
-          }) : null}
-        </IonList>
+        {error === '' && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? (
+          <IonList>
+            {match.url === url && items ? items.map((item, index) => {
+              return (
+                <ItemOptions key={index} item={item} url={`${getURL(item.metadata ? item.metadata.namespace : '', match.params.group, match.params.version, match.params.name)}/${item.metadata ? item.metadata.name : ''}`}>
+                  <CustomResourceItem item={item} />
+                </ItemOptions>
+              )
+            }) : null}
+          </IonList>
+        ) : <LoadingErrorCard error={error} exists={context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? true  : false} icon="/assets/icons/kubernetes/crd.png" text={`Could not get Custom Resource "${match.params.name}"`} />}
       </IonContent>
     </IonPage>
   );

@@ -24,13 +24,13 @@ export const AppContext = React.createContext<IContext>({
 export const AppContextConsumer = AppContext.Consumer;
 
 export const AppContextProvider: React.FunctionComponent = ({ children }) => {
-  const [clusters, setClusters] = useState<IClusters>(() => localStorage.getItem('clusters') === null ? {} : JSON.parse(localStorage.getItem('clusters') as string) as ICluster[]);
-  const [cluster, setCluster] = useState<string>(() => localStorage.getItem('cluster') !== null && localStorage.getItem('cluster') !== '' ? localStorage.getItem('cluster') as string : Object.keys(clusters).length > 0 ? Object.keys(clusters)[0] : '');
+  const [clusters, setClusters] = useState<IClusters|undefined>(() => localStorage.getItem('clusters') === null ? undefined : JSON.parse(localStorage.getItem('clusters') as string) as IClusters);
+  const [cluster, setCluster] = useState<string|undefined>(() => localStorage.getItem('cluster') !== null && localStorage.getItem('cluster') !== '' ? localStorage.getItem('cluster') as string : clusters && Object.keys(clusters).length > 0 ? Object.keys(clusters)[0] : undefined);
 
   const addCluster = (newCluster: ICluster) => {
     let id = '';
     const checkID = (id: string): boolean => {
-      return clusters.hasOwnProperty(id) || id === '';
+      return !clusters || clusters.hasOwnProperty(id) || id === '';
     };
 
     while (checkID(id)) {
@@ -43,33 +43,39 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
     newCluster.clientCertificateData = isBase64(newCluster.clientCertificateData) ? atob(newCluster.clientCertificateData) : newCluster.clientCertificateData;
     newCluster.clientKeyData = isBase64(newCluster.clientKeyData) ? atob(newCluster.clientKeyData) : newCluster.clientKeyData;
 
-    let updatedClusters = clusters;
-    updatedClusters[newCluster.id] = newCluster;
-
-    setClusters({...updatedClusters});
-    localStorage.setItem('clusters', JSON.stringify(updatedClusters));
+    if (clusters) {
+      let updatedClusters = clusters;
+      updatedClusters[newCluster.id] = newCluster;
+      setClusters({...updatedClusters});
+      localStorage.setItem('clusters', JSON.stringify(updatedClusters));
+    } else {
+      setClusters({[newCluster.id]: newCluster});
+      localStorage.setItem('clusters', JSON.stringify({[newCluster.id]: newCluster}));
+    }
   };
 
   const changeCluster = (id: string) => {
-    if (clusters.hasOwnProperty(id)) {
+    if (clusters && clusters.hasOwnProperty(id)) {
       setCluster(id);
       localStorage.setItem('cluster', id);
     }
   };
 
   const deleteCluster = (id: string) => {
-    let filteredClusters = clusters;
-    delete filteredClusters[id];
-    setClusters({...filteredClusters});
-    localStorage.setItem('clusters', JSON.stringify(filteredClusters));
+    if (clusters) {
+      let filteredClusters = clusters;
+      delete filteredClusters[id];
+      setClusters({...filteredClusters});
+      localStorage.setItem('clusters', JSON.stringify(filteredClusters));
 
-    if (cluster === id) {
-      if (Object.keys(filteredClusters).length > 0) {
-        setCluster(Object.keys(clusters)[0]);
-        localStorage.setItem('cluster', Object.keys(clusters)[0]);
-      } else {
-        setCluster('');
-        localStorage.setItem('cluster', '');
+      if (cluster === id) {
+        if (Object.keys(filteredClusters).length > 0) {
+          setCluster(Object.keys(clusters)[0]);
+          localStorage.setItem('cluster', Object.keys(clusters)[0]);
+        } else {
+          setCluster(undefined);
+          localStorage.setItem('cluster', '');
+        }
       }
     }
   };
@@ -80,7 +86,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
     editCluster.clientCertificateData = isBase64(editCluster.clientCertificateData) ? atob(editCluster.clientCertificateData) : editCluster.clientCertificateData;
     editCluster.clientKeyData = isBase64(editCluster.clientKeyData) ? atob(editCluster.clientKeyData) : editCluster.clientKeyData;
 
-    if (cluster !== '') {
+    if (clusters && cluster !== '') {
       let updatedClusters = clusters;
       updatedClusters[editCluster.id] = editCluster;
       setClusters({...updatedClusters});
@@ -89,15 +95,17 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
   };
 
   const setNamespace = (namespace: string) => {
-    let updatedClusters = clusters;
-    updatedClusters[cluster].namespace = namespace;
+    if (clusters && cluster) {
+      let updatedClusters = clusters;
+      updatedClusters[cluster].namespace = namespace;
 
-    setClusters({...updatedClusters});
-    localStorage.setItem('clusters', JSON.stringify(updatedClusters));
+      setClusters({...updatedClusters});
+      localStorage.setItem('clusters', JSON.stringify(updatedClusters));
+    }
   };
 
   const request = async(method: string, url: string, body: string, alternativeCluster?: ICluster) => {
-    if (cluster === '' && alternativeCluster === undefined) {
+    if ((clusters === undefined || cluster === undefined) && alternativeCluster === undefined) {
       throw new Error('Select an active cluster');
     }
 
@@ -113,12 +121,12 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
       let data = await plugin.request({
         server: SERVER,
         method: method,
-        url: alternativeCluster ? alternativeCluster.url : clusters[cluster].url + url,
+        url: alternativeCluster ? alternativeCluster.url : clusters![cluster!].url + url,
         body: body,
-        certificateAuthorityData: alternativeCluster ? alternativeCluster.certificateAuthorityData : clusters[cluster].certificateAuthorityData,
-        clientCertificateData: alternativeCluster ? alternativeCluster.clientCertificateData : clusters[cluster].clientCertificateData,
-        clientKeyData: alternativeCluster ? alternativeCluster.clientKeyData : clusters[cluster].clientKeyData,
-        token: alternativeCluster ? alternativeCluster.token : clusters[cluster].token,
+        certificateAuthorityData: alternativeCluster ? alternativeCluster.certificateAuthorityData : clusters![cluster!].certificateAuthorityData,
+        clientCertificateData: alternativeCluster ? alternativeCluster.clientCertificateData : clusters![cluster!].clientCertificateData,
+        clientKeyData: alternativeCluster ? alternativeCluster.clientKeyData : clusters![cluster!].clientKeyData,
+        token: alternativeCluster ? alternativeCluster.token : clusters![cluster!].token,
       });
 
       if (isJSON(data.data)) {

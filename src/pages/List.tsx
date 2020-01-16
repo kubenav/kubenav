@@ -1,5 +1,4 @@
 import {
-  IonAlert,
   IonButtons,
   IonContent,
   IonHeader,
@@ -16,6 +15,7 @@ import { RouteComponentProps } from 'react-router';
 
 import ItemOptions from '../components/kubernetes/ItemOptions';
 import NamespacePopover from '../components/kubernetes/NamespacePopover';
+import LoadingErrorCard from '../components/misc/LoadingErrorCard';
 import { AppContext } from '../context';
 import { IContext } from '../declarations';
 import { sections } from '../sections';
@@ -49,7 +49,7 @@ const List: React.FunctionComponent<IListProps> = ({ match }) => {
     })();
 
     return () => {};
-  }, [match, context.clusters]); /* eslint-disable-line */
+  }, [match, context.clusters, context.cluster]); /* eslint-disable-line */
 
   const doRefresh = async (event) => {
     event.detail.complete();
@@ -60,11 +60,16 @@ const List: React.FunctionComponent<IListProps> = ({ match }) => {
     setShowLoading(true);
 
     try {
+      if (!context.clusters || !context.cluster) {
+        throw new Error('Select an active cluster');
+      }
+
       const namespace = context.clusters[context.cluster].namespace;
       const data: any = await context.request('GET', page.listURL(namespace), '');
+      setError('');
       setItems(data.items);
     } catch (err) {
-      setError(err);
+      setError(err.message);
     }
 
     setShowLoading(false);
@@ -82,19 +87,20 @@ const List: React.FunctionComponent<IListProps> = ({ match }) => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header={`Could not get ${page.pluralText}`} message={error} buttons={['OK']} /> : null}
         {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
         <IonRefresher slot="fixed"  onIonRefresh={doRefresh} />
 
-        <IonList>
-          {match.url === url && items ? items.map((item, index) => {
-            return (
-              <ItemOptions key={index} item={item} url={page.detailsURL(item.metadata ? item.metadata.namespace : '', item.metadata ? item.metadata.name : '')}>
-                <Component key={index} item={item} section={match.params.section} type={match.params.type} />
-              </ItemOptions>
-            )
-          }) : null}
-        </IonList>
+        {error === '' && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? (
+          <IonList>
+            {match.url === url && items ? items.map((item, index) => {
+              return (
+                <ItemOptions key={index} item={item} url={page.detailsURL(item.metadata ? item.metadata.namespace : '', item.metadata ? item.metadata.name : '')}>
+                  <Component key={index} item={item} section={match.params.section} type={match.params.type} />
+                </ItemOptions>
+              )
+            }) : null}
+          </IonList>
+        ) : <LoadingErrorCard error={error} exists={context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? true  : false} icon={page.icon} text={`Could not get ${page.pluralText}`} />}
       </IonContent>
     </IonPage>
   );
