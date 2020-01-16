@@ -68,6 +68,10 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) =>
       setError('URL is required')
     } else if (!url.startsWith('https://')) {
       setError('Invalid URL')
+    } else if (certificateAuthorityData === '') {
+      setError('Certificate Authority Data is required')
+    } else if (clientCertificateData === '' && clientKeyData === '' && token === '') {
+      setError('Client Certificate Data and Client Key Data or Token is required')
     } else {
       context.editCluster({
         id: cluster.id,

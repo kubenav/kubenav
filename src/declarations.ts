@@ -56,8 +56,8 @@ export interface IContainerMetrics {
 }
 
 export interface IContext {
-  clusters: IClusters;
-  cluster: string;
+  clusters?: IClusters;
+  cluster?: string;
 
   addCluster: (newCluster: ICluster) => void;
   changeCluster: (id: string) => void;

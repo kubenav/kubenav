@@ -1,5 +1,4 @@
 import {
-  IonAlert,
   IonBackButton,
   IonButtons,
   IonContent,
@@ -13,6 +12,7 @@ import {
 import React, {useContext, useEffect, useState} from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import LoadingErrorCard from '../components/misc/LoadingErrorCard';
 import { AppContext } from '../context';
 import { IContext } from '../declarations';
 import { sections } from '../sections';
@@ -57,6 +57,7 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ match }) => {
 
     try {
       const data: any = await context.request('GET', page.detailsURL(match.params.namespace, match.params.name), '');
+      setError('');
       setItem(data);
     } catch (err) {
       setError(err);
@@ -76,11 +77,12 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ match }) => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header={`Could not get ${page.pluralText}`} message={error} buttons={['OK']} /> : null}
         {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
         <IonRefresher slot="fixed"  onIonRefresh={doRefresh} />
 
-        {match.url === url && item ? <Component item={item} section={match.params.section} type={match.params.type} /> : null}
+        {error === '' && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) && match.url === url && item ? (
+          <Component item={item} section={match.params.section} type={match.params.type} />
+        ) : <LoadingErrorCard error={error} exists={context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? true  : false} icon={page.icon} text={`Could not get ${page.pluralText}`} />}
       </IonContent>
     </IonPage>
   );
