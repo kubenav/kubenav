@@ -1,5 +1,6 @@
 import {
   IonAlert,
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
@@ -67,8 +68,10 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ name, namespace, container 
       <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
         <IonHeader>
           <IonToolbar>
-            <IonButtons slot="start" onClick={() => setShowModal(false)}>
-              <IonIcon slot="icon-only" icon={close} />
+            <IonButtons slot="start">
+              <IonButton onClick={() => setShowModal(false)}>
+                <IonIcon slot="icon-only" icon={close} />
+              </IonButton>
             </IonButtons>
             <IonTitle>{container}</IonTitle>
             <IonButtons slot="primary" onClick={() => load()}>

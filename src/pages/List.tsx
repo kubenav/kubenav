@@ -1,15 +1,18 @@
 import {
+  IonButton,
   IonButtons,
   IonContent,
-  IonHeader,
+  IonHeader, IonIcon,
   IonList,
   IonMenuButton,
   IonPage,
   IonProgressBar,
   IonRefresher,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  isPlatform,
 } from '@ionic/react';
+import { refresh } from 'ionicons/icons';
 import React, {useContext, useEffect, useState} from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -83,12 +86,19 @@ const List: React.FunctionComponent<IListProps> = ({ match }) => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle>{page.pluralText}</IonTitle>
-          {isNamespaced(match.params.type) ? <NamespacePopover /> : null}
+          <IonButtons slot="primary">
+            {!isPlatform('hybrid') ? (
+              <IonButton onClick={() => load()}>
+                <IonIcon slot="icon-only" icon={refresh} />
+              </IonButton>
+            ) : null}
+            {isNamespaced(match.params.type) ? <NamespacePopover /> : null}
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
-        <IonRefresher slot="fixed"  onIonRefresh={doRefresh} />
+        <IonRefresher slot="fixed" onIonRefresh={doRefresh} />
 
         {error === '' && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? (
           <IonList>

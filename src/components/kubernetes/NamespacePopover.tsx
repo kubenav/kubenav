@@ -1,7 +1,6 @@
 import {
   IonAlert,
   IonButton,
-  IonButtons,
   IonIcon,
   IonItem,
   IonLabel,
@@ -46,7 +45,7 @@ const NamespacePopover: React.FunctionComponent = () => {
   };
 
   return (
-    <IonButtons slot="primary">
+    <React.Fragment>
       {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => { setShowPopover(false); setError(''); }} header="Could not get namespaces" message={error} buttons={['OK']} /> : (
         <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
           {namespaces ? (
@@ -77,7 +76,7 @@ const NamespacePopover: React.FunctionComponent = () => {
       <IonButton onClick={(e) => { e.persist(); setPopoverEvent(e); loadNamespaces(); }}>
         <IonIcon slot="icon-only" icon={options} />
       </IonButton>
-    </IonButtons>
+    </React.Fragment>
   );
 };
 

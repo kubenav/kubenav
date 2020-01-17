@@ -1,5 +1,6 @@
 import {
   IonAvatar,
+  IonButton,
   IonButtons,
   IonCol,
   IonContent,
@@ -22,7 +23,7 @@ const License: React.FunctionComponent = () => {
 
   return (
     <React.Fragment>
-      <IonItem onClick={() => setShowModal(true)}>
+      <IonItem button={true} onClick={() => setShowModal(true)}>
         <IonAvatar slot="start">
           <img alt="version" src="/assets/icons/misc/license.png" />
         </IonAvatar>
@@ -33,8 +34,10 @@ const License: React.FunctionComponent = () => {
       <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
         <IonHeader>
           <IonToolbar>
-            <IonButtons slot="start" onClick={() => setShowModal(false)}>
-              <IonIcon slot="icon-only" icon={close} />
+            <IonButtons slot="start">
+              <IonButton onClick={() => setShowModal(false)}>
+                <IonIcon slot="icon-only" icon={close} />
+              </IonButton>
             </IonButtons>
             <IonTitle>MIT License</IonTitle>
           </IonToolbar>

@@ -1,4 +1,5 @@
 import {
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
@@ -26,7 +27,7 @@ const Affinity: React.FunctionComponent<IAffinityProps> = ({ title, affinity }) 
 
   return (
     <React.Fragment>
-      <IonItem onClick={() => setShowModal(true)}>
+      <IonItem button={true} onClick={() => setShowModal(true)}>
         <IonLabel>
           <h2>{title}</h2>
         </IonLabel>
@@ -35,8 +36,10 @@ const Affinity: React.FunctionComponent<IAffinityProps> = ({ title, affinity }) 
       <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
         <IonHeader>
           <IonToolbar>
-            <IonButtons slot="start" onClick={() => setShowModal(false)}>
-              <IonIcon slot="icon-only" icon={close} />
+            <IonButtons slot="start">
+              <IonButton onClick={() => setShowModal(false)}>
+                <IonIcon slot="icon-only" icon={close} />
+              </IonButton>
             </IonButtons>
             <IonTitle>{title}</IonTitle>
           </IonToolbar>

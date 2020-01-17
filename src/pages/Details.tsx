@@ -1,17 +1,23 @@
 import {
   IonBackButton,
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
+  IonIcon,
   IonPage,
   IonProgressBar,
   IonRefresher,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  isPlatform,
 } from '@ionic/react';
-import React, {useContext, useEffect, useState} from 'react';
+import { refresh } from 'ionicons/icons';
+import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import DeleteItem from '../components/kubernetes/DeleteItem';
+import EditItem from '../components/kubernetes/EditItem';
 import LoadingErrorCard from '../components/misc/LoadingErrorCard';
 import { AppContext } from '../context';
 import { IContext } from '../declarations';
@@ -60,7 +66,7 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ match }) => {
       setError('');
       setItem(data);
     } catch (err) {
-      setError(err);
+      setError(err.message);
     }
 
     setShowLoading(false);
@@ -74,6 +80,15 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ match }) => {
             <IonBackButton defaultHref={`/kubernetes/${match.params.section}/${match.params.type}`} />
           </IonButtons>
           <IonTitle>{item && item.metadata ? item.metadata.name : ''}</IonTitle>
+          {!isPlatform('hybrid') ? (
+            <IonButtons slot="primary">
+              <IonButton onClick={() => load()}>
+                <IonIcon slot="icon-only" icon={refresh} />
+              </IonButton>
+              {item ? <EditItem activator="button" item={item} url={page.detailsURL(item.metadata ? item.metadata.namespace : '', item.metadata ? item.metadata.name : '')} /> : null}
+              {item ? <DeleteItem activator="button" item={item} url={page.detailsURL(item.metadata ? item.metadata.namespace : '', item.metadata ? item.metadata.name : '')} /> : null}
+            </IonButtons>
+          ) : null}
         </IonToolbar>
       </IonHeader>
       <IonContent>

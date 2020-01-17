@@ -18,8 +18,8 @@ const ItemOptions: React.FunctionComponent<IItemOptionsProps> = ({ item, url, ch
       {children}
 
       <IonItemOptions side="end">
-        <EditItem item={item} url={url} />
-        <DeleteItem item={item} url={url} />
+        <EditItem activator="item-option" item={item} url={url} />
+        <DeleteItem activator="item-option" item={item} url={url} />
       </IonItemOptions>
     </IonItemSliding>
   );

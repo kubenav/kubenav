@@ -139,3 +139,5 @@ export interface IPodMetricsList {
 }
 
 export type TCondition = V1DeploymentCondition | V1JobCondition | V1NodeCondition | V1PodCondition | V1PersistentVolumeClaimCondition | V1ReplicaSetCondition | V1ReplicationControllerCondition | V1StatefulSetCondition;
+
+export type TActivator = 'button' | 'item-option';
