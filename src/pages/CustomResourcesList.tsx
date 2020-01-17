@@ -1,15 +1,17 @@
 import {
-  IonBackButton,
+  IonBackButton, IonButton,
   IonButtons,
   IonContent,
-  IonHeader,
+  IonHeader, IonIcon,
   IonList,
   IonPage,
   IonProgressBar,
   IonRefresher,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  isPlatform,
 } from '@ionic/react';
+import { refresh } from 'ionicons/icons';
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -82,12 +84,19 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
             <IonBackButton defaultHref={`/kubernetes/cluster/customresourcedefinitions`} />
           </IonButtons>
           <IonTitle>{match.params.name}</IonTitle>
-          <NamespacePopover />
+          <IonButtons slot="primary">
+            {!isPlatform('hybrid') ? (
+              <IonButton onClick={() => load()}>
+                <IonIcon slot="icon-only" icon={refresh} />
+              </IonButton>
+            ) : null}
+            <NamespacePopover />
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
-        <IonRefresher slot="fixed"  onIonRefresh={doRefresh} />
+        <IonRefresher slot="fixed" onIonRefresh={doRefresh} />
 
         {error === '' && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? (
           <IonList>
