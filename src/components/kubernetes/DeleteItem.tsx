@@ -1,5 +1,6 @@
 import {
   IonAlert,
+  IonButton,
   IonIcon,
   IonItemOption,
 } from '@ionic/react';
@@ -7,14 +8,15 @@ import { trash } from 'ionicons/icons';
 import React, {useContext, useState} from 'react';
 
 import { AppContext } from '../../context';
-import { IContext } from '../../declarations';
+import { IContext, TActivator } from '../../declarations';
 
 interface IDeleteItemProps {
+  activator: TActivator;
   item: any;
   url: string;
 }
 
-const DeleteItem: React.FunctionComponent<IDeleteItemProps> = ({ item, url }) => {
+const DeleteItem: React.FunctionComponent<IDeleteItemProps> = ({ activator, item, url }) => {
   const context = useContext<IContext>(AppContext);
 
   const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -30,10 +32,18 @@ const DeleteItem: React.FunctionComponent<IDeleteItemProps> = ({ item, url }) =>
 
   return (
     <React.Fragment>
-      <IonItemOption color="danger" onClick={() => setShowAlert(true)}>
-        <IonIcon slot="start" icon={trash} />
-        Delete
-      </IonItemOption>
+      {activator === 'item-option' ? (
+        <IonItemOption color="danger" onClick={() => setShowAlert(true)}>
+          <IonIcon slot="start" icon={trash} />
+          Delete
+        </IonItemOption>
+      ) : null}
+
+      {activator === 'button' ? (
+        <IonButton onClick={() => setShowAlert(true)}>
+          <IonIcon slot="icon-only" icon={trash} />
+        </IonButton>
+      ) : null}
 
       {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header={`Could not delete ${item.metadata ? item.metadata.name : ''}`} message={error} buttons={['OK']} /> : null}
 

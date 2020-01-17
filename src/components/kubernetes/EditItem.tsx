@@ -16,15 +16,16 @@ import yaml from 'js-yaml';
 import React, { useContext, useState } from 'react';
 
 import { AppContext } from '../../context';
-import { IContext } from '../../declarations';
+import { IContext, TActivator } from '../../declarations';
 import Editor from '../misc/Editor';
 
 interface IEditItemProps {
+  activator: TActivator;
   item: any;
   url: string;
 }
 
-const EditItem: React.FunctionComponent<IEditItemProps> = ({ item, url }) => {
+const EditItem: React.FunctionComponent<IEditItemProps> = ({ activator, item, url }) => {
   const context = useContext<IContext>(AppContext);
 
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -43,12 +44,20 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ item, url }) => {
 
   return (
     <React.Fragment>
-      {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header="Could not save" message={error} buttons={['OK']} /> : null}
+      {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header={`Could not save ${item.metadata ? item.metadata.name : ''}`} message={error} buttons={['OK']} /> : null}
 
-      <IonItemOption color="primary" onClick={() => setShowModal(true)}>
-        <IonIcon slot="start" icon={create} />
-        Edit
-      </IonItemOption>
+      {activator === 'item-option' ? (
+        <IonItemOption color="primary" onClick={() => setShowModal(true)}>
+          <IonIcon slot="start" icon={create} />
+          Edit
+        </IonItemOption>
+      ) : null}
+
+      {activator === 'button' ? (
+        <IonButton onClick={() => setShowModal(true)}>
+          <IonIcon slot="icon-only" icon={create} />
+        </IonButton>
+      ) : null}
 
       <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
         <IonHeader>
