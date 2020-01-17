@@ -62,8 +62,10 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ activator, item, ur
       <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
         <IonHeader>
           <IonToolbar>
-            <IonButtons slot="start" onClick={() => setShowModal(false)}>
-              <IonIcon slot="icon-only" icon={close} />
+            <IonButtons slot="start">
+              <IonButton onClick={() => setShowModal(false)}>
+                <IonIcon slot="icon-only" icon={close} />
+              </IonButton>
             </IonButtons>
             <IonTitle>{item.metadata ? item.metadata.name : ''}</IonTitle>
             <IonButtons slot="primary">

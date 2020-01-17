@@ -1,4 +1,5 @@
 import {
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
@@ -24,7 +25,7 @@ const Data: React.FunctionComponent<IDataProps> = ({ name, data }) => {
 
   return (
     <React.Fragment>
-      <IonItem onClick={() => setShowModal(true)}>
+      <IonItem button={true} onClick={() => setShowModal(true)}>
         <IonLabel>
           <h2>{name}</h2>
         </IonLabel>
@@ -33,8 +34,10 @@ const Data: React.FunctionComponent<IDataProps> = ({ name, data }) => {
       <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
         <IonHeader>
           <IonToolbar>
-            <IonButtons slot="start" onClick={() => setShowModal(false)}>
-              <IonIcon slot="icon-only" icon={close} />
+            <IonButtons slot="start">
+              <IonButton onClick={() => setShowModal(false)}>
+                <IonIcon slot="icon-only" icon={close} />
+              </IonButton>
             </IonButtons>
             <IonTitle>{name}</IonTitle>
           </IonToolbar>

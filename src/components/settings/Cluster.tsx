@@ -37,7 +37,7 @@ const Cluster: React.FunctionComponent<IClusterProps> = ({ cluster }) => {
 
   return (
     <IonItemSliding>
-      <IonItem onClick={() => context.changeCluster(cluster.id)}>
+      <IonItem button={true} onClick={() => context.changeCluster(cluster.id)}>
         <IonIcon slot="end" color={status ? 'success' : 'danger'} icon={context.cluster && cluster.id === context.cluster ? radioButtonOn : radioButtonOff} />
         <IonLabel>{cluster.name}</IonLabel>
       </IonItem>

@@ -1,4 +1,5 @@
 import {
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
@@ -36,7 +37,7 @@ const Volume: React.FunctionComponent<IVolumeProps> = ({ volume }) => {
 
   return (
     <React.Fragment>
-      <IonItem onClick={() => setShowModal(true)}>
+      <IonItem button={true} className="cursor-pointer" onClick={() => setShowModal(true)}>
         <IonLabel>
           <h2>{volume.name}</h2>
           <p>{kind}</p>
@@ -46,8 +47,10 @@ const Volume: React.FunctionComponent<IVolumeProps> = ({ volume }) => {
       <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
         <IonHeader>
           <IonToolbar>
-            <IonButtons slot="start" onClick={() => setShowModal(false)}>
-              <IonIcon slot="icon-only" icon={close} />
+            <IonButtons slot="start">
+              <IonButton onClick={() => setShowModal(false)}>
+                <IonIcon slot="icon-only" icon={close} />
+              </IonButton>
             </IonButtons>
             <IonTitle>{volume.name}</IonTitle>
           </IonToolbar>

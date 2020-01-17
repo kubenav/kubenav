@@ -1,4 +1,5 @@
 import {
+  IonButton,
   IonButtons,
   IonCard,
   IonCardContent,
@@ -9,7 +10,9 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
-  IonItem, IonItemOptions, IonItemSliding,
+  IonItem,
+  IonItemOptions,
+  IonItemSliding,
   IonLabel,
   IonModal,
   IonRow,
@@ -86,7 +89,7 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
   return (
     <React.Fragment>
       <IonItemSliding>
-        <IonItem onClick={() => setShowModal(true)}>
+        <IonItem button={true} onClick={() => setShowModal(true)}>
           <IonLabel>
             <h2>{container.name}</h2>
           </IonLabel>
@@ -102,8 +105,10 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
       <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
         <IonHeader>
           <IonToolbar>
-            <IonButtons slot="start" onClick={() => setShowModal(false)}>
-              <IonIcon slot="icon-only" icon={close} />
+            <IonButtons slot="start">
+              <IonButton onClick={() => setShowModal(false)}>
+                <IonIcon slot="icon-only" icon={close} />
+              </IonButton>
             </IonButtons>
             <IonTitle>{container.name}</IonTitle>
           </IonToolbar>
