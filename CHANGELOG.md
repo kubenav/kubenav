@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.1.0](https://github.com/kubenav/kubenav/tree/1.1.0) (2020-01-19)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/1.0.0...1.1.0)
+
+**Implemented enhancements:**
+
+- Create iOS Version [\#1](https://github.com/kubenav/kubenav/issues/1)
+- Several UI fixed and improvements [\#8](https://github.com/kubenav/kubenav/pull/8) ([ricoberger](https://github.com/ricoberger))
+- Improve Error Handling [\#7](https://github.com/kubenav/kubenav/pull/7) ([ricoberger](https://github.com/ricoberger))
+- Add iOS Support [\#5](https://github.com/kubenav/kubenav/pull/5) ([ricoberger](https://github.com/ricoberger))
+- Add linting [\#4](https://github.com/kubenav/kubenav/pull/4) ([ricoberger](https://github.com/ricoberger))
+
+**Fixed bugs:**
+
+- Deletion of Pods doesn't work [\#2](https://github.com/kubenav/kubenav/issues/2)
+- Improve native app builds [\#10](https://github.com/kubenav/kubenav/pull/10) ([ricoberger](https://github.com/ricoberger))
+- Fix cluster management [\#9](https://github.com/kubenav/kubenav/pull/9) ([ricoberger](https://github.com/ricoberger))
+- Add alternative cluster option for request method [\#6](https://github.com/kubenav/kubenav/pull/6) ([ricoberger](https://github.com/ricoberger))
+
+**Merged pull requests:**
+
+- Fix deletion and editing of resources on desktop [\#3](https://github.com/kubenav/kubenav/pull/3) ([ricoberger](https://github.com/ricoberger))
+
 ## [1.0.0](https://github.com/kubenav/kubenav/tree/1.0.0) (2020-01-05)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/637b2fee3b9a5812a151046163cdac254d6b3007...1.0.0)
