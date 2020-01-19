@@ -59,7 +59,7 @@ export interface IContext {
   clusters?: IClusters;
   cluster?: string;
 
-  addCluster: (newCluster: ICluster) => void;
+  addCluster: (newCluster: ICluster[]) => void;
   changeCluster: (id: string) => void;
   deleteCluster: (id: string) => void;
   editCluster: (editCluster: ICluster) => void;

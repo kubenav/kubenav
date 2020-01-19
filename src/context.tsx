@@ -24,34 +24,33 @@ export const AppContext = React.createContext<IContext>({
 export const AppContextConsumer = AppContext.Consumer;
 
 export const AppContextProvider: React.FunctionComponent = ({ children }) => {
-  const [clusters, setClusters] = useState<IClusters|undefined>(() => localStorage.getItem('clusters') === null ? undefined : JSON.parse(localStorage.getItem('clusters') as string) as IClusters);
+  const [clusters, setClusters] = useState<IClusters|undefined>(() => localStorage.getItem('clusters') !== null && localStorage.getItem('clusters') !== '' ? JSON.parse(localStorage.getItem('clusters') as string) as IClusters : undefined);
   const [cluster, setCluster] = useState<string|undefined>(() => localStorage.getItem('cluster') !== null && localStorage.getItem('cluster') !== '' ? localStorage.getItem('cluster') as string : clusters && Object.keys(clusters).length > 0 ? Object.keys(clusters)[0] : undefined);
 
-  const addCluster = (newCluster: ICluster) => {
-    let id = '';
-    const checkID = (id: string): boolean => {
-      return !clusters || clusters.hasOwnProperty(id) || id === '';
-    };
+  const addCluster = (newClusters: ICluster[]) => {
+    let updatedClusters = {};
 
-    while (checkID(id)) {
-      id = randomString(32);
-    }
+    for (let newCluster of newClusters) {
+      let id = '';
+      const checkID = (id: string): boolean => {
+        return (clusters && clusters.hasOwnProperty(id)) || id === '';
+      };
 
-    newCluster.id = id;
-    newCluster.url = newCluster.url.slice(-1) === '/' ? newCluster.url.slice(0, -1) : newCluster.url;
-    newCluster.certificateAuthorityData = isBase64(newCluster.certificateAuthorityData) ? atob(newCluster.certificateAuthorityData) : newCluster.certificateAuthorityData;
-    newCluster.clientCertificateData = isBase64(newCluster.clientCertificateData) ? atob(newCluster.clientCertificateData) : newCluster.clientCertificateData;
-    newCluster.clientKeyData = isBase64(newCluster.clientKeyData) ? atob(newCluster.clientKeyData) : newCluster.clientKeyData;
+      while (checkID(id)) {
+        id = randomString(32);
+      }
 
-    if (clusters) {
-      let updatedClusters = clusters;
+      newCluster.id = id;
+      newCluster.url = newCluster.url.slice(-1) === '/' ? newCluster.url.slice(0, -1) : newCluster.url;
+      newCluster.certificateAuthorityData = isBase64(newCluster.certificateAuthorityData) ? atob(newCluster.certificateAuthorityData) : newCluster.certificateAuthorityData;
+      newCluster.clientCertificateData = isBase64(newCluster.clientCertificateData) ? atob(newCluster.clientCertificateData) : newCluster.clientCertificateData;
+      newCluster.clientKeyData = isBase64(newCluster.clientKeyData) ? atob(newCluster.clientKeyData) : newCluster.clientKeyData;
+
       updatedClusters[newCluster.id] = newCluster;
-      setClusters({...updatedClusters});
-      localStorage.setItem('clusters', JSON.stringify(updatedClusters));
-    } else {
-      setClusters({[newCluster.id]: newCluster});
-      localStorage.setItem('clusters', JSON.stringify({[newCluster.id]: newCluster}));
     }
+
+    setClusters({...updatedClusters});
+    localStorage.setItem('clusters', JSON.stringify(updatedClusters));
   };
 
   const changeCluster = (id: string) => {
@@ -65,8 +64,14 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
     if (clusters) {
       let filteredClusters = clusters;
       delete filteredClusters[id];
-      setClusters({...filteredClusters});
-      localStorage.setItem('clusters', JSON.stringify(filteredClusters));
+
+      if (Object.keys(filteredClusters).length === 0) {
+        setClusters(undefined);
+        localStorage.setItem('clusters', '');
+      } else {
+        setClusters({...filteredClusters});
+        localStorage.setItem('clusters', JSON.stringify(filteredClusters));
+      }
 
       if (cluster === id) {
         if (Object.keys(filteredClusters).length > 0) {

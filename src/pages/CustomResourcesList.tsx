@@ -108,7 +108,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
               )
             }) : null}
           </IonList>
-        ) : <LoadingErrorCard error={error} exists={context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? true  : false} icon="/assets/icons/kubernetes/crd.png" text={`Could not get Custom Resource "${match.params.name}"`} />}
+        ) : <LoadingErrorCard cluster={context.cluster} clusters={context.clusters} error={error} icon="/assets/icons/kubernetes/crd.png" text={`Could not get Custom Resource "${match.params.name}"`} />}
       </IonContent>
     </IonPage>
   );

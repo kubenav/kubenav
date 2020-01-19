@@ -110,7 +110,7 @@ const List: React.FunctionComponent<IListProps> = ({ match }) => {
               )
             }) : null}
           </IonList>
-        ) : <LoadingErrorCard error={error} exists={context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? true  : false} icon={page.icon} text={`Could not get ${page.pluralText}`} />}
+        ) : <LoadingErrorCard cluster={context.cluster} clusters={context.clusters} error={error} icon={page.icon} text={`Could not get ${page.pluralText}`} />}
       </IonContent>
     </IonPage>
   );

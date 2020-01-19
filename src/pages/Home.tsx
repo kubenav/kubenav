@@ -36,7 +36,7 @@ const Home: React.FunctionComponent = () => {
       </IonHeader>
       <IonContent>
         <IonList>
-          {context.cluster !== '' ? (
+          {context.clusters && context.cluster ? (
             <IonCard>
               <img alt="kubenav" src="/assets/card-header.png" />
               <IonCardHeader>
