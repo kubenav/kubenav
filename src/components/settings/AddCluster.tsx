@@ -15,6 +15,7 @@ import {
   IonTextarea,
   IonTitle,
   IonToolbar,
+  isPlatform,
 } from '@ionic/react';
 import { add, close } from 'ionicons/icons';
 import yaml from 'js-yaml';
@@ -84,6 +85,10 @@ const AddCluster: React.FunctionComponent = () => {
 
   const handleToken = (event) => {
     setToken(event.target.value);
+  };
+
+  const handleKubeconfig = (event) => {
+    setKubeconfig(event.target.value);
   };
 
   const addCluster = () => {
@@ -183,7 +188,14 @@ const AddCluster: React.FunctionComponent = () => {
             </IonSegment>
           </div>
 
-          {type === 'kubeconfig' ? (
+          {type === 'kubeconfig' ? isPlatform('hybrid') ? (
+            <IonList lines="full">
+              <IonItem>
+                <IonLabel position="stacked">Kubeconfig</IonLabel>
+                <IonTextarea autoGrow={true} value={kubeconfig} onInput={handleKubeconfig} />
+              </IonItem>
+            </IonList>
+          ) : (
             <Editor readOnly={false} value={kubeconfig} fullHeight={true} mode="yaml" onChange={(newValue: string) => setKubeconfig(newValue)} />
           ) : null}
 
