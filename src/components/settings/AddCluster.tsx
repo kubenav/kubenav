@@ -21,7 +21,7 @@ import yaml from 'js-yaml';
 import React, { useContext, useState } from 'react';
 
 import { AppContext } from '../../context';
-import { IContext, IKubeconfig, IKubeconfigCluster, IKubeconfigClusterRef, IKubeconfigUser, IKubeconfigUserRef } from '../../declarations';
+import { ICluster, IContext, IKubeconfig, IKubeconfigCluster, IKubeconfigClusterRef, IKubeconfigUser, IKubeconfigUserRef } from '../../declarations';
 import Editor from '../misc/Editor';
 
 const getKubeconfigCluster = (name: string, clusters: IKubeconfigClusterRef[]): IKubeconfigCluster|null => {
@@ -102,7 +102,7 @@ const AddCluster: React.FunctionComponent = () => {
     } else {
       try {
         if (type === 'manual') {
-          context.addCluster({
+          context.addCluster([{
             id: '',
             name: name,
             url: url,
@@ -111,8 +111,9 @@ const AddCluster: React.FunctionComponent = () => {
             clientKeyData: clientKeyData,
             token: token,
             namespace: 'default',
-          });
+          }]);
         } else if (type === 'kubeconfig') {
+          const clusters: ICluster[] = [];
           const config: IKubeconfig = yaml.safeLoad(kubeconfig);
 
           for (let ctx of config.contexts) {
@@ -123,7 +124,7 @@ const AddCluster: React.FunctionComponent = () => {
               throw new Error('Invalid kubeconfig');
             }
 
-            context.addCluster({
+            clusters.push({
               id: '',
               name: ctx.name,
               url: cluster.server,
@@ -134,6 +135,8 @@ const AddCluster: React.FunctionComponent = () => {
               namespace: 'default',
             });
           }
+
+          context.addCluster(clusters);
         }
 
         setError('');
