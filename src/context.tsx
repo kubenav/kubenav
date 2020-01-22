@@ -28,7 +28,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
   const [cluster, setCluster] = useState<string|undefined>(() => localStorage.getItem('cluster') !== null && localStorage.getItem('cluster') !== '' ? localStorage.getItem('cluster') as string : clusters && Object.keys(clusters).length > 0 ? Object.keys(clusters)[0] : undefined);
 
   const addCluster = (newClusters: ICluster[]) => {
-    let updatedClusters = {};
+    let updatedClusters = clusters ? clusters : {};
 
     for (let newCluster of newClusters) {
       let id = '';
