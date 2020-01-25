@@ -18,6 +18,7 @@ import {
   IonRow,
   IonTitle,
   IonToolbar,
+  isPlatform,
 } from '@ionic/react';
 import { V1Container, V1ContainerPort, V1ContainerState, V1ContainerStatus, V1EnvVarSource } from '@kubernetes/client-node'
 import { close } from 'ionicons/icons';
@@ -93,11 +94,12 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
           <IonLabel>
             <h2>{container.name}</h2>
           </IonLabel>
+          {!isPlatform('hybrid') && logs && name && namespace ? <Logs activator="button" name={name} namespace={namespace} container={container.name} /> : null}
         </IonItem>
 
-        {logs && name && namespace ? (
+        {isPlatform('hybrid') && logs && name && namespace ? (
           <IonItemOptions side="end">
-            <Logs name={name} namespace={namespace} container={container.name} />
+            <Logs activator="item-option" name={name} namespace={namespace} container={container.name} />
           </IonItemOptions>
         ) : null}
       </IonItemSliding>

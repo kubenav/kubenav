@@ -19,16 +19,17 @@ import { close, list, more } from 'ionicons/icons';
 import React, { useContext, useEffect, useState } from 'react';
 
 import { AppContext } from '../../context';
-import { IContext } from '../../declarations';
+import { IContext, TActivator } from '../../declarations';
 import Editor from '../misc/Editor';
 
 interface ILogsProps {
+  activator: TActivator;
   name: string;
   namespace: string;
   container: string;
 }
 
-const Logs: React.FunctionComponent<ILogsProps> = ({ name, namespace, container }) => {
+const Logs: React.FunctionComponent<ILogsProps> = ({ activator, name, namespace, container }) => {
   const context = useContext<IContext>(AppContext);
 
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -76,38 +77,47 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ name, namespace, container 
     <React.Fragment>
       {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header="Could not load logs" message={error} buttons={['OK']} /> : null}
 
-      <IonItemOption color="primary" onClick={() => setShowModal(true)}>
-        <IonIcon slot="start" icon={list} />
-        Logs
-      </IonItemOption>
+      {activator === 'item-option' ? (
+        <IonItemOption color="primary" onClick={() => setShowModal(true)}>
+          <IonIcon slot="start" icon={list} />
+          Logs
+        </IonItemOption>
+      ) : null}
+
+      {activator === 'button' ? (
+        <IonButton fill="outline" slot="end" onClick={(e) => { e.stopPropagation(); setShowModal(true); }}>
+          <IonIcon slot="start" icon={list} />
+          Logs
+        </IonButton>
+      ) : null}
 
       <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonButton onClick={() => setShowModal(false)}>
+              <IonButton onClick={(e) => { e.stopPropagation(); setShowModal(false); }}>
                 <IonIcon slot="icon-only" icon={close} />
               </IonButton>
             </IonButtons>
             <IonTitle>{container}</IonTitle>
             <IonButtons slot="primary">
-              <IonButton onClick={(e) => { e.persist(); setPopoverEvent(e); setShowPopover(true); }}>
+              <IonButton onClick={(e) => { e.stopPropagation(); e.persist(); setPopoverEvent(e); setShowPopover(true); }}>
                 <IonIcon slot="icon-only" icon={more} />
               </IonButton>
             </IonButtons>
 
             <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
               <IonList>
-                <IonItem button={true} onClick={() => { setShowPopover(false); load(false, 1000); }}>
+                <IonItem button={true} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(false, 1000); }}>
                   <IonLabel>Log</IonLabel>
                 </IonItem>
-                <IonItem button={true} onClick={() => { setShowPopover(false); load(false, 0); }}>
+                <IonItem button={true} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(false, 0); }}>
                   <IonLabel>Complete Log</IonLabel>
                 </IonItem>
-                <IonItem button={true} onClick={() => { setShowPopover(false); load(true, 1000); }}>
+                <IonItem button={true} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(true, 1000); }}>
                   <IonLabel>Previous Log</IonLabel>
                 </IonItem>
-                <IonItem button={true} onClick={() => { setShowPopover(false); load(true, 0); }}>
+                <IonItem button={true} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(true, 0); }}>
                   <IonLabel>Complete Previous Log</IonLabel>
                 </IonItem>
               </IonList>
