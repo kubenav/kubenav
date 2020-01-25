@@ -98,16 +98,16 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ name, namespace, container 
 
             <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
               <IonList>
-                <IonItem onClick={() => { setShowPopover(false); load(false, 1000); }}>
+                <IonItem button={true} onClick={() => { setShowPopover(false); load(false, 1000); }}>
                   <IonLabel>Log</IonLabel>
                 </IonItem>
-                <IonItem onClick={() => { setShowPopover(false); load(false, 0); }}>
+                <IonItem button={true} onClick={() => { setShowPopover(false); load(false, 0); }}>
                   <IonLabel>Complete Log</IonLabel>
                 </IonItem>
-                <IonItem onClick={() => { setShowPopover(false); load(true, 1000); }}>
+                <IonItem button={true} onClick={() => { setShowPopover(false); load(true, 1000); }}>
                   <IonLabel>Previous Log</IonLabel>
                 </IonItem>
-                <IonItem onClick={() => { setShowPopover(false); load(true, 0); }}>
+                <IonItem button={true} onClick={() => { setShowPopover(false); load(true, 0); }}>
                   <IonLabel>Complete Previous Log</IonLabel>
                 </IonItem>
               </IonList>

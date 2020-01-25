@@ -68,7 +68,7 @@ th {
 .editor-scroll-to-bottom-button {
   position: absolute;
   z-index: 999;
-  bottom: 10px;
+  bottom: 20px;
   width: 100%;
   text-align: center;
 }
