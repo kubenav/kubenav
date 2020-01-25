@@ -42,6 +42,10 @@ server.post('/request', function (req, res) {
     options.headers['Authorization'] = 'Bearer ' + postData.token;
   }
 
+  if (postData.username !== '' && postData.password !== '') {
+    options.headers['Authorization'] = 'Basic ' + Buffer.from(postData.username + ':' + postData.password).toString('base64');
+  }
+
   const request = https.request(postData.url, options, function(response) {
     let body = '';
 

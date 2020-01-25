@@ -126,12 +126,14 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
       let data = await plugin.request({
         server: SERVER,
         method: method,
-        url: alternativeCluster ? alternativeCluster.url : clusters![cluster!].url + url,
+        url: alternativeCluster ? alternativeCluster.url : clusters && cluster ? clusters[cluster].url + url : '',
         body: body,
-        certificateAuthorityData: alternativeCluster ? alternativeCluster.certificateAuthorityData : clusters![cluster!].certificateAuthorityData,
-        clientCertificateData: alternativeCluster ? alternativeCluster.clientCertificateData : clusters![cluster!].clientCertificateData,
-        clientKeyData: alternativeCluster ? alternativeCluster.clientKeyData : clusters![cluster!].clientKeyData,
-        token: alternativeCluster ? alternativeCluster.token : clusters![cluster!].token,
+        certificateAuthorityData: alternativeCluster ? alternativeCluster.certificateAuthorityData : clusters && cluster ? clusters[cluster].certificateAuthorityData : '',
+        clientCertificateData: alternativeCluster ? alternativeCluster.clientCertificateData : clusters && cluster ? clusters[cluster].clientCertificateData : '',
+        clientKeyData: alternativeCluster ? alternativeCluster.clientKeyData : clusters && cluster ? clusters[cluster].clientKeyData : '',
+        token: alternativeCluster ? alternativeCluster.token : clusters && cluster ? clusters[cluster].token : '',
+        username: alternativeCluster ? alternativeCluster.username : clusters && cluster ? clusters[cluster].username : '',
+        password: alternativeCluster ? alternativeCluster.password : clusters && cluster ? clusters[cluster].password : '',
       });
 
       if (isJSON(data.data)) {
