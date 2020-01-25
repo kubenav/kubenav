@@ -58,6 +58,8 @@ const AddCluster: React.FunctionComponent = () => {
   const [clientKeyData, setClientKeyData] = useState<string>('');
   const [kubeconfig, setKubeconfig] = useState<string>('');
   const [token, setToken] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const handleType = (event) => {
     setType(event.detail.value);
@@ -87,6 +89,14 @@ const AddCluster: React.FunctionComponent = () => {
     setToken(event.target.value);
   };
 
+  const handleUsername = (event) => {
+    setUsername(event.target.value);
+  };
+
+  const handlePassword = (event) => {
+    setPassword(event.target.value);
+  };
+
   const handleKubeconfig = (event) => {
     setKubeconfig(event.target.value);
   };
@@ -100,8 +110,8 @@ const AddCluster: React.FunctionComponent = () => {
       setError('Invalid URL')
     } else if (type === 'manual' && certificateAuthorityData === '') {
       setError('Certificate Authority Data is required')
-    } else if (type === 'manual' && clientCertificateData === '' && clientKeyData === '' && token === '') {
-      setError('Client Certificate Data and Client Key Data or Token is required')
+    } else if (type === 'manual' && clientCertificateData === '' && clientKeyData === '' && token === '' && username === '' && password === '') {
+      setError('Client Certificate Data and Client Key Data or Token or Username and Password is required')
     } else if (type === 'kubeconfig' && kubeconfig === '') {
       setError('Kubeconfig is required')
     } else {
@@ -115,6 +125,8 @@ const AddCluster: React.FunctionComponent = () => {
             clientCertificateData: clientCertificateData,
             clientKeyData: clientKeyData,
             token: token,
+            username: username,
+            password: password,
             namespace: 'default',
           }]);
         } else if (type === 'kubeconfig') {
@@ -125,7 +137,7 @@ const AddCluster: React.FunctionComponent = () => {
             const cluster = getKubeconfigCluster(ctx.context.cluster, config.clusters);
             const user = getKubeconfigUser(ctx.context.user, config.users);
 
-            if (ctx.name === '' || cluster === null || user === null || !cluster.server || !cluster['certificate-authority-data'] || !((user['client-certificate-data'] && user['client-key-data']) || user.token)) {
+            if (ctx.name === '' || cluster === null || user === null || !cluster.server || !cluster['certificate-authority-data'] || !((user['client-certificate-data'] && user['client-key-data']) || user.token || !(user.username && user.password))) {
               throw new Error('Invalid kubeconfig');
             }
 
@@ -137,6 +149,8 @@ const AddCluster: React.FunctionComponent = () => {
               clientCertificateData: user['client-certificate-data'] ? user['client-certificate-data'] : '',
               clientKeyData: user['client-key-data'] ? user['client-key-data'] : '',
               token: user.token ? user.token : '',
+              username: user.username ? user.username : '',
+              password: user.password ? user.password : '',
               namespace: 'default',
             });
           }
@@ -151,6 +165,8 @@ const AddCluster: React.FunctionComponent = () => {
         setClientCertificateData('');
         setClientKeyData('');
         setToken('');
+        setUsername('');
+        setPassword('');
         setShowModal(false);
       } catch (err) {
         setError(err.message);
@@ -224,6 +240,14 @@ const AddCluster: React.FunctionComponent = () => {
               <IonItem>
                 <IonLabel position="stacked">Token</IonLabel>
                 <IonTextarea autoGrow={true} value={token} onInput={handleToken} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Username</IonLabel>
+                <IonInput type="text" value={username} onInput={handleUsername} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Password</IonLabel>
+                <IonInput type="password" value={password} onInput={handlePassword} />
               </IonItem>
             </IonList>
           ) : null}

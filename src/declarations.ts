@@ -43,6 +43,8 @@ export interface ICluster {
   clientCertificateData: string;
   clientKeyData: string;
   token: string;
+  username: string;
+  password: string;
   namespace: string;
 }
 
@@ -96,7 +98,9 @@ export interface IKubeconfigContext {
 export interface IKubeconfigUser {
   'client-certificate-data'?: string;
   'client-key-data'?: string;
-  token?: string
+  token?: string;
+  username?: string;
+  password?: string;
 }
 
 export interface IKubeconfigUserRef {

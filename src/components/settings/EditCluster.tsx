@@ -36,6 +36,8 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) =>
   const [clientCertificateData, setClientCertificateData] = useState<string>(cluster.clientCertificateData);
   const [clientKeyData, setClientKeyData] = useState<string>(cluster.clientKeyData);
   const [token, setToken] = useState<string>(cluster.token);
+  const [username, setUsername] = useState<string>(cluster.username);
+  const [password, setPassword] = useState<string>(cluster.password);
 
   const handleName = (event) => {
     setName(event.target.value);
@@ -61,6 +63,14 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) =>
     setToken(event.target.value);
   };
 
+  const handleUsername = (event) => {
+    setUsername(event.target.value);
+  };
+
+  const handlePassword = (event) => {
+    setPassword(event.target.value);
+  };
+
   const editCluster = () => {
     if (name === '') {
       setError('Name is required')
@@ -70,8 +80,8 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) =>
       setError('Invalid URL')
     } else if (certificateAuthorityData === '') {
       setError('Certificate Authority Data is required')
-    } else if (clientCertificateData === '' && clientKeyData === '' && token === '') {
-      setError('Client Certificate Data and Client Key Data or Token is required')
+    } else if (clientCertificateData === '' && clientKeyData === '' && token === '' && username === '' && password === '') {
+      setError('Client Certificate Data and Client Key Data or Token or Username and Password is required')
     } else {
       context.editCluster({
         id: cluster.id,
@@ -81,6 +91,8 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) =>
         clientCertificateData: clientCertificateData,
         clientKeyData: clientKeyData,
         token: token,
+        username: username,
+        password: password,
         namespace: cluster.namespace,
       });
 
@@ -139,6 +151,14 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) =>
             <IonItem>
               <IonLabel position="stacked">Token</IonLabel>
               <IonTextarea autoGrow={true} value={token} onInput={handleToken} />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Username</IonLabel>
+              <IonInput type="text" value={username} onInput={handleUsername} />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Password</IonLabel>
+              <IonInput type="password" value={password} onInput={handlePassword} />
             </IonItem>
           </IonList>
         </IonContent>
