@@ -108,16 +108,16 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ activator, name, namespace,
 
             <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
               <IonList>
-                <IonItem button={true} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(false, 1000); }}>
+                <IonItem button={true} detail={false} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(false, 1000); }}>
                   <IonLabel>Log</IonLabel>
                 </IonItem>
-                <IonItem button={true} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(false, 0); }}>
+                <IonItem button={true} detail={false} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(false, 0); }}>
                   <IonLabel>Complete Log</IonLabel>
                 </IonItem>
-                <IonItem button={true} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(true, 1000); }}>
+                <IonItem button={true} detail={false} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(true, 1000); }}>
                   <IonLabel>Previous Log</IonLabel>
                 </IonItem>
-                <IonItem button={true} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(true, 0); }}>
+                <IonItem button={true} detail={false} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(true, 0); }}>
                   <IonLabel>Complete Previous Log</IonLabel>
                 </IonItem>
               </IonList>
