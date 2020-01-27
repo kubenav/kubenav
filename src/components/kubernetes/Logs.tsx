@@ -22,6 +22,8 @@ import { AppContext } from '../../context';
 import { IContext, TActivator } from '../../declarations';
 import Editor from '../misc/Editor';
 
+const TAIL_LINES = 1000;
+
 interface ILogsProps {
   activator: TActivator;
   name: string;
@@ -43,7 +45,7 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ activator, name, namespace,
     if (showModal) {
       (async() => {
         setLogs('');
-        await load(false, 1000);
+        await load(false, TAIL_LINES);
       })();
     }
 
@@ -108,17 +110,17 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ activator, name, namespace,
 
             <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
               <IonList>
-                <IonItem button={true} detail={false} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(false, 1000); }}>
-                  <IonLabel>Log</IonLabel>
+                <IonItem button={true} detail={false} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(false, TAIL_LINES); }}>
+                  <IonLabel>{`Last ${TAIL_LINES} Log Lines`}</IonLabel>
                 </IonItem>
                 <IonItem button={true} detail={false} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(false, 0); }}>
-                  <IonLabel>Complete Log</IonLabel>
+                  <IonLabel>All Log Lines</IonLabel>
                 </IonItem>
-                <IonItem button={true} detail={false} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(true, 1000); }}>
-                  <IonLabel>Previous Log</IonLabel>
+                <IonItem button={true} detail={false} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(true, TAIL_LINES); }}>
+                  <IonLabel>{`Previous Last ${TAIL_LINES} Log Lines`}</IonLabel>
                 </IonItem>
                 <IonItem button={true} detail={false} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(true, 0); }}>
-                  <IonLabel>Complete Previous Log</IonLabel>
+                  <IonLabel>All Previous Log Lines</IonLabel>
                 </IonItem>
               </IonList>
             </IonPopover>
