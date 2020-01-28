@@ -50,14 +50,14 @@ const NamespacePopover: React.FunctionComponent = () => {
         <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
           {namespaces ? (
             <IonList>
-              <IonItem onClick={() => setAllNamespaces()}>
+              <IonItem button={true} detail={false} onClick={() => setAllNamespaces()}>
                 {context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) && context.clusters[context.cluster].namespace === '' ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
                 <IonLabel>All Namespaces</IonLabel>
               </IonItem>
 
               {namespaces.items.map((namespace, index) => {
                 return (
-                  <IonItem key={index} onClick={() => setNamespace(namespace)}>
+                  <IonItem key={index} button={true} detail={false} onClick={() => setNamespace(namespace)}>
                     {namespace.metadata && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) && context.clusters[context.cluster].namespace === namespace.metadata.name ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
                     <IonLabel>{namespace.metadata ? namespace.metadata.name : ''}</IonLabel>
                   </IonItem>
