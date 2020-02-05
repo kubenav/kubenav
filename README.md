@@ -80,6 +80,13 @@ npx cap open android
 npx cap open electron
 ```
 
+You can also run the native iOS or Android app with live reloading:
+
+```sh
+ionic capacitor run android -l --address=0.0.0.0
+ionic capacitor run ios -l --address=0.0.0.0
+```
+
 ## Release
 
 Every new release is created from the `master` branch. To create a new release the `version` field in the `package.json` file must be updated and a new tag must be set. This process is automated via `Makefile`:
@@ -104,3 +111,20 @@ After the the release was created another GitHub Action is executed to create th
 - `kubenav-<TAG>-mac.tar.gz`: Archive containing the kubenav app file for macOS
 - `kubenav-<TAG>-win.exe`: NSIS installer
 - `kubenav-<TAG>-win.tar.gz`: Archive containing the kubenav app for Windows
+
+The native iOS and Android app is built manually and submitted to the App Store and Google Play. To prepare the app run the following commands:
+
+```sh
+export REACT_APP_VERSION=
+export REACT_APP_GOOGLE_CLIENT_ID_ANDROID=
+export REACT_APP_GOOGLE_CLIENT_ID_IOS=
+
+ionic build
+
+npx cap sync
+
+npx cap open ios
+npx cap open android
+```
+
+In the standard IDE for iOS and Android run a clean build and follow the steps to publish the app.

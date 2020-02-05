@@ -93,6 +93,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) =>
         token: token,
         username: username,
         password: password,
+        authProvider: cluster.authProvider,
         namespace: cluster.namespace,
       });
 

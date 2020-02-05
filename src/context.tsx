@@ -3,11 +3,35 @@ import { isPlatform } from '@ionic/react';
 import { KubenavPlugin as KubenavWebPlugin } from '@kubenav/kubenav-plugin';
 import React, { useState } from 'react';
 
-import { ICluster, IClusters, IContext } from './declarations';
-import { isBase64, isJSON, randomString } from './utils';
+import { ICluster, IClusters, IContext, IGoogleTokens } from './declarations';
+import {getGoogleAccessToken, isBase64, isJSON, randomString, saveGoogleTokens} from './utils';
 
 const { KubenavPlugin } = Plugins;
 const SERVER = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:14122';
+
+const getAccessToken = async (): Promise<string> => {
+  const tokens: IGoogleTokens|undefined = localStorage.getItem('google') ? JSON.parse(localStorage.getItem('google')!) : undefined;
+  if (!tokens) {
+    throw new Error('Could not get access token.')
+  }
+
+  const expiresData = new Date(tokens.expires_in);
+  let accessToken = tokens.access_token;
+
+  if (expiresData.getTime() < new Date().getTime()) {
+    const newTokens = await getGoogleAccessToken(tokens.refresh_token);
+    saveGoogleTokens({
+      access_token: newTokens.access_token,
+      expires_in: newTokens.expires_in,
+      id_token: tokens.id_token,
+      refresh_token: tokens.refresh_token,
+      token_type: tokens.token_type,
+    });
+    return newTokens.access_token;
+  }
+
+  return accessToken;
+};
 
 export const AppContext = React.createContext<IContext>({
   clusters: {},
@@ -31,13 +55,15 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
     let updatedClusters = clusters ? clusters : {};
 
     for (let newCluster of newClusters) {
-      let id = '';
+      let id = newCluster.id;
       const checkID = (id: string): boolean => {
         return (clusters && clusters.hasOwnProperty(id)) || id === '';
       };
 
-      while (checkID(id)) {
-        id = randomString(32);
+      if (newCluster.authProvider === '') {
+        while (checkID(id)) {
+          id = randomString(32);
+        }
       }
 
       newCluster.id = id;
@@ -123,6 +149,22 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
     }
 
     try {
+      if (alternativeCluster && alternativeCluster.authProvider === 'google') {
+        if (!(alternativeCluster.clientCertificateData !== '' && alternativeCluster.clientKeyData !== '')) {
+          if (!(alternativeCluster.password !== '' && alternativeCluster.password !== '')) {
+            alternativeCluster.token = await getAccessToken();
+          }
+        }
+      }
+
+      if (clusters && cluster && clusters[cluster].authProvider === 'google') {
+        if (!(clusters[cluster].clientCertificateData !== '' && clusters[cluster].clientKeyData !== '')) {
+          if (!(clusters[cluster].password !== '' && clusters[cluster].password !== '')) {
+            clusters[cluster].token = await getAccessToken();
+          }
+        }
+      }
+
       let data = await plugin.request({
         server: SERVER,
         method: method,

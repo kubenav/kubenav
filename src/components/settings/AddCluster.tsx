@@ -24,6 +24,7 @@ import React, { useContext, useState } from 'react';
 import { AppContext } from '../../context';
 import { ICluster, IContext, IKubeconfig, IKubeconfigCluster, IKubeconfigClusterRef, IKubeconfigUser, IKubeconfigUserRef } from '../../declarations';
 import Editor from '../misc/Editor';
+import GoogleSignIn from './GoogleSignIn';
 
 const getKubeconfigCluster = (name: string, clusters: IKubeconfigClusterRef[]): IKubeconfigCluster|null => {
   for (let cluster of clusters) {
@@ -127,6 +128,7 @@ const AddCluster: React.FunctionComponent = () => {
             token: token,
             username: username,
             password: password,
+            authProvider: '',
             namespace: 'default',
           }]);
         } else if (type === 'kubeconfig') {
@@ -151,6 +153,7 @@ const AddCluster: React.FunctionComponent = () => {
               token: user.token ? user.token : '',
               username: user.username ? user.username : '',
               password: user.password ? user.password : '',
+              authProvider: '',
               namespace: 'default',
             });
           }
@@ -201,6 +204,9 @@ const AddCluster: React.FunctionComponent = () => {
               <IonSegmentButton checked={type === 'manual'} value="manual">
                 <IonLabel>Manual</IonLabel>
               </IonSegmentButton>
+              <IonSegmentButton checked={type === 'oidc'} value="oidc">
+                <IonLabel>OIDC</IonLabel>
+              </IonSegmentButton>
             </IonSegment>
           </div>
 
@@ -249,6 +255,12 @@ const AddCluster: React.FunctionComponent = () => {
                 <IonLabel position="stacked">Password</IonLabel>
                 <IonInput type="password" value={password} onInput={handlePassword} />
               </IonItem>
+            </IonList>
+          ) : null}
+
+          {type === 'oidc' ? (
+            <IonList lines="full">
+              <GoogleSignIn />
             </IonList>
           ) : null}
 

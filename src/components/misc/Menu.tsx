@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core';
 import {
   IonAvatar,
   IonContent,
@@ -14,8 +15,17 @@ import {
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
+import { CUSTOM_URI_SCHEME, GOOGLE_REDIRECT_URI } from '../../constants';
 import { IAppSections } from '../../declarations';
 import Sections from './Sections'
+
+const { App } = Plugins;
+
+App.addListener('appUrlOpen', (data) => {
+  if (data.url.startsWith(GOOGLE_REDIRECT_URI)) {
+    window.location.replace(data.url.replace(`${CUSTOM_URI_SCHEME}:`, ''));
+  }
+});
 
 interface IMenuProps extends RouteComponentProps {
   sections: IAppSections;
