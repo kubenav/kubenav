@@ -3,11 +3,11 @@ import { isPlatform } from '@ionic/react';
 import { KubenavPlugin as KubenavWebPlugin } from '@kubenav/kubenav-plugin';
 import React, { useState } from 'react';
 
+import { SERVER } from './constants';
 import { ICluster, IClusters, IContext, IGoogleTokens } from './declarations';
-import {getGoogleAccessToken, isBase64, isJSON, randomString, saveGoogleTokens} from './utils';
+import { getGoogleAccessToken, isBase64, isJSON, randomString, saveGoogleTokens } from './utils';
 
 const { KubenavPlugin } = Plugins;
-const SERVER = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:14122';
 
 const getAccessToken = async (): Promise<string> => {
   const tokens: IGoogleTokens|undefined = localStorage.getItem('google') ? JSON.parse(localStorage.getItem('google')!) : undefined;
