@@ -95,7 +95,7 @@ export const getGoogleAccessToken = async (refreshToken: string): Promise<IGoogl
 export const getGoogleClientID = () => {
   if (isPlatform('hybrid') && isPlatform('ios')) {
     return GOOGLE_CLIENT_ID_IOS;
-  } else if (isPlatform('hybrid') && isPlatform('ios')) {
+  } else if (isPlatform('hybrid') && isPlatform('android')) {
     return GOOGLE_CLIENT_ID_ANDROID;
   } else {
     return '';
