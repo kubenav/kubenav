@@ -109,11 +109,11 @@ const ClustersGoogle: React.FunctionComponent<IClustersGoogleProps> = ({ locatio
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Select Clusters</IonTitle>
+          <IonTitle>Add Clusters</IonTitle>
           {error ? null : (
             <IonButtons slot="primary">
               <IonButton onClick={() => addClusters()}>
-                Save
+                Add
               </IonButton>
             </IonButtons>
           )}

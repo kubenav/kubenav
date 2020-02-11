@@ -23,6 +23,8 @@ import Menu from './components/misc/Menu';
 import { AppContextProvider } from './context';
 import ClustersPage from './pages/Clusters';
 import ClustersGooglePage from './pages/ClustersGoogle';
+import ClustersKubeconfigPage from './pages/ClustersKubeconfig';
+import ClustersManualPage from './pages/ClustersManual';
 import CustomResourcesListPage from './pages/CustomResourcesList';
 import DetailsPage from './pages/Details';
 import HomePage from './pages/Home';
@@ -46,6 +48,8 @@ const App: React.FunctionComponent = () => (
             <Route path="/customresources/:group/:version/:name" component={CustomResourcesListPage} exact={true} />
             <Route path="/settings/clusters" component={ClustersPage} exact={true} />
             <Route path="/settings/clusters/google" component={ClustersGooglePage} exact={true} />
+            <Route path="/settings/clusters/kubeconfig" component={ClustersKubeconfigPage} exact={true} />
+            <Route path="/settings/clusters/manual" component={ClustersManualPage} exact={true} />
             <Route path="/settings/info" component={InfoPage} exact={true} />
           </IonRouterOutlet>
         </IonSplitPane>
