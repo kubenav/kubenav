@@ -22,6 +22,7 @@ import '@ionic/react/css/typography.css';
 import Menu from './components/misc/Menu';
 import { AppContextProvider } from './context';
 import ClustersPage from './pages/Clusters';
+import ClustersAWSPage from './pages/ClustersAWS';
 import ClustersGooglePage from './pages/ClustersGoogle';
 import ClustersKubeconfigPage from './pages/ClustersKubeconfig';
 import ClustersManualPage from './pages/ClustersManual';
@@ -47,6 +48,7 @@ const App: React.FunctionComponent = () => (
             <Route path="/kubernetes/:section/:type/:namespace/:name" component={DetailsPage} exact={true} />
             <Route path="/customresources/:group/:version/:name" component={CustomResourcesListPage} exact={true} />
             <Route path="/settings/clusters" component={ClustersPage} exact={true} />
+            <Route path="/settings/clusters/aws/:region" component={ClustersAWSPage} exact={true} />
             <Route path="/settings/clusters/google" component={ClustersGooglePage} exact={true} />
             <Route path="/settings/clusters/kubeconfig" component={ClustersKubeconfigPage} exact={true} />
             <Route path="/settings/clusters/manual" component={ClustersManualPage} exact={true} />

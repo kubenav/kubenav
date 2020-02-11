@@ -4,8 +4,8 @@ import { KubenavPlugin as KubenavWebPlugin } from '@kubenav/kubenav-plugin';
 import React, { useState } from 'react';
 
 import { SERVER } from './constants';
-import { ICluster, IClusters, IContext, IGoogleTokens } from './declarations';
-import { getGoogleAccessToken, isBase64, isJSON, randomString, saveGoogleTokens } from './utils';
+import { IAWSTokens, ICluster, IClusters, IContext, IGoogleTokens } from './declarations';
+import { getAWSToken, getGoogleAccessToken, isBase64, isJSON, randomString, saveGoogleTokens } from './utils';
 
 const { KubenavPlugin } = Plugins;
 
@@ -163,6 +163,36 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
             clusters[cluster].token = await getAccessToken();
           }
         }
+      }
+
+      if (alternativeCluster && alternativeCluster.authProvider === 'aws') {
+        const tokens: IAWSTokens = localStorage.getItem('aws') ? JSON.parse(localStorage.getItem('aws') as string) : {};
+        const parts = alternativeCluster.id.split('_');
+
+        if (parts.length < 3) {
+          throw new Error('Invalid cluster id for authentication provider AWS.')
+        }
+
+        if (!tokens.hasOwnProperty(parts[1])) {
+          throw new Error('Could not find credentials for cluster.')
+        }
+
+        alternativeCluster.token = await getAWSToken(tokens[parts[1]].accessKeyID, tokens[parts[1]].secretKey, parts[1], parts.slice(2, parts.length).join('_'));
+      }
+
+      if (clusters && cluster && clusters[cluster].authProvider === 'aws') {
+        const tokens: IAWSTokens = localStorage.getItem('aws') ? JSON.parse(localStorage.getItem('aws') as string) : {};
+        const parts = clusters[cluster].id.split('_');
+
+        if (parts.length < 3) {
+          throw new Error('Invalid cluster id for authentication provider AWS.')
+        }
+
+        if (!tokens.hasOwnProperty(parts[1])) {
+          throw new Error('Could not find credentials for cluster.')
+        }
+
+        clusters[cluster].token = await getAWSToken(tokens[parts[1]].accessKeyID, tokens[parts[1]].secretKey, parts[1], parts.slice(2, parts.length).join('_'));
       }
 
       let data = await plugin.request({

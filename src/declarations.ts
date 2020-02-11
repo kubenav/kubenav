@@ -35,6 +35,25 @@ export interface IAppSections {
   [key: string]: IAppSection
 }
 
+export interface IAWSCluster {
+  CertificateAuthority: IAWSClusterCertificateAuthority;
+  Endpoint: string;
+  Name: string;
+}
+
+export interface IAWSClusterCertificateAuthority {
+  Data: string;
+}
+
+export interface IAWSToken {
+  accessKeyID: string;
+  secretKey: string;
+}
+
+export interface IAWSTokens {
+  [key: string]: IAWSToken;
+}
+
 export interface ICluster {
   id: string;
   name: string;

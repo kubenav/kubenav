@@ -17,8 +17,8 @@ import { RouteComponentProps } from 'react-router';
 
 import ErrorCard from '../components/misc/ErrorCard';
 import { AppContext } from '../context';
-import { ICluster, IContext } from '../declarations';
-import { getGoogleClusters, getGoogleProjects, getGoogleTokens, saveGoogleTokens } from '../utils';
+import { IAWSTokens, ICluster, IContext } from '../declarations';
+import { getAWSClusters } from '../utils';
 
 const isChecked = (id: string, clusters: ICluster[]): boolean => {
   for (let cluster of clusters) {
@@ -30,9 +30,13 @@ const isChecked = (id: string, clusters: ICluster[]): boolean => {
   return false;
 };
 
-interface IClustersGoogleProps extends RouteComponentProps {}
+interface IMatchParams {
+  region: string;
+}
 
-const ClustersGoogle: React.FunctionComponent<IClustersGoogleProps> = ({ location, history }) => {
+interface IClustersAWSProps extends RouteComponentProps<IMatchParams> {}
+
+const ClustersAWS: React.FunctionComponent<IClustersAWSProps> = ({ match, history }) => {
   const context = useContext<IContext>(AppContext);
 
   const [error, setError] = useState<string>('');
@@ -45,39 +49,31 @@ const ClustersGoogle: React.FunctionComponent<IClustersGoogleProps> = ({ locatio
       setShowLoading(true);
 
       try {
-        const params = JSON.parse('{"' + location.search.substr(1).replace(/&/g, '", "').replace(/=/g, '": "') + '"}');
+        if (match.params.region) {
+          const tokens: IAWSTokens = localStorage.getItem('aws') ? JSON.parse(localStorage.getItem('aws') as string) : {};
 
-        if (params.error) {
-          throw new Error(params.error);
-        }
-
-        if (params.code) {
-          const tokens = await getGoogleTokens(params.code);
-          saveGoogleTokens(tokens);
-          const projects = await getGoogleProjects(tokens.access_token);
-
-          for (let project of projects) {
-            const projectClusters = await getGoogleClusters(tokens.access_token, project.projectId);
-
-            if (projectClusters) {
-              // eslint-disable-next-line
-              projectClusters.map((cluster) => {
-                setClusters([...clusters, {
-                  id: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
-                  name: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
-                  url: `https://${cluster.endpoint}`,
-                  certificateAuthorityData: cluster.masterAuth.clusterCaCertificate,
-                  clientCertificateData: cluster.masterAuth.clientCertificate ? cluster.masterAuth.clientCertificate : '',
-                  clientKeyData: cluster.masterAuth.clientKey ? cluster.masterAuth.clientKey : '',
-                  token: '',
-                  username: cluster.masterAuth.username ? cluster.masterAuth.username : '',
-                  password: cluster.masterAuth.password ? cluster.masterAuth.password : '',
-                  authProvider: 'google',
-                  namespace: 'default',
-                }]);
-              });
-            }
+          if (!tokens.hasOwnProperty(match.params.region)) {
+            throw new Error('Could not find AWS credentials.')
           }
+
+          const awsClusters = await getAWSClusters(tokens[match.params.region].accessKeyID, tokens[match.params.region].secretKey, match.params.region);
+
+          // eslint-disable-next-line
+          awsClusters.map((cluster) => {
+            setClusters([...clusters, {
+              id: `aws_${match.params.region}_${cluster.Name}`,
+              name: `aws_${match.params.region}_${cluster.Name}`,
+              url: `${cluster.Endpoint}`,
+              certificateAuthorityData: cluster.CertificateAuthority.Data,
+              clientCertificateData: '',
+              clientKeyData: '',
+              token: '',
+              username: '',
+              password: '',
+              authProvider: 'aws',
+              namespace: 'default',
+            }]);
+          });
         }
       } catch (err) {
         setError(err.message);
@@ -87,7 +83,7 @@ const ClustersGoogle: React.FunctionComponent<IClustersGoogleProps> = ({ locatio
     })();
 
     return () => {};
-  }, [location]); /* eslint-disable-line */
+  }, [match]); /* eslint-disable-line */
 
   const toggleSelectedCluster = (checked: boolean, cluster: ICluster) => {
     if (checked) {
@@ -122,7 +118,7 @@ const ClustersGoogle: React.FunctionComponent<IClustersGoogleProps> = ({ locatio
       <IonContent>
         {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
 
-        {error ? <ErrorCard error={error} text="Could not load GKE clusters" icon="/assets/icons/kubernetes/kubernetes.png" /> : (
+        {error ? <ErrorCard error={error} text="Could not load AWS clusters" icon="/assets/icons/kubernetes/kubernetes.png" /> : (
           clusters.map((cluster, index) => {
             return (
               <IonItem key={index}>
@@ -137,4 +133,4 @@ const ClustersGoogle: React.FunctionComponent<IClustersGoogleProps> = ({ locatio
   );
 };
 
-export default ClustersGoogle;
+export default ClustersAWS;

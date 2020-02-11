@@ -1,8 +1,12 @@
+import { Plugins } from '@capacitor/core';
 import { isPlatform } from '@ionic/react';
+import { KubenavPlugin as KubenavWebPlugin } from '@kubenav/kubenav-plugin';
 import { V1LabelSelector, V1Subject } from '@kubernetes/client-node';
 
 import { GOOGLE_CLIENT_ID_ANDROID, GOOGLE_CLIENT_ID_IOS, GOOGLE_REDIRECT_URI } from './constants';
-import { IGoogleCluster, IGoogleProject, IGoogleTokens } from './declarations';
+import { IAWSCluster, IGoogleCluster, IGoogleProject, IGoogleTokens } from './declarations';
+
+const { KubenavPlugin } = Plugins;
 
 export const formatBytes = (bytes: number, si: boolean): string => {
   const thresh = si ? 1000 : 1024;
@@ -72,6 +76,59 @@ export const formatResourceValue = (type: string, value: string): string => {
   }
 
   return value
+};
+
+export const getAWSClusters = async (accessKeyId: string, secretAccessKey: string, region: string): Promise<IAWSCluster[]> => {
+  let plugin: any;
+
+  if (isPlatform('hybrid')) {
+    plugin = KubenavPlugin;
+  } else {
+    plugin = KubenavWebPlugin;
+  }
+
+  try {
+    let data = await plugin.awsGetClusters({
+      accessKeyId: accessKeyId,
+      secretAccessKey: secretAccessKey,
+      region: region,
+    });
+
+    if (data.data !== '') {
+      return JSON.parse(data.data);
+    } else {
+      throw new Error('No cluster was found');
+    }
+  } catch (err) {
+    throw err
+  }
+};
+
+export const getAWSToken = async (accessKeyId: string, secretAccessKey: string, region: string, clusterID: string): Promise<string> => {
+  let plugin: any;
+
+  if (isPlatform('hybrid')) {
+    plugin = KubenavPlugin;
+  } else {
+    plugin = KubenavWebPlugin;
+  }
+
+  try {
+    let data = await plugin.awsGetToken({
+      accessKeyId: accessKeyId,
+      secretAccessKey: secretAccessKey,
+      region: region,
+      clusterID: clusterID,
+    });
+
+    if (data.data !== '') {
+      return JSON.parse(data.data).token;
+    } else {
+      throw new Error('Could not get AWS token');
+    }
+  } catch (err) {
+    throw err
+  }
 };
 
 export const getGoogleAccessToken = async (refreshToken: string): Promise<IGoogleTokens> => {

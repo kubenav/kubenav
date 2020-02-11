@@ -12,6 +12,7 @@ import {
 import { add, close } from 'ionicons/icons';
 import React, { useState } from 'react';
 
+import AWS from './clusters/AWS';
 import Google from './clusters/Google';
 import Kubeconfig from './clusters/Kubeconfig';
 import Manual from './clusters/Manual';
@@ -34,6 +35,7 @@ const AddCluster: React.FunctionComponent = () => {
         </IonHeader>
         <IonContent>
           {isPlatform('hybrid') ? <Google /> : null}
+          {isPlatform('hybrid') ? <AWS /> : null}
           <Kubeconfig />
           <Manual />
         </IonContent>
