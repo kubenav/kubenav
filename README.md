@@ -116,8 +116,6 @@ The native iOS and Android app is built manually and submitted to the App Store 
 
 ```sh
 export REACT_APP_VERSION=
-export REACT_APP_GOOGLE_CLIENT_ID_ANDROID=
-export REACT_APP_GOOGLE_CLIENT_ID_IOS=
 
 ionic build
 

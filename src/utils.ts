@@ -3,7 +3,7 @@ import { isPlatform } from '@ionic/react';
 import { KubenavPlugin as KubenavWebPlugin } from '@kubenav/kubenav-plugin';
 import { V1LabelSelector, V1Subject } from '@kubernetes/client-node';
 
-import { GOOGLE_CLIENT_ID_ANDROID, GOOGLE_CLIENT_ID_IOS, GOOGLE_REDIRECT_URI } from './constants';
+import { GOOGLE_REDIRECT_URI } from './constants';
 import { IAWSCluster, IGoogleCluster, IGoogleProject, IGoogleTokens } from './declarations';
 
 const { KubenavPlugin } = Plugins;
@@ -149,14 +149,9 @@ export const getGoogleAccessToken = async (refreshToken: string): Promise<IGoogl
   }
 };
 
-export const getGoogleClientID = () => {
-  if (isPlatform('hybrid') && isPlatform('ios')) {
-    return GOOGLE_CLIENT_ID_IOS;
-  } else if (isPlatform('hybrid') && isPlatform('android')) {
-    return GOOGLE_CLIENT_ID_ANDROID;
-  } else {
-    return '';
-  }
+export const getGoogleClientID = (): string => {
+  const clientID = localStorage.getItem('google_clientid');
+  return clientID ? clientID : '';
 };
 
 export const getGoogleClusters = async (token: string, project: string): Promise<IGoogleCluster[]> => {
@@ -297,6 +292,10 @@ export const subjectLink = (subject: V1Subject): string => {
   }
 
   return '';
+};
+
+export const setGoogleClientID = (clientID: string) => {
+  localStorage.setItem('google_clientid', clientID);
 };
 
 export const timeDifference = (current: number, previous: number): string => {
