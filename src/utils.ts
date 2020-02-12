@@ -1,4 +1,12 @@
+import { Plugins } from '@capacitor/core';
+import { isPlatform } from '@ionic/react';
+import { KubenavPlugin as KubenavWebPlugin } from '@kubenav/kubenav-plugin';
 import { V1LabelSelector, V1Subject } from '@kubernetes/client-node';
+
+import { GOOGLE_REDIRECT_URI } from './constants';
+import { IAWSCluster, IGoogleCluster, IGoogleProject, IGoogleTokens } from './declarations';
+
+const { KubenavPlugin } = Plugins;
 
 export const formatBytes = (bytes: number, si: boolean): string => {
   const thresh = si ? 1000 : 1024;
@@ -70,6 +78,142 @@ export const formatResourceValue = (type: string, value: string): string => {
   return value
 };
 
+export const getAWSClusters = async (accessKeyId: string, secretAccessKey: string, region: string): Promise<IAWSCluster[]> => {
+  let plugin: any;
+
+  if (isPlatform('hybrid')) {
+    plugin = KubenavPlugin;
+  } else {
+    plugin = KubenavWebPlugin;
+  }
+
+  try {
+    let data = await plugin.awsGetClusters({
+      accessKeyId: accessKeyId,
+      secretAccessKey: secretAccessKey,
+      region: region,
+    });
+
+    if (data.data !== '') {
+      return JSON.parse(data.data);
+    } else {
+      throw new Error('No cluster was found');
+    }
+  } catch (err) {
+    throw err
+  }
+};
+
+export const getAWSToken = async (accessKeyId: string, secretAccessKey: string, region: string, clusterID: string): Promise<string> => {
+  let plugin: any;
+
+  if (isPlatform('hybrid')) {
+    plugin = KubenavPlugin;
+  } else {
+    plugin = KubenavWebPlugin;
+  }
+
+  try {
+    let data = await plugin.awsGetToken({
+      accessKeyId: accessKeyId,
+      secretAccessKey: secretAccessKey,
+      region: region,
+      clusterID: clusterID,
+    });
+
+    if (data.data !== '') {
+      return JSON.parse(data.data).token;
+    } else {
+      throw new Error('Could not get AWS token');
+    }
+  } catch (err) {
+    throw err
+  }
+};
+
+export const getGoogleAccessToken = async (refreshToken: string): Promise<IGoogleTokens> => {
+  const response = await fetch(`https://oauth2.googleapis.com/token?refresh_token=${refreshToken}&client_id=${getGoogleClientID()}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=refresh_token`, {
+    method: 'POST',
+  });
+
+  const json = await response.json();
+
+  if (response.status >= 200 && response.status < 300) {
+    return json;
+  }
+
+  if (json.error && json.error_description) {
+    throw new Error(`${json.error}: ${json.error_description}`);
+  } else {
+    throw new Error('An unknown error occurred.');
+  }
+};
+
+export const getGoogleClientID = (): string => {
+  const clientID = localStorage.getItem('google_clientid');
+  return clientID ? clientID : '';
+};
+
+export const getGoogleClusters = async (token: string, project: string): Promise<IGoogleCluster[]> => {
+  const response = await fetch(`https://container.googleapis.com/v1/projects/${project}/locations/-/clusters`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    method: 'GET',
+  });
+
+  const json = await response.json();
+
+  if (response.status >= 200 && response.status < 300) {
+    return json.clusters;
+  }
+
+  if (json.error.message) {
+    throw new Error(json.error.message);
+  } else {
+    throw new Error('An unknown error occurred.');
+  }
+};
+
+export const getGoogleProjects = async (token: string): Promise<IGoogleProject[]> => {
+  const response = await fetch('https://cloudresourcemanager.googleapis.com/v1/projects', {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    method: 'GET',
+  });
+
+  const json = await response.json();
+
+  if (response.status >= 200 && response.status < 300) {
+    return json.projects;
+  }
+
+  if (json.error.message) {
+    throw new Error(json.error.message);
+  } else {
+    throw new Error('An unknown error occurred.');
+  }
+};
+
+export const getGoogleTokens = async (code: string): Promise<IGoogleTokens> => {
+  const response = await fetch(`https://oauth2.googleapis.com/token?code=${code}&client_id=${getGoogleClientID()}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=authorization_code`, {
+    method: 'POST',
+  });
+
+  const json = await response.json();
+
+  if (response.status >= 200 && response.status < 300) {
+    return json;
+  }
+
+  if (json.error && json.error_description) {
+    throw new Error(`${json.error}: ${json.error_description}`);
+  } else {
+    throw new Error('An unknown error occurred.');
+  }
+};
+
 export const getProperty = (obj: any, key: string) => {
   return key.split('.').reduce((o, x) => {
     return (typeof o == 'undefined' || o === null) ? o : o[x];
@@ -135,12 +279,23 @@ export const randomString = (length: number): string => {
   return result;
 };
 
+export const saveGoogleTokens = (tokens: IGoogleTokens) => {
+  const expiresData = new Date();
+  expiresData.setSeconds( expiresData.getSeconds() + parseInt(tokens.expires_in) - 300);
+  tokens.expires_in = expiresData.toDateString();
+  localStorage.setItem('google', JSON.stringify(tokens));
+};
+
 export const subjectLink = (subject: V1Subject): string => {
   if (subject.kind === 'ServiceAccount') {
     return `/kubernetes/config-and-storage/serviceaccounts/${subject.namespace}/${subject.name}`;
   }
 
   return '';
+};
+
+export const setGoogleClientID = (clientID: string) => {
+  localStorage.setItem('google_clientid', clientID);
 };
 
 export const timeDifference = (current: number, previous: number): string => {

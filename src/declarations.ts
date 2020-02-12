@@ -35,6 +35,25 @@ export interface IAppSections {
   [key: string]: IAppSection
 }
 
+export interface IAWSCluster {
+  CertificateAuthority: IAWSClusterCertificateAuthority;
+  Endpoint: string;
+  Name: string;
+}
+
+export interface IAWSClusterCertificateAuthority {
+  Data: string;
+}
+
+export interface IAWSToken {
+  accessKeyID: string;
+  secretKey: string;
+}
+
+export interface IAWSTokens {
+  [key: string]: IAWSToken;
+}
+
 export interface ICluster {
   id: string;
   name: string;
@@ -45,6 +64,7 @@ export interface ICluster {
   token: string;
   username: string;
   password: string;
+  authProvider: string;
   namespace: string;
 }
 
@@ -67,6 +87,33 @@ export interface IContext {
   editCluster: (editCluster: ICluster) => void;
   setNamespace: (namespace: string) => void;
   request: (method: string, url: string, body: string, alternativeCluster?: ICluster) => Promise<any>;
+}
+
+export interface IGoogleTokens {
+  access_token: string;
+  expires_in: string;
+  id_token: string;
+  refresh_token: string;
+  token_type: string;
+}
+
+export interface IGoogleProject {
+  projectId: string;
+}
+
+export interface IGoogleCluster {
+  name: string,
+  masterAuth: IGoogleClusterMasterAuth;
+  endpoint: string;
+  location: string;
+}
+
+export interface IGoogleClusterMasterAuth {
+  username?: string;
+  password?: string;
+  clusterCaCertificate: string;
+  clientCertificate?: string;
+  clientKey?: string;
 }
 
 export interface IKubeconfig {
