@@ -36,7 +36,7 @@ const Google: React.FunctionComponent = () => {
 
         <IonList className="paragraph-margin-bottom" lines="full">
           <IonItem>
-            <IonLabel position="stacked">Access Key ID</IonLabel>
+            <IonLabel position="stacked">Client ID</IonLabel>
             <IonInput type="text" required={true} value={clientID} onInput={handleClientID} />
           </IonItem>
         </IonList>
