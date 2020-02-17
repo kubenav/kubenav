@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.2.0](https://github.com/kubenav/kubenav/tree/1.2.0) (2020-02-17)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/1.1.0...1.2.0)
+
+**Implemented enhancements:**
+
+- Can't add a GKE cluster [\#14](https://github.com/kubenav/kubenav/issues/14)
+- feature request: "kubectl logs" [\#11](https://github.com/kubenav/kubenav/issues/11)
+- Add support for GKE and EKS via OIDC [\#19](https://github.com/kubenav/kubenav/pull/19) ([ricoberger](https://github.com/ricoberger))
+- Improve log handling [\#16](https://github.com/kubenav/kubenav/pull/16) ([ricoberger](https://github.com/ricoberger))
+- Add support for basic authentication [\#15](https://github.com/kubenav/kubenav/pull/15) ([ricoberger](https://github.com/ricoberger))
+
+**Fixed bugs:**
+
+- Add link to Google OAuth 2.0 configuration [\#21](https://github.com/kubenav/kubenav/pull/21) ([ricoberger](https://github.com/ricoberger))
+- Fix add cluster overwrites existing clusters [\#12](https://github.com/kubenav/kubenav/pull/12) ([ricoberger](https://github.com/ricoberger))
+
+**Closed issues:**
+
+- Cannot edit a cluster [\#20](https://github.com/kubenav/kubenav/issues/20)
+- Can't add microk8s config [\#18](https://github.com/kubenav/kubenav/issues/18)
+
+**Merged pull requests:**
+
+- Improve status check for clusters [\#17](https://github.com/kubenav/kubenav/pull/17) ([ricoberger](https://github.com/ricoberger))
+
 ## [1.1.0](https://github.com/kubenav/kubenav/tree/1.1.0) (2020-01-19)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/1.0.0...1.1.0)
