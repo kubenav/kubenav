@@ -31,7 +31,7 @@ const Google: React.FunctionComponent = () => {
 
       <IonCardContent>
         <p className="paragraph-margin-bottom">
-          Choose this option to import your GKE clusters from the Google Cloud Platform. First of all you have to add the client ID of your Google OAuth application. More information for the setup of Google OAuth 2.0 can be found on the following page: <a href="https://kubenav.io/help/google-oauth2-configuration.html" target="_blank">Google OAuth 2.0 Configuration</a>. When you have added the client ID click the button sign in with Google. You will be redirect to the Google login form, , then you get a list of your existing clusters and you can select the clusters you want to add.
+          Choose this option to import your GKE clusters from the Google Cloud Platform. First of all you have to add the client ID of your Google OAuth application. More information for the setup of Google OAuth 2.0 can be found on the following page: <a href="https://kubenav.io/help/google-oauth2-configuration.html" target="_blank" rel="noopener noreferrer">Google OAuth 2.0 Configuration</a>. When you have added the client ID click the button sign in with Google. You will be redirect to the Google login form, , then you get a list of your existing clusters and you can select the clusters you want to add.
         </p>
 
         <IonList className="paragraph-margin-bottom" lines="full">
@@ -41,7 +41,7 @@ const Google: React.FunctionComponent = () => {
           </IonItem>
         </IonList>
 
-        <IonButton expand="block" href={`${GOOGLE_OAUTH2_ENDPOINT}?client_id=${clientID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=${GOOGLE_RESPONSE_TYPE}&scope=${GOOGLE_SCOPE}`} target="_blank">Sign In with Google</IonButton>
+        <IonButton expand="block" href={`${GOOGLE_OAUTH2_ENDPOINT}?client_id=${clientID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=${GOOGLE_RESPONSE_TYPE}&scope=${GOOGLE_SCOPE}`} target="_blank" rel="noopener noreferrer">Sign In with Google</IonButton>
       </IonCardContent>
     </IonCard>
   );

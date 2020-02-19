@@ -15,7 +15,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import { close, list, more } from 'ionicons/icons';
+import { close, ellipsisHorizontal, ellipsisVertical, list } from 'ionicons/icons';
 import React, { useContext, useEffect, useState } from 'react';
 
 import { AppContext } from '../../context';
@@ -104,7 +104,7 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ activator, name, namespace,
             <IonTitle>{container}</IonTitle>
             <IonButtons slot="primary">
               <IonButton onClick={(e) => { e.stopPropagation(); e.persist(); setPopoverEvent(e); setShowPopover(true); }}>
-                <IonIcon slot="icon-only" icon={more} />
+                <IonIcon slot="icon-only" ios={ellipsisHorizontal} md={ellipsisVertical} />
               </IonButton>
             </IonButtons>
 

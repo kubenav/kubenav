@@ -72,19 +72,19 @@ const Info: React.FunctionComponent = () => {
               <IonListHeader>
                 <IonLabel>Links</IonLabel>
               </IonListHeader>
-              <IonItem href="https://kubenav.io" target="_blank">
+              <IonItem href="https://kubenav.io" target="_blank" rel="noopener noreferrer">
                 <IonAvatar slot="start">
                   <img alt="Website" src="/assets/icons/misc/browser.png" />
                 </IonAvatar>
                 <IonLabel>Website</IonLabel>
               </IonItem>
-              <IonItem href="https://github.com/kubenav/kubenav" target="_blank">
+              <IonItem href="https://github.com/kubenav/kubenav" target="_blank" rel="noopener noreferrer">
                 <IonAvatar slot="start">
                   <img alt="GitHub" src="/assets/icons/misc/github.png" />
                 </IonAvatar>
                 <IonLabel>GitHub</IonLabel>
               </IonItem>
-              <IonItem href="https://twitter.com/kubenav" target="_blank">
+              <IonItem href="https://twitter.com/kubenav" target="_blank" rel="noopener noreferrer">
                 <IonAvatar slot="start">
                   <img alt="Twitter" src="/assets/icons/misc/twitter.png" />
                 </IonAvatar>
