@@ -80,13 +80,13 @@
     ]
   },
   "dependencies": {
-    "@capacitor/electron": "^1.4.0",
+    "@capacitor/electron": "^1.5.0",
     "cors": "^2.8.5",
     "electron-is-dev": "^1.1.0",
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "electron": "^7.0.0",
-    "electron-builder": "^21.2.0"
+    "electron": "^8.0.1",
+    "electron-builder": "^22.3.2"
   }
 }
