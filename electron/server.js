@@ -7,24 +7,6 @@ const k8s = require('@kubernetes/client-node');
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
 
-/*const opts = {};
-kc.applyToRequest(opts);
-
-console.log(kc.getCurrentUser().authProvider);
-
-console.log(kc.getUser(kc.getContextObject('gke_kubenav_europe-west3-a_standard-cluster-1').user).authProvider);
-kc.setCurrentContext('minikube');
-
-request.get(kc.getCurrentCluster().server + '/api/v1/namespaces/default/pods', opts, (error, response, body) => {
-    if (error) {
-      console.log(`error: ${error}`);
-    }
-    if (response) {
-      console.log(`statusCode: ${response.statusCode}`);
-    }
-    console.log(`body: ${body}`);
-});*/
-
 const server = express();
 
 server.use(cors());
@@ -100,106 +82,6 @@ server.post('/request', function (req, res) {
       }
     }
   });
-
-  /*if (postData.method === 'DELETE') {
-    request.delete(postData.url, opts, (error, response, body) => {
-      if (error) {
-        res.status(400);
-        res.json({error: error.message});
-      } else {
-        if (!(response.statusCode >= 200 && response.statusCode < 300)) {
-          res.status(400);
-          res.json({error: JSON.parse(body).message});
-        } else {
-          res.json({data: body});
-        }
-      }
-    });
-  } else if (postData.method === 'PATCH') {
-    request.patch(postData.url, opts, (error, response, body) => {
-      if (error) {
-        res.status(400);
-        res.json({error: error.message});
-      } else {
-        if (!(response.statusCode >= 200 && response.statusCode < 300)) {
-          res.status(400);
-          res.json({error: JSON.parse(body).message});
-        } else {
-          res.json({data: body});
-        }
-      }
-    });
-  } else {
-    request.get(postData.url, opts, (error, response, body) => {
-      if (error) {
-        res.status(400);
-        res.json({error: error.message});
-      } else {
-        if (!(response.statusCode >= 200 && response.statusCode < 300)) {
-          res.status(400);
-          res.json({error: JSON.parse(body).message});
-        } else {
-          res.json({data: body});
-        }
-      }
-    });
-  }*/
-
-
-  /*const options = {
-    method: postData.method,
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    }
-  };
-
-  if (postData.certificateAuthorityData !== '') {
-    options['ca'] = postData.certificateAuthorityData;
-  }
-
-  if (postData.clientCertificateData !== '' && postData.clientKeyData !== '') {
-    options['cert'] = postData.clientCertificateData;
-    options['key'] = postData.clientKeyData;
-  }
-
-  if (postData.method === 'PATCH') {
-    options.headers['Content-Type'] = 'application/json-patch+json';
-  } else {
-    options.headers['Content-Type'] = 'application/json';
-  }
-
-  if (postData.token !== '') {
-    options.headers['Authorization'] = 'Bearer ' + postData.token;
-  }
-
-  if (postData.username !== '' && postData.password !== '') {
-    options.headers['Authorization'] = 'Basic ' + Buffer.from(postData.username + ':' + postData.password).toString('base64');
-  }
-
-  const request = https.request(postData.url, options, function(response) {
-    let body = '';
-
-    response.on('data', function(chunk) {
-      body = body + chunk;
-    });
-
-    response.on('end', function() {
-      if (!(response.statusCode >= 200 && response.statusCode < 300)) {
-        res.status(400);
-        res.json({error: JSON.parse(body).message});
-      } else {
-        res.json({data: body});
-      }
-    });
-  });
-
-  request.on('error', function(error) {
-    res.json(error);
-  });
-
-  request.write(postData.body);
-  request.end();*/
 });
 
 server.get('*', function (req, res) {
