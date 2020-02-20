@@ -139,6 +139,9 @@ async function createWindow() {
     }
   });
 
+  // Set the current context as active cluster.
+  mainWindow.webContents.executeJavaScript('localStorage.setItem("cluster", "' + kc.getCurrentContext() + '");', true);
+
   configCapacitor(mainWindow);
 
   if (isDevMode) {
