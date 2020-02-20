@@ -198,7 +198,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
       let data = await plugin.request({
         server: SERVER,
         method: method,
-        url: alternativeCluster ? alternativeCluster.url : clusters && cluster && clusters[cluster].url ? clusters[cluster].url + url : '',
+        url: alternativeCluster ? alternativeCluster.url + url : clusters && cluster && clusters[cluster].url ? clusters[cluster].url + url : '',
         body: body,
         certificateAuthorityData: alternativeCluster ? alternativeCluster.certificateAuthorityData : clusters && cluster && clusters[cluster].certificateAuthorityData ? clusters[cluster].certificateAuthorityData : '',
         clientCertificateData: alternativeCluster ? alternativeCluster.clientCertificateData : clusters && cluster && clusters[cluster].clientCertificateData ? clusters[cluster].clientCertificateData : '',

@@ -25,7 +25,7 @@ const Cluster: React.FunctionComponent<IClusterProps> = ({ cluster }) => {
   useEffect(() => {
     (async() => {
       try {
-        const data = await context.request('GET', '/api/v1', '', cluster);
+        const data = await context.request('GET', '', '', cluster);
         if (data && data.paths) {
           setStatus(true);
         } else {
