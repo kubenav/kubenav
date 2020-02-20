@@ -33,6 +33,16 @@ const getAccessToken = async (): Promise<string> => {
   return accessToken;
 };
 
+const localStorageClusterExists = (cluster: string, clusters: IClusters|undefined): boolean => {
+  for (let c in clusters) {
+    if (c === cluster) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
 export const AppContext = React.createContext<IContext>({
   clusters: {},
   cluster: '',
@@ -59,8 +69,12 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
           const clustersData = await getClusters(SERVER);
           setClusters(clustersData);
 
-          const clusterData = await getCluster(SERVER);
-          setCluster(clusterData);
+          if (localStorage.getItem('cluster') && localStorageClusterExists(localStorage.getItem('cluster') as string, clustersData)) {
+            setCluster(localStorage.getItem('cluster') as string);
+          } else {
+            const clusterData = await getCluster(SERVER);
+            setCluster(clusterData);
+          }
         } else {
           setClusters(localStorage.getItem('clusters') !== null && localStorage.getItem('clusters') !== '' ? JSON.parse(localStorage.getItem('clusters') as string) as IClusters : undefined);
           setCluster(localStorage.getItem('cluster') !== null && localStorage.getItem('cluster') !== '' ? localStorage.getItem('cluster') as string : clusters && Object.keys(clusters).length > 0 ? Object.keys(clusters)[0] : undefined);
