@@ -1,11 +1,11 @@
 import { Plugins } from '@capacitor/core';
-import { isPlatform } from '@ionic/react';
+import { IonSpinner, isPlatform } from '@ionic/react';
 import { KubenavPlugin as KubenavWebPlugin } from '@kubenav/kubenav-plugin';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { SERVER } from './constants';
 import { IAWSTokens, ICluster, IClusters, IContext, IGoogleTokens } from './declarations';
-import { getAWSToken, getGoogleAccessToken, isBase64, isJSON, randomString, saveGoogleTokens } from './utils';
+import { getAWSToken, getCluster, getClusters, getGoogleAccessToken, isBase64, isJSON, randomString, saveGoogleTokens } from './utils';
 
 const { KubenavPlugin } = Plugins;
 
@@ -48,8 +48,30 @@ export const AppContext = React.createContext<IContext>({
 export const AppContextConsumer = AppContext.Consumer;
 
 export const AppContextProvider: React.FunctionComponent = ({ children }) => {
-  const [clusters, setClusters] = useState<IClusters|undefined>(() => localStorage.getItem('clusters') !== null && localStorage.getItem('clusters') !== '' ? JSON.parse(localStorage.getItem('clusters') as string) as IClusters : undefined);
-  const [cluster, setCluster] = useState<string|undefined>(() => localStorage.getItem('cluster') !== null && localStorage.getItem('cluster') !== '' ? localStorage.getItem('cluster') as string : clusters && Object.keys(clusters).length > 0 ? Object.keys(clusters)[0] : undefined);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [clusters, setClusters] = useState<IClusters|undefined>(undefined);
+  const [cluster, setCluster] = useState<string|undefined>(undefined);
+
+  useEffect(() => {
+    (async() => {
+      if (loading) {
+        if (!isPlatform('hybrid')) {
+          const clustersData = await getClusters(SERVER);
+          setClusters(clustersData);
+
+          const clusterData = await getCluster(SERVER);
+          setCluster(clusterData);
+        } else {
+          setClusters(localStorage.getItem('clusters') !== null && localStorage.getItem('clusters') !== '' ? JSON.parse(localStorage.getItem('clusters') as string) as IClusters : undefined);
+          setCluster(localStorage.getItem('cluster') !== null && localStorage.getItem('cluster') !== '' ? localStorage.getItem('cluster') as string : clusters && Object.keys(clusters).length > 0 ? Object.keys(clusters)[0] : undefined);
+        }
+      }
+
+      setLoading(false);
+    })();
+
+    return () => {};
+  }, [loading]); /* eslint-disable-line */
 
   const addCluster = (newClusters: ICluster[]) => {
     let updatedClusters = clusters ? clusters : {};
@@ -197,6 +219,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
 
       let data = await plugin.request({
         server: SERVER,
+        cluster: alternativeCluster ? alternativeCluster.id : clusters && cluster && clusters[cluster].id ? clusters[cluster].id : '',
         method: method,
         url: alternativeCluster ? alternativeCluster.url + url : clusters && cluster && clusters[cluster].url ? clusters[cluster].url + url : '',
         body: body,
@@ -232,7 +255,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
         request: request,
       }}
     >
-      {children}
+      {loading ? <IonSpinner className="spinner-centered" /> : children}
     </AppContext.Provider>
   )
 };

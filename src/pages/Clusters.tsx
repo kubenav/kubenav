@@ -5,7 +5,8 @@ import {
   IonMenuButton,
   IonPage,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  isPlatform,
 } from '@ionic/react';
 import React, { useContext } from 'react';
 
@@ -25,7 +26,7 @@ const Clusters: React.FunctionComponent = () => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle>Clusters</IonTitle>
-          <AddCluster />
+          {isPlatform('hybrid') ? <AddCluster /> : null}
         </IonToolbar>
       </IonHeader>
       <IonContent>

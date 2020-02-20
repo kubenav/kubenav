@@ -4,7 +4,7 @@ import { KubenavPlugin as KubenavWebPlugin } from '@kubenav/kubenav-plugin';
 import { V1LabelSelector, V1Subject } from '@kubernetes/client-node';
 
 import { GOOGLE_REDIRECT_URI } from './constants';
-import { IAWSCluster, IGoogleCluster, IGoogleProject, IGoogleTokens } from './declarations';
+import { IAWSCluster, IClusters, IGoogleCluster, IGoogleProject, IGoogleTokens } from './declarations';
 
 const { KubenavPlugin } = Plugins;
 
@@ -129,6 +129,34 @@ export const getAWSToken = async (accessKeyId: string, secretAccessKey: string, 
   } catch (err) {
     throw err
   }
+};
+
+export const getCluster = async (server: string): Promise<string|undefined> => {
+  const response = await fetch(`${server}/cluster`, {
+    method: 'GET',
+  });
+
+  const json = await response.json();
+
+  if (response.status >= 200 && response.status < 300) {
+    return json.cluster;
+  }
+
+  return undefined;
+};
+
+export const getClusters = async (server: string): Promise<IClusters|undefined> => {
+  const response = await fetch(`${server}/clusters`, {
+    method: 'GET',
+  });
+
+  const json = await response.json();
+
+  if (response.status >= 200 && response.status < 300) {
+    return json.clusters;
+  }
+
+  return undefined;
 };
 
 export const getGoogleAccessToken = async (refreshToken: string): Promise<IGoogleTokens> => {

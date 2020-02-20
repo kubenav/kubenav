@@ -81,9 +81,11 @@
   },
   "dependencies": {
     "@capacitor/electron": "^1.5.0",
+    "@kubernetes/client-node": "^0.11.1",
     "cors": "^2.8.5",
     "electron-is-dev": "^1.1.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "electron": "^8.0.1",

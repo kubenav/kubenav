@@ -7,7 +7,6 @@ import {
   IonModal,
   IonTitle,
   IonToolbar,
-  isPlatform,
 } from '@ionic/react';
 import { add, close } from 'ionicons/icons';
 import React, { useState } from 'react';
@@ -34,8 +33,8 @@ const AddCluster: React.FunctionComponent = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          {isPlatform('hybrid') ? <Google /> : null}
-          {isPlatform('hybrid') ? <AWS /> : null}
+          <Google />
+          <AWS />
           <Kubeconfig />
           <Manual />
         </IonContent>
