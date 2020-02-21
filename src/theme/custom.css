@@ -73,7 +73,11 @@ th {
   text-align: center;
 }
 
-/* Segment wrapper */
-.segment-wrapper {
-  padding: 8px 16px;
+/* Center a spinner element in the middle of the screen */
+.spinner-centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -14px;
+  margin-left: -14px;
 }

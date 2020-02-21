@@ -5,9 +5,10 @@ import {
   IonItemOptions,
   IonItemSliding,
   IonLabel,
+  isPlatform,
 } from '@ionic/react';
 import { radioButtonOff, radioButtonOn, trash } from 'ionicons/icons';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { AppContext } from '../../context';
 import { ICluster, IContext} from '../../declarations';
@@ -25,7 +26,7 @@ const Cluster: React.FunctionComponent<IClusterProps> = ({ cluster }) => {
   useEffect(() => {
     (async() => {
       try {
-        const data = await context.request('GET', '/api/v1', '', cluster);
+        const data = await context.request('GET', '', '', cluster);
         if (data && data.paths) {
           setStatus(true);
         } else {
@@ -45,13 +46,15 @@ const Cluster: React.FunctionComponent<IClusterProps> = ({ cluster }) => {
         <IonIcon slot="end" color={status ? 'success' : 'danger'} icon={context.cluster && cluster.id === context.cluster ? radioButtonOn : radioButtonOff} />
         <IonLabel>{cluster.name}</IonLabel>
       </IonItem>
-      <IonItemOptions side="end">
-        <EditCluster cluster={cluster} />
-        <IonItemOption color="danger" onClick={() => context.deleteCluster(cluster.id)}>
-          <IonIcon slot="start" icon={trash} />
-          Delete
-        </IonItemOption>
-      </IonItemOptions>
+      {isPlatform('hybrid') ? (
+        <IonItemOptions side="end">
+          <EditCluster cluster={cluster} />
+          <IonItemOption color="danger" onClick={() => context.deleteCluster(cluster.id)}>
+            <IonIcon slot="start" icon={trash} />
+            Delete
+          </IonItemOption>
+        </IonItemOptions>
+      ) : null}
     </IonItemSliding>
   );
 };

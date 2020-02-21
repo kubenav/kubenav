@@ -1,6 +1,11 @@
 const https = require('https');
 const express = require('express');
 const cors = require('cors');
+const request = require('request');
+const k8s = require('@kubernetes/client-node');
+
+const kc = new k8s.KubeConfig();
+kc.loadFromDefault();
 
 const server = express();
 
@@ -8,67 +13,79 @@ server.use(cors());
 server.use(express.json());
 server.use(express.static(__dirname + '/app'));
 
-server.get('*', function (req, res) {
-  res.sendFile(__dirname + '/app/index.html');
+server.get('/cluster', function (req, res) {
+  res.json({ cluster: kc.getCurrentContext() });
+});
+
+server.get('/clusters', function (req, res) {
+  const contexts = kc.getContexts();
+  const clusters = {};
+
+  for (let context of contexts) {
+    clusters[context.name] = {
+      id: context.name,
+      name: context.name,
+      url: kc.getCluster(context.cluster).server,
+      certificateAuthorityData: '',
+      clientCertificateData: '',
+      clientKeyData: '',
+      token: '',
+      username: '',
+      password: '',
+      authProvider: '',
+      namespace: context.namespace ? context.namespace : 'default',
+    }
+  }
+
+  res.json({ clusters: clusters });
 });
 
 server.post('/request', function (req, res) {
   const postData = req.body;
+  kc.setCurrentContext(postData.cluster);
 
-  const options = {
+  const opts = {
+    url: postData.url,
     method: postData.method,
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    }
   };
 
-  if (postData.certificateAuthorityData !== '') {
-    options['ca'] = postData.certificateAuthorityData;
-  }
-
-  if (postData.clientCertificateData !== '' && postData.clientKeyData !== '') {
-    options['cert'] = postData.clientCertificateData;
-    options['key'] = postData.clientKeyData;
-  }
-
   if (postData.method === 'PATCH') {
-    options.headers['Content-Type'] = 'application/json-patch+json';
+    opts.headers = { 'Content-Type': 'application/json-patch+json' };
   } else {
-    options.headers['Content-Type'] = 'application/json';
+    opts.headers = { 'Content-Type': 'application/json' };
   }
 
-  if (postData.token !== '') {
-    options.headers['Authorization'] = 'Bearer ' + postData.token;
+  if (postData.body !== '') {
+    opts.json = JSON.parse(postData.body);
   }
 
-  if (postData.username !== '' && postData.password !== '') {
-    options.headers['Authorization'] = 'Basic ' + Buffer.from(postData.username + ':' + postData.password).toString('base64');
-  }
+  kc.applyToRequest(opts);
 
-  const request = https.request(postData.url, options, function(response) {
-    let body = '';
-
-    response.on('data', function(chunk) {
-      body = body + chunk;
-    });
-
-    response.on('end', function() {
+  request(opts, (error, response, body) => {
+    if (error) {
+      res.status(400);
+      res.json({ error: error.message });
+    } else {
       if (!(response.statusCode >= 200 && response.statusCode < 300)) {
+        let message;
+
+        try {
+          message = JSON.parse(body).message;
+        } catch (err) {
+          message = body;
+        }
+
         res.status(400);
-        res.json({error: JSON.parse(body).message});
+        res.json({ error: message });
       } else {
-        res.json({data: body});
+        res.json({ data: body });
       }
-    });
+    }
   });
+});
 
-  request.on('error', function(error) {
-    res.json(error);
-  });
-
-  request.write(postData.body);
-  request.end();
+server.get('*', function (req, res) {
+  res.sendFile(__dirname + '/app/index.html');
 });
 
 module.exports = server;

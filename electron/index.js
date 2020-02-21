@@ -2,8 +2,30 @@ const { app, BrowserWindow, Menu } = require('electron');
 const isDevMode = require('electron-is-dev');
 const { CapacitorSplashScreen, configCapacitor } = require('@capacitor/electron');
 
+const k8s = require('@kubernetes/client-node');
 const path = require('path');
 const server = require('./server');
+
+const kc = new k8s.KubeConfig();
+kc.loadFromDefault();
+
+const getClusterMenuItems = () => {
+  const contexts = kc.getContexts();
+  const items = [];
+
+  for (let context of contexts) {
+    items.push({
+      label: context.name,
+      click: function() {
+        mainWindow.webContents.executeJavaScript('localStorage.setItem("cluster", "' + context.name + '");', true).then((data) => {
+          mainWindow.loadURL('http://localhost:14122');
+        });
+      }
+    });
+  }
+
+  return items;
+};
 
 // Place holders for our windows so they don't get garbage collected.
 let mainWindow = null;
@@ -103,6 +125,8 @@ const menuTemplateView = {
   ]
 };
 
+const menuTemplateClusters = { label: 'Clusters', submenu: getClusterMenuItems() };
+
 async function createWindow() {
   // Define our main window size
   mainWindow = new BrowserWindow({
@@ -115,45 +139,30 @@ async function createWindow() {
     }
   });
 
+  // Set the current context as active cluster.
+  mainWindow.webContents.executeJavaScript('localStorage.setItem("cluster", "' + kc.getCurrentContext() + '");', true);
+
   configCapacitor(mainWindow);
 
-  mainWindow.webContents.executeJavaScript('localStorage.getItem("clusters");', true).then((result) => {
-    const clusters = JSON.parse(result);
-    const menuTemplateClusters = { label: 'Clusters', submenu: [] };
-
-    if (clusters) {
-      for (let cluster in clusters) {
-        menuTemplateClusters.submenu.push({
-          label: clusters[cluster].name,
-          click: function() {
-            mainWindow.webContents.executeJavaScript('localStorage.setItem("cluster", "' + cluster + '");', true).then((data) => {
-              mainWindow.loadURL('http://localhost:14122');
-            });
-          }
-        });
-      }
-    }
-
-    if (isDevMode) {
-      // Set our above template to the Menu Object if we are in development mode, dont want users having the devtools.
-      Menu.setApplicationMenu(Menu.buildFromTemplate([
-        menuTemplateOptionsDev,
-        menuTemplateEdit,
-        menuTemplateView,
-        menuTemplateClusters,
-      ]));
-      // If we are developers we might as well open the devtools by default.
-      mainWindow.webContents.openDevTools();
-    } else {
-      // Set our above template to the Menu Object if we are in production mode.
-      Menu.setApplicationMenu(Menu.buildFromTemplate([
-        menuTemplateOptionsProd,
-        menuTemplateEdit,
-        menuTemplateView,
-        menuTemplateClusters,
-      ]));
-    }
-  });
+  if (isDevMode) {
+    // Set our above template to the Menu Object if we are in development mode, dont want users having the devtools.
+    Menu.setApplicationMenu(Menu.buildFromTemplate([
+      menuTemplateOptionsDev,
+      menuTemplateEdit,
+      menuTemplateView,
+      menuTemplateClusters,
+    ]));
+    // If we are developers we might as well open the devtools by default.
+    mainWindow.webContents.openDevTools();
+  } else {
+    // Set our above template to the Menu Object if we are in production mode.
+    Menu.setApplicationMenu(Menu.buildFromTemplate([
+      menuTemplateOptionsProd,
+      menuTemplateEdit,
+      menuTemplateView,
+      menuTemplateClusters,
+    ]));
+  }
 
   if (useSplashScreen) {
     splashScreen = new CapacitorSplashScreen(mainWindow);
