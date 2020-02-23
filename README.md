@@ -5,7 +5,7 @@
   **kubenav** is the navigator for your **Kubernetes** clusters right in your pocket. kubenav is a **mobile and desktop** app to help you manage Kubernetes clusters and stay up to date on whats going on in your clusters.
 
   <p>
-    <a href="https://apps.apple.com/us/app/kubenav/id1494512160" target="_self"><img src="./docs/assets/app-store-badge.png" height="50"></a>
+    <a href="https://apps.apple.com/us/app/kubenav/id1494512160" target="_blank"><img src="./docs/assets/app-store-badge.png" height="50"></a>
     <a href="https://play.google.com/store/apps/details?id=io.kubenav.kubenav" target="_blank"><img src="./docs/assets/google-play-badge.png" height="50"></a>
     <a href="https://github.com/kubenav/kubenav/releases" target="_self"><img src="./docs/assets/desktop-badge.png" height="50"></a>
   </p>
