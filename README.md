@@ -91,14 +91,16 @@ ionic capacitor run ios -l --address=0.0.0.0
 
 For testing new features and faster feedback, we are running nightly builds for the `master` branch via GitHub Action. The builds are release in the [https://console.cloud.google.com/storage/browser/kubenav/](gs://kubenav Google Storage bucket). The following files are available for each day:
 
-- https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<VERSION>-darwin-amd64.dmg
-- https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<VERSION>-darwin-amd64.dmg.blockmap
-- https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<VERSION>-darwin-amd64.tar.gz
-- https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<VERSION>-linux-amd64.AppImage
-- https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<VERSION>-linux-amd64.tar.gz
-- https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<VERSION>-win32-amd64.exe
-- https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<VERSION>-win32-amd64.exe.blockmap
-- https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<VERSION>-win32-amd64.tar.gz
+```
+https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<TAG>-darwin-amd64.dmg
+https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<TAG>-darwin-amd64.dmg.blockmap
+https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<TAG>-darwin-amd64.tar.gz
+https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<TAG>-linux-amd64.AppImage
+https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<TAG>-linux-amd64.tar.gz
+https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<TAG>-win32-amd64.exe
+https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<TAG>-win32-amd64.exe.blockmap
+https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<TAG>-win32-amd64.tar.gz
+```
 
 ## Release
 

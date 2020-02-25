@@ -1,10 +1,8 @@
 name: Electron
 
-on: [pull_request]
-
-#on:
-#  schedule:
-#    - cron: '0 4 * * *'
+on:
+  schedule:
+    - cron: '0 4 * * *'
 
 jobs:
   build:
