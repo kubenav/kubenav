@@ -56,6 +56,7 @@ jobs:
 
       - name: Upload Electron App
         run: |
+          npm run upload
         env:
           GOOGLE_KEY_FILE: ${{ secrets.GOOGLE_KEY_FILE }}
           GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
