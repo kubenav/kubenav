@@ -16,9 +16,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import ErrorCard from '../components/misc/ErrorCard';
-import { AppContext } from '../context';
-import { IAWSTokens, ICluster, IContext } from '../declarations';
-import { getAWSClusters } from '../utils';
+import { ICluster, IContext } from '../declarations';
+import { getAWSClusters } from '../utils/api';
+import { AppContext } from '../utils/context';
+import { getAWSTokens } from '../utils/storage';
 
 const isChecked = (id: string, clusters: ICluster[]): boolean => {
   for (let cluster of clusters) {
@@ -50,7 +51,7 @@ const ClustersAWS: React.FunctionComponent<IClustersAWSProps> = ({ match, histor
 
       try {
         if (match.params.region) {
-          const tokens: IAWSTokens = localStorage.getItem('aws') ? JSON.parse(localStorage.getItem('aws') as string) : {};
+          const tokens = getAWSTokens();
 
           if (!tokens.hasOwnProperty(match.params.region)) {
             throw new Error('Could not find AWS credentials.')

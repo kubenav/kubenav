@@ -19,8 +19,8 @@ import ItemOptions from '../components/kubernetes/ItemOptions';
 import CustomResourceItem from '../components/kubernetes/items/CustomResourceItem';
 import NamespacePopover from '../components/kubernetes/NamespacePopover';
 import LoadingErrorCard from '../components/misc/LoadingErrorCard';
-import { AppContext } from '../context';
 import { IContext } from '../declarations';
+import { AppContext } from '../utils/context';
 
 interface IMatchParams {
   group: string;

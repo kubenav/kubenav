@@ -16,8 +16,8 @@ import {
 import React, { useContext, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { AppContext } from '../context';
 import { IContext } from '../declarations';
+import { AppContext } from '../utils/context';
 
 interface IClustersManualProps extends RouteComponentProps {}
 

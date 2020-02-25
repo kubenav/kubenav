@@ -18,8 +18,8 @@ import {
 import { close, create } from 'ionicons/icons';
 import React, {useContext, useState} from 'react';
 
-import { AppContext } from '../../context';
 import { ICluster, IContext } from '../../declarations';
+import { AppContext } from '../../utils/context';
 
 interface IEditClusterProps {
   cluster: ICluster;

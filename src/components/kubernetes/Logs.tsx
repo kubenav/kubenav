@@ -18,8 +18,8 @@ import {
 import { close, ellipsisHorizontal, ellipsisVertical, list } from 'ionicons/icons';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { AppContext } from '../../context';
 import { IContext, TActivator } from '../../declarations';
+import { AppContext } from '../../utils/context';
 import Editor from '../misc/Editor';
 
 const TAIL_LINES = 1000;

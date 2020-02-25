@@ -14,7 +14,7 @@ import { V1ClusterRoleBinding } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { subjectLink } from '../../../utils';
+import { subjectLink } from '../../../utils/helpers';
 import Configuration from '../Configuration';
 import List from '../List';
 import Metadata from '../Metadata';

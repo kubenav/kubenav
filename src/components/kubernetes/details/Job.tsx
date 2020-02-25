@@ -6,7 +6,7 @@ import { V1Job } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { labelSelector, timeDifference } from '../../../utils';
+import { labelSelector, timeDifference } from '../../../utils/helpers';
 import Conditions from '../Conditions';
 import Configuration from '../Configuration';
 import List from '../List';

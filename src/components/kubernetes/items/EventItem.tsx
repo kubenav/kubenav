@@ -6,7 +6,7 @@ import { V1Event } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { timeDifference } from '../../../utils';
+import { timeDifference } from '../../../utils/helpers';
 import { eventSource } from '../details/Event';
 
 interface IEventItemProps extends RouteComponentProps {

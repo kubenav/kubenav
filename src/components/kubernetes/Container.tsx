@@ -26,7 +26,7 @@ import yaml from 'js-yaml';
 import React, {useState} from 'react';
 
 import { IContainerMetrics } from '../../declarations';
-import { formatResourceValue } from '../../utils';
+import { formatResourceValue } from '../../utils/helpers';
 import Editor from '../misc/Editor';
 import Logs from './Logs';
 import Row from './Row';

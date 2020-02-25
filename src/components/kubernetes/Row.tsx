@@ -4,7 +4,7 @@ import {
 } from '@ionic/react';
 import React from 'react';
 
-import { getProperty } from '../../utils';
+import { getProperty } from '../../utils/helpers';
 
 interface IRowProps {
   objKey: string;

@@ -6,8 +6,8 @@ import { V1Pod } from '@kubernetes/client-node';
 import React, {useContext, useEffect, useState} from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { AppContext } from '../../../context';
 import { IContext, IPodMetrics } from '../../../declarations';
+import { AppContext } from '../../../utils/context';
 import Affinities from '../Affinities';
 import Conditions from '../Conditions';
 import Configuration from '../Configuration';

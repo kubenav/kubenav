@@ -7,7 +7,7 @@ import { V1Service, V1ServicePort } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { matchLabels } from '../../../utils';
+import { matchLabels } from '../../../utils/helpers';
 import Configuration from '../Configuration';
 import List from '../List';
 import Metadata from '../Metadata';

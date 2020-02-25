@@ -13,9 +13,9 @@ import { V1Node, V1NodeAddress } from '@kubernetes/client-node'
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { AppContext } from '../../../context';
 import { IContext, INodeMetrics } from '../../../declarations';
-import { formatBytes, formatResourceValue } from '../../../utils';
+import { AppContext } from '../../../utils/context';
+import { formatBytes, formatResourceValue } from '../../../utils/helpers';
 import IonCardEqualHeight from '../../misc/IonCardEqualHeight';
 import Conditions from '../Conditions';
 import Configuration from '../Configuration';

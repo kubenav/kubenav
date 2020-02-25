@@ -17,9 +17,9 @@ import {
 import React, {useContext} from 'react';
 
 import Sections from '../components/misc/Sections';
-import { AppContext } from '../context';
 import { IContext } from '../declarations';
-import { sections } from '../sections';
+import { AppContext } from '../utils/context';
+import { sections } from '../utils/sections';
 
 const Home: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);

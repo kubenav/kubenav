@@ -12,8 +12,8 @@ import React, { useContext } from 'react';
 
 import AddCluster from '../components/settings/AddCluster';
 import Cluster from '../components/settings/Cluster';
-import { AppContext } from '../context';
 import { IContext } from '../declarations';
+import { AppContext } from '../utils/context';
 
 const Clusters: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);

@@ -1,59 +1,59 @@
-import CronJob from './components/kubernetes/details/CronJob';
-import DaemonSet from './components/kubernetes/details/DaemonSet';
-import Deployment from './components/kubernetes/details/Deployment';
-import Job from './components/kubernetes/details/Job';
-import Pod from './components/kubernetes/details/Pod';
-import ReplicaSet from './components/kubernetes/details/ReplicaSet';
-import ReplicationController from './components/kubernetes/details/ReplicationController';
-import StatefulSet from './components/kubernetes/details/StatefulSet';
+import CronJob from '../components/kubernetes/details/CronJob';
+import DaemonSet from '../components/kubernetes/details/DaemonSet';
+import Deployment from '../components/kubernetes/details/Deployment';
+import Job from '../components/kubernetes/details/Job';
+import Pod from '../components/kubernetes/details/Pod';
+import ReplicaSet from '../components/kubernetes/details/ReplicaSet';
+import ReplicationController from '../components/kubernetes/details/ReplicationController';
+import StatefulSet from '../components/kubernetes/details/StatefulSet';
 
-import Ingress from './components/kubernetes/details/Ingress';
-import Service from './components/kubernetes/details/Service';
+import Ingress from '../components/kubernetes/details/Ingress';
+import Service from '../components/kubernetes/details/Service';
 
-import ConfigMap from './components/kubernetes/details/ConfigMap';
-import PersistentVolume from './components/kubernetes/details/PersistentVolume';
-import PersistentVolumeClaim from './components/kubernetes/details/PersistentVolumeClaim';
-import Secret from './components/kubernetes/details/Secret';
-import ServiceAccount from './components/kubernetes/details/ServiceAccount';
+import ConfigMap from '../components/kubernetes/details/ConfigMap';
+import PersistentVolume from '../components/kubernetes/details/PersistentVolume';
+import PersistentVolumeClaim from '../components/kubernetes/details/PersistentVolumeClaim';
+import Secret from '../components/kubernetes/details/Secret';
+import ServiceAccount from '../components/kubernetes/details/ServiceAccount';
 
-import ClusterRole from './components/kubernetes/details/ClusterRole';
-import ClusterRoleBinding from './components/kubernetes/details/ClusterRoleBinding';
-import Role from './components/kubernetes/details/Role';
-import RoleBinding from './components/kubernetes/details/RoleBinding';
+import ClusterRole from '../components/kubernetes/details/ClusterRole';
+import ClusterRoleBinding from '../components/kubernetes/details/ClusterRoleBinding';
+import Role from '../components/kubernetes/details/Role';
+import RoleBinding from '../components/kubernetes/details/RoleBinding';
 
-import Event from './components/kubernetes/details/Event';
-import Namespace from './components/kubernetes/details/Namespace';
-import Node from './components/kubernetes/details/Node';
+import Event from '../components/kubernetes/details/Event';
+import Namespace from '../components/kubernetes/details/Namespace';
+import Node from '../components/kubernetes/details/Node';
 
-import CronJobItem from './components/kubernetes/items/CronJobItem';
-import DaemonSetItem from './components/kubernetes/items/DaemonSetItem';
-import DeploymentItem from './components/kubernetes/items/DeploymentItem';
-import JobItem from './components/kubernetes/items/JobItem';
-import PodItem from './components/kubernetes/items/PodItem';
-import ReplicaSetItem from './components/kubernetes/items/ReplicaSetItem';
-import ReplicationControllerItem from './components/kubernetes/items/ReplicationControllerItem';
-import StatefulSetItem from './components/kubernetes/items/StatefulSetItem';
+import CronJobItem from '../components/kubernetes/items/CronJobItem';
+import DaemonSetItem from '../components/kubernetes/items/DaemonSetItem';
+import DeploymentItem from '../components/kubernetes/items/DeploymentItem';
+import JobItem from '../components/kubernetes/items/JobItem';
+import PodItem from '../components/kubernetes/items/PodItem';
+import ReplicaSetItem from '../components/kubernetes/items/ReplicaSetItem';
+import ReplicationControllerItem from '../components/kubernetes/items/ReplicationControllerItem';
+import StatefulSetItem from '../components/kubernetes/items/StatefulSetItem';
 
-import IngressItem from './components/kubernetes/items/IngressItem';
-import ServiceItem from './components/kubernetes/items/ServiceItem';
+import IngressItem from '../components/kubernetes/items/IngressItem';
+import ServiceItem from '../components/kubernetes/items/ServiceItem';
 
-import ConfigMapItem from './components/kubernetes/items/ConfigMapItem';
-import PersistentVolumeClaimItem from './components/kubernetes/items/PersistentVolumeClaimItem';
-import PersistentVolumeItem from './components/kubernetes/items/PersistentVolumeItem';
-import SecretItem from './components/kubernetes/items/SecretItem';
-import ServiceAccountItem from './components/kubernetes/items/ServiceAccountItem';
+import ConfigMapItem from '../components/kubernetes/items/ConfigMapItem';
+import PersistentVolumeClaimItem from '../components/kubernetes/items/PersistentVolumeClaimItem';
+import PersistentVolumeItem from '../components/kubernetes/items/PersistentVolumeItem';
+import SecretItem from '../components/kubernetes/items/SecretItem';
+import ServiceAccountItem from '../components/kubernetes/items/ServiceAccountItem';
 
-import ClusterRoleBindingItem from './components/kubernetes/items/ClusterRoleBindingItem';
-import ClusterRoleItem from './components/kubernetes/items/ClusterRoleItem';
-import RoleBindingItem from './components/kubernetes/items/RoleBindingItem';
-import RoleItem from './components/kubernetes/items/RoleItem';
+import ClusterRoleBindingItem from '../components/kubernetes/items/ClusterRoleBindingItem';
+import ClusterRoleItem from '../components/kubernetes/items/ClusterRoleItem';
+import RoleBindingItem from '../components/kubernetes/items/RoleBindingItem';
+import RoleItem from '../components/kubernetes/items/RoleItem';
 
-import CustomResourceDefinitionItem from './components/kubernetes/items/CustomResourceDefinitionItem';
-import EventItem from './components/kubernetes/items/EventItem';
-import NamespaceItem from './components/kubernetes/items/NamespaceItem';
-import NodeItem from './components/kubernetes/items/NodeItem';
+import CustomResourceDefinitionItem from '../components/kubernetes/items/CustomResourceDefinitionItem';
+import EventItem from '../components/kubernetes/items/EventItem';
+import NamespaceItem from '../components/kubernetes/items/NamespaceItem';
+import NodeItem from '../components/kubernetes/items/NodeItem';
 
-import { IAppSections } from './declarations';
+import { IAppSections } from '../declarations';
 
 export const sections: IAppSections = {
   'workloads': {

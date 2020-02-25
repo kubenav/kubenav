@@ -8,7 +8,7 @@ import { V1DaemonSet, V1DaemonSetUpdateStrategy } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { labelSelector } from '../../../utils';
+import { labelSelector } from '../../../utils/helpers';
 import Configuration from '../Configuration';
 import List from '../List';
 import Metadata from '../Metadata';

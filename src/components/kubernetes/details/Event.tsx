@@ -11,7 +11,7 @@ import { V1Event, V1EventSource } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { timeDifference } from '../../../utils';
+import { timeDifference } from '../../../utils/helpers';
 import Metadata from '../Metadata';
 import Row from '../Row';
 

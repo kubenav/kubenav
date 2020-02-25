@@ -10,8 +10,8 @@ import {
 import { radioButtonOff, radioButtonOn, trash } from 'ionicons/icons';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { AppContext } from '../../context';
 import { ICluster, IContext} from '../../declarations';
+import { AppContext } from '../../utils/context';
 import EditCluster from './EditCluster';
 
 interface IClusterProps {

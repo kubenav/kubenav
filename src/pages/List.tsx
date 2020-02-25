@@ -19,10 +19,10 @@ import { RouteComponentProps } from 'react-router';
 import ItemOptions from '../components/kubernetes/ItemOptions';
 import NamespacePopover from '../components/kubernetes/NamespacePopover';
 import LoadingErrorCard from '../components/misc/LoadingErrorCard';
-import { AppContext } from '../context';
 import { IContext } from '../declarations';
-import { sections } from '../sections';
-import { isNamespaced } from '../utils';
+import { AppContext } from '../utils/context';
+import { isNamespaced } from '../utils/helpers';
+import { sections } from '../utils/sections';
 
 interface IMatchParams {
   section: string;

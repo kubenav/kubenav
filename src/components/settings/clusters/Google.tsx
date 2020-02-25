@@ -11,8 +11,8 @@ import {
 } from '@ionic/react';
 import React, { useState } from 'react';
 
-import { GOOGLE_OAUTH2_ENDPOINT, GOOGLE_REDIRECT_URI, GOOGLE_RESPONSE_TYPE, GOOGLE_SCOPE } from '../../../constants';
-import { setGoogleClientID } from '../../../utils';
+import { GOOGLE_OAUTH2_ENDPOINT, GOOGLE_REDIRECT_URI, GOOGLE_RESPONSE_TYPE, GOOGLE_SCOPE } from '../../../utils/constants';
+import { setGoogleClientID } from '../../../utils/storage';
 
 const Google: React.FunctionComponent = () => {
   const [clientID, setClientID] = useState<string>('');

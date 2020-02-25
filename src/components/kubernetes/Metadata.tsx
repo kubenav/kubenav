@@ -12,7 +12,7 @@ import {
 import { V1ObjectMeta } from '@kubernetes/client-node'
 import React from 'react';
 
-import { isNamespaced, timeDifference } from '../../utils';
+import { isNamespaced, timeDifference } from '../../utils/helpers';
 import Row from './Row';
 
 interface IMetadataProps {

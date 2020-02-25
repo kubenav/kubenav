@@ -7,8 +7,8 @@ import {
 import { trash } from 'ionicons/icons';
 import React, {useContext, useState} from 'react';
 
-import { AppContext } from '../../context';
 import { IContext, TActivator } from '../../declarations';
+import { AppContext } from '../../utils/context';
 
 interface IDeleteItemProps {
   activator: TActivator;

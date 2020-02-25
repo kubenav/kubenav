@@ -6,7 +6,7 @@ import { V1beta1CronJob } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { timeDifference } from '../../../utils';
+import { timeDifference } from '../../../utils/helpers';
 
 interface ICronJobItemProps extends RouteComponentProps {
   item: V1beta1CronJob;

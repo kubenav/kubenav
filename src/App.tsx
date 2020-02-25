@@ -20,7 +20,6 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/typography.css';
 
 import Menu from './components/misc/Menu';
-import { AppContextProvider } from './context';
 import ClustersPage from './pages/Clusters';
 import ClustersAWSPage from './pages/ClustersAWS';
 import ClustersGooglePage from './pages/ClustersGoogle';
@@ -31,7 +30,8 @@ import DetailsPage from './pages/Details';
 import HomePage from './pages/Home';
 import InfoPage from './pages/Info';
 import ListPage from './pages/List';
-import { sections } from './sections';
+import { AppContextProvider } from './utils/context';
+import { sections } from './utils/sections';
 
 import './theme/custom.css';
 import './theme/variables.css';

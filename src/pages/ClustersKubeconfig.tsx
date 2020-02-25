@@ -19,8 +19,8 @@ import React, { useContext, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import Editor from '../components/misc/Editor';
-import { AppContext } from '../context';
 import { ICluster, IContext, IKubeconfig, IKubeconfigCluster, IKubeconfigClusterRef, IKubeconfigUser, IKubeconfigUserRef } from '../declarations';
+import { AppContext } from '../utils/context';
 
 const getKubeconfigCluster = (name: string, clusters: IKubeconfigClusterRef[]): IKubeconfigCluster|null => {
   for (let cluster of clusters) {

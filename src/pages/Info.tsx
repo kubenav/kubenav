@@ -20,7 +20,7 @@ import { useGetInfo } from '@ionic/react-hooks/device';
 import React, {useEffect, useState} from 'react';
 
 import License from '../components/settings/License';
-import { VERSION } from '../constants';
+import { VERSION } from '../utils/constants';
 
 const Info: React.FunctionComponent = () => {
   const { info } = useGetInfo();

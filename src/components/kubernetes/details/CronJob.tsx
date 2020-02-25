@@ -6,7 +6,7 @@ import { V1beta1CronJob, V1Job } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { timeDifference } from '../../../utils';
+import { timeDifference } from '../../../utils/helpers';
 import Configuration from '../Configuration';
 import Containers from '../Containers';
 import List from '../List';

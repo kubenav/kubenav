@@ -19,9 +19,9 @@ import { RouteComponentProps } from 'react-router';
 import DeleteItem from '../components/kubernetes/DeleteItem';
 import EditItem from '../components/kubernetes/EditItem';
 import LoadingErrorCard from '../components/misc/LoadingErrorCard';
-import { AppContext } from '../context';
 import { IContext } from '../declarations';
-import { sections } from '../sections';
+import { AppContext } from '../utils/context';
+import { sections } from '../utils/sections';
 
 interface IMatchParams {
   section: string;
