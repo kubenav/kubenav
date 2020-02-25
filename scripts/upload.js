@@ -1,9 +1,23 @@
+const path = require('path');
+const fs = require('fs');
 const { Storage } = require('@google-cloud/storage');
 
 const storage = new Storage({
   credentials: JSON.parse(process.env.GOOGLE_KEY_FILE),
   projectId: process.env.GOOGLE_PROJECT_ID,
 });
+
+function checkFilename(filename) {
+  const validFilenames = ['linux-amd64.AppImage', 'linux-amd64.tar.gz', 'darwin-amd64.dmg', 'darwin-amd64.dmg.blockmap', 'darwin-amd64.tar.gz', 'win32-amd64.exe', 'win32-amd64.exe.blockmap', 'win32-amd64.tar.gz'];
+
+  for (let validFilename in validFilenames) {
+    if (filename.includes(validFilename)) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 function getDate() {
   const date = new Date();
@@ -34,15 +48,14 @@ function upload(bucketName, filename) {
   uploadFile().catch(console.error);
 }
 
-if (process.env.OS === 'ubuntu-latest') {
-  upload('kubenav', `electron/dist/kubenav-${process.env.VERSION}-linux-amd64.AppImage`);
-  upload('kubenav', `electron/dist/kubenav-${process.env.VERSION}-linux-amd64.tar.gz`);
-} else if (process.env.OS === 'macos-latest') {
-  upload('kubenav', `electron/dist/kubenav-${process.env.VERSION}-darwin-amd64.dmg`);
-  upload('kubenav', `electron/dist/kubenav-${process.env.VERSION}-darwin-amd64.dmg.blockmap`);
-  upload('kubenav', `electron/dist/kubenav-${process.env.VERSION}-darwin-amd64.tar.gz`);
-} else if (process.env.OS === 'windows-latest') {
-  upload('kubenav', `electron/dist/kubenav-${process.env.VERSION}-win32-amd64.exe`);
-  upload('kubenav', `electron/dist/kubenav-${process.env.VERSION}-win32-amd64.exe.blockmap`);
-  upload('kubenav', `electron/dist/kubenav-${process.env.VERSION}-win32-amd64.tar.gz`);
-}
+fs.readdir('electron/dist', function (err, files) {
+  if (err) {
+    return console.log('Unable to scan directory: ' + err);
+  }
+
+  files.forEach(function(filename) {
+    if (checkFilename(filename)) {
+      upload('kubenav', `electron/dist/${filename}`);
+    }
+  });
+});

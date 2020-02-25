@@ -60,5 +60,3 @@ jobs:
         env:
           GOOGLE_KEY_FILE: ${{ secrets.GOOGLE_KEY_FILE }}
           GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
-          OS: ${{ matrix.os }}
-          VERSION: ${{ steps.get_version.outputs.VERSION }}
