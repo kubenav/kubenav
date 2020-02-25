@@ -77,9 +77,9 @@ th {
 .segment-wrapper {
   padding: 8px 16px;
 }
-@media (min-width:961px) {
+@media only screen and (min-width: 768px) and (min-height: 600px) {
   .modal-wrapper {
     --width: 90%;
-    --height: 80%;
+    --height: 90%;
   }
 }
