@@ -30,15 +30,15 @@ function getDate() {
   if (day.length < 2)
     day = '0' + day;
 
-  return [year, month, day].join();
+  return `${year}${month}${day}`;
 }
 
 function upload(bucketName, filename) {
   const date = getDate();
 
   async function uploadFile() {
-    await storage.bucket(bucketName).upload(filename, {
-      destination: `${date}-${filename}`,
+    await storage.bucket(bucketName).upload(`electron/dist/${filename}`, {
+      destination: `${date}/${filename}`,
       gzip: true,
     });
 
@@ -55,7 +55,7 @@ fs.readdir('electron/dist', function (err, files) {
 
   files.forEach(function(filename) {
     if (checkFilename(filename)) {
-      upload('kubenav', `electron/dist/${filename}`);
+      upload('kubenav', filename);
     }
   });
 });
