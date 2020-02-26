@@ -20,7 +20,8 @@
     "eject": "react-scripts eject",
     "postinstall": "cd electron && npm install",
     "server": "node scripts/server.js",
-    "resources": "cordova-res ios --splash-source resources/ios/splash.png --icon-source resources/ios/icon.png && cordova-res android --splash-source resources/android/splash.png --icon-source resources/android/icon.png --icon-background-source '#326ce5' && node scripts/resources.js"
+    "resources": "cordova-res ios --splash-source resources/ios/splash.png --icon-source resources/ios/icon.png && cordova-res android --splash-source resources/android/splash.png --icon-source resources/android/icon.png --icon-background-source '#326ce5' && node scripts/resources.js",
+    "upload": "node scripts/upload.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -41,6 +42,7 @@
     "@capacitor/android": "^1.5.0",
     "@capacitor/core": "^1.5.0",
     "@capacitor/ios": "^1.5.0",
+    "@google-cloud/storage": "^4.3.1",
     "@ionic/react": "^5.0.1",
     "@ionic/react-hooks": "0.0.6",
     "@ionic/react-router": "^5.0.1",

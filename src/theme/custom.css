@@ -81,3 +81,9 @@ th {
   margin-top: -14px;
   margin-left: -14px;
 }
+@media only screen and (min-width: 768px) and (min-height: 600px) {
+  .modal-wrapper {
+    --width: 90%;
+    --height: 90%;
+  }
+}
