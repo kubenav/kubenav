@@ -77,7 +77,15 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ activator, name, namespace,
 
   return (
     <React.Fragment>
-      {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header="Could not load logs" message={error} buttons={['OK']} /> : null}
+      {error !== '' ? (
+        <IonAlert
+          isOpen={error !== ''}
+          onDidDismiss={() => setError('')}
+          header="Could not load logs"
+          message={error}
+          buttons={['OK']}
+        />
+      ) : null}
 
       {activator === 'item-option' ? (
         <IonItemOption color="primary" onClick={() => setShowModal(true)}>
@@ -103,23 +111,41 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ activator, name, namespace,
             </IonButtons>
             <IonTitle>{container}</IonTitle>
             <IonButtons slot="primary">
-              <IonButton onClick={(e) => { e.stopPropagation(); e.persist(); setPopoverEvent(e); setShowPopover(true); }}>
+              <IonButton
+                onClick={(e) => { e.stopPropagation(); e.persist(); setPopoverEvent(e); setShowPopover(true); }}
+              >
                 <IonIcon slot="icon-only" ios={ellipsisHorizontal} md={ellipsisVertical} />
               </IonButton>
             </IonButtons>
 
             <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
               <IonList>
-                <IonItem button={true} detail={false} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(false, TAIL_LINES); }}>
+                <IonItem
+                  button={true}
+                  detail={false}
+                  onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(false, TAIL_LINES); }}
+                >
                   <IonLabel>{`Last ${TAIL_LINES} Log Lines`}</IonLabel>
                 </IonItem>
-                <IonItem button={true} detail={false} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(false, 0); }}>
+                <IonItem
+                  button={true}
+                  detail={false}
+                  onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(false, 0); }}
+                >
                   <IonLabel>All Log Lines</IonLabel>
                 </IonItem>
-                <IonItem button={true} detail={false} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(true, TAIL_LINES); }}>
+                <IonItem
+                  button={true}
+                  detail={false}
+                  onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(true, TAIL_LINES); }}
+                >
                   <IonLabel>{`Previous Last ${TAIL_LINES} Log Lines`}</IonLabel>
                 </IonItem>
-                <IonItem button={true} detail={false} onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(true, 0); }}>
+                <IonItem
+                  button={true}
+                  detail={false}
+                  onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(true, 0); }}
+                >
                   <IonLabel>All Previous Log Lines</IonLabel>
                 </IonItem>
               </IonList>

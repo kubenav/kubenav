@@ -25,10 +25,18 @@ const PersistentVolume: React.FunctionComponent<IPersistentVolumeProps> = ({ ite
         <Configuration>
           <Row obj={item} objKey="spec.storageClassName" title="Storage Class Name" />
           <Row obj={item} objKey="spec.persistentVolumeReclaimPolicy" title="Reclaim Policy" />
-          <Row obj={item} objKey="spec.accessModes" title="Access Modes" value={(accessModes) => accessModes.join(', ')} />
+          <Row
+            obj={item}
+            objKey="spec.accessModes"
+            title="Access Modes"
+            value={(accessModes) => accessModes.join(', ')}
+          />
           <Row obj={item} objKey="spec.mountOptions" title="Mount Options" value={(mountOptions) => mountOptions.join(', ')} />
           <Row obj={item} objKey="spec.volumeMode" title="Volume Mode" />
-          {item.spec && item.spec.capacity ? Object.keys(item.spec.capacity).map((key) => <Row key={key} obj={item} objKey={`spec.capacity.${key}`} title={key[0].toUpperCase() + key.slice(1)} />) : null}
+          {item.spec && item.spec.capacity
+            ? Object.keys(item.spec.capacity).map((key) =>
+              <Row key={key} obj={item} objKey={`spec.capacity.${key}`} title={key[0].toUpperCase() + key.slice(1)} />)
+            : null}
         </Configuration>
 
         <Status>

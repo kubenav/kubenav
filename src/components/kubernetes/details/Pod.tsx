@@ -67,14 +67,35 @@ const Pod: React.FunctionComponent<IPodProps> = ({ item, type }) => {
       {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
 
       <IonRow>
-        {item.spec && item.spec.initContainers && item.spec.initContainers.length > 0 ? <Containers containers={item.spec.initContainers} logs={true} metrics={metrics ? metrics.containers : undefined} name={item.metadata ? item.metadata.name : ''} namespace={item.metadata ? item.metadata.namespace : ''} statuses={item.status && item.status.initContainerStatuses ? item.status.initContainerStatuses : undefined} title="Init Containers" /> : null}
-        {item.spec && item.spec.containers && item.spec.containers.length > 0 ? <Containers containers={item.spec.containers} logs={true} metrics={metrics ? metrics.containers : undefined} name={item.metadata ? item.metadata.name : ''} namespace={item.metadata ? item.metadata.namespace : ''} statuses={item.status && item.status.containerStatuses ? item.status.containerStatuses : undefined} title="Containers" /> : null}
+        {item.spec && item.spec.initContainers && item.spec.initContainers.length > 0 ? (
+          <Containers
+            containers={item.spec.initContainers}
+            logs={true}
+            metrics={metrics ? metrics.containers : undefined}
+            name={item.metadata ? item.metadata.name : ''}
+            namespace={item.metadata ? item.metadata.namespace : ''}
+            statuses={item.status && item.status.initContainerStatuses ? item.status.initContainerStatuses : undefined}
+            title="Init Containers"
+          />
+        ) : null}
+        {item.spec && item.spec.containers && item.spec.containers.length > 0 ? (
+          <Containers
+            containers={item.spec.containers}
+            logs={true}
+            metrics={metrics ? metrics.containers : undefined}
+            name={item.metadata ? item.metadata.name : ''}
+            namespace={item.metadata ? item.metadata.namespace : ''}
+            statuses={item.status && item.status.containerStatuses ? item.status.containerStatuses : undefined}
+            title="Containers"
+          />
+        ) : null}
       </IonRow>
 
       <IonRow>
         {item.status && item.status.conditions ? <Conditions conditions={item.status.conditions} /> : null}
         {item.spec && item.spec.volumes ? <Volumes volumes={item.spec.volumes} /> : null}
-        {item.spec && item.spec.tolerations && item.spec.tolerations.filter((toleration) => !!toleration.key).length > 0 ? <Tolerations tolerations={item.spec.tolerations} /> : null}
+        {item.spec && item.spec.tolerations && item.spec.tolerations.filter((toleration) =>
+          !!toleration.key).length > 0 ? <Tolerations tolerations={item.spec.tolerations} /> : null}
         {item.spec && item.spec.affinity ? <Affinities affinities={item.spec.affinity} /> : null}
       </IonRow>
 

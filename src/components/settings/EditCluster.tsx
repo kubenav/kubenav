@@ -104,7 +104,15 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) =>
 
   return (
     <React.Fragment>
-      {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header="Could not save" message={error} buttons={['OK']} /> : null}
+      {error !== '' ? (
+        <IonAlert
+          isOpen={error !== ''}
+          onDidDismiss={() => setError('')}
+          header="Could not save"
+          message={error}
+          buttons={['OK']}
+        />
+      ) : null}
 
       <IonItemOption color="primary" onClick={() => setShowModal(true)}>
         <IonIcon slot="start" icon={create} />

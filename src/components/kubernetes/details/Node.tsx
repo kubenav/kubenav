@@ -73,7 +73,15 @@ const Node: React.FunctionComponent<INodeProps> = ({ item, type }) => {
         </Configuration>
 
         <Status>
-          <Row obj={item} objKey="status.addresses" title="Addresses" value={(addresses: V1NodeAddress[]) => <ul className="no-margin-list">{addresses.map((address, index) => <li key={index}>{address.type}: {address.address}</li>)}</ul>} />
+          <Row
+            obj={item}
+            objKey="status.addresses"
+            title="Addresses"
+            value={(addresses: V1NodeAddress[]) => (
+              <ul className="no-margin-list">{addresses.map((address, index) =>
+                <li key={index}>{address.type}: {address.address}</li>)}</ul>
+            )}
+          />
           <Row obj={item} objKey="status.phase" title="Phase" />
           <Row obj={item} objKey="spec.unschedulable" title="Unschedulable" value={(unschedulable) => unschedulable ? 'true' : 'false'} />
         </Status>

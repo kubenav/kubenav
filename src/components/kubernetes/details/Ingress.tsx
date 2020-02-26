@@ -27,7 +27,12 @@ const Ingress: React.FunctionComponent<IIngressProps> = ({ item, type }) => {
     <IonGrid>
       <IonRow>
         <Configuration>
-          <Row obj={item} objKey="spec.backend" title="Default Backend" defaultValue="Default Backend is not configured" />
+          <Row
+            obj={item}
+            objKey="spec.backend"
+            title="Default Backend"
+            defaultValue="Default Backend is not configured"
+          />
         </Configuration>
       </IonRow>
 

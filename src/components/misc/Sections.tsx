@@ -11,9 +11,15 @@ interface ISectionsProps {
 const Sections: React.FunctionComponent<ISectionsProps> = ({ sections, isMenu }) => {
   return (
     <React.Fragment>
-      {Object.keys(sections).map(sectionKey =>
-        <Section key={sectionKey} pages={sections[sectionKey].pages} title={sections[sectionKey].title} sectionKey={sectionKey} isMenu={isMenu} />
-      )}
+      {Object.keys(sections).map(sectionKey => (
+        <Section
+          key={sectionKey}
+          pages={sections[sectionKey].pages}
+          title={sections[sectionKey].title}
+          sectionKey={sectionKey}
+          isMenu={isMenu}
+        />
+      ))}
     </React.Fragment>
   )
 };

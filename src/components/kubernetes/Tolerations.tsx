@@ -28,7 +28,10 @@ const Tolerations: React.FunctionComponent<ITolerationProps> = ({ tolerations })
             {tolerations.filter((toleration) => !!toleration.key).map((toleration, index) => (
               <IonItem key={index}>
                 <IonLabel class="ion-text-wrap">
-                  <h2>Schedule on nodes with {toleration.key}{toleration.effect ? `: ${toleration.effect} taint.`: '.'} {toleration.tolerationSeconds ? `Evict after ${toleration.tolerationSeconds} seconds.` : ''}</h2>
+                  <h2>
+                    Schedule on nodes with {toleration.key}
+                    {toleration.effect ? `: ${toleration.effect} taint.`: '.'} {toleration.tolerationSeconds ? `Evict after ${toleration.tolerationSeconds} seconds.` : ''}
+                  </h2>
                 </IonLabel>
               </IonItem>
             ))}

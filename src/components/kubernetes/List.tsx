@@ -47,7 +47,11 @@ const List: React.FunctionComponent<IListProps> = ({ name, section, type, namesp
     setShowLoading(true);
 
     try {
-      const data: any = await context.request('GET', `${page.listURL(namespace) }${selector ? '?' + selector : ''}`, '');
+      const data: any = await context.request(
+        'GET',
+        `${page.listURL(namespace) }${selector ? '?' + selector : ''}`,
+        '',
+      );
       setItems(data.items);
     } catch (err) {
       setAlert(err);

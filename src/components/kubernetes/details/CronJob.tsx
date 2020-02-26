@@ -27,7 +27,12 @@ const CronJob: React.FunctionComponent<ICronJobProps> = ({ item, type }) => {
           <Row obj={item} objKey="spec.schedule" title="Schedule" />
           <Row obj={item} objKey="spec.suspend" title="Suspend" value={(value => value ? 'true' : 'false')} />
           <Row obj={item} objKey="spec.concurrencyPolicy" title="Concurrency Policy" />
-          <Row obj={item} objKey="status.lastScheduleTime" title="Last Schedule Time" value={(value) => timeDifference(new Date().getTime(), new Date(value.toString()).getTime())} />
+          <Row
+            obj={item}
+            objKey="status.lastScheduleTime"
+            title="Last Schedule Time"
+            value={(value) => timeDifference(new Date().getTime(), new Date(value.toString()).getTime())}
+          />
           <Row obj={item} objKey="spec.successfulJobsHistoryLimit" title="Successful Job History Limit" />
           <Row obj={item} objKey="spec.failedJobsHistoryLimit" title="Failed Job History Limit" />
         </Configuration>
@@ -37,7 +42,15 @@ const CronJob: React.FunctionComponent<ICronJobProps> = ({ item, type }) => {
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
         <IonRow>
-          <List name="Jobs" section="workloads" type="jobs" namespace={item.metadata.namespace} filter={(job: V1Job) => job.metadata && job.metadata.ownerReferences && job.metadata.ownerReferences.length === 1 ? job.metadata.ownerReferences[0].name === item.metadata!.name : false} />
+          <List
+            name="Jobs"
+            section="workloads"
+            type="jobs"
+            namespace={item.metadata.namespace}
+            filter={(job: V1Job) =>
+              job.metadata && job.metadata.ownerReferences && job.metadata.ownerReferences.length === 1
+                ? job.metadata.ownerReferences[0].name === item.metadata!.name : false}
+          />
         </IonRow>
       ) : null}
 
@@ -52,8 +65,18 @@ const CronJob: React.FunctionComponent<ICronJobProps> = ({ item, type }) => {
       </IonItemDivider>
 
       <IonRow>
-        {item.spec && item.spec.jobTemplate.spec && item.spec.jobTemplate.spec.template.spec && item.spec.jobTemplate.spec.template.spec.initContainers && item.spec.jobTemplate.spec.template.spec.initContainers.length > 0 ? <Containers containers={item.spec.jobTemplate.spec.template.spec.initContainers} statuses={undefined} title="Init Containers" /> : null}
-        {item.spec && item.spec.jobTemplate.spec && item.spec.jobTemplate.spec.template.spec && item.spec.jobTemplate.spec.template.spec.containers && item.spec.jobTemplate.spec.template.spec.containers.length > 0 ? <Containers containers={item.spec.jobTemplate.spec.template.spec.containers} statuses={undefined} title="Containers" /> : null}
+        {item.spec
+        && item.spec.jobTemplate.spec
+        && item.spec.jobTemplate.spec.template.spec
+        && item.spec.jobTemplate.spec.template.spec.initContainers
+        && item.spec.jobTemplate.spec.template.spec.initContainers.length > 0
+          ? <Containers containers={item.spec.jobTemplate.spec.template.spec.initContainers} statuses={undefined} title="Init Containers" /> : null}
+        {item.spec
+        && item.spec.jobTemplate.spec
+        && item.spec.jobTemplate.spec.template.spec
+        && item.spec.jobTemplate.spec.template.spec.containers
+        && item.spec.jobTemplate.spec.template.spec.containers.length > 0
+          ? <Containers containers={item.spec.jobTemplate.spec.template.spec.containers} statuses={undefined} title="Containers" /> : null}
       </IonRow>
     </IonGrid>
   )

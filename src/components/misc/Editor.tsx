@@ -17,7 +17,14 @@ interface IEditorProps {
   scrollToBottomButton?: boolean;
 }
 
-const Editor: React.FunctionComponent<IEditorProps> = ({ onChange, readOnly, mode, value, fullHeight, scrollToBottomButton }) => {
+const Editor: React.FunctionComponent<IEditorProps> = ({
+  onChange,
+  readOnly,
+  mode,
+  value,
+  fullHeight,
+  scrollToBottomButton,
+}) => {
   const editor = useRef<AceEditor>(null);
 
   const [showScrollToBottomButton, setShowScrollToBottomButton] = useState<boolean>(scrollToBottomButton === true);
@@ -58,7 +65,12 @@ const Editor: React.FunctionComponent<IEditorProps> = ({ onChange, readOnly, mod
     <React.Fragment>
       {showScrollToBottomButton ? (
         <div className="editor-scroll-to-bottom-button">
-          <IonButton size="small" onClick={(e) => { e.stopPropagation(); scrollToBottom(); }}>Scroll to Bottom</IonButton>
+          <IonButton
+            size="small"
+            onClick={(e) => { e.stopPropagation(); scrollToBottom(); }}
+          >
+            Scroll to Bottom
+          </IonButton>
         </div>
       ) : null}
 

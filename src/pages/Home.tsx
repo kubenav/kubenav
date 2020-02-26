@@ -45,7 +45,9 @@ const Home: React.FunctionComponent = () => {
               </IonCardHeader>
               <IonCardContent>
                 <p className="paragraph-margin-bottom">
-                  Welcome back to the kubenav app. You are ready to explore your Kubernetes clusters. To get an overview of your running Nodes, Deployments, Pods and Containers select the corresponding item from the menu or from below.
+                  Welcome back to the kubenav app. You are ready to explore your Kubernetes clusters. To get an overview
+                  of your running Nodes, Deployments, Pods and Containers select the corresponding item from the menu or
+                  from below.
                 </p>
                 <IonList>
                   <Sections sections={sections} isMenu={false} />
@@ -61,9 +63,17 @@ const Home: React.FunctionComponent = () => {
               </IonCardHeader>
               <IonCardContent>
                 <p className="paragraph-margin-bottom">
-                  Welcome to the kubenav app. After you added a cluster you can start the exploration of them within the kubenav app. To add a new Kubernetes cluster to the app use the button <b>Add a Cluster</b> or the <b>Clusters</b> item from the menu.
+                  Welcome to the kubenav app. After you added a cluster you can start the exploration of them within the
+                  kubenav app. To add a new Kubernetes cluster to the app use the button <b>Add a Cluster</b> or the
+                  <b>Clusters</b> item from the menu.
                 </p>
-                <IonButton expand="block" routerLink="/settings/clusters" routerDirection="none">Add a Cluster</IonButton>
+                <IonButton
+                  expand="block"
+                  routerLink="/settings/clusters"
+                  routerDirection="none"
+                >
+                  Add a Cluster
+                </IonButton>
               </IonCardContent>
             </IonCard>
           )}

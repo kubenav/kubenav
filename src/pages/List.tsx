@@ -104,13 +104,28 @@ const List: React.FunctionComponent<IListProps> = ({ match }) => {
           <IonList>
             {match.url === url && items ? items.map((item, index) => {
               return (
-                <ItemOptions key={index} item={item} url={page.detailsURL(item.metadata ? item.metadata.namespace : '', item.metadata ? item.metadata.name : '')}>
+                <ItemOptions
+                  key={index}
+                  item={item}
+                  url={page.detailsURL(
+                    item.metadata ? item.metadata.namespace : '',
+                    item.metadata ? item.metadata.name : ''
+                  )}
+                >
                   <Component key={index} item={item} section={match.params.section} type={match.params.type} />
                 </ItemOptions>
               )
             }) : null}
           </IonList>
-        ) : <LoadingErrorCard cluster={context.cluster} clusters={context.clusters} error={error} icon={page.icon} text={`Could not get ${page.pluralText}`} />}
+        ) : (
+          <LoadingErrorCard
+            cluster={context.cluster}
+            clusters={context.clusters}
+            error={error}
+            icon={page.icon}
+            text={`Could not get ${page.pluralText}`}
+          />
+        )}
       </IonContent>
     </IonPage>
   );

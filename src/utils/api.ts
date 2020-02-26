@@ -22,10 +22,14 @@ import {
 
 const { KubenavPlugin } = Plugins;
 
-// getAWSClusters returns all EKS clusters from AWS for the provided access key, secret access key and region.
-// This function is only available for the native mobile apps, on all other platforms an error is returned.
-// For the desktop implementation this is not needed, because we are using kubeconfig file from ~/.kube/config.
-export const getAWSClusters = async (accessKeyId: string, secretAccessKey: string, region: string): Promise<IAWSCluster[]> => {
+// getAWSClusters returns all EKS clusters from AWS for the provided access key, secret access key and region. This
+// function is only available for the native mobile apps, on all other platforms an error is returned. For the desktop
+// implementation this is not needed, because we are using kubeconfig file from ~/.kube/config.
+export const getAWSClusters = async (
+  accessKeyId: string,
+  secretAccessKey: string,
+  region: string,
+): Promise<IAWSCluster[]> => {
   let plugin: any;
 
   if (isPlatform('hybrid')) {
@@ -51,10 +55,15 @@ export const getAWSClusters = async (accessKeyId: string, secretAccessKey: strin
   }
 };
 
-// getAWSToken returns a valid authentication token for API requests against a EKS cluster.
-// This function is only available for the native mobile apps, on all other platforms an error is returned.
-// For the desktop implementation this is not needed, because we are using kubeconfig file from ~/.kube/config.
-export const getAWSToken = async (accessKeyId: string, secretAccessKey: string, region: string, clusterID: string): Promise<string> => {
+// getAWSToken returns a valid authentication token for API requests against a EKS cluster. This function is only
+// available for the native mobile apps, on all other platforms an error is returned. For the desktop implementation
+// this is not needed, because we are using kubeconfig file from ~/.kube/config.
+export const getAWSToken = async (
+  accessKeyId: string,
+  secretAccessKey: string,
+  region: string,
+  clusterID: string,
+): Promise<string> => {
   let plugin: any;
 
   if (isPlatform('hybrid')) {
@@ -81,9 +90,9 @@ export const getAWSToken = async (accessKeyId: string, secretAccessKey: string, 
   }
 };
 
-// getCluster returns the cluster from the current Kubeconfig context.
-// This is only needed for development in the browser.
-// For the mobile app the active cluster is retrieved from localStorage and for desktop the current context is also saved in localStorage at startup.
+// getCluster returns the cluster from the current Kubeconfig context. This is only needed for development in the
+// browser. For the mobile app the active cluster is retrieved from localStorage and for desktop the current context is
+// also saved in localStorage at startup.
 export const getCluster = async (): Promise<string|undefined> => {
   const response = await fetch(`${SERVER}/cluster`, {
     method: 'GET',
@@ -113,10 +122,9 @@ export const getClusters = async (): Promise<IClusters|undefined> => {
   return undefined;
 };
 
-// getGoogleAccessToken returns a valid access token for Google.
-// Therefore we read the saved tokens from the localStorage.
-// If the access token is expired, we request a new token from the Google API and save it.
-// Then the correct token is returned.
+// getGoogleAccessToken returns a valid access token for Google. Therefore we read the saved tokens from the
+// localStorage. If the access token is expired, we request a new token from the Google API and save it. Then the
+// correct token is returned.
 const getGoogleAccessToken = async (): Promise<string> => {
   const tokens = readGoogleTokens();
   if (!tokens) {
@@ -141,8 +149,8 @@ const getGoogleAccessToken = async (): Promise<string> => {
   return accessToken;
 };
 
-// getGoogleAccessTokenAPI uses the refresh token to get a new valid access token for GKE clusters.
-// Therefore a valid refresh token is required.
+// getGoogleAccessTokenAPI uses the refresh token to get a new valid access token for GKE clusters. Therefore a valid
+// refresh token is required.
 export const getGoogleAccessTokenAPI = async (refreshToken: string): Promise<IGoogleTokens> => {
   const response = await fetch(`https://oauth2.googleapis.com/token?refresh_token=${refreshToken}&client_id=${readGoogleClientID()}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=refresh_token`, {
     method: 'POST',
@@ -161,8 +169,8 @@ export const getGoogleAccessTokenAPI = async (refreshToken: string): Promise<IGo
   }
 };
 
-// getGoogleClusters returns all available GKE clusters for the provided project.
-// For the authentication against the Google API a valid access token is required.
+// getGoogleClusters returns all available GKE clusters for the provided project. For the authentication against the
+// Google API a valid access token is required.
 export const getGoogleClusters = async (token: string, project: string): Promise<IGoogleCluster[]> => {
   const response = await fetch(`https://container.googleapis.com/v1/projects/${project}/locations/-/clusters`, {
     headers: {
@@ -184,8 +192,8 @@ export const getGoogleClusters = async (token: string, project: string): Promise
   }
 };
 
-// getGoogleProjects returns all available projects for the authenticated user, from the Google API.
-// Therefor a valid access token is required.
+// getGoogleProjects returns all available projects for the authenticated user, from the Google API. Therefor a valid
+// access token is required.
 export const getGoogleProjects = async (token: string): Promise<IGoogleProject[]> => {
   const response = await fetch('https://cloudresourcemanager.googleapis.com/v1/projects', {
     headers: {
@@ -207,8 +215,8 @@ export const getGoogleProjects = async (token: string): Promise<IGoogleProject[]
   }
 };
 
-// getGoogleTokens is used to retrieve a refresh token from the Google API.
-// This converts the returned code after the login via Google into an refresh token.
+// getGoogleTokens is used to retrieve a refresh token from the Google API. This converts the returned code after the
+// login via Google into an refresh token.
 // See: https://developers.google.com/identity/protocols/OpenIDConnect#exchangecode
 export const getGoogleTokens = async (code: string): Promise<IGoogleTokens> => {
   const response = await fetch(`https://oauth2.googleapis.com/token?code=${code}&client_id=${readGoogleClientID()}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=authorization_code`, {
@@ -228,11 +236,11 @@ export const getGoogleTokens = async (code: string): Promise<IGoogleTokens> => {
   }
 };
 
-// kubernetesRequest is used for operations against the Kubernetes API server.
-// Before the request is execute the provided authentication provider is checked.
-// If the authentication provider is Google and client certificates or username and password are not configured, an valid access token is requested.
-// If the authentication provider is AWS, an valid access token is requested.
-// The region and name for the selected cluster is saved in the cluster id, so we can reuse it to get a access token for the Kubernetes API server.
+// kubernetesRequest is used for operations against the Kubernetes API server. Before the request is execute the
+// provided authentication provider is checked. If the authentication provider is Google and client certificates or
+// username and password are not configured, an valid access token is requested. If the authentication provider is AWS,
+// an valid access token is requested. The region and name for the selected cluster is saved in the cluster id, so we
+// can reuse it to get a access token for the Kubernetes API server.
 export const kubernetesRequest = async (method: string, url: string, body: string, cluster: ICluster): Promise<any> => {
   let plugin: any;
 
@@ -263,7 +271,12 @@ export const kubernetesRequest = async (method: string, url: string, body: strin
         throw new Error('Could not find credentials for cluster.')
       }
 
-      cluster.token = await getAWSToken(tokens[parts[1]].accessKeyID, tokens[parts[1]].secretKey, parts[1], parts.slice(2, parts.length).join('_'));
+      cluster.token = await getAWSToken(
+        tokens[parts[1]].accessKeyID,
+        tokens[parts[1]].secretKey,
+        parts[1],
+        parts.slice(2, parts.length).join('_')
+      );
     }
 
     let data = await plugin.request({

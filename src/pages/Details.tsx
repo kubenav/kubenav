@@ -85,8 +85,24 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ match }) => {
               <IonButton onClick={() => load()}>
                 <IonIcon slot="icon-only" icon={refresh} />
               </IonButton>
-              {item ? <EditItem activator="button" item={item} url={page.detailsURL(item.metadata ? item.metadata.namespace : '', item.metadata ? item.metadata.name : '')} /> : null}
-              {item ? <DeleteItem activator="button" item={item} url={page.detailsURL(item.metadata ? item.metadata.namespace : '', item.metadata ? item.metadata.name : '')} /> : null}
+              {item ? (
+                <EditItem
+                  activator="button"
+                  item={item}
+                  url={page.detailsURL(item.metadata
+                    ? item.metadata.namespace : '', item.metadata ? item.metadata.name : '')
+                  }
+                />
+              ) : null}
+              {item ? (
+                <DeleteItem
+                  activator="button"
+                  item={item}
+                  url={page.detailsURL(item.metadata
+                    ? item.metadata.namespace : '', item.metadata ? item.metadata.name : '')
+                  }
+                />
+              ) : null}
             </IonButtons>
           ) : null}
         </IonToolbar>
@@ -95,9 +111,16 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ match }) => {
         {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
         <IonRefresher slot="fixed"  onIonRefresh={doRefresh} />
 
-        {error === '' && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) && match.url === url && item ? (
+        {error === ''
+        && context.clusters
+        && context.cluster
+        && context.clusters.hasOwnProperty(context.cluster)
+        && match.url === url
+        && item ? (
           <Component item={item} section={match.params.section} type={match.params.type} />
-        ) : <LoadingErrorCard cluster={context.cluster} clusters={context.clusters} error={error} icon={page.icon} text={`Could not get ${page.pluralText}`} />}
+        ) : (
+          <LoadingErrorCard cluster={context.cluster} clusters={context.clusters} error={error} icon={page.icon} text={`Could not get ${page.pluralText}`} />
+        )}
       </IonContent>
     </IonPage>
   );

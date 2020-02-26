@@ -21,7 +21,15 @@ interface IContainersProps {
   title: string;
 }
 
-const Containers: React.FunctionComponent<IContainersProps> = ({ containers, logs, metrics, name, namespace, statuses, title }) => {
+const Containers: React.FunctionComponent<IContainersProps> = ({
+  containers,
+  logs,
+  metrics,
+  name,
+  namespace,
+  statuses,
+  title
+}) => {
   const getContainerStatus = (name: string, containerStatuses: V1ContainerStatus[]): V1ContainerStatus|undefined => {
     if (containerStatuses.filter((containerStatus) => containerStatus.name === name).length === 1) {
       return containerStatuses.filter((containerStatus) => containerStatus.name === name)[0];
@@ -46,7 +54,17 @@ const Containers: React.FunctionComponent<IContainersProps> = ({ containers, log
         </IonCardHeader>
         <IonCardContent>
           <IonList>
-            {containers.map((container, index) => <Container key={index} container={container} logs={logs} metrics={metrics ? getContainerMetrics(container.name, metrics) : undefined} name={name} namespace={namespace} status={statuses ? getContainerStatus(container.name, statuses) : undefined} />)}
+            {containers.map((container, index) => (
+              <Container
+                key={index}
+                container={container}
+                logs={logs}
+                metrics={metrics ? getContainerMetrics(container.name, metrics) : undefined}
+                name={name}
+                namespace={namespace}
+                status={statuses ? getContainerStatus(container.name, statuses) : undefined}
+              />
+            ))}
           </IonList>
         </IonCardContent>
       </IonCardEqualHeight>

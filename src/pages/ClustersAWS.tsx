@@ -57,7 +57,11 @@ const ClustersAWS: React.FunctionComponent<IClustersAWSProps> = ({ match, histor
             throw new Error('Could not find AWS credentials.')
           }
 
-          const awsClusters = await getAWSClusters(tokens[match.params.region].accessKeyID, tokens[match.params.region].secretKey, match.params.region);
+          const awsClusters = await getAWSClusters(
+            tokens[match.params.region].accessKeyID,
+            tokens[match.params.region].secretKey,
+            match.params.region
+          );
 
           // eslint-disable-next-line
           awsClusters.map((cluster) => {
@@ -123,7 +127,11 @@ const ClustersAWS: React.FunctionComponent<IClustersAWSProps> = ({ match, histor
           clusters.map((cluster, index) => {
             return (
               <IonItem key={index}>
-                <IonCheckbox slot="start" checked={isChecked(cluster.id, selectedClusters)} onIonChange={(e) => toggleSelectedCluster(e.detail.checked, cluster)} />
+                <IonCheckbox
+                  slot="start"
+                  checked={isChecked(cluster.id, selectedClusters)}
+                  onIonChange={(e) => toggleSelectedCluster(e.detail.checked, cluster)}
+                />
                 <IonLabel>{cluster.name}</IonLabel>
               </IonItem>
             )

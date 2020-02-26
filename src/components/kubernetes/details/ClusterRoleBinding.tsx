@@ -50,7 +50,10 @@ const ClusterRoleBinding: React.FunctionComponent<IClusterRoleBindingProps> = ({
                   {item.subjects.map((subject, index) => (
                     <IonItem key={index} routerLink={subjectLink(subject)} routerDirection="forward">
                       <IonLabel>
-                        <h2>{subject.kind ? `${subject.kind}: ` : ''}{subject.namespace ? `${subject.namespace}/` : ''}{subject.name}</h2>
+                        <h2>
+                          {subject.kind
+                            ? `${subject.kind}: ` : ''}{subject.namespace ? `${subject.namespace}/` : ''}{subject.name}
+                        </h2>
                       </IonLabel>
                     </IonItem>
                   ))}

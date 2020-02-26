@@ -154,7 +154,15 @@ const ClustersManual: React.FunctionComponent<IClustersManualProps> = ({ history
           </IonItem>
         </IonList>
 
-        {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header="Could not save" message={error} buttons={['OK']} /> : null}
+        {error !== '' ? (
+          <IonAlert
+            isOpen={error !== ''}
+            onDidDismiss={() => setError('')}
+            header="Could not save"
+            message={error}
+            buttons={['OK']}
+          />
+        ) : null}
       </IonContent>
     </IonPage>
   );

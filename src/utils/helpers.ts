@@ -159,7 +159,8 @@ export const subjectLink = (subject: V1Subject): string => {
   return '';
 };
 
-// timeDifference calculates the difference of two given timestamps and returns a human readable string for the difference.
+// timeDifference calculates the difference of two given timestamps and returns a human readable string for the
+// difference.
 export const timeDifference = (current: number, previous: number): string => {
   const msPerMinute = 60 * 1000;
   const msPerHour = msPerMinute * 60;

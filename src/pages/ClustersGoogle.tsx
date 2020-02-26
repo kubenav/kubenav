@@ -127,7 +127,11 @@ const ClustersGoogle: React.FunctionComponent<IClustersGoogleProps> = ({ locatio
           clusters.map((cluster, index) => {
             return (
               <IonItem key={index}>
-                <IonCheckbox slot="start" checked={isChecked(cluster.id, selectedClusters)} onIonChange={(e) => toggleSelectedCluster(e.detail.checked, cluster)} />
+                <IonCheckbox
+                  slot="start"
+                  checked={isChecked(cluster.id, selectedClusters)}
+                  onIonChange={(e) => toggleSelectedCluster(e.detail.checked, cluster)}
+                />
                 <IonLabel>{cluster.name}</IonLabel>
               </IonItem>
             )

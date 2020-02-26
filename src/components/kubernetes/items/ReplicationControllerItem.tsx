@@ -14,11 +14,18 @@ interface IReplicationControllerItemProps extends RouteComponentProps {
   type: string;
 }
 
-const ReplicationControllerItem: React.FunctionComponent<IReplicationControllerItemProps> = ({ item, section, type }) => {
+const ReplicationControllerItem: React.FunctionComponent<IReplicationControllerItemProps> = ({
+  item,
+  section,
+  type,
+}) => {
   let status = '';
 
   if (item.status) {
-    if (item.status.replicas === 0 || item.status.replicas === (item.status.readyReplicas && item.status.availableReplicas)) {
+    if (
+      item.status.replicas === 0
+      || item.status.replicas === (item.status.readyReplicas && item.status.availableReplicas)
+    ) {
       status = 'success';
     } else if (item.status.replicas !== (item.status.readyReplicas || item.status.availableReplicas)) {
       status = 'danger';

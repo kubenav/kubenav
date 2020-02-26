@@ -19,7 +19,15 @@ import React, { useContext, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import Editor from '../components/misc/Editor';
-import { ICluster, IContext, IKubeconfig, IKubeconfigCluster, IKubeconfigClusterRef, IKubeconfigUser, IKubeconfigUserRef } from '../declarations';
+import {
+  ICluster,
+  IContext,
+  IKubeconfig,
+  IKubeconfigCluster,
+  IKubeconfigClusterRef,
+  IKubeconfigUser,
+  IKubeconfigUserRef
+} from '../declarations';
 import { AppContext } from '../utils/context';
 
 const getKubeconfigCluster = (name: string, clusters: IKubeconfigClusterRef[]): IKubeconfigCluster|null => {
@@ -120,10 +128,24 @@ const ClustersKubeconfig: React.FunctionComponent<IClustersKubeconfigProps> = ({
             </IonItem>
           </IonList>
         ) : (
-          <Editor readOnly={false} value={kubeconfig} fullHeight={true} mode="yaml" onChange={(newValue: string) => setKubeconfig(newValue)} />
+          <Editor
+            readOnly={false}
+            value={kubeconfig}
+            fullHeight={true}
+            mode="yaml"
+            onChange={(newValue: string) => setKubeconfig(newValue)}
+          />
         )}
 
-        {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header="Could not save" message={error} buttons={['OK']} /> : null}
+        {error !== '' ? (
+          <IonAlert
+            isOpen={error !== ''}
+            onDidDismiss={() => setError('')}
+            header="Could not save"
+            message={error}
+            buttons={['OK']}
+          />
+        ) : null}
       </IonContent>
     </IonPage>
   );

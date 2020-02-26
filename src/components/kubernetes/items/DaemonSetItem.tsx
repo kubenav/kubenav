@@ -18,9 +18,23 @@ const DaemonSetItem: React.FunctionComponent<IDaemonSetItemProps> = ({ item, sec
   let status = '';
 
   if (item.status) {
-    if ((item.status.desiredNumberScheduled !== (item.status.currentNumberScheduled || item.status.updatedNumberScheduled || item.status.numberAvailable || item.status.numberReady) || (item.status.numberMisscheduled && item.status.numberMisscheduled > 0))) {
+    if (
+      (item.status.desiredNumberScheduled !== (
+        item.status.currentNumberScheduled
+        || item.status.updatedNumberScheduled
+        || item.status.numberAvailable
+        || item.status.numberReady
+      ) || (item.status.numberMisscheduled && item.status.numberMisscheduled > 0))
+    ) {
       status = 'danger';
-    } else if (item.status.desiredNumberScheduled === (item.status.currentNumberScheduled && item.status.updatedNumberScheduled && item.status.numberAvailable && item.status.numberReady)) {
+    } else if (
+      item.status.desiredNumberScheduled === (
+        item.status.currentNumberScheduled
+        && item.status.updatedNumberScheduled
+        && item.status.numberAvailable
+        && item.status.numberReady
+      )
+    ) {
       status = 'success';
     } else {
       status = 'warning';

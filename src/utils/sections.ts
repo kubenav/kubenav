@@ -92,7 +92,9 @@ export const sections: IAppSections = {
         icon: '/assets/icons/kubernetes/job.png',
         listURL: (namespace: string) => { return namespace ? `/apis/batch/v1/namespaces/${namespace}/jobs` : `/apis/batch/v1/jobs`; },
         listItemComponent: JobItem,
-        detailsURL: (namespace: string, name: string) => { return `/apis/batch/v1/namespaces/${namespace}/jobs/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/batch/v1/namespaces/${namespace}/jobs/${name}`;
+        },
         detailsComponent: Job,
       },
       'pods': {
@@ -165,7 +167,9 @@ export const sections: IAppSections = {
         icon: '/assets/icons/kubernetes/cm.png',
         listURL: (namespace: string) => { return namespace ? `/api/v1/namespaces/${namespace}/configmaps` : `/api/v1/configmaps`; },
         listItemComponent: ConfigMapItem,
-        detailsURL: (namespace: string, name: string) => { return `/api/v1/namespaces/${namespace}/configmaps/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/api/v1/namespaces/${namespace}/configmaps/${name}`;
+        },
         detailsComponent: ConfigMap,
       },
       'persistentvolumes': {
@@ -263,7 +267,9 @@ export const sections: IAppSections = {
         singleText: 'Event',
         pluralText: 'Events',
         icon: '/assets/icons/kubernetes/events.png',
-        listURL: (namespace: string) => { return namespace ? `/api/v1/namespaces/${namespace}/events` : `/api/v1/events`; },
+        listURL: (namespace: string) => {
+          return namespace ? `/api/v1/namespaces/${namespace}/events` : `/api/v1/events`;
+        },
         listItemComponent: EventItem,
         detailsURL: (namespace: string, name: string) => { return `/api/v1/namespaces/${namespace}/events/${name}`; },
         detailsComponent: Event,

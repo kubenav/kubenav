@@ -32,7 +32,12 @@ const Metadata: React.FunctionComponent<IMetadataProps> = ({ metadata, type }) =
             <IonGrid>
               <Row obj={metadata} objKey="name" title="Name" />
               {isNamespaced(type) ? <Row obj={metadata} objKey="namespace" title="Namespace" /> : null}
-              <Row obj={metadata} objKey="creationTimestamp" title="Age" value={(value) => timeDifference(new Date().getTime(), new Date(value.toString()).getTime())} />
+              <Row
+                obj={metadata}
+                objKey="creationTimestamp"
+                title="Age"
+                value={(value) => timeDifference(new Date().getTime(), new Date(value.toString()).getTime())}
+              />
               <Row
                 obj={metadata}
                 objKey="labels"

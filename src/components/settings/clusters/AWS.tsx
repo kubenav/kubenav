@@ -55,7 +55,9 @@ const AWS: React.FunctionComponent = () => {
 
       <IonCardContent>
         <p className="paragraph-margin-bottom">
-          Choose this option to import your EKS clusters from the Amazon Web Services. You have to provide an access key id, a secret key and a region. The credentials are used to retrieve your EKS clusters from AWS and to generate a token for the Kubernetes API requests.
+          Choose this option to import your EKS clusters from the Amazon Web Services. You have to provide an access key
+          id, a secret key and a region. The credentials are used to retrieve your EKS clusters from AWS and to generate
+          a token for the Kubernetes API requests.
         </p>
 
         <IonList className="paragraph-margin-bottom" lines="full">

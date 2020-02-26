@@ -81,6 +81,8 @@ th {
   margin-top: -14px;
   margin-left: -14px;
 }
+
+/* Increase width of modals for larger sized screens */
 @media only screen and (min-width: 768px) and (min-height: 600px) {
   .modal-wrapper {
     --width: 90%;
