@@ -2,9 +2,9 @@ import { IonSpinner, isPlatform } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 
 import { ICluster, IClusters, IContext } from '../declarations';
-import { getCluster as getClusterFromAPI, getClusters as getClustersFromAPI, kubernetesRequest } from './api';
+import { getCluster, getClusters, kubernetesRequest } from './api';
 import { isBase64, randomString } from './helpers';
-import { getCluster, getClusters, removeCluster, removeClusters, setCluster as setClusterToStorage, setClusters as setClustersToStorage } from './storage';
+import { readCluster, readClusters, removeCluster, removeClusters, saveCluster, saveClusters } from './storage';
 
 const checkActiveCluster = (cluster: string, clusters: IClusters|undefined): boolean => {
   for (let c in clusters) {
@@ -39,18 +39,18 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
     (async() => {
       if (loading) {
         if (!isPlatform('hybrid')) {
-          const clustersData = await getClustersFromAPI();
+          const clustersData = await getClusters();
           setClusters(clustersData);
 
-          if (getCluster() && checkActiveCluster(getCluster() as string, clustersData)) {
-            setCluster(getCluster());
+          if (readCluster() && checkActiveCluster(readCluster() as string, clustersData)) {
+            setCluster(readCluster());
           } else {
-            const clusterData = await getClusterFromAPI();
+            const clusterData = await getCluster();
             setCluster(clusterData);
           }
         } else {
-          setClusters(getClusters());
-          setCluster(getCluster());
+          setClusters(readClusters());
+          setCluster(readCluster());
         }
       }
 
@@ -85,13 +85,13 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
     }
 
     setClusters({...updatedClusters});
-    setClustersToStorage(updatedClusters);
+    saveClusters(updatedClusters);
   };
 
   const changeCluster = (id: string) => {
     if (clusters && clusters.hasOwnProperty(id)) {
       setCluster(id);
-      setClusterToStorage(id)
+      saveCluster(id)
     }
   };
 
@@ -105,13 +105,13 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
         removeClusters();
       } else {
         setClusters({...filteredClusters});
-        setClustersToStorage(filteredClusters);
+        saveClusters(filteredClusters);
       }
 
       if (cluster === id) {
         if (Object.keys(filteredClusters).length > 0) {
           setCluster(Object.keys(clusters)[0]);
-          setClusterToStorage(Object.keys(clusters)[0]);
+          saveCluster(Object.keys(clusters)[0]);
         } else {
           setCluster(undefined);
           removeCluster();
@@ -130,7 +130,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
       let updatedClusters = clusters;
       updatedClusters[editCluster.id] = editCluster;
       setClusters({...updatedClusters});
-      setClustersToStorage(updatedClusters);
+      saveClusters(updatedClusters);
     }
   };
 
@@ -140,7 +140,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
       updatedClusters[cluster].namespace = namespace;
 
       setClusters({...updatedClusters});
-      setClustersToStorage(updatedClusters);
+      saveClusters(updatedClusters);
     }
   };
 

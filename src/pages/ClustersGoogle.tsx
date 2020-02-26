@@ -19,7 +19,7 @@ import ErrorCard from '../components/misc/ErrorCard';
 import { ICluster, IContext } from '../declarations';
 import { getGoogleClusters, getGoogleProjects, getGoogleTokens } from '../utils/api';
 import { AppContext } from '../utils/context';
-import { setGoogleTokens } from '../utils/storage';
+import { saveGoogleTokens } from '../utils/storage';
 
 const isChecked = (id: string, clusters: ICluster[]): boolean => {
   for (let cluster of clusters) {
@@ -54,7 +54,7 @@ const ClustersGoogle: React.FunctionComponent<IClustersGoogleProps> = ({ locatio
 
         if (params.code) {
           const tokens = await getGoogleTokens(params.code);
-          setGoogleTokens(tokens);
+          saveGoogleTokens(tokens);
           const projects = await getGoogleProjects(tokens.access_token);
 
           for (let project of projects) {

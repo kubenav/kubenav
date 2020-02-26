@@ -14,10 +14,10 @@ import {
 import { GOOGLE_REDIRECT_URI, SERVER } from './constants';
 import { isJSON } from './helpers';
 import {
-  getAWSTokens,
-  getGoogleClientID,
-  getGoogleTokens as getGoogleTokensFromStorage,
-  setGoogleTokens
+  readAWSTokens,
+  readGoogleClientID,
+  readGoogleTokens,
+  saveGoogleTokens
 } from './storage';
 
 const { KubenavPlugin } = Plugins;
@@ -118,7 +118,7 @@ export const getClusters = async (): Promise<IClusters|undefined> => {
 // If the access token is expired, we request a new token from the Google API and save it.
 // Then the correct token is returned.
 const getGoogleAccessToken = async (): Promise<string> => {
-  const tokens = getGoogleTokensFromStorage();
+  const tokens = readGoogleTokens();
   if (!tokens) {
     throw new Error('Could not get access token.')
   }
@@ -128,7 +128,7 @@ const getGoogleAccessToken = async (): Promise<string> => {
 
   if (expiresData.getTime() < new Date().getTime()) {
     const newTokens = await getGoogleAccessTokenAPI(tokens.refresh_token);
-    setGoogleTokens({
+    saveGoogleTokens({
       access_token: newTokens.access_token,
       expires_in: newTokens.expires_in,
       id_token: tokens.id_token,
@@ -144,7 +144,7 @@ const getGoogleAccessToken = async (): Promise<string> => {
 // getGoogleAccessTokenAPI uses the refresh token to get a new valid access token for GKE clusters.
 // Therefore a valid refresh token is required.
 export const getGoogleAccessTokenAPI = async (refreshToken: string): Promise<IGoogleTokens> => {
-  const response = await fetch(`https://oauth2.googleapis.com/token?refresh_token=${refreshToken}&client_id=${getGoogleClientID()}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=refresh_token`, {
+  const response = await fetch(`https://oauth2.googleapis.com/token?refresh_token=${refreshToken}&client_id=${readGoogleClientID()}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=refresh_token`, {
     method: 'POST',
   });
 
@@ -211,7 +211,7 @@ export const getGoogleProjects = async (token: string): Promise<IGoogleProject[]
 // This converts the returned code after the login via Google into an refresh token.
 // See: https://developers.google.com/identity/protocols/OpenIDConnect#exchangecode
 export const getGoogleTokens = async (code: string): Promise<IGoogleTokens> => {
-  const response = await fetch(`https://oauth2.googleapis.com/token?code=${code}&client_id=${getGoogleClientID()}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=authorization_code`, {
+  const response = await fetch(`https://oauth2.googleapis.com/token?code=${code}&client_id=${readGoogleClientID()}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=authorization_code`, {
     method: 'POST',
   });
 
@@ -252,7 +252,7 @@ export const kubernetesRequest = async (method: string, url: string, body: strin
     }
 
     if (cluster.authProvider === 'aws') {
-      const tokens: IAWSTokens = getAWSTokens();
+      const tokens: IAWSTokens = readAWSTokens();
       const parts = cluster.id.split('_');
 
       if (parts.length < 3) {

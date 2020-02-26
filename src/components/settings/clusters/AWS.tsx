@@ -14,7 +14,7 @@ import {
 import React, { useState } from 'react';
 
 import { IAWSTokens } from '../../../declarations';
-import { getAWSTokens, setAWSTokens } from '../../../utils/storage';
+import { readAWSTokens, saveAWSTokens } from '../../../utils/storage';
 
 const AWS: React.FunctionComponent = () => {
   const [accessKeyID, setAccessKeyID] = useState<string>('');
@@ -34,14 +34,14 @@ const AWS: React.FunctionComponent = () => {
   };
 
   const importClusters = () => {
-    let tokens: IAWSTokens = getAWSTokens();
+    let tokens: IAWSTokens = readAWSTokens();
 
     tokens[region] = {
       accessKeyID: accessKeyID,
       secretKey: secretKey,
     };
 
-    setAWSTokens(tokens);
+    saveAWSTokens(tokens);
 
     window.location.replace(`/settings/clusters/aws/${region}`);
   };
