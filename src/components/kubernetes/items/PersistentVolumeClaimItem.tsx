@@ -12,7 +12,11 @@ interface IPersistentVolumeClaimItemProps extends RouteComponentProps {
   type: string;
 }
 
-const PersistentVolumeClaimItem: React.FunctionComponent<IPersistentVolumeClaimItemProps> = ({ item, section, type }) => {
+const PersistentVolumeClaimItem: React.FunctionComponent<IPersistentVolumeClaimItemProps> = ({
+ item,
+ section,
+ type,
+}) => {
   return (
     <IonItem routerLink={`/kubernetes/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <IonLabel>

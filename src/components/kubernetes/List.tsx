@@ -11,9 +11,9 @@ import {
 } from '@ionic/react';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { AppContext } from '../../context';
 import { IContext } from '../../declarations';
-import { sections } from '../../sections';
+import { AppContext } from '../../utils/context';
+import { sections } from '../../utils/sections';
 
 interface IListProps {
   name: string;
@@ -47,7 +47,11 @@ const List: React.FunctionComponent<IListProps> = ({ name, section, type, namesp
     setShowLoading(true);
 
     try {
-      const data: any = await context.request('GET', `${page.listURL(namespace) }${selector ? '?' + selector : ''}`, '');
+      const data: any = await context.request(
+        'GET',
+        `${page.listURL(namespace) }${selector ? '?' + selector : ''}`,
+        '',
+      );
       setItems(data.items);
     } catch (err) {
       setAlert(err);

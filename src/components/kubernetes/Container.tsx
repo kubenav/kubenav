@@ -26,7 +26,7 @@ import yaml from 'js-yaml';
 import React, {useState} from 'react';
 
 import { IContainerMetrics } from '../../declarations';
-import { formatResourceValue } from '../../utils';
+import { formatResourceValue } from '../../utils/helpers';
 import Editor from '../misc/Editor';
 import Logs from './Logs';
 import Row from './Row';
@@ -57,13 +57,15 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
 
   const envValueFrom = (source: V1EnvVarSource): string => {
     if (source.configMapKeyRef) {
-      return source.configMapKeyRef.name ? `${source.configMapKeyRef.key} (${source.configMapKeyRef.name})` : source.configMapKeyRef.key;
+      return source.configMapKeyRef.name
+        ? `${source.configMapKeyRef.key} (${source.configMapKeyRef.name})` : source.configMapKeyRef.key;
     } else if (source.fieldRef) {
       return source.fieldRef.fieldPath;
     } else if (source.resourceFieldRef) {
       return source.resourceFieldRef.resource;
     } else if (source.secretKeyRef) {
-      return source.secretKeyRef.name ? `${source.secretKeyRef.key} (${source.secretKeyRef.name})` : source.secretKeyRef.key;
+      return source.secretKeyRef.name
+        ? `${source.secretKeyRef.key} (${source.secretKeyRef.name})` : source.secretKeyRef.key;
     }
 
     return '';
@@ -94,7 +96,8 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
           <IonLabel>
             <h2>{container.name}</h2>
           </IonLabel>
-          {!isPlatform('hybrid') && logs && name && namespace ? <Logs activator="button" name={name} namespace={namespace} container={container.name} /> : null}
+          {!isPlatform('hybrid') && logs && name && namespace
+            ? <Logs activator="button" name={name} namespace={namespace} container={container.name} /> : null}
         </IonItem>
 
         {isPlatform('hybrid') && logs && name && namespace ? (
@@ -129,9 +132,30 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
                       <Row obj={container} objKey="image" title="Image" />
                       <Row obj={container} objKey="imagePullPolicy" title="Image Pull Policy" />
                       <Row obj={container} objKey="workingDir" title="Working Dir" />
-                      <Row obj={container} objKey="command" title="Command" value={(command) => JSON.stringify(command)} />
-                      <Row obj={container} objKey="args" title="Args" value={(args) => <ul className="no-margin-list">{args.map((arg, index) => <li key={index}>{arg}</li>)}</ul>} />
-                      <Row obj={container} objKey="ports" title="Ports" value={(ports) => <ul className="no-margin-list">{ports.map((port: V1ContainerPort, index) => <li key={index}>{port.containerPort} {port.name ? `(${port.name})` : ''}</li>)}</ul>} />
+                      <Row
+                        obj={container}
+                        objKey="command"
+                        title="Command"
+                        value={(command) => JSON.stringify(command)}
+                      />
+                      <Row
+                        obj={container}
+                        objKey="args"
+                        title="Args"
+                        value={(args) =>
+                          <ul className="no-margin-list">{args.map((arg, index) => <li key={index}>{arg}</li>)}</ul>
+                        }
+                      />
+                      <Row
+                        obj={container}
+                        objKey="ports"
+                        title="Ports"
+                        value={(ports) => (
+                          <ul className="no-margin-list">{ports.map((port: V1ContainerPort, index) =>
+                            <li key={index}>{port.containerPort} {port.name ? `(${port.name})` : ''}</li>
+                          )}</ul>
+                        )}
+                      />
                     </IonGrid>
                   </IonCardContent>
                 </IonCard>
@@ -148,8 +172,19 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
                     <IonCardContent>
                       <IonGrid>
                         <Row obj={status} objKey="state" title="State" value={(state) => containerState(state)} />
-                        <Row obj={status} objKey="lastState" title="Last State" value={(lastState) => containerState(lastState)} />
-                        <Row obj={status} objKey="ready" title="Ready" value={(ready) => ready ? 'true' : 'false'} defaultValue="false" />
+                        <Row
+                          obj={status}
+                          objKey="lastState"
+                          title="Last State"
+                          value={(lastState) => containerState(lastState)}
+                        />
+                        <Row
+                          obj={status}
+                          objKey="ready"
+                          title="Ready"
+                          value={(ready) => ready ? 'true' : 'false'}
+                          defaultValue="false"
+                        />
                         <Row obj={status} objKey="restartCount" title="Restart Count" />
                       </IonGrid>
                     </IonCardContent>
@@ -226,9 +261,12 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
                               return (
                                 <tr key={index}>
                                   <td>{resource}</td>
-                                  <td>{container.resources && container.resources.requests ? formatResourceValue(resource, container.resources.requests[resource]) : null}</td>
-                                  <td>{container.resources && container.resources.limits ? formatResourceValue(resource, container.resources.limits[resource]) : null}</td>
-                                  <td>{metrics && metrics.usage ? formatResourceValue(resource, metrics.usage[resource]) : null}</td>
+                                  <td>{container.resources && container.resources.requests
+                                    ? formatResourceValue(resource, container.resources.requests[resource]) : null}</td>
+                                  <td>{container.resources && container.resources.limits
+                                    ? formatResourceValue(resource, container.resources.limits[resource]) : null}</td>
+                                  <td>{metrics && metrics.usage
+                                    ? formatResourceValue(resource, metrics.usage[resource]) : null}</td>
                                 </tr>
                               )
                             })}

@@ -11,7 +11,7 @@ import { V1Event, V1EventSource } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { timeDifference } from '../../../utils';
+import { timeDifference } from '../../../utils/helpers';
 import Metadata from '../Metadata';
 import Row from '../Row';
 
@@ -47,8 +47,18 @@ const Event: React.FunctionComponent<IEventProps> = ({ item, type }) => {
               <IonCardTitle>Details</IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
-              <Row obj={item} objKey="lastTimestamp" title="Last Seen" value={(value) => timeDifference(new Date().getTime(), new Date(value.toString()).getTime())} />
-              <Row obj={item} objKey="firstTimestamp" title="First Seen" value={(value) => timeDifference(new Date().getTime(), new Date(value.toString()).getTime())} />
+              <Row
+                obj={item}
+                objKey="lastTimestamp"
+                title="Last Seen"
+                value={(value) => timeDifference(new Date().getTime(), new Date(value.toString()).getTime())}
+              />
+              <Row
+                obj={item}
+                objKey="firstTimestamp"
+                title="First Seen"
+                value={(value) => timeDifference(new Date().getTime(), new Date(value.toString()).getTime())}
+              />
               <Row obj={item} objKey="count" title="Count" />
               <Row obj={item} objKey="message" title="Message" />
               <Row obj={item} objKey="kind" title="Kind" />

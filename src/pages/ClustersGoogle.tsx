@@ -16,9 +16,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import ErrorCard from '../components/misc/ErrorCard';
-import { AppContext } from '../context';
 import { ICluster, IContext } from '../declarations';
-import { getGoogleClusters, getGoogleProjects, getGoogleTokens, saveGoogleTokens } from '../utils';
+import { getGoogleClusters, getGoogleProjects, getGoogleTokens } from '../utils/api';
+import { AppContext } from '../utils/context';
+import { saveGoogleTokens } from '../utils/storage';
 
 const isChecked = (id: string, clusters: ICluster[]): boolean => {
   for (let cluster of clusters) {
@@ -126,7 +127,11 @@ const ClustersGoogle: React.FunctionComponent<IClustersGoogleProps> = ({ locatio
           clusters.map((cluster, index) => {
             return (
               <IonItem key={index}>
-                <IonCheckbox slot="start" checked={isChecked(cluster.id, selectedClusters)} onIonChange={(e) => toggleSelectedCluster(e.detail.checked, cluster)} />
+                <IonCheckbox
+                  slot="start"
+                  checked={isChecked(cluster.id, selectedClusters)}
+                  onIonChange={(e) => toggleSelectedCluster(e.detail.checked, cluster)}
+                />
                 <IonLabel>{cluster.name}</IonLabel>
               </IonItem>
             )

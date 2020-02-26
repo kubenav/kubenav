@@ -13,9 +13,9 @@ import { V1Node, V1NodeAddress } from '@kubernetes/client-node'
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { AppContext } from '../../../context';
 import { IContext, INodeMetrics } from '../../../declarations';
-import { formatBytes, formatResourceValue } from '../../../utils';
+import { AppContext } from '../../../utils/context';
+import { formatBytes, formatResourceValue } from '../../../utils/helpers';
 import IonCardEqualHeight from '../../misc/IonCardEqualHeight';
 import Conditions from '../Conditions';
 import Configuration from '../Configuration';
@@ -73,7 +73,15 @@ const Node: React.FunctionComponent<INodeProps> = ({ item, type }) => {
         </Configuration>
 
         <Status>
-          <Row obj={item} objKey="status.addresses" title="Addresses" value={(addresses: V1NodeAddress[]) => <ul className="no-margin-list">{addresses.map((address, index) => <li key={index}>{address.type}: {address.address}</li>)}</ul>} />
+          <Row
+            obj={item}
+            objKey="status.addresses"
+            title="Addresses"
+            value={(addresses: V1NodeAddress[]) => (
+              <ul className="no-margin-list">{addresses.map((address, index) =>
+                <li key={index}>{address.type}: {address.address}</li>)}</ul>
+            )}
+          />
           <Row obj={item} objKey="status.phase" title="Phase" />
           <Row obj={item} objKey="spec.unschedulable" title="Unschedulable" value={(unschedulable) => unschedulable ? 'true' : 'false'} />
         </Status>

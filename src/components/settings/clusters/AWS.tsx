@@ -14,6 +14,7 @@ import {
 import React, { useState } from 'react';
 
 import { IAWSTokens } from '../../../declarations';
+import { readAWSTokens, saveAWSTokens } from '../../../utils/storage';
 
 const AWS: React.FunctionComponent = () => {
   const [accessKeyID, setAccessKeyID] = useState<string>('');
@@ -33,14 +34,14 @@ const AWS: React.FunctionComponent = () => {
   };
 
   const importClusters = () => {
-    let tokens: IAWSTokens = localStorage.getItem('aws') ? JSON.parse(localStorage.getItem('aws') as string) : {};
+    let tokens: IAWSTokens = readAWSTokens();
 
     tokens[region] = {
       accessKeyID: accessKeyID,
       secretKey: secretKey,
     };
 
-    localStorage.setItem('aws', JSON.stringify(tokens));
+    saveAWSTokens(tokens);
 
     window.location.replace(`/settings/clusters/aws/${region}`);
   };
@@ -54,7 +55,9 @@ const AWS: React.FunctionComponent = () => {
 
       <IonCardContent>
         <p className="paragraph-margin-bottom">
-          Choose this option to import your EKS clusters from the Amazon Web Services. You have to provide an access key id, a secret key and a region. The credentials are used to retrieve your EKS clusters from AWS and to generate a token for the Kubernetes API requests.
+          Choose this option to import your EKS clusters from the Amazon Web Services. You have to provide an access key
+          id, a secret key and a region. The credentials are used to retrieve your EKS clusters from AWS and to generate
+          a token for the Kubernetes API requests.
         </p>
 
         <IonList className="paragraph-margin-bottom" lines="full">

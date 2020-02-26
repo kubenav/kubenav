@@ -18,9 +18,16 @@ const DeploymentItem: React.FunctionComponent<IDeploymentItemProps> = ({ item, s
   let status = '';
 
   if (item.status) {
-    if ((item.status.replicas !== (item.status.readyReplicas || item.status.availableReplicas)) || (item.status.unavailableReplicas && item.status.unavailableReplicas > 0)) {
+    if (
+      (item.status.replicas !== (item.status.readyReplicas || item.status.availableReplicas))
+      || (item.status.unavailableReplicas && item.status.unavailableReplicas > 0)
+    ) {
       status = 'danger';
-    } else if (item.status.replicas === (item.status.readyReplicas && item.status.availableReplicas && item.status.updatedReplicas)) {
+    } else if (item.status.replicas === (
+      item.status.readyReplicas
+      && item.status.availableReplicas
+      && item.status.updatedReplicas)
+    ) {
       status = 'success';
     } else {
       status = 'warning';

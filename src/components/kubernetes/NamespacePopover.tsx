@@ -12,8 +12,8 @@ import { V1Namespace, V1NamespaceList } from '@kubernetes/client-node';
 import { checkmark, options } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 
-import { AppContext } from '../../context';
 import { IContext } from '../../declarations';
+import { AppContext } from '../../utils/context';
 
 const NamespacePopover: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);
@@ -46,19 +46,30 @@ const NamespacePopover: React.FunctionComponent = () => {
 
   return (
     <React.Fragment>
-      {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => { setShowPopover(false); setError(''); }} header="Could not get namespaces" message={error} buttons={['OK']} /> : (
+      {error !== '' ? (
+        <IonAlert isOpen={error !== ''} onDidDismiss={() => { setShowPopover(false); setError(''); }} header="Could not get namespaces" message={error} buttons={['OK']} />
+      ) : (
         <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
           {namespaces ? (
             <IonList>
               <IonItem button={true} detail={false} onClick={() => setAllNamespaces()}>
-                {context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) && context.clusters[context.cluster].namespace === '' ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
+                {context.clusters
+                && context.cluster
+                && context.clusters.hasOwnProperty(context.cluster)
+                && context.clusters[context.cluster].namespace === ''
+                  ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
                 <IonLabel>All Namespaces</IonLabel>
               </IonItem>
 
               {namespaces.items.map((namespace, index) => {
                 return (
                   <IonItem key={index} button={true} detail={false} onClick={() => setNamespace(namespace)}>
-                    {namespace.metadata && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) && context.clusters[context.cluster].namespace === namespace.metadata.name ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
+                    {namespace.metadata
+                    && context.clusters
+                    && context.cluster
+                    && context.clusters.hasOwnProperty(context.cluster)
+                    && context.clusters[context.cluster].namespace === namespace.metadata.name
+                      ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
                     <IonLabel>{namespace.metadata ? namespace.metadata.name : ''}</IonLabel>
                   </IonItem>
                 )

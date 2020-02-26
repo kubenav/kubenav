@@ -19,8 +19,8 @@ import ItemOptions from '../components/kubernetes/ItemOptions';
 import CustomResourceItem from '../components/kubernetes/items/CustomResourceItem';
 import NamespacePopover from '../components/kubernetes/NamespacePopover';
 import LoadingErrorCard from '../components/misc/LoadingErrorCard';
-import { AppContext } from '../context';
 import { IContext } from '../declarations';
+import { AppContext } from '../utils/context';
 
 interface IMatchParams {
   group: string;
@@ -66,7 +66,11 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
       }
 
       const namespace = context.clusters[context.cluster].namespace;
-      const data: any = await context.request('GET', getURL(namespace, match.params.group, match.params.version, match.params.name), '');
+      const data: any = await context.request(
+        'GET',
+        getURL(namespace, match.params.group, match.params.version, match.params.name),
+        ''
+      );
       setError('');
       setItems(data.items);
     } catch (err) {

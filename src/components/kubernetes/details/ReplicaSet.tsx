@@ -7,7 +7,7 @@ import { V1ReplicaSet } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { labelSelector } from '../../../utils';
+import { labelSelector } from '../../../utils/helpers';
 import Conditions from '../Conditions';
 import Configuration from '../Configuration';
 import List from '../List';

@@ -18,7 +18,10 @@ const ReplicaSetItem: React.FunctionComponent<IReplicaSetItemProps> = ({ item, s
   let status = '';
 
   if (item.status) {
-    if (item.status.replicas === 0 || item.status.replicas === (item.status.readyReplicas && item.status.availableReplicas)) {
+    if (
+      item.status.replicas === 0
+      || item.status.replicas === (item.status.readyReplicas && item.status.availableReplicas)
+    ) {
       status = 'success';
     } else if (item.status.replicas !== (item.status.readyReplicas || item.status.availableReplicas)) {
       status = 'danger';

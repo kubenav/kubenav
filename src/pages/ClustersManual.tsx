@@ -16,8 +16,8 @@ import {
 import React, { useContext, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { AppContext } from '../context';
 import { IContext } from '../declarations';
+import { AppContext } from '../utils/context';
 
 interface IClustersManualProps extends RouteComponentProps {}
 
@@ -154,7 +154,15 @@ const ClustersManual: React.FunctionComponent<IClustersManualProps> = ({ history
           </IonItem>
         </IonList>
 
-        {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header="Could not save" message={error} buttons={['OK']} /> : null}
+        {error !== '' ? (
+          <IonAlert
+            isOpen={error !== ''}
+            onDidDismiss={() => setError('')}
+            header="Could not save"
+            message={error}
+            buttons={['OK']}
+          />
+        ) : null}
       </IonContent>
     </IonPage>
   );

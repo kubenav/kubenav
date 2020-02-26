@@ -28,7 +28,9 @@ const Affinities: React.FunctionComponent<IAffinitiesProps> = ({ affinities }) =
         </IonCardHeader>
         <IonCardContent>
           <IonList>
-            {Object.keys(affinities).map((affinity, index) => <Affinity key={index} title={title(affinity)} affinity={affinities[affinity]} />)}
+            {Object.keys(affinities).map((affinity, index) =>
+              <Affinity key={index} title={title(affinity)} affinity={affinities[affinity]} />
+            )}
           </IonList>
         </IonCardContent>
       </IonCardEqualHeight>

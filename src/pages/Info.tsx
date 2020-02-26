@@ -20,7 +20,7 @@ import { useGetInfo } from '@ionic/react-hooks/device';
 import React, {useEffect, useState} from 'react';
 
 import License from '../components/settings/License';
-import { VERSION } from '../constants';
+import { VERSION } from '../utils/constants';
 
 const Info: React.FunctionComponent = () => {
   const { info } = useGetInfo();
@@ -50,10 +50,15 @@ const Info: React.FunctionComponent = () => {
           </IonCardHeader>
           <IonCardContent>
             <p>
-              kubenav is a mobile and desktop app to help you manage Kubernetes clusters. The app provides an overview of all your workloads and resources running in your clusters, including the current status. The details view of your workloads contains all the necessary logs and events to debug your clusters in case of problems. You can also edit and delete resources within the app.
+              kubenav is a mobile and desktop app to help you manage Kubernetes clusters. The app provides an overview
+              of all your workloads and resources running in your clusters, including the current status. The details
+              view of your workloads contains all the necessary logs and events to debug your clusters in case of
+              problems. You can also edit and delete resources within the app.
             </p>
             <p className="paragraph-margin-bottom">
-              The app is developed using Ionic Framework and Capacitor. The most parts of the app are implemented using React functional component and TypeScript. So we can achieve nearly 100% code sharing between the mobile and desktop implementation.
+              The app is developed using Ionic Framework and Capacitor. The most parts of the app are implemented using
+              React functional component and TypeScript. So we can achieve nearly 100% code sharing between the mobile
+              and desktop implementation.
             </p>
             <IonList>
               <IonListHeader>

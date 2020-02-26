@@ -9,7 +9,7 @@
     "interface-name": true,
     "jsx-no-lambda": false,
     "jsx-no-multiline-js": false,
-    "max-line-length": false,
+    "max-line-length": [true, 120],
     "no-consecutive-blank-lines": true,
     "object-literal-sort-keys": false,
     "ordered-imports": true,

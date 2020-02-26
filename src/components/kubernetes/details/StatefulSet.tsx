@@ -7,7 +7,7 @@ import { V1StatefulSet, V1StatefulSetUpdateStrategy } from '@kubernetes/client-n
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import {labelSelector} from '../../../utils';
+import {labelSelector} from '../../../utils/helpers';
 import Conditions from '../Conditions';
 import Configuration from '../Configuration';
 import List from '../List';

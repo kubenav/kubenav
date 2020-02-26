@@ -15,8 +15,8 @@ import {
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
-import { CUSTOM_URI_SCHEME, GOOGLE_REDIRECT_URI } from '../../constants';
 import { IAppSections } from '../../declarations';
+import { CUSTOM_URI_SCHEME, GOOGLE_REDIRECT_URI } from '../../utils/constants';
 import Sections from './Sections'
 
 const { App } = Plugins;

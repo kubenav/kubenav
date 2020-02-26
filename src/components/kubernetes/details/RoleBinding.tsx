@@ -14,7 +14,7 @@ import { V1RoleBinding } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { subjectLink } from '../../../utils';
+import { subjectLink } from '../../../utils/helpers';
 import Configuration from '../Configuration';
 import List from '../List';
 import Metadata from '../Metadata';
@@ -50,7 +50,10 @@ const RoleBinding: React.FunctionComponent<IRoleBindingProps> = ({ item, type })
                   {item.subjects.map((subject, index) => (
                     <IonItem key={index} routerLink={subjectLink(subject)} routerDirection="forward">
                       <IonLabel>
-                        <h2>{subject.kind ? `${subject.kind}: ` : ''}{subject.namespace ? `${subject.namespace}/` : ''}{subject.name}</h2>
+                        <h2>
+                          {subject.kind
+                            ? `${subject.kind}: ` : ''}{subject.namespace ? `${subject.namespace}/` : ''}{subject.name}
+                        </h2>
                       </IonLabel>
                     </IonItem>
                   ))}

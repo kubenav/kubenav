@@ -21,7 +21,13 @@ const Namespace: React.FunctionComponent<INamespaceProps> = ({ item, type }) => 
     <IonGrid>
       <IonRow>
         <Configuration>
-          <Row obj={item} objKey="spec.finalizers" title="Finalizers" value={(finalizers) => finalizers.join(', ')} defaultValue="-" />
+          <Row
+            obj={item}
+            objKey="spec.finalizers"
+            title="Finalizers"
+            value={(finalizers) => finalizers.join(', ')}
+            defaultValue="-"
+          />
         </Configuration>
 
         <Status>

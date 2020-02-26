@@ -6,7 +6,7 @@ import { V1Job } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { labelSelector, timeDifference } from '../../../utils';
+import { labelSelector, timeDifference } from '../../../utils/helpers';
 import Conditions from '../Conditions';
 import Configuration from '../Configuration';
 import List from '../List';
@@ -35,8 +35,18 @@ const Job: React.FunctionComponent<IJobProps> = ({ item, type }) => {
 
         <Status>
           <Row obj={item} objKey="status.active" title="Active" />
-          <Row obj={item} objKey="status.startTime" title="Started" value={(value) => timeDifference(new Date().getTime(), new Date(value.toString()).getTime())} />
-          <Row obj={item} objKey="status.completionTime" title="Completed" value={(value) => timeDifference(new Date().getTime(), new Date(value.toString()).getTime())} />
+          <Row
+            obj={item}
+            objKey="status.startTime"
+            title="Started"
+            value={(value) => timeDifference(new Date().getTime(), new Date(value.toString()).getTime())}
+          />
+          <Row
+            obj={item}
+            objKey="status.completionTime"
+            title="Completed"
+            value={(value) => timeDifference(new Date().getTime(), new Date(value.toString()).getTime())}
+          />
           <Row obj={item} objKey="status.failed" title="Failed" />
           <Row obj={item} objKey="status.succeeded" title="Succeeded" />
         </Status>

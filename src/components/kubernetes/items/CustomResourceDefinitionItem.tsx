@@ -12,9 +12,16 @@ interface ICustomResourceDefinitionItemProps extends RouteComponentProps {
   type: string;
 }
 
-const CustomResourceDefinitionItem: React.FunctionComponent<ICustomResourceDefinitionItemProps> = ({ item, section, type }) => {
+const CustomResourceDefinitionItem: React.FunctionComponent<ICustomResourceDefinitionItemProps> = ({
+ item,
+ section,
+ type,
+}) => {
   return (
-    <IonItem routerLink={`/customresources/${item.spec.group}/${item.spec.version}/${item.spec.names.plural}`} routerDirection="forward">
+    <IonItem
+      routerLink={`/customresources/${item.spec.group}/${item.spec.version}/${item.spec.names.plural}`}
+      routerDirection="forward"
+    >
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
       </IonLabel>

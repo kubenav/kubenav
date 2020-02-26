@@ -22,13 +22,20 @@ const PodTemplate: React.FunctionComponent<IPodTemplateProps> = ({ template }) =
       </IonItemDivider>
 
       <IonRow>
-        {template.spec && template.spec.initContainers && template.spec.initContainers.length > 0 ? <Containers containers={template.spec.initContainers} statuses={undefined} title="Init Containers" /> : null}
-        {template.spec && template.spec.containers && template.spec.containers.length > 0 ? <Containers containers={template.spec.containers} statuses={undefined} title="Containers" /> : null}
+        {template.spec && template.spec.initContainers && template.spec.initContainers.length > 0 ? (
+          <Containers containers={template.spec.initContainers} statuses={undefined} title="Init Containers" />
+        ) : null}
+        {template.spec && template.spec.containers && template.spec.containers.length > 0 ? (
+          <Containers containers={template.spec.containers} statuses={undefined} title="Containers" />
+        ) : null}
       </IonRow>
 
       <IonRow>
         {template.spec && template.spec.volumes ? <Volumes volumes={template.spec.volumes} /> : null}
-        {template.spec && template.spec.tolerations && template.spec.tolerations.filter((toleration) => !!toleration.key).length > 0 ? <Tolerations tolerations={template.spec.tolerations} /> : null}
+        {template.spec
+        && template.spec.tolerations
+        && template.spec.tolerations.filter((toleration) => !!toleration.key).length > 0
+          ? <Tolerations tolerations={template.spec.tolerations} /> : null}
       </IonRow>
     </React.Fragment>
   )

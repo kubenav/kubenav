@@ -26,7 +26,10 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
 
     if (pod.status && pod.status.initContainerStatuses) {
       for (let container of pod.status.initContainerStatuses) {
-        if (container.state && (container.state.waiting || (container.state.terminated && container.state.terminated.exitCode !== 0))) {
+        if (
+          container.state
+          && (container.state.waiting || (container.state.terminated && container.state.terminated.exitCode !== 0))
+        ) {
           return 'danger';
         }
       }
@@ -34,7 +37,10 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
 
     if (pod.status && pod.status.containerStatuses) {
       for (let container of pod.status.containerStatuses) {
-        if (container.state && (container.state.waiting || (container.state.terminated && container.state.terminated.exitCode !== 0))) {
+        if (
+          container.state
+          && (container.state.waiting || (container.state.terminated && container.state.terminated.exitCode !== 0))
+        ) {
           return 'danger';
         }
       }

@@ -7,7 +7,7 @@ import {
 import React from 'react';
 
 import { TCondition } from '../../declarations';
-import { getProperty, timeDifference } from '../../utils';
+import { getProperty, timeDifference } from '../../utils/helpers';
 import IonCardEqualHeight from '../misc/IonCardEqualHeight';
 
 interface IPodConditionsProps {
@@ -41,10 +41,30 @@ const Conditions: React.FunctionComponent<IPodConditionsProps> = ({ conditions }
                   <tr key={index}>
                     <td>{condition.type}</td>
                     <td>{condition.status}</td>
-                    {getProperty(condition, 'lastProbeTime') ? <td>{timeDifference(new Date().getTime(), new Date(getProperty(condition, 'lastProbeTime').toString()).getTime())}</td> : null}
-                    {getProperty(condition, 'lastUpdateTime') ? <td>{timeDifference(new Date().getTime(), new Date(getProperty(condition, 'lastUpdateTime').toString()).getTime())}</td> : null}
-                    {getProperty(condition, 'lastHeartbeatTime') ? <td>{timeDifference(new Date().getTime(), new Date(getProperty(condition, 'lastHeartbeatTime').toString()).getTime())}</td> : null}
-                    <td>{condition.lastTransitionTime ? timeDifference(new Date().getTime(), new Date(condition.lastTransitionTime.toString()).getTime()) : null}</td>
+                    {getProperty(condition, 'lastProbeTime') ? (
+                      <td>{timeDifference(
+                        new Date().getTime(),
+                        new Date(getProperty(condition, 'lastProbeTime').toString()).getTime()
+                      )}</td>
+                    ): null}
+                    {getProperty(condition, 'lastUpdateTime') ? (
+                      <td>{timeDifference(
+                        new Date().getTime(),
+                        new Date(getProperty(condition, 'lastUpdateTime').toString()).getTime()
+                      )}</td>
+                    ) : null}
+                    {getProperty(condition, 'lastHeartbeatTime') ? (
+                      <td>{timeDifference(
+                        new Date().getTime(),
+                        new Date(getProperty(condition, 'lastHeartbeatTime').toString()).getTime()
+                      )}</td>
+                    ) : null}
+                    <td>
+                      {condition.lastTransitionTime ? timeDifference(
+                          new Date().getTime(),
+                          new Date(condition.lastTransitionTime.toString()).getTime()
+                      ) : null}
+                    </td>
                     <td>{condition.reason}</td>
                     <td>{condition.message}</td>
                   </tr>

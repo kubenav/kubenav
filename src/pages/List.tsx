@@ -19,10 +19,10 @@ import { RouteComponentProps } from 'react-router';
 import ItemOptions from '../components/kubernetes/ItemOptions';
 import NamespacePopover from '../components/kubernetes/NamespacePopover';
 import LoadingErrorCard from '../components/misc/LoadingErrorCard';
-import { AppContext } from '../context';
 import { IContext } from '../declarations';
-import { sections } from '../sections';
-import { isNamespaced } from '../utils';
+import { AppContext } from '../utils/context';
+import { isNamespaced } from '../utils/helpers';
+import { sections } from '../utils/sections';
 
 interface IMatchParams {
   section: string;
@@ -104,13 +104,28 @@ const List: React.FunctionComponent<IListProps> = ({ match }) => {
           <IonList>
             {match.url === url && items ? items.map((item, index) => {
               return (
-                <ItemOptions key={index} item={item} url={page.detailsURL(item.metadata ? item.metadata.namespace : '', item.metadata ? item.metadata.name : '')}>
+                <ItemOptions
+                  key={index}
+                  item={item}
+                  url={page.detailsURL(
+                    item.metadata ? item.metadata.namespace : '',
+                    item.metadata ? item.metadata.name : ''
+                  )}
+                >
                   <Component key={index} item={item} section={match.params.section} type={match.params.type} />
                 </ItemOptions>
               )
             }) : null}
           </IonList>
-        ) : <LoadingErrorCard cluster={context.cluster} clusters={context.clusters} error={error} icon={page.icon} text={`Could not get ${page.pluralText}`} />}
+        ) : (
+          <LoadingErrorCard
+            cluster={context.cluster}
+            clusters={context.clusters}
+            error={error}
+            icon={page.icon}
+            text={`Could not get ${page.pluralText}`}
+          />
+        )}
       </IonContent>
     </IonPage>
   );

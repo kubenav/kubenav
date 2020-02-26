@@ -10,8 +10,8 @@ import {
 import { radioButtonOff, radioButtonOn, trash } from 'ionicons/icons';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { AppContext } from '../../context';
 import { ICluster, IContext} from '../../declarations';
+import { AppContext } from '../../utils/context';
 import EditCluster from './EditCluster';
 
 interface IClusterProps {
@@ -43,7 +43,11 @@ const Cluster: React.FunctionComponent<IClusterProps> = ({ cluster }) => {
   return (
     <IonItemSliding>
       <IonItem button={true} onClick={() => context.changeCluster(cluster.id)}>
-        <IonIcon slot="end" color={status ? 'success' : 'danger'} icon={context.cluster && cluster.id === context.cluster ? radioButtonOn : radioButtonOff} />
+        <IonIcon
+          slot="end"
+          color={status ? 'success' : 'danger'}
+          icon={context.cluster && cluster.id === context.cluster ? radioButtonOn : radioButtonOff}
+        />
         <IonLabel>{cluster.name}</IonLabel>
       </IonItem>
       {isPlatform('hybrid') ? (

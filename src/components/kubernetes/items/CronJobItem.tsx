@@ -6,7 +6,7 @@ import { V1beta1CronJob } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { timeDifference } from '../../../utils';
+import { timeDifference } from '../../../utils/helpers';
 
 interface ICronJobItemProps extends RouteComponentProps {
   item: V1beta1CronJob;
@@ -19,7 +19,11 @@ const CronJobItem: React.FunctionComponent<ICronJobItemProps> = ({ item, section
     <IonItem routerLink={`/kubernetes/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
-        <p>Namespace: {item.metadata ? item.metadata.namespace : '-'} | Last Time Schedule : {item.status && item.status.lastScheduleTime ? timeDifference(new Date().getTime(), new Date(item.status.lastScheduleTime.toString()).getTime()) : '-'}</p>
+        <p>
+          Namespace: {item.metadata ? item.metadata.namespace : '-'}
+          | Last Time Schedule : {item.status && item.status.lastScheduleTime
+          ? timeDifference(new Date().getTime(), new Date(item.status.lastScheduleTime.toString()).getTime()) : '-'}
+        </p>
       </IonLabel>
     </IonItem>
   )
