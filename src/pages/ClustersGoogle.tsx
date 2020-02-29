@@ -60,10 +60,12 @@ const ClustersGoogle: React.FunctionComponent<IClustersGoogleProps> = ({ locatio
           for (let project of projects) {
             const projectClusters = await getGoogleClusters(tokens.access_token, project.projectId);
 
+            const tmpClusters: ICluster[] = [];
+
             if (projectClusters) {
               // eslint-disable-next-line
               projectClusters.map((cluster) => {
-                setClusters([...clusters, {
+                tmpClusters.push({
                   id: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
                   name: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
                   url: `https://${cluster.endpoint}`,
@@ -75,8 +77,10 @@ const ClustersGoogle: React.FunctionComponent<IClustersGoogleProps> = ({ locatio
                   password: cluster.masterAuth.password ? cluster.masterAuth.password : '',
                   authProvider: 'google',
                   namespace: 'default',
-                }]);
+                });
               });
+
+              setClusters(tmpClusters);
             }
           }
         }
