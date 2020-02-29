@@ -63,9 +63,11 @@ const ClustersAWS: React.FunctionComponent<IClustersAWSProps> = ({ match, histor
             match.params.region
           );
 
+          const tmpClusters: ICluster[] = [];
+
           // eslint-disable-next-line
           awsClusters.map((cluster) => {
-            setClusters([...clusters, {
+            tmpClusters.push({
               id: `aws_${match.params.region}_${cluster.Name}`,
               name: `aws_${match.params.region}_${cluster.Name}`,
               url: `${cluster.Endpoint}`,
@@ -77,8 +79,10 @@ const ClustersAWS: React.FunctionComponent<IClustersAWSProps> = ({ match, histor
               password: '',
               authProvider: 'aws',
               namespace: 'default',
-            }]);
+            });
           });
+
+          setClusters(tmpClusters);
         }
       } catch (err) {
         setError(err.message);
