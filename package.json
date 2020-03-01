@@ -19,9 +19,9 @@
     "lint": "tslint -c tslint.json 'src/**/*{.ts,.tsx}'",
     "eject": "react-scripts eject",
     "postinstall": "cd electron && npm install",
-    "server": "node scripts/server.js",
-    "resources": "cordova-res ios --splash-source resources/ios/splash.png --icon-source resources/ios/icon.png && cordova-res android --splash-source resources/android/splash.png --icon-source resources/android/icon.png --icon-background-source '#326ce5' && node scripts/resources.js",
-    "upload": "node scripts/upload.js"
+    "server": "node utils/scripts/server.js",
+    "resources": "cordova-res ios --splash-source utils/resources/ios/splash.png --icon-source utils/resources/ios/icon.png && cordova-res android --splash-source utils/resources/android/splash.png --icon-source utils/resources/android/icon.png --icon-background-source '#326ce5' && node utils/scripts/resources.js",
+    "upload": "node utils/scripts/upload.js"
   },
   "eslintConfig": {
     "extends": "react-app"
