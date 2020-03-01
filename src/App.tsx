@@ -19,19 +19,19 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/typography.css';
 
-import Menu from './components/misc/Menu';
-import ClustersPage from './pages/Clusters';
-import ClustersAWSPage from './pages/ClustersAWS';
-import ClustersGooglePage from './pages/ClustersGoogle';
-import ClustersKubeconfigPage from './pages/ClustersKubeconfig';
-import ClustersManualPage from './pages/ClustersManual';
-import CustomResourcesListPage from './pages/CustomResourcesList';
-import DetailsPage from './pages/Details';
-import HomePage from './pages/Home';
-import InfoPage from './pages/Info';
-import ListPage from './pages/List';
+import HomePage from './components/HomePage';
+import Menu from './components/menu/Menu';
+import CustomResourcesListPage from './components/resources/cluster/customResourceDefinitions/CustomResourcesListPage';
+import DetailsPage from './components/resources/DetailsPage';
+import ListPage from './components/resources/ListPage';
+import ClustersAWSPage from './components/settings/clusters/aws/AWSPage';
+import ClustersGooglePage from './components/settings/clusters/google/GooglePage';
+import ClustersKubeconfigPage from './components/settings/clusters/kubeconfig/KubeconfigPage';
+import ClustersManualPage from './components/settings/clusters/manual/ManualPage';
+import ClustersPage from './components/settings/ClustersPage';
+import InfoPage from './components/settings/InfoPage';
 import { AppContextProvider } from './utils/context';
-import { sections } from './utils/sections';
+import { resources } from './utils/resources';
 
 import './theme/custom.css';
 import './theme/variables.css';
@@ -41,7 +41,7 @@ const App: React.FunctionComponent = () => (
     <AppContextProvider>
       <IonReactRouter>
         <IonSplitPane contentId="main">
-          <Menu sections={sections}/>
+          <Menu sections={resources} />
           <IonRouterOutlet id="main">
             <Route path="/" component={HomePage} exact={true} />
             <Route path="/kubernetes/:section/:type" component={ListPage} exact={true} />
