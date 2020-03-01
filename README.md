@@ -1,16 +1,16 @@
 <div align="center">
-  <img src="./docs/assets/github-logo.png" width="200" />
+  <img src="utils/assets/github-logo.png" width="200" />
   <br><br>
 
   **kubenav** is the navigator for your **Kubernetes** clusters right in your pocket. kubenav is a **mobile and desktop** app to help you manage Kubernetes clusters and stay up to date on whats going on in your clusters.
 
   <p>
-    <a href="https://apps.apple.com/us/app/kubenav/id1494512160" target="_blank"><img src="./docs/assets/app-store-badge.png" height="50"></a>
-    <a href="https://play.google.com/store/apps/details?id=io.kubenav.kubenav" target="_blank"><img src="./docs/assets/google-play-badge.png" height="50"></a>
-    <a href="https://github.com/kubenav/kubenav/releases" target="_self"><img src="./docs/assets/desktop-badge.png" height="50"></a>
+    <a href="https://apps.apple.com/us/app/kubenav/id1494512160" target="_blank"><img src="utils/assets/app-store-badge.png" height="50"></a>
+    <a href="https://play.google.com/store/apps/details?id=io.kubenav.kubenav" target="_blank"><img src="utils/assets/google-play-badge.png" height="50"></a>
+    <a href="https://github.com/kubenav/kubenav/releases" target="_self"><img src="utils/assets/desktop-badge.png" height="50"></a>
   </p>
 
-  <img src="./docs/assets/github-screenshot.png" width="100%" />
+  <img src="utils/assets/github-screenshot.png" width="100%" />
 </div>
 
 kubenav is a mobile and desktop app to help you manage Kubernetes clusters. The app provides an overview of all your workloads and resources running in your clusters, including the current status. The details view of your workloads contains all the necessary logs and events to debug your clusters in case of problems. You can also edit and delete resources within the app.
