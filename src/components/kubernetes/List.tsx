@@ -13,7 +13,7 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import { IContext } from '../../declarations';
 import { AppContext } from '../../utils/context';
-import { sections } from '../../utils/sections';
+import { resources } from '../../utils/resources';
 
 interface IListProps {
   name: string;
@@ -27,7 +27,7 @@ interface IListProps {
 const List: React.FunctionComponent<IListProps> = ({ name, section, type, namespace, selector, filter }) => {
   const context = useContext<IContext>(AppContext);
 
-  const page = sections[section].pages[type];
+  const page = resources[section].pages[type];
   const Component = page.listItemComponent;
 
   const [alert, setAlert] = useState<string>('');
