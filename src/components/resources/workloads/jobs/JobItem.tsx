@@ -30,7 +30,6 @@ const JobItem: React.FunctionComponent<IJobItemProps> = ({ item, section, type }
       <ItemStatus status={status} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
-        <p>Namespace: {item.metadata ? item.metadata.namespace : '-'}</p>
       </IonLabel>
     </IonItem>
   )

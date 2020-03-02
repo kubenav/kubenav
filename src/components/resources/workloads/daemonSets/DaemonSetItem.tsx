@@ -46,7 +46,6 @@ const DaemonSetItem: React.FunctionComponent<IDaemonSetItemProps> = ({ item, sec
       <ItemStatus status={status} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
-        <p>Namespace: {item.metadata ? item.metadata.namespace : '-'}</p>
       </IonLabel>
     </IonItem>
   )

@@ -21,7 +21,7 @@ const PersistentVolumeClaimItem: React.FunctionComponent<IPersistentVolumeClaimI
     <IonItem routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
-        <p>Namespace: {item.metadata ? item.metadata.namespace : '-'}{item.status ? ` | Phase: ${item.status.phase}` : ''}{item.status && item.status.capacity ? ` | Capacity: ${item.status.capacity.storage}` : ''}</p>
+        <p>{item.status ? ` | Phase: ${item.status.phase}` : ''}{item.status && item.status.capacity ? ` | Capacity: ${item.status.capacity.storage}` : ''}</p>
       </IonLabel>
     </IonItem>
   )

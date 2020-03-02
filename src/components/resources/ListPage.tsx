@@ -2,8 +2,11 @@ import {
   IonButton,
   IonButtons,
   IonContent,
-  IonHeader, IonIcon,
+  IonHeader,
+  IonIcon,
+  IonLabel,
   IonList,
+  IonListHeader,
   IonMenuButton,
   IonPage,
   IonProgressBar,
@@ -13,7 +16,7 @@ import {
   isPlatform,
 } from '@ionic/react';
 import { refresh } from 'ionicons/icons';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../declarations';
@@ -27,23 +30,36 @@ import NamespacePopover from './misc/NamespacePopover';
 interface IMatchParams {
   section: string;
   type: string;
-  namespace: string;
-  name: string;
 }
 
 interface IListPageProps extends RouteComponentProps<IMatchParams> {}
 
+// ListPage shows a list of the selected resource. The list can be filtered by namespace and each item contains a status
+// indicator, to get an overview of problems in the cluster.
 const ListPage: React.FunctionComponent<IListPageProps> = ({ match }) => {
   const context = useContext<IContext>(AppContext);
 
+  // namespace and showNamespace is used to group all items by namespace and to only show the namespace once via the
+  // IonListHeader component.
+  let namespace = '';
+  let showNamespace = false;
+
+  // Determine one which page we are currently (which items for a resource do we want to show) by the section and type
+  // parameter. Get the component 'ResourceItem' we want to render.
   const page = resources[match.params.section].pages[match.params.type];
   const Component = page.listItemComponent;
 
+  // The error state is used to show error message to the user, when the Kubernetes API request fails. showLoading is
+  // the indicator the the items are currently loaded/reloaded.
+  // HACK: url is used to avoid unnecessary rendering. We should try to remove this and test if it is really required in
+  // the current version. Maybe it's already improved and not needed.
   const [error, setError] = useState<string>('');
   const [showLoading, setShowLoading] = useState<boolean>(false);
   const [items, setItems] = useState<any>();
   const [url, setUrl] = useState<string>('');
 
+  // When the component is rendered the first time and on every change route change or a modification to the context
+  // object we are loading all items for the corresponding resource.
   useEffect(() => {
     (async() => {
       setItems(undefined);
@@ -54,11 +70,16 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }) => {
     return () => {};
   }, [match, context.clusters, context.cluster]); /* eslint-disable-line */
 
+  // The doRefresh method is used for a manual reload of the items for the corresponding resource. The
+  // event.detail.complete() call is required to finish the animation of the IonRefresher component.
   const doRefresh = async (event) => {
     event.detail.complete();
     await load();
   };
 
+  // load loads all the items for the corresponding resource. If the clusters or cluster property of the context is
+  // undefined we are returning an error. If everything is defined we are getting the selected namespace of the current
+  // cluster and trying to get all the items.
   const load = async () => {
     setShowLoading(true);
 
@@ -103,17 +124,31 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }) => {
         {error === '' && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? (
           <IonList>
             {match.url === url && items ? items.map((item, index) => {
+              if (isNamespaced(match.params.type) && item.metadata && item.metadata.namespace
+                && item.metadata.namespace !== namespace) {
+                namespace = item.metadata.namespace;
+                showNamespace = true;
+              } else {
+                showNamespace = false;
+              }
+
               return (
-                <ItemOptions
-                  key={index}
-                  item={item}
-                  url={page.detailsURL(
-                    item.metadata ? item.metadata.namespace : '',
-                    item.metadata ? item.metadata.name : ''
-                  )}
-                >
-                  <Component key={index} item={item} section={match.params.section} type={match.params.type} />
-                </ItemOptions>
+                <React.Fragment key={index}>
+                  {showNamespace ? (
+                    <IonListHeader>
+                      <IonLabel>{namespace}</IonLabel>
+                    </IonListHeader>
+                  ) : null}
+                  <ItemOptions
+                    item={item}
+                    url={page.detailsURL(
+                      item.metadata ? item.metadata.namespace : '',
+                      item.metadata ? item.metadata.name : ''
+                    )}
+                  >
+                    <Component key={index} item={item} section={match.params.section} type={match.params.type} />
+                  </ItemOptions>
+                </React.Fragment>
               )
             }) : null}
           </IonList>

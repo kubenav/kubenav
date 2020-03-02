@@ -20,8 +20,7 @@ const CronJobItem: React.FunctionComponent<ICronJobItemProps> = ({ item, section
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>
-          Namespace: {item.metadata ? item.metadata.namespace : '-'}
-          | Last Time Schedule : {item.status && item.status.lastScheduleTime
+          Last Time Schedule : {item.status && item.status.lastScheduleTime
           ? timeDifference(new Date().getTime(), new Date(item.status.lastScheduleTime.toString()).getTime()) : '-'}
         </p>
       </IonLabel>
