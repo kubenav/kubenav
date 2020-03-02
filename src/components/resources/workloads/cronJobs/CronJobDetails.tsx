@@ -7,11 +7,11 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { timeDifference } from '../../../../utils/helpers';
-import Configuration from '../../../kubernetes/Configuration';
-import Containers from '../../../kubernetes/Containers';
-import List from '../../../kubernetes/List';
-import Metadata from '../../../kubernetes/Metadata';
-import Row from '../../../kubernetes/Row';
+import List from '../../misc/List';
+import Containers from '../../misc/podTemplate/containers/Containers';
+import Configuration from '../../misc/template/Configuration';
+import Metadata from '../../misc/template/Metadata';
+import Row from '../../misc/template/Row';
 
 interface ICronJobDetailsProps extends RouteComponentProps {
   item: V1beta1CronJob;

@@ -6,7 +6,7 @@ import { V1Job } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import ItemStatus from '../../../kubernetes/ItemStatus';
+import ItemStatus from '../../misc/template/ItemStatus';
 
 interface IJobItemProps extends RouteComponentProps {
   item: V1Job;

@@ -7,8 +7,8 @@ import {
 import { V1Container, V1ContainerStatus } from '@kubernetes/client-node'
 import React from 'react';
 
-import { IContainerMetrics } from '../../declarations';
-import IonCardEqualHeight from '../misc/IonCardEqualHeight';
+import { IContainerMetrics } from '../../../../../declarations';
+import IonCardEqualHeight from '../../../../misc/IonCardEqualHeight';
 import Container from './Container';
 
 interface IContainersProps {

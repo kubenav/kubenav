@@ -11,9 +11,9 @@ import {
 } from '@ionic/react';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { IContext } from '../../declarations';
-import { AppContext } from '../../utils/context';
-import { resources } from '../../utils/resources';
+import { IContext } from '../../../declarations';
+import { AppContext } from '../../../utils/context';
+import { resources } from '../../../utils/resources';
 
 interface IListProps {
   name: string;

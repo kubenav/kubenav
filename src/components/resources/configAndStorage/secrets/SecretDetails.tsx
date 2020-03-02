@@ -12,10 +12,10 @@ import { V1Secret } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import Configuration from '../../../kubernetes/Configuration';
-import Data from '../../../kubernetes/Data';
-import Metadata from '../../../kubernetes/Metadata';
-import Row from '../../../kubernetes/Row';
+import Configuration from '../../misc/template/Configuration';
+import Data from '../../misc/template/Data';
+import Metadata from '../../misc/template/Metadata';
+import Row from '../../misc/template/Row';
 
 interface ISecretDetailsProps extends RouteComponentProps {
   item: V1Secret;

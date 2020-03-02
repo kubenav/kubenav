@@ -10,11 +10,11 @@ import { NetworkingV1beta1Ingress } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import Configuration from '../../../kubernetes/Configuration';
-import List from '../../../kubernetes/List';
-import Metadata from '../../../kubernetes/Metadata';
-import Row from '../../../kubernetes/Row';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
+import List from '../../misc/List';
+import Configuration from '../../misc/template/Configuration';
+import Metadata from '../../misc/template/Metadata';
+import Row from '../../misc/template/Row';
 
 interface IIngressDetailsProps extends RouteComponentProps {
   item: NetworkingV1beta1Ingress;

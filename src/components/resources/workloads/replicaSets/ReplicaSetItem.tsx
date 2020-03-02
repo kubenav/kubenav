@@ -6,7 +6,7 @@ import { V1ReplicaSet } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import ItemStatus from '../../../kubernetes/ItemStatus';
+import ItemStatus from '../../misc/template/ItemStatus';
 
 interface IReplicaSetItemProps extends RouteComponentProps {
   item: V1ReplicaSet;

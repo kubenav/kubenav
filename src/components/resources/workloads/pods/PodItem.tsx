@@ -6,7 +6,7 @@ import { V1Pod } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import ItemStatus from '../../../kubernetes/ItemStatus';
+import ItemStatus from '../../misc/template/ItemStatus';
 
 interface IPodItemProps extends RouteComponentProps {
   item: V1Pod;

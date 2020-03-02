@@ -20,9 +20,9 @@ import { IContext } from '../../declarations';
 import { AppContext } from '../../utils/context';
 import { isNamespaced } from '../../utils/helpers';
 import { resources } from '../../utils/resources';
-import ItemOptions from '../kubernetes/ItemOptions';
-import NamespacePopover from '../kubernetes/NamespacePopover';
 import LoadingErrorCard from '../misc/LoadingErrorCard';
+import ItemOptions from './misc/modify/ItemOptions';
+import NamespacePopover from './misc/NamespacePopover';
 
 interface IMatchParams {
   section: string;

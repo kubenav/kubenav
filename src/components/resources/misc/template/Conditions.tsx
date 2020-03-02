@@ -6,9 +6,9 @@ import {
 } from '@ionic/react';
 import React from 'react';
 
-import { TCondition } from '../../declarations';
-import { getProperty, timeDifference } from '../../utils/helpers';
-import IonCardEqualHeight from '../misc/IonCardEqualHeight';
+import { TCondition } from '../../../../declarations';
+import { getProperty, timeDifference } from '../../../../utils/helpers';
+import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
 
 interface IPodConditionsProps {
   conditions: TCondition[];

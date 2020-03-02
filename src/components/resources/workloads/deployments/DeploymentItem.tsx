@@ -6,7 +6,7 @@ import { V1Deployment } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import ItemStatus from '../../../kubernetes/ItemStatus';
+import ItemStatus from '../../misc/template/ItemStatus';
 
 interface IDeploymentItemProps extends RouteComponentProps {
   item: V1Deployment;

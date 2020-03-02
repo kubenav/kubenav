@@ -6,8 +6,8 @@ import { V1ServiceAccount } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import List from '../../../kubernetes/List';
-import Metadata from '../../../kubernetes/Metadata';
+import List from '../../misc/List';
+import Metadata from '../../misc/template/Metadata';
 
 interface IServiceAccountDetailsProps extends RouteComponentProps {
   item: V1ServiceAccount;

@@ -8,16 +8,16 @@ import { RouteComponentProps } from 'react-router';
 
 import { IContext, IPodMetrics } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
-import Affinities from '../../../kubernetes/Affinities';
-import Conditions from '../../../kubernetes/Conditions';
-import Configuration from '../../../kubernetes/Configuration';
-import Containers from '../../../kubernetes/Containers';
-import List from '../../../kubernetes/List';
-import Metadata from '../../../kubernetes/Metadata';
-import Row from '../../../kubernetes/Row';
-import Status from '../../../kubernetes/Status';
-import Tolerations from '../../../kubernetes/Tolerations';
-import Volumes from '../../../kubernetes/Volumes';
+import List from '../../misc/List';
+import Affinities from '../../misc/podTemplate/affinities/Affinities';
+import Containers from '../../misc/podTemplate/containers/Containers';
+import Tolerations from '../../misc/podTemplate/tolerations/Tolerations';
+import Volumes from '../../misc/podTemplate/volumes/Volumes';
+import Conditions from '../../misc/template/Conditions';
+import Configuration from '../../misc/template/Configuration';
+import Metadata from '../../misc/template/Metadata';
+import Row from '../../misc/template/Row';
+import Status from '../../misc/template/Status';
 
 interface IPodDetailsProps extends RouteComponentProps {
   item: V1Pod;

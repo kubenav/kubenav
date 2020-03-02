@@ -12,8 +12,8 @@ import { V1Namespace, V1NamespaceList } from '@kubernetes/client-node';
 import { checkmark, options } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 
-import { IContext } from '../../declarations';
-import { AppContext } from '../../utils/context';
+import { IContext } from '../../../declarations';
+import { AppContext } from '../../../utils/context';
 
 const NamespacePopover: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);
