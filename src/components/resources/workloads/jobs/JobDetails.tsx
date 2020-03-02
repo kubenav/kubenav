@@ -7,13 +7,13 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { labelSelector, timeDifference } from '../../../../utils/helpers';
-import Conditions from '../../../kubernetes/Conditions';
-import Configuration from '../../../kubernetes/Configuration';
-import List from '../../../kubernetes/List';
-import Metadata from '../../../kubernetes/Metadata';
-import PodTemplate from '../../../kubernetes/PodTemplate';
-import Row from '../../../kubernetes/Row';
-import Status from '../../../kubernetes/Status';
+import List from '../../misc/List';
+import PodTemplate from '../../misc/podTemplate/PodTemplate';
+import Conditions from '../../misc/template/Conditions';
+import Configuration from '../../misc/template/Configuration';
+import Metadata from '../../misc/template/Metadata';
+import Row from '../../misc/template/Row';
+import Status from '../../misc/template/Status';
 
 interface IJobDetailsProps extends RouteComponentProps {
   item: V1Job;

@@ -8,7 +8,7 @@ import {
 import { V1Affinity } from '@kubernetes/client-node'
 import React from 'react';
 
-import IonCardEqualHeight from '../misc/IonCardEqualHeight';
+import IonCardEqualHeight from '../../../../misc/IonCardEqualHeight';
 import Affinity from './Affinity';
 
 interface IAffinitiesProps {

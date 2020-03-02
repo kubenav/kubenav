@@ -5,10 +5,10 @@ import { V1Namespace } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import Configuration from '../../../kubernetes/Configuration';
-import Metadata from '../../../kubernetes/Metadata';
-import Row from '../../../kubernetes/Row';
-import Status from '../../../kubernetes/Status';
+import Configuration from '../../misc/template/Configuration';
+import Metadata from '../../misc/template/Metadata';
+import Row from '../../misc/template/Row';
+import Status from '../../misc/template/Status';
 
 interface INamespaceDetailsProps extends RouteComponentProps {
   item: V1Namespace;

@@ -6,7 +6,7 @@ import { V1DaemonSet } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import ItemStatus from '../../../kubernetes/ItemStatus';
+import ItemStatus from '../../misc/template/ItemStatus';
 
 interface IDaemonSetItemProps extends RouteComponentProps {
   item: V1DaemonSet;
@@ -42,7 +42,7 @@ const DaemonSetItem: React.FunctionComponent<IDaemonSetItemProps> = ({ item, sec
   }
 
   return (
-    <IonItem routerLink={`/kubernetes/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
+    <IonItem routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <ItemStatus status={status} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>

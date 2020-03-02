@@ -16,13 +16,13 @@ import { RouteComponentProps } from 'react-router';
 import { IContext, INodeMetrics } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import { formatBytes, formatResourceValue } from '../../../../utils/helpers';
-import Conditions from '../../../kubernetes/Conditions';
-import Configuration from '../../../kubernetes/Configuration';
-import List from '../../../kubernetes/List';
-import Metadata from '../../../kubernetes/Metadata';
-import Row from '../../../kubernetes/Row';
-import Status from '../../../kubernetes/Status';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
+import List from '../../misc/List';
+import Conditions from '../../misc/template/Conditions';
+import Configuration from '../../misc/template/Configuration';
+import Metadata from '../../misc/template/Metadata';
+import Row from '../../misc/template/Row';
+import Status from '../../misc/template/Status';
 
 interface INodeDetailsProps extends RouteComponentProps {
   item: V1Node;

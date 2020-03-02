@@ -10,24 +10,26 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
+import { V1NodeAffinity, V1PodAffinity, V1PodAntiAffinity } from '@kubernetes/client-node'
 import { close } from 'ionicons/icons';
+import yaml from 'js-yaml';
 import React, { useState } from 'react';
 
-import Editor from '../misc/Editor';
+import Editor from '../../../../misc/Editor';
 
-interface IDataProps {
-  name: string;
-  data: string;
+interface IAffinityProps {
+  title: string
+  affinity: V1NodeAffinity | V1PodAffinity | V1PodAntiAffinity;
 }
 
-const Data: React.FunctionComponent<IDataProps> = ({ name, data }) => {
+const Affinity: React.FunctionComponent<IAffinityProps> = ({ title, affinity }) => {
   const [showModal, setShowModal] = useState(false);
 
   return (
     <React.Fragment>
       <IonItem button={true} onClick={() => setShowModal(true)}>
         <IonLabel>
-          <h2>{name}</h2>
+          <h2>{title}</h2>
         </IonLabel>
       </IonItem>
 
@@ -39,15 +41,15 @@ const Data: React.FunctionComponent<IDataProps> = ({ name, data }) => {
                 <IonIcon slot="icon-only" icon={close} />
               </IonButton>
             </IonButtons>
-            <IonTitle>{name}</IonTitle>
+            <IonTitle>{title}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <Editor readOnly={true} value={data} fullHeight={true} />
+          <Editor readOnly={true} value={yaml.safeDump(affinity)} fullHeight={true} />
         </IonContent>
       </IonModal>
     </React.Fragment>
   )
 };
 
-export default Data;
+export default Affinity;

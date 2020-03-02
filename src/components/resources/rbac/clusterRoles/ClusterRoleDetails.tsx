@@ -9,9 +9,9 @@ import yaml from 'js-yaml';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import List from '../../../kubernetes/List';
-import Metadata from '../../../kubernetes/Metadata';
 import Editor from '../../../misc/Editor';
+import List from '../../misc/List';
+import Metadata from '../../misc/template/Metadata';
 
 interface IClusterRoleDetailsProps extends RouteComponentProps {
   item: V1ClusterRole;

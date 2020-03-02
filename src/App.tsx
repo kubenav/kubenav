@@ -44,8 +44,8 @@ const App: React.FunctionComponent = () => (
           <Menu sections={resources} />
           <IonRouterOutlet id="main">
             <Route path="/" component={HomePage} exact={true} />
-            <Route path="/kubernetes/:section/:type" component={ListPage} exact={true} />
-            <Route path="/kubernetes/:section/:type/:namespace/:name" component={DetailsPage} exact={true} />
+            <Route path="/resources/:section/:type" component={ListPage} exact={true} />
+            <Route path="/resources/:section/:type/:namespace/:name" component={DetailsPage} exact={true} />
             <Route path="/customresources/:group/:version/:name" component={CustomResourcesListPage} exact={true} />
             <Route path="/settings/clusters" component={ClustersPage} exact={true} />
             <Route path="/settings/clusters/aws/:region" component={ClustersAWSPage} exact={true} />

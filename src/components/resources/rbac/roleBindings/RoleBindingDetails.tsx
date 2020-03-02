@@ -15,10 +15,10 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { subjectLink } from '../../../../utils/helpers';
-import Configuration from '../../../kubernetes/Configuration';
-import List from '../../../kubernetes/List';
-import Metadata from '../../../kubernetes/Metadata';
-import Row from '../../../kubernetes/Row';
+import List from '../../misc/List';
+import Configuration from '../../misc/template/Configuration';
+import Metadata from '../../misc/template/Metadata';
+import Row from '../../misc/template/Row';
 
 interface IRoleBindingDetailsProps extends RouteComponentProps {
   item: V1RoleBinding;

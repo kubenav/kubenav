@@ -77,49 +77,49 @@ const menuTemplateView = {
     {
       label: 'Workloads',
       submenu: [
-        { label: 'Cron Jobs', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/workloads/cronjobs'); }},
-        { label: 'Daemon Sets', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/workloads/daemonsets'); }},
-        { label: 'Deployments', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/workloads/deployments'); }},
-        { label: 'Jobs', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/workloads/jobs'); }},
-        { label: 'Pods', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/workloads/pods'); }},
-        { label: 'Replica Sets', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/workloads/replicasets'); }},
-        { label: 'Replication Controllers', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/workloads/replicationcontrollers'); }},
-        { label: 'Stateful Sets', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/workloads/statefulsets'); }},
+        { label: 'Cron Jobs', click: function() { mainWindow.loadURL('http://localhost:14122/resources/workloads/cronjobs'); }},
+        { label: 'Daemon Sets', click: function() { mainWindow.loadURL('http://localhost:14122/resources/workloads/daemonsets'); }},
+        { label: 'Deployments', click: function() { mainWindow.loadURL('http://localhost:14122/resources/workloads/deployments'); }},
+        { label: 'Jobs', click: function() { mainWindow.loadURL('http://localhost:14122/resources/workloads/jobs'); }},
+        { label: 'Pods', click: function() { mainWindow.loadURL('http://localhost:14122/resources/workloads/pods'); }},
+        { label: 'Replica Sets', click: function() { mainWindow.loadURL('http://localhost:14122/resources/workloads/replicasets'); }},
+        { label: 'Replication Controllers', click: function() { mainWindow.loadURL('http://localhost:14122/resources/workloads/replicationcontrollers'); }},
+        { label: 'Stateful Sets', click: function() { mainWindow.loadURL('http://localhost:14122/resources/workloads/statefulsets'); }},
       ]
     },
     {
       label: 'Discovery and Load Balancing',
       submenu: [
-        { label: 'Ingresses', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/discovery-and-loadbalancing/ingresses'); }},
-        { label: 'Services', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/discovery-and-loadbalancing/services'); }},
+        { label: 'Ingresses', click: function() { mainWindow.loadURL('http://localhost:14122/resources/discovery-and-loadbalancing/ingresses'); }},
+        { label: 'Services', click: function() { mainWindow.loadURL('http://localhost:14122/resources/discovery-and-loadbalancing/services'); }},
       ]
     },
     {
       label: 'Config and Storage',
       submenu: [
-        { label: 'Config Maps', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/config-and-storage/configmaps'); }},
-        { label: 'Persistent Volumes', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/config-and-storage/persistentvolumes'); }},
-        { label: 'Persistent Volume Claims', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/config-and-storage/persistentvolumeclaims'); }},
-        { label: 'Secrets', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/config-and-storage/secrets'); }},
-        { label: 'Service Accounts', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/config-and-storage/serviceaccounts'); }},
+        { label: 'Config Maps', click: function() { mainWindow.loadURL('http://localhost:14122/resources/config-and-storage/configmaps'); }},
+        { label: 'Persistent Volumes', click: function() { mainWindow.loadURL('http://localhost:14122/resources/config-and-storage/persistentvolumes'); }},
+        { label: 'Persistent Volume Claims', click: function() { mainWindow.loadURL('http://localhost:14122/resources/config-and-storage/persistentvolumeclaims'); }},
+        { label: 'Secrets', click: function() { mainWindow.loadURL('http://localhost:14122/resources/config-and-storage/secrets'); }},
+        { label: 'Service Accounts', click: function() { mainWindow.loadURL('http://localhost:14122/resources/config-and-storage/serviceaccounts'); }},
       ]
     },
     {
       label: 'RBAC',
       submenu: [
-        { label: 'Cluster Roles', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/rbac/clusterroles'); }},
-        { label: 'Cluster Role Bindings', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/rbac/clusterrolebindings'); }},
-        { label: 'Roles', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/rbac/roles'); }},
-        { label: 'Role Bindings', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/rbac/rolebindings'); }},
+        { label: 'Cluster Roles', click: function() { mainWindow.loadURL('http://localhost:14122/resources/rbac/clusterroles'); }},
+        { label: 'Cluster Role Bindings', click: function() { mainWindow.loadURL('http://localhost:14122/resources/rbac/clusterrolebindings'); }},
+        { label: 'Roles', click: function() { mainWindow.loadURL('http://localhost:14122/resources/rbac/roles'); }},
+        { label: 'Role Bindings', click: function() { mainWindow.loadURL('http://localhost:14122/resources/rbac/rolebindings'); }},
       ]
     },
     {
       label: 'Cluster',
       submenu: [
-        { label: 'Custom Resource Definitions', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/cluster/customresourcedefinitions'); }},
-        { label: 'Events', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/cluster/events'); }},
-        { label: 'Namespaces', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/cluster/namespaces'); }},
-        { label: 'Nodes', click: function() { mainWindow.loadURL('http://localhost:14122/kubernetes/cluster/nodes'); }},
+        { label: 'Custom Resource Definitions', click: function() { mainWindow.loadURL('http://localhost:14122/resources/cluster/customresourcedefinitions'); }},
+        { label: 'Events', click: function() { mainWindow.loadURL('http://localhost:14122/resources/cluster/events'); }},
+        { label: 'Namespaces', click: function() { mainWindow.loadURL('http://localhost:14122/resources/cluster/namespaces'); }},
+        { label: 'Nodes', click: function() { mainWindow.loadURL('http://localhost:14122/resources/cluster/nodes'); }},
       ]
     },
   ]

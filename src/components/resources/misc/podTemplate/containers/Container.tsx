@@ -25,11 +25,11 @@ import { close } from 'ionicons/icons';
 import yaml from 'js-yaml';
 import React, {useState} from 'react';
 
-import { IContainerMetrics } from '../../declarations';
-import { formatResourceValue } from '../../utils/helpers';
-import Editor from '../misc/Editor';
-import Logs from './Logs';
-import Row from './Row';
+import { IContainerMetrics } from '../../../../../declarations';
+import { formatResourceValue } from '../../../../../utils/helpers';
+import Editor from '../../../../misc/Editor';
+import Row from '../../template/Row';
+import Logs from '../Logs';
 
 interface IContainerProps {
   container: V1Container;

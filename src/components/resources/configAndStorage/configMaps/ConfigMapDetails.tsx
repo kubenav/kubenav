@@ -12,9 +12,9 @@ import { V1ConfigMap } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import Data from '../../../kubernetes/Data';
-import List from '../../../kubernetes/List';
-import Metadata from '../../../kubernetes/Metadata';
+import List from '../../misc/List';
+import Data from '../../misc/template/Data';
+import Metadata from '../../misc/template/Metadata';
 
 interface IConfigMapDetailsDetailsProps extends RouteComponentProps {
   item: V1ConfigMap;

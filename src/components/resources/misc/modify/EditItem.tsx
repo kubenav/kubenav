@@ -15,9 +15,9 @@ import { close, create } from 'ionicons/icons';
 import yaml from 'js-yaml';
 import React, { useContext, useState } from 'react';
 
-import { IContext, TActivator } from '../../declarations';
-import { AppContext } from '../../utils/context';
-import Editor from '../misc/Editor';
+import { IContext, TActivator } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
+import Editor from '../../../misc/Editor';
 
 interface IEditItemProps {
   activator: TActivator;

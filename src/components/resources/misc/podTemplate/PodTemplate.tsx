@@ -6,9 +6,9 @@ import {
 import { V1PodTemplateSpec } from '@kubernetes/client-node'
 import React from 'react';
 
-import Containers from './Containers';
-import Tolerations from './Tolerations';
-import Volumes from './Volumes';
+import Containers from './containers/Containers';
+import Tolerations from './tolerations/Tolerations';
+import Volumes from './volumes/Volumes';
 
 interface IPodTemplateProps {
   template: V1PodTemplateSpec;

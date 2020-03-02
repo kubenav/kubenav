@@ -17,9 +17,9 @@ import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
-import ItemOptions from '../../../kubernetes/ItemOptions';
-import NamespacePopover from '../../../kubernetes/NamespacePopover';
 import LoadingErrorCard from '../../../misc/LoadingErrorCard';
+import ItemOptions from '../../misc/modify/ItemOptions';
+import NamespacePopover from '../../misc/NamespacePopover';
 import CustomResourceItem from './CustomResourceItem';
 
 interface IMatchParams {
@@ -85,7 +85,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref={`/kubernetes/cluster/customresourcedefinitions`} />
+            <IonBackButton defaultHref={`/resources/cluster/customresourcedefinitions`} />
           </IonButtons>
           <IonTitle>{match.params.name}</IonTitle>
           <IonButtons slot="primary">

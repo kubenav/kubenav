@@ -19,9 +19,9 @@ import { RouteComponentProps } from 'react-router';
 import { IContext } from '../../declarations';
 import { AppContext } from '../../utils/context';
 import { resources } from '../../utils/resources';
-import DeleteItem from '../kubernetes/DeleteItem';
-import EditItem from '../kubernetes/EditItem';
 import LoadingErrorCard from '../misc/LoadingErrorCard';
+import DeleteItem from './misc/modify/DeleteItem';
+import EditItem from './misc/modify/EditItem';
 
 interface IMatchParams {
   section: string;
@@ -77,7 +77,7 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }) => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref={`/kubernetes/${match.params.section}/${match.params.type}`} />
+            <IonBackButton defaultHref={`/resources/${match.params.section}/${match.params.type}`} />
           </IonButtons>
           <IonTitle>{item && item.metadata ? item.metadata.name : ''}</IonTitle>
           {!isPlatform('hybrid') ? (
