@@ -77,7 +77,7 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }) => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref={`/kubernetes/${match.params.section}/${match.params.type}`} />
+            <IonBackButton defaultHref={`/resources/${match.params.section}/${match.params.type}`} />
           </IonButtons>
           <IonTitle>{item && item.metadata ? item.metadata.name : ''}</IonTitle>
           {!isPlatform('hybrid') ? (

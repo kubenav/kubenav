@@ -85,7 +85,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref={`/kubernetes/cluster/customresourcedefinitions`} />
+            <IonBackButton defaultHref={`/resources/cluster/customresourcedefinitions`} />
           </IonButtons>
           <IonTitle>{match.params.name}</IonTitle>
           <IonButtons slot="primary">

@@ -17,7 +17,7 @@ interface IEventItemProps extends RouteComponentProps {
 
 const EventItem: React.FunctionComponent<IEventItemProps> = ({ item, section, type }) => {
   return (
-    <IonItem routerLink={`/kubernetes/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
+    <IonItem routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <IonLabel>
         <h2>
           {item.type ? `Type: ${item.type} | ` : ''}

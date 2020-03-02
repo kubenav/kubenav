@@ -14,7 +14,7 @@ interface IServiceAccountItemProps extends RouteComponentProps {
 
 const ServiceAccountItem: React.FunctionComponent<IServiceAccountItemProps> = ({ item, section, type }) => {
   return (
-    <IonItem routerLink={`/kubernetes/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
+    <IonItem routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>Namespace: {item.metadata ? item.metadata.namespace : '-'}</p>

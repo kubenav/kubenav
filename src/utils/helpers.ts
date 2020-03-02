@@ -153,7 +153,7 @@ export const randomString = (length: number): string => {
 // subjectLink returns the link for a subject when it is of kind ServiceAccount.
 export const subjectLink = (subject: V1Subject): string => {
   if (subject.kind === 'ServiceAccount') {
-    return `/kubernetes/config-and-storage/serviceaccounts/${subject.namespace}/${subject.name}`;
+    return `/resources/config-and-storage/serviceaccounts/${subject.namespace}/${subject.name}`;
   }
 
   return '';

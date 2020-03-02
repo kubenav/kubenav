@@ -15,7 +15,7 @@ interface ISectionItemProps {
 
 const SectionItem: React.FunctionComponent<ISectionItemProps> = ({ pages, sectionKey, pageKey }) => {
   return (
-    <IonItem routerLink={`/kubernetes/${sectionKey}/${pageKey}`} routerDirection="root">
+    <IonItem routerLink={`/resources/${sectionKey}/${pageKey}`} routerDirection="root">
       <IonAvatar slot="start">
         <img alt={pages[pageKey].pluralText} src={pages[pageKey].icon} />
       </IonAvatar>

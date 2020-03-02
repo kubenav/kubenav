@@ -28,7 +28,7 @@ const StatefulSetItem: React.FunctionComponent<IStatefulSetItemProps> = ({ item,
   }
 
   return (
-    <IonItem routerLink={`/kubernetes/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
+    <IonItem routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <ItemStatus status={status} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>

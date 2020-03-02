@@ -54,7 +54,7 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
   let status = getPodStatus(item);
 
   return (
-    <IonItem routerLink={`/kubernetes/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
+    <IonItem routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <ItemStatus status={status} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
