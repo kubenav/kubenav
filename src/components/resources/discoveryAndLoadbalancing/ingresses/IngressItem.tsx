@@ -17,7 +17,6 @@ const IngressItem: React.FunctionComponent<IIngressItemProps> = ({ item, section
     <IonItem routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
-        <p>Namespace: {item.metadata ? item.metadata.namespace : '-'}</p>
       </IonLabel>
     </IonItem>
   )
