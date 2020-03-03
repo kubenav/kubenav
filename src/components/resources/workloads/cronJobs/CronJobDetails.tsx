@@ -30,7 +30,7 @@ const CronJobDetails: React.FunctionComponent<ICronJobDetailsProps> = ({ item, t
           <Row
             obj={item}
             objKey="status.lastScheduleTime"
-            title="Last Schedule Time"
+            title="Last Schedule"
             value={(value) => timeDifference(new Date().getTime(), new Date(value.toString()).getTime())}
           />
           <Row obj={item} objKey="spec.successfulJobsHistoryLimit" title="Successful Job History Limit" />

@@ -65,13 +65,13 @@ const DaemonSetDetails: React.FunctionComponent<IDaemonSetDetailsProps> = ({ ite
         </Configuration>
 
         <Status>
-          <Row obj={item} objKey="status.currentNumberScheduled" title="Current Number Scheduled" />
-          <Row obj={item} objKey="status.desiredNumberScheduled" title="Desired Number Scheduled" />
-          <Row obj={item} objKey="status.numberAvailable" title="Number Available" />
-          <Row obj={item} objKey="status.numberMisscheduled" title="Number Misscheduled" />
-          <Row obj={item} objKey="status.numberReady" title="Number Ready" />
-          <Row obj={item} objKey="status.numberUnavailable" title="Number Unavailable" />
-          <Row obj={item} objKey="status.updatedNumberScheduled" title="Updated Number Scheduled" />
+          <Row obj={item} objKey="status.desiredNumberScheduled" title="Desired Number of Pods" />
+          <Row obj={item} objKey="status.currentNumberScheduled" title="Current Number of Pods" />
+          <Row obj={item} objKey="status.numberReady" title="Number of Ready Pods" />
+          <Row obj={item} objKey="status.updatedNumberScheduled" title="Updated Number of Pods" />
+          <Row obj={item} objKey="status.numberAvailable" title="Number of Available Pods" />
+          <Row obj={item} objKey="status.numberUnavailable" title="Number of Unavailable Pods" />
+          <Row obj={item} objKey="status.numberMisscheduled" title="Number of Misscheduled Pods" />
         </Status>
       </IonRow>
 
