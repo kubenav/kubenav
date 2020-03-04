@@ -20,16 +20,37 @@ import {
   IonToolbar,
   isPlatform,
 } from '@ionic/react';
-import { V1Container, V1ContainerPort, V1ContainerState, V1ContainerStatus, V1EnvVarSource } from '@kubernetes/client-node'
+import {
+  V1Container,
+  V1ContainerPort,
+  V1ContainerState,
+  V1ContainerStatus,
+  V1EnvVarSource,
+} from '@kubernetes/client-node'
 import { close } from 'ionicons/icons';
 import yaml from 'js-yaml';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import { IContainerMetrics } from '../../../../../declarations';
 import { formatResourceValue } from '../../../../../utils/helpers';
 import Editor from '../../../../misc/Editor';
+import IonCardEqualHeight from '../../../../misc/IonCardEqualHeight';
 import Row from '../../template/Row';
 import Logs from '../Logs';
+
+// getState returns the current state of the given container. This is used for the list view for init containers and
+// containers.
+const getState = (containerStatus: V1ContainerStatus): string => {
+  if (containerStatus.state && containerStatus.state.waiting) {
+    return containerStatus.state.waiting.reason ? containerStatus.state.waiting.reason : '';
+  }
+
+  if (containerStatus.state && containerStatus.state.terminated) {
+    return containerStatus.state.terminated.reason ? containerStatus.state.terminated.reason : '';
+  }
+
+  return 'Running';
+};
 
 interface IContainerProps {
   container: V1Container;
@@ -95,6 +116,12 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
         <IonItem button={true} onClick={() => setShowModal(true)}>
           <IonLabel>
             <h2>{container.name}</h2>
+            <p>
+              {status ? `Ready: ${status.ready ? '1' : '0'} | Restarts: ${status.restartCount ? status.restartCount : 0} | State: ${getState(status)}` : ''}
+              <br/>
+              {/* tslint:disable-next-line:max-line-length */}
+              CPU: {metrics && metrics.usage && metrics.usage.hasOwnProperty('cpu') ? formatResourceValue('cpu', metrics.usage['cpu']) : '-'} ({container.resources && container.resources.requests && container.resources.requests.hasOwnProperty('cpu') ? formatResourceValue('cpu', container.resources.requests['cpu']) : '-'}/{container.resources && container.resources.limits && container.resources.limits.hasOwnProperty('cpu') ? formatResourceValue('cpu', container.resources.limits['cpu']) : '-'}) | Memory: {metrics && metrics.usage && metrics.usage.hasOwnProperty('memory') ? formatResourceValue('memory', metrics.usage['memory']) : '-'} ({container.resources && container.resources.requests && container.resources.requests.hasOwnProperty('memory') ? formatResourceValue('memory', container.resources.requests['memory']) : '-'}/{container.resources && container.resources.limits && container.resources.limits.hasOwnProperty('memory') ? formatResourceValue('memory', container.resources.limits['memory']) : '-'})
+            </p>
           </IonLabel>
           {!isPlatform('hybrid') && logs && name && namespace
             ? <Logs activator="button" name={name} namespace={namespace} container={container.name} /> : null}
@@ -121,8 +148,8 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
         <IonContent>
           <IonGrid>
             <IonRow>
-              <IonCol>
-                <IonCard>
+              <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+                <IonCardEqualHeight>
                   <IonCardHeader>
                     <IonCardTitle>Configuration</IonCardTitle>
                   </IonCardHeader>
@@ -158,14 +185,12 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
                       />
                     </IonGrid>
                   </IonCardContent>
-                </IonCard>
+                </IonCardEqualHeight>
               </IonCol>
-            </IonRow>
 
-            {status ? (
-              <IonRow>
-                <IonCol>
-                  <IonCard>
+              {status ? (
+                <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+                  <IonCardEqualHeight>
                     <IonCardHeader>
                       <IonCardTitle>Status</IonCardTitle>
                     </IonCardHeader>
@@ -188,15 +213,15 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
                         <Row obj={status} objKey="restartCount" title="Restart Count" />
                       </IonGrid>
                     </IonCardContent>
-                  </IonCard>
+                  </IonCardEqualHeight>
                 </IonCol>
-              </IonRow>
-            ) : null}
+              ) : null}
+            </IonRow>
 
-            {container.env ? (
-              <IonRow>
-                <IonCol>
-                  <IonCard>
+            <IonRow>
+              {container.env ? (
+                <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+                  <IonCardEqualHeight>
                     <IonCardHeader>
                       <IonCardTitle>Environment Variables</IonCardTitle>
                     </IonCardHeader>
@@ -211,15 +236,13 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
                         ))}
                       </IonGrid>
                     </IonCardContent>
-                  </IonCard>
+                  </IonCardEqualHeight>
                 </IonCol>
-              </IonRow>
-            ) : null}
+              ) : null}
 
-            {container.volumeMounts ? (
-              <IonRow>
-                <IonCol>
-                  <IonCard>
+              {container.volumeMounts ? (
+                <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+                  <IonCardEqualHeight>
                     <IonCardHeader>
                       <IonCardTitle>Volume Mounts</IonCardTitle>
                     </IonCardHeader>
@@ -233,10 +256,10 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
                         ))}
                       </IonGrid>
                     </IonCardContent>
-                  </IonCard>
+                  </IonCardEqualHeight>
                 </IonCol>
-              </IonRow>
-            ) : null}
+              ) : null}
+            </IonRow>
 
             {resources.length > 0 ? (
               <IonRow>
@@ -279,50 +302,46 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
               </IonRow>
             ) : null}
 
-            {container.livenessProbe ? (
-              <IonRow>
-                <IonCol>
-                  <IonCard>
+            <IonRow>
+              {container.livenessProbe ? (
+                <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
+                  <IonCardEqualHeight>
                     <IonCardHeader>
                       <IonCardTitle>Liveness Probe</IonCardTitle>
                     </IonCardHeader>
                     <IonCardContent>
                       <Editor readOnly={true} value={yaml.safeDump(container.livenessProbe)} />
                     </IonCardContent>
-                  </IonCard>
+                  </IonCardEqualHeight>
                 </IonCol>
-              </IonRow>
-            ): null}
+              ): null}
 
-            {container.readinessProbe ? (
-              <IonRow>
-                <IonCol>
-                  <IonCard>
+              {container.readinessProbe ? (
+                <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
+                  <IonCardEqualHeight>
                     <IonCardHeader>
                       <IonCardTitle>Readiness Probe</IonCardTitle>
                     </IonCardHeader>
                     <IonCardContent>
                       <Editor readOnly={true} value={yaml.safeDump(container.readinessProbe)} />
                     </IonCardContent>
-                  </IonCard>
+                  </IonCardEqualHeight>
                 </IonCol>
-              </IonRow>
-            ): null}
+              ): null}
 
-            {container.securityContext ? (
-              <IonRow>
-                <IonCol>
-                  <IonCard>
+              {container.securityContext ? (
+                <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
+                  <IonCardEqualHeight>
                     <IonCardHeader>
                       <IonCardTitle>Security Context</IonCardTitle>
                     </IonCardHeader>
                     <IonCardContent>
                       <Editor readOnly={true} value={yaml.safeDump(container.securityContext)} />
                     </IonCardContent>
-                  </IonCard>
+                  </IonCardEqualHeight>
                 </IonCol>
-              </IonRow>
-            ) : null}
+              ) : null}
+            </IonRow>
           </IonGrid>
         </IonContent>
       </IonModal>
