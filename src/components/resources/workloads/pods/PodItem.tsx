@@ -33,7 +33,7 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
   // - Ready: The number of ready containers and the number of containers in the pod.
   // - Restarts: Number of restarts for the pod, using the sum of restarts for all containers.
   // - Status: Show the status of the pod, using the status of the running containers.
-  // - Age: The time when the daemon set was created.
+  // - Age: The time when the pod was created.
   return (
     <IonItem routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
       <ItemStatus status={status} />
