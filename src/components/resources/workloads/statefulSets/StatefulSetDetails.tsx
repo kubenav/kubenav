@@ -55,7 +55,7 @@ const StatefulSetDetails: React.FunctionComponent<IStatefulSetDetailsProps> = ({
         </Configuration>
 
         <Status>
-          <Row obj={item} objKey="status.replicas" title="Total Replicas" />
+          <Row obj={item} objKey="status.replicas" title="Desired Replicas" />
           <Row obj={item} objKey="status.currentReplicas" title="Current Replicas" />
           <Row obj={item} objKey="status.readyReplicas" title="Ready Replicas" />
           <Row obj={item} objKey="status.updatedReplicas" title="Updated Replicas" />
