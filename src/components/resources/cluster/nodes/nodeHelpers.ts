@@ -23,4 +23,3 @@ export const getStatus = (node: V1Node): string => {
 
   return 'Not Ready';
 };
-
