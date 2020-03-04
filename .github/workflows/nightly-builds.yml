@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Build Electron Apps
+    name: Nightly Builds
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
