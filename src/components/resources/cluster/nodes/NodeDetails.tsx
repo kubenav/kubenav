@@ -23,6 +23,7 @@ import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
 import Row from '../../misc/template/Row';
 import Status from '../../misc/template/Status';
+import { getStatus } from './nodeHelpers';
 
 interface INodeDetailsProps extends RouteComponentProps {
   item: V1Node;
@@ -73,6 +74,10 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type })
         </Configuration>
 
         <Status>
+          <IonRow>
+            <IonCol size="auto"><b>Status:</b></IonCol>
+            <IonCol>{getStatus(item)}</IonCol>
+          </IonRow>
           <Row
             obj={item}
             objKey="status.addresses"

@@ -7,29 +7,14 @@ import {
   IonGrid,
   IonRow,
 } from '@ionic/react';
-import { V1Event, V1EventSource } from '@kubernetes/client-node'
+import { V1Event } from '@kubernetes/client-node'
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { timeDifference } from '../../../../utils/helpers';
 import Metadata from '../../misc/template/Metadata';
 import Row from '../../misc/template/Row';
-
-export const eventSource = (value: V1EventSource): string => {
-  if (value.host && value.component) {
-    return `${value.host}/${value.component}`;
-  }
-
-  if (value.host) {
-    return value.host;
-  }
-
-  if (value.component) {
-    return value.component;
-  }
-
-  return '';
-};
+import { eventSource } from './eventHelper';
 
 interface IEventDetailsProps extends RouteComponentProps {
   item: V1Event;
