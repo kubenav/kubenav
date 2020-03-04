@@ -55,11 +55,11 @@ const DeploymentDetails: React.FunctionComponent<IDeploymentDetailsProps> = ({ i
         </Configuration>
 
         <Status>
-          <Row obj={item} objKey="status.availableReplicas" title="Available Replicas" />
+          <Row obj={item} objKey="status.replicas" title="Current Replicas" />
           <Row obj={item} objKey="status.readyReplicas" title="Ready Replicas" />
-          <Row obj={item} objKey="status.replicas" title="Total Replicas" />
-          <Row obj={item} objKey="status.unavailableReplicas" title="Unavailable Replicas" />
           <Row obj={item} objKey="status.updatedReplicas" title="Updated Replicas" />
+          <Row obj={item} objKey="status.availableReplicas" title="Available Replicas" />
+          <Row obj={item} objKey="status.unavailableReplicas" title="Unavailable Replicas" />
         </Status>
       </IonRow>
 

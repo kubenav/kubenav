@@ -182,7 +182,7 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
                           obj={status}
                           objKey="ready"
                           title="Ready"
-                          value={(ready) => ready ? 'true' : 'false'}
+                          value={(ready) => ready ? '1' : '0'}
                           defaultValue="false"
                         />
                         <Row obj={status} objKey="restartCount" title="Restart Count" />

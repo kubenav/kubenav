@@ -1,4 +1,5 @@
 import {
+  IonCol,
   IonGrid,
   IonRow,
 } from '@ionic/react';
@@ -18,6 +19,7 @@ import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
 import Row from '../../misc/template/Row';
 import Status from '../../misc/template/Status';
+import { getReady, getRestarts, getStatus } from './podHelpers';
 
 interface IPodDetailsProps extends RouteComponentProps {
   item: V1Pod;
@@ -57,6 +59,18 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }) =
         </Configuration>
 
         <Status>
+          <IonRow>
+            <IonCol size="auto"><b>Ready:</b></IonCol>
+            <IonCol>{getReady(item)}</IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol size="auto"><b>Restarts:</b></IonCol>
+            <IonCol>{getRestarts(item)}</IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol size="auto"><b>Status:</b></IonCol>
+            <IonCol>{getStatus(item)}</IonCol>
+          </IonRow>
           <Row obj={item} objKey="status.qosClass" title="QoS" />
           <Row obj={item} objKey="status.phase" title="Phase" />
           <Row obj={item} objKey="status.podIP" title="Pod IP" />

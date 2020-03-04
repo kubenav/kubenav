@@ -44,10 +44,10 @@ const ReplicaSetDetails: React.FunctionComponent<IReplicaSetDetailsProps> = ({ i
         </Configuration>
 
         <Status>
+          <Row obj={item} objKey="status.replicas" title="Observed Replicas" />
+          <Row obj={item} objKey="status.readyReplicas" title="Ready Replicas" />
           <Row obj={item} objKey="status.availableReplicas" title="Available Replicas" />
           <Row obj={item} objKey="status.fullyLabeledReplicas" title="Fully Labeled Replicas" />
-          <Row obj={item} objKey="status.readyReplicas" title="Ready Replicas" />
-          <Row obj={item} objKey="status.replicas" title="Total Replicas" />
           <Row obj={item} objKey="status.observedGeneration" title="Observed Generation" />
         </Status>
       </IonRow>
