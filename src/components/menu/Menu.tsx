@@ -55,6 +55,14 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections }) => {
             </IonItem>
           </IonMenuToggle>
           <IonMenuToggle autoHide={false}>
+            <IonItem routerLink="/settings/general" routerDirection="root">
+              <IonAvatar slot="start">
+                <img alt="Info" src="/assets/icons/misc/general.png" />
+              </IonAvatar>
+              <IonLabel>General</IonLabel>
+            </IonItem>
+          </IonMenuToggle>
+          <IonMenuToggle autoHide={false}>
             <IonItem routerLink="/settings/info" routerDirection="root">
               <IonAvatar slot="start">
                 <img alt="Info" src="/assets/icons/misc/info.png" />

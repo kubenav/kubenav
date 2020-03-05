@@ -89,3 +89,10 @@ th {
     --height: 90%;
   }
 }
+
+/* Set the border radius of the IonAvatar components to 0.
+   We only show the hexagon in the avatar component and with the border radius this looks ugly because of the white
+   border gets cut of */
+ion-avatar {
+  --border-radius: 0px;
+}

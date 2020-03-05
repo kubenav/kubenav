@@ -1,5 +1,13 @@
-import { IAWSTokens, IClusters, IGoogleTokens } from '../declarations';
-import { STORAGE_AWS_TOKENS, STORAGE_CLUSTER, STORAGE_CLUSTERS, STORAGE_GOOGLE_CLIENT_ID, STORAGE_GOOGLE_TOKENS } from './constants';
+import { IAppSettings, IAWSTokens, IClusters, IGoogleTokens } from '../declarations';
+import {
+  DEFAULT_SETTINGS,
+  STORAGE_AWS_TOKENS,
+  STORAGE_CLUSTER,
+  STORAGE_CLUSTERS,
+  STORAGE_GOOGLE_CLIENT_ID,
+  STORAGE_GOOGLE_TOKENS,
+  STORAGE_SETTINGS
+} from './constants';
 
 // readAWSTokens returns the tokens required for API requests against AWS. If there is no entry in the localStorage an
 // empty object is returned. Therefore it must be checked if the needed region property exists.
@@ -33,6 +41,14 @@ export const readGoogleClientID = (): string => {
 export const readGoogleTokens = (): IGoogleTokens|undefined => {
   return localStorage.getItem(STORAGE_GOOGLE_TOKENS)
     ? JSON.parse(localStorage.getItem(STORAGE_GOOGLE_TOKENS)!) : undefined;
+};
+
+// readSettings returns the settings set by the user. If the user had not modified the settings yet, return the default
+// settings.
+export const readSettings = (): IAppSettings => {
+  const settings = localStorage.getItem(STORAGE_SETTINGS);
+
+  return settings ? JSON.parse(settings) : DEFAULT_SETTINGS;
 };
 
 // removeCluster removes the saved cluster from localStorage.
@@ -72,4 +88,9 @@ export const saveGoogleTokens = (tokens: IGoogleTokens) => {
 // saveGoogleClientID saves the Google client id to the localStorage.
 export const saveGoogleClientID = (clientID: string) => {
   localStorage.setItem(STORAGE_GOOGLE_CLIENT_ID, clientID);
+};
+
+// saveSettings saves the users settings to the localStorage.
+export const saveSettings = (settings: IAppSettings) => {
+  localStorage.setItem(STORAGE_SETTINGS, JSON.stringify(settings));
 };
