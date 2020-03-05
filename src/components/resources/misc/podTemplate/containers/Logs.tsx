@@ -18,9 +18,9 @@ import {
 import { close, ellipsisHorizontal, ellipsisVertical, list } from 'ionicons/icons';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { IContext, TActivator } from '../../../../declarations';
-import { AppContext } from '../../../../utils/context';
-import Editor from '../../../misc/Editor';
+import { IContext, TActivator } from '../../../../../declarations';
+import { AppContext } from '../../../../../utils/context';
+import Editor from '../../../../misc/Editor';
 
 const TAIL_LINES = 1000;
 
@@ -66,8 +66,10 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ activator, name, namespace,
         parameters = `${parameters}&tailLines=${tailLines}`;
       }
 
+      // It is possible that the returned log only contains one line with valid json. This gets parsed by the requests
+      // function and so an object instead of a string is returned. In this case we have to revert the parsing.
       const data: any = await context.request('GET', `/api/v1/namespaces/${namespace}/pods/${name}/log?${parameters}`, '');
-      setLogs(data);
+      setLogs(typeof data === 'string' ? data : JSON.stringify(data));
     } catch (err) {
       setError(err);
     }
