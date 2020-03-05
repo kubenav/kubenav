@@ -35,6 +35,11 @@ export interface IAppSections {
   [key: string]: IAppSection
 }
 
+export interface IAppSettings {
+  darkMode: boolean;
+  editorTheme: string;
+}
+
 export interface IAWSCluster {
   CertificateAuthority: IAWSClusterCertificateAuthority;
   Endpoint: string;
@@ -80,11 +85,13 @@ export interface IContainerMetrics {
 export interface IContext {
   clusters?: IClusters;
   cluster?: string;
+  settings: IAppSettings;
 
   addCluster: (newCluster: ICluster[]) => void;
   changeCluster: (id: string) => void;
   deleteCluster: (id: string) => void;
   editCluster: (editCluster: ICluster) => void;
+  editSettings: (settings: IAppSettings) => void;
   setNamespace: (namespace: string) => void;
   request: (method: string, url: string, body: string, alternativeCluster?: ICluster) => Promise<any>;
 }

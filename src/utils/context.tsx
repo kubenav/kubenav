@@ -2,10 +2,20 @@ import { Plugins } from '@capacitor/core';
 import { isPlatform } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 
-import { ICluster, IClusters, IContext } from '../declarations';
+import { IAppSettings, ICluster, IClusters, IContext } from '../declarations';
 import { getCluster, getClusters, kubernetesRequest } from './api';
+import { DEFAULT_SETTINGS } from './constants';
 import { isBase64, randomString } from './helpers';
-import { readCluster, readClusters, removeCluster, removeClusters, saveCluster, saveClusters } from './storage';
+import {
+  readCluster,
+  readClusters,
+  readSettings,
+  removeCluster,
+  removeClusters,
+  saveCluster,
+  saveClusters,
+  saveSettings,
+} from './storage';
 
 const { SplashScreen } = Plugins;
 
@@ -14,11 +24,13 @@ const { SplashScreen } = Plugins;
 export const AppContext = React.createContext<IContext>({
   clusters: {},
   cluster: '',
+  settings: DEFAULT_SETTINGS,
 
   addCluster: () => {},
   changeCluster: () => {},
   deleteCluster: () => {},
   editCluster: () => {},
+  editSettings: () => {},
   setNamespace: () => {},
   request: () => { return new Promise(() => {}); },
 });
@@ -31,6 +43,7 @@ export const AppContextConsumer = AppContext.Consumer;
 // changes.
 export const AppContextProvider: React.FunctionComponent = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true);
+  const [settings, setSettings] = useState<IAppSettings>(readSettings());
   const [cluster, setCluster] = useState<string|undefined>(undefined);
   const [clusters, setClusters] = useState<IClusters|undefined>(undefined);
 
@@ -42,6 +55,10 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
   useEffect(() => {
     (async() => {
       if (loading) {
+        // Apply dark mode if it was returned from the storage api. This could be set by the user or the default from
+        // the system.
+        document.body.classList.toggle('dark', settings.darkMode);
+
         if (!isPlatform('hybrid')) {
           const receivedClusters = await getClusters();
           setClusters(receivedClusters);
@@ -59,6 +76,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
       }
 
       setLoading(false);
+      await SplashScreen.hide();
     })();
 
     return () => {};
@@ -156,6 +174,15 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
     }
   };
 
+  // editSettings changes the users settings to the ones provided. We are also saving these settings to the localStorage
+  // via the storage api.
+  const editSettings = (settings: IAppSettings) => {
+    document.body.classList.toggle('dark', settings.darkMode);
+
+    setSettings(settings);
+    saveSettings(settings);
+  };
+
   // setNamespace sets the provided namespace for the currently active cluster.
   const setNamespace = (namespace: string) => {
     if (clusters && cluster) {
@@ -188,17 +215,18 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
 
   // Render the context provider and pass in all required states and functions. While we are retrieving the cluster and
   // clusters we are only showing a spinner icon.
-  // Note: The spinner icon should be replaced with the splash screen in the future.
   return (
     <AppContext.Provider
       value={{
         clusters: clusters,
         cluster: cluster,
+        settings: settings,
 
         addCluster: addCluster,
         changeCluster: changeCluster,
         deleteCluster: deleteCluster,
         editCluster: editCluster,
+        editSettings: editSettings,
         setNamespace: setNamespace,
         request: request,
       }}
