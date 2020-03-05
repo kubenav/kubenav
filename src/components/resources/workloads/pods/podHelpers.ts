@@ -61,7 +61,7 @@ export const getResources = (containers: V1Container[], metrics: IPodMetrics|und
     }
   }
 
-  return `CPU: ${cpuUsage}m (${cpuRequests}m/${cpuLimits}m) | Memory: ${memoryUsage}Mi (${memoryRequests}Mi/${memoryLimits}Mi)`;
+  return `CPU: ${cpuUsage}m (${cpuRequests === 0 ? '-' : `${cpuRequests}m`}/${cpuLimits === 0 ? '-' : `${cpuLimits}m`}) | Memory: ${memoryUsage}Mi (${memoryRequests === 0 ? '-' : `${memoryRequests}Mi`}/${memoryLimits === 0 ? '-' : `${memoryLimits}Mi`})`;
 };
 
 // getRestarts returns the number of restarts for the pod, using the sum of container restarts.
