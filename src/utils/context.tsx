@@ -1,10 +1,13 @@
-import { IonSpinner, isPlatform } from '@ionic/react';
+import { Plugins } from '@capacitor/core';
+import { isPlatform } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 
 import { ICluster, IClusters, IContext } from '../declarations';
 import { getCluster, getClusters, kubernetesRequest } from './api';
 import { isBase64, randomString } from './helpers';
 import { readCluster, readClusters, removeCluster, removeClusters, saveCluster, saveClusters } from './storage';
+
+const { SplashScreen } = Plugins;
 
 // Creates a Context object. When React renders a component that subscribes to this Context object it will read the
 // current context value from the closest matching Provider above it in the tree.
@@ -200,7 +203,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
         request: request,
       }}
     >
-      {loading ? <IonSpinner className="spinner-centered" /> : children}
+      {loading ? null : children}
     </AppContext.Provider>
   )
 };
