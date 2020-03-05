@@ -36,7 +36,7 @@ import { formatResourceValue } from '../../../../../utils/helpers';
 import Editor from '../../../../misc/Editor';
 import IonCardEqualHeight from '../../../../misc/IonCardEqualHeight';
 import Row from '../../template/Row';
-import Logs from '../Logs';
+import Logs from './Logs';
 
 // getState returns the current state of the given container. This is used for the list view for init containers and
 // containers.
