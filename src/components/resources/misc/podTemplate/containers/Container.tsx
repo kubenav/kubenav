@@ -11,6 +11,7 @@ import {
   IonHeader,
   IonIcon,
   IonItem,
+  IonItemOption,
   IonItemOptions,
   IonItemSliding,
   IonLabel,
@@ -27,7 +28,7 @@ import {
   V1ContainerStatus,
   V1EnvVarSource,
 } from '@kubernetes/client-node'
-import { close } from 'ionicons/icons';
+import { close, list } from 'ionicons/icons';
 import yaml from 'js-yaml';
 import React, { useState } from 'react';
 
@@ -63,6 +64,7 @@ interface IContainerProps {
 
 const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, metrics, name, namespace, status }) => {
   const [showModal, setShowModal] = useState(false);
+  const [showLogs, setShowLogs] = useState(false);
 
   const containerState = (state: V1ContainerState): string => {
     if (state.running) {
@@ -123,16 +125,33 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
               CPU: {metrics && metrics.usage && metrics.usage.hasOwnProperty('cpu') ? formatResourceValue('cpu', metrics.usage['cpu']) : '-'} ({container.resources && container.resources.requests && container.resources.requests.hasOwnProperty('cpu') ? formatResourceValue('cpu', container.resources.requests['cpu']) : '-'}/{container.resources && container.resources.limits && container.resources.limits.hasOwnProperty('cpu') ? formatResourceValue('cpu', container.resources.limits['cpu']) : '-'}) | Memory: {metrics && metrics.usage && metrics.usage.hasOwnProperty('memory') ? formatResourceValue('memory', metrics.usage['memory']) : '-'} ({container.resources && container.resources.requests && container.resources.requests.hasOwnProperty('memory') ? formatResourceValue('memory', container.resources.requests['memory']) : '-'}/{container.resources && container.resources.limits && container.resources.limits.hasOwnProperty('memory') ? formatResourceValue('memory', container.resources.limits['memory']) : '-'})
             </p>
           </IonLabel>
-          {!isPlatform('hybrid') && logs && name && namespace
-            ? <Logs activator="button" name={name} namespace={namespace} container={container.name} /> : null}
+          {!isPlatform('hybrid') && logs && name && namespace ? (
+            <IonButton fill="outline" slot="end" onClick={(e) => { e.stopPropagation(); setShowLogs(true); }}>
+              <IonIcon slot="start" icon={list} />
+              Logs
+            </IonButton>
+          ) : null}
         </IonItem>
 
         {isPlatform('hybrid') && logs && name && namespace ? (
           <IonItemOptions side="end">
-            <Logs activator="item-option" name={name} namespace={namespace} container={container.name} />
+            <IonItemOption color="primary" onClick={() => setShowLogs(true)}>
+              <IonIcon slot="start" icon={list} />
+              Logs
+            </IonItemOption>
           </IonItemOptions>
         ) : null}
       </IonItemSliding>
+
+      {container && name && namespace ? (
+        <Logs
+          showModal={showLogs}
+          setShowModal={setShowLogs}
+          name={name}
+          namespace={namespace}
+          container={container.name}
+        />
+      ) : null}
 
       <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
         <IonHeader>

@@ -105,10 +105,7 @@ const Editor: React.FunctionComponent<IEditorProps> = ({
     <React.Fragment>
       {showScrollToBottomButton ? (
         <div className="editor-scroll-to-bottom-button">
-          <IonButton
-            size="small"
-            onClick={(e) => { e.stopPropagation(); scrollToBottom(); }}
-          >
+          <IonButton size="small"  onClick={() => { scrollToBottom(); }}>
             Scroll to Bottom
           </IonButton>
         </div>
