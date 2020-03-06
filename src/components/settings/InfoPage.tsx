@@ -61,7 +61,7 @@ const InfoPage: React.FunctionComponent = () => {
               and desktop implementation.
             </p>
             <IonList>
-              <IonListHeader>
+              <IonListHeader mode="md">
                 <IonLabel>General</IonLabel>
               </IonListHeader>
               <IonItem>
@@ -74,7 +74,7 @@ const InfoPage: React.FunctionComponent = () => {
 
               <License />
 
-              <IonListHeader>
+              <IonListHeader mode="md">
                 <IonLabel>Links</IonLabel>
               </IonListHeader>
               <IonItem href="https://kubenav.io" target="_blank" rel="noopener noreferrer">

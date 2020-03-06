@@ -43,7 +43,7 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections }) => {
         <IonList>
           <Sections sections={sections} isMenu={true} />
 
-          <IonListHeader>
+          <IonListHeader mode="md">
             <IonLabel>Settings</IonLabel>
           </IonListHeader>
           <IonMenuToggle autoHide={false}>
