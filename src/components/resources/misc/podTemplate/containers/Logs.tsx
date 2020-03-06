@@ -6,7 +6,6 @@ import {
   IonHeader,
   IonIcon,
   IonItem,
-  IonItemOption,
   IonLabel,
   IonList,
   IonModal,
@@ -15,26 +14,26 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import { close, ellipsisHorizontal, ellipsisVertical, list } from 'ionicons/icons';
+import { close, ellipsisHorizontal, ellipsisVertical } from 'ionicons/icons';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { IContext, TActivator } from '../../../../../declarations';
+import { IContext } from '../../../../../declarations';
 import { AppContext } from '../../../../../utils/context';
 import Editor from '../../../../misc/Editor';
 
 const TAIL_LINES = 1000;
 
 interface ILogsProps {
-  activator: TActivator;
+  showModal: boolean;
+  setShowModal: (value: boolean) => void;
   name: string;
   namespace: string;
   container: string;
 }
 
-const Logs: React.FunctionComponent<ILogsProps> = ({ activator, name, namespace, container }) => {
+const Logs: React.FunctionComponent<ILogsProps> = ({ showModal, setShowModal, name, namespace, container }) => {
   const context = useContext<IContext>(AppContext);
 
-  const [showModal, setShowModal] = useState<boolean>(false);
   const [showLoading, setShowLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [logs, setLogs] = useState<string>('');
@@ -89,32 +88,18 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ activator, name, namespace,
         />
       ) : null}
 
-      {activator === 'item-option' ? (
-        <IonItemOption color="primary" onClick={() => setShowModal(true)}>
-          <IonIcon slot="start" icon={list} />
-          Logs
-        </IonItemOption>
-      ) : null}
-
-      {activator === 'button' ? (
-        <IonButton fill="outline" slot="end" onClick={(e) => { e.stopPropagation(); setShowModal(true); }}>
-          <IonIcon slot="start" icon={list} />
-          Logs
-        </IonButton>
-      ) : null}
-
       <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonButton onClick={(e) => { e.stopPropagation(); setShowModal(false); }}>
+              <IonButton onClick={(e) => { setShowModal(false); }}>
                 <IonIcon slot="icon-only" icon={close} />
               </IonButton>
             </IonButtons>
             <IonTitle>{container}</IonTitle>
             <IonButtons slot="primary">
               <IonButton
-                onClick={(e) => { e.stopPropagation(); e.persist(); setPopoverEvent(e); setShowPopover(true); }}
+                onClick={(e) => { e.persist(); setPopoverEvent(e); setShowPopover(true); }}
               >
                 <IonIcon slot="icon-only" ios={ellipsisHorizontal} md={ellipsisVertical} />
               </IonButton>
@@ -125,28 +110,28 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ activator, name, namespace,
                 <IonItem
                   button={true}
                   detail={false}
-                  onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(false, TAIL_LINES); }}
+                  onClick={() => { setShowPopover(false); load(false, TAIL_LINES); }}
                 >
                   <IonLabel>{`Last ${TAIL_LINES} Log Lines`}</IonLabel>
                 </IonItem>
                 <IonItem
                   button={true}
                   detail={false}
-                  onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(false, 0); }}
+                  onClick={() => { setShowPopover(false); load(false, 0); }}
                 >
                   <IonLabel>All Log Lines</IonLabel>
                 </IonItem>
                 <IonItem
                   button={true}
                   detail={false}
-                  onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(true, TAIL_LINES); }}
+                  onClick={() => { setShowPopover(false); load(true, TAIL_LINES); }}
                 >
                   <IonLabel>{`Previous Last ${TAIL_LINES} Log Lines`}</IonLabel>
                 </IonItem>
                 <IonItem
                   button={true}
                   detail={false}
-                  onClick={(e) => { e.stopPropagation(); setShowPopover(false); load(true, 0); }}
+                  onClick={() => { setShowPopover(false); load(true, 0); }}
                 >
                   <IonLabel>All Previous Log Lines</IonLabel>
                 </IonItem>

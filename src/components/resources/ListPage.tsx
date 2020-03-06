@@ -4,9 +4,10 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonItemDivider,
+  IonItemGroup,
   IonLabel,
   IonList,
-  IonListHeader,
   IonMenuButton,
   IonPage,
   IonProgressBar,
@@ -40,7 +41,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }) => {
   const context = useContext<IContext>(AppContext);
 
   // namespace and showNamespace is used to group all items by namespace and to only show the namespace once via the
-  // IonListHeader component.
+  // IonItemDivider component.
   let namespace = '';
   let showNamespace = false;
 
@@ -133,11 +134,11 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }) => {
               }
 
               return (
-                <React.Fragment key={index}>
+                <IonItemGroup key={index}>
                   {showNamespace ? (
-                    <IonListHeader>
+                    <IonItemDivider>
                       <IonLabel>{namespace}</IonLabel>
-                    </IonListHeader>
+                    </IonItemDivider>
                   ) : null}
                   <ItemOptions
                     item={item}
@@ -148,7 +149,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }) => {
                   >
                     <Component key={index} item={item} section={match.params.section} type={match.params.type} />
                   </ItemOptions>
-                </React.Fragment>
+                </IonItemGroup>
               )
             }) : null}
           </IonList>

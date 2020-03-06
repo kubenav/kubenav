@@ -18,7 +18,7 @@ interface ISectionProps {
 const Section: React.FunctionComponent<ISectionProps> = ({ pages, title, sectionKey, isMenu }) => {
   return (
     <React.Fragment>
-      <IonListHeader>
+      <IonListHeader mode="md">
         <IonLabel>{title}</IonLabel>
       </IonListHeader>
       {Object.keys(pages).map(pageKey =>

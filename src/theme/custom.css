@@ -39,6 +39,11 @@
   margin-bottom: 20px !important;
 }
 
+/* Add top margin for img tag */
+.image-margin-top {
+  margin-top: 20px !important;
+}
+
 /* Table */
 table {
   min-width: 100%;
