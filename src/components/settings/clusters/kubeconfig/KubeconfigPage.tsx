@@ -12,7 +12,6 @@ import {
   IonTextarea,
   IonTitle,
   IonToolbar,
-  isPlatform,
 } from '@ionic/react';
 import yaml from 'js-yaml';
 import React, { useContext, useState } from 'react';
@@ -28,7 +27,6 @@ import {
   IKubeconfigUserRef
 } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
-import Editor from '../../../misc/Editor';
 
 const getKubeconfigCluster = (name: string, clusters: IKubeconfigClusterRef[]): IKubeconfigCluster|null => {
   for (let cluster of clusters) {
@@ -120,22 +118,12 @@ const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {isPlatform('hybrid') ? (
-          <IonList lines="full">
-            <IonItem>
-              <IonLabel position="stacked">Kubeconfig</IonLabel>
-              <IonTextarea autoGrow={true} value={kubeconfig} onInput={handleKubeconfig} />
-            </IonItem>
-          </IonList>
-        ) : (
-          <Editor
-            readOnly={false}
-            value={kubeconfig}
-            fullHeight={true}
-            mode="yaml"
-            onChange={(newValue: string) => setKubeconfig(newValue)}
-          />
-        )}
+        <IonList lines="full">
+          <IonItem>
+            <IonLabel position="stacked">Kubeconfig</IonLabel>
+            <IonTextarea autoGrow={true} value={kubeconfig} onInput={handleKubeconfig} />
+          </IonItem>
+        </IonList>
 
         {error !== '' ? (
           <IonAlert
