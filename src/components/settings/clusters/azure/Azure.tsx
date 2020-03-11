@@ -7,7 +7,7 @@ import {
   IonInput,
   IonItem,
   IonLabel,
-  IonList, IonToggle,
+  IonList, IonToast, IonToggle,
 } from '@ionic/react';
 import React, { useState } from 'react';
 
@@ -20,6 +20,7 @@ const Azure: React.FunctionComponent = () => {
   const [tenantID, setTenantID] = useState<string>('');
   const [resourceGroupName, setResourceGroupName] = useState<string>('');
   const [admin, setAdmin] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   const handleSubscriptionID = (event) => {
     setSubscriptionID(event.target.value);
@@ -46,16 +47,26 @@ const Azure: React.FunctionComponent = () => {
   };
 
   const importClusters = () => {
-    saveAzureCredentials({
-      subscriptionID: subscriptionID,
-      clientID: clientID,
-      clientSecret: clientSecret,
-      tenantID: tenantID,
-      resourceGroupName: resourceGroupName,
-      admin: admin,
-    });
+    if (
+      subscriptionID === ''
+      || clientID === ''
+      || clientSecret === ''
+      || tenantID === ''
+      || resourceGroupName === ''
+    ) {
+      setError('Subscription ID, Client ID, Client Secret, Tenant ID and Resource Group Name are required.');
+    } else {
+      saveAzureCredentials({
+        subscriptionID: subscriptionID,
+        clientID: clientID,
+        clientSecret: clientSecret,
+        tenantID: tenantID,
+        resourceGroupName: resourceGroupName,
+        admin: admin,
+      });
 
-    window.location.replace(`/settings/clusters/azure`);
+      window.location.replace(`/settings/clusters/azure`);
+    }
   };
 
   return (
@@ -104,6 +115,8 @@ const Azure: React.FunctionComponent = () => {
 
         <IonButton expand="block" onClick={() => importClusters()}>Import from Azure</IonButton>
       </IonCardContent>
+
+      <IonToast isOpen={error !== ''} onDidDismiss={() => setError('')} message={error} duration={3000} />
     </IonCard>
   );
 };

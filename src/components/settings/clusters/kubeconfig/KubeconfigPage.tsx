@@ -72,7 +72,7 @@ const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history
           const cluster = getKubeconfigCluster(ctx.context.cluster, config.clusters);
           const user = getKubeconfigUser(ctx.context.user, config.users);
 
-          if (ctx.name === '' || cluster === null || user === null || !cluster.server || !cluster['certificate-authority-data'] || !((user['client-certificate-data'] && user['client-key-data']) || user.token || !(user.username && user.password))) {
+          if (ctx.name === '' || cluster === null || user === null || !cluster.server || !((user['client-certificate-data'] && user['client-key-data']) || user.token || !(user.username && user.password))) {
             throw new Error('Invalid kubeconfig');
           }
 
