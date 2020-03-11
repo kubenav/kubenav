@@ -101,3 +101,13 @@ th {
 ion-avatar {
   --border-radius: 0px;
 }
+
+/* Center a header image in the card header and set the background color to the used primary color */
+.card-header-image {
+  text-align: center;
+  background-color: var(--ion-color-primary);
+}
+
+.card-header-image img {
+  margin: auto;
+}

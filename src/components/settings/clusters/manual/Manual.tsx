@@ -10,7 +10,9 @@ import React from 'react';
 const Manual: React.FunctionComponent = () => {
   return (
     <IonCard>
-      <img alt="GCP" src="/assets/card-header-kubernetes.png" />
+      <div className="card-header-image">
+        <img alt="Manual" src="/assets/card-header-kubernetes.png" />
+      </div>
       <IonCardHeader>
         <IonCardTitle>Manual Configuration</IonCardTitle>
       </IonCardHeader>

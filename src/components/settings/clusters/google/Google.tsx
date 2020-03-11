@@ -24,7 +24,9 @@ const Google: React.FunctionComponent = () => {
 
   return (
     <IonCard>
-      <img alt="GCP" src="/assets/card-header-gcp.png" />
+      <div className="card-header-image">
+        <img alt="GCP" src="/assets/card-header-gcp.png" />
+      </div>
       <IonCardHeader>
         <IonCardTitle>Import from Google Cloud Platform</IonCardTitle>
       </IonCardHeader>

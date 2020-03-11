@@ -12,6 +12,7 @@ import { add, close } from 'ionicons/icons';
 import React, { useState } from 'react';
 
 import AWS from './aws/AWS';
+import Azure from './azure/Azure';
 import Google from './google/Google';
 import Kubeconfig from './kubeconfig/Kubeconfig';
 import Manual from './manual/Manual';
@@ -35,6 +36,7 @@ const AddCluster: React.FunctionComponent = () => {
         <IonContent>
           <Google />
           <AWS />
+          <Azure />
           <Kubeconfig />
           <Manual />
         </IonContent>
