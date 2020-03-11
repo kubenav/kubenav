@@ -73,8 +73,6 @@ const ManualPage: React.FunctionComponent<IManualPageProps> = ({ history }) => {
       setError('Server is required')
     } else if (!url.startsWith('https://')) {
       setError('Invalid URL')
-    } else if (certificateAuthorityData === '') {
-      setError('Certificate Authority Data is required')
     } else if (clientCertificateData === '' && clientKeyData === '' && token === '' && username === '' && password === '') {
       setError('Client Certificate Data and Client Key Data or Token or Username and Password is required')
     } else {
