@@ -27,7 +27,6 @@ const ClustersPage: React.FunctionComponent = () => {
           </IonButtons>
           <IonTitle>Clusters</IonTitle>
           {isPlatform('hybrid') ? <AddCluster /> : null}
-          <AddCluster />
         </IonToolbar>
       </IonHeader>
       <IonContent>
