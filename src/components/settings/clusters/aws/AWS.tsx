@@ -10,6 +10,7 @@ import {
   IonList,
   IonSelect,
   IonSelectOption,
+  IonToast,
 } from '@ionic/react';
 import React, { useState } from 'react';
 
@@ -20,6 +21,7 @@ const AWS: React.FunctionComponent = () => {
   const [accessKeyID, setAccessKeyID] = useState<string>('');
   const [region, setRegion] = useState<string>('');
   const [secretKey, setSecretKey] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const handleAccessKeyID = (event) => {
     setAccessKeyID(event.target.value);
@@ -34,16 +36,20 @@ const AWS: React.FunctionComponent = () => {
   };
 
   const importClusters = () => {
-    let tokens: IAWSTokens = readAWSTokens();
+    if (accessKeyID === '' || region === '' || secretKey === '') {
+      setError('Access Key ID, Secret Key and Region are required.');
+    } else {
+      let tokens: IAWSTokens = readAWSTokens();
 
-    tokens[region] = {
-      accessKeyID: accessKeyID,
-      secretKey: secretKey,
-    };
+      tokens[region] = {
+        accessKeyID: accessKeyID,
+        secretKey: secretKey,
+      };
 
-    saveAWSTokens(tokens);
+      saveAWSTokens(tokens);
 
-    window.location.replace(`/settings/clusters/aws/${region}`);
+      window.location.replace(`/settings/clusters/aws/${region}`);
+    }
   };
 
   return (
@@ -103,6 +109,8 @@ const AWS: React.FunctionComponent = () => {
 
         <IonButton expand="block" onClick={() => importClusters()}>Import from AWS</IonButton>
       </IonCardContent>
+
+      <IonToast isOpen={error !== ''} onDidDismiss={() => setError('')} message={error} duration={3000} />
     </IonCard>
   );
 };
