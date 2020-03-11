@@ -47,7 +47,13 @@ const Azure: React.FunctionComponent = () => {
   };
 
   const importClusters = () => {
-    if (subscriptionID === '' || clientID == '' || clientSecret === '' || tenantID === '' || resourceGroupName === '') {
+    if (
+      subscriptionID === ''
+      || clientID === ''
+      || clientSecret === ''
+      || tenantID === ''
+      || resourceGroupName === ''
+    ) {
       setError('Subscription ID, Client ID, Client Secret, Tenant ID and Resource Group Name are required.');
     } else {
       saveAzureCredentials({
