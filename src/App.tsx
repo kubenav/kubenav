@@ -25,6 +25,7 @@ import CustomResourcesListPage from './components/resources/cluster/customResour
 import DetailsPage from './components/resources/DetailsPage';
 import ListPage from './components/resources/ListPage';
 import ClustersAWSPage from './components/settings/clusters/aws/AWSPage';
+import ClustersAzurePage from './components/settings/clusters/azure/AzurePage';
 import ClustersGooglePage from './components/settings/clusters/google/GooglePage';
 import ClustersKubeconfigPage from './components/settings/clusters/kubeconfig/KubeconfigPage';
 import ClustersManualPage from './components/settings/clusters/manual/ManualPage';
@@ -50,6 +51,7 @@ const App: React.FunctionComponent = () => (
             <Route path="/customresources/:group/:version/:name" component={CustomResourcesListPage} exact={true} />
             <Route path="/settings/clusters" component={ClustersPage} exact={true} />
             <Route path="/settings/clusters/aws/:region" component={ClustersAWSPage} exact={true} />
+            <Route path="/settings/clusters/azure" component={ClustersAzurePage} exact={true} />
             <Route path="/settings/clusters/google" component={ClustersGooglePage} exact={true} />
             <Route path="/settings/clusters/kubeconfig" component={ClustersKubeconfigPage} exact={true} />
             <Route path="/settings/clusters/manual" component={ClustersManualPage} exact={true} />

@@ -48,7 +48,9 @@ const AWS: React.FunctionComponent = () => {
 
   return (
     <IonCard>
-      <img alt="GCP" src="/assets/card-header-aws.png" />
+      <div className="card-header-image">
+        <img alt="AWS" src="/assets/card-header-aws.png" />
+      </div>
       <IonCardHeader>
         <IonCardTitle>Import from Amazon Web Services</IonCardTitle>
       </IonCardHeader>

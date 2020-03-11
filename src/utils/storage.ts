@@ -1,7 +1,8 @@
-import { IAppSettings, IAWSTokens, IClusters, IGoogleTokens } from '../declarations';
+import { IAppSettings, IAWSTokens, IAzureCredentials, IClusters, IGoogleTokens } from '../declarations';
 import {
   DEFAULT_SETTINGS,
   STORAGE_AWS_TOKENS,
+  STORAGE_AZURE_CREDENTIALS,
   STORAGE_CLUSTER,
   STORAGE_CLUSTERS,
   STORAGE_GOOGLE_CLIENT_ID,
@@ -13,6 +14,12 @@ import {
 // empty object is returned. Therefore it must be checked if the needed region property exists.
 export const readAWSTokens = (): IAWSTokens => {
   return localStorage.getItem(STORAGE_AWS_TOKENS) ? JSON.parse(localStorage.getItem(STORAGE_AWS_TOKENS) as string) : {};
+};
+
+// readAzureCredentials returns the save IDs for Azure. If there are no IDs saved the function returns undefined.
+export const readAzureCredentials = (): IAzureCredentials|undefined => {
+  const ids = localStorage.getItem(STORAGE_AZURE_CREDENTIALS);
+  return ids ? JSON.parse(ids) : undefined;
 };
 
 // readCluster returns the saved active cluster from localStorage. If there is no value in the localStorage or the saved
@@ -64,6 +71,11 @@ export const removeClusters = () => {
 // saveAWSTokens saves the provided tokens to localStorage.
 export const saveAWSTokens = (tokens: IAWSTokens) => {
   localStorage.setItem(STORAGE_AWS_TOKENS, JSON.stringify(tokens));
+};
+
+// saveAzureCredentials saves the provided IDs (client, tenant, subscription) for Azure to localStorage.
+export const saveAzureCredentials = (ids: IAzureCredentials) => {
+  localStorage.setItem(STORAGE_AZURE_CREDENTIALS, JSON.stringify(ids));
 };
 
 // saveCluster saves the given cluster id to localStorage.

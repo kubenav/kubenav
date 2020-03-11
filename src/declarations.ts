@@ -59,6 +59,20 @@ export interface IAWSTokens {
   [key: string]: IAWSToken;
 }
 
+export interface IAzureCluster {
+  name: string;
+  kubeconfig: IKubeconfig;
+}
+
+export interface IAzureCredentials {
+  subscriptionID: string;
+  clientID: string;
+  clientSecret: string;
+  tenantID: string;
+  resourceGroupName: string;
+  admin: boolean;
+}
+
 export interface ICluster {
   id: string;
   name: string;

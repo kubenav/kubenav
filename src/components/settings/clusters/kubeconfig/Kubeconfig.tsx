@@ -10,7 +10,9 @@ import React from 'react';
 const Kubeconfig: React.FunctionComponent = () => {
   return (
     <IonCard>
-      <img alt="GCP" src="/assets/card-header-kubernetes.png" />
+      <div className="card-header-image">
+        <img alt="Kubeconfig" src="/assets/card-header-kubernetes.png" />
+      </div>
       <IonCardHeader>
         <IonCardTitle>Import Kubeconfig</IonCardTitle>
       </IonCardHeader>

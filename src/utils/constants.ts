@@ -15,6 +15,7 @@ export const GOOGLE_RESPONSE_TYPE = 'code';
 export const GOOGLE_SCOPE = 'https://www.googleapis.com/auth/cloud-platform';
 
 export const STORAGE_AWS_TOKENS = 'aws';
+export const STORAGE_AZURE_CREDENTIALS = 'azure';
 export const STORAGE_CLUSTER = 'cluster';
 export const STORAGE_CLUSTERS = 'clusters';
 export const STORAGE_GOOGLE_CLIENT_ID = 'google_clientid';

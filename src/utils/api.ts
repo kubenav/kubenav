@@ -5,6 +5,7 @@ import { KubenavPlugin as KubenavWebPlugin } from '@kubenav/kubenav-plugin';
 import {
   IAWSCluster,
   IAWSTokens,
+  IAzureCluster,
   ICluster,
   IClusters,
   IGoogleCluster,
@@ -84,6 +85,44 @@ export const getAWSToken = async (
       return JSON.parse(data.data).token;
     } else {
       throw new Error('Could not get AWS token');
+    }
+  } catch (err) {
+    throw err
+  }
+};
+
+// getAzureClusters returns all AKS clusters from Azure for the provided subscription ID, client ID, client secret,
+// tenant ID and resource group. The user can decide if he want to retrieve the admin or user credentials.
+export const getAzureClusters = async (
+  subscriptionID: string,
+  clientID: string,
+  clientSecret: string,
+  tenantID: string,
+  resourceGroupName: string,
+  admin: boolean,
+): Promise<IAzureCluster[]> => {
+  let plugin: any;
+
+  if (isPlatform('hybrid')) {
+    plugin = KubenavPlugin;
+  } else {
+    plugin = KubenavWebPlugin;
+  }
+
+  try {
+    let data = await plugin.azureGetClusters({
+      subscriptionID: subscriptionID,
+      clientID: clientID,
+      clientSecret: clientSecret,
+      tenantID: tenantID,
+      resourceGroupName: resourceGroupName,
+      admin: admin,
+    });
+
+    if (data.data !== '') {
+      return JSON.parse(data.data);
+    } else {
+      throw new Error('No cluster was found');
     }
   } catch (err) {
     throw err
