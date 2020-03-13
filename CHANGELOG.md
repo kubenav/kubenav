@@ -1,5 +1,45 @@
 # Changelog
 
+## [1.3.0](https://github.com/kubenav/kubenav/tree/1.3.0) (2020-03-13)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/1.2.0...1.3.0)
+
+**Implemented enhancements:**
+
+- Import from Microsoft Azure [\#26](https://github.com/kubenav/kubenav/issues/26)
+- Use host .kube/config file / kubectl command on Mac OS X [\#13](https://github.com/kubenav/kubenav/issues/13)
+- Add Support for Microsoft Azure [\#46](https://github.com/kubenav/kubenav/pull/46) ([ricoberger](https://github.com/ricoberger))
+- Appearance Customization \(Dark Mode + Editor Theme\) [\#43](https://github.com/kubenav/kubenav/pull/43) ([ricoberger](https://github.com/ricoberger))
+- Improve pod and container view [\#42](https://github.com/kubenav/kubenav/pull/42) ([ricoberger](https://github.com/ricoberger))
+- Add status information to list view [\#41](https://github.com/kubenav/kubenav/pull/41) ([ricoberger](https://github.com/ricoberger))
+- Show namespace in list view [\#40](https://github.com/kubenav/kubenav/pull/40) ([ricoberger](https://github.com/ricoberger))
+- Add nightly builds [\#33](https://github.com/kubenav/kubenav/pull/33) ([ricoberger](https://github.com/ricoberger))
+- Use kubeconfig on desktop [\#25](https://github.com/kubenav/kubenav/pull/25) ([ricoberger](https://github.com/ricoberger))
+
+**Fixed bugs:**
+
+- Importing AWS EKS cluster returns just one cluster [\#35](https://github.com/kubenav/kubenav/issues/35)
+- Using kubeconfig from Rancher does not work [\#32](https://github.com/kubenav/kubenav/issues/32)
+- Improve required data checks [\#47](https://github.com/kubenav/kubenav/pull/47) ([ricoberger](https://github.com/ricoberger))
+- Multiple UI Fixes [\#45](https://github.com/kubenav/kubenav/pull/45) ([ricoberger](https://github.com/ricoberger))
+- Fix logs modal for valid json [\#44](https://github.com/kubenav/kubenav/pull/44) ([ricoberger](https://github.com/ricoberger))
+- Fix adding EKS and GKE clusters [\#36](https://github.com/kubenav/kubenav/pull/36) ([ricoberger](https://github.com/ricoberger))
+- Fix status for init containers [\#24](https://github.com/kubenav/kubenav/pull/24) ([ricoberger](https://github.com/ricoberger))
+
+**Closed issues:**
+
+- User "system:anonymous" cannot list resource  [\#30](https://github.com/kubenav/kubenav/issues/30)
+- Does this work on AWS EKS? [\#27](https://github.com/kubenav/kubenav/issues/27)
+
+**Merged pull requests:**
+
+- Restructuring III [\#39](https://github.com/kubenav/kubenav/pull/39) ([ricoberger](https://github.com/ricoberger))
+- Add utils folder to repo [\#38](https://github.com/kubenav/kubenav/pull/38) ([ricoberger](https://github.com/ricoberger))
+- Restructuring II [\#37](https://github.com/kubenav/kubenav/pull/37) ([ricoberger](https://github.com/ricoberger))
+- Restructuring I [\#34](https://github.com/kubenav/kubenav/pull/34) ([ricoberger](https://github.com/ricoberger))
+- Update Dependencies [\#23](https://github.com/kubenav/kubenav/pull/23) ([ricoberger](https://github.com/ricoberger))
+- Increase width of modals for larger sized screens [\#22](https://github.com/kubenav/kubenav/pull/22) ([armandvanderwalt](https://github.com/armandvanderwalt))
+
 ## [1.2.0](https://github.com/kubenav/kubenav/tree/1.2.0) (2020-02-17)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/1.1.0...1.2.0)
