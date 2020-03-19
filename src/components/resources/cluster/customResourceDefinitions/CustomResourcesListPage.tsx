@@ -1,12 +1,15 @@
 import {
-  IonBackButton, IonButton,
+  IonBackButton,
+  IonButton,
   IonButtons,
   IonContent,
-  IonHeader, IonIcon,
+  IonHeader,
+  IonIcon,
   IonList,
   IonPage,
   IonProgressBar,
   IonRefresher,
+  IonSearchbar,
   IonTitle,
   IonToolbar,
   isPlatform,
@@ -41,6 +44,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
   const [showLoading, setShowLoading] = useState<boolean>(false);
   const [items, setItems] = useState<any>();
   const [url, setUrl] = useState<string>('');
+  const [searchText, setSearchText] = useState<string>('');
 
   useEffect(() => {
     (async() => {
@@ -103,15 +107,22 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
         <IonRefresher slot="fixed" onIonRefresh={doRefresh} />
 
         {error === '' && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? (
-          <IonList>
-            {match.url === url && items ? items.map((item, index) => {
-              return (
-                <ItemOptions key={index} item={item} url={`${getURL(item.metadata ? item.metadata.namespace : '', match.params.group, match.params.version, match.params.name)}/${item.metadata ? item.metadata.name : ''}`}>
-                  <CustomResourceItem item={item} />
-                </ItemOptions>
-              )
-            }) : null}
-          </IonList>
+          <React.Fragment>
+            <IonSearchbar inputmode="search" value={searchText} onIonChange={e => setSearchText(e.detail.value!)} />
+
+            <IonList>
+              {match.url === url && items ? items.filter((item) => {
+                const regex = new RegExp(searchText, 'gi');
+                return item.metadata && item.metadata.name && item.metadata.name.match(regex);
+              }).map((item, index) => {
+                return (
+                  <ItemOptions key={index} item={item} url={`${getURL(item.metadata ? item.metadata.namespace : '', match.params.group, match.params.version, match.params.name)}/${item.metadata ? item.metadata.name : ''}`}>
+                    <CustomResourceItem item={item} />
+                  </ItemOptions>
+                )
+              }) : null}
+            </IonList>
+          </React.Fragment>
         ) : <LoadingErrorCard cluster={context.cluster} clusters={context.clusters} error={error} icon="/assets/icons/kubernetes/crd.png" text={`Could not get Custom Resource "${match.params.name}"`} />}
       </IonContent>
     </IonPage>

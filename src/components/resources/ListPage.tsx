@@ -12,6 +12,7 @@ import {
   IonPage,
   IonProgressBar,
   IonRefresher,
+  IonSearchbar,
   IonTitle,
   IonToolbar,
   isPlatform,
@@ -58,6 +59,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }) => {
   const [showLoading, setShowLoading] = useState<boolean>(false);
   const [items, setItems] = useState<any>();
   const [url, setUrl] = useState<string>('');
+  const [searchText, setSearchText] = useState<string>('');
 
   // When the component is rendered the first time and on every change route change or a modification to the context
   // object we are loading all items for the corresponding resource.
@@ -123,36 +125,43 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }) => {
         <IonRefresher slot="fixed" onIonRefresh={doRefresh} />
 
         {error === '' && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? (
-          <IonList>
-            {match.url === url && items ? items.map((item, index) => {
-              if (isNamespaced(match.params.type) && item.metadata && item.metadata.namespace
-                && item.metadata.namespace !== namespace) {
-                namespace = item.metadata.namespace;
-                showNamespace = true;
-              } else {
-                showNamespace = false;
-              }
+          <React.Fragment>
+            <IonSearchbar inputmode="search" value={searchText} onIonChange={e => setSearchText(e.detail.value!)} />
 
-              return (
-                <IonItemGroup key={index}>
-                  {showNamespace ? (
-                    <IonItemDivider>
-                      <IonLabel>{namespace}</IonLabel>
-                    </IonItemDivider>
-                  ) : null}
-                  <ItemOptions
-                    item={item}
-                    url={page.detailsURL(
-                      item.metadata ? item.metadata.namespace : '',
-                      item.metadata ? item.metadata.name : ''
-                    )}
-                  >
-                    <Component key={index} item={item} section={match.params.section} type={match.params.type} />
-                  </ItemOptions>
-                </IonItemGroup>
-              )
-            }) : null}
-          </IonList>
+            <IonList>
+              {match.url === url && items ? items.filter((item) => {
+                const regex = new RegExp(searchText, 'gi');
+                return item.metadata && item.metadata.name && item.metadata.name.match(regex);
+              }).map((item, index) => {
+                if (isNamespaced(match.params.type) && item.metadata && item.metadata.namespace
+                  && item.metadata.namespace !== namespace) {
+                  namespace = item.metadata.namespace;
+                  showNamespace = true;
+                } else {
+                  showNamespace = false;
+                }
+
+                return (
+                  <IonItemGroup key={index}>
+                    {showNamespace ? (
+                      <IonItemDivider>
+                        <IonLabel>{namespace}</IonLabel>
+                      </IonItemDivider>
+                    ) : null}
+                    <ItemOptions
+                      item={item}
+                      url={page.detailsURL(
+                        item.metadata ? item.metadata.namespace : '',
+                        item.metadata ? item.metadata.name : ''
+                      )}
+                    >
+                      <Component key={index} item={item} section={match.params.section} type={match.params.type} />
+                    </ItemOptions>
+                  </IonItemGroup>
+                )
+              }) : null}
+            </IonList>
+          </React.Fragment>
         ) : (
           <LoadingErrorCard
             cluster={context.cluster}
