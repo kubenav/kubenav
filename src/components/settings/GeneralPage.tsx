@@ -13,7 +13,8 @@ import {
   IonSelectOption,
   IonTitle,
   IonToggle,
-  IonToolbar, isPlatform,
+  IonToolbar,
+  isPlatform,
 } from '@ionic/react';
 import React, { useContext } from 'react';
 

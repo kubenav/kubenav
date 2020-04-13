@@ -92,7 +92,11 @@ const OIDC: React.FunctionComponent = () => {
 
       <IonCardContent>
         <p className="paragraph-margin-bottom">
-          Choose this option to add an OIDC provider for your clusters.
+          Choose this option to use an OIDC provider for the authentication against your Kubernetes API server. If you
+          have already added an OIDC provider you can use the <b>Use existing OIDC Provider</b> button. If you add a new
+          OIDC provider you have to add the <b>Discovery URL</b> (this field is also known as
+          <code>idp-issuer-url</code>), a <b>Client ID</b> and a <b>Client Secret</b>. When you create the Client ID and
+          Client Secret you have to allow <code>https://kubenav.io/oidc.html</code> as redirect URL.
         </p>
 
         <IonList className="paragraph-margin-bottom" lines="full">
