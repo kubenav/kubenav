@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.4.0](https://github.com/kubenav/kubenav/tree/1.4.0) (2020-04-13)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/1.3.0...1.4.0)
+
+**Implemented enhancements:**
+
+- Feature: find in lists [\#49](https://github.com/kubenav/kubenav/issues/49)
+- Ability to add IBM Cluster [\#48](https://github.com/kubenav/kubenav/issues/48)
+- Add Support for OIDC [\#53](https://github.com/kubenav/kubenav/pull/53) ([ricoberger](https://github.com/ricoberger))
+- Add searchbar for list views [\#51](https://github.com/kubenav/kubenav/pull/51) ([ricoberger](https://github.com/ricoberger))
+
+**Closed issues:**
+
+- User "system:anonymous" cannot list resource [\#31](https://github.com/kubenav/kubenav/issues/31)
+
 ## [1.3.0](https://github.com/kubenav/kubenav/tree/1.3.0) (2020-03-13)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/1.2.0...1.3.0)
