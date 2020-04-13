@@ -16,6 +16,7 @@ import Azure from './azure/Azure';
 import Google from './google/Google';
 import Kubeconfig from './kubeconfig/Kubeconfig';
 import Manual from './manual/Manual';
+import OIDC from './oidc/OIDC';
 
 const AddCluster: React.FunctionComponent = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -37,6 +38,7 @@ const AddCluster: React.FunctionComponent = () => {
           <Google />
           <AWS />
           <Azure />
+          <OIDC />
           <Kubeconfig />
           <Manual />
         </IonContent>

@@ -16,13 +16,15 @@ import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { IAppSections } from '../../declarations';
-import { CUSTOM_URI_SCHEME, GOOGLE_REDIRECT_URI } from '../../utils/constants';
+import { CUSTOM_URI_SCHEME, GOOGLE_REDIRECT_URI, OIDC_REDIRECT_URL } from '../../utils/constants';
 import Sections from './Sections'
 
 const { App } = Plugins;
 
 App.addListener('appUrlOpen', (data) => {
   if (data.url.startsWith(GOOGLE_REDIRECT_URI)) {
+    window.location.replace(data.url.replace(`${CUSTOM_URI_SCHEME}:`, ''));
+  } else if (data.url.startsWith(OIDC_REDIRECT_URL)) {
     window.location.replace(data.url.replace(`${CUSTOM_URI_SCHEME}:`, ''));
   }
 });

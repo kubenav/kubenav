@@ -14,11 +14,13 @@ import {
   IonTitle,
   IonToggle,
   IonToolbar,
+  isPlatform,
 } from '@ionic/react';
 import React, { useContext } from 'react';
 
 import { IContext } from '../../declarations';
 import { AppContext } from '../../utils/context';
+import OIDCProvider from './general/OIDCProvider';
 
 const GeneralPage: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);
@@ -100,6 +102,23 @@ const GeneralPage: React.FunctionComponent = () => {
               </IonSelect>
             </IonItem>
           </IonItemGroup>
+
+          {isPlatform('hybrid') ? (
+            <IonItemGroup>
+              <IonItemDivider>
+                <IonLabel>OIDC Provider</IonLabel>
+              </IonItemDivider>
+              {context.oidcProviders ? Object.keys(context.oidcProviders).map(provider => {
+                return (
+                  <OIDCProvider key={provider} provider={provider} />
+                )
+              }) : (
+                <IonItem>
+                  <IonLabel><h2>No OIDC Provider found</h2></IonLabel>
+                </IonItem>
+              )}
+            </IonItemGroup>
+          ) : null}
         </IonList>
       </IonContent>
     </IonPage>

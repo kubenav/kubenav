@@ -1,4 +1,11 @@
-import { IAppSettings, IAWSTokens, IAzureCredentials, IClusters, IGoogleTokens } from '../declarations';
+import {
+  IAppSettings,
+  IAWSTokens,
+  IAzureCredentials,
+  IClusters,
+  IGoogleTokens,
+  IOIDCProviders,
+} from '../declarations';
 import {
   DEFAULT_SETTINGS,
   STORAGE_AWS_TOKENS,
@@ -7,7 +14,9 @@ import {
   STORAGE_CLUSTERS,
   STORAGE_GOOGLE_CLIENT_ID,
   STORAGE_GOOGLE_TOKENS,
-  STORAGE_SETTINGS
+  STORAGE_OIDC_PROVIDERS,
+  STORAGE_OIDC_PROVIDERS_LAST,
+  STORAGE_SETTINGS,
 } from './constants';
 
 // readAWSTokens returns the tokens required for API requests against AWS. If there is no entry in the localStorage an
@@ -50,6 +59,27 @@ export const readGoogleTokens = (): IGoogleTokens|undefined => {
     ? JSON.parse(localStorage.getItem(STORAGE_GOOGLE_TOKENS)!) : undefined;
 };
 
+// readOIDCLastProvider returns the saved name of the last used OIDC provider. This is used to assign a redirect to the
+// added OIDC provider.
+export const readOIDCLastProvider = (): string => {
+  const provider = localStorage.getItem(STORAGE_OIDC_PROVIDERS_LAST);
+  if (provider) {
+    return provider;
+  }
+
+  return '';
+};
+
+// readOIDCProviders returns all saved OIDC providers.
+export const readOIDCProviders = (): IOIDCProviders|undefined => {
+  const providers = localStorage.getItem(STORAGE_OIDC_PROVIDERS);
+  if (providers) {
+    return JSON.parse(providers);
+  }
+
+  return undefined;
+};
+
 // readSettings returns the settings set by the user. If the user had not modified the settings yet, return the default
 // settings.
 export const readSettings = (): IAppSettings => {
@@ -67,6 +97,11 @@ export const removeCluster = () => {
 export const removeClusters = () => {
   localStorage.removeItem(STORAGE_CLUSTERS);
 };
+
+// removeOIDCProviders removes the saved OIDC providers from localStorage.
+export const removeOIDCProviders = () => {
+  localStorage.removeItem(STORAGE_OIDC_PROVIDERS);
+}
 
 // saveAWSTokens saves the provided tokens to localStorage.
 export const saveAWSTokens = (tokens: IAWSTokens) => {
@@ -100,6 +135,17 @@ export const saveGoogleTokens = (tokens: IGoogleTokens) => {
 // saveGoogleClientID saves the Google client id to the localStorage.
 export const saveGoogleClientID = (clientID: string) => {
   localStorage.setItem(STORAGE_GOOGLE_CLIENT_ID, clientID);
+};
+
+// saveOIDCLastProvider is used to save the name of the last used OIDC provider, This is used to assign the OIDC
+// provider to the redirect if the provider is added.
+export const saveOIDCLastProvider = (provider: string) => {
+  localStorage.setItem(STORAGE_OIDC_PROVIDERS_LAST, provider)
+}
+
+// saveOIDCProviders is used to save all OIDC providers to localStorage.
+export const saveOIDCProviders = (providers: IOIDCProviders) =>  {
+  localStorage.setItem(STORAGE_OIDC_PROVIDERS, JSON.stringify(providers))
 };
 
 // saveSettings saves the users settings to the localStorage.

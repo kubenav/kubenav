@@ -10,15 +10,17 @@ import {
   IClusters,
   IGoogleCluster,
   IGoogleProject,
-  IGoogleTokens
+  IGoogleTokens,
+  IOIDCProvider,
+  IOIDCProviderToken,
 } from '../declarations';
-import { GOOGLE_REDIRECT_URI, SERVER } from './constants';
+import { GOOGLE_REDIRECT_URI, OIDC_REDIRECT_URL_WEB, SERVER } from './constants';
 import { isJSON } from './helpers';
 import {
   readAWSTokens,
   readGoogleClientID,
   readGoogleTokens,
-  saveGoogleTokens
+  saveGoogleTokens,
 } from './storage';
 
 const { KubenavPlugin } = Plugins;
@@ -341,3 +343,106 @@ export const kubernetesRequest = async (method: string, url: string, body: strin
     throw err;
   }
 };
+
+// getOIDCAccessToken returns a new id and access token for the provided OIDC provider. To get a new id and access token
+// a valid refresh token is required.
+export const getOIDCAccessToken = async (provider: IOIDCProvider): Promise<IOIDCProviderToken> => {
+  let plugin: any;
+
+  if (isPlatform('hybrid')) {
+    plugin = KubenavPlugin;
+  } else {
+    plugin = KubenavWebPlugin;
+  }
+
+  if (provider.expiry - 60 > Math.floor(Date.now() / 1000)) {
+    return {
+      'id_token': provider.idToken,
+      'refresh_token': provider.refreshToken,
+      'access_token': provider.accessToken,
+      'expiry': provider.expiry
+    }
+  }
+
+  try {
+    let data = await plugin.oidcGetAccessToken({
+      discoveryURL: provider.idpIssuerURL,
+      clientID: provider.clientID,
+      clientSecret: provider.clientSecret,
+      redirectURL: OIDC_REDIRECT_URL_WEB,
+      refreshToken: provider.refreshToken,
+    });
+
+    if (data.data !== '') {
+      return JSON.parse(data.data);
+    } else {
+      throw new Error('Could not get id token for OIDC provider.');
+    }
+  } catch (err) {
+    throw err
+  }
+}
+
+// getOIDCLink returns the login link for the OIDC provider. The user is redirect to the returned link. After the user
+// logged in the getOIDCRefreshToken function is used to exchange the returned code for a refresh token.
+export const getOIDCLink = async (discoveryURL: string, clientID: string, clientSecret: string): Promise<string> => {
+  let plugin: any;
+
+  if (isPlatform('hybrid')) {
+    plugin = KubenavPlugin;
+  } else {
+    plugin = KubenavWebPlugin;
+  }
+
+  try {
+    let data = await plugin.oidcGetLink({
+      discoveryURL: discoveryURL,
+      clientID: clientID,
+      clientSecret: clientSecret,
+      redirectURL: OIDC_REDIRECT_URL_WEB,
+    });
+
+    if (data.data !== '') {
+      return JSON.parse(data.data).url;
+    } else {
+      throw new Error('Could not get URL for OIDC provider.');
+    }
+  } catch (err) {
+    throw err
+  }
+}
+
+// getOIDCRefreshToken is used to exchange the returned code from the login against a refresh token. The refresh token
+// is used to get a new id and access token, which is used to make requests against the Kubernetes API.
+export const getOIDCRefreshToken = async (
+  discoveryURL: string,
+  clientID: string,
+  clientSecret: string,
+  code: string
+): Promise<IOIDCProviderToken> => {
+  let plugin: any;
+
+  if (isPlatform('hybrid')) {
+    plugin = KubenavPlugin;
+  } else {
+    plugin = KubenavWebPlugin;
+  }
+
+  try {
+    let data = await plugin.oidcGetRefreshToken({
+      discoveryURL: discoveryURL,
+      clientID: clientID,
+      clientSecret: clientSecret,
+      redirectURL: OIDC_REDIRECT_URL_WEB,
+      code: code,
+    });
+
+    if (data.data !== '') {
+      return JSON.parse(data.data);
+    } else {
+      throw new Error('Could not get refresh token for OIDC provider.');
+    }
+  } catch (err) {
+    throw err
+  }
+}
