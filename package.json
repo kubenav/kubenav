@@ -46,7 +46,7 @@
     "@ionic/react": "^5.0.1",
     "@ionic/react-hooks": "0.0.6",
     "@ionic/react-router": "^5.0.1",
-    "@kubenav/kubenav-plugin": "1.6.0",
+    "@kubenav/kubenav-plugin": "1.6.1",
     "@kubernetes/client-node": "^0.11.1",
     "@types/jest": "^25.1.2",
     "@types/node": "^13.7.2",
