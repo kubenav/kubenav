@@ -2,18 +2,21 @@ import { Plugins } from '@capacitor/core';
 import { isPlatform } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 
-import { IAppSettings, ICluster, IClusters, IContext } from '../declarations';
-import { getCluster, getClusters, kubernetesRequest } from './api';
+import { IAppSettings, ICluster, IClusters, IContext, IOIDCProvider, IOIDCProviders } from '../declarations';
+import { getCluster, getClusters, getOIDCAccessToken, kubernetesRequest } from './api';
 import { DEFAULT_SETTINGS } from './constants';
 import { isBase64, randomString } from './helpers';
 import {
   readCluster,
   readClusters,
+  readOIDCProviders,
   readSettings,
   removeCluster,
   removeClusters,
+  removeOIDCProviders,
   saveCluster,
   saveClusters,
+  saveOIDCProviders,
   saveSettings,
 } from './storage';
 
@@ -24,11 +27,14 @@ const { SplashScreen } = Plugins;
 export const AppContext = React.createContext<IContext>({
   clusters: {},
   cluster: '',
+  oidcProviders: {},
   settings: DEFAULT_SETTINGS,
 
   addCluster: () => {},
+  addOIDCProvider: () => {},
   changeCluster: () => {},
   deleteCluster: () => {},
+  deleteOIDCProvider: () => {},
   editCluster: () => {},
   editSettings: () => {},
   setNamespace: () => {},
@@ -46,6 +52,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
   const [settings, setSettings] = useState<IAppSettings>(readSettings());
   const [cluster, setCluster] = useState<string|undefined>(undefined);
   const [clusters, setClusters] = useState<IClusters|undefined>(undefined);
+  const [oidcProviders, setOIDCProviders] = useState<IOIDCProviders|undefined>(undefined);
 
   // When the component is rendered we are initializing the cluster and clusters variables.
   // For the desktop version we are calling the internal API endpoint to retrieve a list of clusters from the Kubeconfig
@@ -72,6 +79,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
         } else {
           setClusters(readClusters());
           setCluster(readCluster());
+          setOIDCProviders(readOIDCProviders())
         }
       }
 
@@ -97,7 +105,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
         return (clusters && clusters.hasOwnProperty(id)) || id === '';
       };
 
-      if (newCluster.authProvider === '') {
+      if (newCluster.authProvider === '' || newCluster.authProvider.startsWith('oidc__')) {
         while (checkID(id)) {
           id = randomString(32);
         }
@@ -118,6 +126,14 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
     setClusters({...updatedClusters});
     saveClusters(updatedClusters);
   };
+
+  // addOIDCProvider adds a new OIDC provider and saves all providers to localStorage.
+  const addOIDCProvider = (provider: IOIDCProvider) => {
+    let updatedProviders = oidcProviders ? oidcProviders : {};
+    updatedProviders[provider.name] = provider;
+    setOIDCProviders({...updatedProviders});
+    saveOIDCProviders(updatedProviders);
+  }
 
   // changeCluster changes the currently active cluster to the new cluster with the provided id.
   const changeCluster = (id: string) => {
@@ -153,6 +169,22 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
       }
     }
   };
+
+  // deleteOIDCProvider deletes the OIDC provider with the given name.
+  const deleteOIDCProvider = (name: string) => {
+    if (oidcProviders) {
+      let providers = oidcProviders;
+      delete providers[name];
+
+      if (Object.keys(providers).length === 0) {
+        setOIDCProviders(undefined);
+        removeOIDCProviders();
+      } else {
+        setOIDCProviders({...providers});
+        saveOIDCProviders(providers);
+      }
+    }
+  }
 
   // editCluster replaces a cluster with the new provided cluster.
   // Like in the addCluster function we are validating the provided URL and the provided certificate data. If the user
@@ -204,12 +236,42 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
 
     try {
       if (alternativeCluster) {
-        return await kubernetesRequest(method, url, body, alternativeCluster);
+        return await oidcRequestWrapper(method, url, body, alternativeCluster);
       } else {
-        return await kubernetesRequest(method, url, body, clusters![cluster!]);
+        return await oidcRequestWrapper(method, url, body, clusters![cluster!]);
       }
     } catch (err) {
       throw err;
+    }
+  };
+
+  // oidcRequestWrapper wrappes all Kubernetes API requests. In case the cluster uses an OIDC provider, we check the
+  // current ID token. If the token is expired we requests a new token and modify the OIDC provider. Then we pass the ID
+  // token as token to the API request.
+  const oidcRequestWrapper = async (method: string, url: string, body: string, c: ICluster): Promise<any> => {
+    try {
+      if (c.authProvider.startsWith('oidc__')) {
+        const authProvider = c.authProvider.replace('oidc__', '');
+
+        if (!oidcProviders || !oidcProviders.hasOwnProperty(authProvider)) {
+          throw new Error('OIDC provider is missing.')
+        }
+
+        const tokens = await getOIDCAccessToken(oidcProviders[authProvider]);
+        if (oidcProviders[authProvider].expiry !== tokens.expiry) {
+          oidcProviders[authProvider].refreshToken = tokens.refresh_token;
+          oidcProviders[authProvider].accessToken = tokens.access_token;
+          oidcProviders[authProvider].idToken = tokens.id_token;
+          oidcProviders[authProvider].expiry = tokens.expiry;
+          saveOIDCProviders(oidcProviders);
+        }
+
+        c.token = oidcProviders[authProvider].idToken;
+      }
+
+      return await kubernetesRequest(method, url, body, c);
+    } catch (err) {
+      throw err
     }
   };
 
@@ -220,11 +282,14 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
       value={{
         clusters: clusters,
         cluster: cluster,
+        oidcProviders: oidcProviders,
         settings: settings,
 
         addCluster: addCluster,
+        addOIDCProvider: addOIDCProvider,
         changeCluster: changeCluster,
         deleteCluster: deleteCluster,
+        deleteOIDCProvider: deleteOIDCProvider,
         editCluster: editCluster,
         editSettings: editSettings,
         setNamespace: setNamespace,

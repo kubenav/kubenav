@@ -29,6 +29,8 @@ import ClustersAzurePage from './components/settings/clusters/azure/AzurePage';
 import ClustersGooglePage from './components/settings/clusters/google/GooglePage';
 import ClustersKubeconfigPage from './components/settings/clusters/kubeconfig/KubeconfigPage';
 import ClustersManualPage from './components/settings/clusters/manual/ManualPage';
+import ClustersOIDCPage from './components/settings/clusters/oidc/OIDCPage';
+import ClustersOIDCRedirectPage from './components/settings/clusters/oidc/OIDCRedirectPage';
 import ClustersPage from './components/settings/ClustersPage';
 import GeneralPage from './components/settings/GeneralPage';
 import InfoPage from './components/settings/InfoPage';
@@ -55,6 +57,8 @@ const App: React.FunctionComponent = () => (
             <Route path="/settings/clusters/google" component={ClustersGooglePage} exact={true} />
             <Route path="/settings/clusters/kubeconfig" component={ClustersKubeconfigPage} exact={true} />
             <Route path="/settings/clusters/manual" component={ClustersManualPage} exact={true} />
+            <Route path="/settings/clusters/oidc" component={ClustersOIDCPage} exact={true} />
+            <Route path="/settings/clusters/oidc/redirect" component={ClustersOIDCRedirectPage} exact={true} />
             <Route path="/settings/general" component={GeneralPage} exact={true} />
             <Route path="/settings/info" component={InfoPage} exact={true} />
           </IonRouterOutlet>

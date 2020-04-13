@@ -99,11 +99,14 @@ export interface IContainerMetrics {
 export interface IContext {
   clusters?: IClusters;
   cluster?: string;
+  oidcProviders?: IOIDCProviders;
   settings: IAppSettings;
 
   addCluster: (newCluster: ICluster[]) => void;
+  addOIDCProvider: (provider: IOIDCProvider) => void;
   changeCluster: (id: string) => void;
   deleteCluster: (id: string) => void;
+  deleteOIDCProvider: (name: string) => void;
   editCluster: (editCluster: ICluster) => void;
   editSettings: (settings: IAppSettings) => void;
   setNamespace: (namespace: string) => void;
@@ -193,6 +196,28 @@ export interface INodeMetricsList {
   'items': Array<INodeMetrics>;
   'kind'?: string;
   'metadata'?: V1ListMeta;
+}
+
+export interface IOIDCProvider {
+  name: string;
+  clientID: string;
+  clientSecret: string;
+  idToken: string;
+  idpIssuerURL: string;
+  refreshToken: string;
+  accessToken: string;
+  expiry: number;
+}
+
+export interface IOIDCProviders {
+  [key: string]: IOIDCProvider;
+}
+
+export interface IOIDCProviderToken {
+  'id_token': string;
+  'refresh_token': string;
+  'access_token': string;
+  'expiry': number;
 }
 
 export interface IPodMetrics {
