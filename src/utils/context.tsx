@@ -250,7 +250,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
   // token as token to the API request.
   const oidcRequestWrapper = async (method: string, url: string, body: string, c: ICluster): Promise<any> => {
     try {
-      if (c.authProvider.startsWith('oidc__')) {
+      if (c.authProvider && c.authProvider.startsWith('oidc__')) {
         const authProvider = c.authProvider.replace('oidc__', '');
 
         if (!oidcProviders || !oidcProviders.hasOwnProperty(authProvider)) {
