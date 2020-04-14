@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.1](https://github.com/kubenav/kubenav/tree/1.4.1) (2020-04-14)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/1.4.0...1.4.1)
+
+**Fixed bugs:**
+
+- Fix OIDC support for desktop [\#56](https://github.com/kubenav/kubenav/pull/56) ([ricoberger](https://github.com/ricoberger))
+- Check if authProvider property exists on cluster [\#55](https://github.com/kubenav/kubenav/pull/55) ([ricoberger](https://github.com/ricoberger))
+- Fix Kubeconfig validation [\#54](https://github.com/kubenav/kubenav/pull/54) ([ricoberger](https://github.com/ricoberger))
+
 ## [1.4.0](https://github.com/kubenav/kubenav/tree/1.4.0) (2020-04-13)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/1.3.0...1.4.0)
