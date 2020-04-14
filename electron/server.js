@@ -3,7 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const request = require('request');
 const k8s = require('@kubernetes/client-node');
+const oidc = require('@kubernetes/client-node/dist/oidc_auth');
 
+const auth = new oidc.OpenIDConnectAuth();
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
 
@@ -40,7 +42,7 @@ server.get('/clusters', function (req, res) {
   res.json({ clusters: clusters });
 });
 
-server.post('/request', function (req, res) {
+server.post('/request', async (req, res) => {
   const postData = req.body;
   kc.setCurrentContext(postData.cluster);
 
@@ -59,7 +61,12 @@ server.post('/request', function (req, res) {
     opts.json = JSON.parse(postData.body);
   }
 
-  kc.applyToRequest(opts);
+  const user = kc.getCurrentUser();
+  if (user.authProvider && user.authProvider.name && user.authProvider.name === 'oidc') {
+    await auth.applyAuthentication(kc.getCurrentUser(), opts);
+  }
+
+  await kc.applyToRequest(opts);
 
   request(opts, (error, response, body) => {
     if (error) {
