@@ -1,4 +1,20 @@
-.PHONY: release-major release-minor release-patch
+.PHONY: release-beta release-major release-minor release-patch
+
+release-beta:
+	git checkout master
+	git pull
+
+	$(eval ANDROID_VERSION_CODE=$(shell grep versionCode android/app/build.gradle | awk '{print $$2+1}'))
+	sed -i.bak 's/versionCode .*/versionCode ${ANDROID_VERSION_CODE}/g' android/app/build.gradle
+	rm -f android/app/build.gradle.bak
+
+	$(eval IOS_CF_BUNDLE_VERSION=$(shell /usr/libexec/PlistBuddy -c "Print CFBundleVersion" ios/App/App/Info.plist))
+	$(eval IOS_CF_BUNDLE_VERSION=$(shell echo $$(($(IOS_CF_BUNDLE_VERSION)+1))))
+	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${IOS_CF_BUNDLE_VERSION}" ios/App/App/Info.plist
+
+	git add .
+	git commit -m 'Prepare beta release'
+	git push
 
 release-major:
 	git checkout master
