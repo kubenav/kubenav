@@ -282,7 +282,13 @@ export const getGoogleTokens = async (code: string): Promise<IGoogleTokens> => {
 // username and password are not configured, an valid access token is requested. If the authentication provider is AWS,
 // an valid access token is requested. The region and name for the selected cluster is saved in the cluster id, so we
 // can reuse it to get a access token for the Kubernetes API server.
-export const kubernetesRequest = async (method: string, url: string, body: string, cluster: ICluster): Promise<any> => {
+export const kubernetesRequest = async (
+  method: string,
+  url: string,
+  body: string,
+  timeout: number,
+  cluster: ICluster
+): Promise<any> => {
   let plugin: any;
 
   if (isPlatform('hybrid')) {
@@ -320,6 +326,8 @@ export const kubernetesRequest = async (method: string, url: string, body: strin
       );
     }
 
+    console.log('TIMEOUT', timeout ? timeout : 60);
+
     let data = await plugin.request({
       server: SERVER,
       cluster: cluster ? cluster.id : '',
@@ -332,6 +340,8 @@ export const kubernetesRequest = async (method: string, url: string, body: strin
       token: cluster ? cluster.token : '',
       username: cluster ? cluster.username : '',
       password: cluster ? cluster.password : '',
+      insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
+      timeout: timeout ? timeout : 60,
     });
 
     if (isJSON(data.data)) {

@@ -112,6 +112,7 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ loc
           token: '',
           username: '',
           password: '',
+          insecureSkipTLSVerify: false,
           authProvider: `oidc__${readOIDCLastProvider()}`,
           namespace: 'default',
         }]);

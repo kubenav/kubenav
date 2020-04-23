@@ -1,7 +1,7 @@
 import {
   IonButtons,
   IonContent,
-  IonHeader,
+  IonHeader, IonInput,
   IonItem,
   IonItemDivider,
   IonItemGroup,
@@ -29,13 +29,23 @@ const GeneralPage: React.FunctionComponent = () => {
     context.editSettings({
       darkMode: context.settings.darkMode,
       editorTheme: event.target.value,
+      timeout: context.settings.timeout,
     })
+  };
+
+  const changeTimeout = (event) => {
+    context.editSettings({
+      darkMode: context.settings.darkMode,
+      editorTheme: context.settings.editorTheme,
+      timeout: parseInt(event.target.value),
+    });
   };
 
   const toggleDarkMode = (event) => {
     context.editSettings({
       darkMode: event.detail.checked,
       editorTheme: context.settings.editorTheme,
+      timeout: context.settings.timeout,
     });
   };
 
@@ -100,6 +110,10 @@ const GeneralPage: React.FunctionComponent = () => {
                 <IonSelectOption value="vibrant_ink">Vibrant Ink</IonSelectOption>
                 <IonSelectOption value="xcode">Xcode</IonSelectOption>
               </IonSelect>
+            </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Timeout (in seconds)</IonLabel>
+              <IonInput type="number" required={true} value={context.settings.timeout} onInput={changeTimeout} />
             </IonItem>
           </IonItemGroup>
 

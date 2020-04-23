@@ -67,6 +67,7 @@ const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }) => {
           token: '',
           username: '',
           password: '',
+          insecureSkipTLSVerify: false,
           authProvider: `oidc__${provider}`,
           namespace: 'default',
         }]);

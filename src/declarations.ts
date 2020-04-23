@@ -38,6 +38,7 @@ export interface IAppSections {
 export interface IAppSettings {
   darkMode: boolean;
   editorTheme: string;
+  timeout: number;
 }
 
 export interface IAWSCluster {
@@ -83,6 +84,7 @@ export interface ICluster {
   token: string;
   username: string;
   password: string;
+  insecureSkipTLSVerify: boolean;
   authProvider: string;
   namespace: string;
 }
@@ -148,6 +150,7 @@ export interface IKubeconfig {
 
 export interface IKubeconfigCluster {
   'certificate-authority-data': string;
+  'insecure-skip-tls-verify': boolean;
   server: string;
 }
 

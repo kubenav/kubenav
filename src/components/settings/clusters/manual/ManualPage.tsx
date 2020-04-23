@@ -4,13 +4,15 @@ import {
   IonButton,
   IonButtons,
   IonContent,
-  IonHeader, IonInput,
+  IonHeader,
+  IonInput,
   IonItem,
   IonLabel,
   IonList,
   IonPage,
   IonTextarea,
   IonTitle,
+  IonToggle,
   IonToolbar,
 } from '@ionic/react';
 import React, { useContext, useState } from 'react';
@@ -33,6 +35,7 @@ const ManualPage: React.FunctionComponent<IManualPageProps> = ({ history }) => {
   const [token, setToken] = useState<string>('');
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [insecureSkipTLSVerify, setInsecureSkipTLSVerify] = useState<boolean>(false);
 
   const handleName = (event) => {
     setName(event.target.value);
@@ -66,6 +69,10 @@ const ManualPage: React.FunctionComponent<IManualPageProps> = ({ history }) => {
     setPassword(event.target.value);
   };
 
+  const handleInsecureSkipTLSVerify = (event) => {
+    setInsecureSkipTLSVerify(event.detail.checked);
+  };
+
   const addClusters = () => {
     if (name === '') {
       setError('Name is required')
@@ -87,6 +94,7 @@ const ManualPage: React.FunctionComponent<IManualPageProps> = ({ history }) => {
           token: token,
           username: username,
           password: password,
+          insecureSkipTLSVerify: insecureSkipTLSVerify,
           authProvider: '',
           namespace: 'default',
         }]);
@@ -129,6 +137,10 @@ const ManualPage: React.FunctionComponent<IManualPageProps> = ({ history }) => {
           <IonItem>
             <IonLabel position="stacked">Certificate Authority Data</IonLabel>
             <IonTextarea autoGrow={true} value={certificateAuthorityData} onInput={handleCertificateAuthorityData} />
+          </IonItem>
+          <IonItem>
+            <IonLabel>Insecure Skip TLS Verify</IonLabel>
+            <IonToggle checked={insecureSkipTLSVerify} onIonChange={handleInsecureSkipTLSVerify} />
           </IonItem>
           <IonItem>
             <IonLabel position="stacked">Client Certificate Data</IonLabel>
