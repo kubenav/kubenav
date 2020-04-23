@@ -75,6 +75,7 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
                   token: '',
                   username: cluster.masterAuth.username ? cluster.masterAuth.username : '',
                   password: cluster.masterAuth.password ? cluster.masterAuth.password : '',
+                  insecureSkipTLSVerify: false,
                   authProvider: 'google',
                   namespace: 'default',
                 });

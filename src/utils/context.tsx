@@ -269,7 +269,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
         c.token = oidcProviders[authProvider].idToken;
       }
 
-      return await kubernetesRequest(method, url, body, c);
+      return await kubernetesRequest(method, url, body, settings.timeout, c);
     } catch (err) {
       throw err
     }

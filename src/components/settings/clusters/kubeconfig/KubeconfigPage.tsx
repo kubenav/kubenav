@@ -90,12 +90,14 @@ const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history
             id: '',
             name: ctx.name,
             url: cluster.server,
-            certificateAuthorityData: cluster['certificate-authority-data'],
+            certificateAuthorityData: cluster['certificate-authority-data'] ?
+              cluster['certificate-authority-data'] : '',
             clientCertificateData: user['client-certificate-data'] ? user['client-certificate-data'] : '',
             clientKeyData: user['client-key-data'] ? user['client-key-data'] : '',
             token: user.token ? user.token : '',
             username: user.username ? user.username : '',
             password: user.password ? user.password : '',
+            insecureSkipTLSVerify: cluster['insecure-skip-tls-verify'] ? cluster['insecure-skip-tls-verify'] : false,
             authProvider: '',
             namespace: 'default',
           });

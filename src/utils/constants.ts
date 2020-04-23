@@ -7,6 +7,7 @@ export const VERSION = process.env.REACT_APP_VERSION;
 export const DEFAULT_SETTINGS: IAppSettings = {
   darkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
   editorTheme: 'solarized_dark',
+  timeout: 60,
 };
 
 export const GOOGLE_OAUTH2_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/auth';

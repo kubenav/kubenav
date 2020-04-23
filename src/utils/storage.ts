@@ -81,11 +81,21 @@ export const readOIDCProviders = (): IOIDCProviders|undefined => {
 };
 
 // readSettings returns the settings set by the user. If the user had not modified the settings yet, return the default
-// settings.
+// settings. We have to check the parsed settings from localStorage key by key, because on older version it is possible,
+// that a key is missing.
 export const readSettings = (): IAppSettings => {
-  const settings = localStorage.getItem(STORAGE_SETTINGS);
+  const settingsFromStorage = localStorage.getItem(STORAGE_SETTINGS);
 
-  return settings ? JSON.parse(settings) : DEFAULT_SETTINGS;
+  if (settingsFromStorage) {
+    const settings = JSON.parse(settingsFromStorage)
+    return {
+      darkMode: settings.darkMode ? settings.darkMode : DEFAULT_SETTINGS.darkMode,
+      editorTheme: settings.editorTheme ? settings.editorTheme : DEFAULT_SETTINGS.editorTheme,
+      timeout: settings.timeout ? settings.timeout : DEFAULT_SETTINGS.timeout,
+    };
+  }
+
+  return DEFAULT_SETTINGS;
 };
 
 // removeCluster removes the saved cluster from localStorage.

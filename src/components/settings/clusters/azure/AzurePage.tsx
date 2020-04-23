@@ -107,6 +107,7 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
                 token: kubeconfigUser && kubeconfigUser.token ? kubeconfigUser.token : '',
                 username: kubeconfigUser && kubeconfigUser.username ? kubeconfigUser.username : '',
                 password: kubeconfigUser && kubeconfigUser.password ? kubeconfigUser.password : '',
+                insecureSkipTLSVerify: false,
                 authProvider: 'azure',
                 namespace: 'default',
               });

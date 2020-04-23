@@ -77,6 +77,7 @@ const AWSPage: React.FunctionComponent<IAWSPageProps> = ({ match, history }) => 
               token: '',
               username: '',
               password: '',
+              insecureSkipTLSVerify: false,
               authProvider: 'aws',
               namespace: 'default',
             });

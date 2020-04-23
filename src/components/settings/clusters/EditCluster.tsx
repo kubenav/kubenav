@@ -13,6 +13,7 @@ import {
   IonModal,
   IonTextarea,
   IonTitle,
+  IonToggle,
   IonToolbar,
 } from '@ionic/react';
 import { close, create } from 'ionicons/icons';
@@ -38,6 +39,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) =>
   const [token, setToken] = useState<string>(cluster.token);
   const [username, setUsername] = useState<string>(cluster.username);
   const [password, setPassword] = useState<string>(cluster.password);
+  const [insecureSkipTLSVerify, setInsecureSkipTLSVerify] = useState<boolean>(cluster.insecureSkipTLSVerify);
 
   const handleName = (event) => {
     setName(event.target.value);
@@ -71,6 +73,10 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) =>
     setPassword(event.target.value);
   };
 
+  const handleInsecureSkipTLSVerify = (event) => {
+    setInsecureSkipTLSVerify(event.detail.checked);
+  };
+
   const editCluster = () => {
     if (name === '') {
       setError('Name is required')
@@ -78,8 +84,6 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) =>
       setError('URL is required')
     } else if (!url.startsWith('https://')) {
       setError('Invalid URL')
-    } else if (certificateAuthorityData === '') {
-      setError('Certificate Authority Data is required')
     } else if (clientCertificateData === '' && clientKeyData === '' && token === '' && username === '' && password === '') {
       setError('Client Certificate Data and Client Key Data or Token or Username and Password is required')
     } else {
@@ -93,6 +97,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) =>
         token: token,
         username: username,
         password: password,
+        insecureSkipTLSVerify: insecureSkipTLSVerify,
         authProvider: cluster.authProvider,
         namespace: cluster.namespace,
       });
@@ -148,6 +153,10 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) =>
             <IonItem>
               <IonLabel position="stacked">Certificate Authority Data</IonLabel>
               <IonTextarea autoGrow={true} value={certificateAuthorityData} onInput={handleCertificateAuthorityData} />
+            </IonItem>
+            <IonItem>
+              <IonLabel>Insecure Skip TLS Verify</IonLabel>
+              <IonToggle checked={insecureSkipTLSVerify} onIonChange={handleInsecureSkipTLSVerify} />
             </IonItem>
             <IonItem>
               <IonLabel position="stacked">Client Certificate Data</IonLabel>
