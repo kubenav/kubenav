@@ -87,9 +87,14 @@ ionic capacitor run android -l --address=0.0.0.0
 ionic capacitor run ios -l --address=0.0.0.0
 ```
 
-## Nightly Builds
+## Beta and Nightly Builds
 
-For testing new features and faster feedback, we are running nightly builds for the `master` branch via GitHub Action. The builds are release in the [`gs://kubenav` Google Storage bucket](https://console.cloud.google.com/storage/browser/kubenav/). The following files are available for each day:
+For testing new features and faster feedback, we provide an **Beta** app via Apple Testflight and Google Play:
+
+- [Apple Testflight](https://testflight.apple.com/join/RQUFGkHi)
+- [Google Play](https://play.google.com/apps/testing/io.kubenav.kubenav)
+
+For the desktop version we are running nightly builds for the `master` branch via GitHub Action. The builds are release in the [`gs://kubenav` Google Storage bucket](https://console.cloud.google.com/storage/browser/kubenav/). The following files are available for each day:
 
 ```
 https://storage.googleapis.com/kubenav/<YYYY>-<MM>-<DD>/kubenav-<TAG>-darwin-amd64.dmg
