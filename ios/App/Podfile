@@ -10,7 +10,6 @@ def capacitor_pods
   # Automatic Capacitor Pod dependencies, do not delete
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
-  pod 'KubenavKubenavPlugin', :path => '../../node_modules/@kubenav/kubenav-plugin'
   # Do not delete
 end
 

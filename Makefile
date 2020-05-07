@@ -1,4 +1,12 @@
-.PHONY: release-beta release-major release-minor release-patch
+.PHONY: bindings-android bindings-ios release-beta release-major release-minor release-patch
+
+bindings-android:
+	mkdir -p android/app/src/libs
+	gomobile bind -o android/app/src/libs/server.aar -target=android github.com/kubenav/kubenav/pkg/server
+
+bindings-ios:
+	mkdir -p ios/App/App/libs
+	gomobile bind -o ios/App/App/libs/Server.framework -target=ios github.com/kubenav/kubenav/pkg/server
 
 release-beta:
 	git checkout master

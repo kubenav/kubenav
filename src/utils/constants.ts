@@ -1,7 +1,7 @@
 import { IAppSettings } from '../declarations'
 
 export const CUSTOM_URI_SCHEME = 'io.kubenav.kubenav';
-export const SERVER = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:14122';
+export const SERVER = 'http://localhost:14122';
 export const VERSION = process.env.REACT_APP_VERSION;
 
 export const DEFAULT_SETTINGS: IAppSettings = {

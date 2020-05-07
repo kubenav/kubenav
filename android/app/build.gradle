@@ -25,7 +25,7 @@ repositories {
         url  "https://dl.bintray.com/ionic-team/capacitor"
     }
     flatDir{
-        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs', '../../node_modules/@kubenav/kubenav-plugin/android/src/libs/'
+        dirs './src/libs'
     }
 }
 
@@ -37,6 +37,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':capacitor-cordova-android-plugins')
+    implementation (name:'server', ext:'aar')
 }
 
 apply from: 'capacitor.build.gradle'
