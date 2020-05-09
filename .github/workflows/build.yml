@@ -58,27 +58,22 @@ jobs:
 
       - name: Compress Electron App
         run: |
-          cd cmd/electron/output/darwin-amd64 && tar -czvf kubenav-${REACT_APP_VERSION}-darwin-amd64.tar.gz kubenav.app
-          cd cmd/electron/output/linux-amd64 && tar -czvf kubenav-${REACT_APP_VERSION}-linux-amd64.tar.gz kubenav
-          cd cmd/electron/output/windows-amd64 && tar -czvf kubenav-${REACT_APP_VERSION}-windows-amd64.tar.gz kubenav.exe
-        env:
-          REACT_APP_VERSION: ${{ steps.get_version.outputs.VERSION }}
+          cd cmd/electron/output/darwin-amd64 && tar -czvf kubenav-darwin-amd64.tar.gz kubenav.app
+          cd cmd/electron/output/linux-amd64 && tar -czvf kubenav-linux-amd64.tar.gz kubenav
+          cd cmd/electron/output/windows-amd64 && tar -czvf kubenav-windows-amd64.tar.gz kubenav.exe
 
       - name: Upload Artifacts
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
         uses: actions/upload-artifact@v2
         with:
           name: kubenav
-          path: cmd/electron/output/*-amd64/kubenav-${REACT_APP_VERSION}-*-amd64.tar.gz
-        env:
-          REACT_APP_VERSION: ${{ steps.get_version.outputs.VERSION }}
+          path: cmd/electron/output/*-amd64/kubenav-*-amd64.tar.gz
 
       - name: Upload Artifacts to Release
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
         run: |
-          utils/scripts/upload.sh cmd/electron/output/darwin-amd64/kubenav-${REACT_APP_VERSION}-darwin-amd64.zip application/zip
-          utils/scripts/upload.sh cmd/electron/output/linux-amd64/kubenav-${REACT_APP_VERSION}-linux-amd64.zip application/zip
-          utils/scripts/upload.sh cmd/electron/output/windows-amd64/kubenav-${REACT_APP_VERSION}-windows-amd64.zip application/zip
+          utils/scripts/upload.sh cmd/electron/output/darwin-amd64/kubenav-darwin-amd64.zip application/zip
+          utils/scripts/upload.sh cmd/electron/output/linux-amd64/kubenav-linux-amd64.zip application/zip
+          utils/scripts/upload.sh cmd/electron/output/windows-amd64/kubenav-windows-amd64.zip application/zip
         env:
-          REACT_APP_VERSION: ${{ steps.get_version.outputs.VERSION }}
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
