@@ -14,6 +14,7 @@ import (
 )
 
 type APIRequest struct {
+	Cluster                  string `json:"cluster"`
 	Method                   string `json:"method"`
 	URL                      string `json:"url"`
 	Body                     string `json:"body"`
@@ -98,7 +99,7 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Kubernetes API request failed")
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Kubernetes API request failed: %s", err.Error()))
 		return
 	}
 

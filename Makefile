@@ -1,4 +1,11 @@
-.PHONY: bindings-android bindings-ios release-beta release-major release-minor release-patch
+BRANCH      ?= $(shell git rev-parse --abbrev-ref HEAD)
+BUILDTIME   ?= $(shell date '+%Y-%m-%d@%H:%M:%S')
+BUILDUSER   ?= $(shell id -un)
+REPO        ?= github.com/kubenav/kubenav
+REVISION    ?= $(shell git rev-parse HEAD)
+VERSION     ?= $(shell git describe --tags)
+
+.PHONY: bindings-android bindings-ios build-devserver build-electron release-beta release-major release-minor release-patch
 
 bindings-android:
 	mkdir -p android/app/src/libs
@@ -7,6 +14,20 @@ bindings-android:
 bindings-ios:
 	mkdir -p ios/App/App/libs
 	gomobile bind -o ios/App/App/libs/Server.framework -target=ios github.com/kubenav/kubenav/pkg/server
+
+build-devserver:
+	go build -ldflags "-X ${REPO}/pkg/version.Version=${VERSION} \
+		-X ${REPO}/pkg/version.Revision=${REVISION} \
+		-X ${REPO}/pkg/version.Branch=${BRANCH} \
+		-X ${REPO}/pkg/version.BuildUser=${BUILDUSER} \
+		-X ${REPO}/pkg/version.BuildDate=${BUILDTIME}" \
+		-o ./bin/devserver ./cmd/devserver;
+
+build-electron:
+	rm -rf cmd/electron/resources/app
+	rm -rf cmd/electron/output
+	cp -r build cmd/electron/resources/app
+	cd cmd/electron && astilectron-bundler -ldflags -X:${REPO}/pkg/version.Version=${VERSION},${REPO}/pkg/version.Revision=${REVISION},${REPO}/pkg/version.Branch=${BRANCH},${REPO}/pkg/version.BuildUser=${BUILDUSER},${REPO}/pkg/version.BuildDate=${BUILDTIME}
 
 release-beta:
 	git checkout master

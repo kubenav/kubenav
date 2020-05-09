@@ -1,3 +1,4 @@
+import {isPlatform} from '@ionic/react';
 import {
   IAWSCluster,
   IAWSTokens,
@@ -132,7 +133,7 @@ export const getAzureClusters = async (
 // browser. For the mobile app the active cluster is retrieved from localStorage and for desktop the current context is
 // also saved in localStorage at startup.
 export const getCluster = async (): Promise<string|undefined> => {
-  const response = await fetch(`${SERVER}/cluster`, {
+  const response = await fetch(`${SERVER}/api/cluster`, {
     method: 'GET',
   });
 
@@ -147,7 +148,7 @@ export const getCluster = async (): Promise<string|undefined> => {
 
 // getClusters returns all clusters from the Kubeconfig file on desktop.
 export const getClusters = async (): Promise<IClusters|undefined> => {
-  const response = await fetch(`${SERVER}/clusters`, {
+  const response = await fetch(`${SERVER}/api/clusters`, {
     method: 'GET',
   });
 
@@ -315,7 +316,12 @@ export const kubernetesRequest = async (
       );
     }
 
-    let response = await fetch(`${SERVER}/api/kubernetes/request`, {
+    let serverURL = `${SERVER}/api/kubernetes/request/mobile`;
+    if (!isPlatform('hybrid')) {
+      serverURL = `${SERVER}/api/kubernetes/request/electron`;
+    }
+
+    let response = await fetch(serverURL, {
       method: 'post',
       body: JSON.stringify({
         server: SERVER,
@@ -463,7 +469,7 @@ export const getOIDCRefreshToken = async (
 // getServerStatus checks if the server is ready to receive requests.
 export const getServerStatus = async (): Promise<boolean> => {
   try {
-    let response = await fetch('http://localhost:14122/api/test');
+    let response = await fetch(`${SERVER}/api/test`);
     let data = await response.json()
 
     return data.status === 'ok'
