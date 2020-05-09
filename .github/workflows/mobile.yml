@@ -23,6 +23,7 @@ jobs:
         # because the macOS used for GitHub Actions contains an outdated NDK version.
         if: matrix.os == 'ubuntu-latest'
         run: |
+          go get golang.org/x/mobile/cmd/gomobile
           gomobile init
           make bindings-android
 
@@ -33,5 +34,6 @@ jobs:
         run: |
           unset ANDROID_HOME
           unset ANDROID_NDK_HOME
+          go get golang.org/x/mobile/cmd/gomobile
           gomobile init
           make bindings-ios
