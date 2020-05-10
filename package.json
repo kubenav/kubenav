@@ -18,9 +18,7 @@
     "test": "react-scripts test",
     "lint": "tslint -c tslint.json 'src/**/*{.ts,.tsx}'",
     "eject": "react-scripts eject",
-    "server": "node utils/scripts/server.js",
-    "resources": "cordova-res ios --splash-source utils/resources/ios/splash.png --icon-source utils/resources/ios/icon.png && cordova-res android --splash-source utils/resources/android/splash.png --icon-source utils/resources/android/icon.png --icon-background-source '#326ce5' && node utils/scripts/resources.js",
-    "upload": "node utils/scripts/upload.js"
+    "resources": "cordova-res ios --splash-source utils/resources/ios/splash.png --icon-source utils/resources/ios/icon.png && cordova-res android --splash-source utils/resources/android/splash.png --icon-source utils/resources/android/icon.png --icon-background-source '#326ce5' && node utils/scripts/resources.js"
   },
   "eslintConfig": {
     "extends": "react-app"
