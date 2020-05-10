@@ -58,9 +58,9 @@ jobs:
 
       - name: Compress Electron App
         run: |
-          cd ${GITHUB_WORKSPACE}/cmd/electron/output/darwin-amd64 && tar -czvf kubenav-darwin-amd64.tar.gz kubenav.app
-          cd ${GITHUB_WORKSPACE}/cmd/electron/output/linux-amd64 && tar -czvf kubenav-linux-amd64.tar.gz kubenav
-          cd ${GITHUB_WORKSPACE}/cmd/electron/output/windows-amd64 && tar -czvf kubenav-windows-amd64.tar.gz kubenav.exe
+          cd cmd/electron/output/darwin-amd64 && tar -czvf kubenav-darwin-amd64.tar.gz kubenav.app
+          cd ../linux-amd64 && tar -czvf kubenav-linux-amd64.tar.gz kubenav
+          cd ../windows-amd64 && tar -czvf kubenav-windows-amd64.tar.gz kubenav.exe
 
       - name: Upload Artifacts
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
