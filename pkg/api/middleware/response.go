@@ -5,14 +5,14 @@ import (
 	"net/http"
 )
 
-// Error represents the structure of an error message
+// Error represents the structure of an error message.
 type Error struct {
 	Error   bool   `json:"error"`
 	Code    int    `json:"statusCode"`
 	Message string `json:"message"`
 }
 
-// Errorf return an new error response
+// Errorf return an new error response.
 func Errorf(w http.ResponseWriter, r *http.Request, err error, code int, message string) {
 	errorMessage := Error{
 		Error:   true,
@@ -26,7 +26,7 @@ func Errorf(w http.ResponseWriter, r *http.Request, err error, code int, message
 	return
 }
 
-// Write return a new json response
+// Write return a new json response.
 func Write(w http.ResponseWriter, r *http.Request, data interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)

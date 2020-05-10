@@ -8,7 +8,6 @@ import (
 
 	"github.com/kubenav/kubenav/pkg/api"
 
-	//"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 )
 
@@ -22,6 +21,7 @@ type Client struct {
 	config clientcmd.ClientConfig
 }
 
+// Cluster implements the cluster type used in the React app.
 type Cluster struct {
 	ID                       string `json:"id"`
 	Name                     string `json:"name"`
@@ -55,9 +55,8 @@ func homeDir() string {
 }
 
 // NewClient returns a new API client for a Kubernetes cluster.
-// If the cluster parameter is true the client is configured inside the
-// cluster. If the cluster parameter is false the client is configures outside
-// the cluster.
+// If the cluster parameter is true the client is configured inside the cluster. If the cluster parameter is false the
+// client is configures outside the cluster.
 func NewClient(kubeconfig string) (*Client, error) {
 	if kubeconfig == "" {
 		if os.Getenv("KUBECONFIG") == "" {
@@ -81,6 +80,7 @@ func NewClient(kubeconfig string) (*Client, error) {
 	}, nil
 }
 
+// Cluster returns the current context from the loaded Kubeconfig.
 func (c *Client) Cluster() (string, error) {
 	raw, err := c.config.RawConfig()
 	if err != nil {
@@ -90,6 +90,7 @@ func (c *Client) Cluster() (string, error) {
 	return raw.CurrentContext, nil
 }
 
+// Clusters returns all clusters from the loaded Kubeconfig file in the format for the React app.
 func (c *Client) Clusters() (map[string]Cluster, error) {
 	raw, err := c.config.RawConfig()
 	if err != nil {
@@ -113,6 +114,7 @@ func (c *Client) Clusters() (map[string]Cluster, error) {
 	return clusters, nil
 }
 
+// Request creates the clientset for an Kubernetes API call.
 func (c *Client) Request(request api.APIRequest) (*kubernetes.Clientset, error) {
 	raw, err := c.config.RawConfig()
 	if err != nil {

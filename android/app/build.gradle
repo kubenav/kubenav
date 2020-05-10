@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 
 android {
 
-    buildToolsVersion = '29.0.2'
+    buildToolsVersion = '29.0.3'
     compileSdkVersion 28
     defaultConfig {
         applicationId "io.kubenav.kubenav"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 8
         versionName "1.4.2"
@@ -37,7 +37,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':capacitor-cordova-android-plugins')
-    implementation (name:'server', ext:'aar')
+    implementation (name:'mobile', ext:'aar')
 }
 
 apply from: 'capacitor.build.gradle'

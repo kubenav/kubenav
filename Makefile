@@ -9,11 +9,11 @@ VERSION     ?= $(shell git describe --tags)
 
 bindings-android:
 	mkdir -p android/app/src/libs
-	gomobile bind -o android/app/src/libs/server.aar -target=android github.com/kubenav/kubenav/pkg/server
+	gomobile bind -o android/app/src/libs/mobile.aar -target=android github.com/kubenav/kubenav/pkg/mobile
 
 bindings-ios:
 	mkdir -p ios/App/App/libs
-	gomobile bind -o ios/App/App/libs/Server.framework -target=ios github.com/kubenav/kubenav/pkg/server
+	gomobile bind -o ios/App/App/libs/Mobile.framework -target=ios github.com/kubenav/kubenav/pkg/mobile
 
 build-devserver:
 	go build -ldflags "-X ${REPO}/pkg/version.Version=${VERSION} \
@@ -34,7 +34,7 @@ release-beta:
 	git pull
 
 	# We increase the version for every new beta release. Therefore it can be happen that when we set a new tag for a
-	# production release that we skip some version number.
+	# production release that we skip some version numbers.
 	$(eval PATCHVERSION=$(shell cat ios/App/App.xcodeproj/project.pbxproj | grep MARKETING_VERSION | tail -n1 | awk '{print substr($$3, 1, length($$3)-1)}'))
 	$(eval PATCHVERSION=$(shell echo "${PATCHVERSION}" | awk -F. '{print $$1"."$$2"."$$3+1}'))
 

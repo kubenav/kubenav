@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-// Cors handles preflight
+// Cors sets cors headers to handles preflight requests.
 func Cors(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type")
