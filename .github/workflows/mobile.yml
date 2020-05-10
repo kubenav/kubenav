@@ -18,6 +18,13 @@ jobs:
         with:
           go-version: 1.14
 
+      - name: Print Environment Information
+        shell: bash
+        run: |
+          echo $PATH
+          env
+          go env
+
       - name: Generate Bindings (Android)
         # We must build the Android bindings on Ubuntu,
         # because the macOS used for GitHub Actions contains an outdated NDK version.
