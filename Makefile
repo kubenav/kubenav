@@ -30,9 +30,6 @@ build-electron:
 	cd cmd/electron && astilectron-bundler -ldflags -X:${REPO}/pkg/version.Version=${VERSION},${REPO}/pkg/version.Revision=${REVISION},${REPO}/pkg/version.Branch=${BRANCH},${REPO}/pkg/version.BuildUser=${BUILDUSER},${REPO}/pkg/version.BuildDate=${BUILDTIME}
 
 release-beta:
-	git checkout master
-	git pull
-
 	# We increase the version for every new beta release. Therefore it can be happen that when we set a new tag for a
 	# production release that we skip some version numbers.
 	$(eval PATCHVERSION=$(shell cat ios/App/App.xcodeproj/project.pbxproj | grep MARKETING_VERSION | tail -n1 | awk '{print substr($$3, 1, length($$3)-1)}'))
@@ -59,7 +56,6 @@ release-major:
 
 	$(eval MAJORVERSION=$(shell git describe --tags --abbrev=0 | awk -F. '{print $$1+1".0.0"}'))
 	npm --no-git-tag-version version $(MAJORVERSION)
-	cd electron && npm --no-git-tag-version version $(MAJORVERSION)
 
 	$(eval ANDROID_VERSION_CODE=$(shell grep versionCode android/app/build.gradle | awk '{print $$2+1}'))
 	sed -i.bak 's/versionCode .*/versionCode ${ANDROID_VERSION_CODE}/g' android/app/build.gradle
@@ -84,7 +80,6 @@ release-minor:
 
 	$(eval MINORVERSION=$(shell git describe --tags --abbrev=0 | awk -F. '{print $$1"."$$2+1".0"}'))
 	npm --no-git-tag-version version $(MINORVERSION)
-	cd electron && npm --no-git-tag-version version $(MINORVERSION)
 
 	$(eval ANDROID_VERSION_CODE=$(shell grep versionCode android/app/build.gradle | awk '{print $$2+1}'))
 	sed -i.bak 's/versionCode .*/versionCode ${ANDROID_VERSION_CODE}/g' android/app/build.gradle
@@ -112,7 +107,6 @@ release-patch:
 	$(eval PATCHVERSION=$(shell cat ios/App/App.xcodeproj/project.pbxproj | grep MARKETING_VERSION | tail -n1 | awk '{print substr($$3, 1, length($$3)-1)}'))
 	$(eval PATCHVERSION=$(shell echo "${PATCHVERSION}" | awk -F. '{print $$1"."$$2"."$$3+1}'))
 	npm --no-git-tag-version version $(PATCHVERSION)
-	cd electron && npm --no-git-tag-version version $(PATCHVERSION)
 
 	$(eval ANDROID_VERSION_CODE=$(shell grep versionCode android/app/build.gradle | awk '{print $$2+1}'))
 	sed -i.bak 's/versionCode .*/versionCode ${ANDROID_VERSION_CODE}/g' android/app/build.gradle
