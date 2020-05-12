@@ -28,3 +28,16 @@ yarn-error.log*
 
 # resources
 /resources
+
+# go mobile bindings
+/android/app/src/libs
+/ios/App/App/libs
+
+# electron
+/cmd/electron/bind_*
+/cmd/electron/windows.syso
+/cmd/electron/resources/app
+/cmd/electron/output
+
+# development server
+/bin

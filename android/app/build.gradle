@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
 
-    buildToolsVersion = '29.0.2'
+    buildToolsVersion = '29.0.3'
     compileSdkVersion 28
     defaultConfig {
         applicationId "io.kubenav.kubenav"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 28
-        versionCode 8
-        versionName "1.4.2"
+        versionCode 9
+        versionName "1.4.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -25,7 +25,7 @@ repositories {
         url  "https://dl.bintray.com/ionic-team/capacitor"
     }
     flatDir{
-        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs', '../../node_modules/@kubenav/kubenav-plugin/android/src/libs/'
+        dirs './src/libs'
     }
 }
 
@@ -37,6 +37,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':capacitor-cordova-android-plugins')
+    implementation (name:'mobile', ext:'aar')
 }
 
 apply from: 'capacitor.build.gradle'

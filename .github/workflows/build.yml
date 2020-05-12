@@ -1,0 +1,93 @@
+name: Build
+
+on:
+  pull_request:
+  schedule:
+    - cron: '0 4 * * *'
+  release:
+    types: [created]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.14
+
+      - name: Install Ionic
+        run: |
+          npm install -g ionic
+
+      - name: Install Dependencies
+        run: |
+          npm install
+
+      - name: Lint
+        run: |
+          npm run lint
+
+      - name: Build Ionic App
+        run: |
+          ionic build
+        env:
+          REACT_APP_VERSION: ${{ steps.get_version.outputs.VERSION }}
+
+      - name: Install astilectron-bundler
+        run: |
+          go get -u github.com/asticode/go-astilectron-bundler/...
+          go install github.com/asticode/go-astilectron-bundler/astilectron-bundler
+
+      - name: Build Electron App
+        run: |
+          make build-electron
+
+      - name: Compress Electron App
+        run: |
+          cd cmd/electron/output/darwin-amd64 && tar -czvf kubenav-darwin-amd64.tar.gz kubenav.app
+          cd ../linux-amd64 && tar -czvf kubenav-linux-amd64.tar.gz kubenav
+          cd ../windows-amd64 && tar -czvf kubenav-windows-amd64.tar.gz kubenav.exe
+
+      - name: Upload Artifact (MacOS)
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: kubenav-darwin-amd64.tar.gz
+          path: cmd/electron/output/darwin-amd64/kubenav-darwin-amd64.tar.gz
+
+      - name: Upload Artifact (Linux)
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: kubenav-linux-amd64.tar.gz
+          path: cmd/electron/output/linux-amd64/kubenav-linux-amd64.tar.gz
+
+      - name: Upload Artifact (Windows)
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: kubenav-windows-amd64.tar.gz
+          path: cmd/electron/output/windows-amd64/kubenav-windows-amd64.tar.gz
+
+      - name: Upload Artifacts to Release
+        if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
+        run: |
+          utils/scripts/upload.sh cmd/electron/output/darwin-amd64/kubenav-darwin-amd64.tar.gz application/gzip
+          utils/scripts/upload.sh cmd/electron/output/linux-amd64/kubenav-linux-amd64.tar.gz application/gzip
+          utils/scripts/upload.sh cmd/electron/output/windows-amd64/kubenav-windows-amd64.tar.gz application/gzip
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}

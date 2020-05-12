@@ -18,10 +18,7 @@
     "test": "react-scripts test",
     "lint": "tslint -c tslint.json 'src/**/*{.ts,.tsx}'",
     "eject": "react-scripts eject",
-    "postinstall": "cd electron && npm install",
-    "server": "node utils/scripts/server.js",
-    "resources": "cordova-res ios --splash-source utils/resources/ios/splash.png --icon-source utils/resources/ios/icon.png && cordova-res android --splash-source utils/resources/android/splash.png --icon-source utils/resources/android/icon.png --icon-background-source '#326ce5' && node utils/scripts/resources.js",
-    "upload": "node utils/scripts/upload.js"
+    "resources": "cordova-res ios --splash-source utils/resources/ios/splash.png --icon-source utils/resources/ios/icon.png && cordova-res android --splash-source utils/resources/android/splash.png --icon-source utils/resources/android/icon.png --icon-background-source '#326ce5' && node utils/scripts/resources.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -46,7 +43,6 @@
     "@ionic/react": "^5.0.7",
     "@ionic/react-hooks": "0.0.6",
     "@ionic/react-router": "^5.0.7",
-    "@kubenav/kubenav-plugin": "1.7.0",
     "@kubernetes/client-node": "^0.11.1",
     "@types/jest": "^25.2.1",
     "@types/node": "^13.11.1",

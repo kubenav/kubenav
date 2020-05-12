@@ -11,12 +11,14 @@ import {
   IonMenuToggle,
   IonTitle,
   IonToolbar,
+  isPlatform,
 } from '@ionic/react';
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { IAppSections } from '../../declarations';
-import { CUSTOM_URI_SCHEME, GOOGLE_REDIRECT_URI, OIDC_REDIRECT_URL } from '../../utils/constants';
+import { CUSTOM_URI_SCHEME, GOOGLE_REDIRECT_URI, OIDC_REDIRECT_URL, SERVER } from '../../utils/constants';
+import { saveCluster } from '../../utils/storage';
 import Sections from './Sections'
 
 const { App } = Plugins;
@@ -28,6 +30,21 @@ App.addListener('appUrlOpen', (data) => {
     window.location.replace(data.url.replace(`${CUSTOM_URI_SCHEME}:`, ''));
   }
 });
+
+if (isPlatform('electron')) {
+  let eventSource = new EventSource(`${SERVER}/api/electron`);
+
+  eventSource.addEventListener('navigation', (event) => {
+    const msg = event as MessageEvent;
+    window.location.href = msg.data;
+  });
+
+  eventSource.addEventListener('cluster', (event) => {
+    const msg = event as MessageEvent;
+    saveCluster(msg.data);
+    window.location.href = '/';
+  });
+}
 
 interface IMenuProps extends RouteComponentProps {
   sections: IAppSections;

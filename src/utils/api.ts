@@ -1,7 +1,4 @@
-import { Plugins } from '@capacitor/core';
-import { isPlatform } from '@ionic/react';
-import { KubenavPlugin as KubenavWebPlugin } from '@kubenav/kubenav-plugin';
-
+import {isPlatform} from '@ionic/react';
 import {
   IAWSCluster,
   IAWSTokens,
@@ -23,8 +20,6 @@ import {
   saveGoogleTokens,
 } from './storage';
 
-const { KubenavPlugin } = Plugins;
-
 // getAWSClusters returns all EKS clusters from AWS for the provided access key, secret access key and region. This
 // function is only available for the native mobile apps, on all other platforms an error is returned. For the desktop
 // implementation this is not needed, because we are using kubeconfig file from ~/.kube/config.
@@ -33,25 +28,26 @@ export const getAWSClusters = async (
   secretAccessKey: string,
   region: string,
 ): Promise<IAWSCluster[]> => {
-  let plugin: any;
-
-  if (isPlatform('hybrid')) {
-    plugin = KubenavPlugin;
-  } else {
-    plugin = KubenavWebPlugin;
-  }
-
   try {
-    let data = await plugin.awsGetClusters({
-      accessKeyId: accessKeyId,
-      secretAccessKey: secretAccessKey,
-      region: region,
+    let response = await fetch(`${SERVER}/api/aws/clusters`, {
+      method: 'post',
+      body: JSON.stringify({
+        accessKeyId: accessKeyId,
+        secretAccessKey: secretAccessKey,
+        region: region,
+      }),
     });
 
-    if (data.data !== '') {
-      return JSON.parse(data.data);
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
     } else {
-      throw new Error('No cluster was found');
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
     }
   } catch (err) {
     throw err
@@ -67,26 +63,27 @@ export const getAWSToken = async (
   region: string,
   clusterID: string,
 ): Promise<string> => {
-  let plugin: any;
-
-  if (isPlatform('hybrid')) {
-    plugin = KubenavPlugin;
-  } else {
-    plugin = KubenavWebPlugin;
-  }
-
   try {
-    let data = await plugin.awsGetToken({
-      accessKeyId: accessKeyId,
-      secretAccessKey: secretAccessKey,
-      region: region,
-      clusterID: clusterID,
+    let response = await fetch(`${SERVER}/api/aws/token`, {
+      method: 'post',
+      body: JSON.stringify({
+        accessKeyId: accessKeyId,
+        secretAccessKey: secretAccessKey,
+        region: region,
+        clusterID: clusterID,
+      }),
     });
 
-    if (data.data !== '') {
-      return JSON.parse(data.data).token;
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
     } else {
-      throw new Error('Could not get AWS token');
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
     }
   } catch (err) {
     throw err
@@ -103,28 +100,29 @@ export const getAzureClusters = async (
   resourceGroupName: string,
   admin: boolean,
 ): Promise<IAzureCluster[]> => {
-  let plugin: any;
-
-  if (isPlatform('hybrid')) {
-    plugin = KubenavPlugin;
-  } else {
-    plugin = KubenavWebPlugin;
-  }
-
   try {
-    let data = await plugin.azureGetClusters({
-      subscriptionID: subscriptionID,
-      clientID: clientID,
-      clientSecret: clientSecret,
-      tenantID: tenantID,
-      resourceGroupName: resourceGroupName,
-      admin: admin,
+    let response = await fetch(`${SERVER}/api/aws/token`, {
+      method: 'post',
+      body: JSON.stringify({
+        subscriptionID: subscriptionID,
+        clientID: clientID,
+        clientSecret: clientSecret,
+        tenantID: tenantID,
+        resourceGroupName: resourceGroupName,
+        admin: admin,
+      }),
     });
 
-    if (data.data !== '') {
-      return JSON.parse(data.data);
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
     } else {
-      throw new Error('No cluster was found');
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
     }
   } catch (err) {
     throw err
@@ -135,7 +133,7 @@ export const getAzureClusters = async (
 // browser. For the mobile app the active cluster is retrieved from localStorage and for desktop the current context is
 // also saved in localStorage at startup.
 export const getCluster = async (): Promise<string|undefined> => {
-  const response = await fetch(`${SERVER}/cluster`, {
+  const response = await fetch(`${SERVER}/api/cluster`, {
     method: 'GET',
   });
 
@@ -150,7 +148,7 @@ export const getCluster = async (): Promise<string|undefined> => {
 
 // getClusters returns all clusters from the Kubeconfig file on desktop.
 export const getClusters = async (): Promise<IClusters|undefined> => {
-  const response = await fetch(`${SERVER}/clusters`, {
+  const response = await fetch(`${SERVER}/api/clusters`, {
     method: 'GET',
   });
 
@@ -289,14 +287,6 @@ export const kubernetesRequest = async (
   timeout: number,
   cluster: ICluster
 ): Promise<any> => {
-  let plugin: any;
-
-  if (isPlatform('hybrid')) {
-    plugin = KubenavPlugin;
-  } else {
-    plugin = KubenavWebPlugin;
-  }
-
   try {
     if (cluster.authProvider === 'google') {
       if (!(cluster.clientCertificateData !== '' && cluster.clientKeyData !== '')) {
@@ -326,28 +316,44 @@ export const kubernetesRequest = async (
       );
     }
 
-    console.log('TIMEOUT', timeout ? timeout : 60);
+    let serverURL = `${SERVER}/api/kubernetes/request/mobile`;
+    if (!isPlatform('hybrid')) {
+      serverURL = `${SERVER}/api/kubernetes/request/electron`;
+    }
 
-    let data = await plugin.request({
-      server: SERVER,
-      cluster: cluster ? cluster.id : '',
-      method: method,
-      url: cluster ? cluster.url + url : '',
-      body: body,
-      certificateAuthorityData: cluster ? cluster.certificateAuthorityData : '',
-      clientCertificateData: cluster ? cluster.clientCertificateData : '',
-      clientKeyData: cluster ? cluster.clientKeyData : '',
-      token: cluster ? cluster.token : '',
-      username: cluster ? cluster.username : '',
-      password: cluster ? cluster.password : '',
-      insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
-      timeout: timeout ? timeout : 60,
+    let response = await fetch(serverURL, {
+      method: 'post',
+      body: JSON.stringify({
+        server: SERVER,
+        cluster: cluster ? cluster.id : '',
+        method: method,
+        url: cluster ? cluster.url + url : '',
+        body: body,
+        certificateAuthorityData: cluster ? cluster.certificateAuthorityData : '',
+        clientCertificateData: cluster ? cluster.clientCertificateData : '',
+        clientKeyData: cluster ? cluster.clientKeyData : '',
+        token: cluster ? cluster.token : '',
+        username: cluster ? cluster.username : '',
+        password: cluster ? cluster.password : '',
+        insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
+        timeout: timeout ? timeout : 60,
+      }),
     });
 
-    if (isJSON(data.data)) {
-      return JSON.parse(data.data);
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      if (isJSON(json.data)) {
+        return JSON.parse(json.data);
+      } else {
+        return json.data;
+      }
     } else {
-      return data.data;
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
     }
   } catch (err) {
     throw err;
@@ -357,14 +363,6 @@ export const kubernetesRequest = async (
 // getOIDCAccessToken returns a new id and access token for the provided OIDC provider. To get a new id and access token
 // a valid refresh token is required.
 export const getOIDCAccessToken = async (provider: IOIDCProvider): Promise<IOIDCProviderToken> => {
-  let plugin: any;
-
-  if (isPlatform('hybrid')) {
-    plugin = KubenavPlugin;
-  } else {
-    plugin = KubenavWebPlugin;
-  }
-
   if (provider.expiry - 60 > Math.floor(Date.now() / 1000)) {
     return {
       'id_token': provider.idToken,
@@ -375,18 +373,27 @@ export const getOIDCAccessToken = async (provider: IOIDCProvider): Promise<IOIDC
   }
 
   try {
-    let data = await plugin.oidcGetAccessToken({
-      discoveryURL: provider.idpIssuerURL,
-      clientID: provider.clientID,
-      clientSecret: provider.clientSecret,
-      redirectURL: OIDC_REDIRECT_URL_WEB,
-      refreshToken: provider.refreshToken,
+    let response = await fetch(`${SERVER}/api/oidc/accesstoken`, {
+      method: 'post',
+      body: JSON.stringify({
+        discoveryURL: provider.idpIssuerURL,
+        clientID: provider.clientID,
+        clientSecret: provider.clientSecret,
+        redirectURL: OIDC_REDIRECT_URL_WEB,
+        refreshToken: provider.refreshToken,
+      }),
     });
 
-    if (data.data !== '') {
-      return JSON.parse(data.data);
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
     } else {
-      throw new Error('Could not get id token for OIDC provider.');
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
     }
   } catch (err) {
     throw err
@@ -396,26 +403,27 @@ export const getOIDCAccessToken = async (provider: IOIDCProvider): Promise<IOIDC
 // getOIDCLink returns the login link for the OIDC provider. The user is redirect to the returned link. After the user
 // logged in the getOIDCRefreshToken function is used to exchange the returned code for a refresh token.
 export const getOIDCLink = async (discoveryURL: string, clientID: string, clientSecret: string): Promise<string> => {
-  let plugin: any;
-
-  if (isPlatform('hybrid')) {
-    plugin = KubenavPlugin;
-  } else {
-    plugin = KubenavWebPlugin;
-  }
-
   try {
-    let data = await plugin.oidcGetLink({
-      discoveryURL: discoveryURL,
-      clientID: clientID,
-      clientSecret: clientSecret,
-      redirectURL: OIDC_REDIRECT_URL_WEB,
+    let response = await fetch(`${SERVER}/api/oidc/link`, {
+      method: 'post',
+      body: JSON.stringify({
+        discoveryURL: discoveryURL,
+        clientID: clientID,
+        clientSecret: clientSecret,
+        redirectURL: OIDC_REDIRECT_URL_WEB,
+      }),
     });
 
-    if (data.data !== '') {
-      return JSON.parse(data.data).url;
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json.url;
     } else {
-      throw new Error('Could not get URL for OIDC provider.');
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
     }
   } catch (err) {
     throw err
@@ -430,29 +438,42 @@ export const getOIDCRefreshToken = async (
   clientSecret: string,
   code: string
 ): Promise<IOIDCProviderToken> => {
-  let plugin: any;
-
-  if (isPlatform('hybrid')) {
-    plugin = KubenavPlugin;
-  } else {
-    plugin = KubenavWebPlugin;
-  }
-
   try {
-    let data = await plugin.oidcGetRefreshToken({
-      discoveryURL: discoveryURL,
-      clientID: clientID,
-      clientSecret: clientSecret,
-      redirectURL: OIDC_REDIRECT_URL_WEB,
-      code: code,
+    let response = await fetch(`${SERVER}/api/oidc/refreshtoken`, {
+      method: 'post',
+      body: JSON.stringify({
+        discoveryURL: discoveryURL,
+        clientID: clientID,
+        clientSecret: clientSecret,
+        redirectURL: OIDC_REDIRECT_URL_WEB,
+        code: code,
+      }),
     });
 
-    if (data.data !== '') {
-      return JSON.parse(data.data);
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
     } else {
-      throw new Error('Could not get refresh token for OIDC provider.');
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
     }
   } catch (err) {
     throw err
   }
 }
+
+// getServerStatus checks if the server is ready to receive requests.
+export const getServerStatus = async (): Promise<boolean> => {
+  try {
+    let response = await fetch(`${SERVER}/api/test`);
+    let data = await response.json()
+
+    return data.status === 'ok'
+  } catch (err) {
+    return false;
+  }
+};

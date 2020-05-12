@@ -1,11 +1,37 @@
-.PHONY: release-beta release-major release-minor release-patch
+BRANCH      ?= $(shell git rev-parse --abbrev-ref HEAD)
+BUILDTIME   ?= $(shell date '+%Y-%m-%d@%H:%M:%S')
+BUILDUSER   ?= $(shell id -un)
+REPO        ?= github.com/kubenav/kubenav
+REVISION    ?= $(shell git rev-parse HEAD)
+VERSION     ?= $(shell git describe --tags)
+
+.PHONY: bindings-android bindings-ios build-devserver build-electron release-beta release-major release-minor release-patch
+
+bindings-android:
+	mkdir -p android/app/src/libs
+	gomobile bind -o android/app/src/libs/mobile.aar -target=android github.com/kubenav/kubenav/pkg/mobile
+
+bindings-ios:
+	mkdir -p ios/App/App/libs
+	gomobile bind -o ios/App/App/libs/Mobile.framework -target=ios github.com/kubenav/kubenav/pkg/mobile
+
+build-devserver:
+	go build -ldflags "-X ${REPO}/pkg/version.Version=${VERSION} \
+		-X ${REPO}/pkg/version.Revision=${REVISION} \
+		-X ${REPO}/pkg/version.Branch=${BRANCH} \
+		-X ${REPO}/pkg/version.BuildUser=${BUILDUSER} \
+		-X ${REPO}/pkg/version.BuildDate=${BUILDTIME}" \
+		-o ./bin/devserver ./cmd/devserver;
+
+build-electron:
+	rm -rf cmd/electron/resources/app
+	rm -rf cmd/electron/output
+	cp -r build cmd/electron/resources/app
+	cd cmd/electron && astilectron-bundler -ldflags -X:${REPO}/pkg/version.Version=${VERSION},${REPO}/pkg/version.Revision=${REVISION},${REPO}/pkg/version.Branch=${BRANCH},${REPO}/pkg/version.BuildUser=${BUILDUSER},${REPO}/pkg/version.BuildDate=${BUILDTIME}
 
 release-beta:
-	git checkout master
-	git pull
-
 	# We increase the version for every new beta release. Therefore it can be happen that when we set a new tag for a
-	# production release that we skip some version number.
+	# production release that we skip some version numbers.
 	$(eval PATCHVERSION=$(shell cat ios/App/App.xcodeproj/project.pbxproj | grep MARKETING_VERSION | tail -n1 | awk '{print substr($$3, 1, length($$3)-1)}'))
 	$(eval PATCHVERSION=$(shell echo "${PATCHVERSION}" | awk -F. '{print $$1"."$$2"."$$3+1}'))
 
@@ -30,7 +56,6 @@ release-major:
 
 	$(eval MAJORVERSION=$(shell git describe --tags --abbrev=0 | awk -F. '{print $$1+1".0.0"}'))
 	npm --no-git-tag-version version $(MAJORVERSION)
-	cd electron && npm --no-git-tag-version version $(MAJORVERSION)
 
 	$(eval ANDROID_VERSION_CODE=$(shell grep versionCode android/app/build.gradle | awk '{print $$2+1}'))
 	sed -i.bak 's/versionCode .*/versionCode ${ANDROID_VERSION_CODE}/g' android/app/build.gradle
@@ -55,7 +80,6 @@ release-minor:
 
 	$(eval MINORVERSION=$(shell git describe --tags --abbrev=0 | awk -F. '{print $$1"."$$2+1".0"}'))
 	npm --no-git-tag-version version $(MINORVERSION)
-	cd electron && npm --no-git-tag-version version $(MINORVERSION)
 
 	$(eval ANDROID_VERSION_CODE=$(shell grep versionCode android/app/build.gradle | awk '{print $$2+1}'))
 	sed -i.bak 's/versionCode .*/versionCode ${ANDROID_VERSION_CODE}/g' android/app/build.gradle
@@ -83,7 +107,6 @@ release-patch:
 	$(eval PATCHVERSION=$(shell cat ios/App/App.xcodeproj/project.pbxproj | grep MARKETING_VERSION | tail -n1 | awk '{print substr($$3, 1, length($$3)-1)}'))
 	$(eval PATCHVERSION=$(shell echo "${PATCHVERSION}" | awk -F. '{print $$1"."$$2"."$$3+1}'))
 	npm --no-git-tag-version version $(PATCHVERSION)
-	cd electron && npm --no-git-tag-version version $(PATCHVERSION)
 
 	$(eval ANDROID_VERSION_CODE=$(shell grep versionCode android/app/build.gradle | awk '{print $$2+1}'))
 	sed -i.bak 's/versionCode .*/versionCode ${ANDROID_VERSION_CODE}/g' android/app/build.gradle
