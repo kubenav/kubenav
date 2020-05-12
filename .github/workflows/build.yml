@@ -22,7 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '13.x'
 
       - name: Setup Go
         uses: actions/setup-go@v2
