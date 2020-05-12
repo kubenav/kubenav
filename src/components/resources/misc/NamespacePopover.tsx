@@ -84,7 +84,7 @@ const NamespacePopover: React.FunctionComponent = () => {
         </IonPopover>
       )}
 
-      <IonButton onClick={(e) => { e.persist(); setPopoverEvent(e); loadNamespaces(); }}>
+      <IonButton onClick={(e) => { e.persist(); setPopoverEvent(e as any); loadNamespaces(); }}>
         <IonIcon slot="icon-only" icon={options} />
       </IonButton>
     </React.Fragment>
