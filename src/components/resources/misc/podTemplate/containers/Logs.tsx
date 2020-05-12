@@ -99,7 +99,7 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ showModal, setShowModal, na
             <IonTitle>{container}</IonTitle>
             <IonButtons slot="primary">
               <IonButton
-                onClick={(e) => { e.persist(); setPopoverEvent(e); setShowPopover(true); }}
+                onClick={(e) => { e.persist(); setPopoverEvent(e as any); setShowPopover(true); }}
               >
                 <IonIcon slot="icon-only" ios={ellipsisHorizontal} md={ellipsisVertical} />
               </IonButton>
