@@ -31,7 +31,7 @@ jobs:
 
       - name: Install Ionic
         run: |
-          npm install -g @ionic/cli@6.6.0
+          npm install -g @ionic/cli@6.9.1
 
       - name: Install Dependencies
         run: |
