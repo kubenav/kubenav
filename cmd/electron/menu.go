@@ -1,6 +1,11 @@
 package main
 
 import (
+	"fmt"
+	"log"
+	"os/exec"
+	"runtime"
+
 	"github.com/kubenav/kubenav/pkg/kube"
 
 	"github.com/asticode/go-astikit"
@@ -8,6 +13,28 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// openBrowser opens a given URL in the standard browser of the current OS.
+// See: https://gist.github.com/hyg/9c4afcd91fe24316cbf0
+func openBrowser(url string) {
+	var err error
+
+	switch runtime.GOOS {
+	case "linux":
+		err = exec.Command("xdg-open", url).Start()
+	case "windows":
+		err = exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
+	case "darwin":
+		err = exec.Command("open", url).Start()
+	default:
+		err = fmt.Errorf("unsupported platform")
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+// createClusterMenuItem creates a new menu item for a given context from the Kubeconfig file.
+// When the cluster is selected an "cluster" event will be send to the frontend via SSE.
 func createClusterMenuItem(cluster string, log *logrus.Logger) astilectron.MenuItemOptions {
 	return astilectron.MenuItemOptions{
 		Label: astikit.StrPtr(cluster),
@@ -19,8 +46,53 @@ func createClusterMenuItem(cluster string, log *logrus.Logger) astilectron.MenuI
 	}
 }
 
-func getMenuOptions(client *kube.Client, log *logrus.Logger) ([]*astilectron.MenuItemOptions, error) {
-	fileMenu := &astilectron.MenuItemOptions{
+// createFileMenu creates the items for the "File" menu. If a new version was found an update item is added. If no new
+// version was found the "Update Available" hint is hidden.
+func createFileMenu(updateAvailable bool, log *logrus.Logger) *astilectron.MenuItemOptions {
+	if updateAvailable {
+		return &astilectron.MenuItemOptions{
+			Label: astikit.StrPtr("File"),
+			SubMenu: []*astilectron.MenuItemOptions{
+				{
+					Label: astikit.StrPtr("Clusters"),
+					OnClick: func(e astilectron.Event) (deleteListener bool) {
+						log.Debugf("Menu item 'Clusters' has been clicked")
+						messageChannel <- Message{Event: "navigation", Data: "/settings/clusters"}
+						return
+					},
+				},
+				{
+					Label: astikit.StrPtr("General"),
+					OnClick: func(e astilectron.Event) (deleteListener bool) {
+						log.Debugf("Menu item 'General' has been clicked")
+						messageChannel <- Message{Event: "navigation", Data: "/settings/general"}
+						return
+					},
+				},
+				{
+					Label: astikit.StrPtr("Info"),
+					OnClick: func(e astilectron.Event) (deleteListener bool) {
+						log.Debugf("Menu item 'Info' has been clicked")
+						messageChannel <- Message{Event: "navigation", Data: "/settings/info"}
+						return
+					},
+				},
+				{Type: astilectron.MenuItemTypeSeparator},
+				{
+					Label: astikit.StrPtr("Update Available"),
+					OnClick: func(e astilectron.Event) (deleteListener bool) {
+						log.Debugf("Menu item 'Update Available' has been clicked")
+						openBrowser("https://github.com/kubenav/kubenav/releases")
+						return
+					},
+				},
+				{Type: astilectron.MenuItemTypeSeparator},
+				{Label: astikit.StrPtr("Quit"), Role: astilectron.MenuItemRoleQuit},
+			},
+		}
+	}
+
+	return &astilectron.MenuItemOptions{
 		Label: astikit.StrPtr("File"),
 		SubMenu: []*astilectron.MenuItemOptions{
 			{
@@ -51,6 +123,11 @@ func getMenuOptions(client *kube.Client, log *logrus.Logger) ([]*astilectron.Men
 			{Label: astikit.StrPtr("Quit"), Role: astilectron.MenuItemRoleQuit},
 		},
 	}
+}
+
+// getMenuOptions returns the menu for the Electron app.
+func getMenuOptions(updateAvailable bool, client *kube.Client, log *logrus.Logger) ([]*astilectron.MenuItemOptions, error) {
+	fileMenu := createFileMenu(updateAvailable, log)
 
 	clusters, err := client.Clusters()
 	if err != nil {
