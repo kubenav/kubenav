@@ -15,7 +15,7 @@ import (
 	"github.com/asticode/go-astikit"
 	"github.com/asticode/go-astilectron"
 	bootstrap "github.com/asticode/go-astilectron-bootstrap"
-	"github.com/elazarl/go-bindata-assetfs"
+	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -115,7 +115,8 @@ var rootCmd = &cobra.Command{
 			}
 		}()
 
-		menuOptions, err := getMenuOptions(client, log)
+		updateAvailable := checkVersion(version.Version, log)
+		menuOptions, err := getMenuOptions(updateAvailable, client, log)
 		if err != nil {
 			log.WithError(err).Fatalf("Could not create menu")
 		}
