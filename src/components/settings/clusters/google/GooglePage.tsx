@@ -10,7 +10,7 @@ import {
   IonPage,
   IonProgressBar,
   IonTitle,
-  IonToolbar
+  IonToolbar,
 } from '@ionic/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -22,7 +22,7 @@ import { saveGoogleTokens } from '../../../../utils/storage';
 import ErrorCard from '../../../misc/ErrorCard';
 
 const isChecked = (id: string, clusters: ICluster[]): boolean => {
-  for (let cluster of clusters) {
+  for (const cluster of clusters) {
     if (cluster.id === id) {
       return true;
     }
@@ -31,7 +31,7 @@ const isChecked = (id: string, clusters: ICluster[]): boolean => {
   return false;
 };
 
-interface IGooglePageProps extends RouteComponentProps {}
+type IGooglePageProps = RouteComponentProps;
 
 const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, history }) => {
   const context = useContext<IContext>(AppContext);
@@ -42,7 +42,7 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       setShowLoading(true);
 
       try {
@@ -57,7 +57,7 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
           saveGoogleTokens(tokens);
           const projects = await getGoogleProjects(tokens.access_token);
 
-          for (let project of projects) {
+          for (const project of projects) {
             const projectClusters = await getGoogleClusters(tokens.access_token, project.projectId);
 
             const tmpClusters: ICluster[] = [];
@@ -70,7 +70,9 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
                   name: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
                   url: `https://${cluster.endpoint}`,
                   certificateAuthorityData: cluster.masterAuth.clusterCaCertificate,
-                  clientCertificateData: cluster.masterAuth.clientCertificate ? cluster.masterAuth.clientCertificate : '',
+                  clientCertificateData: cluster.masterAuth.clientCertificate
+                    ? cluster.masterAuth.clientCertificate
+                    : '',
                   clientKeyData: cluster.masterAuth.clientKey ? cluster.masterAuth.clientKey : '',
                   token: '',
                   username: cluster.masterAuth.username ? cluster.masterAuth.username : '',
@@ -118,9 +120,7 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
           <IonTitle>Add Clusters</IonTitle>
           {error ? null : (
             <IonButtons slot="primary">
-              <IonButton onClick={() => addClusters()}>
-                Add
-              </IonButton>
+              <IonButton onClick={() => addClusters()}>Add</IonButton>
             </IonButtons>
           )}
         </IonToolbar>
@@ -128,7 +128,9 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
       <IonContent>
         {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
 
-        {error ? <ErrorCard error={error} text="Could not load GKE clusters" icon="/assets/icons/kubernetes/kubernetes.png" /> : (
+        {error ? (
+          <ErrorCard error={error} text="Could not load GKE clusters" icon="/assets/icons/kubernetes/kubernetes.png" />
+        ) : (
           clusters.map((cluster, index) => {
             return (
               <IonItem key={index}>
@@ -139,7 +141,7 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
                 />
                 <IonLabel>{cluster.name}</IonLabel>
               </IonItem>
-            )
+            );
           })
         )}
       </IonContent>

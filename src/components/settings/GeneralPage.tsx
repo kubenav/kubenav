@@ -1,7 +1,8 @@
 import {
   IonButtons,
   IonContent,
-  IonHeader, IonInput,
+  IonHeader,
+  IonInput,
   IonItem,
   IonItemDivider,
   IonItemGroup,
@@ -30,7 +31,7 @@ const GeneralPage: React.FunctionComponent = () => {
       darkMode: context.settings.darkMode,
       editorTheme: event.target.value,
       timeout: context.settings.timeout,
-    })
+    });
   };
 
   const changeTimeout = (event) => {
@@ -122,13 +123,15 @@ const GeneralPage: React.FunctionComponent = () => {
               <IonItemDivider>
                 <IonLabel>OIDC Provider</IonLabel>
               </IonItemDivider>
-              {context.oidcProviders ? Object.keys(context.oidcProviders).map(provider => {
-                return (
-                  <OIDCProvider key={provider} provider={provider} />
-                )
-              }) : (
+              {context.oidcProviders ? (
+                Object.keys(context.oidcProviders).map((provider) => {
+                  return <OIDCProvider key={provider} provider={provider} />;
+                })
+              ) : (
                 <IonItem>
-                  <IonLabel><h2>No OIDC Provider found</h2></IonLabel>
+                  <IonLabel>
+                    <h2>No OIDC Provider found</h2>
+                  </IonLabel>
                 </IonItem>
               )}
             </IonItemGroup>

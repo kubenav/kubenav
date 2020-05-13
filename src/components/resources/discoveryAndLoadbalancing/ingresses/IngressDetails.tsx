@@ -1,12 +1,5 @@
-import {
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonCol,
-  IonGrid,
-  IonRow,
-} from '@ionic/react';
-import { NetworkingV1beta1Ingress } from '@kubernetes/client-node'
+import { IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonRow } from '@ionic/react';
+import { NetworkingV1beta1Ingress } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -36,7 +29,7 @@ const IngressDetails: React.FunctionComponent<IIngressDetailsProps> = ({ item, t
         </Configuration>
       </IonRow>
 
-      {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       <IonRow>
         {item.spec && item.spec.rules ? (
@@ -48,25 +41,34 @@ const IngressDetails: React.FunctionComponent<IIngressDetailsProps> = ({ item, t
               <IonCardContent>
                 <IonGrid>
                   <IonRow>
-                    <IonCol><b>Host</b></IonCol>
-                    <IonCol><b>HTTP</b></IonCol>
+                    <IonCol>
+                      <b>Host</b>
+                    </IonCol>
+                    <IonCol>
+                      <b>HTTP</b>
+                    </IonCol>
                   </IonRow>
-                {item.spec.rules.map((rule, index) => {
-                  return (
-                    <IonRow key={index}>
-                      <IonCol>{rule.host}</IonCol>
-                      <IonCol>{rule.http && rule.http.paths.map((path, index) => {
-                        return (
-                          <div key={index}>
-                            Path: {path.path}<br/>
-                            Service Name: {path.backend.serviceName}<br/>
-                            Service Port: {path.backend.servicePort}
-                          </div>
-                        )
-                      })}</IonCol>
-                    </IonRow>
-                  )
-                })}
+                  {item.spec.rules.map((rule, index) => {
+                    return (
+                      <IonRow key={index}>
+                        <IonCol>{rule.host}</IonCol>
+                        <IonCol>
+                          {rule.http &&
+                            rule.http.paths.map((path, index) => {
+                              return (
+                                <div key={index}>
+                                  Path: {path.path}
+                                  <br />
+                                  Service Name: {path.backend.serviceName}
+                                  <br />
+                                  Service Port: {path.backend.servicePort}
+                                </div>
+                              );
+                            })}
+                        </IonCol>
+                      </IonRow>
+                    );
+                  })}
                 </IonGrid>
               </IonCardContent>
             </IonCardEqualHeight>
@@ -82,8 +84,12 @@ const IngressDetails: React.FunctionComponent<IIngressDetailsProps> = ({ item, t
               <IonCardContent>
                 <IonGrid>
                   <IonRow>
-                    <IonCol><b>Secret Name</b></IonCol>
-                    <IonCol><b>Hosts</b></IonCol>
+                    <IonCol>
+                      <b>Secret Name</b>
+                    </IonCol>
+                    <IonCol>
+                      <b>Hosts</b>
+                    </IonCol>
                   </IonRow>
                   {item.spec.tls.map((tls, index) => {
                     return (
@@ -91,7 +97,7 @@ const IngressDetails: React.FunctionComponent<IIngressDetailsProps> = ({ item, t
                         <IonCol>{tls.secretName}</IonCol>
                         <IonCol>{tls.hosts && tls.hosts.join(', ')}</IonCol>
                       </IonRow>
-                    )
+                    );
                   })}
                 </IonGrid>
               </IonCardContent>
@@ -102,11 +108,17 @@ const IngressDetails: React.FunctionComponent<IIngressDetailsProps> = ({ item, t
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
         <IonRow>
-          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+          <List
+            name="Events"
+            section="cluster"
+            type="events"
+            namespace={item.metadata.namespace}
+            selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
+          />
         </IonRow>
       ) : null}
     </IonGrid>
-  )
+  );
 };
 
 export default IngressDetails;

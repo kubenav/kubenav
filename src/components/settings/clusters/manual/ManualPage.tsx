@@ -21,7 +21,7 @@ import { RouteComponentProps } from 'react-router';
 import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 
-interface IManualPageProps extends RouteComponentProps {}
+type IManualPageProps = RouteComponentProps;
 
 const ManualPage: React.FunctionComponent<IManualPageProps> = ({ history }) => {
   const context = useContext<IContext>(AppContext);
@@ -75,29 +75,37 @@ const ManualPage: React.FunctionComponent<IManualPageProps> = ({ history }) => {
 
   const addClusters = () => {
     if (name === '') {
-      setError('Name is required')
+      setError('Name is required');
     } else if (url === '') {
-      setError('Server is required')
+      setError('Server is required');
     } else if (!url.startsWith('https://')) {
-      setError('Invalid URL')
-    } else if (clientCertificateData === '' && clientKeyData === '' && token === '' && username === '' && password === '') {
-      setError('Client Certificate Data and Client Key Data or Token or Username and Password is required')
+      setError('Invalid URL');
+    } else if (
+      clientCertificateData === '' &&
+      clientKeyData === '' &&
+      token === '' &&
+      username === '' &&
+      password === ''
+    ) {
+      setError('Client Certificate Data and Client Key Data or Token or Username and Password is required');
     } else {
       try {
-        context.addCluster([{
-          id: '',
-          name: name,
-          url: url,
-          certificateAuthorityData: certificateAuthorityData,
-          clientCertificateData: clientCertificateData,
-          clientKeyData: clientKeyData,
-          token: token,
-          username: username,
-          password: password,
-          insecureSkipTLSVerify: insecureSkipTLSVerify,
-          authProvider: '',
-          namespace: 'default',
-        }]);
+        context.addCluster([
+          {
+            id: '',
+            name: name,
+            url: url,
+            certificateAuthorityData: certificateAuthorityData,
+            clientCertificateData: clientCertificateData,
+            clientKeyData: clientKeyData,
+            token: token,
+            username: username,
+            password: password,
+            insecureSkipTLSVerify: insecureSkipTLSVerify,
+            authProvider: '',
+            namespace: 'default',
+          },
+        ]);
 
         setError('');
         history.push('/settings/clusters');
@@ -117,9 +125,7 @@ const ManualPage: React.FunctionComponent<IManualPageProps> = ({ history }) => {
           <IonTitle>Add Clusters</IonTitle>
           {error ? null : (
             <IonButtons slot="primary">
-              <IonButton onClick={() => addClusters()}>
-                Add
-              </IonButton>
+              <IonButton onClick={() => addClusters()}>Add</IonButton>
             </IonButtons>
           )}
         </IonToolbar>

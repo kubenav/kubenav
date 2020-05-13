@@ -1,8 +1,5 @@
-import {
-  IonItem,
-  IonLabel,
-} from '@ionic/react';
-import { V1ReplicaSet } from '@kubernetes/client-node'
+import { IonItem, IonLabel } from '@ionic/react';
+import { V1ReplicaSet } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -23,10 +20,8 @@ const ReplicaSetItem: React.FunctionComponent<IReplicaSetItemProps> = ({ item, s
 
   if (item.spec && item.status) {
     if (
-      item.spec.replicas === 0
-      || item.spec.replicas === (
-        item.status.replicas && item.status.readyReplicas && item.status.availableReplicas
-      )
+      item.spec.replicas === 0 ||
+      item.spec.replicas === (item.status.replicas && item.status.readyReplicas && item.status.availableReplicas)
     ) {
       status = 'success';
     }
@@ -40,7 +35,12 @@ const ReplicaSetItem: React.FunctionComponent<IReplicaSetItemProps> = ({ item, s
   // - Available: The number of available replicas (ready for at least minReadySeconds) for this replica set.
   // - Age: The time when the replica set was created.
   return (
-    <IonItem routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
+    <IonItem
+      routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${
+        item.metadata ? item.metadata.name : ''
+      }`}
+      routerDirection="forward"
+    >
       <ItemStatus status={status} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
@@ -48,12 +48,19 @@ const ReplicaSetItem: React.FunctionComponent<IReplicaSetItemProps> = ({ item, s
           Desired: {item.spec && item.spec.replicas ? item.spec.replicas : '0'}
           {item.status && item.status.replicas ? ` | Current: ${item.status.replicas}` : ' | Current: 0'}
           {item.status && item.status.readyReplicas ? ` | Ready: ${item.status.readyReplicas}` : ' | Ready: 0'}
-          {item.status && item.status.availableReplicas ? ` | Available: ${item.status.availableReplicas}` : ' | Available: 0'}
-          {item.metadata && item.metadata.creationTimestamp ? ` | Age: ${timeDifference(new Date().getTime(), new Date(item.metadata.creationTimestamp.toString()).getTime())}` : ''}
+          {item.status && item.status.availableReplicas
+            ? ` | Available: ${item.status.availableReplicas}`
+            : ' | Available: 0'}
+          {item.metadata && item.metadata.creationTimestamp
+            ? ` | Age: ${timeDifference(
+                new Date().getTime(),
+                new Date(item.metadata.creationTimestamp.toString()).getTime(),
+              )}`
+            : ''}
         </p>
       </IonLabel>
     </IonItem>
-  )
+  );
 };
 
 export default ReplicaSetItem;

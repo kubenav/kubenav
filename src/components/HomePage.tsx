@@ -12,9 +12,9 @@ import {
   IonMenuButton,
   IonPage,
   IonTitle,
-  IonToolbar
+  IonToolbar,
 } from '@ionic/react';
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 
 import { IContext } from '../declarations';
 import { AppContext } from '../utils/context';
@@ -39,8 +39,8 @@ const HomePage: React.FunctionComponent = () => {
           <IonCard>
             <img alt="kubenav" src="/assets/card-header.png" />
             <IonCardHeader>
-                <IonCardSubtitle>Welcome to kubenav</IonCardSubtitle>
-                <IonCardTitle>Explore your Kubernetes Clusters</IonCardTitle>
+              <IonCardSubtitle>Welcome to kubenav</IonCardSubtitle>
+              <IonCardTitle>Explore your Kubernetes Clusters</IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
               <p className="paragraph-margin-bottom">
@@ -66,11 +66,7 @@ const HomePage: React.FunctionComponent = () => {
                 kubenav app. To add a new Kubernetes cluster to the app use the button <b>Add a Cluster</b> or the
                 <b>Clusters</b> item from the menu.
               </p>
-              <IonButton
-                expand="block"
-                routerLink="/settings/clusters"
-                routerDirection="none"
-              >
+              <IonButton expand="block" routerLink="/settings/clusters" routerDirection="none">
                 Add a Cluster
               </IonButton>
             </IonCardContent>

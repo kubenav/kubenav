@@ -9,12 +9,13 @@ import {
   IonHeader,
   IonItem,
   IonLabel,
-  IonList, IonListHeader,
+  IonList,
+  IonListHeader,
   IonMenuButton,
   IonNote,
   IonPage,
   IonTitle,
-  IonToolbar
+  IonToolbar,
 } from '@ionic/react';
 import { useGetInfo } from '@ionic/react-hooks/device';
 import React, { useEffect, useState } from 'react';

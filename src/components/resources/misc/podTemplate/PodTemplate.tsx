@@ -1,9 +1,5 @@
-import {
-  IonItemDivider,
-  IonLabel,
-  IonRow,
-} from '@ionic/react';
-import { V1PodTemplateSpec } from '@kubernetes/client-node'
+import { IonItemDivider, IonLabel, IonRow } from '@ionic/react';
+import { V1PodTemplateSpec } from '@kubernetes/client-node';
 import React from 'react';
 
 import Containers from './containers/Containers';
@@ -32,13 +28,14 @@ const PodTemplate: React.FunctionComponent<IPodTemplateProps> = ({ template }) =
 
       <IonRow>
         {template.spec && template.spec.volumes ? <Volumes volumes={template.spec.volumes} /> : null}
-        {template.spec
-        && template.spec.tolerations
-        && template.spec.tolerations.filter((toleration) => !!toleration.key).length > 0
-          ? <Tolerations tolerations={template.spec.tolerations} /> : null}
+        {template.spec &&
+        template.spec.tolerations &&
+        template.spec.tolerations.filter((toleration) => !!toleration.key).length > 0 ? (
+          <Tolerations tolerations={template.spec.tolerations} />
+        ) : null}
       </IonRow>
     </React.Fragment>
-  )
+  );
 };
 
 export default PodTemplate;

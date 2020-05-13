@@ -27,7 +27,7 @@ import {
   V1ContainerState,
   V1ContainerStatus,
   V1EnvVarSource,
-} from '@kubernetes/client-node'
+} from '@kubernetes/client-node';
 import { close, list } from 'ionicons/icons';
 import yaml from 'js-yaml';
 import React, { useState } from 'react';
@@ -81,14 +81,16 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
   const envValueFrom = (source: V1EnvVarSource): string => {
     if (source.configMapKeyRef) {
       return source.configMapKeyRef.name
-        ? `${source.configMapKeyRef.key} (${source.configMapKeyRef.name})` : source.configMapKeyRef.key;
+        ? `${source.configMapKeyRef.key} (${source.configMapKeyRef.name})`
+        : source.configMapKeyRef.key;
     } else if (source.fieldRef) {
       return source.fieldRef.fieldPath;
     } else if (source.resourceFieldRef) {
       return source.resourceFieldRef.resource;
     } else if (source.secretKeyRef) {
       return source.secretKeyRef.name
-        ? `${source.secretKeyRef.key} (${source.secretKeyRef.name})` : source.secretKeyRef.key;
+        ? `${source.secretKeyRef.key} (${source.secretKeyRef.name})`
+        : source.secretKeyRef.key;
     }
 
     return '';
@@ -119,14 +121,51 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
           <IonLabel>
             <h2>{container.name}</h2>
             <p>
-              {status ? `Ready: ${status.ready ? '1' : '0'} | Restarts: ${status.restartCount ? status.restartCount : 0} | State: ${getState(status)}` : ''}
-              <br/>
+              {status
+                ? `Ready: ${status.ready ? '1' : '0'} | Restarts: ${
+                    status.restartCount ? status.restartCount : 0
+                  } | State: ${getState(status)}`
+                : ''}
+              <br />
               {/* tslint:disable-next-line:max-line-length */}
-              CPU: {metrics && metrics.usage && metrics.usage.hasOwnProperty('cpu') ? formatResourceValue('cpu', metrics.usage['cpu']) : '-'} ({container.resources && container.resources.requests && container.resources.requests.hasOwnProperty('cpu') ? formatResourceValue('cpu', container.resources.requests['cpu']) : '-'}/{container.resources && container.resources.limits && container.resources.limits.hasOwnProperty('cpu') ? formatResourceValue('cpu', container.resources.limits['cpu']) : '-'}) | Memory: {metrics && metrics.usage && metrics.usage.hasOwnProperty('memory') ? formatResourceValue('memory', metrics.usage['memory']) : '-'} ({container.resources && container.resources.requests && container.resources.requests.hasOwnProperty('memory') ? formatResourceValue('memory', container.resources.requests['memory']) : '-'}/{container.resources && container.resources.limits && container.resources.limits.hasOwnProperty('memory') ? formatResourceValue('memory', container.resources.limits['memory']) : '-'})
+              CPU:{' '}
+              {metrics && metrics.usage && metrics.usage.hasOwnProperty('cpu')
+                ? formatResourceValue('cpu', metrics.usage['cpu'])
+                : '-'}{' '}
+              (
+              {container.resources && container.resources.requests && container.resources.requests.hasOwnProperty('cpu')
+                ? formatResourceValue('cpu', container.resources.requests['cpu'])
+                : '-'}
+              /
+              {container.resources && container.resources.limits && container.resources.limits.hasOwnProperty('cpu')
+                ? formatResourceValue('cpu', container.resources.limits['cpu'])
+                : '-'}
+              ) | Memory:{' '}
+              {metrics && metrics.usage && metrics.usage.hasOwnProperty('memory')
+                ? formatResourceValue('memory', metrics.usage['memory'])
+                : '-'}{' '}
+              (
+              {container.resources &&
+              container.resources.requests &&
+              container.resources.requests.hasOwnProperty('memory')
+                ? formatResourceValue('memory', container.resources.requests['memory'])
+                : '-'}
+              /
+              {container.resources && container.resources.limits && container.resources.limits.hasOwnProperty('memory')
+                ? formatResourceValue('memory', container.resources.limits['memory'])
+                : '-'}
+              )
             </p>
           </IonLabel>
           {!isPlatform('hybrid') && logs && name && namespace ? (
-            <IonButton fill="outline" slot="end" onClick={(e) => { e.stopPropagation(); setShowLogs(true); }}>
+            <IonButton
+              fill="outline"
+              slot="end"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowLogs(true);
+              }}
+            >
               <IonIcon slot="start" icon={list} />
               Logs
             </IonButton>
@@ -188,18 +227,26 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
                         obj={container}
                         objKey="args"
                         title="Args"
-                        value={(args) =>
-                          <ul className="no-margin-list">{args.map((arg, index) => <li key={index}>{arg}</li>)}</ul>
-                        }
+                        value={(args) => (
+                          <ul className="no-margin-list">
+                            {args.map((arg, index) => (
+                              <li key={index}>{arg}</li>
+                            ))}
+                          </ul>
+                        )}
                       />
                       <Row
                         obj={container}
                         objKey="ports"
                         title="Ports"
                         value={(ports) => (
-                          <ul className="no-margin-list">{ports.map((port: V1ContainerPort, index) =>
-                            <li key={index}>{port.containerPort} {port.name ? `(${port.name})` : ''}</li>
-                          )}</ul>
+                          <ul className="no-margin-list">
+                            {ports.map((port: V1ContainerPort, index) => (
+                              <li key={index}>
+                                {port.containerPort} {port.name ? `(${port.name})` : ''}
+                              </li>
+                            ))}
+                          </ul>
                         )}
                       />
                     </IonGrid>
@@ -226,7 +273,7 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
                           obj={status}
                           objKey="ready"
                           title="Ready"
-                          value={(ready) => ready ? '1' : '0'}
+                          value={(ready) => (ready ? '1' : '0')}
                           defaultValue="false"
                         />
                         <Row obj={status} objKey="restartCount" title="Restart Count" />
@@ -248,7 +295,9 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
                       <IonGrid>
                         {container.env.map((env, index) => (
                           <IonRow key={index}>
-                            <IonCol size="auto"><b>{env.name}:</b></IonCol>
+                            <IonCol size="auto">
+                              <b>{env.name}:</b>
+                            </IonCol>
                             {env.value ? <IonCol>{env.value}</IonCol> : null}
                             {env.valueFrom ? <IonCol>Source: {envValueFrom(env.valueFrom)}</IonCol> : null}
                           </IonRow>
@@ -269,8 +318,12 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
                       <IonGrid>
                         {container.volumeMounts.map((volume, index) => (
                           <IonRow key={index}>
-                            <IonCol size="auto"><b>{volume.name}:</b></IonCol>
-                            <IonCol>{volume.mountPath} {volume.readOnly ? '(ro)' : ''}</IonCol>
+                            <IonCol size="auto">
+                              <b>{volume.name}:</b>
+                            </IonCol>
+                            <IonCol>
+                              {volume.mountPath} {volume.readOnly ? '(ro)' : ''}
+                            </IonCol>
                           </IonRow>
                         ))}
                       </IonGrid>
@@ -303,14 +356,23 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
                               return (
                                 <tr key={index}>
                                   <td>{resource}</td>
-                                  <td>{container.resources && container.resources.requests
-                                    ? formatResourceValue(resource, container.resources.requests[resource]) : null}</td>
-                                  <td>{container.resources && container.resources.limits
-                                    ? formatResourceValue(resource, container.resources.limits[resource]) : null}</td>
-                                  <td>{metrics && metrics.usage
-                                    ? formatResourceValue(resource, metrics.usage[resource]) : null}</td>
+                                  <td>
+                                    {container.resources && container.resources.requests
+                                      ? formatResourceValue(resource, container.resources.requests[resource])
+                                      : null}
+                                  </td>
+                                  <td>
+                                    {container.resources && container.resources.limits
+                                      ? formatResourceValue(resource, container.resources.limits[resource])
+                                      : null}
+                                  </td>
+                                  <td>
+                                    {metrics && metrics.usage
+                                      ? formatResourceValue(resource, metrics.usage[resource])
+                                      : null}
+                                  </td>
                                 </tr>
-                              )
+                              );
                             })}
                           </tbody>
                         </table>
@@ -333,7 +395,7 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
                     </IonCardContent>
                   </IonCardEqualHeight>
                 </IonCol>
-              ): null}
+              ) : null}
 
               {container.readinessProbe ? (
                 <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
@@ -346,7 +408,7 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
                     </IonCardContent>
                   </IonCardEqualHeight>
                 </IonCol>
-              ): null}
+              ) : null}
 
               {container.securityContext ? (
                 <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
@@ -365,7 +427,7 @@ const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, 
         </IonContent>
       </IonModal>
     </React.Fragment>
-  )
+  );
 };
 
 export default Container;

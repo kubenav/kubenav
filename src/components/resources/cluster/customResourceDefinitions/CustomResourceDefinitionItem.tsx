@@ -1,8 +1,5 @@
-import {
-  IonItem,
-  IonLabel,
-} from '@ionic/react';
-import { V1beta1CustomResourceDefinition } from '@kubernetes/client-node'
+import { IonItem, IonLabel } from '@ionic/react';
+import { V1beta1CustomResourceDefinition } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -13,9 +10,9 @@ interface ICustomResourceDefinitionItemProps extends RouteComponentProps {
 }
 
 const CustomResourceDefinitionItem: React.FunctionComponent<ICustomResourceDefinitionItemProps> = ({
- item,
- section,
- type,
+  item,
+  section,
+  type,
 }) => {
   return (
     <IonItem
@@ -26,7 +23,7 @@ const CustomResourceDefinitionItem: React.FunctionComponent<ICustomResourceDefin
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
       </IonLabel>
     </IonItem>
-  )
+  );
 };
 
 export default CustomResourceDefinitionItem;

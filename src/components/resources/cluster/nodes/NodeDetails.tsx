@@ -9,7 +9,7 @@ import {
   IonList,
   IonRow,
 } from '@ionic/react';
-import { V1Node, V1NodeAddress } from '@kubernetes/client-node'
+import { V1Node, V1NodeAddress } from '@kubernetes/client-node';
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -38,10 +38,14 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type })
 
   useEffect(() => {
     if (item.metadata && item.metadata.name) {
-      (async() => {
+      (async () => {
         try {
-          const data: INodeMetrics = await context.request('GET', `/apis/metrics.k8s.io/v1beta1/nodes/${item.metadata!.name}`, '');
-          setMetrics(data)
+          const data: INodeMetrics = await context.request(
+            'GET',
+            `/apis/metrics.k8s.io/v1beta1/nodes/${item.metadata!.name}`,
+            '',
+          );
+          setMetrics(data);
         } catch (err) {
           // TODO: Implement error handling.
         }
@@ -52,8 +56,8 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type })
   }, [item, type]); /* eslint-disable-line */
 
   const imageName = (names: string[], long: boolean): string => {
-    if (long) return names.reduce((a, b) => a.length > b.length ? a : b);
-    return names.reduce((a, b) => a.length <= b.length ? a : b);
+    if (long) return names.reduce((a, b) => (a.length > b.length ? a : b));
+    return names.reduce((a, b) => (a.length <= b.length ? a : b));
   };
 
   return (
@@ -75,7 +79,9 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type })
 
         <Status>
           <IonRow>
-            <IonCol size="auto"><b>Status:</b></IonCol>
+            <IonCol size="auto">
+              <b>Status:</b>
+            </IonCol>
             <IonCol>{getStatus(item)}</IonCol>
           </IonRow>
           <Row
@@ -83,16 +89,26 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type })
             objKey="status.addresses"
             title="Addresses"
             value={(addresses: V1NodeAddress[]) => (
-              <ul className="no-margin-list">{addresses.map((address, index) =>
-                <li key={index}>{address.type}: {address.address}</li>)}</ul>
+              <ul className="no-margin-list">
+                {addresses.map((address, index) => (
+                  <li key={index}>
+                    {address.type}: {address.address}
+                  </li>
+                ))}
+              </ul>
             )}
           />
           <Row obj={item} objKey="status.phase" title="Phase" />
-          <Row obj={item} objKey="spec.unschedulable" title="Unschedulable" value={(unschedulable) => unschedulable ? 'true' : 'false'} />
+          <Row
+            obj={item}
+            objKey="spec.unschedulable"
+            title="Unschedulable"
+            value={(unschedulable) => (unschedulable ? 'true' : 'false')}
+          />
         </Status>
       </IonRow>
 
-      {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       <IonRow>
         {item.status && item.status.capacity && item.status.allocatable ? (
@@ -121,7 +137,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type })
                             <td>{formatResourceValue(key, item.status!.allocatable![key])}</td>
                             <td>{metrics && metrics.usage ? formatResourceValue(key, metrics.usage[key]) : null}</td>
                           </tr>
-                        )
+                        );
                       })}
                     </tbody>
                   </table>
@@ -136,13 +152,25 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type })
 
       {item.metadata && item.metadata.name ? (
         <IonRow>
-          <List name="Pods" section="workloads" type="pods" namespace="" selector={`fieldSelector=spec.nodeName=${item.metadata.name}`} />
+          <List
+            name="Pods"
+            section="workloads"
+            type="pods"
+            namespace=""
+            selector={`fieldSelector=spec.nodeName=${item.metadata.name}`}
+          />
         </IonRow>
       ) : null}
 
       {item.metadata && item.metadata.name ? (
         <IonRow>
-          <List name="Events" section="cluster" type="events" namespace="" selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+          <List
+            name="Events"
+            section="cluster"
+            type="events"
+            namespace=""
+            selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
+          />
         </IonRow>
       ) : null}
 
@@ -166,7 +194,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type })
                           </p>
                         </IonLabel>
                       </IonItem>
-                    )
+                    );
                   })}
                 </IonList>
               </IonCardContent>
@@ -175,7 +203,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type })
         </IonRow>
       ) : null}
     </IonGrid>
-  )
+  );
 };
 
 export default NodeDetails;

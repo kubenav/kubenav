@@ -1,7 +1,4 @@
-import {
-  IonItemOptions,
-  IonItemSliding,
-} from '@ionic/react';
+import { IonItemOptions, IonItemSliding } from '@ionic/react';
 import React from 'react';
 
 import DeleteItem from './DeleteItem';

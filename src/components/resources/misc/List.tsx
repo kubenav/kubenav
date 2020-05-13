@@ -35,7 +35,7 @@ const List: React.FunctionComponent<IListProps> = ({ name, section, type, namesp
   const [items, setItems] = useState<any>();
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       setItems(undefined);
       await load();
     })();
@@ -47,11 +47,7 @@ const List: React.FunctionComponent<IListProps> = ({ name, section, type, namesp
     setShowLoading(true);
 
     try {
-      const data: any = await context.request(
-        'GET',
-        `${page.listURL(namespace) }${selector ? '?' + selector : ''}`,
-        '',
-      );
+      const data: any = await context.request('GET', `${page.listURL(namespace)}${selector ? '?' + selector : ''}`, '');
       setItems(data.items);
     } catch (err) {
       setAlert(err);
@@ -83,19 +79,15 @@ const List: React.FunctionComponent<IListProps> = ({ name, section, type, namesp
               ) : null}
 
               {items.filter(filter ? filter : () => true).map((item, index) => {
-                return (
-                  <Component key={index} item={item} section={section} type={type} />
-                )
+                return <Component key={index} item={item} section={section} type={type} />;
               })}
             </IonList>
           </IonCardContent>
         </IonCard>
       </IonCol>
-    )
+    );
   } else {
-    return (
-      <React.Fragment />
-    )
+    return <React.Fragment />;
   }
 };
 

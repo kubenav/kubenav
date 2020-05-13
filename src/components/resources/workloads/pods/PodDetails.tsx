@@ -1,10 +1,6 @@
-import {
-  IonCol,
-  IonGrid,
-  IonRow,
-} from '@ionic/react';
+import { IonCol, IonGrid, IonRow } from '@ionic/react';
 import { V1Pod } from '@kubernetes/client-node';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext, IPodMetrics } from '../../../../declarations';
@@ -34,10 +30,14 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }) =
 
   useEffect(() => {
     if (item.metadata && item.metadata.namespace && item.metadata.name) {
-      (async() => {
+      (async () => {
         try {
-          const data: IPodMetrics = await context.request('GET', `/apis/metrics.k8s.io/v1beta1/namespaces/${item.metadata!.namespace}/pods/${item.metadata!.name}`, '');
-          setMetrics(data)
+          const data: IPodMetrics = await context.request(
+            'GET',
+            `/apis/metrics.k8s.io/v1beta1/namespaces/${item.metadata!.namespace}/pods/${item.metadata!.name}`,
+            '',
+          );
+          setMetrics(data);
         } catch (err) {
           // TODO: Implement error handling.
         }
@@ -60,15 +60,21 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }) =
 
         <Status>
           <IonRow>
-            <IonCol size="auto"><b>Ready:</b></IonCol>
+            <IonCol size="auto">
+              <b>Ready:</b>
+            </IonCol>
             <IonCol>{getReady(item)}</IonCol>
           </IonRow>
           <IonRow>
-            <IonCol size="auto"><b>Restarts:</b></IonCol>
+            <IonCol size="auto">
+              <b>Restarts:</b>
+            </IonCol>
             <IonCol>{getRestarts(item)}</IonCol>
           </IonRow>
           <IonRow>
-            <IonCol size="auto"><b>Status:</b></IonCol>
+            <IonCol size="auto">
+              <b>Status:</b>
+            </IonCol>
             <IonCol>{getStatus(item)}</IonCol>
           </IonRow>
           <Row obj={item} objKey="status.qosClass" title="QoS" />
@@ -78,7 +84,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }) =
         </Status>
       </IonRow>
 
-      {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       <IonRow>
         {item.spec && item.spec.initContainers && item.spec.initContainers.length > 0 ? (
@@ -108,18 +114,27 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }) =
       <IonRow>
         {item.status && item.status.conditions ? <Conditions conditions={item.status.conditions} /> : null}
         {item.spec && item.spec.volumes ? <Volumes volumes={item.spec.volumes} /> : null}
-        {item.spec && item.spec.tolerations && item.spec.tolerations.filter((toleration) =>
-          !!toleration.key).length > 0 ? <Tolerations tolerations={item.spec.tolerations} /> : null}
+        {item.spec &&
+        item.spec.tolerations &&
+        item.spec.tolerations.filter((toleration) => !!toleration.key).length > 0 ? (
+          <Tolerations tolerations={item.spec.tolerations} />
+        ) : null}
         {item.spec && item.spec.affinity ? <Affinities affinities={item.spec.affinity} /> : null}
       </IonRow>
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
         <IonRow>
-          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+          <List
+            name="Events"
+            section="cluster"
+            type="events"
+            namespace={item.metadata.namespace}
+            selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
+          />
         </IonRow>
       ) : null}
     </IonGrid>
-  )
+  );
 };
 
 export default PodDetails;

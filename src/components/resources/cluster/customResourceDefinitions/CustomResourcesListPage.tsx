@@ -31,10 +31,10 @@ interface IMatchParams {
   name: string;
 }
 
-interface ICustomResourcesListPageProps extends RouteComponentProps<IMatchParams> {}
+type ICustomResourcesListPageProps = RouteComponentProps<IMatchParams>;
 
 const getURL = (namespace: string, group: string, version: string, name: string): string => {
-  return namespace ? `/apis/${group}/${version}/namespaces/${namespace}/${name}` : `/apis/${group}/${version}/${name}`
+  return namespace ? `/apis/${group}/${version}/namespaces/${namespace}/${name}` : `/apis/${group}/${version}/${name}`;
 };
 
 const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageProps> = ({ match }) => {
@@ -47,7 +47,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
   const [searchText, setSearchText] = useState<string>('');
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       setItems(undefined);
       setUrl(match.url);
       await load();
@@ -73,7 +73,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
       const data: any = await context.request(
         'GET',
         getURL(namespace, match.params.group, match.params.version, match.params.name),
-        ''
+        '',
       );
       setError('');
       setItems(data.items);
@@ -108,22 +108,43 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
 
         {error === '' && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? (
           <React.Fragment>
-            <IonSearchbar inputmode="search" value={searchText} onIonChange={e => setSearchText(e.detail.value!)} />
+            <IonSearchbar inputmode="search" value={searchText} onIonChange={(e) => setSearchText(e.detail.value!)} />
 
             <IonList>
-              {match.url === url && items ? items.filter((item) => {
-                const regex = new RegExp(searchText, 'gi');
-                return item.metadata && item.metadata.name && item.metadata.name.match(regex);
-              }).map((item, index) => {
-                return (
-                  <ItemOptions key={index} item={item} url={`${getURL(item.metadata ? item.metadata.namespace : '', match.params.group, match.params.version, match.params.name)}/${item.metadata ? item.metadata.name : ''}`}>
-                    <CustomResourceItem item={item} />
-                  </ItemOptions>
-                )
-              }) : null}
+              {match.url === url && items
+                ? items
+                    .filter((item) => {
+                      const regex = new RegExp(searchText, 'gi');
+                      return item.metadata && item.metadata.name && item.metadata.name.match(regex);
+                    })
+                    .map((item, index) => {
+                      return (
+                        <ItemOptions
+                          key={index}
+                          item={item}
+                          url={`${getURL(
+                            item.metadata ? item.metadata.namespace : '',
+                            match.params.group,
+                            match.params.version,
+                            match.params.name,
+                          )}/${item.metadata ? item.metadata.name : ''}`}
+                        >
+                          <CustomResourceItem item={item} />
+                        </ItemOptions>
+                      );
+                    })
+                : null}
             </IonList>
           </React.Fragment>
-        ) : <LoadingErrorCard cluster={context.cluster} clusters={context.clusters} error={error} icon="/assets/icons/kubernetes/crd.png" text={`Could not get Custom Resource "${match.params.name}"`} />}
+        ) : (
+          <LoadingErrorCard
+            cluster={context.cluster}
+            clusters={context.clusters}
+            error={error}
+            icon="/assets/icons/kubernetes/crd.png"
+            text={`Could not get Custom Resource "${match.params.name}"`}
+          />
+        )}
       </IonContent>
     </IonPage>
   );

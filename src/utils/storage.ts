@@ -1,11 +1,4 @@
-import {
-  IAppSettings,
-  IAWSTokens,
-  IAzureCredentials,
-  IClusters,
-  IGoogleTokens,
-  IOIDCProviders,
-} from '../declarations';
+import { IAppSettings, IAWSTokens, IAzureCredentials, IClusters, IGoogleTokens, IOIDCProviders } from '../declarations';
 import {
   DEFAULT_SETTINGS,
   STORAGE_AWS_TOKENS,
@@ -26,24 +19,27 @@ export const readAWSTokens = (): IAWSTokens => {
 };
 
 // readAzureCredentials returns the save IDs for Azure. If there are no IDs saved the function returns undefined.
-export const readAzureCredentials = (): IAzureCredentials|undefined => {
+export const readAzureCredentials = (): IAzureCredentials | undefined => {
   const ids = localStorage.getItem(STORAGE_AZURE_CREDENTIALS);
   return ids ? JSON.parse(ids) : undefined;
 };
 
 // readCluster returns the saved active cluster from localStorage. If there is no value in the localStorage or the saved
 // active cluster is not in the saved cluster, undefined is returned.
-export const readCluster = (): string|undefined => {
+export const readCluster = (): string | undefined => {
   const clusters = readClusters();
   return localStorage.getItem(STORAGE_CLUSTER) !== null && localStorage.getItem(STORAGE_CLUSTER) !== ''
-    ? localStorage.getItem(STORAGE_CLUSTER) as string
-    : clusters && Object.keys(clusters).length > 0 ? Object.keys(clusters)[0] : undefined;
+    ? (localStorage.getItem(STORAGE_CLUSTER) as string)
+    : clusters && Object.keys(clusters).length > 0
+    ? Object.keys(clusters)[0]
+    : undefined;
 };
 
 // readClusters returns the saved clusters from localStorage. If there are no saved clusters, undefined is returned.
-export const readClusters = (): IClusters|undefined => {
+export const readClusters = (): IClusters | undefined => {
   return localStorage.getItem(STORAGE_CLUSTERS) !== null && localStorage.getItem(STORAGE_CLUSTERS) !== ''
-    ? JSON.parse(localStorage.getItem(STORAGE_CLUSTERS) as string) as IClusters : undefined;
+    ? (JSON.parse(localStorage.getItem(STORAGE_CLUSTERS) as string) as IClusters)
+    : undefined;
 };
 
 // readGoogleClientID returns the Google client id from localStorage. If there is no client id, an empty string is
@@ -54,9 +50,10 @@ export const readGoogleClientID = (): string => {
 };
 
 // readGoogleTokens returns the tokens required for Google from localStorage.
-export const readGoogleTokens = (): IGoogleTokens|undefined => {
+export const readGoogleTokens = (): IGoogleTokens | undefined => {
   return localStorage.getItem(STORAGE_GOOGLE_TOKENS)
-    ? JSON.parse(localStorage.getItem(STORAGE_GOOGLE_TOKENS)!) : undefined;
+    ? JSON.parse(localStorage.getItem(STORAGE_GOOGLE_TOKENS)!)
+    : undefined;
 };
 
 // readOIDCLastProvider returns the saved name of the last used OIDC provider. This is used to assign a redirect to the
@@ -71,7 +68,7 @@ export const readOIDCLastProvider = (): string => {
 };
 
 // readOIDCProviders returns all saved OIDC providers.
-export const readOIDCProviders = (): IOIDCProviders|undefined => {
+export const readOIDCProviders = (): IOIDCProviders | undefined => {
   const providers = localStorage.getItem(STORAGE_OIDC_PROVIDERS);
   if (providers) {
     return JSON.parse(providers);
@@ -87,7 +84,7 @@ export const readSettings = (): IAppSettings => {
   const settingsFromStorage = localStorage.getItem(STORAGE_SETTINGS);
 
   if (settingsFromStorage) {
-    const settings = JSON.parse(settingsFromStorage)
+    const settings = JSON.parse(settingsFromStorage);
     return {
       darkMode: settings.darkMode ? settings.darkMode : DEFAULT_SETTINGS.darkMode,
       editorTheme: settings.editorTheme ? settings.editorTheme : DEFAULT_SETTINGS.editorTheme,
@@ -111,7 +108,7 @@ export const removeClusters = () => {
 // removeOIDCProviders removes the saved OIDC providers from localStorage.
 export const removeOIDCProviders = () => {
   localStorage.removeItem(STORAGE_OIDC_PROVIDERS);
-}
+};
 
 // saveAWSTokens saves the provided tokens to localStorage.
 export const saveAWSTokens = (tokens: IAWSTokens) => {
@@ -137,7 +134,7 @@ export const saveClusters = (clusters: IClusters) => {
 // tokens are saved, the expire date is transformed for better access in the app.
 export const saveGoogleTokens = (tokens: IGoogleTokens) => {
   const expiresData = new Date();
-  expiresData.setSeconds( expiresData.getSeconds() + parseInt(tokens.expires_in) - 300);
+  expiresData.setSeconds(expiresData.getSeconds() + parseInt(tokens.expires_in) - 300);
   tokens.expires_in = expiresData.toDateString();
   localStorage.setItem(STORAGE_GOOGLE_TOKENS, JSON.stringify(tokens));
 };
@@ -150,12 +147,12 @@ export const saveGoogleClientID = (clientID: string) => {
 // saveOIDCLastProvider is used to save the name of the last used OIDC provider, This is used to assign the OIDC
 // provider to the redirect if the provider is added.
 export const saveOIDCLastProvider = (provider: string) => {
-  localStorage.setItem(STORAGE_OIDC_PROVIDERS_LAST, provider)
-}
+  localStorage.setItem(STORAGE_OIDC_PROVIDERS_LAST, provider);
+};
 
 // saveOIDCProviders is used to save all OIDC providers to localStorage.
-export const saveOIDCProviders = (providers: IOIDCProviders) =>  {
-  localStorage.setItem(STORAGE_OIDC_PROVIDERS, JSON.stringify(providers))
+export const saveOIDCProviders = (providers: IOIDCProviders) => {
+  localStorage.setItem(STORAGE_OIDC_PROVIDERS, JSON.stringify(providers));
 };
 
 // saveSettings saves the users settings to the localStorage.

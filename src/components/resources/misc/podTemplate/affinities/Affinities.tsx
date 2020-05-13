@@ -1,11 +1,5 @@
-import {
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonCol,
-  IonList,
-} from '@ionic/react';
-import { V1Affinity } from '@kubernetes/client-node'
+import { IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonList } from '@ionic/react';
+import { V1Affinity } from '@kubernetes/client-node';
 import React from 'react';
 
 import IonCardEqualHeight from '../../../../misc/IonCardEqualHeight';
@@ -28,14 +22,14 @@ const Affinities: React.FunctionComponent<IAffinitiesProps> = ({ affinities }) =
         </IonCardHeader>
         <IonCardContent>
           <IonList>
-            {Object.keys(affinities).map((affinity, index) =>
+            {Object.keys(affinities).map((affinity, index) => (
               <Affinity key={index} title={title(affinity)} affinity={affinities[affinity]} />
-            )}
+            ))}
           </IonList>
         </IonCardContent>
       </IonCardEqualHeight>
     </IonCol>
-  )
+  );
 };
 
 export default Affinities;

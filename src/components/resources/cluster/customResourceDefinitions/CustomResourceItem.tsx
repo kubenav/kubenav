@@ -44,7 +44,7 @@ const CustomResourceItem: React.FunctionComponent<ICustomResourceItemProps> = ({
         </IonContent>
       </IonModal>
     </React.Fragment>
-  )
+  );
 };
 
 export default CustomResourceItem;

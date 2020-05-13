@@ -1,16 +1,8 @@
-import {
-  IonIcon,
-  IonItem,
-  IonItemOption,
-  IonItemOptions,
-  IonItemSliding,
-  IonLabel,
-  isPlatform,
-} from '@ionic/react';
+import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, isPlatform } from '@ionic/react';
 import { radioButtonOff, radioButtonOn, trash } from 'ionicons/icons';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { ICluster, IContext} from '../../../declarations';
+import { ICluster, IContext } from '../../../declarations';
 import { AppContext } from '../../../utils/context';
 import EditCluster from './EditCluster';
 
@@ -24,7 +16,7 @@ const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }) =>
   const [status, setStatus] = useState<boolean>(false);
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       try {
         const data = await context.request('GET', '', '', cluster);
         if (data && data.paths) {

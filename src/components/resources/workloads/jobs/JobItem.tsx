@@ -1,8 +1,5 @@
-import {
-  IonItem,
-  IonLabel,
-} from '@ionic/react';
-import { V1Job } from '@kubernetes/client-node'
+import { IonItem, IonLabel } from '@ionic/react';
+import { V1Job } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -52,22 +49,35 @@ const JobItem: React.FunctionComponent<IJobItemProps> = ({ item, section, type }
   //   as reference.
   // - Age: The time when the job was created.
   return (
-    <IonItem routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
+    <IonItem
+      routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${
+        item.metadata ? item.metadata.name : ''
+      }`}
+      routerDirection="forward"
+    >
       <ItemStatus status={status} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>
           Completions: {completions(item)}
           {item.status && item.status.startTime
-          ? ` | Duration: ${timeDifference(item.status.completionTime ?
-              new Date(item.status.completionTime.toString()).getTime() : new Date().getTime(),
-              new Date(item.status.startTime.toString()).getTime()
-            )}` : ''}
-          {item.metadata && item.metadata.creationTimestamp ? ` | Age: ${timeDifference(new Date().getTime(), new Date(item.metadata.creationTimestamp.toString()).getTime())}` : ''}
+            ? ` | Duration: ${timeDifference(
+                item.status.completionTime
+                  ? new Date(item.status.completionTime.toString()).getTime()
+                  : new Date().getTime(),
+                new Date(item.status.startTime.toString()).getTime(),
+              )}`
+            : ''}
+          {item.metadata && item.metadata.creationTimestamp
+            ? ` | Age: ${timeDifference(
+                new Date().getTime(),
+                new Date(item.metadata.creationTimestamp.toString()).getTime(),
+              )}`
+            : ''}
         </p>
       </IonLabel>
     </IonItem>
-  )
+  );
 };
 
 export default JobItem;

@@ -1,8 +1,4 @@
-import {
-  IonAvatar,
-  IonItem,
-  IonLabel,
-} from '@ionic/react';
+import { IonAvatar, IonItem, IonLabel } from '@ionic/react';
 import React from 'react';
 
 import { IAppPages } from '../../declarations';
@@ -21,7 +17,7 @@ const SectionItem: React.FunctionComponent<ISectionItemProps> = ({ pages, sectio
       </IonAvatar>
       <IonLabel>{pages[pageKey].pluralText}</IonLabel>
     </IonItem>
-  )
+  );
 };
 
 export default SectionItem;

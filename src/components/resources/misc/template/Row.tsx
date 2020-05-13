@@ -1,7 +1,4 @@
-import {
-  IonCol,
-  IonRow,
-} from '@ionic/react';
+import { IonCol, IonRow } from '@ionic/react';
 import React from 'react';
 
 import { getProperty } from '../../../../utils/helpers';
@@ -20,21 +17,23 @@ const Row: React.FunctionComponent<IRowProps> = ({ objKey, obj, title, value, de
   if (val || typeof val === 'number') {
     return (
       <IonRow>
-        <IonCol size="auto"><b>{title}:</b></IonCol>
+        <IonCol size="auto">
+          <b>{title}:</b>
+        </IonCol>
         <IonCol>{value ? value(val) : val}</IonCol>
       </IonRow>
-    )
+    );
   } else if (defaultValue) {
     return (
       <IonRow>
-        <IonCol size="auto"><b>{title}:</b></IonCol>
+        <IonCol size="auto">
+          <b>{title}:</b>
+        </IonCol>
         <IonCol>{defaultValue}</IonCol>
       </IonRow>
-    )
+    );
   } else {
-    return (
-      <React.Fragment />
-    )
+    return <React.Fragment />;
   }
 };
 

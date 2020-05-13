@@ -1,9 +1,9 @@
-import { V1Node } from '@kubernetes/client-node'
+import { V1Node } from '@kubernetes/client-node';
 
 const conditions = ['Ready', 'MemoryPressure', 'DiskPressure', 'PIDPressure', 'NetworkUnavailable'];
 
 const isValidCondition = (conditionType: string): boolean => {
-  for (let condition of conditions) {
+  for (const condition of conditions) {
     if (condition === conditionType) {
       return true;
     }
@@ -14,7 +14,7 @@ const isValidCondition = (conditionType: string): boolean => {
 
 export const getStatus = (node: V1Node): string => {
   if (node.status && node.status.conditions) {
-    for (let condition of node.status.conditions) {
+    for (const condition of node.status.conditions) {
       if (isValidCondition(condition.type) && condition.status === 'True') {
         return condition.type;
       }

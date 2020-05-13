@@ -1,13 +1,4 @@
-import {
-  IonAlert,
-  IonButton,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonPopover,
-  IonSpinner,
-} from '@ionic/react';
+import { IonAlert, IonButton, IonIcon, IonItem, IonLabel, IonList, IonPopover, IonSpinner } from '@ionic/react';
 import { V1Namespace, V1NamespaceList } from '@kubernetes/client-node';
 import { checkmark, options } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
@@ -34,7 +25,7 @@ const NamespacePopover: React.FunctionComponent = () => {
   };
 
   const setNamespace = (ns: V1Namespace) => {
-    const namespace: string = ns.metadata !== undefined ? ns.metadata.name ? ns.metadata.name : '' : '';
+    const namespace: string = ns.metadata !== undefined ? (ns.metadata.name ? ns.metadata.name : '') : '';
     context.setNamespace(namespace);
     setShowPopover(false);
   };
@@ -47,44 +38,61 @@ const NamespacePopover: React.FunctionComponent = () => {
   return (
     <React.Fragment>
       {error !== '' ? (
-        <IonAlert isOpen={error !== ''} onDidDismiss={() => { setShowPopover(false); setError(''); }} header="Could not get namespaces" message={error} buttons={['OK']} />
+        <IonAlert
+          isOpen={error !== ''}
+          onDidDismiss={() => {
+            setShowPopover(false);
+            setError('');
+          }}
+          header="Could not get namespaces"
+          message={error}
+          buttons={['OK']}
+        />
       ) : (
         <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
           {namespaces ? (
             <IonList>
               <IonItem button={true} detail={false} onClick={() => setAllNamespaces()}>
-                {context.clusters
-                && context.cluster
-                && context.clusters.hasOwnProperty(context.cluster)
-                && context.clusters[context.cluster].namespace === ''
-                  ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
+                {context.clusters &&
+                context.cluster &&
+                context.clusters.hasOwnProperty(context.cluster) &&
+                context.clusters[context.cluster].namespace === '' ? (
+                  <IonIcon slot="end" color="primary" icon={checkmark} />
+                ) : null}
                 <IonLabel>All Namespaces</IonLabel>
               </IonItem>
 
               {namespaces.items.map((namespace, index) => {
                 return (
                   <IonItem key={index} button={true} detail={false} onClick={() => setNamespace(namespace)}>
-                    {namespace.metadata
-                    && context.clusters
-                    && context.cluster
-                    && context.clusters.hasOwnProperty(context.cluster)
-                    && context.clusters[context.cluster].namespace === namespace.metadata.name
-                      ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
+                    {namespace.metadata &&
+                    context.clusters &&
+                    context.cluster &&
+                    context.clusters.hasOwnProperty(context.cluster) &&
+                    context.clusters[context.cluster].namespace === namespace.metadata.name ? (
+                      <IonIcon slot="end" color="primary" icon={checkmark} />
+                    ) : null}
                     <IonLabel>{namespace.metadata ? namespace.metadata.name : ''}</IonLabel>
                   </IonItem>
-                )
+                );
               })}
             </IonList>
           ) : (
             <IonItem>
               <IonLabel>Loading ...</IonLabel>
-              <IonSpinner/>
+              <IonSpinner />
             </IonItem>
           )}
         </IonPopover>
       )}
 
-      <IonButton onClick={(e) => { e.persist(); setPopoverEvent(e as any); loadNamespaces(); }}>
+      <IonButton
+        onClick={(e) => {
+          e.persist();
+          setPopoverEvent(e as any);
+          loadNamespaces();
+        }}
+      >
         <IonIcon slot="icon-only" icon={options} />
       </IonButton>
     </React.Fragment>

@@ -1,11 +1,6 @@
-import {
-  IonAlert,
-  IonButton,
-  IonIcon,
-  IonItemOption,
-} from '@ionic/react';
+import { IonAlert, IonButton, IonIcon, IonItemOption } from '@ionic/react';
 import { trash } from 'ionicons/icons';
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 
 import { IContext, TActivator } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
@@ -45,13 +40,23 @@ const DeleteItem: React.FunctionComponent<IDeleteItemProps> = ({ activator, item
         </IonButton>
       ) : null}
 
-      {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header={`Could not delete ${item.metadata ? item.metadata.name : ''}`} message={error} buttons={['OK']} /> : null}
+      {error !== '' ? (
+        <IonAlert
+          isOpen={error !== ''}
+          onDidDismiss={() => setError('')}
+          header={`Could not delete ${item.metadata ? item.metadata.name : ''}`}
+          message={error}
+          buttons={['OK']}
+        />
+      ) : null}
 
       <IonAlert
         isOpen={showAlert}
         onDidDismiss={() => setShowAlert(false)}
         header={item.metadata ? item.metadata.name : ''}
-        message={`Do you really want to delete ${item.metadata && item.metadata.namespace ? `${item.metadata.namespace}/` : ''}${item.metadata ? item.metadata.name : ''}?`}
+        message={`Do you really want to delete ${
+          item.metadata && item.metadata.namespace ? `${item.metadata.namespace}/` : ''
+        }${item.metadata ? item.metadata.name : ''}?`}
         buttons={[
           { text: 'Cancel', role: 'cancel', handler: () => setShowAlert(false) },
           { text: 'Delete', cssClass: 'delete-button', handler: () => handleDelete() },

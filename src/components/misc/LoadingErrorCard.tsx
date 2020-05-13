@@ -1,17 +1,11 @@
-import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-} from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/react';
 import React from 'react';
 
 import { IClusters } from '../../declarations';
 
 interface ILoadingErrorCard {
   cluster?: string;
-  clusters?: IClusters
+  clusters?: IClusters;
   error: string;
   icon: string;
   text: string;
@@ -19,8 +13,8 @@ interface ILoadingErrorCard {
 
 const LoadingErrorCard: React.FunctionComponent<ILoadingErrorCard> = ({ cluster, clusters, error, icon, text }) => {
   return (
-    <IonCard style={{textAlign: 'center'}}>
-      <img className="image-margin-top" alt={text} src={icon} style={{width: '128px', margin: 'auto'}} />
+    <IonCard style={{ textAlign: 'center' }}>
+      <img className="image-margin-top" alt={text} src={icon} style={{ width: '128px', margin: 'auto' }} />
       <IonCardHeader>
         <IonCardTitle>{text}</IonCardTitle>
       </IonCardHeader>
@@ -31,16 +25,18 @@ const LoadingErrorCard: React.FunctionComponent<ILoadingErrorCard> = ({ cluster,
             kubenav app. To add a new Kubernetes cluster to the app use the button <b>Add a Cluster</b> or the
             <b>Clusters</b> item from the menu.
           </p>
-          <IonButton expand="block" routerLink="/settings/clusters" routerDirection="none">Add a Cluster</IonButton>
+          <IonButton expand="block" routerLink="/settings/clusters" routerDirection="none">
+            Add a Cluster
+          </IonButton>
         </IonCardContent>
       ) : null}
 
       {clusters && !cluster ? (
         <IonCardContent>
-          <p className="paragraph-margin-bottom">
-            You have to select an active cluster before you can proceed.
-          </p>
-          <IonButton expand="block" routerLink="/settings/clusters" routerDirection="none">Select a Cluster</IonButton>
+          <p className="paragraph-margin-bottom">You have to select an active cluster before you can proceed.</p>
+          <IonButton expand="block" routerLink="/settings/clusters" routerDirection="none">
+            Select a Cluster
+          </IonButton>
         </IonCardContent>
       ) : null}
 

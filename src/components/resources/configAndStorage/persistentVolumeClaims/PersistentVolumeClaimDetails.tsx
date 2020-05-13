@@ -1,8 +1,5 @@
-import {
-  IonGrid,
-  IonRow,
-} from '@ionic/react';
-import { V1PersistentVolumeClaim } from '@kubernetes/client-node'
+import { IonGrid, IonRow } from '@ionic/react';
+import { V1PersistentVolumeClaim } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -45,17 +42,18 @@ const PersistentVolumeClaimDetails: React.FunctionComponent<IPersistentVolumeCla
           />
           {item.status && item.status.capacity
             ? Object.keys(item.status.capacity).map((key) => (
-              <Row
-                key={key}
-                obj={item}
-                objKey={`status.capacity.${key}`}
-                title={key[0].toUpperCase() + key.slice(1)}
-              />
-            )) : null}
+                <Row
+                  key={key}
+                  obj={item}
+                  objKey={`status.capacity.${key}`}
+                  title={key[0].toUpperCase() + key.slice(1)}
+                />
+              ))
+            : null}
         </Status>
       </IonRow>
 
-      {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       {item.status && item.status.conditions ? (
         <IonRow>
@@ -65,11 +63,17 @@ const PersistentVolumeClaimDetails: React.FunctionComponent<IPersistentVolumeCla
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
         <IonRow>
-          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+          <List
+            name="Events"
+            section="cluster"
+            type="events"
+            namespace={item.metadata.namespace}
+            selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
+          />
         </IonRow>
       ) : null}
     </IonGrid>
-  )
+  );
 };
 
 export default PersistentVolumeClaimDetails;

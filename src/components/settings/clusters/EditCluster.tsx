@@ -17,7 +17,7 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import { close, create } from 'ionicons/icons';
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 
 import { ICluster, IContext } from '../../../declarations';
 import { AppContext } from '../../../utils/context';
@@ -79,13 +79,19 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) =>
 
   const editCluster = () => {
     if (name === '') {
-      setError('Name is required')
+      setError('Name is required');
     } else if (url === '') {
-      setError('URL is required')
+      setError('URL is required');
     } else if (!url.startsWith('https://')) {
-      setError('Invalid URL')
-    } else if (clientCertificateData === '' && clientKeyData === '' && token === '' && username === '' && password === '') {
-      setError('Client Certificate Data and Client Key Data or Token or Username and Password is required')
+      setError('Invalid URL');
+    } else if (
+      clientCertificateData === '' &&
+      clientKeyData === '' &&
+      token === '' &&
+      username === '' &&
+      password === ''
+    ) {
+      setError('Client Certificate Data and Client Key Data or Token or Username and Password is required');
     } else {
       context.editCluster({
         id: cluster.id,
@@ -134,9 +140,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) =>
             </IonButtons>
             <IonTitle>Edit Cluster</IonTitle>
             <IonButtons slot="primary">
-              <IonButton onClick={() => editCluster()}>
-                Save
-              </IonButton>
+              <IonButton onClick={() => editCluster()}>Save</IonButton>
             </IonButtons>
           </IonToolbar>
         </IonHeader>

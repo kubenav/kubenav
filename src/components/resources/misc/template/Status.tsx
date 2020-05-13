@@ -1,10 +1,4 @@
-import {
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonCol,
-  IonGrid,
-} from '@ionic/react';
+import { IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid } from '@ionic/react';
 import React from 'react';
 
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
@@ -17,13 +11,11 @@ const Status: React.FunctionComponent = ({ children }) => {
           <IonCardTitle>Status</IonCardTitle>
         </IonCardHeader>
         <IonCardContent>
-          <IonGrid>
-            {children}
-          </IonGrid>
+          <IonGrid>{children}</IonGrid>
         </IonCardContent>
       </IonCardEqualHeight>
     </IonCol>
-  )
+  );
 };
 
 export default Status;

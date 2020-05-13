@@ -1,11 +1,4 @@
-import {
-  IonIcon,
-  IonItem,
-  IonItemOption,
-  IonItemOptions,
-  IonItemSliding,
-  IonLabel,
-} from '@ionic/react';
+import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel } from '@ionic/react';
 import { trash } from 'ionicons/icons';
 import React, { useContext } from 'react';
 
@@ -22,7 +15,9 @@ const OIDCProvider: React.FunctionComponent<IOIDCProviderProps> = ({ provider })
   return (
     <IonItemSliding>
       <IonItem>
-        <IonLabel><h2>{provider}</h2></IonLabel>
+        <IonLabel>
+          <h2>{provider}</h2>
+        </IonLabel>
       </IonItem>
 
       <IonItemOptions side="end">

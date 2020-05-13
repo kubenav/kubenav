@@ -1,9 +1,6 @@
-import {
-  IonItem,
-  IonLabel,
-} from '@ionic/react';
-import { V1Pod } from '@kubernetes/client-node'
-import React, {useContext, useEffect, useState} from 'react';
+import { IonItem, IonLabel } from '@ionic/react';
+import { V1Pod } from '@kubernetes/client-node';
+import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext, IPodMetrics } from '../../../../declarations';
@@ -25,10 +22,14 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
 
   useEffect(() => {
     if (item.metadata && item.metadata.namespace && item.metadata.name) {
-      (async() => {
+      (async () => {
         try {
-          const data: IPodMetrics = await context.request('GET', `/apis/metrics.k8s.io/v1beta1/namespaces/${item.metadata!.namespace}/pods/${item.metadata!.name}`, '');
-          setMetrics(data)
+          const data: IPodMetrics = await context.request(
+            'GET',
+            `/apis/metrics.k8s.io/v1beta1/namespaces/${item.metadata!.namespace}/pods/${item.metadata!.name}`,
+            '',
+          );
+          setMetrics(data);
         } catch (err) {
           // TODO: Implement error handling.
         }
@@ -57,18 +58,32 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
   // - Resources: Show the requests and limits for CPU and Memory.
   // - Age: The time when the pod was created.
   return (
-    <IonItem routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
+    <IonItem
+      routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${
+        item.metadata ? item.metadata.name : ''
+      }`}
+      routerDirection="forward"
+    >
       <ItemStatus status={status} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>
           Ready: {getReady(item)} | Restarts: {getRestarts(item)} | Status: {podStatus}
-          {item.spec && item.spec.initContainers && item.spec.containers ? ` | ${getResources(item.spec.initContainers.concat(item.spec.containers), metrics)}` : item.spec && item.spec.containers ? ` | ${getResources(item.spec.containers, metrics)}` : ''}
-          {item.metadata && item.metadata.creationTimestamp ? ` | Age: ${timeDifference(new Date().getTime(), new Date(item.metadata.creationTimestamp.toString()).getTime())}` : ''}
+          {item.spec && item.spec.initContainers && item.spec.containers
+            ? ` | ${getResources(item.spec.initContainers.concat(item.spec.containers), metrics)}`
+            : item.spec && item.spec.containers
+            ? ` | ${getResources(item.spec.containers, metrics)}`
+            : ''}
+          {item.metadata && item.metadata.creationTimestamp
+            ? ` | Age: ${timeDifference(
+                new Date().getTime(),
+                new Date(item.metadata.creationTimestamp.toString()).getTime(),
+              )}`
+            : ''}
         </p>
       </IonLabel>
     </IonItem>
-  )
+  );
 };
 
 export default PodItem;

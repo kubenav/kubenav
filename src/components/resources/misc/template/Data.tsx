@@ -47,7 +47,7 @@ const Data: React.FunctionComponent<IDataProps> = ({ name, data }) => {
         </IonContent>
       </IonModal>
     </React.Fragment>
-  )
+  );
 };
 
 export default Data;

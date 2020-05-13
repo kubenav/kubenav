@@ -30,7 +30,7 @@ interface IMatchParams {
   name: string;
 }
 
-interface IDetailsPageProps extends RouteComponentProps<IMatchParams> {}
+type IDetailsPageProps = RouteComponentProps<IMatchParams>;
 
 const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }) => {
   const context = useContext<IContext>(AppContext);
@@ -44,7 +44,7 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }) => {
   const [url, setUrl] = useState<string>('');
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       setItem(undefined);
       setUrl(match.url);
       await load();
@@ -89,18 +89,20 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }) => {
                 <EditItem
                   activator="button"
                   item={item}
-                  url={page.detailsURL(item.metadata
-                    ? item.metadata.namespace : '', item.metadata ? item.metadata.name : '')
-                  }
+                  url={page.detailsURL(
+                    item.metadata ? item.metadata.namespace : '',
+                    item.metadata ? item.metadata.name : '',
+                  )}
                 />
               ) : null}
               {item ? (
                 <DeleteItem
                   activator="button"
                   item={item}
-                  url={page.detailsURL(item.metadata
-                    ? item.metadata.namespace : '', item.metadata ? item.metadata.name : '')
-                  }
+                  url={page.detailsURL(
+                    item.metadata ? item.metadata.namespace : '',
+                    item.metadata ? item.metadata.name : '',
+                  )}
                 />
               ) : null}
             </IonButtons>
@@ -109,17 +111,23 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }) => {
       </IonHeader>
       <IonContent>
         {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
-        <IonRefresher slot="fixed"  onIonRefresh={doRefresh} />
+        <IonRefresher slot="fixed" onIonRefresh={doRefresh} />
 
-        {error === ''
-        && context.clusters
-        && context.cluster
-        && context.clusters.hasOwnProperty(context.cluster)
-        && match.url === url
-        && item ? (
+        {error === '' &&
+        context.clusters &&
+        context.cluster &&
+        context.clusters.hasOwnProperty(context.cluster) &&
+        match.url === url &&
+        item ? (
           <Component item={item} section={match.params.section} type={match.params.type} />
         ) : (
-          <LoadingErrorCard cluster={context.cluster} clusters={context.clusters} error={error} icon={page.icon} text={`Could not get ${page.pluralText}`} />
+          <LoadingErrorCard
+            cluster={context.cluster}
+            clusters={context.clusters}
+            error={error}
+            icon={page.icon}
+            text={`Could not get ${page.pluralText}`}
+          />
         )}
       </IonContent>
     </IonPage>

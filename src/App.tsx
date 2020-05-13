@@ -1,8 +1,4 @@
-import {
-  IonApp,
-  IonRouterOutlet,
-  IonSplitPane
-} from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import React from 'react';
 import { Route } from 'react-router-dom';

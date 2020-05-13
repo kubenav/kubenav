@@ -1,6 +1,6 @@
 import { Plugins } from '@capacitor/core';
 import { isPlatform } from '@ionic/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, ReactElement } from 'react';
 
 import { IAppSettings, ICluster, IClusters, IContext, IOIDCProvider, IOIDCProviders } from '../declarations';
 import { getCluster, getClusters, getOIDCAccessToken, kubernetesRequest } from './api';
@@ -38,21 +38,27 @@ export const AppContext = React.createContext<IContext>({
   editCluster: () => {},
   editSettings: () => {},
   setNamespace: () => {},
-  request: () => { return new Promise(() => {}); },
+  request: () => {
+    return new Promise(() => {});
+  },
 });
 
 // A React component that subscribes to context changes. This lets you subscribe to a context within a function
 // component.
 export const AppContextConsumer = AppContext.Consumer;
 
+interface IAppContextProvider {
+  children: ReactElement;
+}
+
 // Every Context object comes with a Provider React component that allows consuming components to subscribe to context
 // changes.
-export const AppContextProvider: React.FunctionComponent = ({ children }) => {
+export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [settings, setSettings] = useState<IAppSettings>(readSettings());
-  const [cluster, setCluster] = useState<string|undefined>(undefined);
-  const [clusters, setClusters] = useState<IClusters|undefined>(undefined);
-  const [oidcProviders, setOIDCProviders] = useState<IOIDCProviders|undefined>(undefined);
+  const [cluster, setCluster] = useState<string | undefined>(undefined);
+  const [clusters, setClusters] = useState<IClusters | undefined>(undefined);
+  const [oidcProviders, setOIDCProviders] = useState<IOIDCProviders | undefined>(undefined);
 
   // When the component is rendered we are initializing the cluster and clusters variables.
   // For the desktop version we are calling the internal API endpoint to retrieve a list of clusters from the Kubeconfig
@@ -60,7 +66,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
   // making an API request to retrieve the current context during startup.
   // For the mobile version we only use the localStorage which holds all cluster information.
   useEffect(() => {
-    (async() => {
+    (async () => {
       if (loading) {
         // Apply dark mode if it was returned from the storage api. This could be set by the user or the default from
         // the system.
@@ -79,7 +85,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
         } else {
           setClusters(readClusters());
           setCluster(readCluster());
-          setOIDCProviders(readOIDCProviders())
+          setOIDCProviders(readOIDCProviders());
         }
       }
 
@@ -97,9 +103,9 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
   // It's also checked if the user provided the certificates and keys as raw data or in a base64 encoded format. The
   // base64 encoded certificates are converted to the raw certificates.
   const addCluster = (newClusters: ICluster[]) => {
-    let updatedClusters = clusters ? clusters : {};
+    const updatedClusters = clusters ? clusters : {};
 
-    for (let newCluster of newClusters) {
+    for (const newCluster of newClusters) {
       let id = newCluster.id;
       const checkID = (id: string): boolean => {
         return (clusters && clusters.hasOwnProperty(id)) || id === '';
@@ -114,32 +120,35 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
       newCluster.id = id;
       newCluster.url = newCluster.url.slice(-1) === '/' ? newCluster.url.slice(0, -1) : newCluster.url;
       newCluster.certificateAuthorityData = isBase64(newCluster.certificateAuthorityData)
-        ? atob(newCluster.certificateAuthorityData) : newCluster.certificateAuthorityData;
+        ? atob(newCluster.certificateAuthorityData)
+        : newCluster.certificateAuthorityData;
       newCluster.clientCertificateData = isBase64(newCluster.clientCertificateData)
-        ? atob(newCluster.clientCertificateData) : newCluster.clientCertificateData;
+        ? atob(newCluster.clientCertificateData)
+        : newCluster.clientCertificateData;
       newCluster.clientKeyData = isBase64(newCluster.clientKeyData)
-        ? atob(newCluster.clientKeyData) : newCluster.clientKeyData;
+        ? atob(newCluster.clientKeyData)
+        : newCluster.clientKeyData;
 
       updatedClusters[newCluster.id] = newCluster;
     }
 
-    setClusters({...updatedClusters});
+    setClusters({ ...updatedClusters });
     saveClusters(updatedClusters);
   };
 
   // addOIDCProvider adds a new OIDC provider and saves all providers to localStorage.
   const addOIDCProvider = (provider: IOIDCProvider) => {
-    let updatedProviders = oidcProviders ? oidcProviders : {};
+    const updatedProviders = oidcProviders ? oidcProviders : {};
     updatedProviders[provider.name] = provider;
-    setOIDCProviders({...updatedProviders});
+    setOIDCProviders({ ...updatedProviders });
     saveOIDCProviders(updatedProviders);
-  }
+  };
 
   // changeCluster changes the currently active cluster to the new cluster with the provided id.
   const changeCluster = (id: string) => {
     if (clusters && clusters.hasOwnProperty(id)) {
       setCluster(id);
-      saveCluster(id)
+      saveCluster(id);
     }
   };
 
@@ -147,14 +156,14 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
   // cluster to the first one in the object of clusters.
   const deleteCluster = (id: string) => {
     if (clusters) {
-      let filteredClusters = clusters;
+      const filteredClusters = clusters;
       delete filteredClusters[id];
 
       if (Object.keys(filteredClusters).length === 0) {
         setClusters(undefined);
         removeClusters();
       } else {
-        setClusters({...filteredClusters});
+        setClusters({ ...filteredClusters });
         saveClusters(filteredClusters);
       }
 
@@ -173,18 +182,18 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
   // deleteOIDCProvider deletes the OIDC provider with the given name.
   const deleteOIDCProvider = (name: string) => {
     if (oidcProviders) {
-      let providers = oidcProviders;
+      const providers = oidcProviders;
       delete providers[name];
 
       if (Object.keys(providers).length === 0) {
         setOIDCProviders(undefined);
         removeOIDCProviders();
       } else {
-        setOIDCProviders({...providers});
+        setOIDCProviders({ ...providers });
         saveOIDCProviders(providers);
       }
     }
-  }
+  };
 
   // editCluster replaces a cluster with the new provided cluster.
   // Like in the addCluster function we are validating the provided URL and the provided certificate data. If the user
@@ -192,16 +201,19 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
   const editCluster = (editCluster: ICluster) => {
     editCluster.url = editCluster.url.slice(-1) === '/' ? editCluster.url.slice(0, -1) : editCluster.url;
     editCluster.certificateAuthorityData = isBase64(editCluster.certificateAuthorityData)
-      ? atob(editCluster.certificateAuthorityData) : editCluster.certificateAuthorityData;
+      ? atob(editCluster.certificateAuthorityData)
+      : editCluster.certificateAuthorityData;
     editCluster.clientCertificateData = isBase64(editCluster.clientCertificateData)
-      ? atob(editCluster.clientCertificateData) : editCluster.clientCertificateData;
+      ? atob(editCluster.clientCertificateData)
+      : editCluster.clientCertificateData;
     editCluster.clientKeyData = isBase64(editCluster.clientKeyData)
-      ? atob(editCluster.clientKeyData) : editCluster.clientKeyData;
+      ? atob(editCluster.clientKeyData)
+      : editCluster.clientKeyData;
 
     if (clusters && cluster !== '') {
-      let updatedClusters = clusters;
+      const updatedClusters = clusters;
       updatedClusters[editCluster.id] = editCluster;
-      setClusters({...updatedClusters});
+      setClusters({ ...updatedClusters });
       saveClusters(updatedClusters);
     }
   };
@@ -218,10 +230,10 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
   // setNamespace sets the provided namespace for the currently active cluster.
   const setNamespace = (namespace: string) => {
     if (clusters && cluster) {
-      let updatedClusters = clusters;
+      const updatedClusters = clusters;
       updatedClusters[cluster].namespace = namespace;
 
-      setClusters({...updatedClusters});
+      setClusters({ ...updatedClusters });
       saveClusters(updatedClusters);
     }
   };
@@ -229,7 +241,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
   // request is used to make requests against the Kubernetes API server for the currently active cluster. If an
   // alternative cluster is provided the requests is done against the API server of this cluster instead the active
   // cluster.
-  const request = async(method: string, url: string, body: string, alternativeCluster?: ICluster) => {
+  const request = async (method: string, url: string, body: string, alternativeCluster?: ICluster) => {
     if ((clusters === undefined || cluster === undefined) && alternativeCluster === undefined) {
       throw new Error('Select an active cluster');
     }
@@ -254,7 +266,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
         const authProvider = c.authProvider.replace('oidc__', '');
 
         if (!oidcProviders || !oidcProviders.hasOwnProperty(authProvider)) {
-          throw new Error('OIDC provider is missing.')
+          throw new Error('OIDC provider is missing.');
         }
 
         const tokens = await getOIDCAccessToken(oidcProviders[authProvider]);
@@ -271,7 +283,7 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
 
       return await kubernetesRequest(method, url, body, settings.timeout, c);
     } catch (err) {
-      throw err
+      throw err;
     }
   };
 
@@ -298,5 +310,5 @@ export const AppContextProvider: React.FunctionComponent = ({ children }) => {
     >
       {loading ? null : children}
     </AppContext.Provider>
-  )
+  );
 };

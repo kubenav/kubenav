@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { IAppSections } from '../../declarations';
-import Section from './Section'
+import Section from './Section';
 
 interface ISectionsProps {
   sections: IAppSections;
@@ -11,7 +11,7 @@ interface ISectionsProps {
 const Sections: React.FunctionComponent<ISectionsProps> = ({ sections, isMenu }) => {
   return (
     <React.Fragment>
-      {Object.keys(sections).map(sectionKey => (
+      {Object.keys(sections).map((sectionKey) => (
         <Section
           key={sectionKey}
           pages={sections[sectionKey].pages}
@@ -21,7 +21,7 @@ const Sections: React.FunctionComponent<ISectionsProps> = ({ sections, isMenu })
         />
       ))}
     </React.Fragment>
-  )
+  );
 };
 
 export default Sections;

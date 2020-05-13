@@ -1,10 +1,5 @@
-import {
-  IonChip,
-  IonGrid,
-  IonLabel,
-  IonRow,
-} from '@ionic/react';
-import { V1DaemonSet, V1DaemonSetUpdateStrategy } from '@kubernetes/client-node'
+import { IonChip, IonGrid, IonLabel, IonRow } from '@ionic/react';
+import { V1DaemonSet, V1DaemonSetUpdateStrategy } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -42,25 +37,33 @@ const DaemonSetDetails: React.FunctionComponent<IDaemonSetDetailsProps> = ({ ite
             obj={item}
             objKey="spec.selector.matchLabels"
             title="Selectors"
-            value={(value) => Object.keys(value).map((label) => {
-              return (
-                <IonChip key={label} className="unset-chip-height">
-                  <IonLabel>{label}: {value[label]}</IonLabel>
-                </IonChip>
-              )
-            })}
+            value={(value) =>
+              Object.keys(value).map((label) => {
+                return (
+                  <IonChip key={label} className="unset-chip-height">
+                    <IonLabel>
+                      {label}: {value[label]}
+                    </IonLabel>
+                  </IonChip>
+                );
+              })
+            }
           />
           <Row
             obj={item}
             objKey="spec.template.spec.nodeSelector"
             title="Node Selectors"
-            value={(value) => Object.keys(value).map((label) => {
-              return (
-                <IonChip key={label} className="unset-chip-height">
-                  <IonLabel>{label}: {value[label]}</IonLabel>
-                </IonChip>
-              )
-            })}
+            value={(value) =>
+              Object.keys(value).map((label) => {
+                return (
+                  <IonChip key={label} className="unset-chip-height">
+                    <IonLabel>
+                      {label}: {value[label]}
+                    </IonLabel>
+                  </IonChip>
+                );
+              })
+            }
           />
         </Configuration>
 
@@ -75,23 +78,35 @@ const DaemonSetDetails: React.FunctionComponent<IDaemonSetDetailsProps> = ({ ite
         </Status>
       </IonRow>
 
-      {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       {item.metadata && item.metadata.namespace && item.spec && item.spec.selector ? (
         <IonRow>
-          <List name="Pods" section="workloads" type="pods" namespace={item.metadata.namespace} selector={`labelSelector=${labelSelector(item.spec.selector)}`} />
+          <List
+            name="Pods"
+            section="workloads"
+            type="pods"
+            namespace={item.metadata.namespace}
+            selector={`labelSelector=${labelSelector(item.spec.selector)}`}
+          />
         </IonRow>
       ) : null}
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
         <IonRow>
-          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+          <List
+            name="Events"
+            section="cluster"
+            type="events"
+            namespace={item.metadata.namespace}
+            selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
+          />
         </IonRow>
       ) : null}
 
       {item.spec && item.spec.template ? <PodTemplate template={item.spec.template} /> : null}
     </IonGrid>
-  )
+  );
 };
 
 export default DaemonSetDetails;
