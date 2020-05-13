@@ -21,7 +21,11 @@ interface IRoleBindingItemProps extends RouteComponentProps {
   type: string;
 }
 
-const RoleBindingItem: React.FunctionComponent<IRoleBindingItemProps> = ({ item, section, type }) => {
+const RoleBindingItem: React.FunctionComponent<IRoleBindingItemProps> = ({
+  item,
+  section,
+  type,
+}: IRoleBindingItemProps) => {
   // - Role: Name is the name of resource being referenced.
   // - Kind: Kind of object being referenced.
   // - Subjects: Name of the object being referenced.

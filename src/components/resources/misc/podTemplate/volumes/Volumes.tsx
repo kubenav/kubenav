@@ -9,7 +9,7 @@ interface IVolumesProps {
   volumes: V1Volume[];
 }
 
-const Volumes: React.FunctionComponent<IVolumesProps> = ({ volumes }) => {
+const Volumes: React.FunctionComponent<IVolumesProps> = ({ volumes }: IVolumesProps) => {
   return (
     <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
       <IonCardEqualHeight>

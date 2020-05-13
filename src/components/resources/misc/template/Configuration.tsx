@@ -1,9 +1,13 @@
 import { IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid } from '@ionic/react';
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
 
-const Configuration: React.FunctionComponent = ({ children }) => {
+interface IConfiguration {
+  children: ReactElement;
+}
+
+const Configuration: React.FunctionComponent<IConfiguration> = ({ children }: IConfiguration) => {
   return (
     <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
       <IonCardEqualHeight>

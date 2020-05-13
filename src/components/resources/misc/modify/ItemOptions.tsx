@@ -1,5 +1,5 @@
 import { IonItemOptions, IonItemSliding } from '@ionic/react';
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import DeleteItem from './DeleteItem';
 import EditItem from './EditItem';
@@ -7,9 +7,10 @@ import EditItem from './EditItem';
 interface IItemOptionsProps {
   item: any;
   url: string;
+  children: ReactElement;
 }
 
-const ItemOptions: React.FunctionComponent<IItemOptionsProps> = ({ item, url, children }) => {
+const ItemOptions: React.FunctionComponent<IItemOptionsProps> = ({ item, url, children }: IItemOptionsProps) => {
   return (
     <IonItemSliding>
       {children}

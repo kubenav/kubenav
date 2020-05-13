@@ -14,7 +14,7 @@ interface INamespaceDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ item, type }) => {
+const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ item, type }: INamespaceDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>

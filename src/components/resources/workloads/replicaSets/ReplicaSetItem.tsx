@@ -12,7 +12,11 @@ interface IReplicaSetItemProps extends RouteComponentProps {
   type: string;
 }
 
-const ReplicaSetItem: React.FunctionComponent<IReplicaSetItemProps> = ({ item, section, type }) => {
+const ReplicaSetItem: React.FunctionComponent<IReplicaSetItemProps> = ({
+  item,
+  section,
+  type,
+}: IReplicaSetItemProps) => {
   // The replica set status is set to success when the number of desired replicas is 0 or when the number of desired
   // replicas is equal to the number of observed replicas, ready replicas and available replicas. If the item does not
   // contain the spec and status field the status is set to warning, because there is something else wrong.

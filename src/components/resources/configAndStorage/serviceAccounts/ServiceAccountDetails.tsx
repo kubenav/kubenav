@@ -12,7 +12,10 @@ interface IServiceAccountDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const ServiceAccountDetails: React.FunctionComponent<IServiceAccountDetailsProps> = ({ item, type }) => {
+const ServiceAccountDetails: React.FunctionComponent<IServiceAccountDetailsProps> = ({
+  item,
+  type,
+}: IServiceAccountDetailsProps) => {
   return (
     <IonGrid>
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}

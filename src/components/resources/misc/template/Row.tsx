@@ -11,7 +11,7 @@ interface IRowProps {
   defaultValue?: string;
 }
 
-const Row: React.FunctionComponent<IRowProps> = ({ objKey, obj, title, value, defaultValue }) => {
+const Row: React.FunctionComponent<IRowProps> = ({ objKey, obj, title, value, defaultValue }: IRowProps) => {
   const val = getProperty(obj, objKey);
 
   if (val || typeof val === 'number') {

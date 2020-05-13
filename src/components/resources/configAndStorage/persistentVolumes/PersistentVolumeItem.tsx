@@ -11,7 +11,11 @@ interface IPersistentVolumeItemProps extends RouteComponentProps {
   type: string;
 }
 
-const PersistentVolumeItem: React.FunctionComponent<IPersistentVolumeItemProps> = ({ item, section, type }) => {
+const PersistentVolumeItem: React.FunctionComponent<IPersistentVolumeItemProps> = ({
+  item,
+  section,
+  type,
+}: IPersistentVolumeItemProps) => {
   // - Phase: Indicates if a volume is available, bound to a claim, or released by a claim.
   // - Capacity: Resources of the volume.
   // - Access Modes: Contains all ways the volume can be mounted.

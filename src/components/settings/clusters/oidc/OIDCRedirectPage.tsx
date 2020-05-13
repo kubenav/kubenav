@@ -29,7 +29,10 @@ const useQuery = () => {
 
 type IOIDCRedirectPageProps = RouteComponentProps;
 
-const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ location, history }) => {
+const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
+  location,
+  history,
+}: IOIDCRedirectPageProps) => {
   const context = useContext<IContext>(AppContext);
   const query = useQuery();
 

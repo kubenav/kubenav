@@ -21,7 +21,7 @@ interface IVolumeProps {
   volume: V1Volume;
 }
 
-const Volume: React.FunctionComponent<IVolumeProps> = ({ volume }) => {
+const Volume: React.FunctionComponent<IVolumeProps> = ({ volume }: IVolumeProps) => {
   const [showModal, setShowModal] = useState(false);
 
   let kind = '';

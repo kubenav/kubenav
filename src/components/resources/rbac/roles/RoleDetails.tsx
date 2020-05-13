@@ -14,7 +14,7 @@ interface IRoleDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const RoleDetails: React.FunctionComponent<IRoleDetailsProps> = ({ item, type }) => {
+const RoleDetails: React.FunctionComponent<IRoleDetailsProps> = ({ item, type }: IRoleDetailsProps) => {
   return (
     <IonGrid>
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}

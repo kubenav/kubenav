@@ -9,7 +9,7 @@ interface ISectionItemProps {
   pageKey: string;
 }
 
-const SectionItem: React.FunctionComponent<ISectionItemProps> = ({ pages, sectionKey, pageKey }) => {
+const SectionItem: React.FunctionComponent<ISectionItemProps> = ({ pages, sectionKey, pageKey }: ISectionItemProps) => {
   return (
     <IonItem routerLink={`/resources/${sectionKey}/${pageKey}`} routerDirection="root">
       <IonAvatar slot="start">

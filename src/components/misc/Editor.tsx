@@ -61,7 +61,7 @@ const Editor: React.FunctionComponent<IEditorProps> = ({
   value,
   fullHeight,
   scrollToBottomButton,
-}) => {
+}: IEditorProps) => {
   const context = useContext<IContext>(AppContext);
   const editor = useRef<AceEditor>(null);
 

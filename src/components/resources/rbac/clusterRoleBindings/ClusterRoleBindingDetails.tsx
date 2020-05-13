@@ -26,7 +26,10 @@ interface IClusterRoleBindingDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const ClusterRoleBindingDetails: React.FunctionComponent<IClusterRoleBindingDetailsProps> = ({ item, type }) => {
+const ClusterRoleBindingDetails: React.FunctionComponent<IClusterRoleBindingDetailsProps> = ({
+  item,
+  type,
+}: IClusterRoleBindingDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>

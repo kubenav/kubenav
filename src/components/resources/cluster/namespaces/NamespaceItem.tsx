@@ -10,7 +10,7 @@ interface INamespaceItemProps extends RouteComponentProps {
   type: string;
 }
 
-const NamespaceItem: React.FunctionComponent<INamespaceItemProps> = ({ item, section, type }) => {
+const NamespaceItem: React.FunctionComponent<INamespaceItemProps> = ({ item, section, type }: INamespaceItemProps) => {
   // - Phase: The current lifecycle phase of the namespace.
   // - Age: The time when the namespace was created.
   return (

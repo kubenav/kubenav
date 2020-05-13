@@ -19,7 +19,7 @@ interface ICustomResourceItemProps {
   item: any;
 }
 
-const CustomResourceItem: React.FunctionComponent<ICustomResourceItemProps> = ({ item }) => {
+const CustomResourceItem: React.FunctionComponent<ICustomResourceItemProps> = ({ item }: ICustomResourceItemProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   return (

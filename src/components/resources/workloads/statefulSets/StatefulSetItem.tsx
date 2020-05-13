@@ -12,7 +12,11 @@ interface IStatefulSetItemProps extends RouteComponentProps {
   type: string;
 }
 
-const StatefulSetItem: React.FunctionComponent<IStatefulSetItemProps> = ({ item, section, type }) => {
+const StatefulSetItem: React.FunctionComponent<IStatefulSetItemProps> = ({
+  item,
+  section,
+  type,
+}: IStatefulSetItemProps) => {
   // The stateful set status is set to success when the number of desired replicas is equal to the number of ready
   // replicas and updated replicas. When the update strategy is not OnDelete we also use the number of current replicas
   // to set the status. If the spec and status field is missing there must be an other error and we set the status to

@@ -62,7 +62,14 @@ interface IContainerProps {
   status?: V1ContainerStatus;
 }
 
-const Container: React.FunctionComponent<IContainerProps> = ({ container, logs, metrics, name, namespace, status }) => {
+const Container: React.FunctionComponent<IContainerProps> = ({
+  container,
+  logs,
+  metrics,
+  name,
+  namespace,
+  status,
+}: IContainerProps) => {
   const [showModal, setShowModal] = useState(false);
   const [showLogs, setShowLogs] = useState(false);
 

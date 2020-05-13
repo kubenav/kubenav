@@ -37,7 +37,9 @@ const getURL = (namespace: string, group: string, version: string, name: string)
   return namespace ? `/apis/${group}/${version}/namespaces/${namespace}/${name}` : `/apis/${group}/${version}/${name}`;
 };
 
-const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageProps> = ({ match }) => {
+const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageProps> = ({
+  match,
+}: ICustomResourcesListPageProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [error, setError] = useState<string>('');
@@ -108,7 +110,11 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
 
         {error === '' && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? (
           <React.Fragment>
-            <IonSearchbar inputmode="search" value={searchText} onIonChange={(e) => setSearchText(e.detail.value!)} />
+            <IonSearchbar
+              inputmode="search"
+              value={searchText}
+              onIonChange={(e) => setSearchText(e.detail.value ? e.detail.value : '')}
+            />
 
             <IonList>
               {match.url === url && items

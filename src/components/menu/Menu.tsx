@@ -50,7 +50,7 @@ interface IMenuProps extends RouteComponentProps {
   sections: IAppSections;
 }
 
-const Menu: React.FunctionComponent<IMenuProps> = ({ sections }) => {
+const Menu: React.FunctionComponent<IMenuProps> = ({ sections }: IMenuProps) => {
   return (
     <IonMenu contentId="main" type="overlay">
       <IonHeader>

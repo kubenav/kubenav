@@ -10,7 +10,7 @@ interface IClusterItemProps {
   cluster: ICluster;
 }
 
-const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }) => {
+const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IClusterItemProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [status, setStatus] = useState<boolean>(false);

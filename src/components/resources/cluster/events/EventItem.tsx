@@ -12,7 +12,7 @@ interface IEventItemProps extends RouteComponentProps {
   type: string;
 }
 
-const EventItem: React.FunctionComponent<IEventItemProps> = ({ item, section, type }) => {
+const EventItem: React.FunctionComponent<IEventItemProps> = ({ item, section, type }: IEventItemProps) => {
   // - Type: Type of this event (Normal, Warning), new types could be added in the future.
   // - Reason: A short, machine understandable string that gives the reason for the transition into the object's
   //   current status.

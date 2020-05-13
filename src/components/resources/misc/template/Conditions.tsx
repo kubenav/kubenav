@@ -9,7 +9,7 @@ interface IPodConditionsProps {
   conditions: TCondition[];
 }
 
-const Conditions: React.FunctionComponent<IPodConditionsProps> = ({ conditions }) => {
+const Conditions: React.FunctionComponent<IPodConditionsProps> = ({ conditions }: IPodConditionsProps) => {
   return (
     <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
       <IonCardEqualHeight>

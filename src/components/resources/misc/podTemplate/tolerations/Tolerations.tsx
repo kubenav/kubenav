@@ -8,7 +8,7 @@ interface ITolerationProps {
   tolerations: V1Toleration[];
 }
 
-const Tolerations: React.FunctionComponent<ITolerationProps> = ({ tolerations }) => {
+const Tolerations: React.FunctionComponent<ITolerationProps> = ({ tolerations }: ITolerationProps) => {
   return (
     <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
       <IonCardEqualHeight>

@@ -11,7 +11,7 @@ interface ISectionProps {
   isMenu: boolean;
 }
 
-const Section: React.FunctionComponent<ISectionProps> = ({ pages, title, sectionKey, isMenu }) => {
+const Section: React.FunctionComponent<ISectionProps> = ({ pages, title, sectionKey, isMenu }: ISectionProps) => {
   return (
     <React.Fragment>
       <IonListHeader mode="md">

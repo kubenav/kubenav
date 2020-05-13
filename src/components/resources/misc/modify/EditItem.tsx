@@ -25,7 +25,7 @@ interface IEditItemProps {
   url: string;
 }
 
-const EditItem: React.FunctionComponent<IEditItemProps> = ({ activator, item, url }) => {
+const EditItem: React.FunctionComponent<IEditItemProps> = ({ activator, item, url }: IEditItemProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [showModal, setShowModal] = useState<boolean>(false);

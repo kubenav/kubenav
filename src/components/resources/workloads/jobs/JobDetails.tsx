@@ -18,7 +18,7 @@ interface IJobDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const JobDetails: React.FunctionComponent<IJobDetailsProps> = ({ item, type }) => {
+const JobDetails: React.FunctionComponent<IJobDetailsProps> = ({ item, type }: IJobDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>

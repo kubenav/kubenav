@@ -9,7 +9,11 @@ interface IServiceAccountItemProps extends RouteComponentProps {
   type: string;
 }
 
-const ServiceAccountItem: React.FunctionComponent<IServiceAccountItemProps> = ({ item, section, type }) => {
+const ServiceAccountItem: React.FunctionComponent<IServiceAccountItemProps> = ({
+  item,
+  section,
+  type,
+}: IServiceAccountItemProps) => {
   return (
     <IonItem
       routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${

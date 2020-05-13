@@ -15,7 +15,7 @@ interface IPodItemProps extends RouteComponentProps {
   type: string;
 }
 
-const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }) => {
+const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }: IPodItemProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [metrics, setMetrics] = useState<IPodMetrics>();
@@ -26,7 +26,9 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
         try {
           const data: IPodMetrics = await context.request(
             'GET',
-            `/apis/metrics.k8s.io/v1beta1/namespaces/${item.metadata!.namespace}/pods/${item.metadata!.name}`,
+            `/apis/metrics.k8s.io/v1beta1/namespaces/${
+              item.metadata && item.metadata.namespace ? item.metadata.namespace : ''
+            }/pods/${item.metadata && item.metadata.name ? item.metadata.name : ''}`,
             '',
           );
           setMetrics(data);

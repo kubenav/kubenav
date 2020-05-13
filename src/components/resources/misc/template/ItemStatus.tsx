@@ -6,7 +6,7 @@ interface IItemStatusProps {
   status: string;
 }
 
-const ItemStatus: React.FunctionComponent<IItemStatusProps> = ({ status }) => {
+const ItemStatus: React.FunctionComponent<IItemStatusProps> = ({ status }: IItemStatusProps) => {
   let color = '';
 
   switch (status) {

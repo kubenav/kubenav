@@ -23,7 +23,7 @@ interface IIngressItemProps extends RouteComponentProps {
   type: string;
 }
 
-const IngressItem: React.FunctionComponent<IIngressItemProps> = ({ item, section, type }) => {
+const IngressItem: React.FunctionComponent<IIngressItemProps> = ({ item, section, type }: IIngressItemProps) => {
   // - Hosts: List of fully qualified domain names.
   // - Age: The time when the ingress was created.
   return (

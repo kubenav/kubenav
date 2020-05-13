@@ -24,7 +24,14 @@ interface IListProps {
   filter?: (item: any) => boolean;
 }
 
-const List: React.FunctionComponent<IListProps> = ({ name, section, type, namespace, selector, filter }) => {
+const List: React.FunctionComponent<IListProps> = ({
+  name,
+  section,
+  type,
+  namespace,
+  selector,
+  filter,
+}: IListProps) => {
   const context = useContext<IContext>(AppContext);
 
   const page = resources[section].pages[type];

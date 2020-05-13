@@ -24,7 +24,7 @@ const Containers: React.FunctionComponent<IContainersProps> = ({
   namespace,
   statuses,
   title,
-}) => {
+}: IContainersProps) => {
   const getContainerStatus = (name: string, containerStatuses: V1ContainerStatus[]): V1ContainerStatus | undefined => {
     if (containerStatuses.filter((containerStatus) => containerStatus.name === name).length === 1) {
       return containerStatuses.filter((containerStatus) => containerStatus.name === name)[0];

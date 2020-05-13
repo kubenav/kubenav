@@ -50,7 +50,7 @@ const getKubeconfigUser = (name: string, users: IKubeconfigUserRef[]): IKubeconf
 
 type IKubeconfigPageProps = RouteComponentProps;
 
-const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history }) => {
+const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history }: IKubeconfigPageProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [error, setError] = useState<string>('');

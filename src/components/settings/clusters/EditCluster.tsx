@@ -26,7 +26,7 @@ interface IEditClusterProps {
   cluster: ICluster;
 }
 
-const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }) => {
+const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IEditClusterProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [showModal, setShowModal] = useState<boolean>(false);

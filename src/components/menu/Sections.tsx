@@ -8,7 +8,7 @@ interface ISectionsProps {
   isMenu: boolean;
 }
 
-const Sections: React.FunctionComponent<ISectionsProps> = ({ sections, isMenu }) => {
+const Sections: React.FunctionComponent<ISectionsProps> = ({ sections, isMenu }: ISectionsProps) => {
   return (
     <React.Fragment>
       {Object.keys(sections).map((sectionKey) => (

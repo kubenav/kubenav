@@ -19,15 +19,14 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
-    "@typescript-eslint/camelcase": "warn",
+    "@typescript-eslint/camelcase": "error",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/interface-name-prefix": ["error", { "prefixWithI": "always" }],
     "@typescript-eslint/no-empty-function": "warn",
     "@typescript-eslint/no-empty-interface": "error",
     "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/no-non-null-assertion": "warn",
+    "@typescript-eslint/no-non-null-assertion": "error",
     "@typescript-eslint/no-unused-vars": "warn",
-    "@typescript-eslint/no-use-before-define": "off",
-    "react/prop-types": 0
+    "@typescript-eslint/no-use-before-define": "off"
   }
 }

@@ -12,7 +12,11 @@ interface IDeploymentItemProps extends RouteComponentProps {
   type: string;
 }
 
-const DeploymentItem: React.FunctionComponent<IDeploymentItemProps> = ({ item, section, type }) => {
+const DeploymentItem: React.FunctionComponent<IDeploymentItemProps> = ({
+  item,
+  section,
+  type,
+}: IDeploymentItemProps) => {
   // The deployment status is set to success when the number of desired replicas is 0 or when the number of desired
   // replicas is equal to the number of observed replicas, ready replicas, updated replicas and available replicas. If
   // the spec and status field is missing there must be an other error and we set the status to warning.

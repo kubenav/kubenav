@@ -18,7 +18,10 @@ interface IReplicationControllerDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const ReplicationControllerDetails: React.FunctionComponent<IReplicationControllerDetailsProps> = ({ item, type }) => {
+const ReplicationControllerDetails: React.FunctionComponent<IReplicationControllerDetailsProps> = ({
+  item,
+  type,
+}: IReplicationControllerDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>

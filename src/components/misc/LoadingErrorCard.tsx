@@ -11,7 +11,13 @@ interface ILoadingErrorCard {
   text: string;
 }
 
-const LoadingErrorCard: React.FunctionComponent<ILoadingErrorCard> = ({ cluster, clusters, error, icon, text }) => {
+const LoadingErrorCard: React.FunctionComponent<ILoadingErrorCard> = ({
+  cluster,
+  clusters,
+  error,
+  icon,
+  text,
+}: ILoadingErrorCard) => {
   return (
     <IonCard style={{ textAlign: 'center' }}>
       <img className="image-margin-top" alt={text} src={icon} style={{ width: '128px', margin: 'auto' }} />

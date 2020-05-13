@@ -9,7 +9,7 @@ interface IRoleItemProps extends RouteComponentProps {
   type: string;
 }
 
-const RoleItem: React.FunctionComponent<IRoleItemProps> = ({ item, section, type }) => {
+const RoleItem: React.FunctionComponent<IRoleItemProps> = ({ item, section, type }: IRoleItemProps) => {
   return (
     <IonItem
       routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${

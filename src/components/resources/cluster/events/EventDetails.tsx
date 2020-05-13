@@ -14,7 +14,7 @@ interface IEventDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const EventDetails: React.FunctionComponent<IEventDetailsProps> = ({ item, type }) => {
+const EventDetails: React.FunctionComponent<IEventDetailsProps> = ({ item, type }: IEventDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>

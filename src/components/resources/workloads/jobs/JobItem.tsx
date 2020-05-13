@@ -33,7 +33,7 @@ interface IJobItemProps extends RouteComponentProps {
   type: string;
 }
 
-const JobItem: React.FunctionComponent<IJobItemProps> = ({ item, section, type }) => {
+const JobItem: React.FunctionComponent<IJobItemProps> = ({ item, section, type }: IJobItemProps) => {
   // status is used to display the status of the job. If the failed field is defined and larger then 0, we display the
   // error status.
   let status = 'success';

@@ -13,7 +13,7 @@ interface INodeItemProps extends RouteComponentProps {
   type: string;
 }
 
-const NodeItem: React.FunctionComponent<INodeItemProps> = ({ item, section, type }) => {
+const NodeItem: React.FunctionComponent<INodeItemProps> = ({ item, section, type }: INodeItemProps) => {
   // Get the node status. Only when the node status is ready we will set our status to success. For ever other node
   // statuses like disk pressure, memory pressure, etc. we set the status to danger.
   const nodeStatus = getStatus(item);

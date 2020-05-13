@@ -23,7 +23,7 @@ import { AppContext } from '../../../../utils/context';
 
 type IManualPageProps = RouteComponentProps;
 
-const ManualPage: React.FunctionComponent<IManualPageProps> = ({ history }) => {
+const ManualPage: React.FunctionComponent<IManualPageProps> = ({ history }: IManualPageProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [error, setError] = useState<string>('');

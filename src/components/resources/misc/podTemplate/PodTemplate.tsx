@@ -10,7 +10,7 @@ interface IPodTemplateProps {
   template: V1PodTemplateSpec;
 }
 
-const PodTemplate: React.FunctionComponent<IPodTemplateProps> = ({ template }) => {
+const PodTemplate: React.FunctionComponent<IPodTemplateProps> = ({ template }: IPodTemplateProps) => {
   return (
     <React.Fragment>
       <IonItemDivider>

@@ -18,7 +18,10 @@ interface IDeploymentDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const DeploymentDetails: React.FunctionComponent<IDeploymentDetailsProps> = ({ item, type }) => {
+const DeploymentDetails: React.FunctionComponent<IDeploymentDetailsProps> = ({
+  item,
+  type,
+}: IDeploymentDetailsProps) => {
   const updateStrategy = (strategy: V1DeploymentStrategy): string => {
     if (strategy.rollingUpdate && strategy.rollingUpdate.maxSurge && strategy.rollingUpdate.maxUnavailable) {
       return `${strategy.type ? `${strategy.type}: ` : ''}Max Surge ${

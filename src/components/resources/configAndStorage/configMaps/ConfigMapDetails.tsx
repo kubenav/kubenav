@@ -13,7 +13,10 @@ interface IConfigMapDetailsDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const ConfigMapDetailsDetails: React.FunctionComponent<IConfigMapDetailsDetailsProps> = ({ item, type }) => {
+const ConfigMapDetailsDetails: React.FunctionComponent<IConfigMapDetailsDetailsProps> = ({
+  item,
+  type,
+}: IConfigMapDetailsDetailsProps) => {
   return (
     <IonGrid>
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
@@ -40,7 +43,7 @@ const ConfigMapDetailsDetails: React.FunctionComponent<IConfigMapDetailsDetailsP
               <IonCardContent>
                 <IonList>
                   {Object.keys(item.data).map((key) => (
-                    <Data key={key} name={key} data={item.data![key]} />
+                    <Data key={key} name={key} data={item.data ? item.data[key] : ''} />
                   ))}
                 </IonList>
               </IonCardContent>
@@ -59,7 +62,7 @@ const ConfigMapDetailsDetails: React.FunctionComponent<IConfigMapDetailsDetailsP
               <IonCardContent>
                 <IonList>
                   {Object.keys(item.binaryData).map((key) => (
-                    <Data key={key} name={key} data={item.binaryData![key]} />
+                    <Data key={key} name={key} data={item.binaryData ? item.binaryData[key] : ''} />
                   ))}
                 </IonList>
               </IonCardContent>

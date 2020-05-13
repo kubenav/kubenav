@@ -16,7 +16,7 @@ const ReplicationControllerItem: React.FunctionComponent<IReplicationControllerI
   item,
   section,
   type,
-}) => {
+}: IReplicationControllerItemProps) => {
   let status = 'danger';
 
   if (item.spec && item.status) {

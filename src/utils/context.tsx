@@ -53,7 +53,7 @@ interface IAppContextProvider {
 
 // Every Context object comes with a Provider React component that allows consuming components to subscribe to context
 // changes.
-export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = ({ children }) => {
+export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = ({ children }: IAppContextProvider) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [settings, setSettings] = useState<IAppSettings>(readSettings());
   const [cluster, setCluster] = useState<string | undefined>(undefined);
@@ -250,7 +250,11 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
       if (alternativeCluster) {
         return await oidcRequestWrapper(method, url, body, alternativeCluster);
       } else {
-        return await oidcRequestWrapper(method, url, body, clusters![cluster!]);
+        if (clusters !== undefined && cluster !== undefined) {
+          return await oidcRequestWrapper(method, url, body, clusters[cluster]);
+        } else {
+          throw new Error('Select an active cluster');
+        }
       }
     } catch (err) {
       throw err;

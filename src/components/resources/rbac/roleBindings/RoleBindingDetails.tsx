@@ -26,7 +26,10 @@ interface IRoleBindingDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const RoleBindingDetails: React.FunctionComponent<IRoleBindingDetailsProps> = ({ item, type }) => {
+const RoleBindingDetails: React.FunctionComponent<IRoleBindingDetailsProps> = ({
+  item,
+  type,
+}: IRoleBindingDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>

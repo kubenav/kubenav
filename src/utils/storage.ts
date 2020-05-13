@@ -51,9 +51,8 @@ export const readGoogleClientID = (): string => {
 
 // readGoogleTokens returns the tokens required for Google from localStorage.
 export const readGoogleTokens = (): IGoogleTokens | undefined => {
-  return localStorage.getItem(STORAGE_GOOGLE_TOKENS)
-    ? JSON.parse(localStorage.getItem(STORAGE_GOOGLE_TOKENS)!)
-    : undefined;
+  const googleTokens = localStorage.getItem(STORAGE_GOOGLE_TOKENS);
+  return googleTokens ? JSON.parse(googleTokens) : undefined;
 };
 
 // readOIDCLastProvider returns the saved name of the last used OIDC provider. This is used to assign a redirect to the
@@ -135,6 +134,7 @@ export const saveClusters = (clusters: IClusters) => {
 export const saveGoogleTokens = (tokens: IGoogleTokens) => {
   const expiresData = new Date();
   expiresData.setSeconds(expiresData.getSeconds() + parseInt(tokens.expires_in) - 300);
+  // eslint-disable-next-line @typescript-eslint/camelcase
   tokens.expires_in = expiresData.toDateString();
   localStorage.setItem(STORAGE_GOOGLE_TOKENS, JSON.stringify(tokens));
 };

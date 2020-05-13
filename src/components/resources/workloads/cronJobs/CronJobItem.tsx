@@ -11,7 +11,7 @@ interface ICronJobItemProps extends RouteComponentProps {
   type: string;
 }
 
-const CronJobItem: React.FunctionComponent<ICronJobItemProps> = ({ item, section, type }) => {
+const CronJobItem: React.FunctionComponent<ICronJobItemProps> = ({ item, section, type }: ICronJobItemProps) => {
   // - Last Schedule: Time when the cron job was scheduled the last time.
   // - Active: Indicator if the cron job is currently running.
   // - Schedule: Planned schedule for the cron job.

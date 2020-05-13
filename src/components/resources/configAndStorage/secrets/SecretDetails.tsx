@@ -14,7 +14,7 @@ interface ISecretDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const SecretDetails: React.FunctionComponent<ISecretDetailsProps> = ({ item, type }) => {
+const SecretDetails: React.FunctionComponent<ISecretDetailsProps> = ({ item, type }: ISecretDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>
@@ -35,7 +35,7 @@ const SecretDetails: React.FunctionComponent<ISecretDetailsProps> = ({ item, typ
               <IonCardContent>
                 <IonList>
                   {Object.keys(item.data).map((key) => (
-                    <Data key={key} name={key} data={atob(item.data![key])} />
+                    <Data key={key} name={key} data={atob(item.data ? item.data[key] : '')} />
                   ))}
                 </IonList>
               </IonCardContent>
@@ -54,7 +54,7 @@ const SecretDetails: React.FunctionComponent<ISecretDetailsProps> = ({ item, typ
               <IonCardContent>
                 <IonList>
                   {Object.keys(item.stringData).map((key) => (
-                    <Data key={key} name={key} data={item.stringData![key]} />
+                    <Data key={key} name={key} data={item.stringData ? item.stringData[key] : ''} />
                   ))}
                 </IonList>
               </IonCardContent>

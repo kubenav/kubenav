@@ -60,7 +60,7 @@ const isChecked = (id: string, clusters: ICluster[]): boolean => {
 
 type IAzurePageProps = RouteComponentProps;
 
-const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history }) => {
+const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history }: IAzurePageProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [error, setError] = useState<string>('');

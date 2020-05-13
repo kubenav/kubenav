@@ -16,7 +16,7 @@ interface IServiceDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const ServiceDetails: React.FunctionComponent<IServiceDetailsProps> = ({ item, type }) => {
+const ServiceDetails: React.FunctionComponent<IServiceDetailsProps> = ({ item, type }: IServiceDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>

@@ -14,7 +14,10 @@ interface IClusterRoleDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const ClusterRoleDetails: React.FunctionComponent<IClusterRoleDetailsProps> = ({ item, type }) => {
+const ClusterRoleDetails: React.FunctionComponent<IClusterRoleDetailsProps> = ({
+  item,
+  type,
+}: IClusterRoleDetailsProps) => {
   return (
     <IonGrid>
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}

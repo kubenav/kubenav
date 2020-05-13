@@ -21,7 +21,11 @@ interface IClusterRoleBindingItemProps extends RouteComponentProps {
   type: string;
 }
 
-const ClusterRoleBindingItem: React.FunctionComponent<IClusterRoleBindingItemProps> = ({ item, section, type }) => {
+const ClusterRoleBindingItem: React.FunctionComponent<IClusterRoleBindingItemProps> = ({
+  item,
+  section,
+  type,
+}: IClusterRoleBindingItemProps) => {
   // - Role: Name is the name of resource being referenced.
   // - Kind: Kind of object being referenced.
   // - Subjects: Name of the object being referenced.

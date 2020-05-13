@@ -16,7 +16,7 @@ interface ICronJobDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const CronJobDetails: React.FunctionComponent<ICronJobDetailsProps> = ({ item, type }) => {
+const CronJobDetails: React.FunctionComponent<ICronJobDetailsProps> = ({ item, type }: ICronJobDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>
@@ -46,7 +46,8 @@ const CronJobDetails: React.FunctionComponent<ICronJobDetailsProps> = ({ item, t
             namespace={item.metadata.namespace}
             filter={(job: V1Job) =>
               job.metadata && job.metadata.ownerReferences && job.metadata.ownerReferences.length === 1
-                ? job.metadata.ownerReferences[0].name === item.metadata!.name
+                ? job.metadata.ownerReferences[0].name ===
+                  (item.metadata && item.metadata.name ? item.metadata.name : '')
                 : false
             }
           />

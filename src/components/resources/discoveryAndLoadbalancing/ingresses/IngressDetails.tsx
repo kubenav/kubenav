@@ -15,7 +15,7 @@ interface IIngressDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const IngressDetails: React.FunctionComponent<IIngressDetailsProps> = ({ item, type }) => {
+const IngressDetails: React.FunctionComponent<IIngressDetailsProps> = ({ item, type }: IIngressDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>

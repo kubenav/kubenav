@@ -24,7 +24,7 @@ import { AppContext } from '../../../../utils/context';
 
 type IOIDCPageProps = RouteComponentProps;
 
-const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }) => {
+const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }: IOIDCPageProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [error, setError] = useState<string>('');

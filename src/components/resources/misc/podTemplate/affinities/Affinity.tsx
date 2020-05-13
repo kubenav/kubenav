@@ -22,7 +22,7 @@ interface IAffinityProps {
   affinity: V1NodeAffinity | V1PodAffinity | V1PodAntiAffinity;
 }
 
-const Affinity: React.FunctionComponent<IAffinityProps> = ({ title, affinity }) => {
+const Affinity: React.FunctionComponent<IAffinityProps> = ({ title, affinity }: IAffinityProps) => {
   const [showModal, setShowModal] = useState(false);
 
   return (

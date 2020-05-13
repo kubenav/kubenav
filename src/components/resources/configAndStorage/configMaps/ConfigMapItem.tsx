@@ -11,7 +11,7 @@ interface IConfigMapItemProps extends RouteComponentProps {
   type: string;
 }
 
-const ConfigMapItem: React.FunctionComponent<IConfigMapItemProps> = ({ item, section, type }) => {
+const ConfigMapItem: React.FunctionComponent<IConfigMapItemProps> = ({ item, section, type }: IConfigMapItemProps) => {
   // - Data: Number of data entries in the config map.
   // - Age: The time when the config map was created.
   return (

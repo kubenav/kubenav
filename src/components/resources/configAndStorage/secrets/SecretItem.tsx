@@ -11,7 +11,7 @@ interface ISecretItemProps extends RouteComponentProps {
   type: string;
 }
 
-const SecretItem: React.FunctionComponent<ISecretItemProps> = ({ item, section, type }) => {
+const SecretItem: React.FunctionComponent<ISecretItemProps> = ({ item, section, type }: ISecretItemProps) => {
   // - Data: Number of data entries in the secret.
   // - Type: Used to facilitate programmatic handling of secret data.
   // - Age: The time when the secret was created.

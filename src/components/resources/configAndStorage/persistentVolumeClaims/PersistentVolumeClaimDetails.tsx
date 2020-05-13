@@ -16,7 +16,10 @@ interface IPersistentVolumeClaimDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const PersistentVolumeClaimDetails: React.FunctionComponent<IPersistentVolumeClaimDetailsProps> = ({ item, type }) => {
+const PersistentVolumeClaimDetails: React.FunctionComponent<IPersistentVolumeClaimDetailsProps> = ({
+  item,
+  type,
+}: IPersistentVolumeClaimDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>

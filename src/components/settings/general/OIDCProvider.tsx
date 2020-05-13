@@ -9,7 +9,7 @@ interface IOIDCProviderProps {
   provider: string;
 }
 
-const OIDCProvider: React.FunctionComponent<IOIDCProviderProps> = ({ provider }) => {
+const OIDCProvider: React.FunctionComponent<IOIDCProviderProps> = ({ provider }: IOIDCProviderProps) => {
   const context = useContext<IContext>(AppContext);
 
   return (

@@ -9,7 +9,11 @@ interface IClusterRoleItemProps extends RouteComponentProps {
   type: string;
 }
 
-const ClusterRoleItem: React.FunctionComponent<IClusterRoleItemProps> = ({ item, section, type }) => {
+const ClusterRoleItem: React.FunctionComponent<IClusterRoleItemProps> = ({
+  item,
+  section,
+  type,
+}: IClusterRoleItemProps) => {
   return (
     <IonItem
       routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${

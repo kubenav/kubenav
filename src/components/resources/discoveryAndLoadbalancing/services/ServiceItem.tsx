@@ -11,7 +11,7 @@ interface IServiceItemProps extends RouteComponentProps {
   type: string;
 }
 
-const ServiceItem: React.FunctionComponent<IServiceItemProps> = ({ item, section, type }) => {
+const ServiceItem: React.FunctionComponent<IServiceItemProps> = ({ item, section, type }: IServiceItemProps) => {
   // - Type: Type of the service, which determines how the Service is exposed.
   // - Cluster IP: IP address of the service and is usually assigned randomly by the master.
   // - External IPs: List of IP addresses for which nodes in the cluster will also accept traffic for this service.

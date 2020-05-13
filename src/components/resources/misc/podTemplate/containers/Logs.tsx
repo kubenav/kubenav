@@ -31,7 +31,13 @@ interface ILogsProps {
   container: string;
 }
 
-const Logs: React.FunctionComponent<ILogsProps> = ({ showModal, setShowModal, name, namespace, container }) => {
+const Logs: React.FunctionComponent<ILogsProps> = ({
+  showModal,
+  setShowModal,
+  name,
+  namespace,
+  container,
+}: ILogsProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [showLoading, setShowLoading] = useState<boolean>(false);

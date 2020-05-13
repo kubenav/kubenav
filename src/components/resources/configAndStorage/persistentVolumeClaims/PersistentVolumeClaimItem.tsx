@@ -15,7 +15,7 @@ const PersistentVolumeClaimItem: React.FunctionComponent<IPersistentVolumeClaimI
   item,
   section,
   type,
-}) => {
+}: IPersistentVolumeClaimItemProps) => {
   // - Phase: The current phase of PersistentVolumeClaim.
   // - Capacity: The actual resources of the underlying volume.
   // - Access Modes: The actual access modes the volume backing the PVC has.

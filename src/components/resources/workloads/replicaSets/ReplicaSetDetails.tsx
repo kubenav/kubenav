@@ -18,7 +18,10 @@ interface IReplicaSetDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const ReplicaSetDetails: React.FunctionComponent<IReplicaSetDetailsProps> = ({ item, type }) => {
+const ReplicaSetDetails: React.FunctionComponent<IReplicaSetDetailsProps> = ({
+  item,
+  type,
+}: IReplicaSetDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>

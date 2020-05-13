@@ -20,7 +20,7 @@ interface IMetadataProps {
   type: string;
 }
 
-const Metadata: React.FunctionComponent<IMetadataProps> = ({ metadata, type }) => {
+const Metadata: React.FunctionComponent<IMetadataProps> = ({ metadata, type }: IMetadataProps) => {
   return (
     <IonRow>
       <IonCol>

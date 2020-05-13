@@ -18,7 +18,10 @@ interface IStatefulSetDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const StatefulSetDetails: React.FunctionComponent<IStatefulSetDetailsProps> = ({ item, type }) => {
+const StatefulSetDetails: React.FunctionComponent<IStatefulSetDetailsProps> = ({
+  item,
+  type,
+}: IStatefulSetDetailsProps) => {
   const updateStrategy = (strategy: V1StatefulSetUpdateStrategy): string => {
     if (strategy.rollingUpdate && strategy.rollingUpdate.partition) {
       return `${strategy.type ? `${strategy.type}: ` : ''}Partition ${strategy.rollingUpdate.partition}`;

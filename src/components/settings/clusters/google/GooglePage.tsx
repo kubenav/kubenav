@@ -33,7 +33,7 @@ const isChecked = (id: string, clusters: ICluster[]): boolean => {
 
 type IGooglePageProps = RouteComponentProps;
 
-const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, history }) => {
+const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, history }: IGooglePageProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [error, setError] = useState<string>('');

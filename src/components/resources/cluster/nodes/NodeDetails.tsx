@@ -31,7 +31,7 @@ interface INodeDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }) => {
+const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }: INodeDetailsProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [metrics, setMetrics] = useState<INodeMetrics>();
@@ -42,7 +42,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type })
         try {
           const data: INodeMetrics = await context.request(
             'GET',
-            `/apis/metrics.k8s.io/v1beta1/nodes/${item.metadata!.name}`,
+            `/apis/metrics.k8s.io/v1beta1/nodes/${item.metadata && item.metadata ? item.metadata.name : ''}`,
             '',
           );
           setMetrics(data);
@@ -133,8 +133,18 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type })
                         return (
                           <tr key={key}>
                             <td>{key}</td>
-                            <td>{formatResourceValue(key, item.status!.capacity![key])}</td>
-                            <td>{formatResourceValue(key, item.status!.allocatable![key])}</td>
+                            <td>
+                              {formatResourceValue(
+                                key,
+                                item.status && item.status.capacity ? item.status.capacity[key] : '',
+                              )}
+                            </td>
+                            <td>
+                              {formatResourceValue(
+                                key,
+                                item.status && item.status.allocatable ? item.status.allocatable[key] : '',
+                              )}
+                            </td>
                             <td>{metrics && metrics.usage ? formatResourceValue(key, metrics.usage[key]) : null}</td>
                           </tr>
                         );

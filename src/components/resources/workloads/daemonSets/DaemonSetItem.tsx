@@ -12,7 +12,7 @@ interface IDaemonSetItemProps extends RouteComponentProps {
   type: string;
 }
 
-const DaemonSetItem: React.FunctionComponent<IDaemonSetItemProps> = ({ item, section, type }) => {
+const DaemonSetItem: React.FunctionComponent<IDaemonSetItemProps> = ({ item, section, type }: IDaemonSetItemProps) => {
   // The daemon set status is set to success when the number of desired pods is equal to the number of currently
   // observed, ready, updated and available pods. If the status key is missing in the daemon set we set the status to
   // warning, because there must be an other error.

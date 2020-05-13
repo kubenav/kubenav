@@ -32,7 +32,7 @@ interface IMatchParams {
 
 type IDetailsPageProps = RouteComponentProps<IMatchParams>;
 
-const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }) => {
+const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDetailsPageProps) => {
   const context = useContext<IContext>(AppContext);
 
   const page = resources[match.params.section].pages[match.params.type];

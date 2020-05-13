@@ -13,7 +13,7 @@ const CustomResourceDefinitionItem: React.FunctionComponent<ICustomResourceDefin
   item,
   section,
   type,
-}) => {
+}: ICustomResourceDefinitionItemProps) => {
   return (
     <IonItem
       routerLink={`/customresources/${item.spec.group}/${item.spec.version}/${item.spec.names.plural}`}

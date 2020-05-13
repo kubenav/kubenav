@@ -9,7 +9,7 @@ interface IAffinitiesProps {
   affinities: V1Affinity;
 }
 
-const Affinities: React.FunctionComponent<IAffinitiesProps> = ({ affinities }) => {
+const Affinities: React.FunctionComponent<IAffinitiesProps> = ({ affinities }: IAffinitiesProps) => {
   const title = (affinity: string): string => {
     return affinity[0].toUpperCase() + affinity.slice(1);
   };

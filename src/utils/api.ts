@@ -171,10 +171,15 @@ const getGoogleAccessToken = async (): Promise<string> => {
   if (expiresData.getTime() < new Date().getTime()) {
     const newTokens = await getGoogleAccessTokenAPI(tokens.refresh_token);
     saveGoogleTokens({
+      // eslint-disable-next-line @typescript-eslint/camelcase
       access_token: newTokens.access_token,
+      // eslint-disable-next-line @typescript-eslint/camelcase
       expires_in: newTokens.expires_in,
+      // eslint-disable-next-line @typescript-eslint/camelcase
       id_token: tokens.id_token,
+      // eslint-disable-next-line @typescript-eslint/camelcase
       refresh_token: tokens.refresh_token,
+      // eslint-disable-next-line @typescript-eslint/camelcase
       token_type: tokens.token_type,
     });
     return newTokens.access_token;
@@ -366,8 +371,11 @@ export const kubernetesRequest = async (
 export const getOIDCAccessToken = async (provider: IOIDCProvider): Promise<IOIDCProviderToken> => {
   if (provider.expiry - 60 > Math.floor(Date.now() / 1000)) {
     return {
+      // eslint-disable-next-line @typescript-eslint/camelcase
       id_token: provider.idToken,
+      // eslint-disable-next-line @typescript-eslint/camelcase
       refresh_token: provider.refreshToken,
+      // eslint-disable-next-line @typescript-eslint/camelcase
       access_token: provider.accessToken,
       expiry: provider.expiry,
     };

@@ -38,7 +38,7 @@ type IListPageProps = RouteComponentProps<IMatchParams>;
 
 // ListPage shows a list of the selected resource. The list can be filtered by namespace and each item contains a status
 // indicator, to get an overview of problems in the cluster.
-const ListPage: React.FunctionComponent<IListPageProps> = ({ match }) => {
+const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageProps) => {
   const context = useContext<IContext>(AppContext);
 
   // namespace and showNamespace is used to group all items by namespace and to only show the namespace once via the
@@ -126,7 +126,11 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }) => {
 
         {error === '' && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? (
           <React.Fragment>
-            <IonSearchbar inputmode="search" value={searchText} onIonChange={(e) => setSearchText(e.detail.value!)} />
+            <IonSearchbar
+              inputmode="search"
+              value={searchText}
+              onIonChange={(e) => setSearchText(e.detail.value ? e.detail.value : '')}
+            />
 
             <IonList>
               {match.url === url && items

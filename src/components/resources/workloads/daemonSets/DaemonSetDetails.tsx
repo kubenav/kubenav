@@ -17,7 +17,7 @@ interface IDaemonSetDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const DaemonSetDetails: React.FunctionComponent<IDaemonSetDetailsProps> = ({ item, type }) => {
+const DaemonSetDetails: React.FunctionComponent<IDaemonSetDetailsProps> = ({ item, type }: IDaemonSetDetailsProps) => {
   const updateStrategy = (strategy: V1DaemonSetUpdateStrategy): string => {
     if (strategy.rollingUpdate && strategy.rollingUpdate.maxUnavailable) {
       return `${strategy.type ? `${strategy.type}: ` : ''}Max Unavailable ${strategy.rollingUpdate.maxUnavailable}`;

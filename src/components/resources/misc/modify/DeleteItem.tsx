@@ -11,7 +11,7 @@ interface IDeleteItemProps {
   url: string;
 }
 
-const DeleteItem: React.FunctionComponent<IDeleteItemProps> = ({ activator, item, url }) => {
+const DeleteItem: React.FunctionComponent<IDeleteItemProps> = ({ activator, item, url }: IDeleteItemProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [showAlert, setShowAlert] = useState<boolean>(false);
