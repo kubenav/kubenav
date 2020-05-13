@@ -4,7 +4,7 @@ import React, { ReactElement } from 'react';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
 
 interface IStatus {
-  children: ReactElement;
+  children: ReactElement | ReactElement[] | null | (ReactElement | ReactElement[] | null)[];
 }
 
 const Status: React.FunctionComponent<IStatus> = ({ children }: IStatus) => {

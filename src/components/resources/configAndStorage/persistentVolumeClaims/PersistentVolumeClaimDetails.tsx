@@ -43,6 +43,7 @@ const PersistentVolumeClaimDetails: React.FunctionComponent<IPersistentVolumeCla
             title="Access Modes"
             value={(accessModes) => accessModes.join(', ')}
           />
+
           {item.status && item.status.capacity
             ? Object.keys(item.status.capacity).map((key) => (
                 <Row
