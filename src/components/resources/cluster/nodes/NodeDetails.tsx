@@ -53,6 +53,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
     if (item.metadata && item.metadata.name) {
       fetchData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item, type]);
 
   const imageName = (names: string[], long: boolean): string => {

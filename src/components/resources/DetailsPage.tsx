@@ -53,6 +53,7 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [match]);
 
   const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {

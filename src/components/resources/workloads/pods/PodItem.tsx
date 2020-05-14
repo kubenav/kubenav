@@ -39,6 +39,7 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
     if (item.metadata && item.metadata.namespace && item.metadata.name) {
       fetchData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item, type]);
 
   // Get the status of the pod. If the status is running or completed we set the status to success.  If the pod stuck

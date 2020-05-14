@@ -58,6 +58,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [match, context.clusters, context.cluster]);
 
   const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {

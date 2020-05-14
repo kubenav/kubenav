@@ -55,6 +55,7 @@ const Logs: React.FunctionComponent<ILogsProps> = ({
     if (showModal) {
       fetchData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showModal]);
 
   const load = async (previous: boolean, tailLines: number) => {

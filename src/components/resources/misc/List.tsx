@@ -50,6 +50,7 @@ const List: React.FunctionComponent<IListProps> = ({
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [section, type, namespace, selector, filter]);
 
   const load = async () => {

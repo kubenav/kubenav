@@ -82,6 +82,7 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   const handleName = (event) => {

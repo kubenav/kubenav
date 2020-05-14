@@ -30,6 +30,7 @@ const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IC
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

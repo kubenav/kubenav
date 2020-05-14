@@ -73,6 +73,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [match, context.clusters, context.cluster]);
 
   // The doRefresh method is used for a manual reload of the items for the corresponding resource. The

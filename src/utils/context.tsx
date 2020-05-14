@@ -103,6 +103,7 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
   // addCluster is used to add new clusters. We are using an array of clusters instead of a cluster object to add

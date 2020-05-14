@@ -86,6 +86,7 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
 
           const tmpClusters: ICluster[] = [];
 
+          // eslint-disable-next-line array-callback-return
           aksClusters.map((cluster) => {
             if (cluster.kubeconfig.contexts.length === 1) {
               const kubeconfigCluster = getKubeconfigCluster(

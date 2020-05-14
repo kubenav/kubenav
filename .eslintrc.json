@@ -12,6 +12,9 @@
       "version": "detect"
     }
   },
+  "plugins": [
+    "react-hooks"
+  ],
   "extends": [
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
@@ -19,6 +22,8 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
+    "array-callback-return": "warn",
+    "react-hooks/exhaustive-deps": "warn",
     "@typescript-eslint/camelcase": "error",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/interface-name-prefix": ["error", { "prefixWithI": "always" }],

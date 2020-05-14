@@ -69,6 +69,7 @@ const Editor: React.FunctionComponent<IEditorProps> = ({
 
   useEffect(() => {
     setShowScrollToBottomButton(scrollToBottomButton === true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const changeValue = (newValue: string) => {
