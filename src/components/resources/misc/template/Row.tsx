@@ -5,8 +5,9 @@ import { getProperty } from '../../../../utils/helpers';
 
 interface IRowProps {
   objKey: string;
-  obj: any;
+  obj: object;
   title: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value?: (value: any) => any;
   defaultValue?: string;
 }

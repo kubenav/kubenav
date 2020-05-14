@@ -73,6 +73,7 @@ const Logs: React.FunctionComponent<ILogsProps> = ({
 
       // It is possible that the returned log only contains one line with valid json. This gets parsed by the requests
       // function and so an object instead of a string is returned. In this case we have to revert the parsing.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data: any = await context.request(
         'GET',
         `/api/v1/namespaces/${namespace}/pods/${name}/log?${parameters}`,
@@ -103,7 +104,7 @@ const Logs: React.FunctionComponent<ILogsProps> = ({
           <IonToolbar>
             <IonButtons slot="start">
               <IonButton
-                onClick={(e) => {
+                onClick={() => {
                   setShowModal(false);
                 }}
               >
@@ -115,6 +116,7 @@ const Logs: React.FunctionComponent<ILogsProps> = ({
               <IonButton
                 onClick={(e) => {
                   e.persist();
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   setPopoverEvent(e as any);
                   setShowPopover(true);
                 }}

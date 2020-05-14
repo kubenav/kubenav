@@ -220,6 +220,7 @@ export const resources: IAppSections = {
         singleText: 'Persistent Volume',
         pluralText: 'Persistent Volumes',
         icon: '/assets/icons/kubernetes/pv.png',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string) => {
           return `/api/v1/persistentvolumes`;
         },
@@ -279,6 +280,7 @@ export const resources: IAppSections = {
         singleText: 'Cluster Role',
         pluralText: 'Cluster Roles',
         icon: '/assets/icons/kubernetes/c-role.png',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string) => {
           return `/apis/rbac.authorization.k8s.io/v1/clusterroles`;
         },
@@ -292,6 +294,7 @@ export const resources: IAppSections = {
         singleText: 'Cluster Role Binding',
         pluralText: 'Cluster Role Bindings',
         icon: '/assets/icons/kubernetes/c-rb.png',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string) => {
           return `/apis/rbac.authorization.k8s.io/v1/clusterrolebindings`;
         },
@@ -340,10 +343,12 @@ export const resources: IAppSections = {
         singleText: 'Custom Resource Definition',
         pluralText: 'Custom Resource Definitions',
         icon: '/assets/icons/kubernetes/crd.png',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string) => {
           return `/apis/apiextensions.k8s.io/v1beta1/customresourcedefinitions`;
         },
         listItemComponent: CustomResourceDefinitionItem,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         detailsURL: (namespace: string, name: string) => {
           return `/apis/apiextensions.k8s.io/v1beta1/customresourcedefinitions`;
         },
@@ -366,6 +371,7 @@ export const resources: IAppSections = {
         singleText: 'Namespace',
         pluralText: 'Namespaces',
         icon: '/assets/icons/kubernetes/ns.png',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string) => {
           return `/api/v1/namespaces`;
         },
@@ -379,6 +385,7 @@ export const resources: IAppSections = {
         singleText: 'Node',
         pluralText: 'Nodes',
         icon: '/assets/icons/kubernetes/node.png',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string) => {
           return `/api/v1/nodes`;
         },

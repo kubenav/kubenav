@@ -1,3 +1,4 @@
+import { RefresherEventDetail } from '@ionic/core';
 import {
   IonBackButton,
   IonButton,
@@ -40,6 +41,7 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
 
   const [error, setError] = useState<string>('');
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [item, setItem] = useState<any>();
   const [url, setUrl] = useState<string>('');
 
@@ -53,7 +55,7 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
     return () => {};
   }, [match]); /* eslint-disable-line */
 
-  const doRefresh = async (event) => {
+  const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();
     await load();
   };
@@ -62,6 +64,7 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
     setShowLoading(true);
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data: any = await context.request('GET', page.detailsURL(match.params.namespace, match.params.name), '');
       setError('');
       setItem(data);

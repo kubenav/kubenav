@@ -7,6 +7,7 @@ import { AppContext } from '../../../../utils/context';
 
 interface IDeleteItemProps {
   activator: TActivator;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
   url: string;
 }

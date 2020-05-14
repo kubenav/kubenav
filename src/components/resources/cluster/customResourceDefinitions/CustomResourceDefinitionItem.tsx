@@ -11,7 +11,9 @@ interface ICustomResourceDefinitionItemProps extends RouteComponentProps {
 
 const CustomResourceDefinitionItem: React.FunctionComponent<ICustomResourceDefinitionItemProps> = ({
   item,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   section,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   type,
 }: ICustomResourceDefinitionItemProps) => {
   return (

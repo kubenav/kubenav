@@ -1,3 +1,4 @@
+import { RefresherEventDetail } from '@ionic/core';
 import {
   IonBackButton,
   IonButton,
@@ -44,6 +45,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
 
   const [error, setError] = useState<string>('');
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [items, setItems] = useState<any>();
   const [url, setUrl] = useState<string>('');
   const [searchText, setSearchText] = useState<string>('');
@@ -58,7 +60,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
     return () => {};
   }, [match, context.clusters, context.cluster]); /* eslint-disable-line */
 
-  const doRefresh = async (event) => {
+  const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();
     await load();
   };
@@ -72,6 +74,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
       }
 
       const namespace = context.clusters[context.cluster].namespace;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data: any = await context.request(
         'GET',
         getURL(namespace, match.params.group, match.params.version, match.params.name),

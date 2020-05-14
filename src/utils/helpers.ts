@@ -78,7 +78,7 @@ export const formatResourceValue = (type: string, value: string): string => {
 };
 
 // getProperty returns the property of an object for a given key.
-export const getProperty = (obj: any, key: string) => {
+export const getProperty = (obj: object, key: string) => {
   return key.split('.').reduce((o, x) => {
     return typeof o == 'undefined' || o === null ? o : o[x];
   }, obj);

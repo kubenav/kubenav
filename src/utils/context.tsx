@@ -264,6 +264,7 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
   // oidcRequestWrapper wrappes all Kubernetes API requests. In case the cluster uses an OIDC provider, we check the
   // current ID token. If the token is expired we requests a new token and modify the OIDC provider. Then we pass the ID
   // token as token to the API request.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const oidcRequestWrapper = async (method: string, url: string, body: string, c: ICluster): Promise<any> => {
     try {
       if (c.authProvider && c.authProvider.startsWith('oidc__')) {

@@ -292,6 +292,7 @@ export const kubernetesRequest = async (
   body: string,
   timeout: number,
   cluster: ICluster,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
   try {
     if (cluster.authProvider === 'google') {

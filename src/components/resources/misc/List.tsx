@@ -21,6 +21,7 @@ interface IListProps {
   type: string;
   namespace: string;
   selector?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filter?: (item: any) => boolean;
 }
 
@@ -39,6 +40,7 @@ const List: React.FunctionComponent<IListProps> = ({
 
   const [alert, setAlert] = useState<string>('');
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [items, setItems] = useState<any>();
 
   useEffect(() => {
@@ -54,6 +56,7 @@ const List: React.FunctionComponent<IListProps> = ({
     setShowLoading(true);
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data: any = await context.request('GET', `${page.listURL(namespace)}${selector ? '?' + selector : ''}`, '');
       setItems(data.items);
     } catch (err) {

@@ -17,8 +17,10 @@ export interface IAppPage {
   singleText: string;
   pluralText: string;
   listURL: (namespace: string) => string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   listItemComponent: React.FunctionComponent<any>;
   detailsURL: (namespace: string, name: string) => string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   detailsComponent: React.FunctionComponent<any>;
 }
 
@@ -112,6 +114,7 @@ export interface IContext {
   editCluster: (editCluster: ICluster) => void;
   editSettings: (settings: IAppSettings) => void;
   setNamespace: (namespace: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   request: (method: string, url: string, body: string, alternativeCluster?: ICluster) => Promise<any>;
 }
 

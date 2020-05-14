@@ -16,6 +16,7 @@ import React, { useState } from 'react';
 import Editor from '../../../misc/Editor';
 
 interface ICustomResourceItemProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
 }
 

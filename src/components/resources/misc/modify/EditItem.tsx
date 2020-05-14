@@ -21,6 +21,7 @@ import Editor from '../../../misc/Editor';
 
 interface IEditItemProps {
   activator: TActivator;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
   url: string;
 }

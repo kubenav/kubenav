@@ -5,6 +5,7 @@ import DeleteItem from './DeleteItem';
 import EditItem from './EditItem';
 
 interface IItemOptionsProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
   url: string;
   children: ReactElement;

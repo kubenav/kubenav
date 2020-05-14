@@ -89,6 +89,7 @@ const NamespacePopover: React.FunctionComponent = () => {
       <IonButton
         onClick={(e) => {
           e.persist();
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           setPopoverEvent(e as any);
           loadNamespaces();
         }}

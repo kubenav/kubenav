@@ -1,3 +1,4 @@
+import { RefresherEventDetail } from '@ionic/core';
 import {
   IonButton,
   IonButtons,
@@ -57,6 +58,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
   // the current version. Maybe it's already improved and not needed.
   const [error, setError] = useState<string>('');
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [items, setItems] = useState<any>();
   const [url, setUrl] = useState<string>('');
   const [searchText, setSearchText] = useState<string>('');
@@ -75,7 +77,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
 
   // The doRefresh method is used for a manual reload of the items for the corresponding resource. The
   // event.detail.complete() call is required to finish the animation of the IonRefresher component.
-  const doRefresh = async (event) => {
+  const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();
     await load();
   };
@@ -92,6 +94,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
       }
 
       const namespace = context.clusters[context.cluster].namespace;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data: any = await context.request('GET', page.listURL(namespace), '');
       setError('');
       setItems(data.items);
