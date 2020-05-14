@@ -1,16 +1,8 @@
-import {
-  IonIcon,
-  IonItem,
-  IonItemOption,
-  IonItemOptions,
-  IonItemSliding,
-  IonLabel,
-  isPlatform,
-} from '@ionic/react';
+import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, isPlatform } from '@ionic/react';
 import { radioButtonOff, radioButtonOn, trash } from 'ionicons/icons';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { ICluster, IContext} from '../../../declarations';
+import { ICluster, IContext } from '../../../declarations';
 import { AppContext } from '../../../utils/context';
 import EditCluster from './EditCluster';
 
@@ -18,13 +10,13 @@ interface IClusterItemProps {
   cluster: ICluster;
 }
 
-const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }) => {
+const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IClusterItemProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [status, setStatus] = useState<boolean>(false);
 
   useEffect(() => {
-    (async() => {
+    const fetchData = async () => {
       try {
         const data = await context.request('GET', '', '', cluster);
         if (data && data.paths) {
@@ -35,10 +27,11 @@ const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }) =>
       } catch (err) {
         setStatus(false);
       }
-    })();
+    };
 
-    return () => {};
-  }, []); /* eslint-disable-line */
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <IonItemSliding>

@@ -1,8 +1,5 @@
-import {
-  IonGrid,
-  IonRow,
-} from '@ionic/react';
-import { V1PersistentVolume } from '@kubernetes/client-node'
+import { IonGrid, IonRow } from '@ionic/react';
+import { V1PersistentVolume } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -18,7 +15,10 @@ interface IPersistentVolumeDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const PersistentVolumeDetails: React.FunctionComponent<IPersistentVolumeDetailsProps> = ({ item, type }) => {
+const PersistentVolumeDetails: React.FunctionComponent<IPersistentVolumeDetailsProps> = ({
+  item,
+  type,
+}: IPersistentVolumeDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>
@@ -31,11 +31,17 @@ const PersistentVolumeDetails: React.FunctionComponent<IPersistentVolumeDetailsP
             title="Access Modes"
             value={(accessModes) => accessModes.join(', ')}
           />
-          <Row obj={item} objKey="spec.mountOptions" title="Mount Options" value={(mountOptions) => mountOptions.join(', ')} />
+          <Row
+            obj={item}
+            objKey="spec.mountOptions"
+            title="Mount Options"
+            value={(mountOptions) => mountOptions.join(', ')}
+          />
           <Row obj={item} objKey="spec.volumeMode" title="Volume Mode" />
           {item.spec && item.spec.capacity
-            ? Object.keys(item.spec.capacity).map((key) =>
-              <Row key={key} obj={item} objKey={`spec.capacity.${key}`} title={key[0].toUpperCase() + key.slice(1)} />)
+            ? Object.keys(item.spec.capacity).map((key) => (
+                <Row key={key} obj={item} objKey={`spec.capacity.${key}`} title={key[0].toUpperCase() + key.slice(1)} />
+              ))
             : null}
         </Configuration>
 
@@ -46,15 +52,21 @@ const PersistentVolumeDetails: React.FunctionComponent<IPersistentVolumeDetailsP
         </Status>
       </IonRow>
 
-      {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       {item.metadata && item.metadata.name ? (
         <IonRow>
-          <List name="Events" section="cluster" type="events" namespace="" selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+          <List
+            name="Events"
+            section="cluster"
+            type="events"
+            namespace=""
+            selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
+          />
         </IonRow>
       ) : null}
     </IonGrid>
-  )
+  );
 };
 
 export default PersistentVolumeDetails;

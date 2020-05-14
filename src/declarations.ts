@@ -8,7 +8,7 @@ import {
   V1PodCondition,
   V1ReplicaSetCondition,
   V1ReplicationControllerCondition,
-  V1StatefulSetCondition
+  V1StatefulSetCondition,
 } from '@kubernetes/client-node';
 import React from 'react';
 
@@ -17,13 +17,15 @@ export interface IAppPage {
   singleText: string;
   pluralText: string;
   listURL: (namespace: string) => string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   listItemComponent: React.FunctionComponent<any>;
   detailsURL: (namespace: string, name: string) => string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   detailsComponent: React.FunctionComponent<any>;
 }
 
 export interface IAppPages {
-  [key: string]: IAppPage
+  [key: string]: IAppPage;
 }
 
 export interface IAppSection {
@@ -32,7 +34,7 @@ export interface IAppSection {
 }
 
 export interface IAppSections {
-  [key: string]: IAppSection
+  [key: string]: IAppSection;
 }
 
 export interface IAppSettings {
@@ -94,8 +96,8 @@ export interface IClusters {
 }
 
 export interface IContainerMetrics {
-  'name'?: string;
-  'usage'?: IMetricsUsage;
+  name?: string;
+  usage?: IMetricsUsage;
 }
 
 export interface IContext {
@@ -112,6 +114,7 @@ export interface IContext {
   editCluster: (editCluster: ICluster) => void;
   editSettings: (settings: IAppSettings) => void;
   setNamespace: (namespace: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   request: (method: string, url: string, body: string, alternativeCluster?: ICluster) => Promise<any>;
 }
 
@@ -128,7 +131,7 @@ export interface IGoogleProject {
 }
 
 export interface IGoogleCluster {
-  name: string,
+  name: string;
   masterAuth: IGoogleClusterMasterAuth;
   endpoint: string;
   location: string;
@@ -187,18 +190,18 @@ export interface IMetricsUsage {
 }
 
 export interface INodeMetrics {
-  'apiVersion'?: string;
-  'metadata'?: V1ObjectMeta;
-  'timestamp'?: Date;
-  'window'?: number;
-  'usage'?: IMetricsUsage;
+  apiVersion?: string;
+  metadata?: V1ObjectMeta;
+  timestamp?: Date;
+  window?: number;
+  usage?: IMetricsUsage;
 }
 
 export interface INodeMetricsList {
-  'apiVersion'?: string;
-  'items': Array<INodeMetrics>;
-  'kind'?: string;
-  'metadata'?: V1ListMeta;
+  apiVersion?: string;
+  items: Array<INodeMetrics>;
+  kind?: string;
+  metadata?: V1ListMeta;
 }
 
 export interface IOIDCProvider {
@@ -217,28 +220,29 @@ export interface IOIDCProviders {
 }
 
 export interface IOIDCProviderToken {
-  'id_token': string;
-  'refresh_token': string;
-  'access_token': string;
-  'expiry': number;
+  id_token: string;
+  refresh_token: string;
+  access_token: string;
+  expiry: number;
 }
 
 export interface IPodMetrics {
-  'apiVersion'?: string;
-  'metadata'?: V1ObjectMeta;
-  'timestamp'?: Date;
-  'window'?: number;
-  'containers'?: Array<IContainerMetrics>;
+  apiVersion?: string;
+  metadata?: V1ObjectMeta;
+  timestamp?: Date;
+  window?: number;
+  containers?: Array<IContainerMetrics>;
 }
 
 export interface IPodMetricsList {
-  'apiVersion'?: string;
-  'items': Array<IPodMetrics>;
-  'kind'?: string;
-  'metadata'?: V1ListMeta;
+  apiVersion?: string;
+  items: Array<IPodMetrics>;
+  kind?: string;
+  metadata?: V1ListMeta;
 }
 
-export type TCondition = V1DeploymentCondition
+export type TCondition =
+  | V1DeploymentCondition
   | V1JobCondition
   | V1NodeCondition
   | V1PodCondition

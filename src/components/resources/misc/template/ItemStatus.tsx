@@ -1,6 +1,4 @@
-import {
-  IonIcon,
-} from '@ionic/react';
+import { IonIcon } from '@ionic/react';
 import { radioButtonOn } from 'ionicons/icons';
 import React from 'react';
 
@@ -8,7 +6,7 @@ interface IItemStatusProps {
   status: string;
 }
 
-const ItemStatus: React.FunctionComponent<IItemStatusProps> = ({ status }) => {
+const ItemStatus: React.FunctionComponent<IItemStatusProps> = ({ status }: IItemStatusProps) => {
   let color = '';
 
   switch (status) {
@@ -24,13 +22,9 @@ const ItemStatus: React.FunctionComponent<IItemStatusProps> = ({ status }) => {
   }
 
   if (color === '') {
-    return (
-      <React.Fragment />
-    )
+    return <React.Fragment />;
   } else {
-    return (
-      <IonIcon slot="end" color={color} icon={radioButtonOn} />
-    );
+    return <IonIcon slot="end" color={color} icon={radioButtonOn} />;
   }
 };
 

@@ -12,8 +12,7 @@ import ServiceDetails from '../components/resources/discoveryAndLoadbalancing/se
 
 import ConfigMapDetails from '../components/resources/configAndStorage/configMaps/ConfigMapDetails';
 import PersistentVolumeClaimDetails from '../components/resources/configAndStorage/persistentVolumeClaims/PersistentVolumeClaimDetails';
-import PersistentVolumeDetails
-  from '../components/resources/configAndStorage/persistentVolumes/PersistentVolumeDetails';
+import PersistentVolumeDetails from '../components/resources/configAndStorage/persistentVolumes/PersistentVolumeDetails';
 import SecretDetails from '../components/resources/configAndStorage/secrets/SecretDetails';
 import ServiceAccountDetails from '../components/resources/configAndStorage/serviceAccounts/ServiceAccountDetails';
 
@@ -57,81 +56,113 @@ import NodeItem from '../components/resources/cluster/nodes/NodeItem';
 import { IAppSections } from '../declarations';
 
 export const resources: IAppSections = {
-  'workloads': {
+  workloads: {
     title: 'Workloads',
     pages: {
-      'cronjobs': {
+      cronjobs: {
         singleText: 'Cron Job',
         pluralText: 'Cron Jobs',
         icon: '/assets/icons/kubernetes/cronjob.png',
-        listURL: (namespace: string) => { return namespace ? `/apis/batch/v1beta1/namespaces/${namespace}/cronjobs` : `/apis/batch/v1beta1/cronjobs`; },
+        listURL: (namespace: string) => {
+          return namespace ? `/apis/batch/v1beta1/namespaces/${namespace}/cronjobs` : `/apis/batch/v1beta1/cronjobs`;
+        },
         listItemComponent: CronJobItem,
-        detailsURL: (namespace: string, name: string) => { return `/apis/batch/v1beta1/namespaces/${namespace}/cronjobs/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/batch/v1beta1/namespaces/${namespace}/cronjobs/${name}`;
+        },
         detailsComponent: CronJobDetails,
       },
-      'daemonsets': {
+      daemonsets: {
         singleText: 'Daemon Set',
         pluralText: 'Daemon Sets',
         icon: '/assets/icons/kubernetes/ds.png',
-        listURL: (namespace: string) => { return namespace ? `/apis/apps/v1/namespaces/${namespace}/daemonsets` : `/apis/apps/v1/daemonsets`; },
+        listURL: (namespace: string) => {
+          return namespace ? `/apis/apps/v1/namespaces/${namespace}/daemonsets` : `/apis/apps/v1/daemonsets`;
+        },
         listItemComponent: DaemonSetItem,
-        detailsURL: (namespace: string, name: string) => { return `/apis/apps/v1/namespaces/${namespace}/daemonsets/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/apps/v1/namespaces/${namespace}/daemonsets/${name}`;
+        },
         detailsComponent: DaemonSetDetails,
       },
-      'deployments': {
+      deployments: {
         singleText: 'Deployment',
         pluralText: 'Deployments',
         icon: '/assets/icons/kubernetes/deploy.png',
-        listURL: (namespace: string) => { return namespace ? `/apis/apps/v1/namespaces/${namespace}/deployments` : `/apis/apps/v1/deployments`; },
+        listURL: (namespace: string) => {
+          return namespace ? `/apis/apps/v1/namespaces/${namespace}/deployments` : `/apis/apps/v1/deployments`;
+        },
         listItemComponent: DeploymentItem,
-        detailsURL: (namespace: string, name: string) => { return `/apis/apps/v1/namespaces/${namespace}/deployments/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/apps/v1/namespaces/${namespace}/deployments/${name}`;
+        },
         detailsComponent: DeploymentDetails,
       },
-      'jobs': {
+      jobs: {
         singleText: 'Job',
         pluralText: 'Jobs',
         icon: '/assets/icons/kubernetes/job.png',
-        listURL: (namespace: string) => { return namespace ? `/apis/batch/v1/namespaces/${namespace}/jobs` : `/apis/batch/v1/jobs`; },
+        listURL: (namespace: string) => {
+          return namespace ? `/apis/batch/v1/namespaces/${namespace}/jobs` : `/apis/batch/v1/jobs`;
+        },
         listItemComponent: JobItem,
         detailsURL: (namespace: string, name: string) => {
           return `/apis/batch/v1/namespaces/${namespace}/jobs/${name}`;
         },
         detailsComponent: JobDetails,
       },
-      'pods': {
+      pods: {
         singleText: 'Pod',
         pluralText: 'Pods',
         icon: '/assets/icons/kubernetes/pod.png',
-        listURL: (namespace: string) => { return namespace ? `/api/v1/namespaces/${namespace}/pods` : `/api/v1/pods`; },
+        listURL: (namespace: string) => {
+          return namespace ? `/api/v1/namespaces/${namespace}/pods` : `/api/v1/pods`;
+        },
         listItemComponent: PodItem,
-        detailsURL: (namespace: string, name: string) => { return `/api/v1/namespaces/${namespace}/pods/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/api/v1/namespaces/${namespace}/pods/${name}`;
+        },
         detailsComponent: PodDetails,
       },
-      'replicasets': {
+      replicasets: {
         singleText: 'Replica Set',
         pluralText: 'Replica Sets',
         icon: '/assets/icons/kubernetes/rs.png',
-        listURL: (namespace: string) => { return namespace ? `/apis/apps/v1/namespaces/${namespace}/replicasets` : `/apis/apps/v1/replicasets`; },
+        listURL: (namespace: string) => {
+          return namespace ? `/apis/apps/v1/namespaces/${namespace}/replicasets` : `/apis/apps/v1/replicasets`;
+        },
         listItemComponent: ReplicaSetItem,
-        detailsURL: (namespace: string, name: string) => { return `/apis/apps/v1/namespaces/${namespace}/replicasets/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/apps/v1/namespaces/${namespace}/replicasets/${name}`;
+        },
         detailsComponent: ReplicaSetDetails,
       },
-      'replicationcontrollers': {
+      replicationcontrollers: {
         singleText: 'Replication Controller',
         pluralText: 'Replication Controllers',
         icon: '/assets/icons/kubernetes/deploy.png',
-        listURL: (namespace: string) => { return namespace ? `/api/v1/namespaces/${namespace}/replicationcontrollers` : `/api/v1/replicationcontrollers`; },
+        listURL: (namespace: string) => {
+          return namespace
+            ? `/api/v1/namespaces/${namespace}/replicationcontrollers`
+            : `/api/v1/replicationcontrollers`;
+        },
         listItemComponent: ReplicationControllerItem,
-        detailsURL: (namespace: string, name: string) => { return `/api/v1/namespaces/${namespace}/replicationcontrollers/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/api/v1/namespaces/${namespace}/replicationcontrollers/${name}`;
+        },
         detailsComponent: ReplicationControllerDetails,
       },
-      'statefulsets': {
+      statefulsets: {
         singleText: 'Stateful Set',
         pluralText: 'Stateful Sets',
         icon: '/assets/icons/kubernetes/sts.png',
-        listURL: (namespace: string) => { return namespace ? `/apis/apps/v1/namespaces/${namespace}/statefulsets` : `/apis/apps/v1/statefulsets`; },
+        listURL: (namespace: string) => {
+          return namespace ? `/apis/apps/v1/namespaces/${namespace}/statefulsets` : `/apis/apps/v1/statefulsets`;
+        },
         listItemComponent: StatefulSetItem,
-        detailsURL: (namespace: string, name: string) => { return `/apis/apps/v1/namespaces/${namespace}/statefulsets/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/apps/v1/namespaces/${namespace}/statefulsets/${name}`;
+        },
         detailsComponent: StatefulSetDetails,
       },
     },
@@ -139,132 +170,191 @@ export const resources: IAppSections = {
   'discovery-and-loadbalancing': {
     title: 'Discovery and Load Balancing',
     pages: {
-      'ingresses': {
+      ingresses: {
         singleText: 'Ingresse',
         pluralText: 'Ingresses',
         icon: '/assets/icons/kubernetes/ing.png',
-        listURL: (namespace: string) => { return namespace ? `/apis/networking.k8s.io/v1beta1/namespaces/${namespace}/ingresses` : `/apis/networking.k8s.io/v1beta1/ingresses`; },
+        listURL: (namespace: string) => {
+          return namespace
+            ? `/apis/networking.k8s.io/v1beta1/namespaces/${namespace}/ingresses`
+            : `/apis/networking.k8s.io/v1beta1/ingresses`;
+        },
         listItemComponent: IngressItem,
-        detailsURL: (namespace: string, name: string) => { return `/apis/networking.k8s.io/v1beta1/namespaces/${namespace}/ingresses/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/networking.k8s.io/v1beta1/namespaces/${namespace}/ingresses/${name}`;
+        },
         detailsComponent: IngressDetails,
       },
-      'services': {
+      services: {
         singleText: 'Service',
         pluralText: 'Services',
         icon: '/assets/icons/kubernetes/svc.png',
-        listURL: (namespace: string) => { return namespace ? `/api/v1/namespaces/${namespace}/services` : `/api/v1/services`; },
+        listURL: (namespace: string) => {
+          return namespace ? `/api/v1/namespaces/${namespace}/services` : `/api/v1/services`;
+        },
         listItemComponent: ServiceItem,
-        detailsURL: (namespace: string, name: string) => { return `/api/v1/namespaces/${namespace}/services/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/api/v1/namespaces/${namespace}/services/${name}`;
+        },
         detailsComponent: ServiceDetails,
       },
-    }
+    },
   },
   'config-and-storage': {
     title: 'Config and Storage',
     pages: {
-      'configmaps': {
+      configmaps: {
         singleText: 'Config Map',
         pluralText: 'Config Maps',
         icon: '/assets/icons/kubernetes/cm.png',
-        listURL: (namespace: string) => { return namespace ? `/api/v1/namespaces/${namespace}/configmaps` : `/api/v1/configmaps`; },
+        listURL: (namespace: string) => {
+          return namespace ? `/api/v1/namespaces/${namespace}/configmaps` : `/api/v1/configmaps`;
+        },
         listItemComponent: ConfigMapItem,
         detailsURL: (namespace: string, name: string) => {
           return `/api/v1/namespaces/${namespace}/configmaps/${name}`;
         },
         detailsComponent: ConfigMapDetails,
       },
-      'persistentvolumes': {
+      persistentvolumes: {
         singleText: 'Persistent Volume',
         pluralText: 'Persistent Volumes',
         icon: '/assets/icons/kubernetes/pv.png',
-        listURL: (namespace: string) => { return `/api/v1/persistentvolumes`; },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        listURL: (namespace: string) => {
+          return `/api/v1/persistentvolumes`;
+        },
         listItemComponent: PersistentVolumeItem,
-        detailsURL: (namespace: string, name: string) => { return `/api/v1/persistentvolumes/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/api/v1/persistentvolumes/${name}`;
+        },
         detailsComponent: PersistentVolumeDetails,
       },
-      'persistentvolumeclaims': {
+      persistentvolumeclaims: {
         singleText: 'Persistent Volume Claim',
         pluralText: 'Persistent Volume Claims',
         icon: '/assets/icons/kubernetes/pvc.png',
-        listURL: (namespace: string) => { return namespace ? `/api/v1/namespaces/${namespace}/persistentvolumeclaims` : `/api/v1/persistentvolumeclaims`; },
+        listURL: (namespace: string) => {
+          return namespace
+            ? `/api/v1/namespaces/${namespace}/persistentvolumeclaims`
+            : `/api/v1/persistentvolumeclaims`;
+        },
         listItemComponent: PersistentVolumeClaimItem,
-        detailsURL: (namespace: string, name: string) => { return `/api/v1/namespaces/${namespace}/persistentvolumeclaims/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/api/v1/namespaces/${namespace}/persistentvolumeclaims/${name}`;
+        },
         detailsComponent: PersistentVolumeClaimDetails,
       },
-      'secrets': {
+      secrets: {
         singleText: 'Secret',
         pluralText: 'Secrets',
         icon: '/assets/icons/kubernetes/secret.png',
-        listURL: (namespace: string) => { return namespace ? `/api/v1/namespaces/${namespace}/secrets` : `/api/v1/secrets`; },
+        listURL: (namespace: string) => {
+          return namespace ? `/api/v1/namespaces/${namespace}/secrets` : `/api/v1/secrets`;
+        },
         listItemComponent: SecretItem,
-        detailsURL: (namespace: string, name: string) => { return `/api/v1/namespaces/${namespace}/secrets/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/api/v1/namespaces/${namespace}/secrets/${name}`;
+        },
         detailsComponent: SecretDetails,
       },
-      'serviceaccounts': {
+      serviceaccounts: {
         singleText: 'Service Account',
         pluralText: 'Service Accounts',
         icon: '/assets/icons/kubernetes/sa.png',
-        listURL: (namespace: string) => { return namespace ? `/api/v1/namespaces/${namespace}/serviceaccounts` : `/api/v1/serviceaccounts`; },
+        listURL: (namespace: string) => {
+          return namespace ? `/api/v1/namespaces/${namespace}/serviceaccounts` : `/api/v1/serviceaccounts`;
+        },
         listItemComponent: ServiceAccountItem,
-        detailsURL: (namespace: string, name: string) => { return `/api/v1/namespaces/${namespace}/serviceaccounts/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/api/v1/namespaces/${namespace}/serviceaccounts/${name}`;
+        },
         detailsComponent: ServiceAccountDetails,
       },
-    }
+    },
   },
-  'rbac': {
+  rbac: {
     title: 'RBAC',
     pages: {
-      'clusterroles': {
+      clusterroles: {
         singleText: 'Cluster Role',
         pluralText: 'Cluster Roles',
         icon: '/assets/icons/kubernetes/c-role.png',
-        listURL: (namespace: string) => { return `/apis/rbac.authorization.k8s.io/v1/clusterroles`; },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        listURL: (namespace: string) => {
+          return `/apis/rbac.authorization.k8s.io/v1/clusterroles`;
+        },
         listItemComponent: ClusterRoleItem,
-        detailsURL: (namespace: string, name: string) => { return `/apis/rbac.authorization.k8s.io/v1/clusterroles/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/rbac.authorization.k8s.io/v1/clusterroles/${name}`;
+        },
         detailsComponent: ClusterRoleDetails,
       },
-      'clusterrolebindings': {
+      clusterrolebindings: {
         singleText: 'Cluster Role Binding',
         pluralText: 'Cluster Role Bindings',
         icon: '/assets/icons/kubernetes/c-rb.png',
-        listURL: (namespace: string) => { return `/apis/rbac.authorization.k8s.io/v1/clusterrolebindings`; },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        listURL: (namespace: string) => {
+          return `/apis/rbac.authorization.k8s.io/v1/clusterrolebindings`;
+        },
         listItemComponent: ClusterRoleBindingItem,
-        detailsURL: (namespace: string, name: string) => { return `/apis/rbac.authorization.k8s.io/v1/clusterrolebindings/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/rbac.authorization.k8s.io/v1/clusterrolebindings/${name}`;
+        },
         detailsComponent: ClusterRoleBindingDetails,
       },
-      'roles': {
+      roles: {
         singleText: 'Role',
         pluralText: 'Roles',
         icon: '/assets/icons/kubernetes/role.png',
-        listURL: (namespace: string) => { return namespace ? `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/roles` : `/apis/rbac.authorization.k8s.io/v1/roles`; },
+        listURL: (namespace: string) => {
+          return namespace
+            ? `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/roles`
+            : `/apis/rbac.authorization.k8s.io/v1/roles`;
+        },
         listItemComponent: RoleItem,
-        detailsURL: (namespace: string, name: string) => { return `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/roles/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/roles/${name}`;
+        },
         detailsComponent: RoleDetails,
       },
-      'rolebindings': {
+      rolebindings: {
         singleText: 'Role Binding',
         pluralText: 'Role Bindings',
         icon: '/assets/icons/kubernetes/rb.png',
-        listURL: (namespace: string) => { return namespace ? `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/rolebindings` : `/apis/rbac.authorization.k8s.io/v1/rolebindings`; },
+        listURL: (namespace: string) => {
+          return namespace
+            ? `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/rolebindings`
+            : `/apis/rbac.authorization.k8s.io/v1/rolebindings`;
+        },
         listItemComponent: RoleBindingItem,
-        detailsURL: (namespace: string, name: string) => { return `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/rolebindings/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/rolebindings/${name}`;
+        },
         detailsComponent: RoleBindingDetails,
       },
-    }
+    },
   },
-  'cluster': {
+  cluster: {
     title: 'Cluster',
     pages: {
-      'customresourcedefinitions': {
+      customresourcedefinitions: {
         singleText: 'Custom Resource Definition',
         pluralText: 'Custom Resource Definitions',
         icon: '/assets/icons/kubernetes/crd.png',
-        listURL: (namespace: string) => { return `/apis/apiextensions.k8s.io/v1beta1/customresourcedefinitions`; },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        listURL: (namespace: string) => {
+          return `/apis/apiextensions.k8s.io/v1beta1/customresourcedefinitions`;
+        },
         listItemComponent: CustomResourceDefinitionItem,
-        detailsURL: (namespace: string, name: string) => { return `/apis/apiextensions.k8s.io/v1beta1/customresourcedefinitions`; },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/apiextensions.k8s.io/v1beta1/customresourcedefinitions`;
+        },
         detailsComponent: CustomResourceDefinitionItem,
       },
-      'events': {
+      events: {
         singleText: 'Event',
         pluralText: 'Events',
         icon: '/assets/icons/kubernetes/events.png',
@@ -272,27 +362,39 @@ export const resources: IAppSections = {
           return namespace ? `/api/v1/namespaces/${namespace}/events` : `/api/v1/events`;
         },
         listItemComponent: EventItem,
-        detailsURL: (namespace: string, name: string) => { return `/api/v1/namespaces/${namespace}/events/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/api/v1/namespaces/${namespace}/events/${name}`;
+        },
         detailsComponent: EventDetails,
       },
-      'namespaces': {
+      namespaces: {
         singleText: 'Namespace',
         pluralText: 'Namespaces',
         icon: '/assets/icons/kubernetes/ns.png',
-        listURL: (namespace: string) => { return `/api/v1/namespaces`; },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        listURL: (namespace: string) => {
+          return `/api/v1/namespaces`;
+        },
         listItemComponent: NamespaceItem,
-        detailsURL: (namespace: string, name: string) => { return `/api/v1/namespaces/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/api/v1/namespaces/${name}`;
+        },
         detailsComponent: NamespaceDetails,
       },
-      'nodes': {
+      nodes: {
         singleText: 'Node',
         pluralText: 'Nodes',
         icon: '/assets/icons/kubernetes/node.png',
-        listURL: (namespace: string) => { return `/api/v1/nodes`; },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        listURL: (namespace: string) => {
+          return `/api/v1/nodes`;
+        },
         listItemComponent: NodeItem,
-        detailsURL: (namespace: string, name: string) => { return `/api/v1/nodes/${name}`; },
+        detailsURL: (namespace: string, name: string) => {
+          return `/api/v1/nodes/${name}`;
+        },
         detailsComponent: NodeDetails,
       },
-    }
+    },
   },
 };

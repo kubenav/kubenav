@@ -24,33 +24,33 @@ import {
   IKubeconfigCluster,
   IKubeconfigClusterRef,
   IKubeconfigUser,
-  IKubeconfigUserRef
+  IKubeconfigUserRef,
 } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 
-const getKubeconfigCluster = (name: string, clusters: IKubeconfigClusterRef[]): IKubeconfigCluster|null => {
-  for (let cluster of clusters) {
+const getKubeconfigCluster = (name: string, clusters: IKubeconfigClusterRef[]): IKubeconfigCluster | null => {
+  for (const cluster of clusters) {
     if (cluster.name === name) {
-      return cluster.cluster
+      return cluster.cluster;
     }
   }
 
-  return null
+  return null;
 };
 
-const getKubeconfigUser = (name: string, users: IKubeconfigUserRef[]): IKubeconfigUser|null => {
-  for (let user of users) {
+const getKubeconfigUser = (name: string, users: IKubeconfigUserRef[]): IKubeconfigUser | null => {
+  for (const user of users) {
     if (user.name === name) {
       return user.user;
     }
   }
 
-  return null
+  return null;
 };
 
-interface IKubeconfigPageProps extends RouteComponentProps {}
+type IKubeconfigPageProps = RouteComponentProps;
 
-const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history }) => {
+const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history }: IKubeconfigPageProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [error, setError] = useState<string>('');
@@ -62,13 +62,13 @@ const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history
 
   const addClusters = () => {
     if (kubeconfig === '') {
-      setError('Kubeconfig is required')
+      setError('Kubeconfig is required');
     } else {
       try {
         const clusters: ICluster[] = [];
         const config: IKubeconfig = yaml.safeLoad(kubeconfig);
 
-        for (let ctx of config.contexts) {
+        for (const ctx of config.contexts) {
           const cluster = getKubeconfigCluster(ctx.context.cluster, config.clusters);
           const user = getKubeconfigUser(ctx.context.user, config.users);
 
@@ -77,11 +77,11 @@ const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history
           }
 
           if (
-            !user['client-certificate-data']
-            && !user['client-key-data']
-            && !user.token
-            && !user.username
-            && !user.password
+            !user['client-certificate-data'] &&
+            !user['client-key-data'] &&
+            !user.token &&
+            !user.username &&
+            !user.password
           ) {
             throw new Error('Invalid kubeconfig');
           }
@@ -90,8 +90,9 @@ const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history
             id: '',
             name: ctx.name,
             url: cluster.server,
-            certificateAuthorityData: cluster['certificate-authority-data'] ?
-              cluster['certificate-authority-data'] : '',
+            certificateAuthorityData: cluster['certificate-authority-data']
+              ? cluster['certificate-authority-data']
+              : '',
             clientCertificateData: user['client-certificate-data'] ? user['client-certificate-data'] : '',
             clientKeyData: user['client-key-data'] ? user['client-key-data'] : '',
             token: user.token ? user.token : '',
@@ -122,9 +123,7 @@ const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history
           <IonTitle>Add Clusters</IonTitle>
           {error ? null : (
             <IonButtons slot="primary">
-              <IonButton onClick={() => addClusters()}>
-                Add
-              </IonButton>
+              <IonButton onClick={() => addClusters()}>Add</IonButton>
             </IonButtons>
           )}
         </IonToolbar>

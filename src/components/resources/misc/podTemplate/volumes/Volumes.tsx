@@ -1,10 +1,4 @@
-import {
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonCol,
-  IonList,
-} from '@ionic/react';
+import { IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonList } from '@ionic/react';
 import { V1Volume } from '@kubernetes/client-node';
 import React from 'react';
 
@@ -15,7 +9,7 @@ interface IVolumesProps {
   volumes: V1Volume[];
 }
 
-const Volumes: React.FunctionComponent<IVolumesProps> = ({ volumes }) => {
+const Volumes: React.FunctionComponent<IVolumesProps> = ({ volumes }: IVolumesProps) => {
   return (
     <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
       <IonCardEqualHeight>
@@ -24,12 +18,14 @@ const Volumes: React.FunctionComponent<IVolumesProps> = ({ volumes }) => {
         </IonCardHeader>
         <IonCardContent>
           <IonList>
-            {volumes.map((volume, index) => <Volume key={index} volume={volume} />)}
+            {volumes.map((volume, index) => (
+              <Volume key={index} volume={volume} />
+            ))}
           </IonList>
         </IonCardContent>
       </IonCardEqualHeight>
     </IonCol>
-  )
+  );
 };
 
 export default Volumes;

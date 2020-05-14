@@ -11,7 +11,7 @@ import {
   IonTextarea,
   IonToast,
 } from '@ionic/react';
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 
 import { IContext } from '../../../../declarations';
 import { getOIDCLink } from '../../../../utils/api';
@@ -30,7 +30,7 @@ const OIDC: React.FunctionComponent = () => {
 
   const handleName = (event) => {
     setName(event.target.value);
-  }
+  };
 
   const handleDiscoveryURL = (event) => {
     setDiscoveryURL(event.target.value);
@@ -122,9 +122,13 @@ const OIDC: React.FunctionComponent = () => {
           </IonItem>
         </IonList>
 
-        <IonButton expand="block" onClick={() => addOIDCProvider()}>Add OIDC Provider</IonButton>
-        <br/>
-        <IonButton expand="block" onClick={() => existingOIDCProvider()}>Use existing OIDC Provider</IonButton>
+        <IonButton expand="block" onClick={() => addOIDCProvider()}>
+          Add OIDC Provider
+        </IonButton>
+        <br />
+        <IonButton expand="block" onClick={() => existingOIDCProvider()}>
+          Use existing OIDC Provider
+        </IonButton>
       </IonCardContent>
 
       <IonToast isOpen={error !== ''} onDidDismiss={() => setError('')} message={error} duration={3000} />

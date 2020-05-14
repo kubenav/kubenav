@@ -10,7 +10,7 @@ export const getReady = (pod: V1Pod): string => {
   let isReady = 0;
 
   if (pod.status && pod.status.containerStatuses) {
-    for (let container of pod.status.containerStatuses) {
+    for (const container of pod.status.containerStatuses) {
       shouldReady = shouldReady + 1;
       if (container.ready) {
         isReady = isReady + 1;
@@ -23,7 +23,7 @@ export const getReady = (pod: V1Pod): string => {
 
 // getResources returns the summed up usage and resources over each container for a pod. It returns a string in the
 // following format: CPU usage (request/limit) | Memory: usage (request/limit)
-export const getResources = (containers: V1Container[], metrics: IPodMetrics|undefined): string => {
+export const getResources = (containers: V1Container[], metrics: IPodMetrics | undefined): string => {
   let cpuRequests = 0;
   let cpuLimits = 0;
   let cpuUsage = 0;
@@ -31,7 +31,7 @@ export const getResources = (containers: V1Container[], metrics: IPodMetrics|und
   let memoryLimits = 0;
   let memoryUsage = 0;
 
-  for (let container of containers) {
+  for (const container of containers) {
     if (container.resources && container.resources.requests && container.resources.requests.hasOwnProperty('cpu')) {
       cpuRequests = cpuRequests + parseInt(formatResourceValue('cpu', container.resources.requests['cpu']));
     }
@@ -50,18 +50,22 @@ export const getResources = (containers: V1Container[], metrics: IPodMetrics|und
   }
 
   if (metrics && metrics.containers) {
-    for (let container of metrics.containers) {
+    for (const container of metrics.containers) {
       if (container.usage && container.usage.hasOwnProperty('cpu')) {
-        cpuUsage = cpuUsage + parseInt(formatResourceValue('cpu', container.usage['cpu']))
+        cpuUsage = cpuUsage + parseInt(formatResourceValue('cpu', container.usage['cpu']));
       }
 
       if (container.usage && container.usage.hasOwnProperty('memory')) {
-        memoryUsage = memoryUsage + parseInt(formatResourceValue('memory', container.usage['memory']))
+        memoryUsage = memoryUsage + parseInt(formatResourceValue('memory', container.usage['memory']));
       }
     }
   }
 
-  return `CPU: ${cpuUsage}m (${cpuRequests === 0 ? '-' : `${cpuRequests}m`}/${cpuLimits === 0 ? '-' : `${cpuLimits}m`}) | Memory: ${memoryUsage}Mi (${memoryRequests === 0 ? '-' : `${memoryRequests}Mi`}/${memoryLimits === 0 ? '-' : `${memoryLimits}Mi`})`;
+  return `CPU: ${cpuUsage}m (${cpuRequests === 0 ? '-' : `${cpuRequests}m`}/${
+    cpuLimits === 0 ? '-' : `${cpuLimits}m`
+  }) | Memory: ${memoryUsage}Mi (${memoryRequests === 0 ? '-' : `${memoryRequests}Mi`}/${
+    memoryLimits === 0 ? '-' : `${memoryLimits}Mi`
+  })`;
 };
 
 // getRestarts returns the number of restarts for the pod, using the sum of container restarts.
@@ -69,7 +73,7 @@ export const getRestarts = (pod: V1Pod): number => {
   let restarts = 0;
 
   if (pod.status && pod.status.containerStatuses) {
-    for (let container of pod.status.containerStatuses) {
+    for (const container of pod.status.containerStatuses) {
       if (container.restartCount) {
         restarts = restarts + container.restartCount;
       }
@@ -83,7 +87,7 @@ export const getRestarts = (pod: V1Pod): number => {
 // immediately returning and do not check the remaining containers.
 export const getStatus = (pod: V1Pod): string => {
   if (pod.status && pod.status.containerStatuses) {
-    for (let container of pod.status.containerStatuses) {
+    for (const container of pod.status.containerStatuses) {
       if (container.state && container.state.waiting) {
         return container.state.waiting.reason ? container.state.waiting.reason : '';
       }

@@ -1,13 +1,5 @@
-import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonCol,
-  IonGrid,
-  IonRow,
-} from '@ionic/react';
-import { V1Role } from '@kubernetes/client-node'
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonRow } from '@ionic/react';
+import { V1Role } from '@kubernetes/client-node';
 import yaml from 'js-yaml';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -22,10 +14,10 @@ interface IRoleDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const RoleDetails: React.FunctionComponent<IRoleDetailsProps> = ({ item, type }) => {
+const RoleDetails: React.FunctionComponent<IRoleDetailsProps> = ({ item, type }: IRoleDetailsProps) => {
   return (
     <IonGrid>
-      {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       {item.rules ? (
         <IonRow>
@@ -44,11 +36,17 @@ const RoleDetails: React.FunctionComponent<IRoleDetailsProps> = ({ item, type })
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
         <IonRow>
-          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+          <List
+            name="Events"
+            section="cluster"
+            type="events"
+            namespace={item.metadata.namespace}
+            selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
+          />
         </IonRow>
       ) : null}
     </IonGrid>
-  )
+  );
 };
 
 export default RoleDetails;

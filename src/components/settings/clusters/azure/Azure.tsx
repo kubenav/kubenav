@@ -7,7 +7,9 @@ import {
   IonInput,
   IonItem,
   IonLabel,
-  IonList, IonToast, IonToggle,
+  IonList,
+  IonToast,
+  IonToggle,
 } from '@ionic/react';
 import React, { useState } from 'react';
 
@@ -48,11 +50,11 @@ const Azure: React.FunctionComponent = () => {
 
   const importClusters = () => {
     if (
-      subscriptionID === ''
-      || clientID === ''
-      || clientSecret === ''
-      || tenantID === ''
-      || resourceGroupName === ''
+      subscriptionID === '' ||
+      clientID === '' ||
+      clientSecret === '' ||
+      tenantID === '' ||
+      resourceGroupName === ''
     ) {
       setError('Subscription ID, Client ID, Client Secret, Tenant ID and Resource Group Name are required.');
     } else {
@@ -83,7 +85,15 @@ const Azure: React.FunctionComponent = () => {
           Choose this option to import your AKS clusters from Microsoft Azure. You have to provide your Subscription ID,
           Client ID, Tenant ID, Client Secret and the name of the Resource Group. These credentials are used to retrieve
           the Kubeconfig files for your cluster. You can also choose between the user and admin configuration. For the
-          creation of the Azure credentials you can use the following guide: <a href="https://kubenav.io/help/microsoft-azure-creating-app-credentials.html" target="_blank" rel="noopener noreferrer">Microsoft Azure: Creating App Credentials</a>.
+          creation of the Azure credentials you can use the following guide:{' '}
+          <a
+            href="https://kubenav.io/help/microsoft-azure-creating-app-credentials.html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Microsoft Azure: Creating App Credentials
+          </a>
+          .
         </p>
 
         <IonList className="paragraph-margin-bottom" lines="full">
@@ -113,7 +123,9 @@ const Azure: React.FunctionComponent = () => {
           </IonItem>
         </IonList>
 
-        <IonButton expand="block" onClick={() => importClusters()}>Import from Azure</IonButton>
+        <IonButton expand="block" onClick={() => importClusters()}>
+          Import from Azure
+        </IonButton>
       </IonCardContent>
 
       <IonToast isOpen={error !== ''} onDidDismiss={() => setError('')} message={error} duration={3000} />

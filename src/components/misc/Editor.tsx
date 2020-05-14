@@ -1,6 +1,4 @@
-import {
-  IonButton,
-} from '@ionic/react';
+import { IonButton } from '@ionic/react';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 
@@ -63,7 +61,7 @@ const Editor: React.FunctionComponent<IEditorProps> = ({
   value,
   fullHeight,
   scrollToBottomButton,
-}) => {
+}: IEditorProps) => {
   const context = useContext<IContext>(AppContext);
   const editor = useRef<AceEditor>(null);
 
@@ -71,9 +69,8 @@ const Editor: React.FunctionComponent<IEditorProps> = ({
 
   useEffect(() => {
     setShowScrollToBottomButton(scrollToBottomButton === true);
-
-    return () => {};
-  }, [value]); /* eslint-disable-line */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
   const changeValue = (newValue: string) => {
     if (onChange) {
@@ -105,7 +102,12 @@ const Editor: React.FunctionComponent<IEditorProps> = ({
     <React.Fragment>
       {showScrollToBottomButton ? (
         <div className="editor-scroll-to-bottom-button">
-          <IonButton size="small"  onClick={() => { scrollToBottom(); }}>
+          <IonButton
+            size="small"
+            onClick={() => {
+              scrollToBottom();
+            }}
+          >
             Scroll to Bottom
           </IonButton>
         </div>
@@ -129,9 +131,8 @@ const Editor: React.FunctionComponent<IEditorProps> = ({
         value={value}
         width="100%"
       />
-
     </React.Fragment>
-  )
+  );
 };
 
 export default Editor;

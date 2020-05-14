@@ -1,3 +1,4 @@
+import { RefresherEventDetail } from '@ionic/core';
 import {
   IonBackButton,
   IonButton,
@@ -31,32 +32,36 @@ interface IMatchParams {
   name: string;
 }
 
-interface ICustomResourcesListPageProps extends RouteComponentProps<IMatchParams> {}
+type ICustomResourcesListPageProps = RouteComponentProps<IMatchParams>;
 
 const getURL = (namespace: string, group: string, version: string, name: string): string => {
-  return namespace ? `/apis/${group}/${version}/namespaces/${namespace}/${name}` : `/apis/${group}/${version}/${name}`
+  return namespace ? `/apis/${group}/${version}/namespaces/${namespace}/${name}` : `/apis/${group}/${version}/${name}`;
 };
 
-const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageProps> = ({ match }) => {
+const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageProps> = ({
+  match,
+}: ICustomResourcesListPageProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [error, setError] = useState<string>('');
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [items, setItems] = useState<any>();
   const [url, setUrl] = useState<string>('');
   const [searchText, setSearchText] = useState<string>('');
 
   useEffect(() => {
-    (async() => {
+    const fetchData = async () => {
       setItems(undefined);
       setUrl(match.url);
       await load();
-    })();
+    };
 
-    return () => {};
-  }, [match, context.clusters, context.cluster]); /* eslint-disable-line */
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [match, context.clusters, context.cluster]);
 
-  const doRefresh = async (event) => {
+  const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();
     await load();
   };
@@ -70,10 +75,11 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
       }
 
       const namespace = context.clusters[context.cluster].namespace;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data: any = await context.request(
         'GET',
         getURL(namespace, match.params.group, match.params.version, match.params.name),
-        ''
+        '',
       );
       setError('');
       setItems(data.items);
@@ -108,22 +114,47 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
 
         {error === '' && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? (
           <React.Fragment>
-            <IonSearchbar inputmode="search" value={searchText} onIonChange={e => setSearchText(e.detail.value!)} />
+            <IonSearchbar
+              inputmode="search"
+              value={searchText}
+              onIonChange={(e) => setSearchText(e.detail.value ? e.detail.value : '')}
+            />
 
             <IonList>
-              {match.url === url && items ? items.filter((item) => {
-                const regex = new RegExp(searchText, 'gi');
-                return item.metadata && item.metadata.name && item.metadata.name.match(regex);
-              }).map((item, index) => {
-                return (
-                  <ItemOptions key={index} item={item} url={`${getURL(item.metadata ? item.metadata.namespace : '', match.params.group, match.params.version, match.params.name)}/${item.metadata ? item.metadata.name : ''}`}>
-                    <CustomResourceItem item={item} />
-                  </ItemOptions>
-                )
-              }) : null}
+              {match.url === url && items
+                ? items
+                    .filter((item) => {
+                      const regex = new RegExp(searchText, 'gi');
+                      return item.metadata && item.metadata.name && item.metadata.name.match(regex);
+                    })
+                    .map((item, index) => {
+                      return (
+                        <ItemOptions
+                          key={index}
+                          item={item}
+                          url={`${getURL(
+                            item.metadata ? item.metadata.namespace : '',
+                            match.params.group,
+                            match.params.version,
+                            match.params.name,
+                          )}/${item.metadata ? item.metadata.name : ''}`}
+                        >
+                          <CustomResourceItem item={item} />
+                        </ItemOptions>
+                      );
+                    })
+                : null}
             </IonList>
           </React.Fragment>
-        ) : <LoadingErrorCard cluster={context.cluster} clusters={context.clusters} error={error} icon="/assets/icons/kubernetes/crd.png" text={`Could not get Custom Resource "${match.params.name}"`} />}
+        ) : (
+          <LoadingErrorCard
+            cluster={context.cluster}
+            clusters={context.clusters}
+            error={error}
+            icon="/assets/icons/kubernetes/crd.png"
+            text={`Could not get Custom Resource "${match.params.name}"`}
+          />
+        )}
       </IonContent>
     </IonPage>
   );

@@ -12,7 +12,7 @@ import {
   IonProgressBar,
   IonTextarea,
   IonTitle,
-  IonToolbar
+  IonToolbar,
 } from '@ionic/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps, useLocation } from 'react-router';
@@ -25,11 +25,14 @@ import ErrorCard from '../../../misc/ErrorCard';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
-}
+};
 
-interface IOIDCRedirectPageProps extends RouteComponentProps {}
+type IOIDCRedirectPageProps = RouteComponentProps;
 
-const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ location, history }) => {
+const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
+  location,
+  history,
+}: IOIDCRedirectPageProps) => {
   const context = useContext<IContext>(AppContext);
   const query = useQuery();
 
@@ -40,7 +43,7 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ loc
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    (async() => {
+    const fetchData = async () => {
       setShowLoading(true);
 
       try {
@@ -68,7 +71,7 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ loc
 
             context.addOIDCProvider(provider);
           } else {
-            setError('Could not find OIDC provider.')
+            setError('Could not find OIDC provider.');
           }
         }
       } catch (err) {
@@ -76,10 +79,11 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ loc
       }
 
       setShowLoading(false);
-    })();
+    };
 
-    return () => {};
-  }, [location]); /* eslint-disable-line */
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
 
   const handleName = (event) => {
     setName(event.target.value);
@@ -95,27 +99,29 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ loc
 
   const addClusters = () => {
     if (name === '') {
-      setError('Name is required')
+      setError('Name is required');
     } else if (url === '') {
-      setError('Server is required')
+      setError('Server is required');
     } else if (!url.startsWith('https://')) {
-      setError('Invalid URL')
+      setError('Invalid URL');
     } else {
       try {
-        context.addCluster([{
-          id: '',
-          name: name,
-          url: url,
-          certificateAuthorityData: certificateAuthorityData,
-          clientCertificateData: '',
-          clientKeyData: '',
-          token: '',
-          username: '',
-          password: '',
-          insecureSkipTLSVerify: false,
-          authProvider: `oidc__${readOIDCLastProvider()}`,
-          namespace: 'default',
-        }]);
+        context.addCluster([
+          {
+            id: '',
+            name: name,
+            url: url,
+            certificateAuthorityData: certificateAuthorityData,
+            clientCertificateData: '',
+            clientKeyData: '',
+            token: '',
+            username: '',
+            password: '',
+            insecureSkipTLSVerify: false,
+            authProvider: `oidc__${readOIDCLastProvider()}`,
+            namespace: 'default',
+          },
+        ]);
 
         setError('');
         history.push('/settings/clusters');
@@ -135,9 +141,7 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ loc
           <IonTitle>Add Clusters</IonTitle>
           {error ? null : (
             <IonButtons slot="primary">
-              <IonButton onClick={() => addClusters()}>
-                Add
-              </IonButton>
+              <IonButton onClick={() => addClusters()}>Add</IonButton>
             </IonButtons>
           )}
         </IonToolbar>
@@ -145,7 +149,9 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ loc
       <IonContent>
         {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
 
-        {error ? <ErrorCard error={error} text="OIDC Error" icon="/assets/icons/kubernetes/kubernetes.png" /> : (
+        {error ? (
+          <ErrorCard error={error} text="OIDC Error" icon="/assets/icons/kubernetes/kubernetes.png" />
+        ) : (
           <IonList lines="full">
             <IonItem>
               <IonLabel position="stacked">Name</IonLabel>

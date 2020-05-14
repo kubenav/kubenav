@@ -10,7 +10,7 @@ import {
   IonPage,
   IonProgressBar,
   IonTitle,
-  IonToolbar
+  IonToolbar,
 } from '@ionic/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -19,36 +19,37 @@ import {
   ICluster,
   IContext,
   IKubeconfigCluster,
-  IKubeconfigClusterRef, IKubeconfigUser,
-  IKubeconfigUserRef
+  IKubeconfigClusterRef,
+  IKubeconfigUser,
+  IKubeconfigUserRef,
 } from '../../../../declarations';
 import { getAzureClusters } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import { readAzureCredentials } from '../../../../utils/storage';
 import ErrorCard from '../../../misc/ErrorCard';
 
-const getKubeconfigCluster = (name: string, clusters: IKubeconfigClusterRef[]): IKubeconfigCluster|null => {
-  for (let cluster of clusters) {
+const getKubeconfigCluster = (name: string, clusters: IKubeconfigClusterRef[]): IKubeconfigCluster | null => {
+  for (const cluster of clusters) {
     if (cluster.name === name) {
-      return cluster.cluster
+      return cluster.cluster;
     }
   }
 
-  return null
+  return null;
 };
 
-const getKubeconfigUser = (name: string, users: IKubeconfigUserRef[]): IKubeconfigUser|null => {
-  for (let user of users) {
+const getKubeconfigUser = (name: string, users: IKubeconfigUserRef[]): IKubeconfigUser | null => {
+  for (const user of users) {
     if (user.name === name) {
       return user.user;
     }
   }
 
-  return null
+  return null;
 };
 
 const isChecked = (id: string, clusters: ICluster[]): boolean => {
-  for (let cluster of clusters) {
+  for (const cluster of clusters) {
     if (cluster.id === id) {
       return true;
     }
@@ -57,9 +58,9 @@ const isChecked = (id: string, clusters: ICluster[]): boolean => {
   return false;
 };
 
-interface IAzurePageProps extends RouteComponentProps {}
+type IAzurePageProps = RouteComponentProps;
 
-const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history }) => {
+const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history }: IAzurePageProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [error, setError] = useState<string>('');
@@ -68,7 +69,7 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    (async() => {
+    const fetchData = async () => {
       setShowLoading(true);
 
       try {
@@ -80,12 +81,12 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
             credentials.clientSecret,
             credentials.tenantID,
             credentials.resourceGroupName,
-            credentials.admin
+            credentials.admin,
           );
 
           const tmpClusters: ICluster[] = [];
 
-          // eslint-disable-next-line
+          // eslint-disable-next-line array-callback-return
           aksClusters.map((cluster) => {
             if (cluster.kubeconfig.contexts.length === 1) {
               const kubeconfigCluster = getKubeconfigCluster(
@@ -102,8 +103,12 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
                 name: cluster.name,
                 url: kubeconfigCluster ? kubeconfigCluster.server : '',
                 certificateAuthorityData: kubeconfigCluster ? kubeconfigCluster['certificate-authority-data'] : '',
-                clientCertificateData: kubeconfigUser && kubeconfigUser['client-certificate-data'] ? kubeconfigUser['client-certificate-data'] : '',
-                clientKeyData: kubeconfigUser && kubeconfigUser['client-key-data'] ? kubeconfigUser['client-key-data'] : '',
+                clientCertificateData:
+                  kubeconfigUser && kubeconfigUser['client-certificate-data']
+                    ? kubeconfigUser['client-certificate-data']
+                    : '',
+                clientKeyData:
+                  kubeconfigUser && kubeconfigUser['client-key-data'] ? kubeconfigUser['client-key-data'] : '',
                 token: kubeconfigUser && kubeconfigUser.token ? kubeconfigUser.token : '',
                 username: kubeconfigUser && kubeconfigUser.username ? kubeconfigUser.username : '',
                 password: kubeconfigUser && kubeconfigUser.password ? kubeconfigUser.password : '',
@@ -116,17 +121,17 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
 
           setClusters(tmpClusters);
         } else {
-          throw new Error('Could not credentials for Azure')
+          throw new Error('Could not credentials for Azure');
         }
       } catch (err) {
         setError(err.message);
       }
 
       setShowLoading(false);
-    })();
+    };
 
-    return () => {};
-  }, [location]); /* eslint-disable-line */
+    fetchData();
+  }, [location]);
 
   const toggleSelectedCluster = (checked: boolean, cluster: ICluster) => {
     if (checked) {
@@ -151,9 +156,7 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
           <IonTitle>Add Clusters</IonTitle>
           {error ? null : (
             <IonButtons slot="primary">
-              <IonButton onClick={() => addClusters()}>
-                Add
-              </IonButton>
+              <IonButton onClick={() => addClusters()}>Add</IonButton>
             </IonButtons>
           )}
         </IonToolbar>
@@ -161,7 +164,9 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
       <IonContent>
         {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
 
-        {error ? <ErrorCard error={error} text="Could not load AKS clusters" icon="/assets/icons/kubernetes/kubernetes.png" /> : (
+        {error ? (
+          <ErrorCard error={error} text="Could not load AKS clusters" icon="/assets/icons/kubernetes/kubernetes.png" />
+        ) : (
           clusters.map((cluster, index) => {
             return (
               <IonItem key={index}>
@@ -172,7 +177,7 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
                 />
                 <IonLabel>{cluster.name}</IonLabel>
               </IonItem>
-            )
+            );
           })
         )}
       </IonContent>

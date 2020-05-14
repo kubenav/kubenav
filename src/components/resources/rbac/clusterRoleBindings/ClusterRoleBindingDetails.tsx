@@ -10,7 +10,7 @@ import {
   IonList,
   IonRow,
 } from '@ionic/react';
-import { V1ClusterRoleBinding } from '@kubernetes/client-node'
+import { V1ClusterRoleBinding } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -26,7 +26,10 @@ interface IClusterRoleBindingDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const ClusterRoleBindingDetails: React.FunctionComponent<IClusterRoleBindingDetailsProps> = ({ item, type }) => {
+const ClusterRoleBindingDetails: React.FunctionComponent<IClusterRoleBindingDetailsProps> = ({
+  item,
+  type,
+}: IClusterRoleBindingDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>
@@ -36,7 +39,7 @@ const ClusterRoleBindingDetails: React.FunctionComponent<IClusterRoleBindingDeta
         </Configuration>
       </IonRow>
 
-      {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       {item.subjects ? (
         <IonRow>
@@ -51,8 +54,9 @@ const ClusterRoleBindingDetails: React.FunctionComponent<IClusterRoleBindingDeta
                     <IonItem key={index} routerLink={subjectLink(subject)} routerDirection="forward">
                       <IonLabel>
                         <h2>
-                          {subject.kind
-                            ? `${subject.kind}: ` : ''}{subject.namespace ? `${subject.namespace}/` : ''}{subject.name}
+                          {subject.kind ? `${subject.kind}: ` : ''}
+                          {subject.namespace ? `${subject.namespace}/` : ''}
+                          {subject.name}
                         </h2>
                       </IonLabel>
                     </IonItem>
@@ -66,11 +70,17 @@ const ClusterRoleBindingDetails: React.FunctionComponent<IClusterRoleBindingDeta
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
         <IonRow>
-          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+          <List
+            name="Events"
+            section="cluster"
+            type="events"
+            namespace={item.metadata.namespace}
+            selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
+          />
         </IonRow>
       ) : null}
     </IonGrid>
-  )
+  );
 };
 
 export default ClusterRoleBindingDetails;

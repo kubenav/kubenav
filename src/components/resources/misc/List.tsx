@@ -21,10 +21,18 @@ interface IListProps {
   type: string;
   namespace: string;
   selector?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filter?: (item: any) => boolean;
 }
 
-const List: React.FunctionComponent<IListProps> = ({ name, section, type, namespace, selector, filter }) => {
+const List: React.FunctionComponent<IListProps> = ({
+  name,
+  section,
+  type,
+  namespace,
+  selector,
+  filter,
+}: IListProps) => {
   const context = useContext<IContext>(AppContext);
 
   const page = resources[section].pages[type];
@@ -32,26 +40,25 @@ const List: React.FunctionComponent<IListProps> = ({ name, section, type, namesp
 
   const [alert, setAlert] = useState<string>('');
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [items, setItems] = useState<any>();
 
   useEffect(() => {
-    (async() => {
+    const fetchData = async () => {
       setItems(undefined);
       await load();
-    })();
+    };
 
-    return () => {};
-  }, [section, type, namespace, selector, filter]); /* eslint-disable-line */
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [section, type, namespace, selector, filter]);
 
   const load = async () => {
     setShowLoading(true);
 
     try {
-      const data: any = await context.request(
-        'GET',
-        `${page.listURL(namespace) }${selector ? '?' + selector : ''}`,
-        '',
-      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const data: any = await context.request('GET', `${page.listURL(namespace)}${selector ? '?' + selector : ''}`, '');
       setItems(data.items);
     } catch (err) {
       setAlert(err);
@@ -83,19 +90,15 @@ const List: React.FunctionComponent<IListProps> = ({ name, section, type, namesp
               ) : null}
 
               {items.filter(filter ? filter : () => true).map((item, index) => {
-                return (
-                  <Component key={index} item={item} section={section} type={type} />
-                )
+                return <Component key={index} item={item} section={section} type={type} />;
               })}
             </IonList>
           </IonCardContent>
         </IonCard>
       </IonCol>
-    )
+    );
   } else {
-    return (
-      <React.Fragment />
-    )
+    return <React.Fragment />;
   }
 };
 

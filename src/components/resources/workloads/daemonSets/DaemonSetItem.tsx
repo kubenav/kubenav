@@ -1,8 +1,5 @@
-import {
-  IonItem,
-  IonLabel,
-} from '@ionic/react';
-import { V1DaemonSet } from '@kubernetes/client-node'
+import { IonItem, IonLabel } from '@ionic/react';
+import { V1DaemonSet } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -15,7 +12,7 @@ interface IDaemonSetItemProps extends RouteComponentProps {
   type: string;
 }
 
-const DaemonSetItem: React.FunctionComponent<IDaemonSetItemProps> = ({ item, section, type }) => {
+const DaemonSetItem: React.FunctionComponent<IDaemonSetItemProps> = ({ item, section, type }: IDaemonSetItemProps) => {
   // The daemon set status is set to success when the number of desired pods is equal to the number of currently
   // observed, ready, updated and available pods. If the status key is missing in the daemon set we set the status to
   // warning, because there must be an other error.
@@ -23,12 +20,11 @@ const DaemonSetItem: React.FunctionComponent<IDaemonSetItemProps> = ({ item, sec
 
   if (item.status) {
     if (
-      (item.status.desiredNumberScheduled === (
-        item.status.currentNumberScheduled
-        || item.status.numberReady
-        || item.status.updatedNumberScheduled
-        || item.status.numberAvailable
-      ))
+      item.status.desiredNumberScheduled ===
+      (item.status.currentNumberScheduled ||
+        item.status.numberReady ||
+        item.status.updatedNumberScheduled ||
+        item.status.numberAvailable)
     ) {
       status = 'success';
     }
@@ -45,21 +41,37 @@ const DaemonSetItem: React.FunctionComponent<IDaemonSetItemProps> = ({ item, sec
   //   running and available
   // - Age: The time when the daemon set was created.
   return (
-    <IonItem routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${item.metadata ? item.metadata.name : ''}`} routerDirection="forward">
+    <IonItem
+      routerLink={`/resources/${section}/${type}/${item.metadata ? item.metadata.namespace : ''}/${
+        item.metadata ? item.metadata.name : ''
+      }`}
+      routerDirection="forward"
+    >
       <ItemStatus status={status} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>
           Desired: {item.status && item.status.desiredNumberScheduled ? item.status.desiredNumberScheduled : '0'}
-          {item.status && item.status.currentNumberScheduled ? ` | Current: ${item.status.currentNumberScheduled}` : ' | Current: 0'}
+          {item.status && item.status.currentNumberScheduled
+            ? ` | Current: ${item.status.currentNumberScheduled}`
+            : ' | Current: 0'}
           {item.status && item.status.numberReady ? ` | Ready: ${item.status.numberReady}` : ' | Ready: 0'}
-          {item.status && item.status.updatedNumberScheduled ? ` | Updated: ${item.status.updatedNumberScheduled}` : ' | Updated: 0'}
-          {item.status && item.status.numberAvailable ? ` | Available: ${item.status.numberAvailable}` : ' | Available: 0'}
-          {item.metadata && item.metadata.creationTimestamp ? ` | Age: ${timeDifference(new Date().getTime(), new Date(item.metadata.creationTimestamp.toString()).getTime())}` : ''}
+          {item.status && item.status.updatedNumberScheduled
+            ? ` | Updated: ${item.status.updatedNumberScheduled}`
+            : ' | Updated: 0'}
+          {item.status && item.status.numberAvailable
+            ? ` | Available: ${item.status.numberAvailable}`
+            : ' | Available: 0'}
+          {item.metadata && item.metadata.creationTimestamp
+            ? ` | Age: ${timeDifference(
+                new Date().getTime(),
+                new Date(item.metadata.creationTimestamp.toString()).getTime(),
+              )}`
+            : ''}
         </p>
       </IonLabel>
     </IonItem>
-  )
+  );
 };
 
 export default DaemonSetItem;

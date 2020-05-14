@@ -1,13 +1,5 @@
-import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonCol,
-  IonGrid,
-  IonRow,
-} from '@ionic/react';
-import { V1Event } from '@kubernetes/client-node'
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonRow } from '@ionic/react';
+import { V1Event } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -22,7 +14,7 @@ interface IEventDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const EventDetails: React.FunctionComponent<IEventDetailsProps> = ({ item, type }) => {
+const EventDetails: React.FunctionComponent<IEventDetailsProps> = ({ item, type }: IEventDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>
@@ -69,9 +61,9 @@ const EventDetails: React.FunctionComponent<IEventDetailsProps> = ({ item, type 
         </IonCol>
       </IonRow>
 
-      {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
     </IonGrid>
-  )
+  );
 };
 
 export default EventDetails;

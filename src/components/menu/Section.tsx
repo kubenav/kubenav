@@ -1,8 +1,4 @@
-import {
-  IonLabel,
-  IonListHeader,
-  IonMenuToggle,
-} from '@ionic/react';
+import { IonLabel, IonListHeader, IonMenuToggle } from '@ionic/react';
 import React from 'react';
 
 import { IAppPages } from '../../declarations';
@@ -15,21 +11,23 @@ interface ISectionProps {
   isMenu: boolean;
 }
 
-const Section: React.FunctionComponent<ISectionProps> = ({ pages, title, sectionKey, isMenu }) => {
+const Section: React.FunctionComponent<ISectionProps> = ({ pages, title, sectionKey, isMenu }: ISectionProps) => {
   return (
     <React.Fragment>
       <IonListHeader mode="md">
         <IonLabel>{title}</IonLabel>
       </IonListHeader>
-      {Object.keys(pages).map(pageKey =>
+      {Object.keys(pages).map((pageKey) =>
         isMenu ? (
           <IonMenuToggle key={pageKey} autoHide={false}>
             <SectionItem pages={pages} sectionKey={sectionKey} pageKey={pageKey} />
           </IonMenuToggle>
-        ) : <SectionItem key={pageKey} pages={pages} sectionKey={sectionKey} pageKey={pageKey} />
+        ) : (
+          <SectionItem key={pageKey} pages={pages} sectionKey={sectionKey} pageKey={pageKey} />
+        ),
       )}
     </React.Fragment>
-  )
+  );
 };
 
 export default Section;

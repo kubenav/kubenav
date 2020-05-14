@@ -12,7 +12,12 @@ import {
 } from '@ionic/react';
 import React, { useState } from 'react';
 
-import { GOOGLE_OAUTH2_ENDPOINT, GOOGLE_REDIRECT_URI, GOOGLE_RESPONSE_TYPE, GOOGLE_SCOPE } from '../../../../utils/constants';
+import {
+  GOOGLE_OAUTH2_ENDPOINT,
+  GOOGLE_REDIRECT_URI,
+  GOOGLE_RESPONSE_TYPE,
+  GOOGLE_SCOPE,
+} from '../../../../utils/constants';
 import { saveGoogleClientID } from '../../../../utils/storage';
 
 const Google: React.FunctionComponent = () => {
@@ -26,9 +31,11 @@ const Google: React.FunctionComponent = () => {
 
   const handleSignIn = () => {
     if (clientID === '') {
-      setError('Client ID is required.')
+      setError('Client ID is required.');
     } else {
-      window.location.replace(`${GOOGLE_OAUTH2_ENDPOINT}?client_id=${clientID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=${GOOGLE_RESPONSE_TYPE}&scope=${GOOGLE_SCOPE}`);
+      window.location.replace(
+        `${GOOGLE_OAUTH2_ENDPOINT}?client_id=${clientID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=${GOOGLE_RESPONSE_TYPE}&scope=${GOOGLE_SCOPE}`,
+      );
     }
   };
 
@@ -45,8 +52,11 @@ const Google: React.FunctionComponent = () => {
         <p className="paragraph-margin-bottom">
           Choose this option to import your GKE clusters from the Google Cloud Platform. First of all you have to add
           the client ID of your Google OAuth application. More information for the setup of Google OAuth 2.0 can be
-          found on the following page: <a href="https://kubenav.io/help/google-oauth2-configuration.html" target="_blank" rel="noopener noreferrer">Google OAuth 2.0 Configuration</a>.
-          When you have added the client ID click the button sign in with Google. You will be redirect to the Google
+          found on the following page:{' '}
+          <a href="https://kubenav.io/help/google-oauth2-configuration.html" target="_blank" rel="noopener noreferrer">
+            Google OAuth 2.0 Configuration
+          </a>
+          . When you have added the client ID click the button sign in with Google. You will be redirect to the Google
           login form, then you get a list of your existing clusters and you can select the clusters you want to add.
         </p>
 
@@ -57,7 +67,9 @@ const Google: React.FunctionComponent = () => {
           </IonItem>
         </IonList>
 
-        <IonButton expand="block" onClick={() => handleSignIn()}>Sign In with Google</IonButton>
+        <IonButton expand="block" onClick={() => handleSignIn()}>
+          Sign In with Google
+        </IonButton>
       </IonCardContent>
 
       <IonToast isOpen={error !== ''} onDidDismiss={() => setError('')} message={error} duration={3000} />

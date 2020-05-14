@@ -19,7 +19,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { IAppSections } from '../../declarations';
 import { CUSTOM_URI_SCHEME, GOOGLE_REDIRECT_URI, OIDC_REDIRECT_URL, SERVER } from '../../utils/constants';
 import { saveCluster } from '../../utils/storage';
-import Sections from './Sections'
+import Sections from './Sections';
 
 const { App } = Plugins;
 
@@ -32,7 +32,7 @@ App.addListener('appUrlOpen', (data) => {
 });
 
 if (isPlatform('electron')) {
-  let eventSource = new EventSource(`${SERVER}/api/electron`);
+  const eventSource = new EventSource(`${SERVER}/api/electron`);
 
   eventSource.addEventListener('navigation', (event) => {
     const msg = event as MessageEvent;
@@ -50,7 +50,7 @@ interface IMenuProps extends RouteComponentProps {
   sections: IAppSections;
 }
 
-const Menu: React.FunctionComponent<IMenuProps> = ({ sections }) => {
+const Menu: React.FunctionComponent<IMenuProps> = ({ sections }: IMenuProps) => {
   return (
     <IonMenu contentId="main" type="overlay">
       <IonHeader>
@@ -92,7 +92,7 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections }) => {
         </IonList>
       </IonContent>
     </IonMenu>
-  )
+  );
 };
 
 export default withRouter(Menu);

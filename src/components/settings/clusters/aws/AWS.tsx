@@ -39,7 +39,7 @@ const AWS: React.FunctionComponent = () => {
     if (accessKeyID === '' || region === '' || secretKey === '') {
       setError('Access Key ID, Secret Key and Region are required.');
     } else {
-      let tokens: IAWSTokens = readAWSTokens();
+      const tokens: IAWSTokens = readAWSTokens();
 
       tokens[region] = {
         accessKeyID: accessKeyID,
@@ -107,7 +107,9 @@ const AWS: React.FunctionComponent = () => {
           </IonItem>
         </IonList>
 
-        <IonButton expand="block" onClick={() => importClusters()}>Import from AWS</IonButton>
+        <IonButton expand="block" onClick={() => importClusters()}>
+          Import from AWS
+        </IonButton>
       </IonCardContent>
 
       <IonToast isOpen={error !== ''} onDidDismiss={() => setError('')} message={error} duration={3000} />

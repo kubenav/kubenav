@@ -31,7 +31,13 @@ interface ILogsProps {
   container: string;
 }
 
-const Logs: React.FunctionComponent<ILogsProps> = ({ showModal, setShowModal, name, namespace, container }) => {
+const Logs: React.FunctionComponent<ILogsProps> = ({
+  showModal,
+  setShowModal,
+  name,
+  namespace,
+  container,
+}: ILogsProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [showLoading, setShowLoading] = useState<boolean>(false);
@@ -41,15 +47,16 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ showModal, setShowModal, na
   const [popoverEvent, setPopoverEvent] = useState();
 
   useEffect(() => {
-    if (showModal) {
-      (async() => {
-        setLogs('');
-        await load(false, TAIL_LINES);
-      })();
-    }
+    const fetchData = async () => {
+      setLogs('');
+      await load(false, TAIL_LINES);
+    };
 
-    return () => {};
-  }, [showModal]); /* eslint-disable-line */
+    if (showModal) {
+      fetchData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showModal]);
 
   const load = async (previous: boolean, tailLines: number) => {
     setShowLoading(true);
@@ -67,7 +74,12 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ showModal, setShowModal, na
 
       // It is possible that the returned log only contains one line with valid json. This gets parsed by the requests
       // function and so an object instead of a string is returned. In this case we have to revert the parsing.
-      const data: any = await context.request('GET', `/api/v1/namespaces/${namespace}/pods/${name}/log?${parameters}`, '');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const data: any = await context.request(
+        'GET',
+        `/api/v1/namespaces/${namespace}/pods/${name}/log?${parameters}`,
+        '',
+      );
       setLogs(typeof data === 'string' ? data : JSON.stringify(data));
     } catch (err) {
       setError(err);
@@ -92,14 +104,23 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ showModal, setShowModal, na
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonButton onClick={(e) => { setShowModal(false); }}>
+              <IonButton
+                onClick={() => {
+                  setShowModal(false);
+                }}
+              >
                 <IonIcon slot="icon-only" icon={close} />
               </IonButton>
             </IonButtons>
             <IonTitle>{container}</IonTitle>
             <IonButtons slot="primary">
               <IonButton
-                onClick={(e) => { e.persist(); setPopoverEvent(e as any); setShowPopover(true); }}
+                onClick={(e) => {
+                  e.persist();
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  setPopoverEvent(e as any);
+                  setShowPopover(true);
+                }}
               >
                 <IonIcon slot="icon-only" ios={ellipsisHorizontal} md={ellipsisVertical} />
               </IonButton>
@@ -110,28 +131,40 @@ const Logs: React.FunctionComponent<ILogsProps> = ({ showModal, setShowModal, na
                 <IonItem
                   button={true}
                   detail={false}
-                  onClick={() => { setShowPopover(false); load(false, TAIL_LINES); }}
+                  onClick={() => {
+                    setShowPopover(false);
+                    load(false, TAIL_LINES);
+                  }}
                 >
                   <IonLabel>{`Last ${TAIL_LINES} Log Lines`}</IonLabel>
                 </IonItem>
                 <IonItem
                   button={true}
                   detail={false}
-                  onClick={() => { setShowPopover(false); load(false, 0); }}
+                  onClick={() => {
+                    setShowPopover(false);
+                    load(false, 0);
+                  }}
                 >
                   <IonLabel>All Log Lines</IonLabel>
                 </IonItem>
                 <IonItem
                   button={true}
                   detail={false}
-                  onClick={() => { setShowPopover(false); load(true, TAIL_LINES); }}
+                  onClick={() => {
+                    setShowPopover(false);
+                    load(true, TAIL_LINES);
+                  }}
                 >
                   <IonLabel>{`Previous Last ${TAIL_LINES} Log Lines`}</IonLabel>
                 </IonItem>
                 <IonItem
                   button={true}
                   detail={false}
-                  onClick={() => { setShowPopover(false); load(true, 0); }}
+                  onClick={() => {
+                    setShowPopover(false);
+                    load(true, 0);
+                  }}
                 >
                   <IonLabel>All Previous Log Lines</IonLabel>
                 </IonItem>

@@ -20,7 +20,7 @@ interface IDataProps {
   data: string;
 }
 
-const Data: React.FunctionComponent<IDataProps> = ({ name, data }) => {
+const Data: React.FunctionComponent<IDataProps> = ({ name, data }: IDataProps) => {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -47,7 +47,7 @@ const Data: React.FunctionComponent<IDataProps> = ({ name, data }) => {
         </IonContent>
       </IonModal>
     </React.Fragment>
-  )
+  );
 };
 
 export default Data;

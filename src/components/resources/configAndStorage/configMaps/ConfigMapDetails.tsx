@@ -1,14 +1,5 @@
-import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonCol,
-  IonGrid,
-  IonList,
-  IonRow,
-} from '@ionic/react';
-import { V1ConfigMap } from '@kubernetes/client-node'
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonList, IonRow } from '@ionic/react';
+import { V1ConfigMap } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -22,14 +13,23 @@ interface IConfigMapDetailsDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const ConfigMapDetailsDetails: React.FunctionComponent<IConfigMapDetailsDetailsProps> = ({ item, type }) => {
+const ConfigMapDetailsDetails: React.FunctionComponent<IConfigMapDetailsDetailsProps> = ({
+  item,
+  type,
+}: IConfigMapDetailsDetailsProps) => {
   return (
     <IonGrid>
-      {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
         <IonRow>
-          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+          <List
+            name="Events"
+            section="cluster"
+            type="events"
+            namespace={item.metadata.namespace}
+            selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
+          />
         </IonRow>
       ) : null}
 
@@ -42,7 +42,9 @@ const ConfigMapDetailsDetails: React.FunctionComponent<IConfigMapDetailsDetailsP
               </IonCardHeader>
               <IonCardContent>
                 <IonList>
-                  {Object.keys(item.data).map((key) => <Data key={key} name={key} data={item.data![key]}/>)}
+                  {Object.keys(item.data).map((key) => (
+                    <Data key={key} name={key} data={item.data ? item.data[key] : ''} />
+                  ))}
                 </IonList>
               </IonCardContent>
             </IonCard>
@@ -59,7 +61,9 @@ const ConfigMapDetailsDetails: React.FunctionComponent<IConfigMapDetailsDetailsP
               </IonCardHeader>
               <IonCardContent>
                 <IonList>
-                  {Object.keys(item.binaryData).map((key) => <Data key={key} name={key} data={item.binaryData![key]}/>)}
+                  {Object.keys(item.binaryData).map((key) => (
+                    <Data key={key} name={key} data={item.binaryData ? item.binaryData[key] : ''} />
+                  ))}
                 </IonList>
               </IonCardContent>
             </IonCard>
@@ -67,7 +71,7 @@ const ConfigMapDetailsDetails: React.FunctionComponent<IConfigMapDetailsDetailsP
         </IonRow>
       ) : null}
     </IonGrid>
-  )
+  );
 };
 
 export default ConfigMapDetailsDetails;

@@ -1,3 +1,4 @@
+import { RefresherEventDetail } from '@ionic/core';
 import {
   IonButton,
   IonButtons,
@@ -34,11 +35,11 @@ interface IMatchParams {
   type: string;
 }
 
-interface IListPageProps extends RouteComponentProps<IMatchParams> {}
+type IListPageProps = RouteComponentProps<IMatchParams>;
 
 // ListPage shows a list of the selected resource. The list can be filtered by namespace and each item contains a status
 // indicator, to get an overview of problems in the cluster.
-const ListPage: React.FunctionComponent<IListPageProps> = ({ match }) => {
+const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageProps) => {
   const context = useContext<IContext>(AppContext);
 
   // namespace and showNamespace is used to group all items by namespace and to only show the namespace once via the
@@ -57,6 +58,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }) => {
   // the current version. Maybe it's already improved and not needed.
   const [error, setError] = useState<string>('');
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [items, setItems] = useState<any>();
   const [url, setUrl] = useState<string>('');
   const [searchText, setSearchText] = useState<string>('');
@@ -64,18 +66,19 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }) => {
   // When the component is rendered the first time and on every change route change or a modification to the context
   // object we are loading all items for the corresponding resource.
   useEffect(() => {
-    (async() => {
+    const fetchData = async () => {
       setItems(undefined);
       setUrl(match.url);
       await load();
-    })();
+    };
 
-    return () => {};
-  }, [match, context.clusters, context.cluster]); /* eslint-disable-line */
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [match, context.clusters, context.cluster]);
 
   // The doRefresh method is used for a manual reload of the items for the corresponding resource. The
   // event.detail.complete() call is required to finish the animation of the IonRefresher component.
-  const doRefresh = async (event) => {
+  const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();
     await load();
   };
@@ -92,6 +95,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }) => {
       }
 
       const namespace = context.clusters[context.cluster].namespace;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data: any = await context.request('GET', page.listURL(namespace), '');
       setError('');
       setItems(data.items);
@@ -126,40 +130,57 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }) => {
 
         {error === '' && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? (
           <React.Fragment>
-            <IonSearchbar inputmode="search" value={searchText} onIonChange={e => setSearchText(e.detail.value!)} />
+            <IonSearchbar
+              inputmode="search"
+              value={searchText}
+              onIonChange={(e) => setSearchText(e.detail.value ? e.detail.value : '')}
+            />
 
             <IonList>
-              {match.url === url && items ? items.filter((item) => {
-                const regex = new RegExp(searchText, 'gi');
-                return item.metadata && item.metadata.name && item.metadata.name.match(regex);
-              }).map((item, index) => {
-                if (isNamespaced(match.params.type) && item.metadata && item.metadata.namespace
-                  && item.metadata.namespace !== namespace) {
-                  namespace = item.metadata.namespace;
-                  showNamespace = true;
-                } else {
-                  showNamespace = false;
-                }
+              {match.url === url && items
+                ? items
+                    .filter((item) => {
+                      const regex = new RegExp(searchText, 'gi');
+                      return item.metadata && item.metadata.name && item.metadata.name.match(regex);
+                    })
+                    .map((item, index) => {
+                      if (
+                        isNamespaced(match.params.type) &&
+                        item.metadata &&
+                        item.metadata.namespace &&
+                        item.metadata.namespace !== namespace
+                      ) {
+                        namespace = item.metadata.namespace;
+                        showNamespace = true;
+                      } else {
+                        showNamespace = false;
+                      }
 
-                return (
-                  <IonItemGroup key={index}>
-                    {showNamespace ? (
-                      <IonItemDivider>
-                        <IonLabel>{namespace}</IonLabel>
-                      </IonItemDivider>
-                    ) : null}
-                    <ItemOptions
-                      item={item}
-                      url={page.detailsURL(
-                        item.metadata ? item.metadata.namespace : '',
-                        item.metadata ? item.metadata.name : ''
-                      )}
-                    >
-                      <Component key={index} item={item} section={match.params.section} type={match.params.type} />
-                    </ItemOptions>
-                  </IonItemGroup>
-                )
-              }) : null}
+                      return (
+                        <IonItemGroup key={index}>
+                          {showNamespace ? (
+                            <IonItemDivider>
+                              <IonLabel>{namespace}</IonLabel>
+                            </IonItemDivider>
+                          ) : null}
+                          <ItemOptions
+                            item={item}
+                            url={page.detailsURL(
+                              item.metadata ? item.metadata.namespace : '',
+                              item.metadata ? item.metadata.name : '',
+                            )}
+                          >
+                            <Component
+                              key={index}
+                              item={item}
+                              section={match.params.section}
+                              type={match.params.type}
+                            />
+                          </ItemOptions>
+                        </IonItemGroup>
+                      );
+                    })
+                : null}
             </IonList>
           </React.Fragment>
         ) : (

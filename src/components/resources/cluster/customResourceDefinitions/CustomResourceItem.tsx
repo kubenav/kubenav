@@ -16,10 +16,11 @@ import React, { useState } from 'react';
 import Editor from '../../../misc/Editor';
 
 interface ICustomResourceItemProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
 }
 
-const CustomResourceItem: React.FunctionComponent<ICustomResourceItemProps> = ({ item }) => {
+const CustomResourceItem: React.FunctionComponent<ICustomResourceItemProps> = ({ item }: ICustomResourceItemProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   return (
@@ -44,7 +45,7 @@ const CustomResourceItem: React.FunctionComponent<ICustomResourceItemProps> = ({
         </IonContent>
       </IonModal>
     </React.Fragment>
-  )
+  );
 };
 
 export default CustomResourceItem;

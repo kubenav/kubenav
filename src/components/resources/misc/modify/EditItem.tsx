@@ -21,11 +21,12 @@ import Editor from '../../../misc/Editor';
 
 interface IEditItemProps {
   activator: TActivator;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
   url: string;
 }
 
-const EditItem: React.FunctionComponent<IEditItemProps> = ({ activator, item, url }) => {
+const EditItem: React.FunctionComponent<IEditItemProps> = ({ activator, item, url }: IEditItemProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -44,7 +45,15 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ activator, item, ur
 
   return (
     <React.Fragment>
-      {error !== '' ? <IonAlert isOpen={error !== ''} onDidDismiss={() => setError('')} header={`Could not save ${item.metadata ? item.metadata.name : ''}`} message={error} buttons={['OK']} /> : null}
+      {error !== '' ? (
+        <IonAlert
+          isOpen={error !== ''}
+          onDidDismiss={() => setError('')}
+          header={`Could not save ${item.metadata ? item.metadata.name : ''}`}
+          message={error}
+          buttons={['OK']}
+        />
+      ) : null}
 
       {activator === 'item-option' ? (
         <IonItemOption color="primary" onClick={() => setShowModal(true)}>
@@ -69,9 +78,7 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ activator, item, ur
             </IonButtons>
             <IonTitle>{item.metadata ? item.metadata.name : ''}</IonTitle>
             <IonButtons slot="primary">
-              <IonButton onClick={() => handleSave()}>
-                Save
-              </IonButton>
+              <IonButton onClick={() => handleSave()}>Save</IonButton>
             </IonButtons>
           </IonToolbar>
         </IonHeader>

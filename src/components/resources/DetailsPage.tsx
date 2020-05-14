@@ -1,3 +1,4 @@
+import { RefresherEventDetail } from '@ionic/core';
 import {
   IonBackButton,
   IonButton,
@@ -30,9 +31,9 @@ interface IMatchParams {
   name: string;
 }
 
-interface IDetailsPageProps extends RouteComponentProps<IMatchParams> {}
+type IDetailsPageProps = RouteComponentProps<IMatchParams>;
 
-const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }) => {
+const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDetailsPageProps) => {
   const context = useContext<IContext>(AppContext);
 
   const page = resources[match.params.section].pages[match.params.type];
@@ -40,20 +41,22 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }) => {
 
   const [error, setError] = useState<string>('');
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [item, setItem] = useState<any>();
   const [url, setUrl] = useState<string>('');
 
   useEffect(() => {
-    (async() => {
+    const fetchData = async () => {
       setItem(undefined);
       setUrl(match.url);
       await load();
-    })();
+    };
 
-    return () => {};
-  }, [match]); /* eslint-disable-line */
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [match]);
 
-  const doRefresh = async (event) => {
+  const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();
     await load();
   };
@@ -62,6 +65,7 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }) => {
     setShowLoading(true);
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data: any = await context.request('GET', page.detailsURL(match.params.namespace, match.params.name), '');
       setError('');
       setItem(data);
@@ -89,18 +93,20 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }) => {
                 <EditItem
                   activator="button"
                   item={item}
-                  url={page.detailsURL(item.metadata
-                    ? item.metadata.namespace : '', item.metadata ? item.metadata.name : '')
-                  }
+                  url={page.detailsURL(
+                    item.metadata ? item.metadata.namespace : '',
+                    item.metadata ? item.metadata.name : '',
+                  )}
                 />
               ) : null}
               {item ? (
                 <DeleteItem
                   activator="button"
                   item={item}
-                  url={page.detailsURL(item.metadata
-                    ? item.metadata.namespace : '', item.metadata ? item.metadata.name : '')
-                  }
+                  url={page.detailsURL(
+                    item.metadata ? item.metadata.namespace : '',
+                    item.metadata ? item.metadata.name : '',
+                  )}
                 />
               ) : null}
             </IonButtons>
@@ -109,17 +115,23 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }) => {
       </IonHeader>
       <IonContent>
         {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
-        <IonRefresher slot="fixed"  onIonRefresh={doRefresh} />
+        <IonRefresher slot="fixed" onIonRefresh={doRefresh} />
 
-        {error === ''
-        && context.clusters
-        && context.cluster
-        && context.clusters.hasOwnProperty(context.cluster)
-        && match.url === url
-        && item ? (
+        {error === '' &&
+        context.clusters &&
+        context.cluster &&
+        context.clusters.hasOwnProperty(context.cluster) &&
+        match.url === url &&
+        item ? (
           <Component item={item} section={match.params.section} type={match.params.type} />
         ) : (
-          <LoadingErrorCard cluster={context.cluster} clusters={context.clusters} error={error} icon={page.icon} text={`Could not get ${page.pluralText}`} />
+          <LoadingErrorCard
+            cluster={context.cluster}
+            clusters={context.clusters}
+            error={error}
+            icon={page.icon}
+            text={`Could not get ${page.pluralText}`}
+          />
         )}
       </IonContent>
     </IonPage>

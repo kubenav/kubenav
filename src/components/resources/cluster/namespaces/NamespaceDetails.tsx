@@ -1,7 +1,5 @@
-import {
-  IonGrid, IonRow,
-} from '@ionic/react';
-import { V1Namespace } from '@kubernetes/client-node'
+import { IonGrid, IonRow } from '@ionic/react';
+import { V1Namespace } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -16,7 +14,7 @@ interface INamespaceDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ item, type }) => {
+const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ item, type }: INamespaceDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>
@@ -35,9 +33,9 @@ const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ ite
         </Status>
       </IonRow>
 
-      {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
     </IonGrid>
-  )
+  );
 };
 
 export default NamespaceDetails;

@@ -1,8 +1,5 @@
-import {
-  IonGrid,
-  IonRow,
-} from '@ionic/react';
-import { V1Job } from '@kubernetes/client-node'
+import { IonGrid, IonRow } from '@ionic/react';
+import { V1Job } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -21,7 +18,7 @@ interface IJobDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const JobDetails: React.FunctionComponent<IJobDetailsProps> = ({ item, type }) => {
+const JobDetails: React.FunctionComponent<IJobDetailsProps> = ({ item, type }: IJobDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>
@@ -52,7 +49,7 @@ const JobDetails: React.FunctionComponent<IJobDetailsProps> = ({ item, type }) =
         </Status>
       </IonRow>
 
-      {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       {item.status && item.status.conditions ? (
         <IonRow>
@@ -62,19 +59,31 @@ const JobDetails: React.FunctionComponent<IJobDetailsProps> = ({ item, type }) =
 
       {item.metadata && item.metadata.namespace && item.spec && item.spec.selector ? (
         <IonRow>
-          <List name="Pods" section="workloads" type="pods" namespace={item.metadata.namespace} selector={`labelSelector=${labelSelector(item.spec.selector)}`} />
+          <List
+            name="Pods"
+            section="workloads"
+            type="pods"
+            namespace={item.metadata.namespace}
+            selector={`labelSelector=${labelSelector(item.spec.selector)}`}
+          />
         </IonRow>
       ) : null}
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
         <IonRow>
-          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+          <List
+            name="Events"
+            section="cluster"
+            type="events"
+            namespace={item.metadata.namespace}
+            selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
+          />
         </IonRow>
       ) : null}
 
       {item.spec && item.spec.template ? <PodTemplate template={item.spec.template} /> : null}
     </IonGrid>
-  )
+  );
 };
 
 export default JobDetails;

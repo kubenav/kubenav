@@ -1,9 +1,4 @@
-import {
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonCol,
-} from '@ionic/react';
+import { IonCardContent, IonCardHeader, IonCardTitle, IonCol } from '@ionic/react';
 import React from 'react';
 
 import { TCondition } from '../../../../declarations';
@@ -14,7 +9,7 @@ interface IPodConditionsProps {
   conditions: TCondition[];
 }
 
-const Conditions: React.FunctionComponent<IPodConditionsProps> = ({ conditions }) => {
+const Conditions: React.FunctionComponent<IPodConditionsProps> = ({ conditions }: IPodConditionsProps) => {
   return (
     <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
       <IonCardEqualHeight>
@@ -42,28 +37,36 @@ const Conditions: React.FunctionComponent<IPodConditionsProps> = ({ conditions }
                     <td>{condition.type}</td>
                     <td>{condition.status}</td>
                     {getProperty(condition, 'lastProbeTime') ? (
-                      <td>{timeDifference(
-                        new Date().getTime(),
-                        new Date(getProperty(condition, 'lastProbeTime').toString()).getTime()
-                      )}</td>
-                    ): null}
+                      <td>
+                        {timeDifference(
+                          new Date().getTime(),
+                          new Date(getProperty(condition, 'lastProbeTime').toString()).getTime(),
+                        )}
+                      </td>
+                    ) : null}
                     {getProperty(condition, 'lastUpdateTime') ? (
-                      <td>{timeDifference(
-                        new Date().getTime(),
-                        new Date(getProperty(condition, 'lastUpdateTime').toString()).getTime()
-                      )}</td>
+                      <td>
+                        {timeDifference(
+                          new Date().getTime(),
+                          new Date(getProperty(condition, 'lastUpdateTime').toString()).getTime(),
+                        )}
+                      </td>
                     ) : null}
                     {getProperty(condition, 'lastHeartbeatTime') ? (
-                      <td>{timeDifference(
-                        new Date().getTime(),
-                        new Date(getProperty(condition, 'lastHeartbeatTime').toString()).getTime()
-                      )}</td>
+                      <td>
+                        {timeDifference(
+                          new Date().getTime(),
+                          new Date(getProperty(condition, 'lastHeartbeatTime').toString()).getTime(),
+                        )}
+                      </td>
                     ) : null}
                     <td>
-                      {condition.lastTransitionTime ? timeDifference(
-                          new Date().getTime(),
-                          new Date(condition.lastTransitionTime.toString()).getTime()
-                      ) : null}
+                      {condition.lastTransitionTime
+                        ? timeDifference(
+                            new Date().getTime(),
+                            new Date(condition.lastTransitionTime.toString()).getTime(),
+                          )
+                        : null}
                     </td>
                     <td>{condition.reason}</td>
                     <td>{condition.message}</td>
@@ -75,7 +78,7 @@ const Conditions: React.FunctionComponent<IPodConditionsProps> = ({ conditions }
         </IonCardContent>
       </IonCardEqualHeight>
     </IonCol>
-  )
+  );
 };
 
 export default Conditions;

@@ -1,14 +1,5 @@
-import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonCol,
-  IonGrid,
-  IonList,
-  IonRow,
-} from '@ionic/react';
-import { V1Secret } from '@kubernetes/client-node'
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonList, IonRow } from '@ionic/react';
+import { V1Secret } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -23,7 +14,7 @@ interface ISecretDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const SecretDetails: React.FunctionComponent<ISecretDetailsProps> = ({ item, type }) => {
+const SecretDetails: React.FunctionComponent<ISecretDetailsProps> = ({ item, type }: ISecretDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>
@@ -32,7 +23,7 @@ const SecretDetails: React.FunctionComponent<ISecretDetailsProps> = ({ item, typ
         </Configuration>
       </IonRow>
 
-      {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       {item.data ? (
         <IonRow>
@@ -43,7 +34,9 @@ const SecretDetails: React.FunctionComponent<ISecretDetailsProps> = ({ item, typ
               </IonCardHeader>
               <IonCardContent>
                 <IonList>
-                  {Object.keys(item.data).map((key) => <Data key={key} name={key} data={atob(item.data![key])}/>)}
+                  {Object.keys(item.data).map((key) => (
+                    <Data key={key} name={key} data={atob(item.data ? item.data[key] : '')} />
+                  ))}
                 </IonList>
               </IonCardContent>
             </IonCard>
@@ -60,7 +53,9 @@ const SecretDetails: React.FunctionComponent<ISecretDetailsProps> = ({ item, typ
               </IonCardHeader>
               <IonCardContent>
                 <IonList>
-                  {Object.keys(item.stringData).map((key) => <Data key={key} name={key} data={item.stringData![key]}/>)}
+                  {Object.keys(item.stringData).map((key) => (
+                    <Data key={key} name={key} data={item.stringData ? item.stringData[key] : ''} />
+                  ))}
                 </IonList>
               </IonCardContent>
             </IonCard>
@@ -68,7 +63,7 @@ const SecretDetails: React.FunctionComponent<ISecretDetailsProps> = ({ item, typ
         </IonRow>
       ) : null}
     </IonGrid>
-  )
+  );
 };
 
 export default SecretDetails;

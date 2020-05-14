@@ -1,15 +1,16 @@
-import {
-  IonCard,
-  isPlatform,
-} from '@ionic/react';
-import React from 'react';
+import { IonCard, isPlatform } from '@ionic/react';
+import React, { ReactElement } from 'react';
 
-const IonCardEqualHeight: React.FunctionComponent = ({ children }) => {
+interface IIonCardEqualHeight {
+  children: ReactElement | ReactElement[];
+}
+
+const IonCardEqualHeight: React.FunctionComponent<IIonCardEqualHeight> = ({ children }: IIonCardEqualHeight) => {
   return (
     <IonCard className={isPlatform('ios') ? 'ios--card-equal-height' : 'default--card-equal-height'}>
       {children}
     </IonCard>
-  )
+  );
 };
 
 export default IonCardEqualHeight;

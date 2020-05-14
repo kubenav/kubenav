@@ -1,8 +1,5 @@
-import {
-  IonGrid, IonItemDivider, IonLabel,
-  IonRow,
-} from '@ionic/react';
-import { V1beta1CronJob, V1Job } from '@kubernetes/client-node'
+import { IonGrid, IonItemDivider, IonLabel, IonRow } from '@ionic/react';
+import { V1beta1CronJob, V1Job } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -19,13 +16,13 @@ interface ICronJobDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const CronJobDetails: React.FunctionComponent<ICronJobDetailsProps> = ({ item, type }) => {
+const CronJobDetails: React.FunctionComponent<ICronJobDetailsProps> = ({ item, type }: ICronJobDetailsProps) => {
   return (
     <IonGrid>
       <IonRow>
         <Configuration>
           <Row obj={item} objKey="spec.schedule" title="Schedule" />
-          <Row obj={item} objKey="spec.suspend" title="Suspend" value={(value => value ? 'true' : 'false')} />
+          <Row obj={item} objKey="spec.suspend" title="Suspend" value={(value) => (value ? 'true' : 'false')} />
           <Row obj={item} objKey="spec.concurrencyPolicy" title="Concurrency Policy" />
           <Row
             obj={item}
@@ -38,7 +35,7 @@ const CronJobDetails: React.FunctionComponent<ICronJobDetailsProps> = ({ item, t
         </Configuration>
       </IonRow>
 
-      {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
         <IonRow>
@@ -49,14 +46,23 @@ const CronJobDetails: React.FunctionComponent<ICronJobDetailsProps> = ({ item, t
             namespace={item.metadata.namespace}
             filter={(job: V1Job) =>
               job.metadata && job.metadata.ownerReferences && job.metadata.ownerReferences.length === 1
-                ? job.metadata.ownerReferences[0].name === item.metadata!.name : false}
+                ? job.metadata.ownerReferences[0].name ===
+                  (item.metadata && item.metadata.name ? item.metadata.name : '')
+                : false
+            }
           />
         </IonRow>
       ) : null}
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
         <IonRow>
-          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+          <List
+            name="Events"
+            section="cluster"
+            type="events"
+            namespace={item.metadata.namespace}
+            selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
+          />
         </IonRow>
       ) : null}
 
@@ -65,21 +71,31 @@ const CronJobDetails: React.FunctionComponent<ICronJobDetailsProps> = ({ item, t
       </IonItemDivider>
 
       <IonRow>
-        {item.spec
-        && item.spec.jobTemplate.spec
-        && item.spec.jobTemplate.spec.template.spec
-        && item.spec.jobTemplate.spec.template.spec.initContainers
-        && item.spec.jobTemplate.spec.template.spec.initContainers.length > 0
-          ? <Containers containers={item.spec.jobTemplate.spec.template.spec.initContainers} statuses={undefined} title="Init Containers" /> : null}
-        {item.spec
-        && item.spec.jobTemplate.spec
-        && item.spec.jobTemplate.spec.template.spec
-        && item.spec.jobTemplate.spec.template.spec.containers
-        && item.spec.jobTemplate.spec.template.spec.containers.length > 0
-          ? <Containers containers={item.spec.jobTemplate.spec.template.spec.containers} statuses={undefined} title="Containers" /> : null}
+        {item.spec &&
+        item.spec.jobTemplate.spec &&
+        item.spec.jobTemplate.spec.template.spec &&
+        item.spec.jobTemplate.spec.template.spec.initContainers &&
+        item.spec.jobTemplate.spec.template.spec.initContainers.length > 0 ? (
+          <Containers
+            containers={item.spec.jobTemplate.spec.template.spec.initContainers}
+            statuses={undefined}
+            title="Init Containers"
+          />
+        ) : null}
+        {item.spec &&
+        item.spec.jobTemplate.spec &&
+        item.spec.jobTemplate.spec.template.spec &&
+        item.spec.jobTemplate.spec.template.spec.containers &&
+        item.spec.jobTemplate.spec.template.spec.containers.length > 0 ? (
+          <Containers
+            containers={item.spec.jobTemplate.spec.template.spec.containers}
+            statuses={undefined}
+            title="Containers"
+          />
+        ) : null}
       </IonRow>
     </IonGrid>
-  )
+  );
 };
 
 export default CronJobDetails;

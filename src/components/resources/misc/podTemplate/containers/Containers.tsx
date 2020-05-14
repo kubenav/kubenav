@@ -1,10 +1,5 @@
-import {
-  IonCardContent,
-  IonCardHeader, IonCardTitle,
-  IonCol,
-  IonList,
-} from '@ionic/react';
-import { V1Container, V1ContainerStatus } from '@kubernetes/client-node'
+import { IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonList } from '@ionic/react';
+import { V1Container, V1ContainerStatus } from '@kubernetes/client-node';
 import React from 'react';
 
 import { IContainerMetrics } from '../../../../../declarations';
@@ -28,22 +23,22 @@ const Containers: React.FunctionComponent<IContainersProps> = ({
   name,
   namespace,
   statuses,
-  title
-}) => {
-  const getContainerStatus = (name: string, containerStatuses: V1ContainerStatus[]): V1ContainerStatus|undefined => {
+  title,
+}: IContainersProps) => {
+  const getContainerStatus = (name: string, containerStatuses: V1ContainerStatus[]): V1ContainerStatus | undefined => {
     if (containerStatuses.filter((containerStatus) => containerStatus.name === name).length === 1) {
       return containerStatuses.filter((containerStatus) => containerStatus.name === name)[0];
     }
 
-    return undefined
+    return undefined;
   };
 
-  const getContainerMetrics = (name: string, containerMetrics: IContainerMetrics[]): IContainerMetrics|undefined => {
+  const getContainerMetrics = (name: string, containerMetrics: IContainerMetrics[]): IContainerMetrics | undefined => {
     if (containerMetrics.filter((containerMetric) => containerMetric.name === name).length === 1) {
       return containerMetrics.filter((containerMetric) => containerMetric.name === name)[0];
     }
 
-    return undefined
+    return undefined;
   };
 
   return (
@@ -69,7 +64,7 @@ const Containers: React.FunctionComponent<IContainersProps> = ({
         </IonCardContent>
       </IonCardEqualHeight>
     </IonCol>
-  )
+  );
 };
 
 export default Containers;

@@ -5,7 +5,9 @@ import { V1LabelSelector, V1Subject } from '@kubernetes/client-node';
 // See: https://stackoverflow.com/a/14919494
 export const formatBytes = (bytes: number, si: boolean): string => {
   const thresh = si ? 1000 : 1024;
-  const units = si ? ['kB','MB','GB','TB','PB','EB','ZB','YB'] : ['kiB','MiB','GiB','TiB','PiB','EiB','ZiB','YiB'];
+  const units = si
+    ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+    : ['kiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
 
   if (Math.abs(bytes) < thresh) {
     return bytes + ' B';
@@ -16,9 +18,9 @@ export const formatBytes = (bytes: number, si: boolean): string => {
   do {
     bytes /= thresh;
     ++u;
-  } while(Math.abs(bytes) >= thresh && u < units.length - 1);
+  } while (Math.abs(bytes) >= thresh && u < units.length - 1);
 
-  return bytes.toFixed(1)+' '+units[u];
+  return bytes.toFixed(1) + ' ' + units[u];
 };
 
 // formatResourceValue converts the given value for CPU, memory or ephemeral storage to another unit.
@@ -37,7 +39,7 @@ export const formatResourceValue = (type: string, value: string): string => {
       return Math.round(parseInt(value.slice(0, -1)) / 1000000) + 'm';
     }
 
-    return (parseInt(value) * 1000) + 'm';
+    return parseInt(value) * 1000 + 'm';
   }
 
   if (type === 'memory') {
@@ -72,19 +74,19 @@ export const formatResourceValue = (type: string, value: string): string => {
     return Math.round(parseInt(value) / 1024 / 1024 / 1024) + 'Gi';
   }
 
-  return value
+  return value;
 };
 
 // getProperty returns the property of an object for a given key.
-export const getProperty = (obj: any, key: string) => {
+export const getProperty = (obj: object, key: string) => {
   return key.split('.').reduce((o, x) => {
-    return (typeof o == 'undefined' || o === null) ? o : o[x];
+    return typeof o == 'undefined' || o === null ? o : o[x];
   }, obj);
 };
 
 // isBase64 checks a given string, if it is a valid base64 encoded string.
 // See: https://github.com/validatorjs/validator.js/blob/master/src/lib/isBase64.js
-export const  isBase64 = (str: string): boolean => {
+export const isBase64 = (str: string): boolean => {
   const len = str.length;
   const firstPaddingChar = str.indexOf('=');
 
@@ -96,7 +98,9 @@ export const  isBase64 = (str: string): boolean => {
     return false;
   }
 
-  return firstPaddingChar === -1 || firstPaddingChar === len - 1 || (firstPaddingChar === len - 2 && str[len - 1] === '=');
+  return (
+    firstPaddingChar === -1 || firstPaddingChar === len - 1 || (firstPaddingChar === len - 2 && str[len - 1] === '=')
+  );
 };
 
 // isJSON checks a given string if it is valid JSON.
@@ -113,7 +117,14 @@ export const isJSON = (data: string): boolean => {
 
 // isNamespaced checks if the given resource type is a namespaced resource or a cluster wide resource.
 export const isNamespaced = (type: string): boolean => {
-  return !(type === 'persistentvolumes' || type === 'clusterroles' || type === 'clusterrolebindings' || type === 'customresourcedefinitions' || type === 'namespaces' || type === 'nodes');
+  return !(
+    type === 'persistentvolumes' ||
+    type === 'clusterroles' ||
+    type === 'clusterrolebindings' ||
+    type === 'customresourcedefinitions' ||
+    type === 'namespaces' ||
+    type === 'nodes'
+  );
 };
 
 // labelSelector is used to create the selector for pods for a given labelSelector.
@@ -126,10 +137,10 @@ export const labelSelector = (labelSelector: V1LabelSelector): string => {
 };
 
 // matchLabels returns a string wiche can be used to select specific resources via labelSelector.
-export const matchLabels = (labels: {[key: string]: string}): string => {
-  let selectors: string[] = [];
+export const matchLabels = (labels: { [key: string]: string }): string => {
+  const selectors: string[] = [];
 
-  for (let label in labels) {
+  for (const label in labels) {
     selectors.push(`${label}=${labels[label]}`);
   }
 
@@ -143,7 +154,7 @@ export const randomString = (length: number): string => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;
 
-  for ( let i = 0; i < length; i++ ) {
+  for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
 
@@ -170,14 +181,14 @@ export const timeDifference = (current: number, previous: number): string => {
   const elapsed = current - previous;
 
   if (elapsed < msPerMinute) {
-    return Math.round(elapsed/1000) + 's';
+    return Math.round(elapsed / 1000) + 's';
   } else if (elapsed < msPerHour) {
-    return Math.round(elapsed/msPerMinute) + 'm';
-  } else if (elapsed < msPerDay ) {
-    return Math.round(elapsed/msPerHour ) + 'h';
+    return Math.round(elapsed / msPerMinute) + 'm';
+  } else if (elapsed < msPerDay) {
+    return Math.round(elapsed / msPerHour) + 'h';
   } else if (elapsed < msPerYear) {
-    return Math.round(elapsed/msPerDay) + 'd';
+    return Math.round(elapsed / msPerDay) + 'd';
   } else {
-    return Math.round(elapsed/msPerYear ) + 'y';
+    return Math.round(elapsed / msPerYear) + 'y';
   }
 };

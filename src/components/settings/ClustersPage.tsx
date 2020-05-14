@@ -30,11 +30,11 @@ const ClustersPage: React.FunctionComponent = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {context.clusters ? Object.keys(context.clusters).map(key => {
-          return (
-            <ClusterItem key={key} cluster={context.clusters![key]} />
-          )
-        }) : null}
+        {context.clusters
+          ? Object.keys(context.clusters).map((key) => {
+              return context.clusters ? <ClusterItem key={key} cluster={context.clusters[key]} /> : null;
+            })
+          : null}
       </IonContent>
     </IonPage>
   );

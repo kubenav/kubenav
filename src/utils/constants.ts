@@ -1,4 +1,4 @@
-import { IAppSettings } from '../declarations'
+import { IAppSettings } from '../declarations';
 
 export const CUSTOM_URI_SCHEME = 'io.kubenav.kubenav';
 export const SERVER = 'http://localhost:14122';

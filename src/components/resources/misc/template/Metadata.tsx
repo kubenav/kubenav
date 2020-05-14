@@ -9,7 +9,7 @@ import {
   IonLabel,
   IonRow,
 } from '@ionic/react';
-import { V1ObjectMeta } from '@kubernetes/client-node'
+import { V1ObjectMeta } from '@kubernetes/client-node';
 import React from 'react';
 
 import { isNamespaced, timeDifference } from '../../../../utils/helpers';
@@ -20,7 +20,7 @@ interface IMetadataProps {
   type: string;
 }
 
-const Metadata: React.FunctionComponent<IMetadataProps> = ({ metadata, type }) => {
+const Metadata: React.FunctionComponent<IMetadataProps> = ({ metadata, type }: IMetadataProps) => {
   return (
     <IonRow>
       <IonCol>
@@ -42,32 +42,40 @@ const Metadata: React.FunctionComponent<IMetadataProps> = ({ metadata, type }) =
                 obj={metadata}
                 objKey="labels"
                 title="Labels"
-                value={(value) => Object.keys(value).map((label) => {
-                  return (
-                    <IonChip key={label} className="unset-chip-height">
-                      <IonLabel>{label}: {value[label]}</IonLabel>
-                    </IonChip>
-                  )
-                })}
+                value={(value) =>
+                  Object.keys(value).map((label) => {
+                    return (
+                      <IonChip key={label} className="unset-chip-height">
+                        <IonLabel>
+                          {label}: {value[label]}
+                        </IonLabel>
+                      </IonChip>
+                    );
+                  })
+                }
               />
               <Row
                 obj={metadata}
                 objKey="annotations"
                 title="Annotations"
-                value={(value) => Object.keys(value).map((annotation) => {
-                  return (
-                    <IonChip key={annotation} className="unset-chip-height">
-                      <IonLabel>{annotation}: {value[annotation]}</IonLabel>
-                    </IonChip>
-                  )
-                })}
+                value={(value) =>
+                  Object.keys(value).map((annotation) => {
+                    return (
+                      <IonChip key={annotation} className="unset-chip-height">
+                        <IonLabel>
+                          {annotation}: {value[annotation]}
+                        </IonLabel>
+                      </IonChip>
+                    );
+                  })
+                }
               />
             </IonGrid>
           </IonCardContent>
         </IonCard>
       </IonCol>
     </IonRow>
-  )
+  );
 };
 
 export default Metadata;

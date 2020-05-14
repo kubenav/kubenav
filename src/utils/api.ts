@@ -1,4 +1,4 @@
-import {isPlatform} from '@ionic/react';
+import { isPlatform } from '@ionic/react';
 import {
   IAWSCluster,
   IAWSTokens,
@@ -13,12 +13,7 @@ import {
 } from '../declarations';
 import { GOOGLE_REDIRECT_URI, OIDC_REDIRECT_URL_WEB, SERVER } from './constants';
 import { isJSON } from './helpers';
-import {
-  readAWSTokens,
-  readGoogleClientID,
-  readGoogleTokens,
-  saveGoogleTokens,
-} from './storage';
+import { readAWSTokens, readGoogleClientID, readGoogleTokens, saveGoogleTokens } from './storage';
 
 // getAWSClusters returns all EKS clusters from AWS for the provided access key, secret access key and region. This
 // function is only available for the native mobile apps, on all other platforms an error is returned. For the desktop
@@ -29,7 +24,7 @@ export const getAWSClusters = async (
   region: string,
 ): Promise<IAWSCluster[]> => {
   try {
-    let response = await fetch(`${SERVER}/api/aws/clusters`, {
+    const response = await fetch(`${SERVER}/api/aws/clusters`, {
       method: 'post',
       body: JSON.stringify({
         accessKeyId: accessKeyId,
@@ -50,7 +45,7 @@ export const getAWSClusters = async (
       }
     }
   } catch (err) {
-    throw err
+    throw err;
   }
 };
 
@@ -64,7 +59,7 @@ export const getAWSToken = async (
   clusterID: string,
 ): Promise<string> => {
   try {
-    let response = await fetch(`${SERVER}/api/aws/token`, {
+    const response = await fetch(`${SERVER}/api/aws/token`, {
       method: 'post',
       body: JSON.stringify({
         accessKeyId: accessKeyId,
@@ -86,7 +81,7 @@ export const getAWSToken = async (
       }
     }
   } catch (err) {
-    throw err
+    throw err;
   }
 };
 
@@ -101,7 +96,7 @@ export const getAzureClusters = async (
   admin: boolean,
 ): Promise<IAzureCluster[]> => {
   try {
-    let response = await fetch(`${SERVER}/api/aws/token`, {
+    const response = await fetch(`${SERVER}/api/aws/token`, {
       method: 'post',
       body: JSON.stringify({
         subscriptionID: subscriptionID,
@@ -125,14 +120,14 @@ export const getAzureClusters = async (
       }
     }
   } catch (err) {
-    throw err
+    throw err;
   }
 };
 
 // getCluster returns the cluster from the current Kubeconfig context. This is only needed for development in the
 // browser. For the mobile app the active cluster is retrieved from localStorage and for desktop the current context is
 // also saved in localStorage at startup.
-export const getCluster = async (): Promise<string|undefined> => {
+export const getCluster = async (): Promise<string | undefined> => {
   const response = await fetch(`${SERVER}/api/cluster`, {
     method: 'GET',
   });
@@ -147,7 +142,7 @@ export const getCluster = async (): Promise<string|undefined> => {
 };
 
 // getClusters returns all clusters from the Kubeconfig file on desktop.
-export const getClusters = async (): Promise<IClusters|undefined> => {
+export const getClusters = async (): Promise<IClusters | undefined> => {
   const response = await fetch(`${SERVER}/api/clusters`, {
     method: 'GET',
   });
@@ -167,19 +162,24 @@ export const getClusters = async (): Promise<IClusters|undefined> => {
 const getGoogleAccessToken = async (): Promise<string> => {
   const tokens = readGoogleTokens();
   if (!tokens) {
-    throw new Error('Could not get access token.')
+    throw new Error('Could not get access token.');
   }
 
   const expiresData = new Date(tokens.expires_in);
-  let accessToken = tokens.access_token;
+  const accessToken = tokens.access_token;
 
   if (expiresData.getTime() < new Date().getTime()) {
     const newTokens = await getGoogleAccessTokenAPI(tokens.refresh_token);
     saveGoogleTokens({
+      // eslint-disable-next-line @typescript-eslint/camelcase
       access_token: newTokens.access_token,
+      // eslint-disable-next-line @typescript-eslint/camelcase
       expires_in: newTokens.expires_in,
+      // eslint-disable-next-line @typescript-eslint/camelcase
       id_token: tokens.id_token,
+      // eslint-disable-next-line @typescript-eslint/camelcase
       refresh_token: tokens.refresh_token,
+      // eslint-disable-next-line @typescript-eslint/camelcase
       token_type: tokens.token_type,
     });
     return newTokens.access_token;
@@ -191,9 +191,12 @@ const getGoogleAccessToken = async (): Promise<string> => {
 // getGoogleAccessTokenAPI uses the refresh token to get a new valid access token for GKE clusters. Therefore a valid
 // refresh token is required.
 export const getGoogleAccessTokenAPI = async (refreshToken: string): Promise<IGoogleTokens> => {
-  const response = await fetch(`https://oauth2.googleapis.com/token?refresh_token=${refreshToken}&client_id=${readGoogleClientID()}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=refresh_token`, {
-    method: 'POST',
-  });
+  const response = await fetch(
+    `https://oauth2.googleapis.com/token?refresh_token=${refreshToken}&client_id=${readGoogleClientID()}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=refresh_token`,
+    {
+      method: 'POST',
+    },
+  );
 
   const json = await response.json();
 
@@ -213,7 +216,7 @@ export const getGoogleAccessTokenAPI = async (refreshToken: string): Promise<IGo
 export const getGoogleClusters = async (token: string, project: string): Promise<IGoogleCluster[]> => {
   const response = await fetch(`https://container.googleapis.com/v1/projects/${project}/locations/-/clusters`, {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
     method: 'GET',
   });
@@ -236,7 +239,7 @@ export const getGoogleClusters = async (token: string, project: string): Promise
 export const getGoogleProjects = async (token: string): Promise<IGoogleProject[]> => {
   const response = await fetch('https://cloudresourcemanager.googleapis.com/v1/projects', {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
     method: 'GET',
   });
@@ -258,9 +261,12 @@ export const getGoogleProjects = async (token: string): Promise<IGoogleProject[]
 // login via Google into an refresh token.
 // See: https://developers.google.com/identity/protocols/OpenIDConnect#exchangecode
 export const getGoogleTokens = async (code: string): Promise<IGoogleTokens> => {
-  const response = await fetch(`https://oauth2.googleapis.com/token?code=${code}&client_id=${readGoogleClientID()}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=authorization_code`, {
-    method: 'POST',
-  });
+  const response = await fetch(
+    `https://oauth2.googleapis.com/token?code=${code}&client_id=${readGoogleClientID()}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=authorization_code`,
+    {
+      method: 'POST',
+    },
+  );
 
   const json = await response.json();
 
@@ -285,7 +291,8 @@ export const kubernetesRequest = async (
   url: string,
   body: string,
   timeout: number,
-  cluster: ICluster
+  cluster: ICluster,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
   try {
     if (cluster.authProvider === 'google') {
@@ -301,18 +308,18 @@ export const kubernetesRequest = async (
       const parts = cluster.id.split('_');
 
       if (parts.length < 3) {
-        throw new Error('Invalid cluster id for authentication provider AWS.')
+        throw new Error('Invalid cluster id for authentication provider AWS.');
       }
 
       if (!tokens.hasOwnProperty(parts[1])) {
-        throw new Error('Could not find credentials for cluster.')
+        throw new Error('Could not find credentials for cluster.');
       }
 
       cluster.token = await getAWSToken(
         tokens[parts[1]].accessKeyID,
         tokens[parts[1]].secretKey,
         parts[1],
-        parts.slice(2, parts.length).join('_')
+        parts.slice(2, parts.length).join('_'),
       );
     }
 
@@ -321,7 +328,7 @@ export const kubernetesRequest = async (
       serverURL = `${SERVER}/api/kubernetes/request/electron`;
     }
 
-    let response = await fetch(serverURL, {
+    const response = await fetch(serverURL, {
       method: 'post',
       body: JSON.stringify({
         server: SERVER,
@@ -365,15 +372,18 @@ export const kubernetesRequest = async (
 export const getOIDCAccessToken = async (provider: IOIDCProvider): Promise<IOIDCProviderToken> => {
   if (provider.expiry - 60 > Math.floor(Date.now() / 1000)) {
     return {
-      'id_token': provider.idToken,
-      'refresh_token': provider.refreshToken,
-      'access_token': provider.accessToken,
-      'expiry': provider.expiry
-    }
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      id_token: provider.idToken,
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      refresh_token: provider.refreshToken,
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      access_token: provider.accessToken,
+      expiry: provider.expiry,
+    };
   }
 
   try {
-    let response = await fetch(`${SERVER}/api/oidc/accesstoken`, {
+    const response = await fetch(`${SERVER}/api/oidc/accesstoken`, {
       method: 'post',
       body: JSON.stringify({
         discoveryURL: provider.idpIssuerURL,
@@ -396,15 +406,15 @@ export const getOIDCAccessToken = async (provider: IOIDCProvider): Promise<IOIDC
       }
     }
   } catch (err) {
-    throw err
+    throw err;
   }
-}
+};
 
 // getOIDCLink returns the login link for the OIDC provider. The user is redirect to the returned link. After the user
 // logged in the getOIDCRefreshToken function is used to exchange the returned code for a refresh token.
 export const getOIDCLink = async (discoveryURL: string, clientID: string, clientSecret: string): Promise<string> => {
   try {
-    let response = await fetch(`${SERVER}/api/oidc/link`, {
+    const response = await fetch(`${SERVER}/api/oidc/link`, {
       method: 'post',
       body: JSON.stringify({
         discoveryURL: discoveryURL,
@@ -426,9 +436,9 @@ export const getOIDCLink = async (discoveryURL: string, clientID: string, client
       }
     }
   } catch (err) {
-    throw err
+    throw err;
   }
-}
+};
 
 // getOIDCRefreshToken is used to exchange the returned code from the login against a refresh token. The refresh token
 // is used to get a new id and access token, which is used to make requests against the Kubernetes API.
@@ -436,10 +446,10 @@ export const getOIDCRefreshToken = async (
   discoveryURL: string,
   clientID: string,
   clientSecret: string,
-  code: string
+  code: string,
 ): Promise<IOIDCProviderToken> => {
   try {
-    let response = await fetch(`${SERVER}/api/oidc/refreshtoken`, {
+    const response = await fetch(`${SERVER}/api/oidc/refreshtoken`, {
       method: 'post',
       body: JSON.stringify({
         discoveryURL: discoveryURL,
@@ -462,17 +472,17 @@ export const getOIDCRefreshToken = async (
       }
     }
   } catch (err) {
-    throw err
+    throw err;
   }
-}
+};
 
 // getServerStatus checks if the server is ready to receive requests.
 export const getServerStatus = async (): Promise<boolean> => {
   try {
-    let response = await fetch(`${SERVER}/api/test`);
-    let data = await response.json()
+    const response = await fetch(`${SERVER}/api/test`);
+    const data = await response.json();
 
-    return data.status === 'ok'
+    return data.status === 'ok';
   } catch (err) {
     return false;
   }

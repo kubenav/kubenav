@@ -10,7 +10,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import { V1NodeAffinity, V1PodAffinity, V1PodAntiAffinity } from '@kubernetes/client-node'
+import { V1NodeAffinity, V1PodAffinity, V1PodAntiAffinity } from '@kubernetes/client-node';
 import { close } from 'ionicons/icons';
 import yaml from 'js-yaml';
 import React, { useState } from 'react';
@@ -18,11 +18,11 @@ import React, { useState } from 'react';
 import Editor from '../../../../misc/Editor';
 
 interface IAffinityProps {
-  title: string
+  title: string;
   affinity: V1NodeAffinity | V1PodAffinity | V1PodAntiAffinity;
 }
 
-const Affinity: React.FunctionComponent<IAffinityProps> = ({ title, affinity }) => {
+const Affinity: React.FunctionComponent<IAffinityProps> = ({ title, affinity }: IAffinityProps) => {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -49,7 +49,7 @@ const Affinity: React.FunctionComponent<IAffinityProps> = ({ title, affinity }) 
         </IonContent>
       </IonModal>
     </React.Fragment>
-  )
+  );
 };
 
 export default Affinity;

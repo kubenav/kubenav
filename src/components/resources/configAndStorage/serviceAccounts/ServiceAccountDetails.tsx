@@ -1,8 +1,5 @@
-import {
-  IonGrid,
-  IonRow,
-} from '@ionic/react';
-import { V1ServiceAccount } from '@kubernetes/client-node'
+import { IonGrid, IonRow } from '@ionic/react';
+import { V1ServiceAccount } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -15,18 +12,27 @@ interface IServiceAccountDetailsProps extends RouteComponentProps {
   type: string;
 }
 
-const ServiceAccountDetails: React.FunctionComponent<IServiceAccountDetailsProps> = ({ item, type }) => {
+const ServiceAccountDetails: React.FunctionComponent<IServiceAccountDetailsProps> = ({
+  item,
+  type,
+}: IServiceAccountDetailsProps) => {
   return (
     <IonGrid>
-      {item.metadata ?  <Metadata metadata={item.metadata} type={type} /> : null}
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
         <IonRow>
-          <List name="Events" section="cluster" type="events" namespace={item.metadata.namespace} selector={`fieldSelector=involvedObject.name=${item.metadata.name}`} />
+          <List
+            name="Events"
+            section="cluster"
+            type="events"
+            namespace={item.metadata.namespace}
+            selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
+          />
         </IonRow>
       ) : null}
     </IonGrid>
-  )
+  );
 };
 
 export default ServiceAccountDetails;

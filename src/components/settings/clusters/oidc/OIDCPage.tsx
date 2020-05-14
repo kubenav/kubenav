@@ -4,11 +4,14 @@ import {
   IonButton,
   IonButtons,
   IonContent,
-  IonHeader, IonInput,
+  IonHeader,
+  IonInput,
   IonItem,
   IonLabel,
   IonList,
-  IonPage, IonSelect, IonSelectOption,
+  IonPage,
+  IonSelect,
+  IonSelectOption,
   IonTextarea,
   IonTitle,
   IonToolbar,
@@ -19,9 +22,9 @@ import { RouteComponentProps } from 'react-router';
 import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 
-interface IOIDCPageProps extends RouteComponentProps {}
+type IOIDCPageProps = RouteComponentProps;
 
-const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }) => {
+const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }: IOIDCPageProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [error, setError] = useState<string>('');
@@ -48,29 +51,31 @@ const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }) => {
 
   const addClusters = () => {
     if (name === '') {
-      setError('Name is required')
+      setError('Name is required');
     } else if (url === '') {
-      setError('Server is required')
+      setError('Server is required');
     } else if (!url.startsWith('https://')) {
-      setError('Invalid URL')
+      setError('Invalid URL');
     } else if (provider === '') {
-      setError('OIDC Provider is required')
+      setError('OIDC Provider is required');
     } else {
       try {
-        context.addCluster([{
-          id: '',
-          name: name,
-          url: url,
-          certificateAuthorityData: certificateAuthorityData,
-          clientCertificateData: '',
-          clientKeyData: '',
-          token: '',
-          username: '',
-          password: '',
-          insecureSkipTLSVerify: false,
-          authProvider: `oidc__${provider}`,
-          namespace: 'default',
-        }]);
+        context.addCluster([
+          {
+            id: '',
+            name: name,
+            url: url,
+            certificateAuthorityData: certificateAuthorityData,
+            clientCertificateData: '',
+            clientKeyData: '',
+            token: '',
+            username: '',
+            password: '',
+            insecureSkipTLSVerify: false,
+            authProvider: `oidc__${provider}`,
+            namespace: 'default',
+          },
+        ]);
 
         setError('');
         history.push('/settings/clusters');
@@ -90,9 +95,7 @@ const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }) => {
           <IonTitle>Add Clusters</IonTitle>
           {error ? null : (
             <IonButtons slot="primary">
-              <IonButton onClick={() => addClusters()}>
-                Add
-              </IonButton>
+              <IonButton onClick={() => addClusters()}>Add</IonButton>
             </IonButtons>
           )}
         </IonToolbar>
@@ -114,9 +117,15 @@ const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }) => {
           <IonItem>
             <IonLabel>OIDC Provider</IonLabel>
             <IonSelect value={provider} onIonChange={handleProvider}>
-              {context.oidcProviders ? Object.keys(context.oidcProviders).map(provider => {
-                return <IonSelectOption key={provider} value={provider}>{provider}</IonSelectOption>
-              }) : null}
+              {context.oidcProviders
+                ? Object.keys(context.oidcProviders).map((provider) => {
+                    return (
+                      <IonSelectOption key={provider} value={provider}>
+                        {provider}
+                      </IonSelectOption>
+                    );
+                  })
+                : null}
             </IonSelect>
           </IonItem>
         </IonList>
