@@ -51,14 +51,14 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
   const [searchText, setSearchText] = useState<string>('');
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       setItems(undefined);
       setUrl(match.url);
       await load();
-    })();
+    };
 
-    return () => {};
-  }, [match, context.clusters, context.cluster]); /* eslint-disable-line */
+    fetchData();
+  }, [match, context.clusters, context.cluster]);
 
   const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();

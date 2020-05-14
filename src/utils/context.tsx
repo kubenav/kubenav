@@ -30,15 +30,24 @@ export const AppContext = React.createContext<IContext>({
   oidcProviders: {},
   settings: DEFAULT_SETTINGS,
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   addCluster: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   addOIDCProvider: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   changeCluster: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   deleteCluster: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   deleteOIDCProvider: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   editCluster: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   editSettings: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setNamespace: () => {},
   request: () => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return new Promise(() => {});
   },
 });
@@ -66,7 +75,7 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
   // making an API request to retrieve the current context during startup.
   // For the mobile version we only use the localStorage which holds all cluster information.
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       if (loading) {
         // Apply dark mode if it was returned from the storage api. This could be set by the user or the default from
         // the system.
@@ -91,10 +100,10 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
 
       setLoading(false);
       await SplashScreen.hide();
-    })();
+    };
 
-    return () => {};
-  }, [loading]); /* eslint-disable-line */
+    fetchData();
+  }, [loading]);
 
   // addCluster is used to add new clusters. We are using an array of clusters instead of a cluster object to add
   // multiple clusters with one call. If we want to add multiple clusters and call this function multiple times, there

@@ -69,7 +69,7 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       setShowLoading(true);
 
       try {
@@ -86,7 +86,6 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
 
           const tmpClusters: ICluster[] = [];
 
-          // eslint-disable-next-line
           aksClusters.map((cluster) => {
             if (cluster.kubeconfig.contexts.length === 1) {
               const kubeconfigCluster = getKubeconfigCluster(
@@ -128,10 +127,10 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
       }
 
       setShowLoading(false);
-    })();
+    };
 
-    return () => {};
-  }, [location]); /* eslint-disable-line */
+    fetchData();
+  }, [location]);
 
   const toggleSelectedCluster = (checked: boolean, cluster: ICluster) => {
     if (checked) {

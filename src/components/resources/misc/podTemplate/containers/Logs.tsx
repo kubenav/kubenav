@@ -47,15 +47,15 @@ const Logs: React.FunctionComponent<ILogsProps> = ({
   const [popoverEvent, setPopoverEvent] = useState();
 
   useEffect(() => {
-    if (showModal) {
-      (async () => {
-        setLogs('');
-        await load(false, TAIL_LINES);
-      })();
-    }
+    const fetchData = async () => {
+      setLogs('');
+      await load(false, TAIL_LINES);
+    };
 
-    return () => {};
-  }, [showModal]); /* eslint-disable-line */
+    if (showModal) {
+      fetchData();
+    }
+  }, [showModal]);
 
   const load = async (previous: boolean, tailLines: number) => {
     setShowLoading(true);

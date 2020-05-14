@@ -37,23 +37,23 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
   const [metrics, setMetrics] = useState<INodeMetrics>();
 
   useEffect(() => {
-    if (item.metadata && item.metadata.name) {
-      (async () => {
-        try {
-          const data: INodeMetrics = await context.request(
-            'GET',
-            `/apis/metrics.k8s.io/v1beta1/nodes/${item.metadata && item.metadata ? item.metadata.name : ''}`,
-            '',
-          );
-          setMetrics(data);
-        } catch (err) {
-          // TODO: Implement error handling.
-        }
-      })();
-    }
+    const fetchData = async () => {
+      try {
+        const data: INodeMetrics = await context.request(
+          'GET',
+          `/apis/metrics.k8s.io/v1beta1/nodes/${item.metadata && item.metadata ? item.metadata.name : ''}`,
+          '',
+        );
+        setMetrics(data);
+      } catch (err) {
+        // TODO: Implement error handling.
+      }
+    };
 
-    return () => {};
-  }, [item, type]); /* eslint-disable-line */
+    if (item.metadata && item.metadata.name) {
+      fetchData();
+    }
+  }, [item, type]);
 
   const imageName = (names: string[], long: boolean): string => {
     if (long) return names.reduce((a, b) => (a.length > b.length ? a : b));

@@ -42,7 +42,7 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       setShowLoading(true);
 
       try {
@@ -92,10 +92,10 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
       }
 
       setShowLoading(false);
-    })();
+    };
 
-    return () => {};
-  }, [location]); /* eslint-disable-line */
+    fetchData();
+  }, [location]);
 
   const toggleSelectedCluster = (checked: boolean, cluster: ICluster) => {
     if (checked) {

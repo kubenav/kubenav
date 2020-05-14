@@ -21,25 +21,25 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
   const [metrics, setMetrics] = useState<IPodMetrics>();
 
   useEffect(() => {
-    if (item.metadata && item.metadata.namespace && item.metadata.name) {
-      (async () => {
-        try {
-          const data: IPodMetrics = await context.request(
-            'GET',
-            `/apis/metrics.k8s.io/v1beta1/namespaces/${
-              item.metadata && item.metadata.namespace ? item.metadata.namespace : ''
-            }/pods/${item.metadata && item.metadata.name ? item.metadata.name : ''}`,
-            '',
-          );
-          setMetrics(data);
-        } catch (err) {
-          // TODO: Implement error handling.
-        }
-      })();
-    }
+    const fetchData = async () => {
+      try {
+        const data: IPodMetrics = await context.request(
+          'GET',
+          `/apis/metrics.k8s.io/v1beta1/namespaces/${
+            item.metadata && item.metadata.namespace ? item.metadata.namespace : ''
+          }/pods/${item.metadata && item.metadata.name ? item.metadata.name : ''}`,
+          '',
+        );
+        setMetrics(data);
+      } catch (err) {
+        // TODO: Implement error handling.
+      }
+    };
 
-    return () => {};
-  }, [item, type]); /* eslint-disable-line */
+    if (item.metadata && item.metadata.namespace && item.metadata.name) {
+      fetchData();
+    }
+  }, [item, type]);
 
   // Get the status of the pod. If the status is running or completed we set the status to success.  If the pod stuck
   // in the pending state, we set the status to warning. If none of these conditions applies we set the status to error.

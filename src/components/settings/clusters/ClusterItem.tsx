@@ -16,7 +16,7 @@ const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IC
   const [status, setStatus] = useState<boolean>(false);
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
         const data = await context.request('GET', '', '', cluster);
         if (data && data.paths) {
@@ -27,10 +27,10 @@ const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IC
       } catch (err) {
         setStatus(false);
       }
-    })();
+    };
 
-    return () => {};
-  }, []); /* eslint-disable-line */
+    fetchData();
+  }, []);
 
   return (
     <IonItemSliding>

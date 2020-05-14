@@ -46,14 +46,14 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
   const [url, setUrl] = useState<string>('');
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       setItem(undefined);
       setUrl(match.url);
       await load();
-    })();
+    };
 
-    return () => {};
-  }, [match]); /* eslint-disable-line */
+    fetchData();
+  }, [match]);
 
   const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();

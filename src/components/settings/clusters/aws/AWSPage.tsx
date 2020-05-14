@@ -46,7 +46,7 @@ const AWSPage: React.FunctionComponent<IAWSPageProps> = ({ match, history }: IAW
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       setShowLoading(true);
 
       try {
@@ -90,10 +90,10 @@ const AWSPage: React.FunctionComponent<IAWSPageProps> = ({ match, history }: IAW
       }
 
       setShowLoading(false);
-    })();
+    };
 
-    return () => {};
-  }, [match]); /* eslint-disable-line */
+    fetchData();
+  }, [match]);
 
   const toggleSelectedCluster = (checked: boolean, cluster: ICluster) => {
     if (checked) {

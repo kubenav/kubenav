@@ -29,25 +29,25 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
   const [metrics, setMetrics] = useState<IPodMetrics>();
 
   useEffect(() => {
-    if (item.metadata && item.metadata.namespace && item.metadata.name) {
-      (async () => {
-        try {
-          const data: IPodMetrics = await context.request(
-            'GET',
-            `/apis/metrics.k8s.io/v1beta1/namespaces/${
-              item.metadata && item.metadata.namespace ? item.metadata.namespace : ''
-            }/pods/${item.metadata && item.metadata.name ? item.metadata.name : ''}`,
-            '',
-          );
-          setMetrics(data);
-        } catch (err) {
-          // TODO: Implement error handling.
-        }
-      })();
-    }
+    const fetchData = async () => {
+      try {
+        const data: IPodMetrics = await context.request(
+          'GET',
+          `/apis/metrics.k8s.io/v1beta1/namespaces/${
+            item.metadata && item.metadata.namespace ? item.metadata.namespace : ''
+          }/pods/${item.metadata && item.metadata.name ? item.metadata.name : ''}`,
+          '',
+        );
+        setMetrics(data);
+      } catch (err) {
+        // TODO: Implement error handling.
+      }
+    };
 
-    return () => {};
-  }, [item, type]); /* eslint-disable-line */
+    if (item.metadata && item.metadata.namespace && item.metadata.name) {
+      fetchData();
+    }
+  }, [item, type]);
 
   return (
     <IonGrid>

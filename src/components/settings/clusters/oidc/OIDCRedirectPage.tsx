@@ -43,7 +43,7 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       setShowLoading(true);
 
       try {
@@ -79,10 +79,10 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
       }
 
       setShowLoading(false);
-    })();
+    };
 
-    return () => {};
-  }, [location]); /* eslint-disable-line */
+    fetchData();
+  }, [location]);
 
   const handleName = (event) => {
     setName(event.target.value);

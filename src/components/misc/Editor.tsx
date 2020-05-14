@@ -69,9 +69,7 @@ const Editor: React.FunctionComponent<IEditorProps> = ({
 
   useEffect(() => {
     setShowScrollToBottomButton(scrollToBottomButton === true);
-
-    return () => {};
-  }, [value]); /* eslint-disable-line */
+  }, [value]);
 
   const changeValue = (newValue: string) => {
     if (onChange) {

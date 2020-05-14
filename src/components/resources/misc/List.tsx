@@ -44,13 +44,13 @@ const List: React.FunctionComponent<IListProps> = ({
   const [items, setItems] = useState<any>();
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       setItems(undefined);
       await load();
-    })();
+    };
 
-    return () => {};
-  }, [section, type, namespace, selector, filter]); /* eslint-disable-line */
+    fetchData();
+  }, [section, type, namespace, selector, filter]);
 
   const load = async () => {
     setShowLoading(true);

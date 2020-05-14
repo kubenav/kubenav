@@ -66,14 +66,14 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
   // When the component is rendered the first time and on every change route change or a modification to the context
   // object we are loading all items for the corresponding resource.
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       setItems(undefined);
       setUrl(match.url);
       await load();
-    })();
+    };
 
-    return () => {};
-  }, [match, context.clusters, context.cluster]); /* eslint-disable-line */
+    fetchData();
+  }, [match, context.clusters, context.cluster]);
 
   // The doRefresh method is used for a manual reload of the items for the corresponding resource. The
   // event.detail.complete() call is required to finish the animation of the IonRefresher component.
