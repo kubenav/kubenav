@@ -241,6 +241,26 @@ export interface IPodMetricsList {
   metadata?: V1ListMeta;
 }
 
+export interface ITerminal {
+  namespace: string;
+  pod: string;
+  container: string;
+  type: TTerminal;
+  cluster: ICluster;
+}
+
+export interface ITerminalContext {
+  terminals: ITerminal[];
+
+  add: (term: ITerminal) => void;
+}
+
+export interface ITerminalResponse {
+  id: string;
+}
+
+export type TActivator = 'button' | 'item-option';
+
 export type TCondition =
   | V1DeploymentCondition
   | V1JobCondition
@@ -251,4 +271,4 @@ export type TCondition =
   | V1ReplicationControllerCondition
   | V1StatefulSetCondition;
 
-export type TActivator = 'button' | 'item-option';
+export type TTerminal = 'term' | 'logs';

@@ -6,11 +6,15 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"fmt"
-	"github.com/kubenav/kubenav/pkg/api/middleware"
 	"io/ioutil"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/kubenav/kubenav/pkg/api/kubernetes"
+	"github.com/kubenav/kubenav/pkg/api/middleware"
+
+	"k8s.io/client-go/tools/remotecommand"
 )
 
 type APIRequest struct {
@@ -156,4 +160,46 @@ func httpClientForRootCAs(certificateAuthorityData, clientCertificateData, clien
 	tlsConfig.InsecureSkipVerify = insecureSkipTLSVerify
 
 	return &tlsConfig, nil
+}
+
+func execHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		middleware.Write(w, r, nil)
+		return
+	}
+
+	var request APIRequest
+	if r.Body == nil {
+		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
+		return
+	}
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not decode request body")
+		return
+	}
+
+	cfg, clientset, err := kubernetes.Client(request.URL, request.CertificateAuthorityData, request.ClientCertificateData, request.ClientKeyData, request.Token, request.Username, request.Password, request.InsecureSkipTLSVerify)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create Kubernetes API client")
+		return
+	}
+
+	sessionID, err := GenTerminalSessionID()
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not generate terminal session id")
+		return
+	}
+
+	TerminalSessions.Set(sessionID, TerminalSession{
+		ID:       sessionID,
+		Bound:    make(chan error),
+		SizeChan: make(chan remotecommand.TerminalSize),
+	})
+
+	shell := ""
+	go WaitForTerminal(cfg, clientset, &request, shell, sessionID)
+
+	middleware.Write(w, r, TerminalResponse{ID: sessionID})
+	return
 }

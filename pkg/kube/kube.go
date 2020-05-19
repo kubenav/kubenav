@@ -2,12 +2,13 @@ package kube
 
 import (
 	"errors"
-	"k8s.io/client-go/kubernetes"
 	"os"
 	"path/filepath"
 
 	"github.com/kubenav/kubenav/pkg/api"
 
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 )
 
@@ -114,11 +115,11 @@ func (c *Client) Clusters() (map[string]Cluster, error) {
 	return clusters, nil
 }
 
-// Request creates the clientset for an Kubernetes API call.
-func (c *Client) Request(request api.APIRequest) (*kubernetes.Clientset, error) {
+// KubernetesClient creates the config and clientset for an Kubernetes API call.
+func (c *Client) KubernetesClient(request api.APIRequest) (*rest.Config, *kubernetes.Clientset, error) {
 	raw, err := c.config.RawConfig()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	override := &clientcmd.ConfigOverrides{CurrentContext: request.Cluster}
@@ -126,8 +127,13 @@ func (c *Client) Request(request api.APIRequest) (*kubernetes.Clientset, error) 
 
 	restClient, err := currentContextConfig.ClientConfig()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return kubernetes.NewForConfig(restClient)
+	clientset, err := kubernetes.NewForConfig(restClient)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return restClient, clientset, nil
 }

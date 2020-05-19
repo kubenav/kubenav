@@ -10,6 +10,7 @@ import {
   IGoogleTokens,
   IOIDCProvider,
   IOIDCProviderToken,
+  ITerminalResponse,
 } from '../declarations';
 import { GOOGLE_REDIRECT_URI, OIDC_REDIRECT_URL_WEB, SERVER } from './constants';
 import { isJSON } from './helpers';
@@ -364,6 +365,41 @@ export const kubernetesRequest = async (
     }
   } catch (err) {
     throw err;
+  }
+};
+
+export const execRequest = async (url: string, cluster: ICluster): Promise<ITerminalResponse> => {
+  let serverURL = `${SERVER}/api/kubernetes/exec/mobile`;
+  if (!isPlatform('hybrid')) {
+    serverURL = `${SERVER}/api/kubernetes/exec/electron`;
+  }
+
+  const response = await fetch(serverURL, {
+    method: 'post',
+    body: JSON.stringify({
+      server: SERVER,
+      cluster: cluster ? cluster.id : '',
+      url: cluster ? cluster.url + url : '',
+      certificateAuthorityData: cluster ? cluster.certificateAuthorityData : '',
+      clientCertificateData: cluster ? cluster.clientCertificateData : '',
+      clientKeyData: cluster ? cluster.clientKeyData : '',
+      token: cluster ? cluster.token : '',
+      username: cluster ? cluster.username : '',
+      password: cluster ? cluster.password : '',
+      insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
+    }),
+  });
+
+  const json = await response.json();
+
+  if (response.status >= 200 && response.status < 300) {
+    return json;
+  } else {
+    if (json.error) {
+      throw new Error(json.message);
+    } else {
+      throw new Error('An unknown error occured');
+    }
   }
 };
 

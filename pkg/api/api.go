@@ -12,6 +12,8 @@ func Register(router *http.ServeMux) {
 	router.HandleFunc("/api/aws/token", middleware.Cors(awsGetTokenHandler))
 	router.HandleFunc("/api/azure/clusters", middleware.Cors(azureGetClustersHandler))
 	router.HandleFunc("/api/kubernetes/request/mobile", middleware.Cors(requestHandler))
+	router.HandleFunc("/api/kubernetes/exec/mobile", middleware.Cors(execHandler))
+	router.Handle("/api/kubernetes/sockjs/", CreateAttachHandler("/api/kubernetes/sockjs"))
 	router.HandleFunc("/api/oidc/link", middleware.Cors(oidcGetLinkHandler))
 	router.HandleFunc("/api/oidc/refreshtoken", middleware.Cors(oidcGetRefreshTokenHandler))
 	router.HandleFunc("/api/oidc/accesstoken", middleware.Cors(oidcGetAccessTokenHandler))

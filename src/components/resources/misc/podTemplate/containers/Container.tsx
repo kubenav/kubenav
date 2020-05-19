@@ -36,6 +36,7 @@ import { IContainerMetrics } from '../../../../../declarations';
 import { formatResourceValue } from '../../../../../utils/helpers';
 import Editor from '../../../../misc/Editor';
 import IonCardEqualHeight from '../../../../misc/IonCardEqualHeight';
+import AddTerminal from '../../../../terminal/AddTerminal';
 import Row from '../../template/Row';
 import Logs from './Logs';
 
@@ -56,6 +57,7 @@ const getState = (containerStatus: V1ContainerStatus): string => {
 interface IContainerProps {
   container: V1Container;
   logs?: boolean;
+  terminal?: boolean;
   metrics?: IContainerMetrics;
   name?: string;
   namespace?: string;
@@ -65,6 +67,7 @@ interface IContainerProps {
 const Container: React.FunctionComponent<IContainerProps> = ({
   container,
   logs,
+  terminal,
   metrics,
   name,
   namespace,
@@ -177,14 +180,24 @@ const Container: React.FunctionComponent<IContainerProps> = ({
               Logs
             </IonButton>
           ) : null}
+
+          {!isPlatform('hybrid') && terminal && name && namespace ? (
+            <AddTerminal namespace={namespace} pod={name} container={container.name} mobile={false} />
+          ) : null}
         </IonItem>
 
         {isPlatform('hybrid') && logs && name && namespace ? (
           <IonItemOptions side="end">
-            <IonItemOption color="primary" onClick={() => setShowLogs(true)}>
-              <IonIcon slot="start" icon={list} />
-              Logs
-            </IonItemOption>
+            {logs ? (
+              <IonItemOption color="primary" onClick={() => setShowLogs(true)}>
+                <IonIcon slot="start" icon={list} />
+                Logs
+              </IonItemOption>
+            ) : null}
+
+            {terminal ? (
+              <AddTerminal namespace={namespace} pod={name} container={container.name} mobile={true} />
+            ) : null}
           </IonItemOptions>
         ) : null}
       </IonItemSliding>

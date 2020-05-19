@@ -12,6 +12,7 @@ import (
 	"github.com/kubenav/kubenav/pkg/kube"
 
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/client-go/tools/remotecommand"
 )
 
 var client *kube.Client
@@ -22,6 +23,7 @@ func Register(router *http.ServeMux, kubeClient *kube.Client) {
 	router.HandleFunc("/api/cluster", middleware.Cors(clusterHandler))
 	router.HandleFunc("/api/clusters", middleware.Cors(clustersHandler))
 	router.HandleFunc("/api/kubernetes/request/electron", middleware.Cors(requestHandler))
+	router.HandleFunc("/api/kubernetes/exec/electron", middleware.Cors(execHandler))
 }
 
 func clusterHandler(w http.ResponseWriter, r *http.Request) {
@@ -83,7 +85,7 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	clientset, err := client.Request(request)
+	_, clientset, err := client.KubernetesClient(request)
 	if err != nil {
 		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create clientset")
 		return
@@ -119,5 +121,47 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	middleware.Write(w, r, apiResponse)
+	return
+}
+
+func execHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		middleware.Write(w, r, nil)
+		return
+	}
+
+	var request api.APIRequest
+	if r.Body == nil {
+		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
+		return
+	}
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not decode request body")
+		return
+	}
+
+	cfg, clientset, err := client.KubernetesClient(request)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create clientset")
+		return
+	}
+
+	sessionID, err := api.GenTerminalSessionID()
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not generate terminal session id")
+		return
+	}
+
+	api.TerminalSessions.Set(sessionID, api.TerminalSession{
+		ID:       sessionID,
+		Bound:    make(chan error),
+		SizeChan: make(chan remotecommand.TerminalSize),
+	})
+
+	shell := ""
+	go api.WaitForTerminal(cfg, clientset, &request, shell, sessionID)
+
+	middleware.Write(w, r, api.TerminalResponse{ID: sessionID})
 	return
 }
