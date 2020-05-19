@@ -39,7 +39,6 @@ export interface IAppSections {
 
 export interface IAppSettings {
   darkMode: boolean;
-  editorTheme: string;
   timeout: number;
 }
 

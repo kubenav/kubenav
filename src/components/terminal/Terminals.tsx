@@ -15,9 +15,10 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import { close, ellipsisHorizontal, ellipsisVertical } from 'ionicons/icons';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
-import { ITerminal } from '../../declarations';
+import { IContext, ITerminal } from '../../declarations';
+import { AppContext } from '../../utils/context';
 import Terminal from './Terminal';
 
 interface ITerminalsProps {
@@ -37,6 +38,8 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
   setActiveTerminal,
   removeTerminal,
 }: ITerminalsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   const [showPopover, setShowPopover] = useState<boolean>(false);
   const [popoverEvent, setPopoverEvent] = useState();
 
@@ -110,7 +113,9 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
 
       <IonContent>
         {terminals.map((terminal, index) => {
-          return activeTerminal === `term_${index}` ? <Terminal key={index} terminal={terminal} /> : null;
+          return activeTerminal === `term_${index}` ? (
+            <Terminal key={index} terminal={terminal} darkMode={context.settings.darkMode} />
+          ) : null;
         })}
       </IonContent>
     </IonModal>

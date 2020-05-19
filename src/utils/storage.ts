@@ -86,7 +86,6 @@ export const readSettings = (): IAppSettings => {
     const settings = JSON.parse(settingsFromStorage);
     return {
       darkMode: settings.darkMode ? settings.darkMode : DEFAULT_SETTINGS.darkMode,
-      editorTheme: settings.editorTheme ? settings.editorTheme : DEFAULT_SETTINGS.editorTheme,
       timeout: settings.timeout ? settings.timeout : DEFAULT_SETTINGS.timeout,
     };
   }

@@ -6,7 +6,6 @@ export const VERSION = process.env.REACT_APP_VERSION;
 
 export const DEFAULT_SETTINGS: IAppSettings = {
   darkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
-  editorTheme: 'solarized_dark',
   timeout: 60,
 };
 
