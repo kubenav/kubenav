@@ -36,7 +36,7 @@ import { IContainerMetrics } from '../../../../../declarations';
 import { formatResourceValue } from '../../../../../utils/helpers';
 import Editor from '../../../../misc/Editor';
 import IonCardEqualHeight from '../../../../misc/IonCardEqualHeight';
-import AddTerminal from '../../../../terminal/AddTerminal';
+import AddShell from '../../../../terminal/AddShell';
 import Row from '../../template/Row';
 import Logs from './Logs';
 
@@ -182,7 +182,7 @@ const Container: React.FunctionComponent<IContainerProps> = ({
           ) : null}
 
           {!isPlatform('hybrid') && terminal && name && namespace ? (
-            <AddTerminal namespace={namespace} pod={name} container={container.name} mobile={false} />
+            <AddShell namespace={namespace} pod={name} container={container.name} mobile={false} />
           ) : null}
         </IonItem>
 
@@ -195,9 +195,7 @@ const Container: React.FunctionComponent<IContainerProps> = ({
               </IonItemOption>
             ) : null}
 
-            {terminal ? (
-              <AddTerminal namespace={namespace} pod={name} container={container.name} mobile={true} />
-            ) : null}
+            {terminal ? <AddShell namespace={namespace} pod={name} container={container.name} mobile={true} /> : null}
           </IonItemOptions>
         ) : null}
       </IonItemSliding>

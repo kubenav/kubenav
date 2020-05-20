@@ -11,6 +11,7 @@ import {
   V1StatefulSetCondition,
 } from '@kubernetes/client-node';
 import React from 'react';
+import { Terminal } from 'xterm';
 
 export interface IAppPage {
   icon: string;
@@ -241,11 +242,9 @@ export interface IPodMetricsList {
 }
 
 export interface ITerminal {
-  namespace: string;
-  pod: string;
-  container: string;
+  name: string;
   type: TTerminal;
-  cluster: ICluster;
+  shell?: Terminal;
 }
 
 export interface ITerminalContext {
@@ -270,4 +269,4 @@ export type TCondition =
   | V1ReplicationControllerCondition
   | V1StatefulSetCondition;
 
-export type TTerminal = 'term' | 'logs';
+export type TTerminal = 'shell' | 'logs';
