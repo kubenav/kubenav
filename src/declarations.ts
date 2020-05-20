@@ -245,6 +245,7 @@ export interface ITerminal {
   name: string;
   type: TTerminal;
   shell?: Terminal;
+  logs?: string;
 }
 
 export interface ITerminalContext {

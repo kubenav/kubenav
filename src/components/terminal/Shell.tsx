@@ -12,12 +12,12 @@ interface IShellProps {
 
 const Shell: React.FunctionComponent<IShellProps> = ({ terminal }: IShellProps) => {
   const termRef = useRef<HTMLDivElement>(null);
-  const [xterm, setXterm] = useState<Terminal>();
+  const [term, setTerm] = useState<Terminal>();
 
   const fitAddon = new FitAddon();
 
   useEffect(() => {
-    setXterm(terminal.shell);
+    setTerm(terminal.shell);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -30,11 +30,11 @@ const Shell: React.FunctionComponent<IShellProps> = ({ terminal }: IShellProps) 
   useEffect(() => {
     const handleTerminalInit = async () => {
       setTimeout(() => {
-        if (termRef.current && xterm) {
-          xterm.loadAddon(fitAddon);
-          xterm.open(termRef.current);
+        if (termRef.current && term) {
+          term.loadAddon(fitAddon);
+          term.open(termRef.current);
           fitAddon.fit();
-          xterm.focus();
+          term.focus();
 
           window.addEventListener('resize', updateTerminalSize);
         }
@@ -43,7 +43,7 @@ const Shell: React.FunctionComponent<IShellProps> = ({ terminal }: IShellProps) 
 
     handleTerminalInit();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [termRef, xterm]);
+  }, [termRef, term]);
 
   const updateTerminalSize = () => {
     fitAddon.fit();

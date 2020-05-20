@@ -11,7 +11,6 @@ import {
   IonHeader,
   IonIcon,
   IonItem,
-  IonItemOption,
   IonItemOptions,
   IonItemSliding,
   IonLabel,
@@ -28,7 +27,7 @@ import {
   V1ContainerStatus,
   V1EnvVarSource,
 } from '@kubernetes/client-node';
-import { close, list } from 'ionicons/icons';
+import { close } from 'ionicons/icons';
 import yaml from 'js-yaml';
 import React, { useState } from 'react';
 
@@ -36,9 +35,9 @@ import { IContainerMetrics } from '../../../../../declarations';
 import { formatResourceValue } from '../../../../../utils/helpers';
 import Editor from '../../../../misc/Editor';
 import IonCardEqualHeight from '../../../../misc/IonCardEqualHeight';
+import AddLogs from '../../../../terminal/AddLogs';
 import AddShell from '../../../../terminal/AddShell';
 import Row from '../../template/Row';
-import Logs from './Logs';
 
 // getState returns the current state of the given container. This is used for the list view for init containers and
 // containers.
@@ -74,7 +73,6 @@ const Container: React.FunctionComponent<IContainerProps> = ({
   status,
 }: IContainerProps) => {
   const [showModal, setShowModal] = useState(false);
-  const [showLogs, setShowLogs] = useState(false);
 
   const containerState = (state: V1ContainerState): string => {
     if (state.running) {
@@ -168,17 +166,7 @@ const Container: React.FunctionComponent<IContainerProps> = ({
             </p>
           </IonLabel>
           {!isPlatform('hybrid') && logs && name && namespace ? (
-            <IonButton
-              fill="outline"
-              slot="end"
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowLogs(true);
-              }}
-            >
-              <IonIcon slot="start" icon={list} />
-              Logs
-            </IonButton>
+            <AddLogs namespace={namespace} pod={name} container={container.name} mobile={false} />
           ) : null}
 
           {!isPlatform('hybrid') && terminal && name && namespace ? (
@@ -188,27 +176,11 @@ const Container: React.FunctionComponent<IContainerProps> = ({
 
         {isPlatform('hybrid') && logs && name && namespace ? (
           <IonItemOptions side="end">
-            {logs ? (
-              <IonItemOption color="primary" onClick={() => setShowLogs(true)}>
-                <IonIcon slot="start" icon={list} />
-                Logs
-              </IonItemOption>
-            ) : null}
-
+            {logs ? <AddLogs namespace={namespace} pod={name} container={container.name} mobile={true} /> : null}
             {terminal ? <AddShell namespace={namespace} pod={name} container={container.name} mobile={true} /> : null}
           </IonItemOptions>
         ) : null}
       </IonItemSliding>
-
-      {container && name && namespace ? (
-        <Logs
-          showModal={showLogs}
-          setShowModal={setShowLogs}
-          name={name}
-          namespace={namespace}
-          container={container.name}
-        />
-      ) : null}
 
       <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
         <IonHeader>

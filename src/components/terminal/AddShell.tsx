@@ -2,7 +2,7 @@ import { IonButton, IonIcon, IonItemOption } from '@ionic/react';
 import { terminal } from 'ionicons/icons';
 import React, { useContext } from 'react';
 import SockJS from 'sockjs-client';
-import { Terminal as xTerminal } from 'xterm';
+import { Terminal } from 'xterm';
 
 import { IContext, ITerminalContext } from '../../declarations';
 import { execRequest } from '../../utils/api';
@@ -22,15 +22,15 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({ namespace, pod, con
   const terminalContext = useContext<ITerminalContext>(TerminalContext);
 
   const add = async () => {
+    const term = new Terminal({
+      fontSize: 12,
+      bellStyle: 'sound',
+      cursorBlink: true,
+      theme: context.settings.darkMode ? TERMINAL_DARK_THEME : TERMINAL_LIGHT_THEME,
+    });
+
     try {
       if (context.clusters && context.cluster) {
-        const term = new xTerminal({
-          fontSize: 12,
-          bellStyle: 'sound',
-          cursorBlink: true,
-          theme: context.settings.darkMode ? TERMINAL_DARK_THEME : TERMINAL_LIGHT_THEME,
-        });
-
         const { id } = await execRequest(
           `/api/v1/namespaces/${namespace}/pods/${pod}/exec?command=sh&container=${container}&stdin=true&stdout=true&stderr=true&tty=true`,
           context.clusters[context.cluster],
@@ -60,16 +60,16 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({ namespace, pod, con
             term?.write(msg.Data);
           }
         };
-
-        terminalContext.add({
-          name: container,
-          type: 'shell',
-          shell: term,
-        });
       }
     } catch (err) {
-      throw err;
+      term.write = err.message;
     }
+
+    terminalContext.add({
+      name: container,
+      type: 'shell',
+      shell: term,
+    });
   };
 
   if (mobile) {
