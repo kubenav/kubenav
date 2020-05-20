@@ -9,6 +9,7 @@ import Container from './Container';
 interface IContainersProps {
   containers: V1Container[];
   logs?: boolean;
+  terminal?: boolean;
   metrics?: IContainerMetrics[];
   name?: string;
   namespace?: string;
@@ -19,6 +20,7 @@ interface IContainersProps {
 const Containers: React.FunctionComponent<IContainersProps> = ({
   containers,
   logs,
+  terminal,
   metrics,
   name,
   namespace,
@@ -54,6 +56,7 @@ const Containers: React.FunctionComponent<IContainersProps> = ({
                 key={index}
                 container={container}
                 logs={logs}
+                terminal={terminal}
                 metrics={metrics ? getContainerMetrics(container.name, metrics) : undefined}
                 name={name}
                 namespace={namespace}

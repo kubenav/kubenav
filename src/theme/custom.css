@@ -111,3 +111,9 @@ ion-avatar {
 .card-header-image img {
   margin: auto;
 }
+
+/* Terminal */
+.terminal-container {
+  width: 100%;
+  height: 100%;
+}

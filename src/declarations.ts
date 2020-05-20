@@ -11,6 +11,7 @@ import {
   V1StatefulSetCondition,
 } from '@kubernetes/client-node';
 import React from 'react';
+import { Terminal } from 'xterm';
 
 export interface IAppPage {
   icon: string;
@@ -39,7 +40,6 @@ export interface IAppSections {
 
 export interface IAppSettings {
   darkMode: boolean;
-  editorTheme: string;
   timeout: number;
 }
 
@@ -241,6 +241,25 @@ export interface IPodMetricsList {
   metadata?: V1ListMeta;
 }
 
+export interface ITerminal {
+  name: string;
+  type: TTerminal;
+  shell?: Terminal;
+  logs?: string;
+}
+
+export interface ITerminalContext {
+  terminals: ITerminal[];
+
+  add: (term: ITerminal) => void;
+}
+
+export interface ITerminalResponse {
+  id: string;
+}
+
+export type TActivator = 'button' | 'item-option';
+
 export type TCondition =
   | V1DeploymentCondition
   | V1JobCondition
@@ -251,4 +270,4 @@ export type TCondition =
   | V1ReplicationControllerCondition
   | V1StatefulSetCondition;
 
-export type TActivator = 'button' | 'item-option';
+export type TTerminal = 'shell' | 'logs';

@@ -94,6 +94,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
           <Containers
             containers={item.spec.initContainers}
             logs={true}
+            terminal={true}
             metrics={metrics ? metrics.containers : undefined}
             name={item.metadata ? item.metadata.name : ''}
             namespace={item.metadata ? item.metadata.namespace : ''}
@@ -105,6 +106,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
           <Containers
             containers={item.spec.containers}
             logs={true}
+            terminal={true}
             metrics={metrics ? metrics.containers : undefined}
             name={item.metadata ? item.metadata.name : ''}
             namespace={item.metadata ? item.metadata.namespace : ''}
