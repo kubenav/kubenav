@@ -76,6 +76,12 @@ const Terminal: React.FunctionComponent<ITerminalProps> = ({ darkMode, terminal 
   }, []);
 
   useEffect(() => {
+    return () => {
+      window.removeEventListener('resize', updateTerminalSize);
+    };
+  });
+
+  useEffect(() => {
     const handleTerminalInit = async () => {
       setTimeout(() => {
         if (termRef.current && xterm) {
@@ -83,6 +89,8 @@ const Terminal: React.FunctionComponent<ITerminalProps> = ({ darkMode, terminal 
           xterm.open(termRef.current);
           fitAddon.fit();
           xterm.focus();
+
+          window.addEventListener('resize', updateTerminalSize);
 
           openWebSocket();
         }
@@ -92,6 +100,10 @@ const Terminal: React.FunctionComponent<ITerminalProps> = ({ darkMode, terminal 
     handleTerminalInit();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [termRef, xterm]);
+
+  const updateTerminalSize = () => {
+    fitAddon.fit();
+  };
 
   const openWebSocket = async () => {
     try {
