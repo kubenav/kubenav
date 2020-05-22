@@ -40,6 +40,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
   const [username, setUsername] = useState<string>(cluster.username);
   const [password, setPassword] = useState<string>(cluster.password);
   const [insecureSkipTLSVerify, setInsecureSkipTLSVerify] = useState<boolean>(cluster.insecureSkipTLSVerify);
+  const [namespace, setNamespace] = useState<string>(cluster.namespace);
 
   const handleName = (event) => {
     setName(event.target.value);
@@ -77,6 +78,10 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
     setInsecureSkipTLSVerify(event.detail.checked);
   };
 
+  const handleNamespace = (event) => {
+    setNamespace(event.target.value);
+  };
+
   const editCluster = () => {
     if (name === '') {
       setError('Name is required');
@@ -105,7 +110,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
         password: password,
         insecureSkipTLSVerify: insecureSkipTLSVerify,
         authProvider: cluster.authProvider,
-        namespace: cluster.namespace,
+        namespace: namespace,
       });
 
       setError('');
@@ -181,6 +186,10 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
             <IonItem>
               <IonLabel position="stacked">Password</IonLabel>
               <IonInput type="password" value={password} onInput={handlePassword} />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Namespace</IonLabel>
+              <IonInput type="text" value={namespace} onInput={handleNamespace} />
             </IonItem>
           </IonList>
         </IonContent>
