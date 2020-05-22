@@ -1,8 +1,11 @@
 import { IonButton, IonIcon, IonItem, IonItemOption, IonLabel, IonList, IonPopover } from '@ionic/react';
 import { list } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
+import { Terminal } from 'xterm';
 
 import { IContext, ITerminalContext } from '../../declarations';
+import { logsRequest } from '../../utils/api';
+import { SERVER, TERMINAL_DARK_THEME, TERMINAL_LIGHT_THEME } from '../../utils/constants';
 import { AppContext } from '../../utils/context';
 import { TerminalContext } from '../../utils/terminal';
 
@@ -22,41 +25,81 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, conta
   const [showPopover, setShowPopover] = useState<boolean>(false);
   const [popoverEvent, setPopoverEvent] = useState();
 
-  const add = async (previous: boolean, tailLines: number) => {
-    let logs = '';
+  const add = async (previous: boolean, tailLines: number, follow: boolean) => {
+    if (context.clusters && context.cluster) {
+      if (follow) {
+        const term = new Terminal({
+          fontSize: 12,
+          bellStyle: 'sound',
+          cursorBlink: true,
+          theme: context.settings.darkMode ? TERMINAL_DARK_THEME : TERMINAL_LIGHT_THEME,
+        });
 
-    try {
-      if (context.clusters && context.cluster) {
-        let parameters = `container=${container}`;
+        try {
+          const parameters = `container=${container}&tailLines=10&follow=true`;
 
-        if (previous) {
-          parameters = `${parameters}&previous=true`;
+          const { id } = await logsRequest(
+            `/api/v1/namespaces/${namespace}/pods/${pod}/log?${parameters}`,
+            context.clusters[context.cluster],
+          );
+
+          const eventSource = new EventSource(`${SERVER}/api/kubernetes/logs/${id}`);
+
+          eventSource.onmessage = (event) => {
+            const msg = event as MessageEvent;
+            term.write(`${msg.data}\n\r`);
+          };
+
+          terminalContext.add({
+            name: container,
+            type: 'shell',
+            shell: term,
+            eventSource: eventSource,
+          });
+        } catch (err) {
+          term.write = err.message;
+
+          terminalContext.add({
+            name: container,
+            type: 'shell',
+            shell: term,
+          });
+        }
+      } else {
+        let logs = '';
+
+        try {
+          let parameters = `container=${container}`;
+
+          if (previous) {
+            parameters = `${parameters}&previous=true`;
+          }
+
+          if (tailLines !== 0) {
+            parameters = `${parameters}&tailLines=${tailLines}`;
+          }
+
+          // It is possible that the returned log only contains one line with valid json. This gets parsed by the requests
+          // function and so an object instead of a string is returned. In this case we have to revert the parsing.
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const data: any = await context.request(
+            'GET',
+            `/api/v1/namespaces/${namespace}/pods/${pod}/log?${parameters}`,
+            '',
+          );
+
+          logs = typeof data === 'string' ? data : JSON.stringify(data);
+        } catch (err) {
+          logs = err.message;
         }
 
-        if (tailLines !== 0) {
-          parameters = `${parameters}&tailLines=${tailLines}`;
-        }
-
-        // It is possible that the returned log only contains one line with valid json. This gets parsed by the requests
-        // function and so an object instead of a string is returned. In this case we have to revert the parsing.
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const data: any = await context.request(
-          'GET',
-          `/api/v1/namespaces/${namespace}/pods/${pod}/log?${parameters}`,
-          '',
-        );
-
-        logs = typeof data === 'string' ? data : JSON.stringify(data);
+        terminalContext.add({
+          name: container,
+          type: 'logs',
+          logs: logs,
+        });
       }
-    } catch (err) {
-      logs = err.message;
     }
-
-    terminalContext.add({
-      name: container,
-      type: 'logs',
-      logs: logs,
-    });
   };
 
   return (
@@ -69,7 +112,7 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, conta
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              add(false, TAIL_LINES);
+              add(false, TAIL_LINES, false);
             }}
           >
             <IonLabel>{`Last ${TAIL_LINES} Log Lines`}</IonLabel>
@@ -80,7 +123,7 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, conta
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              add(false, 0);
+              add(false, 0, false);
             }}
           >
             <IonLabel>All Log Lines</IonLabel>
@@ -91,7 +134,7 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, conta
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              add(true, TAIL_LINES);
+              add(true, TAIL_LINES, false);
             }}
           >
             <IonLabel>{`Previous Last ${TAIL_LINES} Log Lines`}</IonLabel>
@@ -102,10 +145,21 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, conta
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              add(true, 0);
+              add(true, 0, false);
             }}
           >
             <IonLabel>All Previous Log Lines</IonLabel>
+          </IonItem>
+          <IonItem
+            button={true}
+            detail={false}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowPopover(false);
+              add(false, TAIL_LINES, true);
+            }}
+          >
+            <IonLabel>{`Stream Log Lines`}</IonLabel>
           </IonItem>
         </IonList>
       </IonPopover>

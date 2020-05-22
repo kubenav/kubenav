@@ -246,6 +246,7 @@ export interface ITerminal {
   type: TTerminal;
   shell?: Terminal;
   logs?: string;
+  eventSource?: EventSource;
 }
 
 export interface ITerminalContext {

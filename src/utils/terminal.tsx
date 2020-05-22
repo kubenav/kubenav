@@ -38,6 +38,10 @@ export const TerminalContextProvider: React.FunctionComponent<ITerminalContextPr
   };
 
   const remove = (index: number) => {
+    if (terminals[index].eventSource) {
+      terminals[index].eventSource?.close();
+    }
+
     if (terminals.length > 1) {
       setActiveTerminal('term_0');
       const copy = [...terminals];

@@ -362,8 +362,41 @@ export const kubernetesRequest = async (
   }
 };
 
+// execRequest initialize the request to get a shell into a container. The generated session id is returned and can be
+// used to get the shell into the container.
 export const execRequest = async (url: string, cluster: ICluster): Promise<ITerminalResponse> => {
   const response = await fetch(`${SERVER}/api/kubernetes/exec`, {
+    method: 'post',
+    body: JSON.stringify({
+      server: SERVER,
+      cluster: cluster ? cluster.id : '',
+      url: cluster ? cluster.url + url : '',
+      certificateAuthorityData: cluster ? cluster.certificateAuthorityData : '',
+      clientCertificateData: cluster ? cluster.clientCertificateData : '',
+      clientKeyData: cluster ? cluster.clientKeyData : '',
+      token: cluster ? cluster.token : '',
+      username: cluster ? cluster.username : '',
+      password: cluster ? cluster.password : '',
+      insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
+    }),
+  });
+
+  const json = await response.json();
+
+  if (response.status >= 200 && response.status < 300) {
+    return json;
+  } else {
+    if (json.error) {
+      throw new Error(json.message);
+    } else {
+      throw new Error('An unknown error occured');
+    }
+  }
+};
+
+// logsRequest returns the session id to stream the log files of a container via server sent events.
+export const logsRequest = async (url: string, cluster: ICluster): Promise<ITerminalResponse> => {
+  const response = await fetch(`${SERVER}/api/kubernetes/logs`, {
     method: 'post',
     body: JSON.stringify({
       server: SERVER,
