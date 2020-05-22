@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"time"
 
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -114,7 +115,7 @@ func (c *Client) Clusters() (map[string]Cluster, error) {
 }
 
 // ConfigClientset creates the config and clientset for an Kubernetes API call.
-func (c *Client) ConfigClientset(context string) (*rest.Config, *kubernetes.Clientset, error) {
+func (c *Client) ConfigClientset(context string, timeout time.Duration) (*rest.Config, *kubernetes.Clientset, error) {
 	raw, err := c.config.RawConfig()
 	if err != nil {
 		return nil, nil, err
@@ -127,6 +128,8 @@ func (c *Client) ConfigClientset(context string) (*rest.Config, *kubernetes.Clie
 	if err != nil {
 		return nil, nil, err
 	}
+
+	restClient.Timeout = timeout
 
 	clientset, err := kubernetes.NewForConfig(restClient)
 	if err != nil {
