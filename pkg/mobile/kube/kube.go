@@ -1,4 +1,4 @@
-package kubernetes
+package kube
 
 import (
 	"encoding/base64"
@@ -9,9 +9,9 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
-// Client can be used to create an config and clientset for an Kubernetes API call from the fields from an
+// ConfigClientset can be used to create an config and clientset for an Kubernetes API call from the fields from an
 // API request.
-func Client(server, certificateAuthorityData, clientCertificateData, clientKeyData, token, username, password string, insecureSkipTLSVerify bool) (*rest.Config, *kubernetes.Clientset, error) {
+func ConfigClientset(server, certificateAuthorityData, clientCertificateData, clientKeyData, token, username, password string, insecureSkipTLSVerify bool) (*rest.Config, *kubernetes.Clientset, error) {
 	config, err := clientcmd.NewClientConfigFromBytes([]byte(`apiVersion: v1
 clusters:
 - cluster:

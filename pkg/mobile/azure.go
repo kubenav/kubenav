@@ -1,4 +1,4 @@
-package api
+package mobile
 
 import (
 	"context"
@@ -14,6 +14,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// AzureRequest is the structure of a request for one of the Azure methods.
 type AzureRequest struct {
 	SubscriptionID    string `json:"subscriptionID"`
 	ClientID          string `json:"clientID"`
@@ -23,6 +24,7 @@ type AzureRequest struct {
 	Admin             bool   `json:"admin"`
 }
 
+// AzureCluster is the structure of the response for loading all clusters from Microsoft Azure.
 type AzureCluster struct {
 	Name       string `json:"name"`
 	Kubeconfig string `json:"kubeconfig"`

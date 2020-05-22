@@ -183,7 +183,7 @@ func CreateAttachHandler(path string) http.Handler {
 
 // startProcess is called by handleAttach
 // Executed cmd in the container specified in request and connects it up with the ptyHandler (a session)
-func startProcess(config *rest.Config, clientset *kubernetes.Clientset, request *APIRequest, cmd []string, ptyHandler PtyHandler) error {
+func startProcess(config *rest.Config, clientset *kubernetes.Clientset, request *Request, cmd []string, ptyHandler PtyHandler) error {
 	reqURL, err := url.Parse(request.URL)
 
 	exec, err := remotecommand.NewSPDYExecutor(config, "POST", reqURL)
@@ -231,7 +231,7 @@ func isValidShell(validShells []string, shell string) bool {
 
 // WaitForTerminal is called from apihandler.handleAttach as a goroutine
 // Waits for the SockJS connection to be opened by the client the session to be bound in handleTerminalSession
-func WaitForTerminal(config *rest.Config, clientset *kubernetes.Clientset, request *APIRequest, shell string, sessionID string) {
+func WaitForTerminal(config *rest.Config, clientset *kubernetes.Clientset, request *Request, shell string, sessionID string) {
 	select {
 	case <-TerminalSessions.Get(sessionID).Bound:
 		close(TerminalSessions.Get(sessionID).Bound)

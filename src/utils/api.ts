@@ -1,4 +1,3 @@
-import { isPlatform } from '@ionic/react';
 import {
   IAWSCluster,
   IAWSTokens,
@@ -324,12 +323,7 @@ export const kubernetesRequest = async (
       );
     }
 
-    let serverURL = `${SERVER}/api/kubernetes/request/mobile`;
-    if (!isPlatform('hybrid')) {
-      serverURL = `${SERVER}/api/kubernetes/request/electron`;
-    }
-
-    const response = await fetch(serverURL, {
+    const response = await fetch(`${SERVER}/api/kubernetes/request`, {
       method: 'post',
       body: JSON.stringify({
         server: SERVER,
@@ -369,12 +363,7 @@ export const kubernetesRequest = async (
 };
 
 export const execRequest = async (url: string, cluster: ICluster): Promise<ITerminalResponse> => {
-  let serverURL = `${SERVER}/api/kubernetes/exec/mobile`;
-  if (!isPlatform('hybrid')) {
-    serverURL = `${SERVER}/api/kubernetes/exec/electron`;
-  }
-
-  const response = await fetch(serverURL, {
+  const response = await fetch(`${SERVER}/api/kubernetes/exec`, {
     method: 'post',
     body: JSON.stringify({
       server: SERVER,
@@ -509,17 +498,5 @@ export const getOIDCRefreshToken = async (
     }
   } catch (err) {
     throw err;
-  }
-};
-
-// getServerStatus checks if the server is ready to receive requests.
-export const getServerStatus = async (): Promise<boolean> => {
-  try {
-    const response = await fetch(`${SERVER}/api/test`);
-    const data = await response.json();
-
-    return data.status === 'ok';
-  } catch (err) {
-    return false;
   }
 };

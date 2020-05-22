@@ -1,4 +1,4 @@
-package api
+package mobile
 
 import (
 	"context"
@@ -12,6 +12,7 @@ import (
 	"golang.org/x/oauth2"
 )
 
+// OIDCRequest is the structure of a request for one of the OIDC methods.
 type OIDCRequest struct {
 	DiscoveryURL string `json:"discoveryURL"`
 	ClientID     string `json:"clientID"`
@@ -21,6 +22,7 @@ type OIDCRequest struct {
 	Code         string `json:"code"`
 }
 
+// OIDCResponse is the structure of a response for one of the OIDC methods.
 type OIDCResponse struct {
 	URL          string `json:"url"`
 	IDToken      string `json:"id_token"`
