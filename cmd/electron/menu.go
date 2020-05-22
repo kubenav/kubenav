@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"runtime"
 
-	"github.com/kubenav/kubenav/pkg/kube"
+	"github.com/kubenav/kubenav/pkg/electron/kube"
 
 	"github.com/asticode/go-astikit"
 	"github.com/asticode/go-astilectron"

@@ -1,19 +1,17 @@
-package kubernetes
+package kube
 
 import (
 	"encoding/base64"
 	"fmt"
-	"time"
 
-	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 )
 
-// Client can be used to create an config and clientset for an Kubernetes API call from the fields from an
+// ConfigClientset can be used to create an config and clientset for an Kubernetes API call from the fields from an
 // API request.
-func Client(server, certificateAuthorityData, clientCertificateData, clientKeyData, token, username, password string, insecureSkipTLSVerify bool) (*rest.Config, *kubernetes.Clientset, error) {
+func ConfigClientset(server, certificateAuthorityData, clientCertificateData, clientKeyData, token, username, password string, insecureSkipTLSVerify bool) (*rest.Config, *kubernetes.Clientset, error) {
 	config, err := clientcmd.NewClientConfigFromBytes([]byte(`apiVersion: v1
 clusters:
 - cluster:
@@ -52,16 +50,4 @@ users:
 	}
 
 	return restClient, clientset, nil
-}
-
-func Request(method, url, body string, timeout int64, clientset *kubernetes.Clientset) ([]byte, error) {
-	if method == "GET" {
-		return clientset.RESTClient().Get().RequestURI(url).Timeout(time.Duration(timeout) * time.Second).DoRaw()
-	} else if method == "DELETE" {
-		return clientset.RESTClient().Delete().RequestURI(url).Timeout(time.Duration(timeout) * time.Second).DoRaw()
-	} else if method == "PATCH" {
-		return clientset.RESTClient().Patch(types.JSONPatchType).RequestURI(url).Body([]byte(body)).Timeout(time.Duration(timeout) * time.Second).DoRaw()
-	}
-
-	return []byte(``), fmt.Errorf("Request method is not implemented")
 }

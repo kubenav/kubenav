@@ -1,4 +1,4 @@
-package api
+package mobile
 
 import (
 	"encoding/base64"
@@ -15,13 +15,15 @@ import (
 	"github.com/aws/aws-sdk-go/service/sts"
 )
 
+// AWSRequest is the structure of an request for one of the AWS methods.
 type AWSRequest struct {
-	AccessKeyId     string `json:"accessKeyId"`
+	AccessKeyID     string `json:"accessKeyId"`
 	SecretAccessKey string `json:"secretAccessKey"`
 	Region          string `json:"region"`
 	ClusterID       string `json:"clusterID"`
 }
 
+// AWSTokenResponse is the structure to return an Token for AWS.
 type AWSTokenResponse struct {
 	Token string `json:"token"`
 }
@@ -48,7 +50,7 @@ func awsGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 	var names []*string
 	var nextToken *string
 
-	cred := credentials.NewStaticCredentials(awsRequest.AccessKeyId, awsRequest.SecretAccessKey, "")
+	cred := credentials.NewStaticCredentials(awsRequest.AccessKeyID, awsRequest.SecretAccessKey, "")
 
 	sess, err := session.NewSession(&aws.Config{Region: aws.String(awsRequest.Region), Credentials: cred})
 	if err != nil {
@@ -109,7 +111,7 @@ func awsGetTokenHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cred := credentials.NewStaticCredentials(awsRequest.AccessKeyId, awsRequest.SecretAccessKey, "")
+	cred := credentials.NewStaticCredentials(awsRequest.AccessKeyID, awsRequest.SecretAccessKey, "")
 
 	sess, err := session.NewSession(&aws.Config{Region: aws.String(awsRequest.Region), Credentials: cred})
 	if err != nil {

@@ -4,9 +4,10 @@ import (
 	"net/http"
 
 	"github.com/kubenav/kubenav/pkg/api/middleware"
-	"github.com/kubenav/kubenav/pkg/kube"
+	"github.com/kubenav/kubenav/pkg/electron/kube"
 )
 
+// clusterHandler returns the cluster from the current context from the loaded kubeconfig.
 func clusterHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		middleware.Write(w, r, nil)
@@ -28,6 +29,7 @@ func clusterHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// clustersHandler returns all clusters from the loaded kubeconfig.
 func clustersHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		middleware.Write(w, r, nil)

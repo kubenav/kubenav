@@ -5,9 +5,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/kubenav/kubenav/pkg/api"
 	"github.com/kubenav/kubenav/pkg/electron"
-	"github.com/kubenav/kubenav/pkg/kube"
+	"github.com/kubenav/kubenav/pkg/electron/kube"
 	"github.com/kubenav/kubenav/pkg/version"
 
 	"github.com/sirupsen/logrus"
@@ -41,7 +40,6 @@ var rootCmd = &cobra.Command{
 		}
 
 		router := http.NewServeMux()
-		api.Register(router)
 		electron.Register(router, client)
 
 		if err := http.ListenAndServe(":14122", router); err != nil {

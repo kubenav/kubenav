@@ -1,4 +1,4 @@
-package electron
+package mobile
 
 import (
 	"encoding/json"
@@ -8,6 +8,7 @@ import (
 
 	"github.com/kubenav/kubenav/pkg/api"
 	"github.com/kubenav/kubenav/pkg/api/middleware"
+	"github.com/kubenav/kubenav/pkg/mobile/kube"
 
 	"k8s.io/client-go/tools/remotecommand"
 )
@@ -30,9 +31,9 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, clientset, err := client.ConfigClientset(request.Cluster)
+	_, clientset, err := kube.ConfigClientset(request.URL, request.CertificateAuthorityData, request.ClientCertificateData, request.ClientKeyData, request.Token, request.Username, request.Password, request.InsecureSkipTLSVerify)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create clientset")
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create Kubernetes API client")
 		return
 	}
 
@@ -68,9 +69,9 @@ func execHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	config, clientset, err := client.ConfigClientset(request.Cluster)
+	config, clientset, err := kube.ConfigClientset(request.URL, request.CertificateAuthorityData, request.ClientCertificateData, request.ClientKeyData, request.Token, request.Username, request.Password, request.InsecureSkipTLSVerify)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create clientset")
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create Kubernetes API client")
 		return
 	}
 

@@ -511,15 +511,3 @@ export const getOIDCRefreshToken = async (
     throw err;
   }
 };
-
-// getServerStatus checks if the server is ready to receive requests.
-export const getServerStatus = async (): Promise<boolean> => {
-  try {
-    const response = await fetch(`${SERVER}/api/test`);
-    const data = await response.json();
-
-    return data.status === 'ok';
-  } catch (err) {
-    return false;
-  }
-};

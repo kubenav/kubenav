@@ -7,9 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kubenav/kubenav/pkg/api"
 	"github.com/kubenav/kubenav/pkg/electron"
-	"github.com/kubenav/kubenav/pkg/kube"
+	"github.com/kubenav/kubenav/pkg/electron/kube"
 	"github.com/kubenav/kubenav/pkg/version"
 
 	"github.com/asticode/go-astikit"
@@ -61,7 +60,6 @@ var rootCmd = &cobra.Command{
 
 		go func() {
 			router := http.NewServeMux()
-			api.Register(router)
 			electron.Register(router, client)
 
 			router.HandleFunc("/api/electron", func(w http.ResponseWriter, r *http.Request) {
