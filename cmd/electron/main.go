@@ -28,6 +28,7 @@ var (
 var (
 	debug      bool
 	kubeconfig string
+	sync       bool
 )
 
 type Message struct {
@@ -114,7 +115,7 @@ var rootCmd = &cobra.Command{
 		}()
 
 		updateAvailable := checkVersion(version.Version, log)
-		menuOptions, err := getMenuOptions(updateAvailable, client, log)
+		menuOptions, err := getMenuOptions(sync, updateAvailable, client, log)
 		if err != nil {
 			log.WithError(err).Fatalf("Could not create menu")
 		}
@@ -168,6 +169,7 @@ func init() {
 
 	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "Enable debug mode.")
 	rootCmd.PersistentFlags().StringVar(&kubeconfig, "kubeconfig", "", "Optional Kubeconfig file.")
+	rootCmd.PersistentFlags().BoolVar(&sync, "sync", "", "Sync the changes from kubenav with the used Kubeconfig file.")
 }
 
 func main() {
