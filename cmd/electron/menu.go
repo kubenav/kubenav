@@ -5,6 +5,7 @@ import (
 	"log"
 	"os/exec"
 	"runtime"
+	"sort"
 
 	"github.com/kubenav/kubenav/pkg/electron/kube"
 
@@ -35,11 +36,17 @@ func openBrowser(url string) {
 
 // createClusterMenuItem creates a new menu item for a given context from the Kubeconfig file.
 // When the cluster is selected an "cluster" event will be send to the frontend via SSE.
-func createClusterMenuItem(cluster string, log *logrus.Logger) astilectron.MenuItemOptions {
+func createClusterMenuItem(cluster string, sync bool, client *kube.Client, log *logrus.Logger) astilectron.MenuItemOptions {
 	return astilectron.MenuItemOptions{
 		Label: astikit.StrPtr(cluster),
 		OnClick: func(e astilectron.Event) (deleteListener bool) {
 			log.Debugf("Menu item '%s' has been clicked", cluster)
+			if sync {
+				err := client.ChangeContext(cluster)
+				if err != nil {
+					log.WithError(err).Errorf("Could not save selected context")
+				}
+			}
 			messageChannel <- Message{Event: "cluster", Data: cluster}
 			return
 		},
@@ -126,17 +133,25 @@ func createFileMenu(updateAvailable bool, log *logrus.Logger) *astilectron.MenuI
 }
 
 // getMenuOptions returns the menu for the Electron app.
-func getMenuOptions(updateAvailable bool, client *kube.Client, log *logrus.Logger) ([]*astilectron.MenuItemOptions, error) {
+func getMenuOptions(sync bool, updateAvailable bool, client *kube.Client, log *logrus.Logger) ([]*astilectron.MenuItemOptions, error) {
 	fileMenu := createFileMenu(updateAvailable, log)
 
+	// Load all clusters from the Kubeconfig file and sort the clusters alphabetical. Then iterate over the clusters and
+	// create a menu entry for each cluster.
 	clusters, err := client.Clusters()
 	if err != nil {
 		return nil, err
 	}
 
+	contexts := make([]string, 0, len(clusters))
+	for c := range clusters {
+		contexts = append(contexts, c)
+	}
+	sort.Strings(contexts)
+
 	var clusterSubMenu []*astilectron.MenuItemOptions
-	for cluster := range clusters {
-		item := createClusterMenuItem(cluster, log)
+	for _, context := range contexts {
+		item := createClusterMenuItem(context, sync, client, log)
 		clusterSubMenu = append(clusterSubMenu, &item)
 	}
 

@@ -10,6 +10,7 @@ import {
   IOIDCProvider,
   IOIDCProviderToken,
   ITerminalResponse,
+  TSyncType,
 } from '../declarations';
 import { GOOGLE_REDIRECT_URI, OIDC_REDIRECT_URL_WEB, SERVER } from './constants';
 import { isJSON } from './helpers';
@@ -523,6 +524,33 @@ export const getOIDCRefreshToken = async (
     if (response.status >= 200 && response.status < 300) {
       return json;
     } else {
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// syncKubeconfig is used to applie the changes to the current context or namespace to the loaded Kubeconfig file.
+export const syncKubeconfig = async (context: string, namespace: string, syncType: TSyncType): Promise<boolean> => {
+  try {
+    const response = await fetch(`${SERVER}/api/sync/${syncType}`, {
+      method: 'post',
+      body: JSON.stringify({
+        context: context,
+        namespace: namespace,
+      }),
+    });
+
+    if (response.status >= 200 && response.status < 300) {
+      return true;
+    } else {
+      const json = await response.json();
+
       if (json.error) {
         throw new Error(json.message);
       } else {

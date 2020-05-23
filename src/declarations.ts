@@ -271,4 +271,6 @@ export type TCondition =
   | V1ReplicationControllerCondition
   | V1StatefulSetCondition;
 
+export type TSyncType = 'context' | 'namespace';
+
 export type TTerminal = 'shell' | 'logs';

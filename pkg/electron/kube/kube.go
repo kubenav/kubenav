@@ -18,14 +18,15 @@ var (
 
 // Client implements an API client for a Kubernetes cluster.
 type Client struct {
-	config clientcmd.ClientConfig
+	config     clientcmd.ClientConfig
+	kubeconfig string
 }
 
 // Cluster implements the cluster type used in the React app.
 type Cluster struct {
 	ID                       string `json:"id"`
 	Name                     string `json:"name"`
-	Url                      string `json:"url"`
+	URL                      string `json:"url"`
 	CertificateAuthorityData string `json:"certificateAuthorityData"`
 	ClientCertificateData    string `json:"clientCertificateData"`
 	ClientKeyData            string `json:"clientKeyData"`
@@ -34,13 +35,6 @@ type Cluster struct {
 	Password                 string `json:"password"`
 	AuthProvider             string `json:"authProvider"`
 	Namespace                string `json:"namespace"`
-}
-
-// JSONPatch is the json patch formate to update the machine deployment
-type JSONPatch struct {
-	Op    string `json:"op"`
-	Path  string `json:"path"`
-	Value int32  `json:"value"`
 }
 
 // homeDir returns the users home directory, where the '.kube' directory is located.
@@ -76,7 +70,8 @@ func NewClient(kubeconfig string) (*Client, error) {
 	)
 
 	return &Client{
-		config: config,
+		config:     config,
+		kubeconfig: kubeconfig,
 	}, nil
 }
 
@@ -106,12 +101,45 @@ func (c *Client) Clusters() (map[string]Cluster, error) {
 		clusters[context] = Cluster{
 			ID:        context,
 			Name:      context,
-			Url:       cluster.Server,
+			URL:       cluster.Server,
 			Namespace: details.Namespace,
 		}
 	}
 
 	return clusters, nil
+}
+
+// ChangeContext is used to modify the current-context value in the used Kubeconfig file and to persist these changes.
+// Note: We modify the raw config directly and do not use the logic of the ConfigClientset function, because the
+// override has no effect to the raw config. See: https://github.com/kubernetes/client-go/issues/735
+func (c *Client) ChangeContext(context string) error {
+	raw, err := c.config.RawConfig()
+	if err != nil {
+		return err
+	}
+
+	raw.CurrentContext = context
+
+	return clientcmd.WriteToFile(raw, c.kubeconfig)
+}
+
+// ChangeNamespace is used to modify the namespace of the currently selected context and to persist these changes in the
+// Kubeconfig file.
+// In the frontend it is possible to select "" as namespace, which is used for the all namespaces selection. This isn't
+// a valid value for the Kubeconfig file. Therefor we don't write these value back to the Kubeconfig file.
+func (c *Client) ChangeNamespace(context, namespace string) error {
+	if namespace == "" {
+		return nil
+	}
+
+	raw, err := c.config.RawConfig()
+	if err != nil {
+		return err
+	}
+
+	raw.Contexts[context].Namespace = namespace
+
+	return clientcmd.WriteToFile(raw, c.kubeconfig)
 }
 
 // ConfigClientset creates the config and clientset for an Kubernetes API call.
