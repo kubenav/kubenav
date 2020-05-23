@@ -247,6 +247,7 @@ export interface ITerminal {
   shell?: Terminal;
   logs?: string;
   eventSource?: EventSource;
+  webSocket?: WebSocket;
 }
 
 export interface ITerminalContext {

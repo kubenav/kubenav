@@ -36,10 +36,10 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({ namespace, pod, con
           context.clusters[context.cluster],
         );
 
-        const sock = new SockJS(`${SERVER}/api/kubernetes/sockjs?${id}`);
+        const webSocket = new SockJS(`${SERVER}/api/kubernetes/sockjs?${id}`);
 
         term?.onData((str) => {
-          sock.send(
+          webSocket.send(
             JSON.stringify({
               Op: 'stdin',
               Data: str,
@@ -49,27 +49,34 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({ namespace, pod, con
           );
         });
 
-        sock.onopen = () => {
+        webSocket.onopen = () => {
           const startData = { Op: 'bind', SessionID: id };
-          sock.send(JSON.stringify(startData));
+          webSocket.send(JSON.stringify(startData));
         };
 
-        sock.onmessage = (event) => {
+        webSocket.onmessage = (event) => {
           const msg = JSON.parse(event.data);
           if (msg.Op === 'stdout') {
             term?.write(msg.Data);
           }
         };
+
+        terminalContext.add({
+          name: container,
+          type: 'shell',
+          shell: term,
+          webSocket: webSocket,
+        });
       }
     } catch (err) {
       term.write = err.message;
-    }
 
-    terminalContext.add({
-      name: container,
-      type: 'shell',
-      shell: term,
-    });
+      terminalContext.add({
+        name: container,
+        type: 'shell',
+        shell: term,
+      });
+    }
   };
 
   if (mobile) {
