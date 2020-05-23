@@ -16,6 +16,7 @@ import (
 var (
 	debug      bool
 	kubeconfig string
+	sync       bool
 )
 
 var rootCmd = &cobra.Command{
@@ -40,7 +41,7 @@ var rootCmd = &cobra.Command{
 		}
 
 		router := http.NewServeMux()
-		electron.Register(router, client)
+		electron.Register(router, sync, client)
 
 		if err := http.ListenAndServe(":14122", router); err != nil {
 			log.WithError(err).Fatalf("kubenav server died")
@@ -67,6 +68,7 @@ func init() {
 
 	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "Enable debug mode.")
 	rootCmd.PersistentFlags().StringVar(&kubeconfig, "kubeconfig", "", "Optional Kubeconfig file.")
+	rootCmd.PersistentFlags().BoolVar(&sync, "sync", false, "Sync the changes from kubenav with the used Kubeconfig file.")
 }
 
 func main() {
