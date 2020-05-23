@@ -42,6 +42,10 @@ export const TerminalContextProvider: React.FunctionComponent<ITerminalContextPr
       terminals[index].eventSource?.close();
     }
 
+    if (terminals[index].webSocket) {
+      terminals[index].webSocket?.close();
+    }
+
     if (terminals.length > 1) {
       setActiveTerminal('term_0');
       const copy = [...terminals];
