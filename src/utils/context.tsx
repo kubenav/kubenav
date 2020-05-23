@@ -3,7 +3,7 @@ import { isPlatform } from '@ionic/react';
 import React, { useEffect, useState, ReactElement } from 'react';
 
 import { IAppSettings, ICluster, IClusters, IContext, IOIDCProvider, IOIDCProviders } from '../declarations';
-import { getCluster, getClusters, getOIDCAccessToken, kubernetesRequest } from './api';
+import { getCluster, getClusters, getOIDCAccessToken, kubernetesRequest, syncKubeconfig } from './api';
 import { DEFAULT_SETTINGS } from './constants';
 import { isBase64, randomString } from './helpers';
 import {
@@ -155,10 +155,14 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
   };
 
   // changeCluster changes the currently active cluster to the new cluster with the provided id.
-  const changeCluster = (id: string) => {
+  const changeCluster = async (id: string) => {
     if (clusters && clusters.hasOwnProperty(id)) {
       setCluster(id);
       saveCluster(id);
+
+      if (!isPlatform('hybrid')) {
+        await syncKubeconfig(id, '', 'context');
+      }
     }
   };
 
@@ -238,13 +242,17 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
   };
 
   // setNamespace sets the provided namespace for the currently active cluster.
-  const setNamespace = (namespace: string) => {
+  const setNamespace = async (namespace: string) => {
     if (clusters && cluster) {
       const updatedClusters = clusters;
       updatedClusters[cluster].namespace = namespace;
 
       setClusters({ ...updatedClusters });
       saveClusters(updatedClusters);
+
+      if (!isPlatform('hybrid')) {
+        await syncKubeconfig(updatedClusters[cluster].id, namespace, 'namespace');
+      }
     }
   };
 

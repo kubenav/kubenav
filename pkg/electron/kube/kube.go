@@ -110,6 +110,8 @@ func (c *Client) Clusters() (map[string]Cluster, error) {
 }
 
 // ChangeContext is used to modify the current-context value in the used Kubeconfig file and to persist these changes.
+// Note: We modify the raw config directly and do not use the logic of the ConfigClientset function, because the
+// override has no effect to the raw config. See: https://github.com/kubernetes/client-go/issues/735
 func (c *Client) ChangeContext(context string) error {
 	raw, err := c.config.RawConfig()
 	if err != nil {
@@ -124,6 +126,10 @@ func (c *Client) ChangeContext(context string) error {
 // ChangeNamespace is used to modify the namespace of the currently selected context and to persist these changes in the
 // Kubeconfig file.
 func (c *Client) ChangeNamespace(context, namespace string) error {
+	if namespace == "" {
+		return nil
+	}
+
 	raw, err := c.config.RawConfig()
 	if err != nil {
 		return err

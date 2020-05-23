@@ -61,7 +61,7 @@ var rootCmd = &cobra.Command{
 
 		go func() {
 			router := http.NewServeMux()
-			electron.Register(router, client)
+			electron.Register(router, sync, client)
 
 			router.HandleFunc("/api/electron", func(w http.ResponseWriter, r *http.Request) {
 				w.Header().Set("Connection", "keep-alive")
@@ -169,7 +169,7 @@ func init() {
 
 	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "Enable debug mode.")
 	rootCmd.PersistentFlags().StringVar(&kubeconfig, "kubeconfig", "", "Optional Kubeconfig file.")
-	rootCmd.PersistentFlags().BoolVar(&sync, "sync", "", "Sync the changes from kubenav with the used Kubeconfig file.")
+	rootCmd.PersistentFlags().BoolVar(&sync, "sync", false, "Sync the changes from kubenav with the used Kubeconfig file.")
 }
 
 func main() {
