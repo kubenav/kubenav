@@ -5,6 +5,7 @@ import (
 	"log"
 	"os/exec"
 	"runtime"
+	"sort"
 
 	"github.com/kubenav/kubenav/pkg/electron/kube"
 
@@ -135,14 +136,22 @@ func createFileMenu(updateAvailable bool, log *logrus.Logger) *astilectron.MenuI
 func getMenuOptions(sync bool, updateAvailable bool, client *kube.Client, log *logrus.Logger) ([]*astilectron.MenuItemOptions, error) {
 	fileMenu := createFileMenu(updateAvailable, log)
 
+	// Load all clusters from the Kubeconfig file and sort the clusters alphabetical. Then iterate over the clusters and
+	// create a menu entry for each cluster.
 	clusters, err := client.Clusters()
 	if err != nil {
 		return nil, err
 	}
 
+	contexts := make([]string, 0, len(clusters))
+	for c := range clusters {
+		contexts = append(contexts, c)
+	}
+	sort.Strings(contexts)
+
 	var clusterSubMenu []*astilectron.MenuItemOptions
-	for cluster := range clusters {
-		item := createClusterMenuItem(cluster, sync, client, log)
+	for _, context := range contexts {
+		item := createClusterMenuItem(context, sync, client, log)
 		clusterSubMenu = append(clusterSubMenu, &item)
 	}
 

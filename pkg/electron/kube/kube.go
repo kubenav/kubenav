@@ -125,6 +125,8 @@ func (c *Client) ChangeContext(context string) error {
 
 // ChangeNamespace is used to modify the namespace of the currently selected context and to persist these changes in the
 // Kubeconfig file.
+// In the frontend it is possible to select "" as namespace, which is used for the all namespaces selection. This isn't
+// a valid value for the Kubeconfig file. Therefor we don't write these value back to the Kubeconfig file.
 func (c *Client) ChangeNamespace(context, namespace string) error {
 	if namespace == "" {
 		return nil
