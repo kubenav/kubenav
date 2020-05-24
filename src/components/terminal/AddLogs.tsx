@@ -26,15 +26,15 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, conta
   const [popoverEvent, setPopoverEvent] = useState();
 
   const add = async (previous: boolean, tailLines: number, follow: boolean) => {
+    const term = new Terminal({
+      fontSize: 12,
+      bellStyle: 'sound',
+      cursorBlink: true,
+      theme: context.settings.darkMode ? TERMINAL_DARK_THEME : TERMINAL_LIGHT_THEME,
+    });
+
     if (context.clusters && context.cluster) {
       if (follow) {
-        const term = new Terminal({
-          fontSize: 12,
-          bellStyle: 'sound',
-          cursorBlink: true,
-          theme: context.settings.darkMode ? TERMINAL_DARK_THEME : TERMINAL_LIGHT_THEME,
-        });
-
         try {
           const parameters = `container=${container}&tailLines=10&follow=true`;
 
@@ -56,22 +56,18 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, conta
 
           terminalContext.add({
             name: container,
-            type: 'shell',
             shell: term,
             eventSource: eventSource,
           });
         } catch (err) {
-          term.write = err.message;
+          term.write(`${err.message}\n\r`);
 
           terminalContext.add({
             name: container,
-            type: 'shell',
             shell: term,
           });
         }
       } else {
-        let logs = '';
-
         try {
           let parameters = `container=${container}`;
 
@@ -85,6 +81,7 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, conta
 
           // It is possible that the returned log only contains one line with valid json. This gets parsed by the requests
           // function and so an object instead of a string is returned. In this case we have to revert the parsing.
+          // Befor writing the logs to the terminal we have to replace all '\n' with '\n\r' to print the new lines.
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const data: any = await context.request(
             'GET',
@@ -92,15 +89,15 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, conta
             '',
           );
 
-          logs = typeof data === 'string' ? data : JSON.stringify(data);
+          const logs = typeof data === 'string' ? data : JSON.stringify(data);
+          term.write(`${logs.replace(/\n/g, '\n\r')}\n\r`);
         } catch (err) {
-          logs = err.message;
+          term.write(`${err.message}\n\r`);
         }
 
         terminalContext.add({
           name: container,
-          type: 'logs',
-          logs: logs,
+          shell: term,
         });
       }
     }

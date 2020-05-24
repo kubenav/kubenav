@@ -73,17 +73,15 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({ namespace, pod, con
 
         terminalContext.add({
           name: container,
-          type: 'shell',
           shell: term,
           webSocket: webSocket,
         });
       }
     } catch (err) {
-      term.write = err.message;
+      term.write(`${err.message}\n\r`);
 
       terminalContext.add({
         name: container,
-        type: 'shell',
         shell: term,
       });
     }
