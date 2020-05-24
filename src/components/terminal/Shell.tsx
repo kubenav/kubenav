@@ -1,3 +1,5 @@
+import { Plugins } from '@capacitor/core';
+import { isPlatform } from '@ionic/react';
 import React, { useRef, useEffect, useState } from 'react';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
@@ -5,6 +7,8 @@ import { FitAddon } from 'xterm-addon-fit';
 import 'xterm/css/xterm.css';
 
 import { ITerminal } from '../../declarations';
+
+const { Keyboard } = Plugins;
 
 interface IShellProps {
   terminal: ITerminal;
@@ -34,9 +38,22 @@ const Shell: React.FunctionComponent<IShellProps> = ({ terminal }: IShellProps) 
           term.loadAddon(fitAddon);
           term.open(termRef.current);
           fitAddon.fit();
-          term.focus();
+
+          if (terminal.webSocket) {
+            term.focus();
+          }
 
           window.addEventListener('resize', updateTerminalSize);
+
+          if (isPlatform('hybrid')) {
+            Keyboard.addListener('keyboardDidShow', () => {
+              updateTerminalSize();
+            });
+
+            Keyboard.addListener('keyboardDidHide', () => {
+              updateTerminalSize();
+            });
+          }
         }
       }, 1000);
     };

@@ -243,9 +243,7 @@ export interface IPodMetricsList {
 
 export interface ITerminal {
   name: string;
-  type: TTerminal;
   shell?: Terminal;
-  logs?: string;
   eventSource?: EventSource;
   webSocket?: WebSocket;
 }
@@ -273,5 +271,3 @@ export type TCondition =
   | V1StatefulSetCondition;
 
 export type TSyncType = 'context' | 'namespace';
-
-export type TTerminal = 'shell' | 'logs';

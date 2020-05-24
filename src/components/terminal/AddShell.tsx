@@ -49,6 +49,16 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({ namespace, pod, con
           );
         });
 
+        term?.onResize(() => {
+          webSocket.send(
+            JSON.stringify({
+              Op: 'resize',
+              Cols: term.cols,
+              Rows: term.rows,
+            }),
+          );
+        });
+
         webSocket.onopen = () => {
           const startData = { Op: 'bind', SessionID: id };
           webSocket.send(JSON.stringify(startData));
@@ -63,17 +73,15 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({ namespace, pod, con
 
         terminalContext.add({
           name: container,
-          type: 'shell',
           shell: term,
           webSocket: webSocket,
         });
       }
     } catch (err) {
-      term.write = err.message;
+      term.write(`${err.message}\n\r`);
 
       terminalContext.add({
         name: container,
-        type: 'shell',
         shell: term,
       });
     }

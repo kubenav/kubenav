@@ -18,7 +18,6 @@ import { close, ellipsisHorizontal, ellipsisVertical } from 'ionicons/icons';
 import React, { useState } from 'react';
 
 import { ITerminal } from '../../declarations';
-import Logs from './Logs';
 import Shell from './Shell';
 
 interface ITerminalsProps {
@@ -83,7 +82,7 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
                       removeTerminal(index);
                     }}
                   >
-                    <IonLabel>{`Close ${terminal.name}`}</IonLabel>
+                    <IonLabel>{terminal.name}</IonLabel>
                   </IonItem>
                 );
               })}
@@ -111,13 +110,7 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
 
       <IonContent>
         {terminals.map((terminal, index) => {
-          return activeTerminal === `term_${index}` ? (
-            terminal.type === 'shell' ? (
-              <Shell key={index} terminal={terminal} />
-            ) : (
-              <Logs key={index} terminal={terminal} />
-            )
-          ) : null;
+          return activeTerminal === `term_${index}` ? <Shell key={index} terminal={terminal} /> : null;
         })}
       </IonContent>
     </IonModal>
