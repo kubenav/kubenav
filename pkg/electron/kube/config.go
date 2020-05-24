@@ -1,7 +1,6 @@
 package kube
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -47,8 +46,6 @@ func loadConfigFile(kubeconfig string) (clientcmd.ClientConfig, error) {
 func loadConfigFiles(includeKubeconfig, excludeKubeconfig string) (clientcmd.ClientConfig, error) {
 	includes := getFilesFromString(includeKubeconfig)
 	excludes := getFilesFromString(excludeKubeconfig)
-
-	fmt.Println(includes, excludes)
 
 	includeFiles, err := getFilesForGlobs(includes)
 	if err != nil {
