@@ -2,8 +2,6 @@ package kube
 
 import (
 	"errors"
-	"os"
-	"path/filepath"
 	"time"
 
 	"k8s.io/client-go/kubernetes"
@@ -37,37 +35,22 @@ type Cluster struct {
 	Namespace                string `json:"namespace"`
 }
 
-// homeDir returns the users home directory, where the '.kube' directory is located.
-// The '.kube' directory contains the configuration file for a Kubernetes cluster.
-func homeDir() string {
-	if h := os.Getenv("HOME"); h != "" {
-		return h
-	}
-
-	// Get the home directory on windows.
-	return os.Getenv("USERPROFILE")
-}
-
 // NewClient returns a new API client for a Kubernetes cluster.
-// If the cluster parameter is true the client is configured inside the cluster. If the cluster parameter is false the
-// client is configures outside the cluster.
-func NewClient(kubeconfig string) (*Client, error) {
-	if kubeconfig == "" {
-		if os.Getenv("KUBECONFIG") == "" {
-			if home := homeDir(); home != "" {
-				kubeconfig = filepath.Join(home, ".kube", "config")
-			} else {
-				return nil, ErrConfigNotFound
-			}
-		} else {
-			kubeconfig = os.Getenv("KUBECONFIG")
+func NewClient(kubeconfig, kubeconfigInclude, kubeconfigExclude string) (*Client, error) {
+	var config clientcmd.ClientConfig
+	var err error
+
+	if kubeconfigInclude != "" {
+		config, err = loadConfigFiles(kubeconfigInclude, kubeconfigExclude)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		config, err = loadConfigFile(kubeconfig)
+		if err != nil {
+			return nil, err
 		}
 	}
-
-	config := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
-		&clientcmd.ClientConfigLoadingRules{ExplicitPath: kubeconfig},
-		&clientcmd.ConfigOverrides{},
-	)
 
 	return &Client{
 		config:     config,
