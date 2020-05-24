@@ -82,7 +82,7 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
                       removeTerminal(index);
                     }}
                   >
-                    <IonLabel>{`Close ${terminal.name}`}</IonLabel>
+                    <IonLabel>{terminal.name}</IonLabel>
                   </IonItem>
                 );
               })}
