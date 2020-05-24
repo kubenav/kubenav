@@ -112,7 +112,7 @@ func logsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, clientset, err := client.ConfigClientset(request.Cluster, 1*time.Hour)
+	_, clientset, err := client.ConfigClientset(request.Cluster, 6*time.Hour)
 	if err != nil {
 		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create clientset")
 		return

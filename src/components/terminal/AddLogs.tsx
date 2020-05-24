@@ -45,9 +45,13 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, conta
 
           const eventSource = new EventSource(`${SERVER}/api/kubernetes/logs/${id}`);
 
-          eventSource.onmessage = (event) => {
-            const msg = event as MessageEvent;
-            term.write(`${msg.data}\n\r`);
+          eventSource.onmessage = (event: MessageEvent) => {
+            term.write(`${event.data}\n\r`);
+          };
+
+          eventSource.onerror = () => {
+            term.write('\n\rAN ERROR OCCURRED, WHILE STREAMING LOG LINES.\n\r');
+            eventSource.close();
           };
 
           terminalContext.add({
