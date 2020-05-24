@@ -34,7 +34,10 @@ const Shell: React.FunctionComponent<IShellProps> = ({ terminal }: IShellProps) 
           term.loadAddon(fitAddon);
           term.open(termRef.current);
           fitAddon.fit();
-          term.focus();
+
+          if (terminal.webSocket) {
+            term.focus();
+          }
 
           window.addEventListener('resize', updateTerminalSize);
         }

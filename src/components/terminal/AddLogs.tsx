@@ -30,6 +30,8 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, conta
       fontSize: 12,
       bellStyle: 'sound',
       cursorBlink: true,
+      disableStdin: true,
+      convertEol: true,
       theme: context.settings.darkMode ? TERMINAL_DARK_THEME : TERMINAL_LIGHT_THEME,
     });
 
@@ -89,8 +91,7 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, conta
             '',
           );
 
-          const logs = typeof data === 'string' ? data : JSON.stringify(data);
-          term.write(`${logs.replace(/\n/g, '\n\r')}\n\r`);
+          term.write(`${typeof data === 'string' ? data : JSON.stringify(data)}\n\r`);
         } catch (err) {
           term.write(`${err.message}\n\r`);
         }
