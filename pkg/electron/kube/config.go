@@ -1,8 +1,10 @@
 package kube
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"k8s.io/client-go/tools/clientcmd"
@@ -43,8 +45,10 @@ func loadConfigFile(kubeconfig string) (clientcmd.ClientConfig, error) {
 // loadConfigFiles loads and merged multiple Kubeconfig file by the provided glob. If a file matches the exlude glob the
 // file isn't included in the final config object.
 func loadConfigFiles(includeKubeconfig, excludeKubeconfig string) (clientcmd.ClientConfig, error) {
-	includes := strings.Split(includeKubeconfig, ",")
-	excludes := strings.Split(excludeKubeconfig, ",")
+	includes := getFilesFromString(includeKubeconfig)
+	excludes := getFilesFromString(excludeKubeconfig)
+
+	fmt.Println(includes, excludes)
 
 	includeFiles, err := getFilesForGlobs(includes)
 	if err != nil {
@@ -67,6 +71,28 @@ func loadConfigFiles(includeKubeconfig, excludeKubeconfig string) (clientcmd.Cli
 		&clientcmd.ClientConfigLoadingRules{Precedence: kubeconfigFiles},
 		&clientcmd.ConfigOverrides{},
 	), nil
+}
+
+// getFilesFromString returns a slice of files from a single string. The string is splitted by the "," character. If an
+// item starts with "~/" the tilde character is replaced with the path of the home directory.
+//
+// Note: On macOS the home directory must be lowercase.
+func getFilesFromString(filesStr string) []string {
+	home := homeDir()
+	if runtime.GOOS == "darwin" {
+		home = strings.ToLower(home)
+	}
+
+	var files []string
+	for _, file := range strings.Split(filesStr, ",") {
+		if strings.HasPrefix(file, "~/") {
+			files = append(files, home+strings.TrimPrefix(file, "~"))
+		} else {
+			files = append(files, file)
+		}
+	}
+
+	return files
 }
 
 // getFilesForGlobs returns a list of files for a list of globs using the filepath.Glob function. The accepted pattern
