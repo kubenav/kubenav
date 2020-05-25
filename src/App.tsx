@@ -17,6 +17,7 @@ import '@ionic/react/css/typography.css';
 
 import HomePage from './components/HomePage';
 import Menu from './components/menu/Menu';
+import CustomResourcesDetailsPage from './components/resources/cluster/customResourceDefinitions/CustomResourcesDetailsPage';
 import CustomResourcesListPage from './components/resources/cluster/customResourceDefinitions/CustomResourcesListPage';
 import DetailsPage from './components/resources/DetailsPage';
 import ListPage from './components/resources/ListPage';
@@ -49,6 +50,11 @@ const App: React.FunctionComponent = () => (
               <Route path="/resources/:section/:type" component={ListPage} exact={true} />
               <Route path="/resources/:section/:type/:namespace/:name" component={DetailsPage} exact={true} />
               <Route path="/customresources/:group/:version/:name" component={CustomResourcesListPage} exact={true} />
+              <Route
+                path="/customresources/:group/:version/:name/:crnamespace/:crname"
+                component={CustomResourcesDetailsPage}
+                exact={true}
+              />
               <Route path="/settings/clusters" component={ClustersPage} exact={true} />
               <Route path="/settings/clusters/aws/:region" component={ClustersAWSPage} exact={true} />
               <Route path="/settings/clusters/azure" component={ClustersAzurePage} exact={true} />

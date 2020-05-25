@@ -139,7 +139,12 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
                             match.params.name,
                           )}/${item.metadata ? item.metadata.name : ''}`}
                         >
-                          <CustomResourceItem item={item} />
+                          <CustomResourceItem
+                            group={match.params.group}
+                            version={match.params.version}
+                            name={match.params.name}
+                            item={item}
+                          />
                         </ItemOptions>
                       );
                     })
@@ -152,7 +157,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
             clusters={context.clusters}
             error={error}
             icon="/assets/icons/kubernetes/crd.png"
-            text={`Could not get Custom Resource "${match.params.name}"`}
+            text={`Could not get Custom Resources "${match.params.name}"`}
           />
         )}
       </IonContent>
