@@ -19,6 +19,7 @@ interface IShellProps {
 
 const Shell: React.FunctionComponent<IShellProps> = ({ showSearch, terminal }: IShellProps) => {
   const termRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLIonSearchbarElement>(null);
   const [term, setTerm] = useState<Terminal>();
   const [searchText, setSearchText] = useState<string>('');
 
@@ -29,11 +30,6 @@ const Shell: React.FunctionComponent<IShellProps> = ({ showSearch, terminal }: I
     setTerm(terminal.shell);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    updateTerminalSize();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showSearch]);
 
   useEffect(() => {
     return () => {
@@ -72,6 +68,15 @@ const Shell: React.FunctionComponent<IShellProps> = ({ showSearch, terminal }: I
     handleTerminalInit();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [termRef, term]);
+
+  useEffect(() => {
+    if (showSearch && searchRef) {
+      searchRef.current?.setFocus();
+    }
+
+    updateTerminalSize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showSearch]);
 
   const updateTerminalSize = () => {
     fitAddon.fit();
@@ -118,6 +123,7 @@ const Shell: React.FunctionComponent<IShellProps> = ({ showSearch, terminal }: I
             inputmode="search"
             value={searchText}
             onIonChange={search}
+            ref={searchRef}
           />
           <IonButtons style={showSearch && isPlatform('ios') ? { paddingTop: '10px' } : {}} slot="end">
             <IonButton onClick={searchPrevious}>
