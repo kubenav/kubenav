@@ -5,6 +5,8 @@ import {
   IonHeader,
   IonIcon,
   IonItem,
+  IonItemDivider,
+  IonItemGroup,
   IonLabel,
   IonList,
   IonModal,
@@ -15,7 +17,7 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import { close, ellipsisHorizontal, ellipsisVertical } from 'ionicons/icons';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { ITerminal } from '../../declarations';
 import Shell from './Shell';
@@ -38,7 +40,12 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
   removeTerminal,
 }: ITerminalsProps) => {
   const [showPopover, setShowPopover] = useState<boolean>(false);
+  const [showSearch, setShowSearch] = useState<boolean>(false);
   const [popoverEvent, setPopoverEvent] = useState();
+
+  useEffect(() => {
+    setShowSearch(false);
+  }, [activeTerminal, showModal]);
 
   return (
     <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
@@ -71,21 +78,38 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
 
           <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
             <IonList>
-              {terminals.map((terminal, index) => {
-                return (
-                  <IonItem
-                    key={index}
-                    button={true}
-                    detail={false}
-                    onClick={() => {
-                      setShowPopover(false);
-                      removeTerminal(index);
-                    }}
-                  >
-                    <IonLabel>{terminal.name}</IonLabel>
-                  </IonItem>
-                );
-              })}
+              <IonItemGroup>
+                <IonItem
+                  button={true}
+                  detail={false}
+                  onClick={() => {
+                    setShowSearch(!showSearch);
+                    setShowPopover(false);
+                  }}
+                >
+                  <IonLabel>Search</IonLabel>
+                </IonItem>
+              </IonItemGroup>
+              <IonItemGroup>
+                <IonItemDivider>
+                  <IonLabel>Close</IonLabel>
+                </IonItemDivider>
+                {terminals.map((terminal, index) => {
+                  return (
+                    <IonItem
+                      key={index}
+                      button={true}
+                      detail={false}
+                      onClick={() => {
+                        setShowPopover(false);
+                        removeTerminal(index);
+                      }}
+                    >
+                      <IonLabel>{terminal.name}</IonLabel>
+                    </IonItem>
+                  );
+                })}
+              </IonItemGroup>
             </IonList>
           </IonPopover>
         </IonToolbar>
@@ -110,7 +134,9 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
 
       <IonContent>
         {terminals.map((terminal, index) => {
-          return activeTerminal === `term_${index}` ? <Shell key={index} terminal={terminal} /> : null;
+          return activeTerminal === `term_${index}` ? (
+            <Shell key={index} showSearch={showSearch} terminal={terminal} />
+          ) : null;
         })}
       </IonContent>
     </IonModal>

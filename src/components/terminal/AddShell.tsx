@@ -26,6 +26,7 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({ namespace, pod, con
       fontSize: 12,
       bellStyle: 'sound',
       cursorBlink: true,
+      scrollback: 10000,
       theme: context.settings.darkMode ? TERMINAL_DARK_THEME : TERMINAL_LIGHT_THEME,
     });
 
