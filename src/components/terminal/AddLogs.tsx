@@ -32,6 +32,7 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, conta
       cursorBlink: true,
       disableStdin: true,
       convertEol: true,
+      scrollback: 10000,
       theme: context.settings.darkMode ? TERMINAL_DARK_THEME : TERMINAL_LIGHT_THEME,
     });
 
@@ -167,7 +168,15 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, conta
       </IonPopover>
 
       {mobile ? (
-        <IonItemOption color="primary" onClick={() => setShowPopover(true)}>
+        <IonItemOption
+          color="primary"
+          onClick={(e) => {
+            e.persist();
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            setPopoverEvent(e as any);
+            setShowPopover(true);
+          }}
+        >
           <IonIcon slot="start" icon={list} />
           Logs
         </IonItemOption>
