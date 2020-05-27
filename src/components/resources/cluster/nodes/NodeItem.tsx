@@ -19,7 +19,9 @@ const NodeItem: React.FunctionComponent<INodeItemProps> = ({ item, section, type
   const nodeStatus = getStatus(item);
   let status = 'danger';
 
-  if (nodeStatus === 'Ready') {
+  if (nodeStatus === 'Unschedulable') {
+    status = 'warning';
+  } else if (nodeStatus === 'Ready') {
     status = 'success';
   }
 

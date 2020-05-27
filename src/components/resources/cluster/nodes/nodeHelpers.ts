@@ -13,6 +13,10 @@ const isValidCondition = (conditionType: string): boolean => {
 };
 
 export const getStatus = (node: V1Node): string => {
+  if (node.spec && node.spec.unschedulable) {
+    return 'Unschedulable';
+  }
+
   if (node.status && node.status.conditions) {
     for (const condition of node.status.conditions) {
       if (isValidCondition(condition.type) && condition.status === 'True') {
