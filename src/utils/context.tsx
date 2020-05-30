@@ -36,6 +36,9 @@ export const AppContext = React.createContext<IContext>({
   addOIDCProvider: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   changeCluster: () => {},
+  currentCluster: () => {
+    return undefined;
+  },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   deleteCluster: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -76,35 +79,34 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
   // For the mobile version we only use the localStorage which holds all cluster information.
   useEffect(() => {
     const fetchData = async () => {
-      if (loading) {
-        // Apply dark mode if it was returned from the storage api. This could be set by the user or the default from
-        // the system.
-        document.body.classList.toggle('dark', settings.darkMode);
+      // Apply dark mode if it was returned from the storage api. This could be set by the user or the default from
+      // the system.
+      document.body.classList.toggle('dark', settings.darkMode);
 
-        if (!isPlatform('hybrid')) {
-          const receivedClusters = await getClusters();
-          setClusters(receivedClusters);
+      if (!isPlatform('hybrid')) {
+        const receivedClusters = await getClusters();
+        setClusters(receivedClusters);
 
-          let activeCluster = readCluster();
-          if (!activeCluster) {
-            activeCluster = await getCluster();
-          }
-
-          setCluster(activeCluster);
-        } else {
-          setClusters(readClusters());
-          setCluster(readCluster());
-          setOIDCProviders(readOIDCProviders());
+        let activeCluster = readCluster();
+        if (!activeCluster) {
+          activeCluster = await getCluster();
         }
+
+        setCluster(activeCluster);
+      } else {
+        setClusters(readClusters());
+        setCluster(readCluster());
+        setOIDCProviders(readOIDCProviders());
       }
 
       setLoading(false);
       await SplashScreen.hide();
     };
 
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading]);
+    if (loading) {
+      fetchData();
+    }
+  }, [loading, settings.darkMode]);
 
   // addCluster is used to add new clusters. We are using an array of clusters instead of a cluster object to add
   // multiple clusters with one call. If we want to add multiple clusters and call this function multiple times, there
@@ -164,6 +166,11 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
         await syncKubeconfig(id, '', 'context');
       }
     }
+  };
+
+  // currentCluster returns the currently active cluster or if no cluster is selected, the function returns undefined.
+  const currentCluster = (): ICluster | undefined => {
+    return clusters && cluster && clusters.hasOwnProperty(cluster) ? clusters[cluster] : undefined;
   };
 
   // deleteCluster deletes the cluster with the given id. When the active cluster is deleted, we are changing the active
@@ -259,7 +266,8 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
   // request is used to make requests against the Kubernetes API server for the currently active cluster. If an
   // alternative cluster is provided the requests is done against the API server of this cluster instead the active
   // cluster.
-  const request = async (method: string, url: string, body: string, alternativeCluster?: ICluster) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const request = async (method: string, url: string, body: string, alternativeCluster?: ICluster): Promise<any> => {
     if ((clusters === undefined || cluster === undefined) && alternativeCluster === undefined) {
       throw new Error('Select an active cluster');
     }
@@ -323,6 +331,7 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
         addCluster: addCluster,
         addOIDCProvider: addOIDCProvider,
         changeCluster: changeCluster,
+        currentCluster: currentCluster,
         deleteCluster: deleteCluster,
         deleteOIDCProvider: deleteOIDCProvider,
         editCluster: editCluster,

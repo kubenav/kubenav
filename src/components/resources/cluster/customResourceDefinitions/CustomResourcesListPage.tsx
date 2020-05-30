@@ -6,6 +6,9 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonItemDivider,
+  IonItemGroup,
+  IonLabel,
   IonList,
   IonPage,
   IonProgressBar,
@@ -16,11 +19,12 @@ import {
   isPlatform,
 } from '@ionic/react';
 import { refresh } from 'ionicons/icons';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
+import useAsyncFn from '../../../../utils/useAsyncFn';
 import LoadingErrorCard from '../../../misc/LoadingErrorCard';
 import ItemOptions from '../../misc/modify/ItemOptions';
 import NamespacePopover from '../../misc/NamespacePopover';
@@ -42,52 +46,39 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
   match,
 }: ICustomResourcesListPageProps) => {
   const context = useContext<IContext>(AppContext);
+  const cluster = context.currentCluster();
 
-  const [error, setError] = useState<string>('');
-  const [showLoading, setShowLoading] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [items, setItems] = useState<any>();
-  const [url, setUrl] = useState<string>('');
+  // namespace and showNamespace is used to group all items by namespace and to only show the namespace once via the
+  // IonItemDivider component.
+  let namespace = '';
+  let showNamespace = false;
+
+  // searchText is used to search and filter the list of items.
   const [searchText, setSearchText] = useState<string>('');
 
+  // useAsyncFn is a custom React hook which wrapps our API call.
+  const [state, fetch, fetchInit] = useAsyncFn(
+    async () =>
+      await context.request(
+        'GET',
+        getURL(cluster ? cluster.namespace : '', match.params.group, match.params.version, match.params.name),
+        '',
+      ),
+    [cluster?.namespace],
+    { loading: true, error: undefined, value: undefined },
+  );
+
+  // When the component is rendered the first time and on every route change or a modification to the context
+  // object we are loading all items for the corresponding resource.
   useEffect(() => {
-    const fetchData = async () => {
-      setItems(undefined);
-      setUrl(match.url);
-      await load();
-    };
+    fetchInit();
+  }, [fetchInit]);
 
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [match, context.clusters, context.cluster]);
-
+  // The doRefresh method is used for a manual reload of the items for the corresponding resource. The
+  // event.detail.complete() call is required to finish the animation of the IonRefresher component.
   const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();
-    await load();
-  };
-
-  const load = async () => {
-    setShowLoading(true);
-
-    try {
-      if (!context.clusters || !context.cluster) {
-        throw new Error('Select an active cluster');
-      }
-
-      const namespace = context.clusters[context.cluster].namespace;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const data: any = await context.request(
-        'GET',
-        getURL(namespace, match.params.group, match.params.version, match.params.name),
-        '',
-      );
-      setError('');
-      setItems(data.items);
-    } catch (err) {
-      setError(err.message);
-    }
-
-    setShowLoading(false);
+    fetch();
   };
 
   return (
@@ -100,7 +91,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
           <IonTitle>{match.params.name}</IonTitle>
           <IonButtons slot="primary">
             {!isPlatform('hybrid') ? (
-              <IonButton onClick={() => load()}>
+              <IonButton onClick={() => fetch()}>
                 <IonIcon slot="icon-only" icon={refresh} />
               </IonButton>
             ) : null}
@@ -109,10 +100,10 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
+        {state.loading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
         <IonRefresher slot="fixed" onIonRefresh={doRefresh} />
 
-        {error === '' && context.clusters && context.cluster && context.clusters.hasOwnProperty(context.cluster) ? (
+        {!state.error && cluster ? (
           <React.Fragment>
             <IonSearchbar
               inputmode="search"
@@ -121,41 +112,55 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
             />
 
             <IonList>
-              {match.url === url && items
-                ? items
+              {state.value && state.value.items
+                ? state.value.items
                     .filter((item) => {
                       const regex = new RegExp(searchText, 'gi');
                       return item.metadata && item.metadata.name && item.metadata.name.match(regex);
                     })
                     .map((item, index) => {
+                      if (item.metadata && item.metadata.namespace && item.metadata.namespace !== namespace) {
+                        namespace = item.metadata.namespace;
+                        showNamespace = true;
+                      } else {
+                        showNamespace = false;
+                      }
+
                       return (
-                        <ItemOptions
-                          key={index}
-                          item={item}
-                          url={`${getURL(
-                            item.metadata ? item.metadata.namespace : '',
-                            match.params.group,
-                            match.params.version,
-                            match.params.name,
-                          )}/${item.metadata ? item.metadata.name : ''}`}
-                        >
-                          <CustomResourceItem
-                            group={match.params.group}
-                            version={match.params.version}
-                            name={match.params.name}
+                        <IonItemGroup key={index}>
+                          {showNamespace ? (
+                            <IonItemDivider>
+                              <IonLabel>{namespace}</IonLabel>
+                            </IonItemDivider>
+                          ) : null}
+                          <ItemOptions
+                            key={index}
                             item={item}
-                          />
-                        </ItemOptions>
+                            url={`${getURL(
+                              item.metadata ? item.metadata.namespace : '',
+                              match.params.group,
+                              match.params.version,
+                              match.params.name,
+                            )}/${item.metadata ? item.metadata.name : ''}`}
+                          >
+                            <CustomResourceItem
+                              group={match.params.group}
+                              version={match.params.version}
+                              name={match.params.name}
+                              item={item}
+                            />
+                          </ItemOptions>
+                        </IonItemGroup>
                       );
                     })
                 : null}
             </IonList>
           </React.Fragment>
-        ) : (
+        ) : state.loading ? null : (
           <LoadingErrorCard
             cluster={context.cluster}
             clusters={context.clusters}
-            error={error}
+            error={state.error}
             icon="/assets/icons/kubernetes/crd.png"
             text={`Could not get Custom Resources "${match.params.name}"`}
           />
@@ -165,4 +170,10 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
   );
 };
 
-export default CustomResourcesListPage;
+export default memo(CustomResourcesListPage, (prevProps, nextProps): boolean => {
+  if (prevProps.match.url !== nextProps.match.url) {
+    return false;
+  }
+
+  return true;
+});

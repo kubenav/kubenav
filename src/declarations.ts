@@ -109,6 +109,7 @@ export interface IContext {
   addCluster: (newCluster: ICluster[]) => void;
   addOIDCProvider: (provider: IOIDCProvider) => void;
   changeCluster: (id: string) => void;
+  currentCluster: () => ICluster | undefined;
   deleteCluster: (id: string) => void;
   deleteOIDCProvider: (name: string) => void;
   editCluster: (editCluster: ICluster) => void;

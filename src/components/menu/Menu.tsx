@@ -13,7 +13,7 @@ import {
   IonToolbar,
   isPlatform,
 } from '@ionic/react';
-import React from 'react';
+import React, { memo } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { IAppSections } from '../../declarations';
@@ -95,4 +95,8 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections }: IMenuProps) => 
   );
 };
 
-export default withRouter(Menu);
+export default withRouter(
+  memo(Menu, (): boolean => {
+    return true;
+  }),
+);

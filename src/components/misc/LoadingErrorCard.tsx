@@ -6,7 +6,7 @@ import { IClusters } from '../../declarations';
 interface ILoadingErrorCard {
   cluster?: string;
   clusters?: IClusters;
-  error: string;
+  error?: Error;
   icon: string;
   text: string;
 }
@@ -48,7 +48,7 @@ const LoadingErrorCard: React.FunctionComponent<ILoadingErrorCard> = ({
 
       {clusters && cluster ? (
         <IonCardContent>
-          <p className="paragraph-margin-bottom">{error}</p>
+          <p className="paragraph-margin-bottom">{error ? error.message : 'An unknown error occured.'}</p>
         </IonCardContent>
       ) : null}
     </IonCard>
