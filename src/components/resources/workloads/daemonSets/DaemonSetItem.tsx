@@ -13,27 +13,39 @@ interface IDaemonSetItemProps extends RouteComponentProps {
 }
 
 const DaemonSetItem: React.FunctionComponent<IDaemonSetItemProps> = ({ item, section, type }: IDaemonSetItemProps) => {
-  // If the number of misscheduled pods is greater then 0 the status is set to danger. The daemon set status is set to
-  // success when the number of desired pods is equal to the number of currently observed, ready, updated and available
-  // pods. If the status key is missing in the daemon set we set the status to warning, because there must be an other
-  // error.
-  let status = 'danger';
-
-  if (item.status) {
-    if (item.status.numberMisscheduled > 0) {
-      status = 'danger';
-    } else if (
-      item.status.desiredNumberScheduled ===
-      (item.status.currentNumberScheduled ||
-        item.status.numberReady ||
-        item.status.updatedNumberScheduled ||
-        item.status.numberAvailable)
-    ) {
-      status = 'success';
+  const status = (): string => {
+    if (item.status === undefined) {
+      return 'warning';
     }
-  } else {
-    status = 'warning';
-  }
+
+    if (item.status.numberMisscheduled > 0) {
+      return 'danger';
+    }
+
+    if (
+      item.status.desiredNumberScheduled === item.status.currentNumberScheduled ||
+      item.status.desiredNumberScheduled === item.status.numberReady ||
+      item.status.desiredNumberScheduled === item.status.updatedNumberScheduled ||
+      item.status.desiredNumberScheduled === item.status.numberAvailable
+    ) {
+      return 'success';
+    }
+
+    if (
+      item.status.currentNumberScheduled === 0 ||
+      item.status.numberReady === 0 ||
+      item.status.updatedNumberScheduled === 0 ||
+      item.status.numberAvailable === 0 ||
+      item.status.currentNumberScheduled === undefined ||
+      item.status.numberReady === undefined ||
+      item.status.updatedNumberScheduled === undefined ||
+      item.status.numberAvailable === undefined
+    ) {
+      return 'danger';
+    }
+
+    return 'warning';
+  };
 
   // - Desired: The total number of nodes that should be running the daemon pod.
   // - Current: The number of nodes that are running at least 1 daemon pod and are supposed to run the daemon pod.
@@ -50,7 +62,7 @@ const DaemonSetItem: React.FunctionComponent<IDaemonSetItemProps> = ({ item, sec
       }`}
       routerDirection="forward"
     >
-      <ItemStatus status={status} />
+      <ItemStatus status={status()} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>

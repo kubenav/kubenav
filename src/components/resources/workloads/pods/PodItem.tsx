@@ -42,18 +42,19 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item, type]);
 
-  // Get the status of the pod. If the status is running or completed we set the status to success.  If the pod stuck
-  // in the pending state, we set the status to warning. If none of these conditions applies we set the status to error.
   const podStatus = getStatus(item);
-  let status = 'danger';
 
-  if (podStatus === 'Pending') {
-    status = 'warning';
-  }
+  const status = (): string => {
+    if (podStatus === 'Pending') {
+      return 'warning';
+    }
 
-  if (podStatus === 'Running' || podStatus === 'Completed') {
-    status = 'success';
-  }
+    if (podStatus === 'Running' || podStatus === 'Completed') {
+      return 'success';
+    }
+
+    return 'danger';
+  };
 
   // - Ready: The number of ready containers and the number of containers in the pod.
   // - Restarts: Number of restarts for the pod, using the sum of restarts for all containers.
@@ -67,7 +68,7 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
       }`}
       routerDirection="forward"
     >
-      <ItemStatus status={status} />
+      <ItemStatus status={status()} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>
