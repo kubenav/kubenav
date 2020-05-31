@@ -47,8 +47,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
     if (item.metadata && item.metadata.namespace && item.metadata.name) {
       fetchData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [item, type]);
+  }, [item, type, context]);
 
   return (
     <IonGrid>

@@ -1,19 +1,10 @@
-import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonCol,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonSpinner,
-} from '@ionic/react';
-import React, { useContext, useEffect, useState } from 'react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonList } from '@ionic/react';
+import React, { useContext, useEffect } from 'react';
 
 import { IContext } from '../../../declarations';
 import { AppContext } from '../../../utils/context';
 import { resources } from '../../../utils/resources';
+import useAsyncFn from '../../../utils/useAsyncFn';
 
 interface IListProps {
   name: string;
@@ -38,36 +29,17 @@ const List: React.FunctionComponent<IListProps> = ({
   const page = resources[section].pages[type];
   const Component = page.listItemComponent;
 
-  const [alert, setAlert] = useState<string>('');
-  const [showLoading, setShowLoading] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [items, setItems] = useState<any>();
+  const [state, , fetchInit] = useAsyncFn(
+    async () => await context.request('GET', `${page.listURL(namespace)}${selector ? '?' + selector : ''}`, ''),
+    [section, type, namespace, selector, filter],
+    { loading: true, error: undefined, value: undefined },
+  );
 
   useEffect(() => {
-    const fetchData = async () => {
-      setItems(undefined);
-      await load();
-    };
+    fetchInit();
+  }, [fetchInit]);
 
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [section, type, namespace, selector, filter]);
-
-  const load = async () => {
-    setShowLoading(true);
-
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const data: any = await context.request('GET', `${page.listURL(namespace)}${selector ? '?' + selector : ''}`, '');
-      setItems(data.items);
-    } catch (err) {
-      setAlert(err);
-    }
-
-    setShowLoading(false);
-  };
-
-  if (items && items.filter(filter ? filter : () => true).length > 0) {
+  if (state.value && state.value.items && state.value.items.filter(filter ? filter : () => true).length > 0) {
     return (
       <IonCol>
         <IonCard>
@@ -76,20 +48,7 @@ const List: React.FunctionComponent<IListProps> = ({
           </IonCardHeader>
           <IonCardContent>
             <IonList>
-              {showLoading ? (
-                <IonItem>
-                  <IonSpinner slot="end" />
-                  <IonLabel>Loading...</IonLabel>
-                </IonItem>
-              ) : null}
-
-              {alert !== '' ? (
-                <IonItem>
-                  <IonLabel>Could not load {page.pluralText}</IonLabel>
-                </IonItem>
-              ) : null}
-
-              {items.filter(filter ? filter : () => true).map((item, index) => {
+              {state.value.items.filter(filter ? filter : () => true).map((item, index) => {
                 return <Component key={index} item={item} section={section} type={type} />;
               })}
             </IonList>
