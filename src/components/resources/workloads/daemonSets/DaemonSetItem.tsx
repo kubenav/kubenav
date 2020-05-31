@@ -23,9 +23,9 @@ const DaemonSetItem: React.FunctionComponent<IDaemonSetItemProps> = ({ item, sec
     }
 
     if (
-      item.status.desiredNumberScheduled === item.status.currentNumberScheduled ||
-      item.status.desiredNumberScheduled === item.status.numberReady ||
-      item.status.desiredNumberScheduled === item.status.updatedNumberScheduled ||
+      item.status.desiredNumberScheduled === item.status.currentNumberScheduled &&
+      item.status.desiredNumberScheduled === item.status.numberReady &&
+      item.status.desiredNumberScheduled === item.status.updatedNumberScheduled &&
       item.status.desiredNumberScheduled === item.status.numberAvailable
     ) {
       return 'success';

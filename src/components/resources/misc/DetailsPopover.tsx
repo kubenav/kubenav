@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 import DeleteItem from './modify/DeleteItem';
 import EditItem from './modify/EditItem';
+import RestartItem from './modify/RestartItem';
 import ScaleItem from './modify/ScaleItem';
 
 interface IDetailsPopoverProps {
@@ -26,6 +27,9 @@ const DetailsPopover: React.FunctionComponent<IDetailsPopoverProps> = ({ type, i
           type === 'replicationcontrollers' ||
           type === 'replicasets' ? (
             <ScaleItem activator="item" item={item} url={url} />
+          ) : null}
+          {type === 'deployments' || type === 'statefulsets' || type === 'daemonsets' ? (
+            <RestartItem activator="item" item={item} url={url} />
           ) : null}
           <EditItem activator="item" item={item} url={url} />
           <DeleteItem activator="item" item={item} url={url} />
