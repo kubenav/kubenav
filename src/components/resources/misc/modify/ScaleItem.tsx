@@ -1,4 +1,5 @@
 import { IonAlert, IonButton, IonIcon, IonItem, IonItemOption, IonLabel } from '@ionic/react';
+import { V1Deployment, V1StatefulSet, V1ReplicaSet, V1ReplicationController } from '@kubernetes/client-node';
 import { copy } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 
@@ -7,8 +8,7 @@ import { AppContext } from '../../../../utils/context';
 
 interface IScaleItemProps {
   activator: TActivator;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  item: any;
+  item: V1Deployment | V1StatefulSet | V1ReplicaSet | V1ReplicationController;
   url: string;
 }
 

@@ -1,7 +1,7 @@
-import * as jsonpatch from 'fast-json-patch';
 import { IonAlert, IonButton, IonIcon, IonItem, IonItemOption, IonLabel } from '@ionic/react';
-import { reload } from 'ionicons/icons';
 import { V1DaemonSet, V1Deployment, V1StatefulSet } from '@kubernetes/client-node';
+import * as jsonpatch from 'fast-json-patch';
+import { reload } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 
 import { IContext, TActivator } from '../../../../declarations';
@@ -9,7 +9,6 @@ import { AppContext } from '../../../../utils/context';
 
 interface IRestartItemProps {
   activator: TActivator;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: V1DaemonSet | V1Deployment | V1StatefulSet;
   url: string;
 }
