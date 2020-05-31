@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 import DeleteItem from './modify/DeleteItem';
 import EditItem from './modify/EditItem';
+import ScaleItem from './modify/ScaleItem';
 
 interface IDetailsPopoverProps {
   type: string;
@@ -20,6 +21,12 @@ const DetailsPopover: React.FunctionComponent<IDetailsPopoverProps> = ({ type, i
     <React.Fragment>
       <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
         <IonList>
+          {type === 'deployments' ||
+          type === 'statefulsets' ||
+          type === 'replicationcontrollers' ||
+          type === 'replicasets' ? (
+            <ScaleItem activator="item" item={item} url={url} />
+          ) : null}
           <EditItem activator="item" item={item} url={url} />
           <DeleteItem activator="item" item={item} url={url} />
         </IonList>
