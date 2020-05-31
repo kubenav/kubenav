@@ -3,7 +3,7 @@ import { list } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 import { Terminal } from 'xterm';
 
-import { IContext, ITerminalContext } from '../../declarations';
+import { IContext, ITerminalContext, TActivator } from '../../declarations';
 import { logsRequest } from '../../utils/api';
 import { SERVER, TERMINAL_DARK_THEME, TERMINAL_LIGHT_THEME } from '../../utils/constants';
 import { AppContext } from '../../utils/context';
@@ -12,13 +12,13 @@ import { TerminalContext } from '../../utils/terminal';
 const TAIL_LINES = 1000;
 
 interface IAddLogsProps {
+  activator: TActivator;
   namespace: string;
   pod: string;
   container: string;
-  mobile: boolean;
 }
 
-const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, container, mobile }: IAddLogsProps) => {
+const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace, pod, container }: IAddLogsProps) => {
   const context = useContext<IContext>(AppContext);
   const terminalContext = useContext<ITerminalContext>(TerminalContext);
 
@@ -167,7 +167,7 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ namespace, pod, conta
         </IonList>
       </IonPopover>
 
-      {mobile ? (
+      {activator === 'item-option' ? (
         <IonItemOption
           color="primary"
           onClick={(e) => {

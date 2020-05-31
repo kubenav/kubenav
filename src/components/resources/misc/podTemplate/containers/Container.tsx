@@ -166,18 +166,22 @@ const Container: React.FunctionComponent<IContainerProps> = ({
             </p>
           </IonLabel>
           {!isPlatform('hybrid') && logs && name && namespace ? (
-            <AddLogs namespace={namespace} pod={name} container={container.name} mobile={false} />
+            <AddLogs activator="button" namespace={namespace} pod={name} container={container.name} />
           ) : null}
 
           {!isPlatform('hybrid') && terminal && name && namespace ? (
-            <AddShell namespace={namespace} pod={name} container={container.name} mobile={false} />
+            <AddShell activator="button" namespace={namespace} pod={name} container={container.name} />
           ) : null}
         </IonItem>
 
         {isPlatform('hybrid') && logs && name && namespace ? (
           <IonItemOptions side="end">
-            {logs ? <AddLogs namespace={namespace} pod={name} container={container.name} mobile={true} /> : null}
-            {terminal ? <AddShell namespace={namespace} pod={name} container={container.name} mobile={true} /> : null}
+            {logs ? (
+              <AddLogs activator="item-option" namespace={namespace} pod={name} container={container.name} />
+            ) : null}
+            {terminal ? (
+              <AddShell activator="item-option" namespace={namespace} pod={name} container={container.name} />
+            ) : null}
           </IonItemOptions>
         ) : null}
       </IonItemSliding>
