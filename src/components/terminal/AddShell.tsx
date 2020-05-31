@@ -4,20 +4,25 @@ import React, { useContext } from 'react';
 import SockJS from 'sockjs-client';
 import { Terminal } from 'xterm';
 
-import { IContext, ITerminalContext } from '../../declarations';
+import { IContext, ITerminalContext, TActivator } from '../../declarations';
 import { execRequest } from '../../utils/api';
 import { SERVER, TERMINAL_DARK_THEME, TERMINAL_LIGHT_THEME } from '../../utils/constants';
 import { AppContext } from '../../utils/context';
 import { TerminalContext } from '../../utils/terminal';
 
 interface IAddShellProps {
+  activator: TActivator;
   namespace: string;
   pod: string;
   container: string;
-  mobile: boolean;
 }
 
-const AddShell: React.FunctionComponent<IAddShellProps> = ({ namespace, pod, container, mobile }: IAddShellProps) => {
+const AddShell: React.FunctionComponent<IAddShellProps> = ({
+  activator,
+  namespace,
+  pod,
+  container,
+}: IAddShellProps) => {
   const context = useContext<IContext>(AppContext);
   const terminalContext = useContext<ITerminalContext>(TerminalContext);
 
@@ -88,7 +93,7 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({ namespace, pod, con
     }
   };
 
-  if (mobile) {
+  if (activator === 'item-option') {
     return (
       <IonItemOption color="primary" onClick={() => add()}>
         <IonIcon slot="start" icon={terminal} />

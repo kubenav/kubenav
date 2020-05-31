@@ -5,7 +5,9 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonItem,
   IonItemOption,
+  IonLabel,
   IonModal,
   IonTitle,
   IonToolbar,
@@ -66,6 +68,13 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ activator, item, ur
         <IonButton onClick={() => setShowModal(true)}>
           <IonIcon slot="icon-only" icon={create} />
         </IonButton>
+      ) : null}
+
+      {activator === 'item' ? (
+        <IonItem button={true} detail={false} onClick={() => setShowModal(true)}>
+          <IonIcon slot="end" color="primary" icon={create} />
+          <IonLabel>Edit</IonLabel>
+        </IonItem>
       ) : null}
 
       <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>

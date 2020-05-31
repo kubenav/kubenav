@@ -31,8 +31,7 @@ import useAsyncFn from '../../../../utils/useAsyncFn';
 import Editor from '../../../misc/Editor';
 import LoadingErrorCard from '../../../misc/LoadingErrorCard';
 import List from '../../misc/List';
-import DeleteItem from '../../misc/modify/DeleteItem';
-import EditItem from '../../misc/modify/EditItem';
+import DetailsPopover from '../../misc/DetailsPopover';
 import Conditions from '../../misc/template/Conditions';
 import Metadata from '../../misc/template/Metadata';
 
@@ -99,39 +98,26 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
             />
           </IonButtons>
           <IonTitle>{match.params.crname}</IonTitle>
-          {!isPlatform('hybrid') ? (
-            <IonButtons slot="primary">
+          <IonButtons slot="primary">
+            {!isPlatform('hybrid') ? (
               <IonButton onClick={() => fetch()}>
                 <IonIcon slot="icon-only" icon={refresh} />
               </IonButton>
-              {state.value ? (
-                <EditItem
-                  activator="button"
-                  item={state.value}
-                  url={getURL(
-                    match.params.crnamespace,
-                    match.params.group,
-                    match.params.version,
-                    match.params.name,
-                    match.params.crname,
-                  )}
-                />
-              ) : null}
-              {state.value ? (
-                <DeleteItem
-                  activator="button"
-                  item={state.value}
-                  url={getURL(
-                    match.params.crnamespace,
-                    match.params.group,
-                    match.params.version,
-                    match.params.name,
-                    match.params.crname,
-                  )}
-                />
-              ) : null}
-            </IonButtons>
-          ) : null}
+            ) : null}
+            {state.value ? (
+              <DetailsPopover
+                type="customresources"
+                item={state.value}
+                url={getURL(
+                  match.params.crnamespace,
+                  match.params.group,
+                  match.params.version,
+                  match.params.name,
+                  match.params.crname,
+                )}
+              />
+            ) : null}
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
