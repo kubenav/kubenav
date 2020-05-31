@@ -14,7 +14,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import React, { useContext } from 'react';
+import React, { memo, useContext } from 'react';
 
 import { IContext } from '../declarations';
 import { AppContext } from '../utils/context';
@@ -77,4 +77,6 @@ const HomePage: React.FunctionComponent = () => {
   );
 };
 
-export default HomePage;
+export default memo(HomePage, (): boolean => {
+  return true;
+});

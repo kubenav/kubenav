@@ -18,7 +18,7 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import { useGetInfo } from '@ionic/react-hooks/device';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 
 import { VERSION } from '../../utils/constants';
 import License from './info/License';
@@ -104,4 +104,6 @@ const InfoPage: React.FunctionComponent = () => {
   );
 };
 
-export default InfoPage;
+export default memo(InfoPage, (): boolean => {
+  return true;
+});

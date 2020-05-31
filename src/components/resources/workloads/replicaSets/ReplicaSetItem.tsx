@@ -17,21 +17,34 @@ const ReplicaSetItem: React.FunctionComponent<IReplicaSetItemProps> = ({
   section,
   type,
 }: IReplicaSetItemProps) => {
-  // The replica set status is set to success when the number of desired replicas is 0 or when the number of desired
-  // replicas is equal to the number of observed replicas, ready replicas and available replicas. If the item does not
-  // contain the spec and status field the status is set to warning, because there is something else wrong.
-  let status = 'danger';
-
-  if (item.spec && item.status) {
-    if (
-      item.spec.replicas === 0 ||
-      item.spec.replicas === (item.status.replicas && item.status.readyReplicas && item.status.availableReplicas)
-    ) {
-      status = 'success';
+  const status = (): string => {
+    if (item.spec === undefined || item.status === undefined) {
+      return 'warning';
     }
-  } else {
-    status = 'warning';
-  }
+
+    if (item.spec.replicas === 0) {
+      return 'success';
+    }
+
+    if (
+      item.spec.replicas === item.status.replicas &&
+      item.spec.replicas === item.status.readyReplicas &&
+      item.spec.replicas === item.status.availableReplicas
+    ) {
+      return 'success';
+    }
+
+    if (
+      item.status.readyReplicas === 0 ||
+      item.status.availableReplicas === 0 ||
+      item.status.readyReplicas === undefined ||
+      item.status.availableReplicas === undefined
+    ) {
+      return 'danger';
+    }
+
+    return 'warning';
+  };
 
   // - Desired: Replicas is the number of desired replicas.
   // - Current: Replicas is the most recently observed number of replicas.
@@ -45,7 +58,7 @@ const ReplicaSetItem: React.FunctionComponent<IReplicaSetItemProps> = ({
       }`}
       routerDirection="forward"
     >
-      <ItemStatus status={status} />
+      <ItemStatus status={status()} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>

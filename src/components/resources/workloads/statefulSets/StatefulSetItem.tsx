@@ -17,31 +17,38 @@ const StatefulSetItem: React.FunctionComponent<IStatefulSetItemProps> = ({
   section,
   type,
 }: IStatefulSetItemProps) => {
-  // The stateful set status is set to success when the number of desired replicas is equal to the number of ready
-  // replicas and updated replicas. When the update strategy is not OnDelete we also use the number of current replicas
-  // to set the status. If the spec and status field is missing there must be an other error and we set the status to
-  // warning.
-  let status = 'danger';
+  const status = (): string => {
+    if (item.spec === undefined || item.status === undefined || item.spec.replicas === 0) {
+      return 'warning';
+    }
 
-  if (item.spec && item.status) {
     if (item.spec.updateStrategy && item.spec.updateStrategy.type && item.spec.updateStrategy.type === 'OnDelete') {
-      if (item.status.replicas === (item.status.readyReplicas && item.status.updatedReplicas)) {
-        status = 'success';
-      }
-    } else {
-      if (
-        item.status.replicas ===
-        (item.status.currentReplicas && item.status.readyReplicas && item.status.updatedReplicas)
-      ) {
-        status = 'success';
+      if (item.status.replicas === item.status.readyReplicas && item.status.replicas === item.status.updatedReplicas) {
+        return 'success';
       }
     }
-  } else {
-    status = 'warning';
-  }
 
-  //updateStrategy:
-  //type: OnDelete
+    if (
+      item.status.replicas === item.status.currentReplicas &&
+      item.status.replicas === item.status.readyReplicas &&
+      item.status.replicas === item.status.updatedReplicas
+    ) {
+      return 'success';
+    }
+
+    if (
+      item.status.currentReplicas === 0 ||
+      item.status.readyReplicas === 0 ||
+      item.status.updatedReplicas === 0 ||
+      item.status.currentReplicas === undefined ||
+      item.status.readyReplicas === undefined ||
+      item.status.updatedReplicas === undefined
+    ) {
+      return 'danger';
+    }
+
+    return 'warning';
+  };
 
   // - Desired: Number of Pods created by the stateful set controller.
   // - Current: Number of Pods created by the stateful set controller from the stateful set version indicated by
@@ -57,7 +64,7 @@ const StatefulSetItem: React.FunctionComponent<IStatefulSetItemProps> = ({
       }`}
       routerDirection="forward"
     >
-      <ItemStatus status={status} />
+      <ItemStatus status={status()} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>

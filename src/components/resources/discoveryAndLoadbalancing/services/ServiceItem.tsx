@@ -29,6 +29,11 @@ const ServiceItem: React.FunctionComponent<IServiceItemProps> = ({ item, section
           Type: {item.spec && item.spec.type ? item.spec.type : '-'}
           {item.spec && item.spec.clusterIP ? ` | Cluster IP: ${item.spec.clusterIP}` : ''}
           {item.spec && item.spec.externalIPs ? ` | External IPs: ${item.spec.externalIPs.join(', ')}` : ''}
+          {item.spec && item.spec.externalName ? ` | External Name: ${item.spec.externalName}` : ''}
+          {item.spec && item.spec.loadBalancerIP ? ` | Load Balancer IP: ${item.spec.loadBalancerIP}` : ''}
+          {item.status && item.status.loadBalancer && item.status.loadBalancer.ingress
+            ? ` | Load Balancer: ${item.status.loadBalancer.ingress.map((ing) => Object.values(ing).join(', '))}`
+            : ''}
           {item.metadata && item.metadata.creationTimestamp
             ? ` | Age: ${timeDifference(
                 new Date().getTime(),

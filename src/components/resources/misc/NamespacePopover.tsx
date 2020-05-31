@@ -8,6 +8,7 @@ import { AppContext } from '../../../utils/context';
 
 const NamespacePopover: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);
+  const cluster = context.currentCluster();
 
   const [error, setError] = useState<string>('');
   const [showPopover, setShowPopover] = useState<boolean>(false);
@@ -53,23 +54,14 @@ const NamespacePopover: React.FunctionComponent = () => {
           {namespaces ? (
             <IonList>
               <IonItem button={true} detail={false} onClick={() => setAllNamespaces()}>
-                {context.clusters &&
-                context.cluster &&
-                context.clusters.hasOwnProperty(context.cluster) &&
-                context.clusters[context.cluster].namespace === '' ? (
-                  <IonIcon slot="end" color="primary" icon={checkmark} />
-                ) : null}
+                {cluster && cluster.namespace === '' ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
                 <IonLabel>All Namespaces</IonLabel>
               </IonItem>
 
               {namespaces.items.map((namespace, index) => {
                 return (
                   <IonItem key={index} button={true} detail={false} onClick={() => setNamespace(namespace)}>
-                    {namespace.metadata &&
-                    context.clusters &&
-                    context.cluster &&
-                    context.clusters.hasOwnProperty(context.cluster) &&
-                    context.clusters[context.cluster].namespace === namespace.metadata.name ? (
+                    {namespace.metadata && cluster && cluster.namespace === namespace.metadata.name ? (
                       <IonIcon slot="end" color="primary" icon={checkmark} />
                     ) : null}
                     <IonLabel>{namespace.metadata ? namespace.metadata.name : ''}</IonLabel>

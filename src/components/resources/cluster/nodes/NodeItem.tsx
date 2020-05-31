@@ -17,13 +17,16 @@ const NodeItem: React.FunctionComponent<INodeItemProps> = ({ item, section, type
   // Get the node status. Only when the node status is ready we will set our status to success. For ever other node
   // statuses like disk pressure, memory pressure, etc. we set the status to danger.
   const nodeStatus = getStatus(item);
-  let status = 'danger';
 
-  if (nodeStatus === 'Unschedulable') {
-    status = 'warning';
-  } else if (nodeStatus === 'Ready') {
-    status = 'success';
-  }
+  const status = (): string => {
+    if (nodeStatus === 'Unschedulable') {
+      return 'warning';
+    } else if (nodeStatus === 'Ready') {
+      return 'success';
+    }
+
+    return 'danger';
+  };
 
   // - Status: Shows the current node status.
   // - Version: Kubelet Version reported by the node.
@@ -36,7 +39,7 @@ const NodeItem: React.FunctionComponent<INodeItemProps> = ({ item, section, type
       }`}
       routerDirection="forward"
     >
-      <ItemStatus status={status} />
+      <ItemStatus status={status()} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>

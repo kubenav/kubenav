@@ -34,15 +34,17 @@ interface IJobItemProps extends RouteComponentProps {
 }
 
 const JobItem: React.FunctionComponent<IJobItemProps> = ({ item, section, type }: IJobItemProps) => {
-  // status is used to display the status of the job. If the failed field is defined and larger then 0, we display the
-  // error status.
-  let status = 'success';
-
-  if (item.status) {
-    if (item.status.failed && item.status.failed > 0) {
-      status = 'danger';
+  const status = (): string => {
+    if (item.status === undefined) {
+      return 'warning';
     }
-  }
+
+    if (item.status.failed && item.status.failed > 0) {
+      return 'danger';
+    }
+
+    return 'success';
+  };
 
   // - Completions: Number of succeeded and planned completions
   // - Duration: Time the job needed to complete. If the completion time is not available we are using the current time
@@ -55,7 +57,7 @@ const JobItem: React.FunctionComponent<IJobItemProps> = ({ item, section, type }
       }`}
       routerDirection="forward"
     >
-      <ItemStatus status={status} />
+      <ItemStatus status={status()} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>

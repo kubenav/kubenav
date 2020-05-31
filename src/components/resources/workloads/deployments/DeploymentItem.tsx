@@ -17,25 +17,33 @@ const DeploymentItem: React.FunctionComponent<IDeploymentItemProps> = ({
   section,
   type,
 }: IDeploymentItemProps) => {
-  // The deployment status is set to success when the number of desired replicas is 0 or when the number of desired
-  // replicas is equal to the number of observed replicas, ready replicas, updated replicas and available replicas. If
-  // the spec and status field is missing there must be an other error and we set the status to warning.
-  let status = 'danger';
-
-  if (item.spec && item.status) {
-    if (
-      item.spec.replicas === 0 ||
-      item.spec.replicas ===
-        (item.status.replicas &&
-          item.status.readyReplicas &&
-          item.status.updatedReplicas &&
-          item.status.availableReplicas)
-    ) {
-      status = 'success';
+  const status = (): string => {
+    if (item.spec === undefined || item.status === undefined || item.spec.replicas === 0) {
+      return 'warning';
     }
-  } else {
-    status = 'warning';
-  }
+
+    if (
+      item.spec.replicas === item.status.replicas &&
+      item.spec.replicas === item.status.readyReplicas &&
+      item.spec.replicas === item.status.updatedReplicas &&
+      item.spec.replicas === item.status.availableReplicas
+    ) {
+      return 'success';
+    }
+
+    if (
+      item.status.readyReplicas === 0 ||
+      item.status.updatedReplicas === 0 ||
+      item.status.availableReplicas === 0 ||
+      item.status.readyReplicas === undefined ||
+      item.status.updatedReplicas === undefined ||
+      item.status.availableReplicas === undefined
+    ) {
+      return 'danger';
+    }
+
+    return 'warning';
+  };
 
   // - Desired: Number of desired pods.
   // - Current: Total number of non-terminated pods targeted by this deployment.
@@ -50,7 +58,7 @@ const DeploymentItem: React.FunctionComponent<IDeploymentItemProps> = ({
       }`}
       routerDirection="forward"
     >
-      <ItemStatus status={status} />
+      <ItemStatus status={status()} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>

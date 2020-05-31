@@ -15,7 +15,7 @@ import {
   IonToolbar,
   isPlatform,
 } from '@ionic/react';
-import React, { useContext } from 'react';
+import React, { memo, useContext } from 'react';
 
 import { IContext } from '../../declarations';
 import { AppContext } from '../../utils/context';
@@ -88,4 +88,6 @@ const GeneralPage: React.FunctionComponent = () => {
   );
 };
 
-export default GeneralPage;
+export default memo(GeneralPage, (): boolean => {
+  return true;
+});

@@ -14,12 +14,13 @@ import {
   isPlatform,
 } from '@ionic/react';
 import { refresh } from 'ionicons/icons';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../declarations';
 import { AppContext } from '../../utils/context';
 import { resources } from '../../utils/resources';
+import useAsyncFn from '../../utils/useAsyncFn';
 import LoadingErrorCard from '../misc/LoadingErrorCard';
 import DeleteItem from './misc/modify/DeleteItem';
 import EditItem from './misc/modify/EditItem';
@@ -35,45 +36,29 @@ type IDetailsPageProps = RouteComponentProps<IMatchParams>;
 
 const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDetailsPageProps) => {
   const context = useContext<IContext>(AppContext);
+  const cluster = context.currentCluster();
 
   const page = resources[match.params.section].pages[match.params.type];
   const Component = page.detailsComponent;
 
-  const [error, setError] = useState<string>('');
-  const [showLoading, setShowLoading] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [item, setItem] = useState<any>();
-  const [url, setUrl] = useState<string>('');
+  // useAsyncFn is a custom React hook which wrapps our API call.
+  const [state, fetch, fetchInit] = useAsyncFn(
+    async () => await context.request('GET', page.detailsURL(match.params.namespace, match.params.name), ''),
+    [page],
+    { loading: true, error: undefined, value: undefined },
+  );
 
+  // When the component is rendered the first time and on every route change or a modification to the context
+  // object we are loading all items for the corresponding resource.
   useEffect(() => {
-    const fetchData = async () => {
-      setItem(undefined);
-      setUrl(match.url);
-      await load();
-    };
+    fetchInit();
+  }, [fetchInit]);
 
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [match]);
-
+  // The doRefresh method is used for a manual reload of the items for the corresponding resource. The
+  // event.detail.complete() call is required to finish the animation of the IonRefresher component.
   const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();
-    await load();
-  };
-
-  const load = async () => {
-    setShowLoading(true);
-
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const data: any = await context.request('GET', page.detailsURL(match.params.namespace, match.params.name), '');
-      setError('');
-      setItem(data);
-    } catch (err) {
-      setError(err.message);
-    }
-
-    setShowLoading(false);
+    fetch();
   };
 
   return (
@@ -83,29 +68,29 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
           <IonButtons slot="start">
             <IonBackButton defaultHref={`/resources/${match.params.section}/${match.params.type}`} />
           </IonButtons>
-          <IonTitle>{item && item.metadata ? item.metadata.name : ''}</IonTitle>
+          <IonTitle>{state.value && state.value.metadata ? state.value.metadata.name : ''}</IonTitle>
           {!isPlatform('hybrid') ? (
             <IonButtons slot="primary">
-              <IonButton onClick={() => load()}>
+              <IonButton onClick={() => fetch()}>
                 <IonIcon slot="icon-only" icon={refresh} />
               </IonButton>
-              {item ? (
+              {state.value ? (
                 <EditItem
                   activator="button"
-                  item={item}
+                  item={state.value}
                   url={page.detailsURL(
-                    item.metadata ? item.metadata.namespace : '',
-                    item.metadata ? item.metadata.name : '',
+                    state.value.metadata ? state.value.metadata.namespace : '',
+                    state.value.metadata ? state.value.metadata.name : '',
                   )}
                 />
               ) : null}
-              {item ? (
+              {state.value ? (
                 <DeleteItem
                   activator="button"
-                  item={item}
+                  item={state.value}
                   url={page.detailsURL(
-                    item.metadata ? item.metadata.namespace : '',
-                    item.metadata ? item.metadata.name : '',
+                    state.value.metadata ? state.value.metadata.namespace : '',
+                    state.value.metadata ? state.value.metadata.name : '',
                   )}
                 />
               ) : null}
@@ -114,23 +99,18 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
+        {state.loading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
         <IonRefresher slot="fixed" onIonRefresh={doRefresh} />
 
-        {error === '' &&
-        context.clusters &&
-        context.cluster &&
-        context.clusters.hasOwnProperty(context.cluster) &&
-        match.url === url &&
-        item ? (
-          <Component item={item} section={match.params.section} type={match.params.type} />
-        ) : (
+        {!state.error && cluster && state.value ? (
+          <Component item={state.value} section={match.params.section} type={match.params.type} />
+        ) : state.loading ? null : (
           <LoadingErrorCard
             cluster={context.cluster}
             clusters={context.clusters}
-            error={error}
+            error={state.error}
             icon={page.icon}
-            text={`Could not get ${page.pluralText}`}
+            text={`Could not get ${page.singleText}`}
           />
         )}
       </IonContent>
@@ -138,4 +118,10 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
   );
 };
 
-export default DetailsPage;
+export default memo(DetailsPage, (prevProps, nextProps): boolean => {
+  if (prevProps.match.url !== nextProps.match.url) {
+    return false;
+  }
+
+  return true;
+});

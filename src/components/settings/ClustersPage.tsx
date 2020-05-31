@@ -8,7 +8,7 @@ import {
   IonToolbar,
   isPlatform,
 } from '@ionic/react';
-import React, { useContext } from 'react';
+import React, { memo, useContext } from 'react';
 
 import { IContext } from '../../declarations';
 import { AppContext } from '../../utils/context';
@@ -40,4 +40,6 @@ const ClustersPage: React.FunctionComponent = () => {
   );
 };
 
-export default ClustersPage;
+export default memo(ClustersPage, (): boolean => {
+  return true;
+});

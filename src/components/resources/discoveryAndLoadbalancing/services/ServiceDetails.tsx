@@ -1,5 +1,5 @@
 import { IonChip, IonGrid, IonLabel, IonRow } from '@ionic/react';
-import { V1Service, V1ServicePort } from '@kubernetes/client-node';
+import { V1LoadBalancerIngress, V1Service, V1ServicePort } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -55,6 +55,23 @@ const ServiceDetails: React.FunctionComponent<IServiceDetailsProps> = ({ item, t
               })
             }
           />
+          <Row
+            obj={item}
+            objKey="spec.loadBalancerSourceRanges"
+            title="Load Balancer Source Ranges"
+            value={(loadBalancerSourceRanges) =>
+              loadBalancerSourceRanges.map((loadBalancerSourceRange: string, index) => {
+                return (
+                  <IonChip key={index} className="unset-chip-height">
+                    <IonLabel>{loadBalancerSourceRange}</IonLabel>
+                  </IonChip>
+                );
+              })
+            }
+          />
+          <Row obj={item} objKey="spec.externalTrafficPolicy" title="External Traffic Policy" />
+          <Row obj={item} objKey="spec.healthCheckNodePort" title="Health Check Node Port" />
+          <Row obj={item} objKey="spec.publishNotReadyAddresses" title="Publish Not Ready Addresses" />
           <Row obj={item} objKey="spec.sessionAffinity" title="Session Affinity" />
         </Configuration>
 
@@ -74,6 +91,14 @@ const ServiceDetails: React.FunctionComponent<IServiceDetailsProps> = ({ item, t
               })
             }
             defaultValue="None"
+          />
+          <Row obj={item} objKey="spec.externalName" title="External Name" defaultValue="None" />
+          <Row obj={item} objKey="spec.loadBalancerIP" title="Load Balancer IP" />
+          <Row
+            obj={item}
+            objKey="status.loadBalancer.ingress"
+            title="Load Balancer"
+            value={(ingress: V1LoadBalancerIngress[]) => ingress.map((ing) => Object.values(ing).join(', '))}
           />
         </Status>
       </IonRow>

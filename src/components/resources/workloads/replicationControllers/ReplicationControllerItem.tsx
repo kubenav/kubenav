@@ -17,18 +17,30 @@ const ReplicationControllerItem: React.FunctionComponent<IReplicationControllerI
   section,
   type,
 }: IReplicationControllerItemProps) => {
-  let status = 'danger';
-
-  if (item.spec && item.status) {
-    if (
-      item.spec.replicas === 0 ||
-      item.spec.replicas === (item.status.replicas && item.status.readyReplicas && item.status.availableReplicas)
-    ) {
-      status = 'success';
+  const status = (): string => {
+    if (item.spec === undefined || item.status === undefined || item.spec.replicas === 0) {
+      return 'warning';
     }
-  } else {
-    status = 'warning';
-  }
+
+    if (
+      item.spec.replicas === item.status.replicas &&
+      item.spec.replicas === item.status.readyReplicas &&
+      item.spec.replicas === item.status.availableReplicas
+    ) {
+      return 'success';
+    }
+
+    if (
+      item.status.readyReplicas === 0 ||
+      item.status.availableReplicas === 0 ||
+      item.status.readyReplicas === undefined ||
+      item.status.availableReplicas === undefined
+    ) {
+      return 'danger';
+    }
+
+    return 'warning';
+  };
 
   // - Desired: Number of desired pods.
   // - Current: Most recently oberved number of replicas.
@@ -42,7 +54,7 @@ const ReplicationControllerItem: React.FunctionComponent<IReplicationControllerI
       }`}
       routerDirection="forward"
     >
-      <ItemStatus status={status} />
+      <ItemStatus status={status()} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>
