@@ -21,9 +21,8 @@ import { IContext } from '../../declarations';
 import { AppContext } from '../../utils/context';
 import { resources } from '../../utils/resources';
 import useAsyncFn from '../../utils/useAsyncFn';
+import DetailsPopover from './misc/DetailsPopover';
 import LoadingErrorCard from '../misc/LoadingErrorCard';
-import DeleteItem from './misc/modify/DeleteItem';
-import EditItem from './misc/modify/EditItem';
 
 interface IMatchParams {
   section: string;
@@ -69,33 +68,23 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
             <IonBackButton defaultHref={`/resources/${match.params.section}/${match.params.type}`} />
           </IonButtons>
           <IonTitle>{state.value && state.value.metadata ? state.value.metadata.name : ''}</IonTitle>
-          {!isPlatform('hybrid') ? (
-            <IonButtons slot="primary">
+          <IonButtons slot="primary">
+            {!isPlatform('hybrid') ? (
               <IonButton onClick={() => fetch()}>
                 <IonIcon slot="icon-only" icon={refresh} />
               </IonButton>
-              {state.value ? (
-                <EditItem
-                  activator="button"
-                  item={state.value}
-                  url={page.detailsURL(
-                    state.value.metadata ? state.value.metadata.namespace : '',
-                    state.value.metadata ? state.value.metadata.name : '',
-                  )}
-                />
-              ) : null}
-              {state.value ? (
-                <DeleteItem
-                  activator="button"
-                  item={state.value}
-                  url={page.detailsURL(
-                    state.value.metadata ? state.value.metadata.namespace : '',
-                    state.value.metadata ? state.value.metadata.name : '',
-                  )}
-                />
-              ) : null}
-            </IonButtons>
-          ) : null}
+            ) : null}
+            {state.value ? (
+              <DetailsPopover
+                type={match.params.type}
+                item={state.value}
+                url={page.detailsURL(
+                  state.value.metadata ? state.value.metadata.namespace : '',
+                  state.value.metadata ? state.value.metadata.name : '',
+                )}
+              />
+            ) : null}
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>

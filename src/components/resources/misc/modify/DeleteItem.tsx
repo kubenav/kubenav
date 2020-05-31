@@ -1,4 +1,4 @@
-import { IonAlert, IonButton, IonIcon, IonItemOption } from '@ionic/react';
+import { IonAlert, IonButton, IonIcon, IonItem, IonItemOption, IonLabel } from '@ionic/react';
 import { trash } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 
@@ -39,6 +39,13 @@ const DeleteItem: React.FunctionComponent<IDeleteItemProps> = ({ activator, item
         <IonButton onClick={() => setShowAlert(true)}>
           <IonIcon slot="icon-only" icon={trash} />
         </IonButton>
+      ) : null}
+
+      {activator === 'item' ? (
+        <IonItem button={true} detail={false} onClick={() => setShowAlert(true)}>
+          <IonIcon slot="end" color="primary" icon={trash} />
+          <IonLabel>Delete</IonLabel>
+        </IonItem>
       ) : null}
 
       {error !== '' ? (
