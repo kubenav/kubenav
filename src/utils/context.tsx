@@ -130,7 +130,8 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
       }
 
       newCluster.id = id;
-      newCluster.url = newCluster.url.slice(-1) === '/' ? newCluster.url.slice(0, -1) : newCluster.url;
+      newCluster.url =
+        newCluster.url.trim().slice(-1) === '/' ? newCluster.url.trim().slice(0, -1) : newCluster.url.trim();
       newCluster.certificateAuthorityData = isBase64(newCluster.certificateAuthorityData)
         ? atob(newCluster.certificateAuthorityData)
         : newCluster.certificateAuthorityData;
@@ -220,7 +221,8 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
   // Like in the addCluster function we are validating the provided URL and the provided certificate data. If the user
   // provides a base64 encoded certificate, it will be decoded before it is saved.
   const editCluster = (editCluster: ICluster) => {
-    editCluster.url = editCluster.url.slice(-1) === '/' ? editCluster.url.slice(0, -1) : editCluster.url;
+    editCluster.url =
+      editCluster.url.trim().slice(-1) === '/' ? editCluster.url.trim().slice(0, -1) : editCluster.url.trim();
     editCluster.certificateAuthorityData = isBase64(editCluster.certificateAuthorityData)
       ? atob(editCluster.certificateAuthorityData)
       : editCluster.certificateAuthorityData;

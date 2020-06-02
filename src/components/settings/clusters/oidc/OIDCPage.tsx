@@ -14,9 +14,10 @@ import {
   IonSelectOption,
   IonTextarea,
   IonTitle,
+  IonToggle,
   IonToolbar,
 } from '@ionic/react';
-import React, { useContext, useState } from 'react';
+import React, { memo, useContext, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../../../declarations';
@@ -31,6 +32,7 @@ const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }: IOIDCPag
   const [name, setName] = useState<string>('');
   const [url, setURL] = useState<string>('');
   const [certificateAuthorityData, setCertificateAuthorityData] = useState<string>('');
+  const [insecureSkipTLSVerify, setInsecureSkipTLSVerify] = useState<boolean>(false);
   const [provider, setProvider] = useState<string>('');
 
   const handleName = (event) => {
@@ -43,6 +45,10 @@ const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }: IOIDCPag
 
   const handleCertificateAuthorityData = (event) => {
     setCertificateAuthorityData(event.target.value);
+  };
+
+  const handleInsecureSkipTLSVerify = (event) => {
+    setInsecureSkipTLSVerify(event.detail.checked);
   };
 
   const handleProvider = (event) => {
@@ -71,7 +77,7 @@ const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }: IOIDCPag
             token: '',
             username: '',
             password: '',
-            insecureSkipTLSVerify: false,
+            insecureSkipTLSVerify: insecureSkipTLSVerify,
             authProvider: `oidc__${provider}`,
             namespace: 'default',
           },
@@ -115,6 +121,10 @@ const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }: IOIDCPag
             <IonTextarea autoGrow={true} value={certificateAuthorityData} onInput={handleCertificateAuthorityData} />
           </IonItem>
           <IonItem>
+            <IonLabel>Insecure Skip TLS Verify</IonLabel>
+            <IonToggle checked={insecureSkipTLSVerify} onIonChange={handleInsecureSkipTLSVerify} />
+          </IonItem>
+          <IonItem>
             <IonLabel>OIDC Provider</IonLabel>
             <IonSelect value={provider} onIonChange={handleProvider}>
               {context.oidcProviders
@@ -144,4 +154,6 @@ const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }: IOIDCPag
   );
 };
 
-export default OIDCPage;
+export default memo(OIDCPage, (): boolean => {
+  return true;
+});

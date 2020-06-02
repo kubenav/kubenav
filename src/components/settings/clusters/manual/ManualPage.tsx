@@ -15,7 +15,7 @@ import {
   IonToggle,
   IonToolbar,
 } from '@ionic/react';
-import React, { useContext, useState } from 'react';
+import React, { memo, useContext, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../../../declarations';
@@ -184,4 +184,6 @@ const ManualPage: React.FunctionComponent<IManualPageProps> = ({ history }: IMan
   );
 };
 
-export default ManualPage;
+export default memo(ManualPage, (): boolean => {
+  return true;
+});

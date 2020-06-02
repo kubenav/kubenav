@@ -12,7 +12,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { ICluster, IContext } from '../../../../declarations';
@@ -129,7 +129,11 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
         {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
 
         {error ? (
-          <ErrorCard error={error} text="Could not load GKE clusters" icon="/assets/icons/kubernetes/kubernetes.png" />
+          <ErrorCard
+            error={new Error(error)}
+            text="Could not load GKE clusters"
+            icon="/assets/icons/kubernetes/kubernetes.png"
+          />
         ) : (
           clusters.map((cluster, index) => {
             return (
@@ -149,4 +153,6 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
   );
 };
 
-export default GooglePage;
+export default memo(GooglePage, (): boolean => {
+  return true;
+});

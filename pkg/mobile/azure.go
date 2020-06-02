@@ -26,8 +26,8 @@ type AzureRequest struct {
 
 // AzureCluster is the structure of the response for loading all clusters from Microsoft Azure.
 type AzureCluster struct {
-	Name       string `json:"name"`
-	Kubeconfig string `json:"kubeconfig"`
+	Name       string      `json:"name"`
+	Kubeconfig interface{} `json:"kubeconfig"`
 }
 
 // azureGetClustersHandler return all Kubeconfigs for all AKS clusters for the provided subscription and resource group.
@@ -91,16 +91,9 @@ func azureGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			kubeconfigJSON = convert(kubeconfigJSON)
-			kubeconfigJSONString, err := json.Marshal(kubeconfigJSON)
-			if err != nil {
-				middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not marshal Kubeconfig")
-				return
-			}
-
 			clusters = append(clusters, AzureCluster{
 				Name:       fmt.Sprintf("%s_%s_%s", *kubeconfig.Name, azureRequest.ResourceGroupName, name),
-				Kubeconfig: string(kubeconfigJSONString),
+				Kubeconfig: convert(kubeconfigJSON),
 			})
 		}
 	}

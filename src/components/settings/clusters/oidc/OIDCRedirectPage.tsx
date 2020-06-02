@@ -12,9 +12,10 @@ import {
   IonProgressBar,
   IonTextarea,
   IonTitle,
+  IonToggle,
   IonToolbar,
 } from '@ionic/react';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps, useLocation } from 'react-router';
 
 import { IContext } from '../../../../declarations';
@@ -40,6 +41,7 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
   const [name, setName] = useState<string>('');
   const [url, setURL] = useState<string>('');
   const [certificateAuthorityData, setCertificateAuthorityData] = useState<string>('');
+  const [insecureSkipTLSVerify, setInsecureSkipTLSVerify] = useState<boolean>(false);
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -97,6 +99,10 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
     setCertificateAuthorityData(event.target.value);
   };
 
+  const handleInsecureSkipTLSVerify = (event) => {
+    setInsecureSkipTLSVerify(event.detail.checked);
+  };
+
   const addClusters = () => {
     if (name === '') {
       setError('Name is required');
@@ -117,7 +123,7 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
             token: '',
             username: '',
             password: '',
-            insecureSkipTLSVerify: false,
+            insecureSkipTLSVerify: insecureSkipTLSVerify,
             authProvider: `oidc__${readOIDCLastProvider()}`,
             namespace: 'default',
           },
@@ -150,7 +156,7 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
         {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
 
         {error ? (
-          <ErrorCard error={error} text="OIDC Error" icon="/assets/icons/kubernetes/kubernetes.png" />
+          <ErrorCard error={new Error(error)} text="OIDC Error" icon="/assets/icons/kubernetes/kubernetes.png" />
         ) : (
           <IonList lines="full">
             <IonItem>
@@ -165,6 +171,10 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
               <IonLabel position="stacked">Certificate Authority Data</IonLabel>
               <IonTextarea autoGrow={true} value={certificateAuthorityData} onInput={handleCertificateAuthorityData} />
             </IonItem>
+            <IonItem>
+              <IonLabel>Insecure Skip TLS Verify</IonLabel>
+              <IonToggle checked={insecureSkipTLSVerify} onIonChange={handleInsecureSkipTLSVerify} />
+            </IonItem>
           </IonList>
         )}
       </IonContent>
@@ -172,4 +182,6 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
   );
 };
 
-export default OIDCRedirectPage;
+export default memo(OIDCRedirectPage, (): boolean => {
+  return true;
+});
