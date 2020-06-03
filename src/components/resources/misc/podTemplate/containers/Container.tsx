@@ -135,7 +135,6 @@ const Container: React.FunctionComponent<IContainerProps> = ({
                   } | State: ${getState(status)}`
                 : ''}
               <br />
-              {/* tslint:disable-next-line:max-line-length */}
               CPU:{' '}
               {metrics && metrics.usage && metrics.usage.hasOwnProperty('cpu')
                 ? formatResourceValue('cpu', metrics.usage['cpu'])

@@ -7,6 +7,7 @@ import ReplicaSetDetails from '../components/resources/workloads/replicaSets/Rep
 import ReplicationControllerDetails from '../components/resources/workloads/replicationControllers/ReplicationControllerDetails';
 import StatefulSetDetails from '../components/resources/workloads/statefulSets/StatefulSetDetails';
 
+import HorizontalPodAutoscalerDetails from '../components/resources/discoveryAndLoadbalancing/horizontalpodautoscalers/HorizontalPodAutoscalerDetails';
 import IngressDetails from '../components/resources/discoveryAndLoadbalancing/ingresses/IngressDetails';
 import ServiceDetails from '../components/resources/discoveryAndLoadbalancing/services/ServiceDetails';
 
@@ -34,6 +35,7 @@ import ReplicaSetItem from '../components/resources/workloads/replicaSets/Replic
 import ReplicationControllerItem from '../components/resources/workloads/replicationControllers/ReplicationControllerItem';
 import StatefulSetItem from '../components/resources/workloads/statefulSets/StatefulSetItem';
 
+import HorizontalPodAutoscalerItem from '../components/resources/discoveryAndLoadbalancing/horizontalpodautoscalers/HorizontalPodAutoscalerItem';
 import IngressItem from '../components/resources/discoveryAndLoadbalancing/ingresses/IngressItem';
 import ServiceItem from '../components/resources/discoveryAndLoadbalancing/services/ServiceItem';
 
@@ -170,6 +172,21 @@ export const resources: IAppSections = {
   'discovery-and-loadbalancing': {
     title: 'Discovery and Load Balancing',
     pages: {
+      horizontalpodautoscalers: {
+        singleText: 'Horizontal Pod Autoscaler',
+        pluralText: 'Horizontal Pod Autoscalers',
+        icon: '/assets/icons/kubernetes/hpa.png',
+        listURL: (namespace: string) => {
+          return namespace
+            ? `/apis/autoscaling/v2beta1/namespaces/${namespace}/horizontalpodautoscalers`
+            : `/apis/autoscaling/v2beta1/horizontalpodautoscalers`;
+        },
+        listItemComponent: HorizontalPodAutoscalerItem,
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/autoscaling/v2beta1/namespaces/${namespace}/horizontalpodautoscalers/${name}`;
+        },
+        detailsComponent: HorizontalPodAutoscalerDetails,
+      },
       ingresses: {
         singleText: 'Ingresse',
         pluralText: 'Ingresses',
