@@ -9,6 +9,7 @@ import StatefulSetDetails from '../components/resources/workloads/statefulSets/S
 
 import HorizontalPodAutoscalerDetails from '../components/resources/discoveryAndLoadbalancing/horizontalpodautoscalers/HorizontalPodAutoscalerDetails';
 import IngressDetails from '../components/resources/discoveryAndLoadbalancing/ingresses/IngressDetails';
+import NetworkPolicyDetails from '../components/resources/discoveryAndLoadbalancing/networkpolicies/NetworkPolicyDetails';
 import ServiceDetails from '../components/resources/discoveryAndLoadbalancing/services/ServiceDetails';
 
 import ConfigMapDetails from '../components/resources/configAndStorage/configMaps/ConfigMapDetails';
@@ -37,6 +38,7 @@ import StatefulSetItem from '../components/resources/workloads/statefulSets/Stat
 
 import HorizontalPodAutoscalerItem from '../components/resources/discoveryAndLoadbalancing/horizontalpodautoscalers/HorizontalPodAutoscalerItem';
 import IngressItem from '../components/resources/discoveryAndLoadbalancing/ingresses/IngressItem';
+import NetworkPolicyItem from '../components/resources/discoveryAndLoadbalancing/networkpolicies/NetworkPolicyItem';
 import ServiceItem from '../components/resources/discoveryAndLoadbalancing/services/ServiceItem';
 
 import ConfigMapItem from '../components/resources/configAndStorage/configMaps/ConfigMapItem';
@@ -201,6 +203,21 @@ export const resources: IAppSections = {
           return `/apis/networking.k8s.io/v1beta1/namespaces/${namespace}/ingresses/${name}`;
         },
         detailsComponent: IngressDetails,
+      },
+      networkpolicies: {
+        singleText: 'Network Policy',
+        pluralText: 'Network Policies',
+        icon: '/assets/icons/kubernetes/netpol.png',
+        listURL: (namespace: string) => {
+          return namespace
+            ? `/apis/networking.k8s.io/v1/namespaces/${namespace}/networkpolicies`
+            : `/apis/networking.k8s.io/v1/networkpolicies`;
+        },
+        listItemComponent: NetworkPolicyItem,
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/networking.k8s.io/v1/namespaces/${namespace}/networkpolicies/${name}`;
+        },
+        detailsComponent: NetworkPolicyDetails,
       },
       services: {
         singleText: 'Service',

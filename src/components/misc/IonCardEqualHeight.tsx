@@ -2,7 +2,7 @@ import { IonCard, isPlatform } from '@ionic/react';
 import React, { ReactElement } from 'react';
 
 interface IIonCardEqualHeight {
-  children: ReactElement | ReactElement[];
+  children: ReactElement | ReactElement[] | (ReactElement | ReactElement[])[];
 }
 
 const IonCardEqualHeight: React.FunctionComponent<IIonCardEqualHeight> = ({ children }: IIonCardEqualHeight) => {
