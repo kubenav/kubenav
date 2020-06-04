@@ -111,3 +111,8 @@ ion-avatar {
 .card-header-image img {
   margin: auto;
 }
+
+/* Add a border to the bottom of IonCardContent if a IonCard component contains multiple IonCardContent components. */
+.ion-card-content-divider {
+  border-bottom: 1px solid var(--ion-color-light);
+}
