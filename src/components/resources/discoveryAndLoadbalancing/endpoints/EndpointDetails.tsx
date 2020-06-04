@@ -38,8 +38,7 @@ const EndpointDetails: React.FunctionComponent<IEndpointDetailsProps> = ({ item,
 
     return `/resources/discovery-and-loadbalancing/endpoints/${
       item.metadata && item.metadata.namespace ? item.metadata.namespace : ''
-    }/
-      ${item.metadata && item.metadata.name ? item.metadata.name : ''}`;
+    }/${item.metadata && item.metadata.name ? item.metadata.name : ''}`;
   };
 
   return (
