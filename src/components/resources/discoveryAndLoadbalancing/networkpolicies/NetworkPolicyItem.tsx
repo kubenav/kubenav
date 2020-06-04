@@ -16,9 +16,9 @@ const NetworkPolicyItem: React.FunctionComponent<INetworkPolicyItemProps> = ({
   section,
   type,
 }: INetworkPolicyItemProps) => {
-  // - Type: Type of the service, which determines how the Service is exposed.
-  // - Cluster IP: IP address of the service and is usually assigned randomly by the master.
-  // - External IPs: List of IP addresses for which nodes in the cluster will also accept traffic for this service.
+  // - Egress Rules: List of egress rules to be applied to the selected pods.
+  // - Ingress Rules: List of ingress rules to be applied to the selected pods.
+  // - Policy Types: List of rule types that the NetworkPolicy relates to.
   // - Age: The time when the service was created.
   return (
     <IonItem

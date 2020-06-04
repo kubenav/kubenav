@@ -7,6 +7,7 @@ import ReplicaSetDetails from '../components/resources/workloads/replicaSets/Rep
 import ReplicationControllerDetails from '../components/resources/workloads/replicationControllers/ReplicationControllerDetails';
 import StatefulSetDetails from '../components/resources/workloads/statefulSets/StatefulSetDetails';
 
+import EndpointDetails from '../components/resources/discoveryAndLoadbalancing/endpoints/EndpointDetails';
 import HorizontalPodAutoscalerDetails from '../components/resources/discoveryAndLoadbalancing/horizontalpodautoscalers/HorizontalPodAutoscalerDetails';
 import IngressDetails from '../components/resources/discoveryAndLoadbalancing/ingresses/IngressDetails';
 import NetworkPolicyDetails from '../components/resources/discoveryAndLoadbalancing/networkpolicies/NetworkPolicyDetails';
@@ -36,6 +37,7 @@ import ReplicaSetItem from '../components/resources/workloads/replicaSets/Replic
 import ReplicationControllerItem from '../components/resources/workloads/replicationControllers/ReplicationControllerItem';
 import StatefulSetItem from '../components/resources/workloads/statefulSets/StatefulSetItem';
 
+import EndpointItem from '../components/resources/discoveryAndLoadbalancing/endpoints/EndpointItem';
 import HorizontalPodAutoscalerItem from '../components/resources/discoveryAndLoadbalancing/horizontalpodautoscalers/HorizontalPodAutoscalerItem';
 import IngressItem from '../components/resources/discoveryAndLoadbalancing/ingresses/IngressItem';
 import NetworkPolicyItem from '../components/resources/discoveryAndLoadbalancing/networkpolicies/NetworkPolicyItem';
@@ -174,6 +176,19 @@ export const resources: IAppSections = {
   'discovery-and-loadbalancing': {
     title: 'Discovery and Load Balancing',
     pages: {
+      endpoints: {
+        singleText: 'Endpoints',
+        pluralText: 'Endpoint',
+        icon: '/assets/icons/kubernetes/ep.png',
+        listURL: (namespace: string) => {
+          return namespace ? `/api/v1/namespaces/${namespace}/endpoints` : `/api/v1/endpoints`;
+        },
+        listItemComponent: EndpointItem,
+        detailsURL: (namespace: string, name: string) => {
+          return `/api/v1/namespaces/${namespace}/endpoints/${name}`;
+        },
+        detailsComponent: EndpointDetails,
+      },
       horizontalpodautoscalers: {
         singleText: 'Horizontal Pod Autoscaler',
         pluralText: 'Horizontal Pod Autoscalers',
