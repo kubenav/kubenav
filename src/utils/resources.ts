@@ -18,6 +18,7 @@ import PersistentVolumeClaimDetails from '../components/resources/configAndStora
 import PersistentVolumeDetails from '../components/resources/configAndStorage/persistentVolumes/PersistentVolumeDetails';
 import SecretDetails from '../components/resources/configAndStorage/secrets/SecretDetails';
 import ServiceAccountDetails from '../components/resources/configAndStorage/serviceAccounts/ServiceAccountDetails';
+import StorageClassDetails from '../components/resources/configAndStorage/storageclasses/StorageClassDetails';
 
 import ClusterRoleBindingDetails from '../components/resources/rbac/clusterRoleBindings/ClusterRoleBindingDetails';
 import ClusterRoleDetails from '../components/resources/rbac/clusterRoles/ClusterRoleDetails';
@@ -48,6 +49,7 @@ import PersistentVolumeClaimItem from '../components/resources/configAndStorage/
 import PersistentVolumeItem from '../components/resources/configAndStorage/persistentVolumes/PersistentVolumeItem';
 import SecretItem from '../components/resources/configAndStorage/secrets/SecretItem';
 import ServiceAccountItem from '../components/resources/configAndStorage/serviceAccounts/ServiceAccountItem';
+import StorageClassItem from '../components/resources/configAndStorage/storageclasses/StorageClassItem';
 
 import ClusterRoleBindingItem from '../components/resources/rbac/clusterRoleBindings/ClusterRoleBindingItem';
 import ClusterRoleItem from '../components/resources/rbac/clusterRoles/ClusterRoleItem';
@@ -319,6 +321,20 @@ export const resources: IAppSections = {
           return `/api/v1/namespaces/${namespace}/serviceaccounts/${name}`;
         },
         detailsComponent: ServiceAccountDetails,
+      },
+      storageclasses: {
+        singleText: 'Storage Class',
+        pluralText: 'Storage Classes',
+        icon: '/assets/icons/kubernetes/sc.png',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        listURL: (namespace: string) => {
+          return `/apis/storage.k8s.io/v1/storageclasses`;
+        },
+        listItemComponent: StorageClassItem,
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/storage.k8s.io/v1/storageclasses/${name}`;
+        },
+        detailsComponent: StorageClassDetails,
       },
     },
   },
