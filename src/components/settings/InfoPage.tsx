@@ -51,7 +51,7 @@ const InfoPage: React.FunctionComponent = () => {
           </IonCardHeader>
           <IonCardContent>
             <p>
-              kubenav is a movile and desktop app to manage Kubernetes clusters. The app provides an overview of all
+              kubenav is a mobile and desktop app to manage Kubernetes clusters. The app provides an overview of all
               resources in a Kubernetes clusters, including current status information for workloads. The details view
               for resources provides additional information. It is possible to view logs and events or to get a shell
               into a container. You can also edit and delete resources or scale your workloads within the app.

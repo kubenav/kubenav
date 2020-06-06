@@ -13,7 +13,7 @@
   <img src="utils/assets/github-screenshot.png" width="100%" />
 </div>
 
-kubenav is a movile and desktop app to  manage Kubernetes clusters. The app provides an overview of all resources in a Kubernetes clusters, including current status information for workloads. The details view for resources provides additional information. It is possible to view logs and events or to get a shell into a container. You can also edit and delete resources or scale your workloads within the app.
+kubenav is a mobile and desktop app to  manage Kubernetes clusters. The app provides an overview of all resources in a Kubernetes clusters, including current status information for workloads. The details view for resources provides additional information. It is possible to view logs and events or to get a shell into a container. You can also edit and delete resources or scale your workloads within the app.
 
 The app is developed using [Ionic Framework](https://ionicframework.com) and [Capacitor](https://capacitor.ionicframework.com). The frontend part of the app is implemented using TypeScript and React functional components. The backend part uses [Go mobile](https://github.com/golang/go/wiki/Mobile) for communication with the Kubernetes API server and Cloud Providers. So it is possible to achieve nearly 100% code sharing between the mobile and desktop implementation of kubenav.
 
