@@ -2,7 +2,7 @@
   <img src="utils/assets/github-logo.png" width="200" />
   <br><br>
 
-  **kubenav** is the navigator for your **Kubernetes** clusters right in your pocket. kubenav is a **mobile and desktop** app to help you manage Kubernetes clusters and stay up to date on whats going on in your clusters.
+  **kubenav** is the navigator for your **Kubernetes** clusters right in your pocket. kubenav is a **mobile and desktop** app to manage Kubernetes clusters and to get an overview of the status of your resources.
 
   <p>
     <a href="https://apps.apple.com/us/app/kubenav/id1494512160" target="_blank"><img src="utils/assets/app-store-badge.png" height="50"></a>
@@ -13,22 +13,33 @@
   <img src="utils/assets/github-screenshot.png" width="100%" />
 </div>
 
-kubenav is a mobile and desktop app to help you manage Kubernetes clusters. The app provides an overview of all your workloads and resources running in your clusters, including the current status. The details view of your workloads contains all the necessary logs and events to debug your clusters in case of problems. You can also edit and delete resources within the app.
+kubenav is a mobile and desktop app to  manage Kubernetes clusters. The app provides an overview of all resources in a Kubernetes clusters, including current status information for workloads. The details view for resources provides additional information. It is possible to view logs and events or to get a shell into a container. You can also edit and delete resources or scale your workloads within the app.
 
-The app is developed using [Ionic Framework](https://ionicframework.com) and [Capacitor](https://capacitor.ionicframework.com). The most parts of the app are implemented using React functional component and TypeScript. So we can achieve nearly 100% code sharing between the mobile and desktop implementation.
+The app is developed using [Ionic Framework](https://ionicframework.com) and [Capacitor](https://capacitor.ionicframework.com). The frontend part of the app is implemented using TypeScript and React functional components. The backend part uses [Go mobile](https://github.com/golang/go/wiki/Mobile) for communication with the Kubernetes API server and Cloud Providers. So it is possible to achieve nearly 100% code sharing between the mobile and desktop implementation of kubenav.
 
 ## Features
 
-- [x] **Available for mobile and desktop**: kubenav is available for mobile and desktop with nearly 100% code sharing.
-- [x] **Manage Workloads**: Manage workloads like Deployments, Pods and StatefulSets in your Kubernetes cluster.
-- [x] **View your resources**: Get an overview of other resources like Services, ConfigMaps, Persistent Volumes, Secrets and Role Bindings.
-- [x] **CRD support**: Out of the box support for Custom Resource Definitions.
-- [x] **Filter**: Filter the resource overview by the selected Namespace.
-- [x] **Debugging**: Automatic detection of problems with your Workloads. Get all corresponding events and logs.
-- [x] **Edit YAML files**: Edit and save your YAML files right from the app.
-- [x] **Delete resources**: Delete resources which are not needed anymore.
-- [x] **Resource usage**: Get the resource usage of your nodes, pods and containers.
-- [x] **Manage multiple clusters**: Add multiple clusters via `kubeconfig` or manually.
+- **Available for mobile and desktop:** kubenav provides the same experience for mobile and desktop, with nearly 100% code sharing.
+- **Manage Resources:** All major resources like Deployments, StatefulSets, DaemonSets, Pods, etc. are supported.
+- **Custom Resource Definitions:** View all Custom Resource Definitions and mange Custom Resources.
+- **Modify Resources:** Edit and delete all available resources or scale your Deployments, StatefulSets, DaemonSets.
+- **Filter and Search:** Filter the resources by Namespace and find them by there name.
+- **Status Information:** Fast overview of the status of workloads and detailed information including Events.
+- **Resource Usage:** View the requests, limits and current usage of Pods and Containers.
+- **Logs:** View the logs of a container or stream the logs in realtime.
+- **Terminal:** Get a shell into a container, right from your phone.
+- **Manage multiple Clusters:** Add multiple clusters via `kubeconfig` or your prefered Cloud Provider, including Google, AWS and Azure.
+
+## Installation
+
+The mobile version of kubenav can be downloaded from the [App Store](https://apps.apple.com/us/app/kubenav/id1494512160) or [Google Play](https://play.google.com/store/apps/details?id=io.kubenav.kubenav). The desktop version for macOS, Linux and Windows can be downloaded from the [release page](https://github.com/kubenav/kubenav/releases).
+
+On mobile you can add your Cluster via Kubeconfig file or via your prefered Cloud Provider, including Google, AWS and Azure. You can also use OIDC for authentication. More information for the setup of your Cloud Provider visit one of the following pages:
+
+- [Google OAuth 2.0 Configuration](https://kubenav.io/help/google-oauth2-configuration.html)
+- [Microsoft Azure: Creating App Credentials](https://kubenav.io/help/microsoft-azure-creating-app-credentials.html)
+
+On desktop kubenav will automatic load all configured clusters from your `~/.kube/config` file. If you want to use another Kubeconfig file you can start kubenav with the `-kubeconfig` Flag. You can also use the `-kubeconfig-include` and `-kubeconfig-exclude` flag to load Kubeconfig files from multiple locations. The `-sync` flag can be used to write context changes back to your Kubeconfig file, so the context is also changed on your terminal.
 
 ## Beta and Nightly Builds
 
@@ -37,7 +48,7 @@ For testing new features and faster feedback, we provide an **Beta** app via App
 - [Apple Testflight](https://testflight.apple.com/join/RQUFGkHi)
 - [Google Play](https://play.google.com/apps/testing/io.kubenav.kubenav)
 
-For the desktop version we are running nightly builds for the `master` branch via GitHub Action. The binaries are uploaded to the GitHub Workflow as artifact. You can select a workflow from the following page: [https://github.com/kubenav/kubenav/actions?query=workflow%3ABuild+event%3Aschedule](https://github.com/kubenav/kubenav/actions?query=workflow%3ABuild+event%3Aschedule) to download the binary for your platform.
+For the desktop version we are running nightly builds for the `master` branch via GitHub Action. The binaries are uploaded to the GitHub Workflow as artifact. You can select a workflow from the following page: [https://github.com/kubenav/kubenav/actions](https://github.com/kubenav/kubenav/actions?query=workflow%3ABuild+event%3Aschedule) to download the binary for your platform.
 
 ## Development
 
