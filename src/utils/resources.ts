@@ -7,7 +7,10 @@ import ReplicaSetDetails from '../components/resources/workloads/replicaSets/Rep
 import ReplicationControllerDetails from '../components/resources/workloads/replicationControllers/ReplicationControllerDetails';
 import StatefulSetDetails from '../components/resources/workloads/statefulSets/StatefulSetDetails';
 
+import EndpointDetails from '../components/resources/discoveryAndLoadbalancing/endpoints/EndpointDetails';
+import HorizontalPodAutoscalerDetails from '../components/resources/discoveryAndLoadbalancing/horizontalpodautoscalers/HorizontalPodAutoscalerDetails';
 import IngressDetails from '../components/resources/discoveryAndLoadbalancing/ingresses/IngressDetails';
+import NetworkPolicyDetails from '../components/resources/discoveryAndLoadbalancing/networkpolicies/NetworkPolicyDetails';
 import ServiceDetails from '../components/resources/discoveryAndLoadbalancing/services/ServiceDetails';
 
 import ConfigMapDetails from '../components/resources/configAndStorage/configMaps/ConfigMapDetails';
@@ -15,6 +18,7 @@ import PersistentVolumeClaimDetails from '../components/resources/configAndStora
 import PersistentVolumeDetails from '../components/resources/configAndStorage/persistentVolumes/PersistentVolumeDetails';
 import SecretDetails from '../components/resources/configAndStorage/secrets/SecretDetails';
 import ServiceAccountDetails from '../components/resources/configAndStorage/serviceAccounts/ServiceAccountDetails';
+import StorageClassDetails from '../components/resources/configAndStorage/storageclasses/StorageClassDetails';
 
 import ClusterRoleBindingDetails from '../components/resources/rbac/clusterRoleBindings/ClusterRoleBindingDetails';
 import ClusterRoleDetails from '../components/resources/rbac/clusterRoles/ClusterRoleDetails';
@@ -34,7 +38,10 @@ import ReplicaSetItem from '../components/resources/workloads/replicaSets/Replic
 import ReplicationControllerItem from '../components/resources/workloads/replicationControllers/ReplicationControllerItem';
 import StatefulSetItem from '../components/resources/workloads/statefulSets/StatefulSetItem';
 
+import EndpointItem from '../components/resources/discoveryAndLoadbalancing/endpoints/EndpointItem';
+import HorizontalPodAutoscalerItem from '../components/resources/discoveryAndLoadbalancing/horizontalpodautoscalers/HorizontalPodAutoscalerItem';
 import IngressItem from '../components/resources/discoveryAndLoadbalancing/ingresses/IngressItem';
+import NetworkPolicyItem from '../components/resources/discoveryAndLoadbalancing/networkpolicies/NetworkPolicyItem';
 import ServiceItem from '../components/resources/discoveryAndLoadbalancing/services/ServiceItem';
 
 import ConfigMapItem from '../components/resources/configAndStorage/configMaps/ConfigMapItem';
@@ -42,6 +49,7 @@ import PersistentVolumeClaimItem from '../components/resources/configAndStorage/
 import PersistentVolumeItem from '../components/resources/configAndStorage/persistentVolumes/PersistentVolumeItem';
 import SecretItem from '../components/resources/configAndStorage/secrets/SecretItem';
 import ServiceAccountItem from '../components/resources/configAndStorage/serviceAccounts/ServiceAccountItem';
+import StorageClassItem from '../components/resources/configAndStorage/storageclasses/StorageClassItem';
 
 import ClusterRoleBindingItem from '../components/resources/rbac/clusterRoleBindings/ClusterRoleBindingItem';
 import ClusterRoleItem from '../components/resources/rbac/clusterRoles/ClusterRoleItem';
@@ -170,6 +178,34 @@ export const resources: IAppSections = {
   'discovery-and-loadbalancing': {
     title: 'Discovery and Load Balancing',
     pages: {
+      endpoints: {
+        singleText: 'Endpoints',
+        pluralText: 'Endpoint',
+        icon: '/assets/icons/kubernetes/ep.png',
+        listURL: (namespace: string) => {
+          return namespace ? `/api/v1/namespaces/${namespace}/endpoints` : `/api/v1/endpoints`;
+        },
+        listItemComponent: EndpointItem,
+        detailsURL: (namespace: string, name: string) => {
+          return `/api/v1/namespaces/${namespace}/endpoints/${name}`;
+        },
+        detailsComponent: EndpointDetails,
+      },
+      horizontalpodautoscalers: {
+        singleText: 'Horizontal Pod Autoscaler',
+        pluralText: 'Horizontal Pod Autoscalers',
+        icon: '/assets/icons/kubernetes/hpa.png',
+        listURL: (namespace: string) => {
+          return namespace
+            ? `/apis/autoscaling/v2beta1/namespaces/${namespace}/horizontalpodautoscalers`
+            : `/apis/autoscaling/v2beta1/horizontalpodautoscalers`;
+        },
+        listItemComponent: HorizontalPodAutoscalerItem,
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/autoscaling/v2beta1/namespaces/${namespace}/horizontalpodautoscalers/${name}`;
+        },
+        detailsComponent: HorizontalPodAutoscalerDetails,
+      },
       ingresses: {
         singleText: 'Ingresse',
         pluralText: 'Ingresses',
@@ -184,6 +220,21 @@ export const resources: IAppSections = {
           return `/apis/networking.k8s.io/v1beta1/namespaces/${namespace}/ingresses/${name}`;
         },
         detailsComponent: IngressDetails,
+      },
+      networkpolicies: {
+        singleText: 'Network Policy',
+        pluralText: 'Network Policies',
+        icon: '/assets/icons/kubernetes/netpol.png',
+        listURL: (namespace: string) => {
+          return namespace
+            ? `/apis/networking.k8s.io/v1/namespaces/${namespace}/networkpolicies`
+            : `/apis/networking.k8s.io/v1/networkpolicies`;
+        },
+        listItemComponent: NetworkPolicyItem,
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/networking.k8s.io/v1/namespaces/${namespace}/networkpolicies/${name}`;
+        },
+        detailsComponent: NetworkPolicyDetails,
       },
       services: {
         singleText: 'Service',
@@ -270,6 +321,20 @@ export const resources: IAppSections = {
           return `/api/v1/namespaces/${namespace}/serviceaccounts/${name}`;
         },
         detailsComponent: ServiceAccountDetails,
+      },
+      storageclasses: {
+        singleText: 'Storage Class',
+        pluralText: 'Storage Classes',
+        icon: '/assets/icons/kubernetes/sc.png',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        listURL: (namespace: string) => {
+          return `/apis/storage.k8s.io/v1/storageclasses`;
+        },
+        listItemComponent: StorageClassItem,
+        detailsURL: (namespace: string, name: string) => {
+          return `/apis/storage.k8s.io/v1/storageclasses/${name}`;
+        },
+        detailsComponent: StorageClassDetails,
       },
     },
   },

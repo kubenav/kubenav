@@ -1,5 +1,15 @@
 import { V1LabelSelector, V1Subject } from '@kubernetes/client-node';
 
+// capitalize uppercase the first letter of a string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const capitalize = (s: any) => {
+  if (s === '' || typeof s !== 'string') {
+    return s;
+  }
+
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
 // formatBytes converts a given number of the unit bytes into a human readable string.
 // If the si parameter is true, the function uses 1000 instead of 1024 to convert the given number.
 // See: https://stackoverflow.com/a/14919494
@@ -119,6 +129,7 @@ export const isJSON = (data: string): boolean => {
 export const isNamespaced = (type: string): boolean => {
   return !(
     type === 'persistentvolumes' ||
+    type === 'storageclasses' ||
     type === 'clusterroles' ||
     type === 'clusterrolebindings' ||
     type === 'customresourcedefinitions' ||

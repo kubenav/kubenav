@@ -51,15 +51,16 @@ const InfoPage: React.FunctionComponent = () => {
           </IonCardHeader>
           <IonCardContent>
             <p>
-              kubenav is a mobile and desktop app to help you manage Kubernetes clusters. The app provides an overview
-              of all your workloads and resources running in your clusters, including the current status. The details
-              view of your workloads contains all the necessary logs and events to debug your clusters in case of
-              problems. You can also edit and delete resources within the app.
+              kubenav is a mobile and desktop app to manage Kubernetes clusters. The app provides an overview of all
+              resources in a Kubernetes clusters, including current status information for workloads. The details view
+              for resources provides additional information. It is possible to view logs and events or to get a shell
+              into a container. You can also edit and delete resources or scale your workloads within the app.
             </p>
             <p className="paragraph-margin-bottom">
-              The app is developed using Ionic Framework and Capacitor. The most parts of the app are implemented using
-              React functional component and TypeScript. So we can achieve nearly 100% code sharing between the mobile
-              and desktop implementation.
+              The app is developed using Ionic Framework and Capacitor. The frontend part of the app is implemented
+              using TypeScript and React functional components. The backend part uses Go mobile for communication with
+              the Kubernetes API server and Cloud Providers. So it is possible to achieve nearly 100% code sharing
+              between the mobile and desktop implementation of kubenav.
             </p>
             <IonList>
               <IonListHeader mode="md">
