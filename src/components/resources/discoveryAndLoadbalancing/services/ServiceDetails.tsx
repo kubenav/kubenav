@@ -47,7 +47,7 @@ const ServiceDetails: React.FunctionComponent<IServiceDetailsProps> = ({ item, t
                 return (
                   <IonChip key={index} className="unset-chip-height">
                     <IonLabel>
-                      {port.name} {port.port}
+                      {port.name} {port.port} &nbsp;
                       {port.nodePort}/{port.protocol} &gt; {port.targetPort}
                     </IonLabel>
                   </IonChip>
