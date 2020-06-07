@@ -11,6 +11,8 @@ import (
 func StartServer() {
 	router := http.NewServeMux()
 
+	router.HandleFunc("/api/health", middleware.Cors(healthHandler))
+
 	router.HandleFunc("/api/aws/clusters", middleware.Cors(awsGetClustersHandler))
 	router.HandleFunc("/api/aws/token", middleware.Cors(awsGetTokenHandler))
 
@@ -29,4 +31,8 @@ func StartServer() {
 	if err := http.ListenAndServe(":14122", router); err != nil {
 		return
 	}
+}
+
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
 }
