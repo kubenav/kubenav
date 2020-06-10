@@ -49,9 +49,9 @@ const ServiceDetails: React.FunctionComponent<IServiceDetailsProps> = ({ item, t
                     <IonLabel>
                       {port.name ? `${port.name} ` : ''}
                       {port.port}
+                      {port.nodePort ? ` ${port.nodePort}` : ''}
                       {port.protocol ? `/${port.protocol}` : ''}
                       {port.targetPort ? ` > ${port.targetPort}` : ''}
-                      {port.nodePort ? ` ${port.targetPort ? ` ${port.nodePort}` : ` > ${port.nodePort}`}` : ''}
                     </IonLabel>
                   </IonChip>
                 );
