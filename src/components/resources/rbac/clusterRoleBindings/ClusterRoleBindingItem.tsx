@@ -40,7 +40,7 @@ const ClusterRoleBindingItem: React.FunctionComponent<IClusterRoleBindingItemPro
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>
-          Role: {item.roleRef.name}
+          Role: {item.roleRef && item.roleRef.name ? item.roleRef.name : ''}
           {item.subjects ? ` | Kind: ${getSubjects(item.subjects, 'kind')}` : ''}
           {item.subjects ? ` | Subjects: ${getSubjects(item.subjects, 'name')}` : ''}
           {item.metadata && item.metadata.creationTimestamp
