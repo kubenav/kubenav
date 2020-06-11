@@ -12,13 +12,14 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { ICluster, IContext } from '../../../../declarations';
 import { getAWSClusters } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import { readAWSTokens } from '../../../../utils/storage';
+import useAsyncFn from '../../../../utils/useAsyncFn';
 import ErrorCard from '../../../misc/ErrorCard';
 
 const isChecked = (id: string, clusters: ICluster[]): boolean => {
@@ -40,15 +41,8 @@ type IAWSPageProps = RouteComponentProps<IMatchParams>;
 const AWSPage: React.FunctionComponent<IAWSPageProps> = ({ match, history }: IAWSPageProps) => {
   const context = useContext<IContext>(AppContext);
 
-  const [error, setError] = useState<string>('');
-  const [clusters, setClusters] = useState<ICluster[]>([]);
-  const [selectedClusters, setSelectedClusters] = useState<ICluster[]>([]);
-  const [showLoading, setShowLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setShowLoading(true);
-
+  const [state, , fetchInit] = useAsyncFn(
+    async () => {
       try {
         if (match.params.region) {
           const tokens = readAWSTokens();
@@ -83,17 +77,21 @@ const AWSPage: React.FunctionComponent<IAWSPageProps> = ({ match, history }: IAW
             });
           });
 
-          setClusters(tmpClusters);
+          return tmpClusters;
         }
       } catch (err) {
-        setError(err.message);
+        throw err;
       }
+    },
+    [match.params.region],
+    { loading: true, error: undefined, value: undefined },
+  );
 
-      setShowLoading(false);
-    };
+  const [selectedClusters, setSelectedClusters] = useState<ICluster[]>([]);
 
-    fetchData();
-  }, [match]);
+  useEffect(() => {
+    fetchInit();
+  }, [fetchInit]);
 
   const toggleSelectedCluster = (checked: boolean, cluster: ICluster) => {
     if (checked) {
@@ -116,7 +114,7 @@ const AWSPage: React.FunctionComponent<IAWSPageProps> = ({ match, history }: IAW
             <IonMenuButton />
           </IonButtons>
           <IonTitle>Add Clusters</IonTitle>
-          {error ? null : (
+          {state.error ? null : (
             <IonButtons slot="primary">
               <IonButton onClick={() => addClusters()}>Add</IonButton>
             </IonButtons>
@@ -124,12 +122,16 @@ const AWSPage: React.FunctionComponent<IAWSPageProps> = ({ match, history }: IAW
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
-
-        {error ? (
-          <ErrorCard error={error} text="Could not load AWS clusters" icon="/assets/icons/kubernetes/kubernetes.png" />
+        {state.loading ? (
+          <IonProgressBar slot="fixed" type="indeterminate" color="primary" />
+        ) : state.error || !state.value ? (
+          <ErrorCard
+            error={state.error}
+            text="Could not load AWS clusters"
+            icon="/assets/icons/kubernetes/kubernetes.png"
+          />
         ) : (
-          clusters.map((cluster, index) => {
+          state.value.map((cluster, index) => {
             return (
               <IonItem key={index}>
                 <IonCheckbox
@@ -147,4 +149,6 @@ const AWSPage: React.FunctionComponent<IAWSPageProps> = ({ match, history }: IAW
   );
 };
 
-export default AWSPage;
+export default memo(AWSPage, (): boolean => {
+  return true;
+});

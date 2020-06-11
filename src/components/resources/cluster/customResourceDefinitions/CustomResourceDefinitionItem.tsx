@@ -18,7 +18,9 @@ const CustomResourceDefinitionItem: React.FunctionComponent<ICustomResourceDefin
 }: ICustomResourceDefinitionItemProps) => {
   return (
     <IonItem
-      routerLink={`/customresources/${item.spec.group}/${item.spec.version}/${item.spec.names.plural}`}
+      routerLink={`/customresources/${item.spec ? item.spec.group : ''}/${item.spec ? item.spec.version : ''}/${
+        item.spec && item.spec.names ? item.spec.names.plural : ''
+      }`}
       routerDirection="forward"
     >
       <IonLabel>

@@ -73,7 +73,7 @@ export const getAWSToken = async (
     const json = await response.json();
 
     if (response.status >= 200 && response.status < 300) {
-      return json;
+      return json.token;
     } else {
       if (json.error) {
         throw new Error(json.message);
@@ -97,7 +97,7 @@ export const getAzureClusters = async (
   admin: boolean,
 ): Promise<IAzureCluster[]> => {
   try {
-    const response = await fetch(`${SERVER}/api/aws/token`, {
+    const response = await fetch(`${SERVER}/api/azure/clusters`, {
       method: 'post',
       body: JSON.stringify({
         subscriptionID: subscriptionID,

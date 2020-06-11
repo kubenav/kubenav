@@ -16,6 +16,7 @@ import (
 	bootstrap "github.com/asticode/go-astilectron-bootstrap"
 	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/sirupsen/logrus"
+	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 )
 
 var (

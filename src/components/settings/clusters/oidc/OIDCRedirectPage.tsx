@@ -1,4 +1,5 @@
 import {
+  IonAlert,
   IonButton,
   IonButtons,
   IonContent,
@@ -12,15 +13,17 @@ import {
   IonProgressBar,
   IonTextarea,
   IonTitle,
+  IonToggle,
   IonToolbar,
 } from '@ionic/react';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps, useLocation } from 'react-router';
 
 import { IContext } from '../../../../declarations';
 import { getOIDCRefreshToken } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import { readOIDCLastProvider } from '../../../../utils/storage';
+import useAsyncFn from '../../../../utils/useAsyncFn';
 import ErrorCard from '../../../misc/ErrorCard';
 
 const useQuery = () => {
@@ -29,23 +32,12 @@ const useQuery = () => {
 
 type IOIDCRedirectPageProps = RouteComponentProps;
 
-const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
-  location,
-  history,
-}: IOIDCRedirectPageProps) => {
+const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ history }: IOIDCRedirectPageProps) => {
   const context = useContext<IContext>(AppContext);
   const query = useQuery();
 
-  const [error, setError] = useState<string>('');
-  const [name, setName] = useState<string>('');
-  const [url, setURL] = useState<string>('');
-  const [certificateAuthorityData, setCertificateAuthorityData] = useState<string>('');
-  const [showLoading, setShowLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setShowLoading(true);
-
+  const [state, , fetchInit] = useAsyncFn(
+    async () => {
       try {
         const lastProvider = readOIDCLastProvider();
 
@@ -71,19 +63,26 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
 
             context.addOIDCProvider(provider);
           } else {
-            setError('Could not find OIDC provider.');
+            throw new Error('Could not find OIDC provider.');
           }
         }
       } catch (err) {
-        setError(err.message);
+        throw err;
       }
+    },
+    [],
+    { loading: true, error: undefined, value: undefined },
+  );
 
-      setShowLoading(false);
-    };
+  const [error, setError] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [url, setURL] = useState<string>('');
+  const [certificateAuthorityData, setCertificateAuthorityData] = useState<string>('');
+  const [insecureSkipTLSVerify, setInsecureSkipTLSVerify] = useState<boolean>(false);
 
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location]);
+  useEffect(() => {
+    fetchInit();
+  }, [fetchInit]);
 
   const handleName = (event) => {
     setName(event.target.value);
@@ -95,6 +94,10 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
 
   const handleCertificateAuthorityData = (event) => {
     setCertificateAuthorityData(event.target.value);
+  };
+
+  const handleInsecureSkipTLSVerify = (event) => {
+    setInsecureSkipTLSVerify(event.detail.checked);
   };
 
   const addClusters = () => {
@@ -117,7 +120,7 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
             token: '',
             username: '',
             password: '',
-            insecureSkipTLSVerify: false,
+            insecureSkipTLSVerify: insecureSkipTLSVerify,
             authProvider: `oidc__${readOIDCLastProvider()}`,
             namespace: 'default',
           },
@@ -139,7 +142,7 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
             <IonMenuButton />
           </IonButtons>
           <IonTitle>Add Clusters</IonTitle>
-          {error ? null : (
+          {state.error ? null : (
             <IonButtons slot="primary">
               <IonButton onClick={() => addClusters()}>Add</IonButton>
             </IonButtons>
@@ -147,10 +150,10 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
-
-        {error ? (
-          <ErrorCard error={error} text="OIDC Error" icon="/assets/icons/kubernetes/kubernetes.png" />
+        {state.loading ? (
+          <IonProgressBar slot="fixed" type="indeterminate" color="primary" />
+        ) : state.error ? (
+          <ErrorCard error={state.error} text="OIDC Error" icon="/assets/icons/kubernetes/kubernetes.png" />
         ) : (
           <IonList lines="full">
             <IonItem>
@@ -165,11 +168,27 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({
               <IonLabel position="stacked">Certificate Authority Data</IonLabel>
               <IonTextarea autoGrow={true} value={certificateAuthorityData} onInput={handleCertificateAuthorityData} />
             </IonItem>
+            <IonItem>
+              <IonLabel>Insecure Skip TLS Verify</IonLabel>
+              <IonToggle checked={insecureSkipTLSVerify} onIonChange={handleInsecureSkipTLSVerify} />
+            </IonItem>
           </IonList>
         )}
+
+        {error !== '' ? (
+          <IonAlert
+            isOpen={error !== ''}
+            onDidDismiss={() => setError('')}
+            header="Could not add cluster"
+            message={error}
+            buttons={['OK']}
+          />
+        ) : null}
       </IonContent>
     </IonPage>
   );
 };
 
-export default OIDCRedirectPage;
+export default memo(OIDCRedirectPage, (): boolean => {
+  return true;
+});

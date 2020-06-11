@@ -12,13 +12,14 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { ICluster, IContext } from '../../../../declarations';
 import { getGoogleClusters, getGoogleProjects, getGoogleTokens } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import { saveGoogleTokens } from '../../../../utils/storage';
+import useAsyncFn from '../../../../utils/useAsyncFn';
 import ErrorCard from '../../../misc/ErrorCard';
 
 const isChecked = (id: string, clusters: ICluster[]): boolean => {
@@ -36,15 +37,8 @@ type IGooglePageProps = RouteComponentProps;
 const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, history }: IGooglePageProps) => {
   const context = useContext<IContext>(AppContext);
 
-  const [error, setError] = useState<string>('');
-  const [clusters, setClusters] = useState<ICluster[]>([]);
-  const [selectedClusters, setSelectedClusters] = useState<ICluster[]>([]);
-  const [showLoading, setShowLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setShowLoading(true);
-
+  const [state, , fetchInit] = useAsyncFn(
+    async () => {
       try {
         const params = JSON.parse('{"' + location.search.substr(1).replace(/&/g, '", "').replace(/=/g, '": "') + '"}');
 
@@ -83,19 +77,23 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
                 });
               });
 
-              setClusters(tmpClusters);
+              return tmpClusters;
             }
           }
         }
       } catch (err) {
-        setError(err.message);
+        throw err;
       }
+    },
+    [],
+    { loading: true, error: undefined, value: undefined },
+  );
 
-      setShowLoading(false);
-    };
+  const [selectedClusters, setSelectedClusters] = useState<ICluster[]>([]);
 
-    fetchData();
-  }, [location]);
+  useEffect(() => {
+    fetchInit();
+  }, [fetchInit]);
 
   const toggleSelectedCluster = (checked: boolean, cluster: ICluster) => {
     if (checked) {
@@ -118,7 +116,7 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
             <IonMenuButton />
           </IonButtons>
           <IonTitle>Add Clusters</IonTitle>
-          {error ? null : (
+          {state.error ? null : (
             <IonButtons slot="primary">
               <IonButton onClick={() => addClusters()}>Add</IonButton>
             </IonButtons>
@@ -126,12 +124,16 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
-
-        {error ? (
-          <ErrorCard error={error} text="Could not load GKE clusters" icon="/assets/icons/kubernetes/kubernetes.png" />
+        {state.loading ? (
+          <IonProgressBar slot="fixed" type="indeterminate" color="primary" />
+        ) : state.error || !state.value ? (
+          <ErrorCard
+            error={state.error}
+            text="Could not load GKE clusters"
+            icon="/assets/icons/kubernetes/kubernetes.png"
+          />
         ) : (
-          clusters.map((cluster, index) => {
+          state.value.map((cluster, index) => {
             return (
               <IonItem key={index}>
                 <IonCheckbox
@@ -149,4 +151,6 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
   );
 };
 
-export default GooglePage;
+export default memo(GooglePage, (): boolean => {
+  return true;
+});

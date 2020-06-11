@@ -14,7 +14,7 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import yaml from 'js-yaml';
-import React, { useContext, useState } from 'react';
+import React, { memo, useContext, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import {
@@ -150,4 +150,6 @@ const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history
   );
 };
 
-export default KubeconfigPage;
+export default memo(KubeconfigPage, (): boolean => {
+  return true;
+});

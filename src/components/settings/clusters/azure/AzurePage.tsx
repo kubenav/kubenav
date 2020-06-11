@@ -12,7 +12,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import {
@@ -26,6 +26,7 @@ import {
 import { getAzureClusters } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import { readAzureCredentials } from '../../../../utils/storage';
+import useAsyncFn from '../../../../utils/useAsyncFn';
 import ErrorCard from '../../../misc/ErrorCard';
 
 const getKubeconfigCluster = (name: string, clusters: IKubeconfigClusterRef[]): IKubeconfigCluster | null => {
@@ -60,18 +61,11 @@ const isChecked = (id: string, clusters: ICluster[]): boolean => {
 
 type IAzurePageProps = RouteComponentProps;
 
-const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history }: IAzurePageProps) => {
+const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ history }: IAzurePageProps) => {
   const context = useContext<IContext>(AppContext);
 
-  const [error, setError] = useState<string>('');
-  const [clusters, setClusters] = useState<ICluster[]>([]);
-  const [selectedClusters, setSelectedClusters] = useState<ICluster[]>([]);
-  const [showLoading, setShowLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setShowLoading(true);
-
+  const [state, , fetchInit] = useAsyncFn(
+    async () => {
       try {
         const credentials = readAzureCredentials();
         if (credentials) {
@@ -119,19 +113,23 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
             }
           });
 
-          setClusters(tmpClusters);
+          return tmpClusters;
         } else {
           throw new Error('Could not credentials for Azure');
         }
       } catch (err) {
-        setError(err.message);
+        throw err;
       }
+    },
+    [],
+    { loading: true, error: undefined, value: undefined },
+  );
 
-      setShowLoading(false);
-    };
+  const [selectedClusters, setSelectedClusters] = useState<ICluster[]>([]);
 
-    fetchData();
-  }, [location]);
+  useEffect(() => {
+    fetchInit();
+  }, [fetchInit]);
 
   const toggleSelectedCluster = (checked: boolean, cluster: ICluster) => {
     if (checked) {
@@ -154,7 +152,7 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
             <IonMenuButton />
           </IonButtons>
           <IonTitle>Add Clusters</IonTitle>
-          {error ? null : (
+          {state.error ? null : (
             <IonButtons slot="primary">
               <IonButton onClick={() => addClusters()}>Add</IonButton>
             </IonButtons>
@@ -162,12 +160,16 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {showLoading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
-
-        {error ? (
-          <ErrorCard error={error} text="Could not load AKS clusters" icon="/assets/icons/kubernetes/kubernetes.png" />
+        {state.loading ? (
+          <IonProgressBar slot="fixed" type="indeterminate" color="primary" />
+        ) : state.error || !state.value ? (
+          <ErrorCard
+            error={state.error}
+            text="Could not load AKS clusters"
+            icon="/assets/icons/kubernetes/kubernetes.png"
+          />
         ) : (
-          clusters.map((cluster, index) => {
+          state.value.map((cluster, index) => {
             return (
               <IonItem key={index}>
                 <IonCheckbox
@@ -185,4 +187,6 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ location, history
   );
 };
 
-export default AzurePage;
+export default memo(AzurePage, (): boolean => {
+  return true;
+});
