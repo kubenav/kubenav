@@ -1,3 +1,6 @@
+import { Plugins } from '@capacitor/core';
+import { isPlatform } from '@ionic/react';
+
 import {
   IAWSCluster,
   IAWSTokens,
@@ -16,6 +19,32 @@ import { GOOGLE_REDIRECT_URI, OIDC_REDIRECT_URL_WEB, SERVER } from './constants'
 import { isJSON } from './helpers';
 import { readAWSTokens, readGoogleClientID, readGoogleTokens, saveGoogleTokens } from './storage';
 
+const { KubenavPlugin } = Plugins;
+
+// checkServer checks if the API is ready. An error can only occure when the server was stopped. In this case the server
+// is started and we wait 1 second befor the function returns.
+const checkServer = async (): Promise<boolean> => {
+  if (isPlatform('hybrid')) {
+    try {
+      const response = await fetch(`${SERVER}/api/health`);
+
+      if (response.status >= 200 && response.status < 300) {
+        return true;
+      } else {
+        throw new Error('Server is unhealthy.');
+      }
+    } catch (err) {
+      await KubenavPlugin.startServer();
+
+      return new Promise((resolve) => {
+        setTimeout(resolve, 1000);
+      });
+    }
+  } else {
+    return true;
+  }
+};
+
 // getAWSClusters returns all EKS clusters from AWS for the provided access key, secret access key and region. This
 // function is only available for the native mobile apps, on all other platforms an error is returned. For the desktop
 // implementation this is not needed, because we are using kubeconfig file from ~/.kube/config.
@@ -25,6 +54,8 @@ export const getAWSClusters = async (
   region: string,
 ): Promise<IAWSCluster[]> => {
   try {
+    await checkServer();
+
     const response = await fetch(`${SERVER}/api/aws/clusters`, {
       method: 'post',
       body: JSON.stringify({
@@ -60,6 +91,8 @@ export const getAWSToken = async (
   clusterID: string,
 ): Promise<string> => {
   try {
+    await checkServer();
+
     const response = await fetch(`${SERVER}/api/aws/token`, {
       method: 'post',
       body: JSON.stringify({
@@ -97,6 +130,8 @@ export const getAzureClusters = async (
   admin: boolean,
 ): Promise<IAzureCluster[]> => {
   try {
+    await checkServer();
+
     const response = await fetch(`${SERVER}/api/azure/clusters`, {
       method: 'post',
       body: JSON.stringify({
@@ -129,32 +164,40 @@ export const getAzureClusters = async (
 // browser. For the mobile app the active cluster is retrieved from localStorage and for desktop the current context is
 // also saved in localStorage at startup.
 export const getCluster = async (): Promise<string | undefined> => {
-  const response = await fetch(`${SERVER}/api/cluster`, {
-    method: 'GET',
-  });
+  try {
+    const response = await fetch(`${SERVER}/api/cluster`, {
+      method: 'GET',
+    });
 
-  const json = await response.json();
+    const json = await response.json();
 
-  if (response.status >= 200 && response.status < 300) {
-    return json.cluster;
+    if (response.status >= 200 && response.status < 300) {
+      return json.cluster;
+    }
+
+    return undefined;
+  } catch (err) {
+    return undefined;
   }
-
-  return undefined;
 };
 
 // getClusters returns all clusters from the Kubeconfig file on desktop.
 export const getClusters = async (): Promise<IClusters | undefined> => {
-  const response = await fetch(`${SERVER}/api/clusters`, {
-    method: 'GET',
-  });
+  try {
+    const response = await fetch(`${SERVER}/api/clusters`, {
+      method: 'GET',
+    });
 
-  const json = await response.json();
+    const json = await response.json();
 
-  if (response.status >= 200 && response.status < 300) {
-    return json.clusters;
+    if (response.status >= 200 && response.status < 300) {
+      return json.clusters;
+    }
+
+    return undefined;
+  } catch (err) {
+    return undefined;
   }
-
-  return undefined;
 };
 
 // getGoogleAccessToken returns a valid access token for Google. Therefore we read the saved tokens from the
@@ -296,6 +339,8 @@ export const kubernetesRequest = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
   try {
+    await checkServer();
+
     if (cluster.authProvider === 'google') {
       if (!(cluster.clientCertificateData !== '' && cluster.clientKeyData !== '')) {
         if (!(cluster.password !== '' && cluster.password !== '')) {
@@ -366,63 +411,75 @@ export const kubernetesRequest = async (
 // execRequest initialize the request to get a shell into a container. The generated session id is returned and can be
 // used to get the shell into the container.
 export const execRequest = async (url: string, cluster: ICluster): Promise<ITerminalResponse> => {
-  const response = await fetch(`${SERVER}/api/kubernetes/exec`, {
-    method: 'post',
-    body: JSON.stringify({
-      server: SERVER,
-      cluster: cluster ? cluster.id : '',
-      url: cluster ? cluster.url + url : '',
-      certificateAuthorityData: cluster ? cluster.certificateAuthorityData : '',
-      clientCertificateData: cluster ? cluster.clientCertificateData : '',
-      clientKeyData: cluster ? cluster.clientKeyData : '',
-      token: cluster ? cluster.token : '',
-      username: cluster ? cluster.username : '',
-      password: cluster ? cluster.password : '',
-      insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
-    }),
-  });
+  try {
+    await checkServer();
 
-  const json = await response.json();
+    const response = await fetch(`${SERVER}/api/kubernetes/exec`, {
+      method: 'post',
+      body: JSON.stringify({
+        server: SERVER,
+        cluster: cluster ? cluster.id : '',
+        url: cluster ? cluster.url + url : '',
+        certificateAuthorityData: cluster ? cluster.certificateAuthorityData : '',
+        clientCertificateData: cluster ? cluster.clientCertificateData : '',
+        clientKeyData: cluster ? cluster.clientKeyData : '',
+        token: cluster ? cluster.token : '',
+        username: cluster ? cluster.username : '',
+        password: cluster ? cluster.password : '',
+        insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
+      }),
+    });
 
-  if (response.status >= 200 && response.status < 300) {
-    return json;
-  } else {
-    if (json.error) {
-      throw new Error(json.message);
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
     } else {
-      throw new Error('An unknown error occured');
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
     }
+  } catch (err) {
+    throw err;
   }
 };
 
 // logsRequest returns the session id to stream the log files of a container via server sent events.
 export const logsRequest = async (url: string, cluster: ICluster): Promise<ITerminalResponse> => {
-  const response = await fetch(`${SERVER}/api/kubernetes/logs`, {
-    method: 'post',
-    body: JSON.stringify({
-      server: SERVER,
-      cluster: cluster ? cluster.id : '',
-      url: cluster ? cluster.url + url : '',
-      certificateAuthorityData: cluster ? cluster.certificateAuthorityData : '',
-      clientCertificateData: cluster ? cluster.clientCertificateData : '',
-      clientKeyData: cluster ? cluster.clientKeyData : '',
-      token: cluster ? cluster.token : '',
-      username: cluster ? cluster.username : '',
-      password: cluster ? cluster.password : '',
-      insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
-    }),
-  });
+  try {
+    await checkServer();
 
-  const json = await response.json();
+    const response = await fetch(`${SERVER}/api/kubernetes/logs`, {
+      method: 'post',
+      body: JSON.stringify({
+        server: SERVER,
+        cluster: cluster ? cluster.id : '',
+        url: cluster ? cluster.url + url : '',
+        certificateAuthorityData: cluster ? cluster.certificateAuthorityData : '',
+        clientCertificateData: cluster ? cluster.clientCertificateData : '',
+        clientKeyData: cluster ? cluster.clientKeyData : '',
+        token: cluster ? cluster.token : '',
+        username: cluster ? cluster.username : '',
+        password: cluster ? cluster.password : '',
+        insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
+      }),
+    });
 
-  if (response.status >= 200 && response.status < 300) {
-    return json;
-  } else {
-    if (json.error) {
-      throw new Error(json.message);
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
     } else {
-      throw new Error('An unknown error occured');
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
     }
+  } catch (err) {
+    throw err;
   }
 };
 
@@ -442,6 +499,8 @@ export const getOIDCAccessToken = async (provider: IOIDCProvider): Promise<IOIDC
   }
 
   try {
+    await checkServer();
+
     const response = await fetch(`${SERVER}/api/oidc/accesstoken`, {
       method: 'post',
       body: JSON.stringify({
@@ -473,6 +532,8 @@ export const getOIDCAccessToken = async (provider: IOIDCProvider): Promise<IOIDC
 // logged in the getOIDCRefreshToken function is used to exchange the returned code for a refresh token.
 export const getOIDCLink = async (discoveryURL: string, clientID: string, clientSecret: string): Promise<string> => {
   try {
+    await checkServer();
+
     const response = await fetch(`${SERVER}/api/oidc/link`, {
       method: 'post',
       body: JSON.stringify({
@@ -508,6 +569,8 @@ export const getOIDCRefreshToken = async (
   code: string,
 ): Promise<IOIDCProviderToken> => {
   try {
+    await checkServer();
+
     const response = await fetch(`${SERVER}/api/oidc/refreshtoken`, {
       method: 'post',
       body: JSON.stringify({
