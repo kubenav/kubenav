@@ -31,7 +31,7 @@ const StorageClassItem: React.FunctionComponent<IStorageClassItemProps> = ({
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>
-          Provisioner: {item.provisioner}
+          {item.provisioner ? `Provisioner:  ${item.provisioner}` : 'Provisioner: -'}
           {item.reclaimPolicy ? ` | Reclaim Policy: ${item.reclaimPolicy}` : ''}
           {item.volumeBindingMode ? ` | Volume Binding Mode: ${item.volumeBindingMode}` : ''}
           {item.allowVolumeExpansion ? ` | Allow Volume Expansion: ${item.allowVolumeExpansion}` : ''}

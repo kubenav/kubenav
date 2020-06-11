@@ -144,7 +144,7 @@ const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }: IOIDCPag
           <IonAlert
             isOpen={error !== ''}
             onDidDismiss={() => setError('')}
-            header="Could not save"
+            header="Could not add cluster"
             message={error}
             buttons={['OK']}
           />

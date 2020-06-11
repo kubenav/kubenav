@@ -9,6 +9,7 @@ import (
 	"github.com/kubenav/kubenav/pkg/version"
 
 	"github.com/sirupsen/logrus"
+	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 )
 
 var (
