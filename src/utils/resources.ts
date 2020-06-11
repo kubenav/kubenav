@@ -179,8 +179,8 @@ export const resources: IAppSections = {
     title: 'Discovery and Load Balancing',
     pages: {
       endpoints: {
-        singleText: 'Endpoints',
-        pluralText: 'Endpoint',
+        singleText: 'Endpoint',
+        pluralText: 'Endpoints',
         icon: '/assets/icons/kubernetes/ep.png',
         listURL: (namespace: string) => {
           return namespace ? `/api/v1/namespaces/${namespace}/endpoints` : `/api/v1/endpoints`;
