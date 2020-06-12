@@ -1,11 +1,11 @@
-import { IonItem, IonLabel, IonListHeader, IonSelect, IonSelectOption, IonMenuToggle } from '@ionic/react';
+import { IonItem, IonLabel, IonListHeader, IonSelect, IonSelectOption, IonMenuToggle, isPlatform } from '@ionic/react';
 import React, { memo, useContext } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { IContext } from '../../declarations';
 import { AppContext } from '../../utils/context';
 
-const Context: React.FunctionComponent<RouteComponentProps> = ({ history, location }: RouteComponentProps) => {
+const Clusters: React.FunctionComponent<RouteComponentProps> = ({ history, location }: RouteComponentProps) => {
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
 
@@ -40,24 +40,30 @@ const Context: React.FunctionComponent<RouteComponentProps> = ({ history, locati
     return (
       <React.Fragment>
         <IonListHeader mode="md">
-          <IonLabel>Context</IonLabel>
+          <IonLabel>Clusters</IonLabel>
         </IonListHeader>
         <IonMenuToggle autoHide={false}>
           <IonItem>
             <IonSelect
               disabled={location.pathname.startsWith('/settings/clusters')}
-              value={cluster.name}
+              value={cluster.id}
               onIonChange={(e) => changeCluster(e.detail.value)}
-              interface="action-sheet"
-              interfaceOptions={{
-                header: 'Select Context',
-              }}
-              style={{ maxWidth: '100%', width: '100%' }}
+              interface={isPlatform('hybrid') ? 'action-sheet' : 'popover'}
+              interfaceOptions={
+                isPlatform('hybrid')
+                  ? {
+                      header: 'Select Cluster',
+                    }
+                  : {
+                      cssClass: 'menu-cluster-select',
+                    }
+              }
+              className="menu-cluster-select"
             >
               {context.clusters
                 ? Object.keys(context.clusters).map((key) => {
                     return context.clusters ? (
-                      <IonSelectOption key={key} value={context.clusters[key].name}>
+                      <IonSelectOption key={key} value={context.clusters[key].id}>
                         {context.clusters[key].name}
                       </IonSelectOption>
                     ) : null;
@@ -74,7 +80,7 @@ const Context: React.FunctionComponent<RouteComponentProps> = ({ history, locati
 };
 
 export default withRouter(
-  memo(Context, (prevProps, nextProps): boolean => {
+  memo(Clusters, (prevProps, nextProps): boolean => {
     if (prevProps.location.pathname !== nextProps.location.pathname) {
       return false;
     }

@@ -19,7 +19,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { IAppSections } from '../../declarations';
 import { CUSTOM_URI_SCHEME, GOOGLE_REDIRECT_URI, OIDC_REDIRECT_URL, SERVER } from '../../utils/constants';
 import { saveCluster } from '../../utils/storage';
-import Context from './Context';
+import Clusters from './Clusters';
 import Sections from './Sections';
 
 const { App } = Plugins;
@@ -61,7 +61,7 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections }: IMenuProps) => 
       </IonHeader>
       <IonContent>
         <IonList>
-          <Context />
+          <Clusters />
 
           <Sections sections={sections} isMenu={true} />
 

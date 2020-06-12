@@ -64,7 +64,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
         getURL(cluster ? cluster.namespace : '', match.params.group, match.params.version, match.params.name),
         '',
       ),
-    [cluster?.namespace],
+    [cluster?.id, cluster?.namespace],
     { loading: true, error: undefined, value: undefined },
   );
 

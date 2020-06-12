@@ -1,4 +1,4 @@
-import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonSplitPane, isPlatform } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import React from 'react';
 import { Route } from 'react-router-dom';
@@ -43,7 +43,7 @@ const App: React.FunctionComponent = () => (
     <AppContextProvider>
       <TerminalContextProvider>
         <IonReactRouter>
-          <IonSplitPane contentId="main">
+          <IonSplitPane contentId="main" className={isPlatform('hybrid') ? '' : 'menu-width'}>
             <Menu sections={resources} />
             <IonRouterOutlet id="main">
               <Route path="/" component={HomePage} exact={true} />
