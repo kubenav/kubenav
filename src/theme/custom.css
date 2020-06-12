@@ -116,3 +116,24 @@ ion-avatar {
 .ion-card-content-divider {
   border-bottom: 1px solid var(--ion-color-light);
 }
+
+/* Menu customization
+   On desktop the menu should always have a width of 400px, Therefor we are setting the minimum and maximum width of the
+   IonSplitPane. 400px corresponds to one quater of the default Electron window size.
+   To fit the menu we set the width of the cluster select box to 100% and the width of the popover to 400px - 32px
+   (the padding left + right). */
+.menu-width {
+  --side-max-width: 400px;
+  --side-min-width: 400px;
+  --side-width: 400px;
+}
+
+.menu-cluster-select {
+  max-width: 100%;
+  width: 100%;
+}
+
+.menu-cluster-select .popover-content {
+  width: 368px;
+}
+

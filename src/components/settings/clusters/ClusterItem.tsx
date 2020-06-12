@@ -33,9 +33,13 @@ const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IC
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const changeCluster = async (id: string) => {
+    await context.changeCluster(id);
+  };
+
   return (
     <IonItemSliding>
-      <IonItem button={true} onClick={() => context.changeCluster(cluster.id)}>
+      <IonItem button={true} onClick={() => changeCluster(cluster.id)}>
         <IonIcon
           slot="end"
           color={status ? 'success' : 'danger'}

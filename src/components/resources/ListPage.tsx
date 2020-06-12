@@ -60,7 +60,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
   // useAsyncFn is a custom React hook which wrapps our API call.
   const [state, fetch, fetchInit] = useAsyncFn(
     async () => await context.request('GET', page.listURL(cluster ? cluster.namespace : ''), ''),
-    [page, cluster?.namespace],
+    [page, cluster?.id, cluster?.namespace],
     { loading: true, error: undefined, value: undefined },
   );
 
