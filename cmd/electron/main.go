@@ -28,7 +28,7 @@ var (
 var (
 	debugFlag             = flag.Bool("debug", false, "Enable debug mode.")
 	kubeconfigFlag        = flag.String("kubeconfig", "", "Optional Kubeconfig file.")
-	kubeconfigIncludeFlag = flag.String("kubeconfig-include", "", "Comma separated list of globs to include in the Kubeconfig. When this option is used the '-kubeconfig' and '-sync' flag is ignored.")
+	kubeconfigIncludeFlag = flag.String("kubeconfig-include", "", "Comma separated list of globs to include in the Kubeconfig.")
 	kubeconfigExcludeFlag = flag.String("kubeconfig-exclude", "", "Comma separated list of globs to exclude from the Kubeconfig. This flag must be used in combination with the '-kubeconfig-include' flag.")
 	syncFlag              = flag.Bool("sync", false, "Sync the changes from kubenav with the used Kubeconfig file.")
 )
@@ -44,14 +44,7 @@ var messageChannel = make(chan Message)
 
 func main() {
 	// Parse command-line flags.
-	// When the "-kubeconfig-includ" flag is used the sync flag is ignored. Therefor we set the sync value always to
-	// false. The same applies for the "-kubeconfig" flag, but this is handled by the Kubernetes client.
 	flag.Parse()
-
-	sync := *syncFlag
-	if *kubeconfigIncludeFlag != "" {
-		sync = false
-	}
 
 	// Setup the logger and print the version information.
 	log := logrus.StandardLogger()
@@ -76,7 +69,7 @@ func main() {
 	// frontend from the embedded assets.
 	go func() {
 		router := http.NewServeMux()
-		electron.Register(router, sync, client)
+		electron.Register(router, *syncFlag, client)
 
 		// Add route for Server Sent Events. The events are handled via the message channel. Possible events are
 		// "navigation" and "cluster". These events are handled by the frontend to navigate to another page or to modify
@@ -138,7 +131,7 @@ func main() {
 	// selected context back to the Kubeconfig file, the result from the version check and the Kubernetes client and
 	// logger.
 	updateAvailable := checkVersion(version.Version, log)
-	menuOptions, err := getMenuOptions(sync, updateAvailable, client, log)
+	menuOptions, err := getMenuOptions(*syncFlag, updateAvailable, client, log)
 	if err != nil {
 		log.WithError(err).Fatalf("Could not create menu")
 	}

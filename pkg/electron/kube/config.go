@@ -1,51 +1,56 @@
 package kube
 
 import (
+	"fmt"
 	"os"
+	"os/user"
+	"path"
 	"path/filepath"
-	"runtime"
 	"strings"
 
 	"k8s.io/client-go/tools/clientcmd"
 )
 
-// homeDir returns the users home directory, where the '.kube' directory is located.
-// The '.kube' directory contains the configuration file for a Kubernetes cluster.
-func homeDir() string {
-	if h := os.Getenv("HOME"); h != "" {
-		return h
+// loadConfigFile implements the logic from kubectl to load Kubeconfig files. If the -kubeconfig flag is provided this
+// file is used. When the flag isn't provided the KUBECONFIG variable or the default Kubeconfig directory is used.
+func loadConfigFile(kubeconfig string) (clientcmd.ClientConfig, error) {
+	if len(kubeconfig) > 0 {
+		return clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
+			&clientcmd.ClientConfigLoadingRules{ExplicitPath: kubeconfig},
+			&clientcmd.ConfigOverrides{},
+		), nil
 	}
 
-	// Get the home directory on windows.
-	return os.Getenv("USERPROFILE")
-}
-
-// loadConfigFile loads a single Kubeconfig file. If the "-kubeconfig" flag is set the provided file will be used. If
-// the value is empty the "KUBECONFIG" environment variable or the "~/.kube/config" file is used.
-func loadConfigFile(kubeconfig string) (clientcmd.ClientConfig, error) {
-	if kubeconfig == "" {
-		if os.Getenv("KUBECONFIG") == "" {
-			if home := homeDir(); home != "" {
-				kubeconfig = filepath.Join(home, ".kube", "config")
-			} else {
-				return nil, ErrConfigNotFound
-			}
-		} else {
-			kubeconfig = os.Getenv("KUBECONFIG")
+	loadingRules := clientcmd.NewDefaultClientConfigLoadingRules()
+	if _, ok := os.LookupEnv("HOME"); !ok {
+		u, err := user.Current()
+		if err != nil {
+			return nil, fmt.Errorf("could not get current user: %v", err)
 		}
+
+		loadingRules.Precedence = append(loadingRules.Precedence, path.Join(u.HomeDir, clientcmd.RecommendedHomeDir, clientcmd.RecommendedFileName))
 	}
 
 	return clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
-		&clientcmd.ClientConfigLoadingRules{ExplicitPath: kubeconfig},
+		loadingRules,
 		&clientcmd.ConfigOverrides{},
 	), nil
 }
 
 // loadConfigFiles loads and merged multiple Kubeconfig file by the provided glob. If a file matches the exlude glob the
 // file isn't included in the final config object.
+//
+// Example: -kubeconfig-include ~/Documents/kubeconfigs1/kube*,~/Documents/kubeconfigs2/kube*
 func loadConfigFiles(includeKubeconfig, excludeKubeconfig string) (clientcmd.ClientConfig, error) {
-	includes := getFilesFromString(includeKubeconfig)
-	excludes := getFilesFromString(excludeKubeconfig)
+	includes, err := getFilesFromString(includeKubeconfig)
+	if err != nil {
+		return nil, err
+	}
+
+	excludes, err := getFilesFromString(excludeKubeconfig)
+	if err != nil {
+		return nil, err
+	}
 
 	includeFiles, err := getFilesForGlobs(includes)
 	if err != nil {
@@ -72,12 +77,15 @@ func loadConfigFiles(includeKubeconfig, excludeKubeconfig string) (clientcmd.Cli
 
 // getFilesFromString returns a slice of files from a single string. The string is splitted by the "," character. If an
 // item starts with "~/" the tilde character is replaced with the path of the home directory.
-//
-// Note: On macOS the home directory must be lowercase.
-func getFilesFromString(filesStr string) []string {
-	home := homeDir()
-	if runtime.GOOS == "darwin" {
-		home = strings.ToLower(home)
+func getFilesFromString(filesStr string) ([]string, error) {
+	home, ok := os.LookupEnv("HOME")
+	if !ok {
+		u, err := user.Current()
+		if err != nil {
+			return nil, fmt.Errorf("could not get current user: %v", err)
+		}
+
+		home = u.HomeDir
 	}
 
 	var files []string
@@ -89,7 +97,7 @@ func getFilesFromString(filesStr string) []string {
 		}
 	}
 
-	return files
+	return files, nil
 }
 
 // getFilesForGlobs returns a list of files for a list of globs using the filepath.Glob function. The accepted pattern

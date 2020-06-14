@@ -39,7 +39,7 @@ On mobile you can add your Cluster via Kubeconfig file or via your prefered Clou
 - [Google OAuth 2.0 Configuration](https://kubenav.io/help/google-oauth2-configuration.html)
 - [Microsoft Azure: Creating App Credentials](https://kubenav.io/help/microsoft-azure-creating-app-credentials.html)
 
-On desktop kubenav will automatic load all configured clusters from your `~/.kube/config` file. If you want to use another Kubeconfig file you can start kubenav with the `-kubeconfig` Flag. You can also use the `-kubeconfig-include` and `-kubeconfig-exclude` flag to load Kubeconfig files from multiple locations. The `-sync` flag can be used to write context changes back to your Kubeconfig file, so the context is also changed on your terminal.
+On desktop kubenav will automatic load all configured clusters from the default Kubeconfig file or the `KUBECONFIG` environment variable. If you want to use another Kubeconfig file, you can start kubenav with the `-kubeconfig` Flag. You can also use the `-kubeconfig-include` and `-kubeconfig-exclude` flag to load Kubeconfig files from multiple locations by glob. The `-sync` flag can be used to write context changes back to your Kubeconfig file, so the context is also changed in your terminal.
 
 ## Beta and Nightly Builds
 

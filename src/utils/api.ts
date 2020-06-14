@@ -172,7 +172,7 @@ export const getCluster = async (): Promise<string | undefined> => {
     const json = await response.json();
 
     if (response.status >= 200 && response.status < 300) {
-      return json.cluster;
+      return json.cluster || undefined;
     }
 
     return undefined;
@@ -191,7 +191,11 @@ export const getClusters = async (): Promise<IClusters | undefined> => {
     const json = await response.json();
 
     if (response.status >= 200 && response.status < 300) {
-      return json.clusters;
+      if (Object.keys(json.clusters).length === 0) {
+        return undefined;
+      } else {
+        return json.clusters;
+      }
     }
 
     return undefined;
