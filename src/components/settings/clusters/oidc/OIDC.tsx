@@ -109,7 +109,7 @@ const OIDC: React.FunctionComponent = () => {
         </p>
         <p className="paragraph-margin-bottom">
           When your OIDC provider uses self signed certificate you have to set the <b>Certificate Authority</b> field.
-          You can also skip the OIDC login, when providing a valid refresh token.
+          You can also skip the redirect to the OIDC login page, by providing a valid refresh token.
         </p>
 
         <IonList className="paragraph-margin-bottom" lines="full">
