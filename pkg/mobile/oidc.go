@@ -2,6 +2,8 @@ package mobile
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -14,12 +16,13 @@ import (
 
 // OIDCRequest is the structure of a request for one of the OIDC methods.
 type OIDCRequest struct {
-	DiscoveryURL string `json:"discoveryURL"`
-	ClientID     string `json:"clientID"`
-	ClientSecret string `json:"clientSecret"`
-	RedirectURL  string `json:"redirectURL"`
-	RefreshToken string `json:"refreshToken"`
-	Code         string `json:"code"`
+	DiscoveryURL         string `json:"discoveryURL"`
+	ClientID             string `json:"clientID"`
+	ClientSecret         string `json:"clientSecret"`
+	CertificateAuthority string `json:"certificateAuthority"`
+	RedirectURL          string `json:"redirectURL"`
+	RefreshToken         string `json:"refreshToken"`
+	Code                 string `json:"code"`
 }
 
 // OIDCResponse is the structure of a response for one of the OIDC methods.
@@ -49,10 +52,15 @@ func oidcGetLinkHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ctx := context.Background()
+	ctx, err := oidcContext(r.Context(), oidcRequest.CertificateAuthority)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not create context: %s", err.Error()))
+		return
+	}
+
 	provider, err := oidc.NewProvider(ctx, oidcRequest.DiscoveryURL)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create OIDC provider")
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not create OIDC provider: %s", err.Error()))
 		return
 	}
 
@@ -89,10 +97,15 @@ func oidcGetRefreshTokenHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ctx := context.Background()
+	ctx, err := oidcContext(r.Context(), oidcRequest.CertificateAuthority)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not create context: %s", err.Error()))
+		return
+	}
+
 	provider, err := oidc.NewProvider(ctx, oidcRequest.DiscoveryURL)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create OIDC provider")
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not create OIDC provider: %s", err.Error()))
 		return
 	}
 
@@ -106,13 +119,13 @@ func oidcGetRefreshTokenHandler(w http.ResponseWriter, r *http.Request) {
 
 	oauth2Token, err := oauth2Config.Exchange(ctx, oidcRequest.Code)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not oauth token")
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not get oauth token: %s", err.Error()))
 		return
 	}
 
 	idToken, ok := oauth2Token.Extra("id_token").(string)
 	if !ok {
-		middleware.Errorf(w, r, nil, http.StatusInternalServerError, "Could not id token")
+		middleware.Errorf(w, r, nil, http.StatusInternalServerError, "Could not get id token")
 		return
 	}
 
@@ -145,10 +158,15 @@ func oidcGetAccessTokenHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ctx := context.Background()
+	ctx, err := oidcContext(r.Context(), oidcRequest.CertificateAuthority)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not create context: %s", err.Error()))
+		return
+	}
+
 	provider, err := oidc.NewProvider(ctx, oidcRequest.DiscoveryURL)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create OIDC provider")
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not create OIDC provider: %s", err.Error()))
 		return
 	}
 
@@ -163,7 +181,7 @@ func oidcGetAccessTokenHandler(w http.ResponseWriter, r *http.Request) {
 	ts := oauth2Config.TokenSource(ctx, &oauth2.Token{RefreshToken: oidcRequest.RefreshToken})
 	token, err := ts.Token()
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not get token")
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not get token: %s", err.Error()))
 		return
 	}
 
@@ -176,4 +194,31 @@ func oidcGetAccessTokenHandler(w http.ResponseWriter, r *http.Request) {
 
 	middleware.Write(w, r, oidcResponse)
 	return
+}
+
+// oidcContext creates the context for the HTTP requests against the OIDC provider. If the OIDC provider uses a self
+// signed certificate, it will be included in the context.
+//
+// NOTE: The certificateAuthority field correlates to the idp-certificate-authority field in the Kubeconfig
+// auth-provider section.
+func oidcContext(ctx context.Context, certificateAuthority string) (context.Context, error) {
+	if certificateAuthority == "" {
+		return ctx, nil
+	}
+
+	tlsConfig := &tls.Config{RootCAs: x509.NewCertPool()}
+	rootCA := []byte(certificateAuthority)
+
+	if !tlsConfig.RootCAs.AppendCertsFromPEM(rootCA) {
+		return ctx, fmt.Errorf("no certs found in root CA file")
+	}
+
+	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: tlsConfig,
+		},
+	}
+
+	return oidc.ClientContext(ctx, client), nil
+
 }

@@ -53,6 +53,7 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
               provider.idpIssuerURL,
               provider.clientID,
               provider.clientSecret,
+              provider.certificateAuthority,
               query.get('code') as string,
             );
 

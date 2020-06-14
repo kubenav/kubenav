@@ -212,6 +212,7 @@ export interface IOIDCProvider {
   idToken: string;
   idpIssuerURL: string;
   refreshToken: string;
+  certificateAuthority: string;
   accessToken: string;
   expiry: number;
 }

@@ -511,6 +511,7 @@ export const getOIDCAccessToken = async (provider: IOIDCProvider): Promise<IOIDC
         discoveryURL: provider.idpIssuerURL,
         clientID: provider.clientID,
         clientSecret: provider.clientSecret,
+        certificateAuthority: provider.certificateAuthority ? provider.certificateAuthority : '',
         redirectURL: OIDC_REDIRECT_URL_WEB,
         refreshToken: provider.refreshToken,
       }),
@@ -534,7 +535,12 @@ export const getOIDCAccessToken = async (provider: IOIDCProvider): Promise<IOIDC
 
 // getOIDCLink returns the login link for the OIDC provider. The user is redirect to the returned link. After the user
 // logged in the getOIDCRefreshToken function is used to exchange the returned code for a refresh token.
-export const getOIDCLink = async (discoveryURL: string, clientID: string, clientSecret: string): Promise<string> => {
+export const getOIDCLink = async (
+  discoveryURL: string,
+  clientID: string,
+  clientSecret: string,
+  certificateAuthority: string,
+): Promise<string> => {
   try {
     await checkServer();
 
@@ -544,6 +550,7 @@ export const getOIDCLink = async (discoveryURL: string, clientID: string, client
         discoveryURL: discoveryURL,
         clientID: clientID,
         clientSecret: clientSecret,
+        certificateAuthority: certificateAuthority,
         redirectURL: OIDC_REDIRECT_URL_WEB,
       }),
     });
@@ -570,6 +577,7 @@ export const getOIDCRefreshToken = async (
   discoveryURL: string,
   clientID: string,
   clientSecret: string,
+  certificateAuthority: string,
   code: string,
 ): Promise<IOIDCProviderToken> => {
   try {
@@ -581,6 +589,7 @@ export const getOIDCRefreshToken = async (
         discoveryURL: discoveryURL,
         clientID: clientID,
         clientSecret: clientSecret,
+        certificateAuthority: certificateAuthority,
         redirectURL: OIDC_REDIRECT_URL_WEB,
         code: code,
       }),
