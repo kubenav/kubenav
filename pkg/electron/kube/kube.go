@@ -16,8 +16,7 @@ var (
 
 // Client implements an API client for a Kubernetes cluster.
 type Client struct {
-	config     clientcmd.ClientConfig
-	kubeconfig string
+	config clientcmd.ClientConfig
 }
 
 // Cluster implements the cluster type used in the React app.
@@ -53,8 +52,7 @@ func NewClient(kubeconfig, kubeconfigInclude, kubeconfigExclude string) (*Client
 	}
 
 	return &Client{
-		config:     config,
-		kubeconfig: kubeconfig,
+		config: config,
 	}, nil
 }
 
@@ -93,17 +91,16 @@ func (c *Client) Clusters() (map[string]Cluster, error) {
 }
 
 // ChangeContext is used to modify the current-context value in the used Kubeconfig file and to persist these changes.
-// Note: We modify the raw config directly and do not use the logic of the ConfigClientset function, because the
-// override has no effect to the raw config. See: https://github.com/kubernetes/client-go/issues/735
+// Note: We are using the same logic as kubectl, see https://github.com/kubernetes/kubernetes/blob/master/staging/src/k8s.io/kubectl/pkg/cmd/config/use_context.go
 func (c *Client) ChangeContext(context string) error {
-	raw, err := c.config.RawConfig()
+	config, err := c.config.ConfigAccess().GetStartingConfig()
 	if err != nil {
 		return err
 	}
 
-	raw.CurrentContext = context
+	config.CurrentContext = context
 
-	return clientcmd.WriteToFile(raw, c.kubeconfig)
+	return clientcmd.ModifyConfig(c.config.ConfigAccess(), *config, true)
 }
 
 // ChangeNamespace is used to modify the namespace of the currently selected context and to persist these changes in the
@@ -115,14 +112,14 @@ func (c *Client) ChangeNamespace(context, namespace string) error {
 		return nil
 	}
 
-	raw, err := c.config.RawConfig()
+	config, err := c.config.ConfigAccess().GetStartingConfig()
 	if err != nil {
 		return err
 	}
 
-	raw.Contexts[context].Namespace = namespace
+	config.Contexts[context].Namespace = namespace
 
-	return clientcmd.WriteToFile(raw, c.kubeconfig)
+	return clientcmd.ModifyConfig(c.config.ConfigAccess(), *config, true)
 }
 
 // ConfigClientset creates the config and clientset for an Kubernetes API call.

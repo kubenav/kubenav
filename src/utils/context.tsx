@@ -85,13 +85,8 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
 
       if (!isPlatform('hybrid')) {
         const receivedClusters = await getClusters();
+        const activeCluster = await getCluster();
         setClusters(receivedClusters);
-
-        let activeCluster = readCluster();
-        if (!activeCluster) {
-          activeCluster = await getCluster();
-        }
-
         setCluster(activeCluster);
       } else {
         setClusters(readClusters());
