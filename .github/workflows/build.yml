@@ -45,7 +45,8 @@ jobs:
         run: |
           ionic build
         env:
-          REACT_APP_VERSION: ${{ steps.get_version.outputs.VERSION }}
+          # REACT_APP_VERSION: ${{ steps.get_version.outputs.VERSION }}
+          REACT_APP_VERSION: 2.0.0
 
       - name: Install astilectron-bundler
         run: |
