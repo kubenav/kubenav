@@ -36,17 +36,11 @@ func openBrowser(url string) {
 
 // createClusterMenuItem creates a new menu item for a given context from the Kubeconfig file.
 // When the cluster is selected an "cluster" event will be send to the frontend via SSE.
-func createClusterMenuItem(cluster string, sync bool, client *kube.Client, log *logrus.Logger) astilectron.MenuItemOptions {
+func createClusterMenuItem(cluster string, log *logrus.Logger) astilectron.MenuItemOptions {
 	return astilectron.MenuItemOptions{
 		Label: astikit.StrPtr(cluster),
 		OnClick: func(e astilectron.Event) (deleteListener bool) {
 			log.Debugf("Menu item '%s' has been clicked", cluster)
-			if sync {
-				err := client.ChangeContext(cluster)
-				if err != nil {
-					log.WithError(err).Errorf("Could not save selected context")
-				}
-			}
 			messageChannel <- Message{Event: "cluster", Data: cluster}
 			return
 		},
@@ -133,7 +127,7 @@ func createFileMenu(updateAvailable bool, log *logrus.Logger) *astilectron.MenuI
 }
 
 // getMenuOptions returns the menu for the Electron app.
-func getMenuOptions(sync bool, updateAvailable bool, client *kube.Client, log *logrus.Logger) ([]*astilectron.MenuItemOptions, error) {
+func getMenuOptions(updateAvailable bool, client *kube.Client, log *logrus.Logger) ([]*astilectron.MenuItemOptions, error) {
 	fileMenu := createFileMenu(updateAvailable, log)
 
 	// Load all clusters from the Kubeconfig file and sort the clusters alphabetical. Then iterate over the clusters and
@@ -151,7 +145,7 @@ func getMenuOptions(sync bool, updateAvailable bool, client *kube.Client, log *l
 
 	var clusterSubMenu []*astilectron.MenuItemOptions
 	for _, context := range contexts {
-		item := createClusterMenuItem(context, sync, client, log)
+		item := createClusterMenuItem(context, log)
 		clusterSubMenu = append(clusterSubMenu, &item)
 	}
 
@@ -247,10 +241,34 @@ func getMenuOptions(sync bool, updateAvailable bool, client *kube.Client, log *l
 					Label: astikit.StrPtr("Discovery and Load Balancing"),
 					SubMenu: []*astilectron.MenuItemOptions{
 						{
+							Label: astikit.StrPtr("Endpoints"),
+							OnClick: func(e astilectron.Event) (deleteListener bool) {
+								log.Debugf("Menu item 'Endpoint' has been clicked")
+								messageChannel <- Message{Event: "navigation", Data: "/resources/discovery-and-loadbalancing/endpoints"}
+								return
+							},
+						},
+						{
+							Label: astikit.StrPtr("Horizontal Pod Autoscalers"),
+							OnClick: func(e astilectron.Event) (deleteListener bool) {
+								log.Debugf("Menu item 'Horizontal Pod Autoscalers' has been clicked")
+								messageChannel <- Message{Event: "navigation", Data: "/resources/discovery-and-loadbalancing/horizontalpodautoscalers"}
+								return
+							},
+						},
+						{
 							Label: astikit.StrPtr("Ingresses"),
 							OnClick: func(e astilectron.Event) (deleteListener bool) {
 								log.Debugf("Menu item 'Ingresses' has been clicked")
 								messageChannel <- Message{Event: "navigation", Data: "/resources/discovery-and-loadbalancing/ingresses"}
+								return
+							},
+						},
+						{
+							Label: astikit.StrPtr("Network Policies"),
+							OnClick: func(e astilectron.Event) (deleteListener bool) {
+								log.Debugf("Menu item 'Network Policies' has been clicked")
+								messageChannel <- Message{Event: "navigation", Data: "/resources/discovery-and-loadbalancing/networkpolicies"}
 								return
 							},
 						},
@@ -307,6 +325,14 @@ func getMenuOptions(sync bool, updateAvailable bool, client *kube.Client, log *l
 								return
 							},
 						},
+						{
+							Label: astikit.StrPtr("Storage Classes"),
+							OnClick: func(e astilectron.Event) (deleteListener bool) {
+								log.Debugf("Menu item 'Storage Classes' has been clicked")
+								messageChannel <- Message{Event: "navigation", Data: "/resources/config-and-storage/storageclasses"}
+								return
+							},
+						},
 					},
 				},
 				{
@@ -324,7 +350,7 @@ func getMenuOptions(sync bool, updateAvailable bool, client *kube.Client, log *l
 							Label: astikit.StrPtr("Cluster Role Bindings"),
 							OnClick: func(e astilectron.Event) (deleteListener bool) {
 								log.Debugf("Menu item 'Cluster Role Bindings' has been clicked")
-								messageChannel <- Message{Event: "navigation", Data: "/resources/rbac/clusterrolebinding"}
+								messageChannel <- Message{Event: "navigation", Data: "/resources/rbac/clusterrolebindings"}
 								return
 							},
 						},

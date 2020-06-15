@@ -127,11 +127,10 @@ func main() {
 		}
 	}()
 
-	// Check if a new version is available and create the menu. For the menu we need the sync flag, to write the
-	// selected context back to the Kubeconfig file, the result from the version check and the Kubernetes client and
-	// logger.
+	// Check if a new version is available and create the menu. For the menu we need the result from the version check
+	// and the Kubernetes client and logger.
 	updateAvailable := checkVersion(version.Version, log)
-	menuOptions, err := getMenuOptions(*syncFlag, updateAvailable, client, log)
+	menuOptions, err := getMenuOptions(updateAvailable, client, log)
 	if err != nil {
 		log.WithError(err).Fatalf("Could not create menu")
 	}
