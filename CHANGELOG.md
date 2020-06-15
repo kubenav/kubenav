@@ -1,5 +1,68 @@
 # Changelog
 
+## [2.0.0](https://github.com/kubenav/kubenav/tree/2.0.0) (2020-06-15)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/1.4.1...2.0.0)
+
+**Implemented enhancements:**
+
+- \[feature request\] display which cluster \(context\) and namespace currently being viewed [\#98](https://github.com/kubenav/kubenav/issues/98)
+- Improvement: Show Deployments yellow if... [\#81](https://github.com/kubenav/kubenav/issues/81)
+- Improvement: Scale Deployment [\#80](https://github.com/kubenav/kubenav/issues/80)
+- Viewing container logs [\#60](https://github.com/kubenav/kubenav/issues/60)
+- not support insecure-skip-verify   [\#58](https://github.com/kubenav/kubenav/issues/58)
+- Beta testing ios? [\#57](https://github.com/kubenav/kubenav/issues/57)
+- Error on macos [\#52](https://github.com/kubenav/kubenav/issues/52)
+- Feature: Set as current Cluster [\#50](https://github.com/kubenav/kubenav/issues/50)
+- Support self signed certificates for OIDC [\#102](https://github.com/kubenav/kubenav/pull/102) ([ricoberger](https://github.com/ricoberger))
+- Improve context switch [\#99](https://github.com/kubenav/kubenav/pull/99) ([ricoberger](https://github.com/ricoberger))
+- Add Storage Class [\#89](https://github.com/kubenav/kubenav/pull/89) ([ricoberger](https://github.com/ricoberger))
+- Add Resources [\#88](https://github.com/kubenav/kubenav/pull/88) ([ricoberger](https://github.com/ricoberger))
+- Add search function for terminal and logs [\#77](https://github.com/kubenav/kubenav/pull/77) ([ricoberger](https://github.com/ricoberger))
+- Improve CRD Support [\#76](https://github.com/kubenav/kubenav/pull/76) ([ricoberger](https://github.com/ricoberger))
+- Support multiple Kubeconfig files [\#75](https://github.com/kubenav/kubenav/pull/75) ([ricoberger](https://github.com/ricoberger))
+- Sync changes back to loaded Kubeconfig file [\#72](https://github.com/kubenav/kubenav/pull/72) ([ricoberger](https://github.com/ricoberger))
+- Add support to stream logs [\#71](https://github.com/kubenav/kubenav/pull/71) ([ricoberger](https://github.com/ricoberger))
+- Change namespace via edit cluster modal [\#70](https://github.com/kubenav/kubenav/pull/70) ([ricoberger](https://github.com/ricoberger))
+- Add terminal support [\#68](https://github.com/kubenav/kubenav/pull/68) ([ricoberger](https://github.com/ricoberger))
+- Add version check [\#65](https://github.com/kubenav/kubenav/pull/65) ([ricoberger](https://github.com/ricoberger))
+- Update Capacitor to version 2 [\#64](https://github.com/kubenav/kubenav/pull/64) ([ricoberger](https://github.com/ricoberger))
+- Remove kubenav-plugin Dependency [\#63](https://github.com/kubenav/kubenav/pull/63) ([ricoberger](https://github.com/ricoberger))
+- Support insecure-skip-tls-verify and timeout [\#59](https://github.com/kubenav/kubenav/pull/59) ([ricoberger](https://github.com/ricoberger))
+
+**Fixed bugs:**
+
+- \[bug\] parsing KUBECONFIG environment variable containing multiple files [\#100](https://github.com/kubenav/kubenav/issues/100)
+- cluster role bindings generates blank white page [\#95](https://github.com/kubenav/kubenav/issues/95)
+- ports listed under services are incorrectly displayed [\#93](https://github.com/kubenav/kubenav/issues/93)
+- Could not connect to AWS EKS using token/username password [\#90](https://github.com/kubenav/kubenav/issues/90)
+- Losses connect if don't do anything in a period. [\#85](https://github.com/kubenav/kubenav/issues/85)
+- Loadbalancer external IP address isn't shown [\#83](https://github.com/kubenav/kubenav/issues/83)
+- Incorrect page displayed. [\#79](https://github.com/kubenav/kubenav/issues/79)
+- Update ServiceDetails.tsx [\#94](https://github.com/kubenav/kubenav/pull/94) ([si458](https://github.com/si458))
+
+**Closed issues:**
+
+- \[feature request\] add Endpoints [\#96](https://github.com/kubenav/kubenav/issues/96)
+- Ability to change default namespace without namespace permission [\#67](https://github.com/kubenav/kubenav/issues/67)
+- fresh install cant add new cluster mac [\#62](https://github.com/kubenav/kubenav/issues/62)
+- Could not connect to aws eks using token [\#61](https://github.com/kubenav/kubenav/issues/61)
+
+**Merged pull requests:**
+
+- Improve desktop menu [\#103](https://github.com/kubenav/kubenav/pull/103) ([ricoberger](https://github.com/ricoberger))
+- Fix Kubeconfig handling [\#101](https://github.com/kubenav/kubenav/pull/101) ([ricoberger](https://github.com/ricoberger))
+- Fix \(Cluster\) Role Bindings [\#97](https://github.com/kubenav/kubenav/pull/97) ([ricoberger](https://github.com/ricoberger))
+- Restart server for API requests on mobile [\#92](https://github.com/kubenav/kubenav/pull/92) ([ricoberger](https://github.com/ricoberger))
+- Adjust documentation [\#91](https://github.com/kubenav/kubenav/pull/91) ([ricoberger](https://github.com/ricoberger))
+- Refactor Cloud Providers [\#87](https://github.com/kubenav/kubenav/pull/87) ([ricoberger](https://github.com/ricoberger))
+- Add menu for details page [\#86](https://github.com/kubenav/kubenav/pull/86) ([ricoberger](https://github.com/ricoberger))
+- Improve rendering [\#82](https://github.com/kubenav/kubenav/pull/82) ([ricoberger](https://github.com/ricoberger))
+- Improve terminal handling [\#74](https://github.com/kubenav/kubenav/pull/74) ([ricoberger](https://github.com/ricoberger))
+- Improve setup [\#73](https://github.com/kubenav/kubenav/pull/73) ([ricoberger](https://github.com/ricoberger))
+- Rework request logic for mobile [\#69](https://github.com/kubenav/kubenav/pull/69) ([ricoberger](https://github.com/ricoberger))
+- Migrate from TSLint to ESLint [\#66](https://github.com/kubenav/kubenav/pull/66) ([ricoberger](https://github.com/ricoberger))
+
 ## [1.4.1](https://github.com/kubenav/kubenav/tree/1.4.1) (2020-04-14)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/1.4.0...1.4.1)
