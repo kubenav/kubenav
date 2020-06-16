@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"fmt"
 
 	"k8s.io/apimachinery/pkg/types"
@@ -32,13 +33,13 @@ type Response struct {
 
 // KubernetesRequest makes the request to the Kubernetes API server. A request contains a method, url, body and timeout.
 // The API server data is defined in the clientset.
-func KubernetesRequest(method, url, body string, clientset *kubernetes.Clientset) ([]byte, error) {
+func KubernetesRequest(ctx context.Context, method, url, body string, clientset *kubernetes.Clientset) ([]byte, error) {
 	if method == "GET" {
-		return clientset.RESTClient().Get().RequestURI(url).DoRaw()
+		return clientset.RESTClient().Get().RequestURI(url).DoRaw(ctx)
 	} else if method == "DELETE" {
-		return clientset.RESTClient().Delete().RequestURI(url).DoRaw()
+		return clientset.RESTClient().Delete().RequestURI(url).DoRaw(ctx)
 	} else if method == "PATCH" {
-		return clientset.RESTClient().Patch(types.JSONPatchType).RequestURI(url).Body([]byte(body)).DoRaw()
+		return clientset.RESTClient().Patch(types.JSONPatchType).RequestURI(url).Body([]byte(body)).DoRaw(ctx)
 	}
 
 	return []byte(``), fmt.Errorf("Request method is not implemented")

@@ -9,10 +9,10 @@ require (
 	github.com/Azure/go-autorest/autorest/to v0.3.0 // indirect
 	github.com/Azure/go-autorest/autorest/validation v0.2.0 // indirect
 	github.com/akavel/rsrc v0.9.0 // indirect
-	github.com/asticode/go-astikit v0.6.0
-	github.com/asticode/go-astilectron v0.14.2
+	github.com/asticode/go-astikit v0.8.0
+	github.com/asticode/go-astilectron v0.16.0
 	github.com/asticode/go-astilectron-bootstrap v0.4.0
-	github.com/asticode/go-astilectron-bundler v0.6.0 // indirect
+	github.com/asticode/go-astilectron-bundler v0.7.0 // indirect
 	github.com/aws/aws-sdk-go v1.30.20
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/elazarl/go-bindata-assetfs v1.0.0
@@ -32,7 +32,6 @@ require (
 	gopkg.in/igm/sockjs-go.v2 v2.1.0
 	gopkg.in/square/go-jose.v2 v2.5.1 // indirect
 	gopkg.in/yaml.v2 v2.2.8
-	k8s.io/apimachinery v0.17.2
-	k8s.io/client-go v0.17.2
-	k8s.io/utils v0.0.0-20200229041039-0a110f9eb7ab // indirect
+	k8s.io/apimachinery v0.18.3
+	k8s.io/client-go v0.18.3
 )

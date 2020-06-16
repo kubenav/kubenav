@@ -94,67 +94,66 @@ export const readSettings = (): IAppSettings => {
 };
 
 // removeCluster removes the saved cluster from localStorage.
-export const removeCluster = () => {
+export const removeCluster = (): void => {
   localStorage.removeItem(STORAGE_CLUSTER);
 };
 
 // removeClusters removes the saved clusters from localStorage.
-export const removeClusters = () => {
+export const removeClusters = (): void => {
   localStorage.removeItem(STORAGE_CLUSTERS);
 };
 
 // removeOIDCProviders removes the saved OIDC providers from localStorage.
-export const removeOIDCProviders = () => {
+export const removeOIDCProviders = (): void => {
   localStorage.removeItem(STORAGE_OIDC_PROVIDERS);
 };
 
 // saveAWSTokens saves the provided tokens to localStorage.
-export const saveAWSTokens = (tokens: IAWSTokens) => {
+export const saveAWSTokens = (tokens: IAWSTokens): void => {
   localStorage.setItem(STORAGE_AWS_TOKENS, JSON.stringify(tokens));
 };
 
 // saveAzureCredentials saves the provided IDs (client, tenant, subscription) for Azure to localStorage.
-export const saveAzureCredentials = (ids: IAzureCredentials) => {
+export const saveAzureCredentials = (ids: IAzureCredentials): void => {
   localStorage.setItem(STORAGE_AZURE_CREDENTIALS, JSON.stringify(ids));
 };
 
 // saveCluster saves the given cluster id to localStorage.
-export const saveCluster = (cluster: string) => {
+export const saveCluster = (cluster: string): void => {
   localStorage.setItem(STORAGE_CLUSTER, cluster);
 };
 
 // saveClusters saves the given clusters object to localStorage.
-export const saveClusters = (clusters: IClusters) => {
+export const saveClusters = (clusters: IClusters): void => {
   localStorage.setItem(STORAGE_CLUSTERS, JSON.stringify(clusters));
 };
 
 // saveGoogleTokens saves the returned Google tokens for authenticated API requests to the localStorage. Before the
 // tokens are saved, the expire date is transformed for better access in the app.
-export const saveGoogleTokens = (tokens: IGoogleTokens) => {
+export const saveGoogleTokens = (tokens: IGoogleTokens): void => {
   const expiresData = new Date();
   expiresData.setSeconds(expiresData.getSeconds() + parseInt(tokens.expires_in) - 300);
-  // eslint-disable-next-line @typescript-eslint/camelcase
   tokens.expires_in = expiresData.toDateString();
   localStorage.setItem(STORAGE_GOOGLE_TOKENS, JSON.stringify(tokens));
 };
 
 // saveGoogleClientID saves the Google client id to the localStorage.
-export const saveGoogleClientID = (clientID: string) => {
+export const saveGoogleClientID = (clientID: string): void => {
   localStorage.setItem(STORAGE_GOOGLE_CLIENT_ID, clientID);
 };
 
 // saveOIDCLastProvider is used to save the name of the last used OIDC provider, This is used to assign the OIDC
 // provider to the redirect if the provider is added.
-export const saveOIDCLastProvider = (provider: string) => {
+export const saveOIDCLastProvider = (provider: string): void => {
   localStorage.setItem(STORAGE_OIDC_PROVIDERS_LAST, provider);
 };
 
 // saveOIDCProviders is used to save all OIDC providers to localStorage.
-export const saveOIDCProviders = (providers: IOIDCProviders) => {
+export const saveOIDCProviders = (providers: IOIDCProviders): void => {
   localStorage.setItem(STORAGE_OIDC_PROVIDERS, JSON.stringify(providers));
 };
 
 // saveSettings saves the users settings to the localStorage.
-export const saveSettings = (settings: IAppSettings) => {
+export const saveSettings = (settings: IAppSettings): void => {
   localStorage.setItem(STORAGE_SETTINGS, JSON.stringify(settings));
 };
