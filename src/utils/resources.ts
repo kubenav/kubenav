@@ -71,11 +71,11 @@ export const resources: IAppSections = {
         singleText: 'Cron Job',
         pluralText: 'Cron Jobs',
         icon: '/assets/icons/kubernetes/cronjob.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace ? `/apis/batch/v1beta1/namespaces/${namespace}/cronjobs` : `/apis/batch/v1beta1/cronjobs`;
         },
         listItemComponent: CronJobItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/apis/batch/v1beta1/namespaces/${namespace}/cronjobs/${name}`;
         },
         detailsComponent: CronJobDetails,
@@ -84,11 +84,11 @@ export const resources: IAppSections = {
         singleText: 'Daemon Set',
         pluralText: 'Daemon Sets',
         icon: '/assets/icons/kubernetes/ds.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace ? `/apis/apps/v1/namespaces/${namespace}/daemonsets` : `/apis/apps/v1/daemonsets`;
         },
         listItemComponent: DaemonSetItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/apis/apps/v1/namespaces/${namespace}/daemonsets/${name}`;
         },
         detailsComponent: DaemonSetDetails,
@@ -97,11 +97,11 @@ export const resources: IAppSections = {
         singleText: 'Deployment',
         pluralText: 'Deployments',
         icon: '/assets/icons/kubernetes/deploy.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace ? `/apis/apps/v1/namespaces/${namespace}/deployments` : `/apis/apps/v1/deployments`;
         },
         listItemComponent: DeploymentItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/apis/apps/v1/namespaces/${namespace}/deployments/${name}`;
         },
         detailsComponent: DeploymentDetails,
@@ -110,11 +110,11 @@ export const resources: IAppSections = {
         singleText: 'Job',
         pluralText: 'Jobs',
         icon: '/assets/icons/kubernetes/job.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace ? `/apis/batch/v1/namespaces/${namespace}/jobs` : `/apis/batch/v1/jobs`;
         },
         listItemComponent: JobItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/apis/batch/v1/namespaces/${namespace}/jobs/${name}`;
         },
         detailsComponent: JobDetails,
@@ -123,11 +123,11 @@ export const resources: IAppSections = {
         singleText: 'Pod',
         pluralText: 'Pods',
         icon: '/assets/icons/kubernetes/pod.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace ? `/api/v1/namespaces/${namespace}/pods` : `/api/v1/pods`;
         },
         listItemComponent: PodItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/api/v1/namespaces/${namespace}/pods/${name}`;
         },
         detailsComponent: PodDetails,
@@ -136,11 +136,11 @@ export const resources: IAppSections = {
         singleText: 'Replica Set',
         pluralText: 'Replica Sets',
         icon: '/assets/icons/kubernetes/rs.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace ? `/apis/apps/v1/namespaces/${namespace}/replicasets` : `/apis/apps/v1/replicasets`;
         },
         listItemComponent: ReplicaSetItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/apis/apps/v1/namespaces/${namespace}/replicasets/${name}`;
         },
         detailsComponent: ReplicaSetDetails,
@@ -149,13 +149,13 @@ export const resources: IAppSections = {
         singleText: 'Replication Controller',
         pluralText: 'Replication Controllers',
         icon: '/assets/icons/kubernetes/deploy.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace
             ? `/api/v1/namespaces/${namespace}/replicationcontrollers`
             : `/api/v1/replicationcontrollers`;
         },
         listItemComponent: ReplicationControllerItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/api/v1/namespaces/${namespace}/replicationcontrollers/${name}`;
         },
         detailsComponent: ReplicationControllerDetails,
@@ -164,11 +164,11 @@ export const resources: IAppSections = {
         singleText: 'Stateful Set',
         pluralText: 'Stateful Sets',
         icon: '/assets/icons/kubernetes/sts.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace ? `/apis/apps/v1/namespaces/${namespace}/statefulsets` : `/apis/apps/v1/statefulsets`;
         },
         listItemComponent: StatefulSetItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/apis/apps/v1/namespaces/${namespace}/statefulsets/${name}`;
         },
         detailsComponent: StatefulSetDetails,
@@ -182,11 +182,11 @@ export const resources: IAppSections = {
         singleText: 'Endpoint',
         pluralText: 'Endpoints',
         icon: '/assets/icons/kubernetes/ep.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace ? `/api/v1/namespaces/${namespace}/endpoints` : `/api/v1/endpoints`;
         },
         listItemComponent: EndpointItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/api/v1/namespaces/${namespace}/endpoints/${name}`;
         },
         detailsComponent: EndpointDetails,
@@ -195,13 +195,13 @@ export const resources: IAppSections = {
         singleText: 'Horizontal Pod Autoscaler',
         pluralText: 'Horizontal Pod Autoscalers',
         icon: '/assets/icons/kubernetes/hpa.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace
             ? `/apis/autoscaling/v2beta1/namespaces/${namespace}/horizontalpodautoscalers`
             : `/apis/autoscaling/v2beta1/horizontalpodautoscalers`;
         },
         listItemComponent: HorizontalPodAutoscalerItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/apis/autoscaling/v2beta1/namespaces/${namespace}/horizontalpodautoscalers/${name}`;
         },
         detailsComponent: HorizontalPodAutoscalerDetails,
@@ -210,13 +210,13 @@ export const resources: IAppSections = {
         singleText: 'Ingresse',
         pluralText: 'Ingresses',
         icon: '/assets/icons/kubernetes/ing.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace
             ? `/apis/networking.k8s.io/v1beta1/namespaces/${namespace}/ingresses`
             : `/apis/networking.k8s.io/v1beta1/ingresses`;
         },
         listItemComponent: IngressItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/apis/networking.k8s.io/v1beta1/namespaces/${namespace}/ingresses/${name}`;
         },
         detailsComponent: IngressDetails,
@@ -225,13 +225,13 @@ export const resources: IAppSections = {
         singleText: 'Network Policy',
         pluralText: 'Network Policies',
         icon: '/assets/icons/kubernetes/netpol.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace
             ? `/apis/networking.k8s.io/v1/namespaces/${namespace}/networkpolicies`
             : `/apis/networking.k8s.io/v1/networkpolicies`;
         },
         listItemComponent: NetworkPolicyItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/apis/networking.k8s.io/v1/namespaces/${namespace}/networkpolicies/${name}`;
         },
         detailsComponent: NetworkPolicyDetails,
@@ -240,11 +240,11 @@ export const resources: IAppSections = {
         singleText: 'Service',
         pluralText: 'Services',
         icon: '/assets/icons/kubernetes/svc.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace ? `/api/v1/namespaces/${namespace}/services` : `/api/v1/services`;
         },
         listItemComponent: ServiceItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/api/v1/namespaces/${namespace}/services/${name}`;
         },
         detailsComponent: ServiceDetails,
@@ -258,11 +258,11 @@ export const resources: IAppSections = {
         singleText: 'Config Map',
         pluralText: 'Config Maps',
         icon: '/assets/icons/kubernetes/cm.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace ? `/api/v1/namespaces/${namespace}/configmaps` : `/api/v1/configmaps`;
         },
         listItemComponent: ConfigMapItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/api/v1/namespaces/${namespace}/configmaps/${name}`;
         },
         detailsComponent: ConfigMapDetails,
@@ -272,11 +272,11 @@ export const resources: IAppSections = {
         pluralText: 'Persistent Volumes',
         icon: '/assets/icons/kubernetes/pv.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return `/api/v1/persistentvolumes`;
         },
         listItemComponent: PersistentVolumeItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/api/v1/persistentvolumes/${name}`;
         },
         detailsComponent: PersistentVolumeDetails,
@@ -285,13 +285,13 @@ export const resources: IAppSections = {
         singleText: 'Persistent Volume Claim',
         pluralText: 'Persistent Volume Claims',
         icon: '/assets/icons/kubernetes/pvc.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace
             ? `/api/v1/namespaces/${namespace}/persistentvolumeclaims`
             : `/api/v1/persistentvolumeclaims`;
         },
         listItemComponent: PersistentVolumeClaimItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/api/v1/namespaces/${namespace}/persistentvolumeclaims/${name}`;
         },
         detailsComponent: PersistentVolumeClaimDetails,
@@ -300,11 +300,11 @@ export const resources: IAppSections = {
         singleText: 'Secret',
         pluralText: 'Secrets',
         icon: '/assets/icons/kubernetes/secret.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace ? `/api/v1/namespaces/${namespace}/secrets` : `/api/v1/secrets`;
         },
         listItemComponent: SecretItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/api/v1/namespaces/${namespace}/secrets/${name}`;
         },
         detailsComponent: SecretDetails,
@@ -313,11 +313,11 @@ export const resources: IAppSections = {
         singleText: 'Service Account',
         pluralText: 'Service Accounts',
         icon: '/assets/icons/kubernetes/sa.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace ? `/api/v1/namespaces/${namespace}/serviceaccounts` : `/api/v1/serviceaccounts`;
         },
         listItemComponent: ServiceAccountItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/api/v1/namespaces/${namespace}/serviceaccounts/${name}`;
         },
         detailsComponent: ServiceAccountDetails,
@@ -327,11 +327,11 @@ export const resources: IAppSections = {
         pluralText: 'Storage Classes',
         icon: '/assets/icons/kubernetes/sc.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return `/apis/storage.k8s.io/v1/storageclasses`;
         },
         listItemComponent: StorageClassItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/apis/storage.k8s.io/v1/storageclasses/${name}`;
         },
         detailsComponent: StorageClassDetails,
@@ -346,11 +346,11 @@ export const resources: IAppSections = {
         pluralText: 'Cluster Roles',
         icon: '/assets/icons/kubernetes/c-role.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return `/apis/rbac.authorization.k8s.io/v1/clusterroles`;
         },
         listItemComponent: ClusterRoleItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/apis/rbac.authorization.k8s.io/v1/clusterroles/${name}`;
         },
         detailsComponent: ClusterRoleDetails,
@@ -360,11 +360,11 @@ export const resources: IAppSections = {
         pluralText: 'Cluster Role Bindings',
         icon: '/assets/icons/kubernetes/c-rb.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return `/apis/rbac.authorization.k8s.io/v1/clusterrolebindings`;
         },
         listItemComponent: ClusterRoleBindingItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/apis/rbac.authorization.k8s.io/v1/clusterrolebindings/${name}`;
         },
         detailsComponent: ClusterRoleBindingDetails,
@@ -373,13 +373,13 @@ export const resources: IAppSections = {
         singleText: 'Role',
         pluralText: 'Roles',
         icon: '/assets/icons/kubernetes/role.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace
             ? `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/roles`
             : `/apis/rbac.authorization.k8s.io/v1/roles`;
         },
         listItemComponent: RoleItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/roles/${name}`;
         },
         detailsComponent: RoleDetails,
@@ -388,13 +388,13 @@ export const resources: IAppSections = {
         singleText: 'Role Binding',
         pluralText: 'Role Bindings',
         icon: '/assets/icons/kubernetes/rb.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace
             ? `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/rolebindings`
             : `/apis/rbac.authorization.k8s.io/v1/rolebindings`;
         },
         listItemComponent: RoleBindingItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/rolebindings/${name}`;
         },
         detailsComponent: RoleBindingDetails,
@@ -409,12 +409,12 @@ export const resources: IAppSections = {
         pluralText: 'Custom Resource Definitions',
         icon: '/assets/icons/kubernetes/crd.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return `/apis/apiextensions.k8s.io/v1beta1/customresourcedefinitions`;
         },
         listItemComponent: CustomResourceDefinitionItem,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/apis/apiextensions.k8s.io/v1beta1/customresourcedefinitions`;
         },
         detailsComponent: CustomResourceDefinitionItem,
@@ -423,11 +423,11 @@ export const resources: IAppSections = {
         singleText: 'Event',
         pluralText: 'Events',
         icon: '/assets/icons/kubernetes/events.png',
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return namespace ? `/api/v1/namespaces/${namespace}/events` : `/api/v1/events`;
         },
         listItemComponent: EventItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/api/v1/namespaces/${namespace}/events/${name}`;
         },
         detailsComponent: EventDetails,
@@ -437,11 +437,11 @@ export const resources: IAppSections = {
         pluralText: 'Namespaces',
         icon: '/assets/icons/kubernetes/ns.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return `/api/v1/namespaces`;
         },
         listItemComponent: NamespaceItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/api/v1/namespaces/${name}`;
         },
         detailsComponent: NamespaceDetails,
@@ -451,11 +451,11 @@ export const resources: IAppSections = {
         pluralText: 'Nodes',
         icon: '/assets/icons/kubernetes/node.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        listURL: (namespace: string) => {
+        listURL: (namespace: string): string => {
           return `/api/v1/nodes`;
         },
         listItemComponent: NodeItem,
-        detailsURL: (namespace: string, name: string) => {
+        detailsURL: (namespace: string, name: string): string => {
           return `/api/v1/nodes/${name}`;
         },
         detailsComponent: NodeDetails,

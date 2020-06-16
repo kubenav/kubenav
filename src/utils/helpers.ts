@@ -1,7 +1,7 @@
 import { V1LabelSelector, V1Subject } from '@kubernetes/client-node';
 
 // capitalize uppercase the first letter of a string
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 export const capitalize = (s: any) => {
   if (s === '' || typeof s !== 'string') {
     return s;
@@ -88,7 +88,8 @@ export const formatResourceValue = (type: string, value: string): string => {
 };
 
 // getProperty returns the property of an object for a given key.
-export const getProperty = (obj: object, key: string) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+export const getProperty = (obj: any, key: string) => {
   return key.split('.').reduce((o, x) => {
     return typeof o == 'undefined' || o === null ? o : o[x];
   }, obj);

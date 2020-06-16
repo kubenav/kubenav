@@ -120,10 +120,15 @@ export interface IContext {
 }
 
 export interface IGoogleTokens {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   access_token: string;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   expires_in: string;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   id_token: string;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   refresh_token: string;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   token_type: string;
 }
 
@@ -222,8 +227,11 @@ export interface IOIDCProviders {
 }
 
 export interface IOIDCProviderToken {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   id_token: string;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   refresh_token: string;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   access_token: string;
   expiry: number;
 }

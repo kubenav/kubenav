@@ -219,15 +219,15 @@ const getGoogleAccessToken = async (): Promise<string> => {
   if (expiresData.getTime() < new Date().getTime()) {
     const newTokens = await getGoogleAccessTokenAPI(tokens.refresh_token);
     saveGoogleTokens({
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       access_token: newTokens.access_token,
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       expires_in: newTokens.expires_in,
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       id_token: tokens.id_token,
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       refresh_token: tokens.refresh_token,
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       token_type: tokens.token_type,
     });
     return newTokens.access_token;
@@ -492,11 +492,11 @@ export const logsRequest = async (url: string, cluster: ICluster): Promise<ITerm
 export const getOIDCAccessToken = async (provider: IOIDCProvider): Promise<IOIDCProviderToken> => {
   if (provider.expiry - 60 > Math.floor(Date.now() / 1000)) {
     return {
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       id_token: provider.idToken,
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       refresh_token: provider.refreshToken,
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       access_token: provider.accessToken,
       expiry: provider.expiry,
     };
