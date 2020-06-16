@@ -31,7 +31,7 @@ func StreamLogsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	readCloser, err := logSession.ClientSet.RESTClient().Get().RequestURI(logSession.URL).Stream()
+	readCloser, err := logSession.ClientSet.RESTClient().Get().RequestURI(logSession.URL).Stream(r.Context())
 	if err != nil {
 		delete(LogSessions, sessionID)
 		return

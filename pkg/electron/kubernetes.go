@@ -37,7 +37,7 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result, err := api.KubernetesRequest(request.Method, request.URL, request.Body, clientset)
+	result, err := api.KubernetesRequest(r.Context(), request.Method, request.URL, request.Body, clientset)
 	if err != nil {
 		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Kubernetes API request failed: %s", err.Error()))
 		return
