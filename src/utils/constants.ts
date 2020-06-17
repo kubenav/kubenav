@@ -1,3 +1,5 @@
+import { ITerminalOptions } from 'xterm';
+
 import { IAppSettings } from '../declarations';
 
 export const CUSTOM_URI_SCHEME = 'io.kubenav.kubenav';
@@ -26,6 +28,29 @@ export const STORAGE_GOOGLE_TOKENS = 'google';
 export const STORAGE_OIDC_PROVIDERS = 'oidc';
 export const STORAGE_OIDC_PROVIDERS_LAST = 'oidc_last';
 export const STORAGE_SETTINGS = 'settings';
+
+export const LOG_TAIL_LINES = 1000;
+export const LOG_TERMINAL_OPTIONS = (darkMode: boolean): ITerminalOptions => {
+  return {
+    fontSize: 12,
+    bellStyle: 'sound',
+    cursorBlink: true,
+    disableStdin: true,
+    convertEol: true,
+    scrollback: 10000,
+    theme: darkMode ? TERMINAL_DARK_THEME : TERMINAL_LIGHT_THEME,
+  };
+};
+
+export const SHELL_TERMINAL_OPTIONS = (darkMode: boolean): ITerminalOptions => {
+  return {
+    fontSize: 12,
+    bellStyle: 'sound',
+    cursorBlink: true,
+    scrollback: 10000,
+    theme: darkMode ? TERMINAL_DARK_THEME : TERMINAL_LIGHT_THEME,
+  };
+};
 
 export const TERMINAL_DARK_THEME = {
   foreground: '#d8dee9',
