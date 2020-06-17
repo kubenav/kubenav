@@ -1,9 +1,10 @@
-import { IonButton, IonIcon, IonList, IonPopover } from '@ionic/react';
+import { IonButton, IonIcon, IonList, IonPopover, isPlatform } from '@ionic/react';
 import { ellipsisHorizontal, ellipsisVertical } from 'ionicons/icons';
 import React, { useState } from 'react';
 
 import DeleteItem from './modify/DeleteItem';
 import EditItem from './modify/EditItem';
+import LogsItem from './modify/LogsItem';
 import RestartItem from './modify/RestartItem';
 import ScaleItem from './modify/ScaleItem';
 
@@ -31,6 +32,7 @@ const DetailsPopover: React.FunctionComponent<IDetailsPopoverProps> = ({ type, i
           {type === 'deployments' || type === 'statefulsets' || type === 'daemonsets' ? (
             <RestartItem activator="item" item={item} url={url} />
           ) : null}
+          {isPlatform('hybrid') && type === 'pods' ? <LogsItem activator="item" item={item} url={url} /> : null}
           <EditItem activator="item" item={item} url={url} />
           <DeleteItem activator="item" item={item} url={url} />
         </IonList>

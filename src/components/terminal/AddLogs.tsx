@@ -5,11 +5,9 @@ import { Terminal } from 'xterm';
 
 import { IContext, ITerminalContext, TActivator } from '../../declarations';
 import { logsRequest } from '../../utils/api';
-import { SERVER, TERMINAL_DARK_THEME, TERMINAL_LIGHT_THEME } from '../../utils/constants';
+import { LOG_TAIL_LINES, LOG_TERMINAL_OPTIONS, SERVER } from '../../utils/constants';
 import { AppContext } from '../../utils/context';
 import { TerminalContext } from '../../utils/terminal';
-
-const TAIL_LINES = 1000;
 
 interface IAddLogsProps {
   activator: TActivator;
@@ -26,15 +24,7 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
   const [popoverEvent, setPopoverEvent] = useState();
 
   const add = async (previous: boolean, tailLines: number, follow: boolean) => {
-    const term = new Terminal({
-      fontSize: 12,
-      bellStyle: 'sound',
-      cursorBlink: true,
-      disableStdin: true,
-      convertEol: true,
-      scrollback: 10000,
-      theme: context.settings.darkMode ? TERMINAL_DARK_THEME : TERMINAL_LIGHT_THEME,
-    });
+    const term = new Terminal(LOG_TERMINAL_OPTIONS(context.settings.darkMode));
 
     if (context.clusters && context.cluster) {
       if (follow) {
@@ -115,10 +105,10 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              add(false, TAIL_LINES, false);
+              add(false, LOG_TAIL_LINES, false);
             }}
           >
-            <IonLabel>{`Last ${TAIL_LINES} Log Lines`}</IonLabel>
+            <IonLabel>{`Last ${LOG_TAIL_LINES} Log Lines`}</IonLabel>
           </IonItem>
           <IonItem
             button={true}
@@ -137,10 +127,10 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              add(true, TAIL_LINES, false);
+              add(true, LOG_TAIL_LINES, false);
             }}
           >
-            <IonLabel>{`Previous Last ${TAIL_LINES} Log Lines`}</IonLabel>
+            <IonLabel>{`Previous Last ${LOG_TAIL_LINES} Log Lines`}</IonLabel>
           </IonItem>
           <IonItem
             button={true}
@@ -159,7 +149,7 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              add(false, TAIL_LINES, true);
+              add(false, LOG_TAIL_LINES, true);
             }}
           >
             <IonLabel>{`Stream Log Lines`}</IonLabel>
@@ -180,7 +170,9 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
           <IonIcon slot="start" icon={list} />
           Logs
         </IonItemOption>
-      ) : (
+      ) : null}
+
+      {activator === 'button' ? (
         <IonButton
           fill="outline"
           slot="end"
@@ -195,7 +187,7 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
           <IonIcon slot="start" icon={list} />
           Logs
         </IonButton>
-      )}
+      ) : null}
     </React.Fragment>
   );
 };
