@@ -20,7 +20,7 @@ const ShellItem: React.FunctionComponent<IShellItemProps> = ({ activator, item, 
 
   const [showActionSheet, setShowActionSheet] = useState<boolean>(false);
 
-  const buttons = () => {
+  const generateButtons = (): ActionSheetButton[] => {
     const buttons: ActionSheetButton[] = [];
 
     if (item.spec && item.spec.initContainers) {
@@ -48,10 +48,20 @@ const ShellItem: React.FunctionComponent<IShellItemProps> = ({ activator, item, 
     return buttons;
   };
 
+  const buttons = generateButtons();
+
   return (
     <React.Fragment>
       {activator === 'item' ? (
-        <IonItem button={true} detail={false} onClick={() => setShowActionSheet(true)}>
+        <IonItem
+          button={true}
+          detail={false}
+          onClick={() =>
+            buttons.length === 1
+              ? addShell(context, terminalContext, url, buttons[0].text ? buttons[0].text : '')
+              : setShowActionSheet(true)
+          }
+        >
           <IonIcon slot="end" color="primary" icon={terminal} />
           <IonLabel>Shell</IonLabel>
         </IonItem>
@@ -61,7 +71,7 @@ const ShellItem: React.FunctionComponent<IShellItemProps> = ({ activator, item, 
         isOpen={showActionSheet}
         onDidDismiss={() => setShowActionSheet(false)}
         header="Select Container"
-        buttons={buttons()}
+        buttons={buttons}
       />
     </React.Fragment>
   );

@@ -19,11 +19,7 @@ const LogsItem: React.FunctionComponent<ILogsItemProps> = ({ activator, item, ur
   const context = useContext<IContext>(AppContext);
   const terminalContext = useContext<ITerminalContext>(TerminalContext);
 
-  const [showActionSheetContainer, setShowActionSheetContainer] = useState<boolean>(false);
-  const [showActionSheetOptions, setShowActionSheetOptions] = useState<boolean>(false);
-  const [container, setContainer] = useState<string>('');
-
-  const buttons = () => {
+  const generateButtons = (): ActionSheetButton[] => {
     const buttons: ActionSheetButton[] = [];
 
     if (item.spec && item.spec.initContainers) {
@@ -52,10 +48,22 @@ const LogsItem: React.FunctionComponent<ILogsItemProps> = ({ activator, item, ur
     return buttons;
   };
 
+  const buttons = generateButtons();
+
+  const [showActionSheetContainer, setShowActionSheetContainer] = useState<boolean>(false);
+  const [showActionSheetOptions, setShowActionSheetOptions] = useState<boolean>(false);
+  const [container, setContainer] = useState<string>(
+    buttons.length === 1 ? (buttons[0].text ? buttons[0].text : '') : '',
+  );
+
   return (
     <React.Fragment>
       {activator === 'item' ? (
-        <IonItem button={true} detail={false} onClick={() => setShowActionSheetContainer(true)}>
+        <IonItem
+          button={true}
+          detail={false}
+          onClick={() => (buttons.length === 1 ? setShowActionSheetOptions(true) : setShowActionSheetContainer(true))}
+        >
           <IonIcon slot="end" color="primary" icon={list} />
           <IonLabel>Logs</IonLabel>
         </IonItem>
@@ -65,13 +73,13 @@ const LogsItem: React.FunctionComponent<ILogsItemProps> = ({ activator, item, ur
         isOpen={showActionSheetContainer}
         onDidDismiss={() => setShowActionSheetContainer(false)}
         header="Select Container"
-        buttons={buttons()}
+        buttons={buttons}
       />
 
       <IonActionSheet
         isOpen={showActionSheetOptions}
         onDidDismiss={() => setShowActionSheetOptions(false)}
-        header="Select Container"
+        header="Select Option"
         buttons={[
           {
             text: `Last ${LOG_TAIL_LINES} Log Lines`,
