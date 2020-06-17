@@ -42,6 +42,16 @@ export const LOG_TERMINAL_OPTIONS = (darkMode: boolean): ITerminalOptions => {
   };
 };
 
+export const SHELL_TERMINAL_OPTIONS = (darkMode: boolean): ITerminalOptions => {
+  return {
+    fontSize: 12,
+    bellStyle: 'sound',
+    cursorBlink: true,
+    scrollback: 10000,
+    theme: darkMode ? TERMINAL_DARK_THEME : TERMINAL_LIGHT_THEME,
+  };
+};
+
 export const TERMINAL_DARK_THEME = {
   foreground: '#d8dee9',
   background: '#2e3440',

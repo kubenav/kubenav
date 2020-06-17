@@ -7,6 +7,7 @@ import EditItem from './modify/EditItem';
 import LogsItem from './modify/LogsItem';
 import RestartItem from './modify/RestartItem';
 import ScaleItem from './modify/ScaleItem';
+import ShellItem from './modify/ShellItem';
 
 interface IDetailsPopoverProps {
   type: string;
@@ -33,6 +34,7 @@ const DetailsPopover: React.FunctionComponent<IDetailsPopoverProps> = ({ type, i
             <RestartItem activator="item" item={item} url={url} />
           ) : null}
           {isPlatform('hybrid') && type === 'pods' ? <LogsItem activator="item" item={item} url={url} /> : null}
+          {isPlatform('hybrid') && type === 'pods' ? <ShellItem activator="item" item={item} url={url} /> : null}
           <EditItem activator="item" item={item} url={url} />
           <DeleteItem activator="item" item={item} url={url} />
         </IonList>
