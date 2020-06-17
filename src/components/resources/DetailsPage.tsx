@@ -43,7 +43,7 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
   // useAsyncFn is a custom React hook which wrapps our API call.
   const [state, fetch, fetchInit] = useAsyncFn(
     async () => await context.request('GET', page.detailsURL(match.params.namespace, match.params.name), ''),
-    [page],
+    [page, match.params.namespace, match.params.name],
     { loading: true, error: undefined, value: undefined },
   );
 
