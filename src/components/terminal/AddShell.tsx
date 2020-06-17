@@ -40,7 +40,7 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({
         slot="end"
         onClick={(e) => {
           e.stopPropagation();
-          add();
+          addShell(context, terminalContext, `/api/v1/namespaces/${namespace}/pods/${pod}`, container);
         }}
       >
         <IonIcon slot="start" icon={terminal} />
