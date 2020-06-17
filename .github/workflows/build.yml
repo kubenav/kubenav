@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Get Version
         id: get_version
@@ -56,13 +56,23 @@ jobs:
         run: |
           make build-electron
 
+      - name: Import Apple Code-signing Certificates and Keys
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.MACOS_CERTIFICATES_P12 }}
+          p12-password: ${{ secrets.MACOS_CERTIFICATES_P12_PASSWORD }}
+
+      - name: Code-sign macOS App
+        run: |
+          codesign --force --sign "Developer ID Application: Rico Berger" cmd/electron/output/darwin-amd64/kubenav.app
+
       - name: Compress Electron App
         run: |
           cd cmd/electron/output/darwin-amd64 && tar -czvf kubenav-darwin-amd64.tar.gz kubenav.app
           cd ../linux-amd64 && tar -czvf kubenav-linux-amd64.tar.gz kubenav
           cd ../windows-amd64 && tar -czvf kubenav-windows-amd64.tar.gz kubenav.exe
 
-      - name: Upload Artifact (MacOS)
+      - name: Upload Artifact (macOS)
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
         uses: actions/upload-artifact@v2
         with:
