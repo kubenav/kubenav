@@ -1,0 +1,30 @@
+name: Docker
+
+on:
+  push:
+  #  branches:
+  #    - master
+  release:
+    types: [created]
+
+jobs:
+  docker:
+    name: Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Docker Tag
+        if: ${{ github.event_name == 'push' }}
+        run: echo ::set-env name=DOCKER_TAG::${GITHUB_SHA::8}
+
+      - name: Set Docker Tag
+        if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
+        run: echo ::set-env name=DOCKER_TAG::${GITHUB_REF/refs\/tags\//}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ DOCKER_USERNAME }}
+          password: ${{ DOCKER_PASSWORD }}
+          repository: kubenav/kubenav
+          dockerfile: cmd/server/Dockerfile
+          tags: ${{ env.DOCKER_TAG  }}

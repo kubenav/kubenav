@@ -84,10 +84,10 @@ cd kubenav
 npm install
 ```
 
-To use kubenav in your browser you need to build and start the development server. The server listening on port `14122`:
+To use kubenav in your browser you need to build and start the server. The server listening on port `14122`:
 
 ```sh
-make build-devserver && ./bin/devserver
+make build-server && ./bin/server
 ```
 
 Now you can start the app and open [localhost:8100](http://localhost:8100) in your browser:

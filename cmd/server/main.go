@@ -2,7 +2,10 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"io/ioutil"
 	"net/http"
+	"strings"
 
 	"github.com/kubenav/kubenav/pkg/electron"
 	"github.com/kubenav/kubenav/pkg/electron/kube"
@@ -45,6 +48,21 @@ func main() {
 	// Register the API for the Electron app and start the server.
 	router := http.NewServeMux()
 	electron.Register(router, *syncFlag, client)
+
+	index, err := ioutil.ReadFile("build/index.html")
+	if err != nil {
+		log.WithError(err).Fatalf("Could not load index.html file")
+	}
+
+	staticHandler := http.StripPrefix("/", http.FileServer(http.Dir("build")))
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if strings.Contains(r.URL.Path, ".") {
+			staticHandler.ServeHTTP(w, r)
+			return
+		}
+
+		fmt.Fprintf(w, string(index))
+	})
 
 	if err := http.ListenAndServe(":14122", router); err != nil {
 		log.WithError(err).Fatalf("kubenav server died")

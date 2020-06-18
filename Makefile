@@ -3,7 +3,7 @@ BUILDTIME   ?= $(shell date '+%Y-%m-%d@%H:%M:%S')
 BUILDUSER   ?= $(shell id -un)
 REPO        ?= github.com/kubenav/kubenav
 REVISION    ?= $(shell git rev-parse HEAD)
-VERSION     ?= $(shell git describe --tags)
+VERSION     ?= $(shell git describe --abbrev=0 --tags)
 
 .PHONY: bindings-android bindings-ios build-devserver build-electron release-beta release-major release-minor release-patch
 
@@ -15,13 +15,13 @@ bindings-ios:
 	mkdir -p ios/App/App/libs
 	gomobile bind -o ios/App/App/libs/Mobile.framework -target=ios github.com/kubenav/kubenav/pkg/mobile
 
-build-devserver:
+build-server:
 	go build -ldflags "-X ${REPO}/pkg/version.Version=${VERSION} \
 		-X ${REPO}/pkg/version.Revision=${REVISION} \
 		-X ${REPO}/pkg/version.Branch=${BRANCH} \
 		-X ${REPO}/pkg/version.BuildUser=${BUILDUSER} \
 		-X ${REPO}/pkg/version.BuildDate=${BUILDTIME}" \
-		-o ./bin/devserver ./cmd/devserver;
+		-o ./bin/server ./cmd/server;
 
 build-electron:
 	rm -rf cmd/electron/resources/app
