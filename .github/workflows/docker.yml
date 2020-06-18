@@ -23,8 +23,8 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v1
         with:
-          username: ${{ DOCKER_USERNAME }}
-          password: ${{ DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
           repository: kubenav/kubenav
           dockerfile: cmd/server/Dockerfile
           tags: ${{ env.DOCKER_TAG  }}
