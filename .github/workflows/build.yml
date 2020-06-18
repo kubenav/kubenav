@@ -73,6 +73,7 @@ jobs:
           cd ../windows-amd64 && zip -r -X kubenav-windows-amd64.zip kubenav.exe
 
       - name: Upload macOS App to the Notarization Service
+        if: ${{ (github.event_name == 'release' && github.event.action == 'created') || github.event_name == 'schedule' }}
         run: |
           mkdir -p ~/.appstoreconnect/private_keys
           echo -n "$AC_AUTH_KEY" > ~/.appstoreconnect/private_keys/AuthKey_${AC_API_KEY}.p8
