@@ -64,7 +64,7 @@ jobs:
 
       - name: Code-sign macOS App
         run: |
-          codesign --force --sign "Developer ID Application: Rico Berger" cmd/electron/output/darwin-amd64/kubenav.app
+          codesign --deep --force --options runtime --entitlements utils/resources/entitlements.plist --sign "Developer ID Application: Rico Berger" cmd/electron/output/darwin-amd64/kubenav.app
 
       - name: Compress Electron App
         run: |

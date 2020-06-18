@@ -15,6 +15,12 @@
     "CFBundleName": "kubenav",
     "CFBundleIdentifier": "io.kubenav.kubenav",
     "LSUIElement": "NO",
-    "CFBundlePackageType": "APPL"
+    "CFBundlePackageType": "APPL",
+    "CFBundleInfoDictionaryVersion": "6.0",
+    "LSMinimumSystemVersion": "10.11",
+    "NSHighResolutionCapable": true,
+    "NSAppTransportSecurity": {
+      "NSAllowsArbitraryLoads": true
+    }
   }
 }
