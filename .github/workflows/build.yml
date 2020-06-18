@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Get Version
         id: get_version
@@ -56,38 +56,60 @@ jobs:
         run: |
           make build-electron
 
+      - name: Import Apple Code-signing Certificates and Keys
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.MACOS_CERTIFICATES_P12 }}
+          p12-password: ${{ secrets.MACOS_CERTIFICATES_P12_PASSWORD }}
+
+      - name: Code-sign macOS App
+        run: |
+          codesign --deep --force --options runtime --entitlements utils/resources/entitlements.plist --sign "Developer ID Application: Rico Berger" cmd/electron/output/darwin-amd64/kubenav.app
+
       - name: Compress Electron App
         run: |
-          cd cmd/electron/output/darwin-amd64 && tar -czvf kubenav-darwin-amd64.tar.gz kubenav.app
-          cd ../linux-amd64 && tar -czvf kubenav-linux-amd64.tar.gz kubenav
-          cd ../windows-amd64 && tar -czvf kubenav-windows-amd64.tar.gz kubenav.exe
+          cd cmd/electron/output/darwin-amd64 && zip -r -X kubenav-darwin-amd64.zip kubenav.app
+          cd ../linux-amd64 && zip -r -X kubenav-linux-amd64.zip kubenav
+          cd ../windows-amd64 && zip -r -X kubenav-windows-amd64.zip kubenav.exe
 
-      - name: Upload Artifact (MacOS)
+      - name: Upload macOS App to the Notarization Service
+        if: ${{ (github.event_name == 'release' && github.event.action == 'created') || github.event_name == 'schedule' }}
+        run: |
+          mkdir -p ~/.appstoreconnect/private_keys
+          echo -n "$AC_AUTH_KEY" > ~/.appstoreconnect/private_keys/AuthKey_${AC_API_KEY}.p8
+          xcrun altool --notarize-app --primary-bundle-id "io.kubenav.kubenav.zip" --apiKey $AC_API_KEY --apiIssuer $AC_ISSUER --file cmd/electron/output/darwin-amd64/kubenav-darwin-amd64.zip > /dev/null 2>&1
+          rm -rf ~/.appstoreconnect/private_keys/AuthKey_${AC_API_KEY}.p8
+        env:
+          AC_AUTH_KEY: ${{ secrets.AC_AUTH_KEY }}
+          AC_API_KEY: ${{ secrets.AC_API_KEY }}
+          AC_ISSUER: ${{ secrets.AC_ISSUER }}
+
+      - name: Upload Artifact (macOS)
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
         uses: actions/upload-artifact@v2
         with:
-          name: kubenav-darwin-amd64.tar.gz
-          path: cmd/electron/output/darwin-amd64/kubenav-darwin-amd64.tar.gz
+          name: kubenav-darwin-amd64.zip
+          path: cmd/electron/output/darwin-amd64/kubenav-darwin-amd64.zip
 
       - name: Upload Artifact (Linux)
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
         uses: actions/upload-artifact@v2
         with:
-          name: kubenav-linux-amd64.tar.gz
-          path: cmd/electron/output/linux-amd64/kubenav-linux-amd64.tar.gz
+          name: kubenav-linux-amd64.zip
+          path: cmd/electron/output/linux-amd64/kubenav-linux-amd64.zip
 
       - name: Upload Artifact (Windows)
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
         uses: actions/upload-artifact@v2
         with:
-          name: kubenav-windows-amd64.tar.gz
-          path: cmd/electron/output/windows-amd64/kubenav-windows-amd64.tar.gz
+          name: kubenav-windows-amd64.zip
+          path: cmd/electron/output/windows-amd64/kubenav-windows-amd64.zip
 
       - name: Upload Artifacts to Release
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
         run: |
-          utils/scripts/upload.sh cmd/electron/output/darwin-amd64/kubenav-darwin-amd64.tar.gz application/gzip
-          utils/scripts/upload.sh cmd/electron/output/linux-amd64/kubenav-linux-amd64.tar.gz application/gzip
-          utils/scripts/upload.sh cmd/electron/output/windows-amd64/kubenav-windows-amd64.tar.gz application/gzip
+          utils/scripts/upload.sh cmd/electron/output/darwin-amd64/kubenav-darwin-amd64.zip application/zip
+          utils/scripts/upload.sh cmd/electron/output/linux-amd64/kubenav-linux-amd64.zip application/zip
+          utils/scripts/upload.sh cmd/electron/output/windows-amd64/kubenav-windows-amd64.zip application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
