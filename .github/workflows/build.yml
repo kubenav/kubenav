@@ -12,6 +12,9 @@ jobs:
     name: Build
     runs-on: macos-latest
     steps:
+      - name: Trigger GitHub Action
+        run: echo "Trigger GitHub Action"
+
       - name: Get Version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
