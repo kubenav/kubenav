@@ -3,6 +3,7 @@ COPY . /kubenav
 WORKDIR /kubenav
 RUN npm install -g ionic
 RUN npm install
+RUN export REACT_APP_SERVER=true
 RUN ionic build
 
 FROM golang:1.14.4-alpine3.12 as server

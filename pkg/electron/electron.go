@@ -16,6 +16,8 @@ func Register(router *http.ServeMux, sync bool, kubeClient *kube.Client) {
 	syncKubeconfig = sync
 	client = kubeClient
 
+	router.HandleFunc("/api/health", middleware.Cors(healthHandler))
+
 	router.HandleFunc("/api/cluster", middleware.Cors(clusterHandler))
 	router.HandleFunc("/api/clusters", middleware.Cors(clustersHandler))
 
@@ -27,4 +29,8 @@ func Register(router *http.ServeMux, sync bool, kubeClient *kube.Client) {
 	router.Handle("/api/kubernetes/sockjs/", api.CreateAttachHandler("/api/kubernetes/sockjs"))
 	router.HandleFunc("/api/kubernetes/logs", middleware.Cors(logsHandler))
 	router.HandleFunc("/api/kubernetes/logs/", middleware.Cors(api.StreamLogsHandler))
+}
+
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
 }
