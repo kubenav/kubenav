@@ -19,8 +19,10 @@ spec:
       serviceAccountName: kubenav
       containers:
         - name: kubenav
-          image: kubenav/kubenav:998d975a
+          image: kubenav/kubenav:31d61797
           imagePullPolicy: IfNotPresent
+          args:
+             - -incluster
           ports:
             - name: http
               containerPort: 14122

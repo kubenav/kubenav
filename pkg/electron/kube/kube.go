@@ -4,7 +4,6 @@ import (
 	"errors"
 	"time"
 
-	"github.com/sirupsen/logrus"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
@@ -57,8 +56,6 @@ func NewClient(incluster bool, kubeconfig, kubeconfigInclude, kubeconfigExclude 
 		}
 	}
 
-	logrus.Infof("%#v", config)
-
 	return &Client{
 		config: config,
 	}, nil
@@ -80,8 +77,6 @@ func (c *Client) Clusters() (map[string]Cluster, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	logrus.Infof("%#v", raw)
 
 	var clusters map[string]Cluster
 	clusters = make(map[string]Cluster)

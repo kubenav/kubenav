@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/sirupsen/logrus"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
@@ -20,8 +19,6 @@ func loadInClusterConfig() (clientcmd.ClientConfig, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	logrus.Infof("%#v", config)
 
 	return clientcmd.NewDefaultClientConfig(clientcmdapi.Config{
 		APIVersion:     "v1",
