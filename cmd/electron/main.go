@@ -16,7 +16,7 @@ import (
 	bootstrap "github.com/asticode/go-astilectron-bootstrap"
 	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/sirupsen/logrus"
-	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
 var (
@@ -59,7 +59,7 @@ func main() {
 	log.Infof(version.BuildContext())
 
 	// Create the client for the interaction with the Kubernetes API.
-	client, err := kube.NewClient(*kubeconfigFlag, *kubeconfigIncludeFlag, *kubeconfigExcludeFlag)
+	client, err := kube.NewClient(false, *kubeconfigFlag, *kubeconfigIncludeFlag, *kubeconfigExcludeFlag)
 	if err != nil {
 		log.WithError(err).Fatalf("Could not create Kubernetes client")
 	}
