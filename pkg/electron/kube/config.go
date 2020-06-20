@@ -1,6 +1,7 @@
 package kube
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/user"
@@ -8,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/sirupsen/logrus"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
@@ -19,6 +21,9 @@ func loadInClusterConfig() (clientcmd.ClientConfig, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	configBytes, _ := json.Marshal(config)
+	logrus.Infof("%#v\n", configBytes)
 
 	return clientcmd.NewDefaultClientConfig(clientcmdapi.Config{
 		APIVersion:     "v1",

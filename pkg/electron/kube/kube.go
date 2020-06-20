@@ -1,6 +1,7 @@
 package kube
 
 import (
+	"encoding/json"
 	"errors"
 	"time"
 
@@ -79,7 +80,8 @@ func (c *Client) Clusters() (map[string]Cluster, error) {
 		return nil, err
 	}
 
-	logrus.Infof("%#v\n", raw)
+	configBytes, _ := json.Marshal(raw)
+	logrus.Infof("%#v\n", configBytes)
 
 	var clusters map[string]Cluster
 	clusters = make(map[string]Cluster)
