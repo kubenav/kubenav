@@ -41,6 +41,19 @@ On mobile you can add your Cluster via Kubeconfig file or via your prefered Clou
 
 On desktop kubenav will automatic load all configured clusters from the default Kubeconfig file or the `KUBECONFIG` environment variable. If you want to use another Kubeconfig file, you can start kubenav with the `-kubeconfig` Flag. You can also use the `-kubeconfig-include` and `-kubeconfig-exclude` flag to load Kubeconfig files from multiple locations by glob. The `-sync` flag can be used to write context changes back to your Kubeconfig file, so the context is also changed in your terminal.
 
+It is also possible to deploy kubenav to your Kubernetes cluster and use it via your browser. For the Kubernetes based deployment you can choose between the in cluster options or you can add your Kubeconfig file to the container. You can take a look at the [`utils/kubernetes`](./utils/kubernetes) folder, to deploy kubenav to your cluster, or you can run the following commands:
+
+```sh
+kubectl apply -f https://raw.githubusercontent.com/kubenav/kubenav/master/utils/kubernetes/namespace.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubenav/kubenav/master/utils/kubernetes/serviceaccount.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubenav/kubenav/master/utils/kubernetes/clusterrole.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubenav/kubenav/master/utils/kubernetes/clusterrolebinding.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubenav/kubenav/master/utils/kubernetes/deployment.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubenav/kubenav/master/utils/kubernetes/service.yaml
+```
+
+All available Docker images can be found at Docker Hub: [kubenav/kubenav](https://hub.docker.com/r/kubenav/kubenav)
+
 ## Beta and Nightly Builds
 
 For testing new features and faster feedback, we provide an **Beta** app via Apple Testflight and Google Play:
