@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes"
 )
@@ -35,7 +34,6 @@ type Response struct {
 // KubernetesRequest makes the request to the Kubernetes API server. A request contains a method, url, body and timeout.
 // The API server data is defined in the clientset.
 func KubernetesRequest(ctx context.Context, method, url, body string, clientset *kubernetes.Clientset) ([]byte, error) {
-	logrus.Infoln(method, url, body)
 	if method == "GET" {
 		return clientset.RESTClient().Get().RequestURI(url).DoRaw(ctx)
 	} else if method == "DELETE" {

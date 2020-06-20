@@ -3,12 +3,11 @@ kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: kubenav
-  namespace: default
 subjects:
 - kind: ServiceAccount
   name: kubenav
-  namespace: default
+  namespace: kubenav
 roleRef:
   kind: ClusterRole
-  name: cluster-admin
+  name: kubenav
   apiGroup: rbac.authorization.k8s.io
