@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubenav
+  namespace: kubenav
+  labels:
+    app: kubenav
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubenav
+  template:
+    metadata:
+      labels:
+        app: kubenav
+    spec:
+      serviceAccountName: kubenav
+      containers:
+        - name: kubenav
+          image: kubenav/kubenav:8e93455a
+          imagePullPolicy: IfNotPresent
+          args:
+             # Use the in cluster configuration for kubenav. This allows to manage only the cluster where kubenav is
+             # deployed.
+             - -incluster
+             # Use a Kubeconfig to manage all clusters defined in the Kubeconfig file within the deployed kubenav. The
+             # command-line flag can also be replaced with a KUBECONFIG environment variable which contains the path to
+             # the Kubeconfig file.
+             #- -kubeconfig=/kubenav/kubeconfig/kubeconfig
+          ports:
+            - name: http
+              containerPort: 14122
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          # Mount the Kubeconfig file from your secret to the kubenav container.
+          # volumeMounts:
+          #   - name: kubeconfig
+          #     mountPath: '/kubenav/kubeconfig'
+          #     readOnly: true
+      # Define a new volume, to use the kubeconfig secret containing your Kubeconfig file. This is only required, if you
+      # do not want to use the in cluster option.
+      # volumes:
+      #   - name: kubeconfig
+      #     secret:
+      #       secretName: kubeconfig

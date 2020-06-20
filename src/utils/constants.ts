@@ -3,7 +3,7 @@ import { ITerminalOptions } from 'xterm';
 import { IAppSettings } from '../declarations';
 
 export const CUSTOM_URI_SCHEME = 'io.kubenav.kubenav';
-export const SERVER = 'http://localhost:14122';
+export const SERVER = process.env.REACT_APP_SERVER === 'true' ? '' : 'http://localhost:14122';
 export const VERSION = process.env.REACT_APP_VERSION;
 
 export const DEFAULT_SETTINGS: IAppSettings = {

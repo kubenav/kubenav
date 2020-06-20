@@ -8,8 +8,43 @@ import (
 	"path/filepath"
 	"strings"
 
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
+	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 )
+
+// loadInClusterConfig loads the Kubeconfig from the in cluster configuration.
+func loadInClusterConfig() (clientcmd.ClientConfig, error) {
+	config, err := rest.InClusterConfig()
+	if err != nil {
+		return nil, err
+	}
+
+	return clientcmd.NewDefaultClientConfig(clientcmdapi.Config{
+		APIVersion:     "v1",
+		Kind:           "Config",
+		CurrentContext: "kubenav",
+		Contexts: map[string]*clientcmdapi.Context{
+			"kubenav": {
+				Cluster:   "kubenav",
+				AuthInfo:  "kubenav",
+				Namespace: "default",
+			},
+		},
+		Clusters: map[string]*clientcmdapi.Cluster{
+			"kubenav": {
+				Server:               config.Host,
+				CertificateAuthority: config.TLSClientConfig.CAFile,
+			},
+		},
+		AuthInfos: map[string]*clientcmdapi.AuthInfo{
+			"kubenav": {
+				Token:     config.BearerToken,
+				TokenFile: config.BearerTokenFile,
+			},
+		},
+	}, &clientcmd.ConfigOverrides{}), nil
+}
 
 // loadConfigFile implements the logic from kubectl to load Kubeconfig files. If the -kubeconfig flag is provided this
 // file is used. When the flag isn't provided the KUBECONFIG variable or the default Kubeconfig directory is used.
