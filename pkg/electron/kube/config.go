@@ -42,8 +42,8 @@ func loadInClusterConfig() (clientcmd.ClientConfig, error) {
 		},
 		AuthInfos: map[string]*clientcmdapi.AuthInfo{
 			"incluster": {
-				Token:     config.BearerToken,
-				TokenFile: config.BearerTokenFile,
+				Token: config.BearerToken,
+				//TokenFile: config.BearerTokenFile,
 			},
 		},
 	}, &clientcmd.ConfigOverrides{}), nil
