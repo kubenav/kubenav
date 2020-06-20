@@ -19,10 +19,13 @@ spec:
       serviceAccountName: kubenav
       containers:
         - name: kubenav
-          image: kubenav/kubenav:78e6f803
+          image: kubenav/kubenav:328cc904
           imagePullPolicy: IfNotPresent
           args:
+             #
              - -incluster
+             #
+             #- -kubeconfig=/kubenav/kubeconfig/kubeconfig
           ports:
             - name: http
               containerPort: 14122
@@ -42,3 +45,11 @@ spec:
             requests:
               cpu: 50m
               memory: 64Mi
+          # volumeMounts:
+          #   - name: kubeconfig
+          #     mountPath: '/kubenav/kubeconfig'
+          #     readOnly: true
+      # volumes:
+      #   - name: kubeconfig
+      #     secret:
+      #       secretName: kubeconfig

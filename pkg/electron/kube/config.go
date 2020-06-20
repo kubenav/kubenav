@@ -11,7 +11,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 )
 
 // loadInClusterConfig loads the Kubeconfig from the in cluster configuration.
@@ -23,7 +22,25 @@ func loadInClusterConfig() (clientcmd.ClientConfig, error) {
 
 	logrus.Infof("%#v\n", config.String())
 
-	return clientcmd.NewDefaultClientConfig(clientcmdapi.Config{
+	return clientcmd.NewClientConfigFromBytes([]byte(`apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: ` + config.TLSClientConfig.CAFile + `
+    server: ` + config.Host + `
+  name: kubenav
+contexts:
+- context:
+    cluster: kubenav
+    user: kubenav
+  name: kubenav
+current-context: kubenav
+kind: Config
+users:
+- name: kubenav
+  user:
+    token: ` + config.BearerToken))
+
+	/*return clientcmd.NewDefaultClientConfig(clientcmdapi.Config{
 		APIVersion:     "v1",
 		Kind:           "Config",
 		CurrentContext: "incluster",
@@ -46,7 +63,7 @@ func loadInClusterConfig() (clientcmd.ClientConfig, error) {
 				//TokenFile: config.BearerTokenFile,
 			},
 		},
-	}, &clientcmd.ConfigOverrides{}), nil
+	}, &clientcmd.ConfigOverrides{}), nil*/
 }
 
 // loadConfigFile implements the logic from kubectl to load Kubeconfig files. If the -kubeconfig flag is provided this

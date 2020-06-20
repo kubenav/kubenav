@@ -13,7 +13,7 @@ WORKDIR /kubenav
 RUN make build-server
 
 FROM alpine:3.12.0
-RUN apk update && apk add --no-cache ca-certificates
+RUN apk update && apk add --no-cache ca-certificates curl
 COPY --from=build /kubenav/build /kubenav/build
 COPY --from=server /kubenav/bin/server /kubenav
 WORKDIR /kubenav
