@@ -23,22 +23,22 @@ func loadInClusterConfig() (clientcmd.ClientConfig, error) {
 	return clientcmd.NewDefaultClientConfig(clientcmdapi.Config{
 		APIVersion:     "v1",
 		Kind:           "Config",
-		CurrentContext: "incluster",
+		CurrentContext: "kubenav",
 		Contexts: map[string]*clientcmdapi.Context{
-			"incluster": {
-				Cluster:   "incluster",
-				AuthInfo:  "incluster",
+			"kubenav": {
+				Cluster:   "kubenav",
+				AuthInfo:  "kubenav",
 				Namespace: "default",
 			},
 		},
 		Clusters: map[string]*clientcmdapi.Cluster{
-			"incluster": {
+			"kubenav": {
 				Server:               config.Host,
 				CertificateAuthority: config.TLSClientConfig.CAFile,
 			},
 		},
 		AuthInfos: map[string]*clientcmdapi.AuthInfo{
-			"incluster": {
+			"kubenav": {
 				Token:     config.BearerToken,
 				TokenFile: config.BearerTokenFile,
 			},
