@@ -81,7 +81,7 @@ func (c *Client) Clusters() (map[string]Cluster, error) {
 	}
 
 	configBytes, _ := json.Marshal(raw)
-	logrus.Infof("%#v\n", configBytes)
+	logrus.Infof("%#v\n", string(configBytes))
 
 	var clusters map[string]Cluster
 	clusters = make(map[string]Cluster)

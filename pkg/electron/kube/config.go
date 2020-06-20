@@ -1,7 +1,6 @@
 package kube
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"os/user"
@@ -22,8 +21,7 @@ func loadInClusterConfig() (clientcmd.ClientConfig, error) {
 		return nil, err
 	}
 
-	configBytes, _ := json.Marshal(config)
-	logrus.Infof("%#v\n", configBytes)
+	logrus.Infof("%#v\n", config.String())
 
 	return clientcmd.NewDefaultClientConfig(clientcmdapi.Config{
 		APIVersion:     "v1",
