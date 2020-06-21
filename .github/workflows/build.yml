@@ -57,7 +57,7 @@ jobs:
           make build-electron
 
       - name: Import Apple Code-signing Certificates and Keys
-        if: ${{ (github.event_name == 'release' && github.event.action == 'created') || github.event_name == 'schedule' }}
+        # if: ${{ (github.event_name == 'release' && github.event.action == 'created') || github.event_name == 'schedule' }}
         uses: apple-actions/import-codesign-certs@v1
         with:
           p12-file-base64: ${{ secrets.MACOS_CERTIFICATES_P12 }}
