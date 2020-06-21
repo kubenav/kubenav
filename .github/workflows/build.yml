@@ -66,7 +66,7 @@ jobs:
       - name: Code-sign macOS App
         if: ${{ (github.event_name == 'release' && github.event.action == 'created') || github.event_name == 'schedule' }}
         run: |
-          codesign --deep --force --options runtime --entitlements utils/resources/entitlements.plist --sign "Developer ID Application: Rico Berger" cmd/electron/output/darwin-amd64/kubenav.app
+          codesign --deep --force --options runtime --sign "Developer ID Application: Rico Berger" cmd/electron/output/darwin-amd64/kubenav.app
 
       - name: Compress Electron App
         run: |
@@ -80,11 +80,17 @@ jobs:
           mkdir -p ~/.appstoreconnect/private_keys
           echo -n "$AC_AUTH_KEY" > ~/.appstoreconnect/private_keys/AuthKey_${AC_API_KEY}.p8
           xcrun altool --notarize-app --primary-bundle-id "io.kubenav.kubenav.zip" --apiKey $AC_API_KEY --apiIssuer $AC_ISSUER --file cmd/electron/output/darwin-amd64/kubenav-darwin-amd64.zip > /dev/null 2>&1
-          rm -rf ~/.appstoreconnect/private_keys/AuthKey_${AC_API_KEY}.p8
         env:
           AC_AUTH_KEY: ${{ secrets.AC_AUTH_KEY }}
           AC_API_KEY: ${{ secrets.AC_API_KEY }}
           AC_ISSUER: ${{ secrets.AC_ISSUER }}
+
+      - name: Remove AuthKey for Notarization Service
+        if: ${{ always() }}
+        run: |
+          rm -rf ~/.appstoreconnect/private_keys/AuthKey_${AC_API_KEY}.p8
+        env:
+          AC_API_KEY: ${{ secrets.AC_API_KEY }}
 
       - name: Upload Artifact (macOS)
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}

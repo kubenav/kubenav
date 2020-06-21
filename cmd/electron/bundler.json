@@ -7,20 +7,5 @@
     {"arch": "amd64", "os": "darwin"},
     {"arch": "amd64", "os": "linux"},
     {"arch": "amd64", "os": "windows"}
-  ],
-  "info_plist": {
-    "CFBundleIconFile": "kubenav.icns",
-    "CFBundleDisplayName": "kubenav",
-    "CFBundleExecutable": "kubenav",
-    "CFBundleName": "kubenav",
-    "CFBundleIdentifier": "io.kubenav.kubenav",
-    "LSUIElement": "NO",
-    "CFBundlePackageType": "APPL",
-    "CFBundleInfoDictionaryVersion": "6.0",
-    "LSMinimumSystemVersion": "10.11",
-    "NSHighResolutionCapable": true,
-    "NSAppTransportSecurity": {
-      "NSAllowsArbitraryLoads": true
-    }
-  }
+  ]
 }
