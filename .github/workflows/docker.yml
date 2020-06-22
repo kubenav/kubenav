@@ -12,32 +12,8 @@ jobs:
     name: Docker
     runs-on: ubuntu-latest
     steps:
-      # - name: Get Version
-      #   id: get_version
-      #   run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-
       - name: Checkout
         uses: actions/checkout@v2
-
-      # - name: Setup Node.js
-      #   uses: actions/setup-node@v1
-      #   with:
-      #     node-version: '13.x'
-
-      # - name: Install Ionic
-      #   run: |
-      #     npm install -g @ionic/cli@6.9.1
-
-      # - name: Install Dependencies
-      #   run: |
-      #     npm install
-
-      # - name: Build Ionic App
-      #   run: |
-      #     ionic build
-      #   env:
-      #     REACT_APP_VERSION: ${{ steps.get_version.outputs.VERSION }}
-      #     REACT_APP_SERVER: true
 
       - name: Set Docker Tag
         if: ${{ github.event_name == 'push' }}
