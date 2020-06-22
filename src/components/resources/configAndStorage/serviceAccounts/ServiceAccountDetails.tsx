@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router';
 
 import List from '../../misc/List';
 import Metadata from '../../misc/template/Metadata';
+import Permissions from './Permissions';
 
 interface IServiceAccountDetailsProps extends RouteComponentProps {
   item: V1ServiceAccount;
@@ -19,6 +20,12 @@ const ServiceAccountDetails: React.FunctionComponent<IServiceAccountDetailsProps
   return (
     <IonGrid>
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
+
+      {item.metadata && item.metadata.name && item.metadata.namespace ? (
+        <IonRow>
+          <Permissions namespace={item.metadata.namespace} serviceAccountName={item.metadata.name} />
+        </IonRow>
+      ) : null}
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
         <IonRow>
