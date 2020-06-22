@@ -7,6 +7,7 @@ import {
   IonCol,
   IonIcon,
   IonProgressBar,
+  IonRouterLink,
 } from '@ionic/react';
 import { checkmark, close } from 'ionicons/icons';
 import {
@@ -228,47 +229,68 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
     fetchInit();
   }, [fetchInit]);
 
-  if (state.loading) {
-    return <IonProgressBar slot="fixed" type="indeterminate" color="primary" />;
-  } else if (!state.error && state.value) {
-    return (
-      <IonCol>
-        <IonCard>
-          <IonCardHeader>
-            <IonCardTitle>Permissions</IonCardTitle>
-          </IonCardHeader>
-          {state.value && state.value.clusterRoles
-            ? state.value.clusterRoles.map((clusterRole, index) => {
-                return (
-                  <React.Fragment key={index}>
-                    <IonCardHeader>
-                      <IonCardSubtitle>
-                        ClusterRole: {clusterRole.metadata ? clusterRole.metadata.name : ''}
-                      </IonCardSubtitle>
-                    </IonCardHeader>
-                    <IonCardContent>{renderRules(clusterRole.rules)}</IonCardContent>
-                  </React.Fragment>
-                );
-              })
-            : null}
-          {state.value && state.value.roles
-            ? state.value.roles.map((role, index) => {
-                return (
-                  <React.Fragment key={index}>
-                    <IonCardHeader>
-                      <IonCardSubtitle>Role: {role.metadata ? role.metadata.name : ''}</IonCardSubtitle>
-                    </IonCardHeader>
-                    <IonCardContent>{renderRules(role.rules)}</IonCardContent>
-                  </React.Fragment>
-                );
-              })
-            : null}
-        </IonCard>
-      </IonCol>
-    );
-  } else {
-    return <div>Test</div>;
-  }
+  return (
+    <IonCol>
+      <IonCard>
+        <IonCardHeader>
+          <IonCardTitle>Permissions</IonCardTitle>
+        </IonCardHeader>
+        {state.loading ? (
+          <IonCardContent>
+            <IonProgressBar slot="fixed" type="indeterminate" color="primary" />
+          </IonCardContent>
+        ) : null}
+        {!state.error && state.value ? (
+          <React.Fragment>
+            {state.value && state.value.clusterRoles
+              ? state.value.clusterRoles.map((clusterRole, index) => {
+                  return (
+                    <React.Fragment key={index}>
+                      <IonCardHeader>
+                        <IonCardSubtitle>
+                          ClusterRole:{' '}
+                          <IonRouterLink
+                            routerLink={`/resources/rbac/clusterroles/undefined/${
+                              clusterRole.metadata ? clusterRole.metadata.name : ''
+                            }`}
+                            routerDirection="forward"
+                          >
+                            {clusterRole.metadata ? clusterRole.metadata.name : ''}
+                          </IonRouterLink>
+                        </IonCardSubtitle>
+                      </IonCardHeader>
+                      <IonCardContent>{renderRules(clusterRole.rules)}</IonCardContent>
+                    </React.Fragment>
+                  );
+                })
+              : null}
+            {state.value && state.value.roles
+              ? state.value.roles.map((role, index) => {
+                  return (
+                    <React.Fragment key={index}>
+                      <IonCardHeader>
+                        <IonCardSubtitle>
+                          Role:{' '}
+                          <IonRouterLink
+                            routerLink={`/resources/rbac/roles/${role.metadata ? role.metadata.namespace : ''}/${
+                              role.metadata ? role.metadata.name : ''
+                            }`}
+                            routerDirection="forward"
+                          >
+                            {role.metadata ? role.metadata.name : ''}
+                          </IonRouterLink>
+                        </IonCardSubtitle>
+                      </IonCardHeader>
+                      <IonCardContent>{renderRules(role.rules)}</IonCardContent>
+                    </React.Fragment>
+                  );
+                })
+              : null}
+          </React.Fragment>
+        ) : null}
+      </IonCard>
+    </IonCol>
+  );
 };
 
 export default Permissions;
