@@ -5,25 +5,17 @@ import {
   IonCardSubtitle,
   IonCardTitle,
   IonCol,
-  IonIcon,
   IonProgressBar,
   IonRouterLink,
 } from '@ionic/react';
-import { checkmark, close } from 'ionicons/icons';
-import {
-  V1ClusterRole,
-  V1ClusterRoleBindingList,
-  V1PolicyRule,
-  V1Role,
-  V1RoleBindingList,
-  V1Subject,
-} from '@kubernetes/client-node';
+import { V1ClusterRole, V1ClusterRoleBindingList, V1Role, V1RoleBindingList, V1Subject } from '@kubernetes/client-node';
 import React, { useContext, useEffect } from 'react';
 
 import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import { resources } from '../../../../utils/resources';
 import useAsyncFn from '../../../../utils/useAsyncFn';
+import Rules from '../../rbac/misc/Rules';
 
 interface IPermissionsProps {
   namespace: string;
@@ -38,95 +30,6 @@ const subjectsContainServiceAccount = (saNamespace: string, saName: string, subj
   }
 
   return false;
-};
-
-const renderRules = (rules: V1PolicyRule[] | undefined) => {
-  return (
-    <div className="table">
-      <table>
-        <thead>
-          <tr>
-            <th>Resource</th>
-            <th>Get</th>
-            <th>List</th>
-            <th>Create</th>
-            <th>Update</th>
-            <th>Patch</th>
-            <th>Delete</th>
-            <th>Watch</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rules
-            ? rules.map((rule, indexRule) => {
-                return rule.resources
-                  ? rule.resources.map((resource, indexResource) => {
-                      return (
-                        <tr key={`rule-${indexRule}-resource-${indexResource}`}>
-                          <td>
-                            Resource: {resource}
-                            {rule.apiGroups ? ` | API Groups: ${rule.apiGroups.join(',')}` : ''}
-                            {rule.resourceNames ? ` | Resource Name: ${rule.resourceNames.join(',')}` : ''}
-                          </td>
-                          <td>
-                            {rule.verbs.includes('get') ? (
-                              <IonIcon icon={checkmark} color="success" />
-                            ) : (
-                              <IonIcon icon={close} color="danger" />
-                            )}
-                          </td>
-                          <td>
-                            {rule.verbs.includes('list') ? (
-                              <IonIcon icon={checkmark} color="success" />
-                            ) : (
-                              <IonIcon icon={close} color="danger" />
-                            )}
-                          </td>
-                          <td>
-                            {rule.verbs.includes('create') ? (
-                              <IonIcon icon={checkmark} color="success" />
-                            ) : (
-                              <IonIcon icon={close} color="danger" />
-                            )}
-                          </td>
-                          <td>
-                            {rule.verbs.includes('update') ? (
-                              <IonIcon icon={checkmark} color="success" />
-                            ) : (
-                              <IonIcon icon={close} color="danger" />
-                            )}
-                          </td>
-                          <td>
-                            {rule.verbs.includes('patch') ? (
-                              <IonIcon icon={checkmark} color="success" />
-                            ) : (
-                              <IonIcon icon={close} color="danger" />
-                            )}
-                          </td>
-                          <td>
-                            {rule.verbs.includes('delete') ? (
-                              <IonIcon icon={checkmark} color="success" />
-                            ) : (
-                              <IonIcon icon={close} color="danger" />
-                            )}
-                          </td>
-                          <td>
-                            {rule.verbs.includes('watch') ? (
-                              <IonIcon icon={checkmark} color="success" />
-                            ) : (
-                              <IonIcon icon={close} color="danger" />
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })
-                  : null;
-              })
-            : null}
-        </tbody>
-      </table>
-    </div>
-  );
 };
 
 const Permissions: React.FunctionComponent<IPermissionsProps> = ({
@@ -259,7 +162,9 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
                           </IonRouterLink>
                         </IonCardSubtitle>
                       </IonCardHeader>
-                      <IonCardContent>{renderRules(clusterRole.rules)}</IonCardContent>
+                      <IonCardContent>
+                        <Rules rules={clusterRole.rules} />
+                      </IonCardContent>
                     </React.Fragment>
                   );
                 })
@@ -281,7 +186,9 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
                           </IonRouterLink>
                         </IonCardSubtitle>
                       </IonCardHeader>
-                      <IonCardContent>{renderRules(role.rules)}</IonCardContent>
+                      <IonCardContent>
+                        <Rules rules={role.rules} />
+                      </IonCardContent>
                     </React.Fragment>
                   );
                 })

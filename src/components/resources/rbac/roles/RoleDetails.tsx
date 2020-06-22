@@ -1,12 +1,11 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonRow } from '@ionic/react';
 import { V1Role } from '@kubernetes/client-node';
-import yaml from 'js-yaml';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import Editor from '../../../misc/Editor';
 import List from '../../misc/List';
 import Metadata from '../../misc/template/Metadata';
+import Rules from '../misc/Rules';
 
 interface IRoleDetailsProps extends RouteComponentProps {
   item: V1Role;
@@ -27,7 +26,7 @@ const RoleDetails: React.FunctionComponent<IRoleDetailsProps> = ({ item, type }:
                 <IonCardTitle>Rules</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
-                <Editor readOnly={true} value={yaml.safeDump(item.rules)} />
+                <Rules rules={item.rules} />
               </IonCardContent>
             </IonCard>
           </IonCol>
