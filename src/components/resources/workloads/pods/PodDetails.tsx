@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { IContext, IPodMetrics } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
+import Permissions from '../../configAndStorage/serviceAccounts/Permissions';
 import List from '../../misc/List';
 import Affinities from '../../misc/podTemplate/affinities/Affinities';
 import Containers from '../../misc/podTemplate/containers/Containers';
@@ -55,7 +56,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
         <Configuration>
           <Row obj={item} objKey="spec.priority" title="Priority" />
           <Row obj={item} objKey="spec.nodeName" title="Node" />
-          <Row obj={item} objKey="spec.serviceAccount" title="Service Account" />
+          <Row obj={item} objKey="spec.serviceAccountName" title="Service Account" />
           <Row obj={item} objKey="spec.restartPolicy" title="Restart Policy" />
           <Row obj={item} objKey="spec.terminationGracePeriodSeconds" title="Termination Grace Period Seconds" />
         </Configuration>
@@ -125,6 +126,10 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
         ) : null}
         {item.spec && item.spec.affinity ? <Affinities affinities={item.spec.affinity} /> : null}
       </IonRow>
+
+      {item.metadata && item.metadata.namespace && item.spec && item.spec.serviceAccountName ? (
+        <Permissions namespace={item.metadata.namespace} serviceAccountName={item.spec.serviceAccountName} />
+      ) : null}
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
         <IonRow>

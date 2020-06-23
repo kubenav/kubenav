@@ -1,12 +1,11 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonRow } from '@ionic/react';
 import { V1ClusterRole } from '@kubernetes/client-node';
-import yaml from 'js-yaml';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import Editor from '../../../misc/Editor';
 import List from '../../misc/List';
 import Metadata from '../../misc/template/Metadata';
+import Rules from '../misc/Rules';
 
 interface IClusterRoleDetailsProps extends RouteComponentProps {
   item: V1ClusterRole;
@@ -30,7 +29,7 @@ const ClusterRoleDetails: React.FunctionComponent<IClusterRoleDetailsProps> = ({
                 <IonCardTitle>Rules</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
-                <Editor readOnly={true} value={yaml.safeDump(item.rules)} />
+                <Rules rules={item.rules} />
               </IonCardContent>
             </IonCard>
           </IonCol>
