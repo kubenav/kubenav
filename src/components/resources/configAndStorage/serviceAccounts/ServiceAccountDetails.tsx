@@ -22,9 +22,7 @@ const ServiceAccountDetails: React.FunctionComponent<IServiceAccountDetailsProps
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
-        <IonRow>
-          <Permissions namespace={item.metadata.namespace} serviceAccountName={item.metadata.name} />
-        </IonRow>
+        <Permissions namespace={item.metadata.namespace} serviceAccountName={item.metadata.name} />
       ) : null}
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (

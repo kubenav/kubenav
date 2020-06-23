@@ -13,6 +13,7 @@ const Rules: React.FunctionComponent<IRulesProps> = ({ rules }: IRulesProps) => 
       <table>
         <thead>
           <tr>
+            <th>API Groups</th>
             <th>Resource</th>
             <th>Get</th>
             <th>List</th>
@@ -30,10 +31,10 @@ const Rules: React.FunctionComponent<IRulesProps> = ({ rules }: IRulesProps) => 
                   ? rule.resources.map((resource, indexResource) => {
                       return (
                         <tr key={`rule-${indexRule}-resource-${indexResource}`}>
+                          <td>{rule.apiGroups ? rule.apiGroups.join(',') : ''}</td>
                           <td>
-                            Resource: {resource}
-                            {rule.apiGroups ? ` | API Groups: ${rule.apiGroups.join(',')}` : ''}
-                            {rule.resourceNames ? ` | Resource Name: ${rule.resourceNames.join(',')}` : ''}
+                            {resource}
+                            {rule.resourceNames ? ` (${rule.resourceNames.join(',')})` : ''}
                           </td>
                           <td>
                             {rule.verbs.includes('get') ? (

@@ -128,9 +128,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
       </IonRow>
 
       {item.metadata && item.metadata.namespace && item.spec && item.spec.serviceAccountName ? (
-        <IonRow>
-          <Permissions namespace={item.metadata.namespace} serviceAccountName={item.spec.serviceAccountName} />
-        </IonRow>
+        <Permissions namespace={item.metadata.namespace} serviceAccountName={item.spec.serviceAccountName} />
       ) : null}
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (
