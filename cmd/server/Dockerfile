@@ -8,6 +8,8 @@
 
 FROM --platform=${BUILDPLATFORM:-linux/amd64} golang:1.14.4-alpine3.12 as server
 ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+RUN echo "Building on $BUILDPLATFORM, for $TARGETPLATFORM" > /log
 RUN apk update && apk add git make
 COPY . /kubenav
 WORKDIR /kubenav
