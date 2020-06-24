@@ -41,6 +41,8 @@ On mobile you can add your Cluster via Kubeconfig file or via your prefered Clou
 
 On desktop kubenav will automatic load all configured clusters from the default Kubeconfig file or the `KUBECONFIG` environment variable. If you want to use another Kubeconfig file, you can start kubenav with the `-kubeconfig` Flag. You can also use the `-kubeconfig-include` and `-kubeconfig-exclude` flag to load Kubeconfig files from multiple locations by glob. The `-sync` flag can be used to write context changes back to your Kubeconfig file, so the context is also changed in your terminal.
 
+> **Note:** kubenav is based on [Electron](https://www.electronjs.org) and [go-astilectron](https://github.com/asticode/go-astilectron), which will be downloaded on the first start of the app. Therefore the first start of the app can take a bit longer with a slow internet connection.
+
 Similar to the [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) it is also possible to deploy kubenav to your Kubernetes cluster. More information on the deployment of kubenav to Kubernetes can be found in [`utils/kubernetes`](./utils/kubernetes) folder.
 
 ## Beta and Nightly Builds
