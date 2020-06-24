@@ -57,14 +57,14 @@ jobs:
           make build-electron
 
       - name: Import Apple Code-signing Certificates and Keys
-        if: ${{ (github.event_name == 'release' && github.event.action == 'created') || github.event_name == 'schedule' }}
+        # if: ${{ (github.event_name == 'release' && github.event.action == 'created') || github.event_name == 'schedule' }}
         uses: apple-actions/import-codesign-certs@v1
         with:
           p12-file-base64: ${{ secrets.MACOS_CERTIFICATES_P12 }}
           p12-password: ${{ secrets.MACOS_CERTIFICATES_P12_PASSWORD }}
 
       - name: Code-sign macOS App
-        if: ${{ (github.event_name == 'release' && github.event.action == 'created') || github.event_name == 'schedule' }}
+        # if: ${{ (github.event_name == 'release' && github.event.action == 'created') || github.event_name == 'schedule' }}
         run: |
           codesign --deep --force --options runtime --sign "Developer ID Application: Rico Berger" cmd/electron/output/darwin-amd64/kubenav.app
 
@@ -75,7 +75,7 @@ jobs:
           cd ../windows-amd64 && zip -r -X kubenav-windows-amd64.zip kubenav.exe
 
       - name: Upload macOS App to the Notarization Service
-        if: ${{ (github.event_name == 'release' && github.event.action == 'created') || github.event_name == 'schedule' }}
+        # if: ${{ (github.event_name == 'release' && github.event.action == 'created') || github.event_name == 'schedule' }}
         run: |
           mkdir -p ~/.appstoreconnect/private_keys
           echo -n "$AC_AUTH_KEY" > ~/.appstoreconnect/private_keys/AuthKey_${AC_API_KEY}.p8

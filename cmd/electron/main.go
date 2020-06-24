@@ -44,7 +44,7 @@ var messageChannel = make(chan Message)
 
 func main() {
 	// Parse command-line flags.
-	flag.Parse()
+	// flag.Parse()
 
 	// Setup the logger and print the version information.
 	log := logrus.StandardLogger()
