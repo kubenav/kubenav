@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/kubenav/kubenav/pkg/electron"
@@ -26,6 +27,7 @@ var (
 )
 
 var (
+	fs                    = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
 	debugFlag             = flag.Bool("debug", false, "Enable debug mode.")
 	kubeconfigFlag        = flag.String("kubeconfig", "", "Optional Kubeconfig file.")
 	kubeconfigIncludeFlag = flag.String("kubeconfig-include", "", "Comma separated list of globs to include in the Kubeconfig.")
@@ -44,7 +46,7 @@ var messageChannel = make(chan Message)
 
 func main() {
 	// Parse command-line flags.
-	// flag.Parse()
+	fs.Parse(os.Args[1:])
 
 	// Setup the logger and print the version information.
 	log := logrus.StandardLogger()
