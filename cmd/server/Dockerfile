@@ -6,7 +6,7 @@
 #ENV REACT_APP_SERVER true
 #RUN ionic build
 
-FROM --platform=${BUILDPLATFORM} golang:1.14.4-alpine3.12 as server
+FROM golang:1.14.4-alpine3.12 as server
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 RUN echo "Building on $BUILDPLATFORM, for $TARGETPLATFORM" > /log
@@ -15,7 +15,7 @@ COPY . /kubenav
 WORKDIR /kubenav
 RUN make build-server
 
-FROM --platform=${TARGETPLATFORM} alpine:3.12.0
+FROM alpine:3.12.0
 RUN apk update && apk add --no-cache ca-certificates
 RUN mkdir /kubenav
 #COPY --from=build /kubenav/build /kubenav/build
