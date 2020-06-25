@@ -29,7 +29,7 @@ jobs:
         id: prepare
         run: |
           DOCKER_IMAGE=kubenav/kubenav
-          DOCKER_PLATFORMS=linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/386,linux/ppc64le
+          DOCKER_PLATFORMS=linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           echo ::set-output name=buildx_args::--platform ${DOCKER_PLATFORMS} --tag ${DOCKER_IMAGE}:${{ env.DOCKER_TAG  }} --file cmd/server/Dockerfile .
 
       - name: Set up Docker Buildx
