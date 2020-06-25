@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/kubenav/kubenav/pkg/electron"
@@ -16,17 +17,18 @@ import (
 )
 
 var (
-	debugFlag             = flag.Bool("debug", false, "Enable debug mode.")
-	incluster             = flag.Bool("incluster", false, "Use the in cluster configuration. Only needed for a Kubernetes based Deployment using the Docker image.")
-	kubeconfigFlag        = flag.String("kubeconfig", "", "Optional Kubeconfig file.")
-	kubeconfigIncludeFlag = flag.String("kubeconfig-include", "", "Comma separated list of globs to include in the Kubeconfig.")
-	kubeconfigExcludeFlag = flag.String("kubeconfig-exclude", "", "Comma separated list of globs to exclude from the Kubeconfig. This flag must be used in combination with the '-kubeconfig-include' flag.")
-	syncFlag              = flag.Bool("sync", false, "Sync the changes from kubenav with the used Kubeconfig file.")
+	fs                    = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	debugFlag             = fs.Bool("debug", false, "Enable debug mode.")
+	inclusterFlag         = fs.Bool("incluster", false, "Use the in cluster configuration. Only needed for a Kubernetes based Deployment using the Docker image.")
+	kubeconfigFlag        = fs.String("kubeconfig", "", "Optional Kubeconfig file.")
+	kubeconfigIncludeFlag = fs.String("kubeconfig-include", "", "Comma separated list of globs to include in the Kubeconfig.")
+	kubeconfigExcludeFlag = fs.String("kubeconfig-exclude", "", "Comma separated list of globs to exclude from the Kubeconfig. This flag must be used in combination with the '-kubeconfig-include' flag.")
+	syncFlag              = fs.Bool("sync", false, "Sync the changes from kubenav with the used Kubeconfig file.")
 )
 
 func main() {
 	// Parse command-line flags.
-	flag.Parse()
+	fs.Parse(os.Args[1:])
 
 	// Setup the logger and print the version information.
 	log := logrus.StandardLogger()
@@ -41,7 +43,7 @@ func main() {
 	log.Infof(version.BuildContext())
 
 	// Create the client for the interaction with the Kubernetes API.
-	client, err := kube.NewClient(*incluster, *kubeconfigFlag, *kubeconfigIncludeFlag, *kubeconfigExcludeFlag)
+	client, err := kube.NewClient(*inclusterFlag, *kubeconfigFlag, *kubeconfigIncludeFlag, *kubeconfigExcludeFlag)
 	if err != nil {
 		log.WithError(err).Fatalf("Could not create Kubernetes client")
 	}

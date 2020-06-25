@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/kubenav/kubenav/pkg/electron"
@@ -26,11 +27,12 @@ var (
 )
 
 var (
-	debugFlag             = flag.Bool("debug", false, "Enable debug mode.")
-	kubeconfigFlag        = flag.String("kubeconfig", "", "Optional Kubeconfig file.")
-	kubeconfigIncludeFlag = flag.String("kubeconfig-include", "", "Comma separated list of globs to include in the Kubeconfig.")
-	kubeconfigExcludeFlag = flag.String("kubeconfig-exclude", "", "Comma separated list of globs to exclude from the Kubeconfig. This flag must be used in combination with the '-kubeconfig-include' flag.")
-	syncFlag              = flag.Bool("sync", false, "Sync the changes from kubenav with the used Kubeconfig file.")
+	fs                    = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	debugFlag             = fs.Bool("debug", false, "Enable debug mode.")
+	kubeconfigFlag        = fs.String("kubeconfig", "", "Optional Kubeconfig file.")
+	kubeconfigIncludeFlag = fs.String("kubeconfig-include", "", "Comma separated list of globs to include in the Kubeconfig.")
+	kubeconfigExcludeFlag = fs.String("kubeconfig-exclude", "", "Comma separated list of globs to exclude from the Kubeconfig. This flag must be used in combination with the '-kubeconfig-include' flag.")
+	syncFlag              = fs.Bool("sync", false, "Sync the changes from kubenav with the used Kubeconfig file.")
 )
 
 // Message is the structure of a Server Sent Event, which contains the Event and Data. Server Sent Events are used to
@@ -44,7 +46,7 @@ var messageChannel = make(chan Message)
 
 func main() {
 	// Parse command-line flags.
-	flag.Parse()
+	fs.Parse(os.Args[1:])
 
 	// Setup the logger and print the version information.
 	log := logrus.StandardLogger()
