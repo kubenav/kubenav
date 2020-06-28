@@ -1,5 +1,40 @@
 # Changelog
 
+## [2.1.0](https://github.com/kubenav/kubenav/tree/2.1.0) (2020-06-28)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/2.0.0...2.1.0)
+
+**Implemented enhancements:**
+
+- Add multi-arch for docker images [\#113](https://github.com/kubenav/kubenav/issues/113)
+- Feature request: Docker image [\#107](https://github.com/kubenav/kubenav/issues/107)
+- Import Kubeconfig via file [\#122](https://github.com/kubenav/kubenav/pull/122) ([ricoberger](https://github.com/ricoberger))
+- Add support for PodDisruptionBudgets [\#121](https://github.com/kubenav/kubenav/pull/121) ([ricoberger](https://github.com/ricoberger))
+- Show permissions for SA and Pods [\#117](https://github.com/kubenav/kubenav/pull/117) ([ricoberger](https://github.com/ricoberger))
+- Add Docker support [\#110](https://github.com/kubenav/kubenav/pull/110) ([ricoberger](https://github.com/ricoberger))
+- Code-sign macOS App [\#109](https://github.com/kubenav/kubenav/pull/109) ([ricoberger](https://github.com/ricoberger))
+- Improve log and shell access [\#106](https://github.com/kubenav/kubenav/pull/106) ([ricoberger](https://github.com/ricoberger))
+
+**Fixed bugs:**
+
+- unable to open releases properly on Mac [\#108](https://github.com/kubenav/kubenav/issues/108)
+- Too many open files. [\#78](https://github.com/kubenav/kubenav/issues/78)
+- Fix GitHub Action [\#104](https://github.com/kubenav/kubenav/pull/104) ([ricoberger](https://github.com/ricoberger))
+
+**Closed issues:**
+
+- Y [\#119](https://github.com/kubenav/kubenav/issues/119)
+- Could not create Kubernetes API client [\#115](https://github.com/kubenav/kubenav/issues/115)
+
+**Merged pull requests:**
+
+- Fix flag parsing [\#118](https://github.com/kubenav/kubenav/pull/118) ([ricoberger](https://github.com/ricoberger))
+- Add multi arch Docker images [\#116](https://github.com/kubenav/kubenav/pull/116) ([ricoberger](https://github.com/ricoberger))
+- Add missing --- at the top in kubernetes/clusterrole.yaml [\#114](https://github.com/kubenav/kubenav/pull/114) ([mzac](https://github.com/mzac))
+- Adjust code signing [\#112](https://github.com/kubenav/kubenav/pull/112) ([ricoberger](https://github.com/ricoberger))
+- Fix GitHub Action for PRs [\#111](https://github.com/kubenav/kubenav/pull/111) ([ricoberger](https://github.com/ricoberger))
+- Update dependencies [\#105](https://github.com/kubenav/kubenav/pull/105) ([ricoberger](https://github.com/ricoberger))
+
 ## [2.0.0](https://github.com/kubenav/kubenav/tree/2.0.0) (2020-06-15)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/1.4.1...2.0.0)
