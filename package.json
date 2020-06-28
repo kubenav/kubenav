@@ -1,6 +1,6 @@
 {
   "name": "kubenav",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "kubenav - The navigator for your Kubernetes clusters.",
   "author": "Rico Berger",
   "license": "MIT",
