@@ -60,6 +60,23 @@ const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history
     setKubeconfig(event.target.value);
   };
 
+  const handleKubeconfigFile = async (event) => {
+    const files: FileList = event.target.files;
+
+    if (files.length === 1) {
+      const reader = new FileReader();
+      reader.readAsText(files[0], 'UTF-8');
+      reader.onload = (e) => {
+        if (e.target && e.target.result) {
+          setKubeconfig(e.target.result as string);
+        }
+      };
+      reader.onerror = () => {
+        setError(`Could not read ${files[0].name}`);
+      };
+    }
+  };
+
   const addClusters = () => {
     if (kubeconfig === '') {
       setError('Kubeconfig is required');
@@ -130,6 +147,15 @@ const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history
       </IonHeader>
       <IonContent>
         <IonList lines="full">
+          <div className="select-kubeconfig-wrapper">
+            <IonButton expand="block">
+              <input id="file" hidden type="file" onChange={handleKubeconfigFile} />
+              <label htmlFor="file" className="select-kubeconfig">
+                Select Kubeconfig
+              </label>
+            </IonButton>
+          </div>
+
           <IonItem>
             <IonLabel position="stacked">Kubeconfig</IonLabel>
             <IonTextarea autoGrow={true} value={kubeconfig} onInput={handleKubeconfig} />
