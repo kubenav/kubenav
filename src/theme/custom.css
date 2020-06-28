@@ -137,3 +137,13 @@ ion-avatar {
   width: 368px;
 }
 
+/* Select Kubeconfig
+   Customization for the file input to import a Kubeconfig file */
+.select-kubeconfig-wrapper {
+  padding: 16px;
+}
+
+.select-kubeconfig {
+  width: 100%;
+  cursor: pointer;
+}
