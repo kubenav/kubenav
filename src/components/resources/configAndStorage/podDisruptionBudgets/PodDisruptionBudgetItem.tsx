@@ -35,6 +35,7 @@ const PodDisruptionBudgetItem: React.FunctionComponent<IPodDisruptionBudgetItemP
 
   // - Min Available: An eviction is allowed if at least minAvailable pods selected by selector will still be available after the eviction.
   // - Max Unavailable: An eviction is allowed if at most maxUnavailable pods selected by selector are unavailable after the eviction.
+  // - Allowed Disruptions: Number of pod disruptions that are currently allowed.
   // - Age: The time when the secret was created.
   return (
     <IonItem
@@ -48,7 +49,7 @@ const PodDisruptionBudgetItem: React.FunctionComponent<IPodDisruptionBudgetItemP
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>
           Min Available: {item.spec && item.spec.minAvailable ? item.spec.minAvailable : 'N/A'} | Max Unavailable:{' '}
-          {item.spec && item.spec.maxUnavailable ? item.spec.maxUnavailable : 'N/A'} | Disruptions Allowed:{' '}
+          {item.spec && item.spec.maxUnavailable ? item.spec.maxUnavailable : 'N/A'} | Allowed Disruptions:{' '}
           {item.status && item.status.disruptionsAllowed ? item.status.disruptionsAllowed : 'N/A'}
           {item.metadata && item.metadata.creationTimestamp
             ? ` | Age: ${timeDifference(
