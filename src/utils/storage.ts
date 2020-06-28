@@ -84,8 +84,9 @@ export const readSettings = (): IAppSettings => {
 
   if (settingsFromStorage) {
     const settings = JSON.parse(settingsFromStorage);
+    console.log(settings);
     return {
-      darkMode: settings.darkMode ? settings.darkMode : DEFAULT_SETTINGS.darkMode,
+      darkMode: settings.hasOwnProperty('darkMode') ? settings.darkMode : DEFAULT_SETTINGS.darkMode,
       timeout: settings.timeout ? settings.timeout : DEFAULT_SETTINGS.timeout,
     };
   }

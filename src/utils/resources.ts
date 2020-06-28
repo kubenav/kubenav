@@ -16,6 +16,7 @@ import ServiceDetails from '../components/resources/discoveryAndLoadbalancing/se
 import ConfigMapDetails from '../components/resources/configAndStorage/configMaps/ConfigMapDetails';
 import PersistentVolumeClaimDetails from '../components/resources/configAndStorage/persistentVolumeClaims/PersistentVolumeClaimDetails';
 import PersistentVolumeDetails from '../components/resources/configAndStorage/persistentVolumes/PersistentVolumeDetails';
+import PodDisruptionBudgetDetails from '../components/resources/configAndStorage/podDisruptionBudgets/PodDisruptionBudgetDetails';
 import SecretDetails from '../components/resources/configAndStorage/secrets/SecretDetails';
 import ServiceAccountDetails from '../components/resources/configAndStorage/serviceAccounts/ServiceAccountDetails';
 import StorageClassDetails from '../components/resources/configAndStorage/storageclasses/StorageClassDetails';
@@ -47,6 +48,7 @@ import ServiceItem from '../components/resources/discoveryAndLoadbalancing/servi
 import ConfigMapItem from '../components/resources/configAndStorage/configMaps/ConfigMapItem';
 import PersistentVolumeClaimItem from '../components/resources/configAndStorage/persistentVolumeClaims/PersistentVolumeClaimItem';
 import PersistentVolumeItem from '../components/resources/configAndStorage/persistentVolumes/PersistentVolumeItem';
+import PodDisruptionBudgetItem from '../components/resources/configAndStorage/podDisruptionBudgets/PodDisruptionBudgetItem';
 import SecretItem from '../components/resources/configAndStorage/secrets/SecretItem';
 import ServiceAccountItem from '../components/resources/configAndStorage/serviceAccounts/ServiceAccountItem';
 import StorageClassItem from '../components/resources/configAndStorage/storageclasses/StorageClassItem';
@@ -295,6 +297,21 @@ export const resources: IAppSections = {
           return `/api/v1/namespaces/${namespace}/persistentvolumeclaims/${name}`;
         },
         detailsComponent: PersistentVolumeClaimDetails,
+      },
+      podDisruptionBudgets: {
+        singleText: 'Pod Disruption Budget',
+        pluralText: 'Pod Disruption Budgets',
+        icon: '/assets/icons/kubernetes/pdb.png',
+        listURL: (namespace: string): string => {
+          return namespace
+            ? `/apis/policy/v1beta1/namespaces/${namespace}/poddisruptionbudgets`
+            : `/apis/policy/v1beta1/poddisruptionbudgets`;
+        },
+        listItemComponent: PodDisruptionBudgetItem,
+        detailsURL: (namespace: string, name: string): string => {
+          return `/apis/policy/v1beta1/namespaces/${namespace}/poddisruptionbudgets/${name}`;
+        },
+        detailsComponent: PodDisruptionBudgetDetails,
       },
       secrets: {
         singleText: 'Secret',
