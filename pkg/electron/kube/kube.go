@@ -82,13 +82,13 @@ func (c *Client) Clusters() (map[string]Cluster, error) {
 	clusters = make(map[string]Cluster)
 
 	for context, details := range raw.Contexts {
-		cluster := raw.Clusters[details.Cluster]
-
-		clusters[context] = Cluster{
-			ID:        context,
-			Name:      context,
-			URL:       cluster.Server,
-			Namespace: details.Namespace,
+		if cluster, ok := raw.Clusters[details.Cluster]; ok && cluster.Server != "" {
+			clusters[context] = Cluster{
+				ID:        context,
+				Name:      context,
+				URL:       cluster.Server,
+				Namespace: details.Namespace,
+			}
 		}
 	}
 
