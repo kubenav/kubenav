@@ -1,6 +1,6 @@
 import { Plugins } from '@capacitor/core';
-import { IonButton, IonButtons, IonIcon, IonSearchbar, IonToolbar, isPlatform } from '@ionic/react';
-import { arrowBack, arrowForward } from 'ionicons/icons';
+import { IonButton, IonButtons, IonIcon, IonRange, IonSearchbar, IonToolbar, isPlatform } from '@ionic/react';
+import { arrowBack, arrowForward, copy } from 'ionicons/icons';
 import React, { useRef, useEffect, useState } from 'react';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
@@ -10,14 +10,15 @@ import 'xterm/css/xterm.css';
 
 import { ITerminal } from '../../declarations';
 
-const { Keyboard } = Plugins;
+const { Clipboard, Keyboard } = Plugins;
 
 interface IShellProps {
   showSearch: boolean;
+  showSelect: boolean;
   terminal: ITerminal;
 }
 
-const Shell: React.FunctionComponent<IShellProps> = ({ showSearch, terminal }: IShellProps) => {
+const Shell: React.FunctionComponent<IShellProps> = ({ showSearch, showSelect, terminal }: IShellProps) => {
   const termRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLIonSearchbarElement>(null);
   const [term, setTerm] = useState<Terminal>();
@@ -112,6 +113,19 @@ const Shell: React.FunctionComponent<IShellProps> = ({ showSearch, terminal }: I
     }
   };
 
+  const select = (event) => {
+    if (term) {
+      term.selectLines(event.detail.value.lower, event.detail.value.upper);
+    }
+  };
+
+  const selectCopy = () => {
+    if (term) {
+      const selection = term.getSelection();
+      Clipboard.write({ string: selection });
+    }
+  };
+
   return (
     <React.Fragment>
       {showSearch ? (
@@ -135,7 +149,30 @@ const Shell: React.FunctionComponent<IShellProps> = ({ showSearch, terminal }: I
           </IonButtons>
         </IonToolbar>
       ) : null}
-      <div style={{ width: '100%', height: showSearch ? 'calc(100% - 56px)' : '100%' }} ref={termRef}></div>
+
+      {showSelect ? (
+        <IonToolbar>
+          <IonRange
+            style={showSearch && isPlatform('ios') ? { paddingTop: '15px' } : {}}
+            color="dark"
+            dualKnobs={true}
+            min={0}
+            max={term?.buffer.normal.length}
+            step={1}
+            onIonChange={select}
+          />
+          <IonButtons style={showSearch && isPlatform('ios') ? { paddingTop: '10px' } : {}} slot="end">
+            <IonButton onClick={selectCopy}>
+              <IonIcon slot="icon-only" icon={copy} />
+            </IonButton>
+          </IonButtons>
+        </IonToolbar>
+      ) : null}
+
+      <div
+        style={{ width: '100%', height: showSearch || showSelect ? 'calc(100% - 56px)' : '100%' }}
+        ref={termRef}
+      ></div>
     </React.Fragment>
   );
 };

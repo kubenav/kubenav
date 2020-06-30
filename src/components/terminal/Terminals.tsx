@@ -41,6 +41,7 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
 }: ITerminalsProps) => {
   const [showPopover, setShowPopover] = useState<boolean>(false);
   const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [showSelect, setShowSelect] = useState<boolean>(false);
   const [popoverEvent, setPopoverEvent] = useState();
 
   useEffect(() => {
@@ -84,10 +85,22 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
                   detail={false}
                   onClick={() => {
                     setShowSearch(!showSearch);
+                    setShowSelect(false);
                     setShowPopover(false);
                   }}
                 >
                   <IonLabel>Search</IonLabel>
+                </IonItem>
+                <IonItem
+                  button={true}
+                  detail={false}
+                  onClick={() => {
+                    setShowSearch(false);
+                    setShowSelect(!showSelect);
+                    setShowPopover(false);
+                  }}
+                >
+                  <IonLabel>Select</IonLabel>
                 </IonItem>
               </IonItemGroup>
               <IonItemGroup>
@@ -135,7 +148,7 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
       <IonContent>
         {terminals.map((terminal, index) => {
           return activeTerminal === `term_${index}` ? (
-            <Shell key={index} showSearch={showSearch} terminal={terminal} />
+            <Shell key={index} showSearch={showSearch} showSelect={showSelect} terminal={terminal} />
           ) : null;
         })}
       </IonContent>
