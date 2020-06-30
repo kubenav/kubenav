@@ -47,6 +47,14 @@ const Shell: React.FunctionComponent<IShellProps> = ({ showSearch, showSelect, t
           term.open(termRef.current);
           fitAddon.fit();
 
+          term.attachCustomKeyEventHandler((event) => {
+            if (event.ctrlKey && event.shiftKey && event.keyCode === 3) {
+              selectCopy();
+            }
+
+            return false;
+          });
+
           if (terminal.webSocket) {
             term.focus();
           }
