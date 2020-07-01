@@ -20,7 +20,7 @@ export const addShell = async (
         context.clusters[context.cluster],
       );
 
-      const webSocket = new SockJS(`${SERVER}/api/kubernetes/sockjs?${id}`);
+      const webSocket = new SockJS(`${SERVER}/api/kubernetes/exec/sockjs?${id}`);
 
       term?.onData((str) => {
         webSocket.send(

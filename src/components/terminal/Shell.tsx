@@ -50,9 +50,10 @@ const Shell: React.FunctionComponent<IShellProps> = ({ showSearch, showSelect, t
           term.attachCustomKeyEventHandler((event) => {
             if (event.ctrlKey && event.shiftKey && event.keyCode === 3) {
               selectCopy();
+              return false;
             }
 
-            return false;
+            return true;
           });
 
           if (terminal.webSocket) {

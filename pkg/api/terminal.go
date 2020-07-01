@@ -146,7 +146,7 @@ func (sm *SessionMap) Close(sessionID string, status uint32, reason string) {
 
 var TerminalSessions = SessionMap{Sessions: make(map[string]TerminalSession)}
 
-// handleTerminalSession is Called by net/http for any new /api/sockjs connections
+// handleTerminalSession is Called by net/http for any new /api/kubernetes/exec/sockjs connections
 func handleTerminalSession(session sockjs.Session) {
 	var (
 		buf             string
@@ -176,7 +176,7 @@ func handleTerminalSession(session sockjs.Session) {
 	terminalSession.Bound <- nil
 }
 
-// CreateAttachHandler is called from main for /api/sockjs
+// CreateAttachHandler is called from main for /api/kubernetes/exec/sockjs
 func CreateAttachHandler(path string) http.Handler {
 	return sockjs.NewHandler(path, sockjs.DefaultOptions, handleTerminalSession)
 }
@@ -229,7 +229,7 @@ func isValidShell(validShells []string, shell string) bool {
 	return false
 }
 
-// WaitForTerminal is called from apihandler.handleAttach as a goroutine
+// WaitForTerminal is called from execHandler as a goroutine
 // Waits for the SockJS connection to be opened by the client the session to be bound in handleTerminalSession
 func WaitForTerminal(config *rest.Config, clientset *kubernetes.Clientset, request *Request, shell string, sessionID string) {
 	select {
