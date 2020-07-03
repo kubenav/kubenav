@@ -133,3 +133,39 @@ func logsHandler(w http.ResponseWriter, r *http.Request) {
 	middleware.Write(w, r, api.TerminalResponse{ID: sessionID})
 	return
 }
+
+// sshHandler handles SSH connections to a node
+func sshHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		middleware.Write(w, r, nil)
+		return
+	}
+
+	var request api.SSHRequest
+	if r.Body == nil {
+		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
+		return
+	}
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not decode request body")
+		return
+	}
+
+	sessionID, err := api.GenTerminalSessionID()
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not generate terminal session id")
+		return
+	}
+
+	api.TerminalSessions.Set(sessionID, api.TerminalSession{
+		ID:       sessionID,
+		Bound:    make(chan error),
+		SizeChan: make(chan remotecommand.TerminalSize),
+	})
+
+	go api.WaitForSSH(request.Key, request.Address, request.User, sessionID)
+
+	middleware.Write(w, r, api.TerminalResponse{ID: sessionID})
+	return
+}

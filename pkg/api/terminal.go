@@ -33,6 +33,7 @@ type PtyHandler interface {
 	io.Reader
 	io.Writer
 	remotecommand.TerminalSizeQueue
+	GetSizeChan() chan remotecommand.TerminalSize
 }
 
 // TerminalSession implements PtyHandler (using a SockJS connection)
@@ -66,6 +67,11 @@ func (t TerminalSession) Next() *remotecommand.TerminalSize {
 	case <-t.DoneChan:
 		return nil
 	}
+}
+
+// GetSizeChan is used to support resizing for the SSH terminal.
+func (t TerminalSession) GetSizeChan() chan remotecommand.TerminalSize {
+	return t.SizeChan
 }
 
 // Read handles pty->process messages (stdin, resize)
@@ -146,7 +152,7 @@ func (sm *SessionMap) Close(sessionID string, status uint32, reason string) {
 
 var TerminalSessions = SessionMap{Sessions: make(map[string]TerminalSession)}
 
-// handleTerminalSession is Called by net/http for any new /api/sockjs connections
+// handleTerminalSession is Called by net/http for any new /api/kubernetes/exec/sockjs connections
 func handleTerminalSession(session sockjs.Session) {
 	var (
 		buf             string
@@ -176,12 +182,12 @@ func handleTerminalSession(session sockjs.Session) {
 	terminalSession.Bound <- nil
 }
 
-// CreateAttachHandler is called from main for /api/sockjs
+// CreateAttachHandler is called from main for /api/kubernetes/exec/sockjs
 func CreateAttachHandler(path string) http.Handler {
 	return sockjs.NewHandler(path, sockjs.DefaultOptions, handleTerminalSession)
 }
 
-// startProcess is called by handleAttach
+// startProcess is called by execHandler
 // Executed cmd in the container specified in request and connects it up with the ptyHandler (a session)
 func startProcess(config *rest.Config, clientset *kubernetes.Clientset, request *Request, cmd []string, ptyHandler PtyHandler) error {
 	reqURL, err := url.Parse(request.URL)
@@ -229,7 +235,7 @@ func isValidShell(validShells []string, shell string) bool {
 	return false
 }
 
-// WaitForTerminal is called from apihandler.handleAttach as a goroutine
+// WaitForTerminal is called from execHandler as a goroutine
 // Waits for the SockJS connection to be opened by the client the session to be bound in handleTerminalSession
 func WaitForTerminal(config *rest.Config, clientset *kubernetes.Clientset, request *Request, shell string, sessionID string) {
 	select {

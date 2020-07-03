@@ -45,14 +45,15 @@ const Shell: React.FunctionComponent<IShellProps> = ({ showSearch, showSelect, t
           term.loadAddon(fitAddon);
           term.loadAddon(searchAddon);
           term.open(termRef.current);
-          fitAddon.fit();
+          updateTerminalSize();
 
           term.attachCustomKeyEventHandler((event) => {
             if (event.ctrlKey && event.shiftKey && event.keyCode === 3) {
               selectCopy();
+              return false;
             }
 
-            return false;
+            return true;
           });
 
           if (terminal.webSocket) {
@@ -84,17 +85,30 @@ const Shell: React.FunctionComponent<IShellProps> = ({ showSearch, showSelect, t
     }
 
     updateTerminalSize();
+
+    if (term) {
+      if (showSearch) {
+        term.resize(term.cols, term.rows - 4);
+      } else {
+        term.resize(term.cols, term.rows + 4);
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showSearch]);
 
+  useEffect(() => {
+    if (term) {
+      if (showSelect) {
+        term.resize(term.cols, term.rows - 4);
+      } else {
+        term.resize(term.cols, term.rows + 4);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showSelect]);
+
   const updateTerminalSize = () => {
     fitAddon.fit();
-
-    if (showSearch) {
-      term?.resize(term.cols, term.rows - 4);
-    } else {
-      term?.resize(term.cols, term.rows + 4);
-    }
   };
 
   const search = (event) => {

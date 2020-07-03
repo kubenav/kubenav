@@ -487,6 +487,37 @@ export const logsRequest = async (url: string, cluster: ICluster): Promise<ITerm
   }
 };
 
+// sshRequest initialize the request to get a SSH connection to a node. The generated session id is returned and can be
+// used to get the SSH connection to the node.
+export const sshRequest = async (key: string, address: string, user: string): Promise<ITerminalResponse> => {
+  try {
+    await checkServer();
+
+    const response = await fetch(`${SERVER}/api/kubernetes/ssh`, {
+      method: 'post',
+      body: JSON.stringify({
+        key: key,
+        address: address,
+        user: user,
+      }),
+    });
+
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
+    } else {
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
 // getOIDCAccessToken returns a new id and access token for the provided OIDC provider. To get a new id and access token
 // a valid refresh token is required.
 export const getOIDCAccessToken = async (provider: IOIDCProvider): Promise<IOIDCProviderToken> => {

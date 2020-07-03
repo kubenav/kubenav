@@ -10,6 +10,7 @@ import {
   IonList,
   IonMenuButton,
   IonPage,
+  IonTextarea,
   IonTitle,
   IonToggle,
   IonToolbar,
@@ -28,6 +29,9 @@ const GeneralPage: React.FunctionComponent = () => {
     context.editSettings({
       darkMode: context.settings.darkMode,
       timeout: parseInt(event.target.value),
+      sshKey: context.settings.sshKey,
+      sshPort: context.settings.sshPort,
+      sshUser: context.settings.sshUser,
     });
   };
 
@@ -35,6 +39,39 @@ const GeneralPage: React.FunctionComponent = () => {
     context.editSettings({
       darkMode: event.detail.checked,
       timeout: context.settings.timeout,
+      sshKey: context.settings.sshKey,
+      sshPort: context.settings.sshPort,
+      sshUser: context.settings.sshUser,
+    });
+  };
+
+  const changeSSHKey = (event) => {
+    context.editSettings({
+      darkMode: context.settings.darkMode,
+      timeout: context.settings.timeout,
+      sshKey: event.target.value,
+      sshPort: context.settings.sshPort,
+      sshUser: context.settings.sshUser,
+    });
+  };
+
+  const changeSSHPort = (event) => {
+    context.editSettings({
+      darkMode: context.settings.darkMode,
+      timeout: context.settings.timeout,
+      sshKey: context.settings.sshKey,
+      sshPort: event.target.value,
+      sshUser: context.settings.sshUser,
+    });
+  };
+
+  const changeSSHUser = (event) => {
+    context.editSettings({
+      darkMode: context.settings.darkMode,
+      timeout: context.settings.timeout,
+      sshKey: context.settings.sshKey,
+      sshPort: context.settings.sshPort,
+      sshUser: event.target.value,
     });
   };
 
@@ -61,6 +98,24 @@ const GeneralPage: React.FunctionComponent = () => {
             <IonItem>
               <IonLabel position="stacked">Timeout (in seconds)</IonLabel>
               <IonInput type="number" required={true} value={context.settings.timeout} onInput={changeTimeout} />
+            </IonItem>
+          </IonItemGroup>
+
+          <IonItemGroup>
+            <IonItemDivider>
+              <IonLabel>SSH</IonLabel>
+            </IonItemDivider>
+            <IonItem>
+              <IonLabel position="stacked">Port</IonLabel>
+              <IonInput type="text" required={true} value={context.settings.sshPort} onInput={changeSSHPort} />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Private Key</IonLabel>
+              <IonTextarea autoGrow={true} value={context.settings.sshKey} onInput={changeSSHKey} />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">User</IonLabel>
+              <IonInput type="text" required={true} value={context.settings.sshUser} onInput={changeSSHUser} />
             </IonItem>
           </IonItemGroup>
 
