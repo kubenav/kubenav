@@ -45,7 +45,10 @@ const ComponentStatusDetails: React.FunctionComponent<IComponentStatusDetailsPro
                         <h2>
                           {condition.status !== 'True' && condition.status !== 'Healthy' ? 'Unhealthy' : 'Healthy'}
                         </h2>
-                        <p>{condition.message}</p>
+                        <p>
+                          {condition.message}
+                          {condition.error ? ` | Error: ${condition.error}` : ''}
+                        </p>
                       </IonLabel>
                     </IonItem>
                   ))}
