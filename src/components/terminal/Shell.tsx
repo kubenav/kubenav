@@ -86,19 +86,23 @@ const Shell: React.FunctionComponent<IShellProps> = ({ showSearch, showSelect, t
 
     updateTerminalSize();
 
-    if (showSearch) {
-      term?.resize(term.cols, term.rows - 4);
-    } else {
-      term?.resize(term.cols, term.rows + 4);
+    if (term) {
+      if (showSearch) {
+        term.resize(term.cols, term.rows - 4);
+      } else {
+        term.resize(term.cols, term.rows + 4);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showSearch]);
 
   useEffect(() => {
-    if (showSelect) {
-      term?.resize(term.cols, term.rows - 4);
-    } else {
-      term?.resize(term.cols, term.rows + 4);
+    if (term) {
+      if (showSelect) {
+        term.resize(term.cols, term.rows - 4);
+      } else {
+        term.resize(term.cols, term.rows + 4);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showSelect]);
