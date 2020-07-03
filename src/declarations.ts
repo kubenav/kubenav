@@ -41,6 +41,9 @@ export interface IAppSections {
 export interface IAppSettings {
   darkMode: boolean;
   timeout: number;
+  sshKey: string;
+  sshPort: string;
+  sshUser: string;
 }
 
 export interface IAWSCluster {

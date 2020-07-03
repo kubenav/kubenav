@@ -87,6 +87,9 @@ export const readSettings = (): IAppSettings => {
     return {
       darkMode: settings.hasOwnProperty('darkMode') ? settings.darkMode : DEFAULT_SETTINGS.darkMode,
       timeout: settings.timeout ? settings.timeout : DEFAULT_SETTINGS.timeout,
+      sshKey: settings.sshKey ? settings.sshKey : DEFAULT_SETTINGS.sshKey,
+      sshPort: settings.sshPort ? settings.sshPort : DEFAULT_SETTINGS.sshPort,
+      sshUser: settings.sshUser ? settings.sshUser : DEFAULT_SETTINGS.sshUser,
     };
   }
 

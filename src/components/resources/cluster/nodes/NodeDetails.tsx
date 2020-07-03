@@ -1,13 +1,17 @@
 import {
+  IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardTitle,
   IonCol,
   IonGrid,
   IonItem,
+  IonItemOptions,
+  IonItemSliding,
   IonLabel,
   IonList,
   IonRow,
+  isPlatform,
 } from '@ionic/react';
 import { V1Node, V1NodeAddress } from '@kubernetes/client-node';
 import React, { useContext, useEffect, useState } from 'react';
@@ -17,6 +21,7 @@ import { IContext, INodeMetrics } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import { formatBytes, formatResourceValue } from '../../../../utils/helpers';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
+import AddSSH from '../../../terminal/AddSSH';
 import List from '../../misc/List';
 import Conditions from '../../misc/template/Conditions';
 import Configuration from '../../misc/template/Configuration';
@@ -109,6 +114,50 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
       </IonRow>
 
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
+
+      {item.status && item.status.addresses ? (
+        <IonRow>
+          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="12">
+            <IonCard>
+              <IonCardHeader>
+                <IonCardTitle>Addresses</IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent>
+                <IonList>
+                  {item.status.addresses.map((address, index) => (
+                    <IonItemSliding key={index}>
+                      <IonItem>
+                        <IonLabel>
+                          <h2>
+                            {address.type}: {address.address}
+                          </h2>
+                        </IonLabel>
+                        {!isPlatform('hybrid') ? (
+                          <AddSSH
+                            activator="button"
+                            node={item.metadata && item.metadata.name ? item.metadata.name : ''}
+                            ip={address.address}
+                          />
+                        ) : null}
+                      </IonItem>
+
+                      {isPlatform('hybrid') ? (
+                        <IonItemOptions side="end">
+                          <AddSSH
+                            activator="item-option"
+                            node={item.metadata && item.metadata.name ? item.metadata.name : ''}
+                            ip={address.address}
+                          />
+                        </IonItemOptions>
+                      ) : null}
+                    </IonItemSliding>
+                  ))}
+                </IonList>
+              </IonCardContent>
+            </IonCard>
+          </IonCol>
+        </IonRow>
+      ) : null}
 
       <IonRow>
         {item.status && item.status.capacity && item.status.allocatable ? (

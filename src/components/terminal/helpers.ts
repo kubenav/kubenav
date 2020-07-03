@@ -2,7 +2,7 @@ import SockJS from 'sockjs-client';
 import { Terminal } from 'xterm';
 
 import { IContext, ITerminalContext } from '../../declarations';
-import { execRequest, logsRequest } from '../../utils/api';
+import { execRequest, logsRequest, sshRequest } from '../../utils/api';
 import { LOG_TERMINAL_OPTIONS, SERVER, SHELL_TERMINAL_OPTIONS } from '../../utils/constants';
 
 export const addShell = async (
@@ -141,5 +141,72 @@ export const addLogs = async (
         shell: term,
       });
     }
+  }
+};
+
+export const addSSH = async (
+  context: IContext,
+  terminalContext: ITerminalContext,
+  node: string,
+  ip: string,
+): Promise<void> => {
+  const term = new Terminal(SHELL_TERMINAL_OPTIONS(context.settings.darkMode));
+
+  try {
+    if (context.clusters && context.cluster) {
+      const { id } = await sshRequest(
+        context.settings.sshKey,
+        `${ip}:${context.settings.sshPort}`,
+        context.settings.sshUser,
+      );
+
+      const webSocket = new SockJS(`${SERVER}/api/kubernetes/ssh/sockjs?${id}`);
+
+      term?.onData((str) => {
+        webSocket.send(
+          JSON.stringify({
+            Op: 'stdin',
+            Data: str,
+            Cols: term.cols,
+            Rows: term.rows,
+          }),
+        );
+      });
+
+      term?.onResize(() => {
+        webSocket.send(
+          JSON.stringify({
+            Op: 'resize',
+            Cols: term.cols,
+            Rows: term.rows,
+          }),
+        );
+      });
+
+      webSocket.onopen = () => {
+        const startData = { Op: 'bind', SessionID: id };
+        webSocket.send(JSON.stringify(startData));
+      };
+
+      webSocket.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        if (msg.Op === 'stdout') {
+          term?.write(msg.Data);
+        }
+      };
+
+      terminalContext.add({
+        name: node,
+        shell: term,
+        webSocket: webSocket,
+      });
+    }
+  } catch (err) {
+    term.write(`${err.message}\n\r`);
+
+    terminalContext.add({
+      name: node,
+      shell: term,
+    });
   }
 };

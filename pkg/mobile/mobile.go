@@ -23,6 +23,8 @@ func StartServer() {
 	router.Handle("/api/kubernetes/exec/sockjs/", api.CreateAttachHandler("/api/kubernetes/exec/sockjs"))
 	router.HandleFunc("/api/kubernetes/logs", middleware.Cors(logsHandler))
 	router.HandleFunc("/api/kubernetes/logs/", middleware.Cors(api.StreamLogsHandler))
+	router.HandleFunc("/api/kubernetes/ssh", middleware.Cors(sshHandler))
+	router.Handle("/api/kubernetes/ssh/sockjs/", api.CreateSSHHandler("/api/kubernetes/ssh/sockjs"))
 
 	router.HandleFunc("/api/oidc/link", middleware.Cors(oidcGetLinkHandler))
 	router.HandleFunc("/api/oidc/refreshtoken", middleware.Cors(oidcGetRefreshTokenHandler))

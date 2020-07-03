@@ -9,6 +9,9 @@ export const VERSION = process.env.REACT_APP_VERSION;
 export const DEFAULT_SETTINGS: IAppSettings = {
   darkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
   timeout: 60,
+  sshKey: '',
+  sshPort: '22',
+  sshUser: '',
 };
 
 export const GOOGLE_OAUTH2_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/auth';
