@@ -135,7 +135,8 @@ export const isNamespaced = (type: string): boolean => {
     type === 'clusterrolebindings' ||
     type === 'customresourcedefinitions' ||
     type === 'namespaces' ||
-    type === 'nodes'
+    type === 'nodes' ||
+    type === 'podsecuritypolicies'
   );
 };
 
