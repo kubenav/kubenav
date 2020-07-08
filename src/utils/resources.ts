@@ -30,6 +30,7 @@ import ComponentStatusDetails from '../components/resources/cluster/componentsta
 import EventDetails from '../components/resources/cluster/events/EventDetails';
 import NamespaceDetails from '../components/resources/cluster/namespaces/NamespaceDetails';
 import NodeDetails from '../components/resources/cluster/nodes/NodeDetails';
+import PodSecurityPolicyDetails from '../components/resources/cluster/podsecuritypolicies/PodSecurityPolicyDetails';
 
 import CronJobItem from '../components/resources/workloads/cronJobs/CronJobItem';
 import DaemonSetItem from '../components/resources/workloads/daemonSets/DaemonSetItem';
@@ -64,6 +65,7 @@ import CustomResourceDefinitionItem from '../components/resources/cluster/custom
 import EventItem from '../components/resources/cluster/events/EventItem';
 import NamespaceItem from '../components/resources/cluster/namespaces/NamespaceItem';
 import NodeItem from '../components/resources/cluster/nodes/NodeItem';
+import PodSecurityPolicyItem from '../components/resources/cluster/podsecuritypolicies/PodSecurityPolicyItem';
 
 import { IAppSections } from '../declarations';
 
@@ -493,6 +495,20 @@ export const resources: IAppSections = {
           return `/api/v1/nodes/${name}`;
         },
         detailsComponent: NodeDetails,
+      },
+      podsecuritypolicies: {
+        singleText: 'Pod Security Policy',
+        pluralText: 'Pod Security Policies',
+        icon: '/assets/icons/kubernetes/psp.png',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        listURL: (namespace: string): string => {
+          return `/apis/policy/v1beta1/podsecuritypolicies`;
+        },
+        listItemComponent: PodSecurityPolicyItem,
+        detailsURL: (namespace: string, name: string): string => {
+          return `/apis/policy/v1beta1/podsecuritypolicies/${name}`;
+        },
+        detailsComponent: PodSecurityPolicyDetails,
       },
     },
   },
