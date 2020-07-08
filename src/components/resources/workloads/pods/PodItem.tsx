@@ -45,12 +45,12 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
   const podStatus = getStatus(item);
 
   const status = (): string => {
-    if (podStatus === 'Pending') {
-      return 'warning';
+    if (podStatus.phase === 'Running' || podStatus.phase === 'Succeeded') {
+      return 'success';
     }
 
-    if (podStatus === 'Running' || podStatus === 'Completed') {
-      return 'success';
+    if (podStatus.phase === 'Unknown') {
+      return 'warning';
     }
 
     return 'danger';
@@ -72,7 +72,8 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>
-          Ready: {getReady(item)} | Restarts: {getRestarts(item)} | Status: {podStatus}
+          Ready: {getReady(item)} | Restarts: {getRestarts(item)} | Phase: {podStatus.phase}
+          {podStatus.reason ? ` | Reason: ${podStatus.reason}` : ''}
           {item.spec && item.spec.initContainers && item.spec.containers
             ? ` | ${getResources(item.spec.initContainers.concat(item.spec.containers), metrics)}`
             : item.spec && item.spec.containers
