@@ -3,6 +3,11 @@ import { V1Container, V1Pod } from '@kubernetes/client-node';
 import { IPodMetrics } from '../../../../declarations';
 import { formatResourceValue } from '../../../../utils/helpers';
 
+export interface IPodStatus {
+  phase: string;
+  reason: string;
+}
+
 // getReady returns the number of ready containers for a pod and the number of container which should be ready. The
 // function returns a string 'number of ready containers / number of containers'.
 export const getReady = (pod: V1Pod): string => {
@@ -85,18 +90,31 @@ export const getRestarts = (pod: V1Pod): number => {
 
 // getStatus returns the status of the pod. If there is a problem with the state of one of the containers, we are
 // immediately returning and do not check the remaining containers.
-export const getStatus = (pod: V1Pod): string => {
-  if (pod.status && pod.status.containerStatuses) {
+export const getStatus = (pod: V1Pod): IPodStatus => {
+  // Pending: The pod has been accepted by the Kubernetes system, but one or more of the container images has not been created. This includes time before being scheduled as well as time spent downloading images over the network, which could take a while.
+  // Running: The pod has been bound to a node, and all of the containers have been created. At least one container is still running, or is in the process of starting or restarting.
+  // Succeeded: All containers in the pod have terminated in success, and will not be restarted.
+  // Failed: All containers in the pod have terminated, and at least one container has terminated in failure. The container either exited with non-zero status or was terminated by the system.
+  // Unknown: For some reason the state of the pod could not be obtained, typically due to an error in communicating with the host of the pod.
+  const phase = pod.status && pod.status.phase ? pod.status.phase : 'Unknown';
+  let reason = pod.status && pod.status.reason ? pod.status.reason : '';
+
+  if (reason === '' && pod.status && pod.status.containerStatuses) {
     for (const container of pod.status.containerStatuses) {
       if (container.state && container.state.waiting) {
-        return container.state.waiting.reason ? container.state.waiting.reason : '';
+        reason = container.state.waiting.reason ? container.state.waiting.reason : '';
+        break;
       }
 
       if (container.state && container.state.terminated) {
-        return container.state.terminated.reason ? container.state.terminated.reason : '';
+        reason = container.state.terminated.reason ? container.state.terminated.reason : '';
+        break;
       }
     }
   }
 
-  return 'Running';
+  return {
+    phase: phase,
+    reason: reason,
+  };
 };

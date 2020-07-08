@@ -50,6 +50,8 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
     }
   }, [item, type, context]);
 
+  const status = getStatus(item);
+
   return (
     <IonGrid>
       <IonRow>
@@ -74,14 +76,9 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
             </IonCol>
             <IonCol>{getRestarts(item)}</IonCol>
           </IonRow>
-          <IonRow>
-            <IonCol size="auto">
-              <b>Status:</b>
-            </IonCol>
-            <IonCol>{getStatus(item)}</IonCol>
-          </IonRow>
+          <Row obj={status} objKey="phase" title="Phase" />
+          {status.reason ? <Row obj={status} objKey="reason" title="Reason" /> : null}
           <Row obj={item} objKey="status.qosClass" title="QoS" />
-          <Row obj={item} objKey="status.phase" title="Phase" />
           <Row obj={item} objKey="status.podIP" title="Pod IP" />
           <Row obj={item} objKey="status.hostIP" title="Host IP" />
         </Status>
