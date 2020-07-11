@@ -28,7 +28,7 @@ const ClustersPage: React.FunctionComponent = () => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle>Clusters</IonTitle>
-          {isPlatform('hybrid') ? <AddCluster /> : null}
+          {isPlatform('hybrid') ? <AddCluster activator="button" /> : null}
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -36,7 +36,19 @@ const ClustersPage: React.FunctionComponent = () => {
           Object.keys(context.clusters).map((key) => {
             return context.clusters ? <ClusterItem key={key} cluster={context.clusters[key]} /> : null;
           })
-        ) : !isPlatform('hybrid') ? (
+        ) : isPlatform('hybrid') ? (
+          <IonCard>
+            <IonCardContent>
+              <p className="paragraph-margin-bottom">
+                It looks like you have not add a cluster yet. Click the button below to add your first cluster. You can
+                choose between different options when adding a cluster. You can import your cluster directly from one of
+                your cloud providers like Google, AWS or Azure. You can also import your clusters from an existing
+                Kubeconfig or you can choose the OIDC option.
+              </p>
+              <AddCluster activator="block-button" />
+            </IonCardContent>
+          </IonCard>
+        ) : (
           <IonCard>
             <IonCardContent>
               <p className="paragraph-margin-bottom">
@@ -52,7 +64,7 @@ const ClustersPage: React.FunctionComponent = () => {
               </p>
             </IonCardContent>
           </IonCard>
-        ) : null}
+        )}
       </IonContent>
     </IonPage>
   );
