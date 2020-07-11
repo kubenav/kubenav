@@ -271,7 +271,7 @@ export interface ITerminalResponse {
   id: string;
 }
 
-export type TActivator = 'button' | 'item' | 'item-option';
+export type TActivator = 'block-button' | 'button' | 'item' | 'item-option';
 
 export type TCondition =
   | V1DeploymentCondition

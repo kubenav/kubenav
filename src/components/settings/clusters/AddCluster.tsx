@@ -2,6 +2,7 @@ import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonModal, IonTit
 import { add, close } from 'ionicons/icons';
 import React, { useState } from 'react';
 
+import { TActivator } from '../../../declarations';
 import AWS from './aws/AWS';
 import Azure from './azure/Azure';
 import Google from './google/Google';
@@ -9,11 +10,15 @@ import Kubeconfig from './kubeconfig/Kubeconfig';
 import Manual from './manual/Manual';
 import OIDC from './oidc/OIDC';
 
-const AddCluster: React.FunctionComponent = () => {
+interface IAddCluster {
+  activator: TActivator;
+}
+
+const AddCluster: React.FunctionComponent<IAddCluster> = ({ activator }: IAddCluster) => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   return (
-    <IonButtons slot="primary">
+    <React.Fragment>
       <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
         <IonHeader>
           <IonToolbar>
@@ -34,10 +39,19 @@ const AddCluster: React.FunctionComponent = () => {
           <Manual />
         </IonContent>
       </IonModal>
-      <IonButton onClick={() => setShowModal(true)}>
-        <IonIcon slot="icon-only" icon={add} />
-      </IonButton>
-    </IonButtons>
+
+      {activator === 'button' ? (
+        <IonButtons slot="primary">
+          <IonButton onClick={() => setShowModal(true)}>
+            <IonIcon slot="icon-only" icon={add} />
+          </IonButton>
+        </IonButtons>
+      ) : (
+        <IonButton expand="block" onClick={() => setShowModal(true)}>
+          Add a Cluster
+        </IonButton>
+      )}
+    </React.Fragment>
   );
 };
 
