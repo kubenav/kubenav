@@ -18,7 +18,7 @@ import {
   GOOGLE_RESPONSE_TYPE,
   GOOGLE_SCOPE,
 } from '../../../../utils/constants';
-import { saveGoogleClientID } from '../../../../utils/storage';
+import { saveTemporaryCredentials } from '../../../../utils/storage';
 
 const Google: React.FunctionComponent = () => {
   const [clientID, setClientID] = useState<string>('');
@@ -26,13 +26,21 @@ const Google: React.FunctionComponent = () => {
 
   const handleClientID = (event) => {
     setClientID(event.target.value);
-    saveGoogleClientID(event.target.value);
   };
 
   const handleSignIn = () => {
     if (clientID === '') {
       setError('Client ID is required.');
     } else {
+      saveTemporaryCredentials({
+        accessToken: '',
+        clientID: clientID,
+        expiresIn: '',
+        idToken: '',
+        refreshToken: '',
+        tokenType: '',
+      });
+
       window.location.replace(
         `${GOOGLE_OAUTH2_ENDPOINT}?client_id=${clientID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=${GOOGLE_RESPONSE_TYPE}&scope=${GOOGLE_SCOPE}`,
       );

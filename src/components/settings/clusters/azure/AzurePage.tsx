@@ -22,10 +22,11 @@ import {
   IKubeconfigClusterRef,
   IKubeconfigUser,
   IKubeconfigUserRef,
+  IClusterAuthProviderAzure,
 } from '../../../../declarations';
 import { getAzureClusters } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
-import { readAzureCredentials } from '../../../../utils/storage';
+import { readTemporaryCredentials } from '../../../../utils/storage';
 import useAsyncFn from '../../../../utils/useAsyncFn';
 import ErrorCard from '../../../misc/ErrorCard';
 
@@ -67,17 +68,10 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ history }: IAzure
   const [state, , fetchInit] = useAsyncFn(
     async () => {
       try {
-        const credentials = readAzureCredentials();
-        if (credentials) {
-          const aksClusters = await getAzureClusters(
-            credentials.subscriptionID,
-            credentials.clientID,
-            credentials.clientSecret,
-            credentials.tenantID,
-            credentials.resourceGroupName,
-            credentials.admin,
-          );
+        const credentials = readTemporaryCredentials('azure') as undefined | IClusterAuthProviderAzure;
 
+        if (credentials) {
+          const aksClusters = await getAzureClusters(credentials);
           const tmpClusters: ICluster[] = [];
 
           // eslint-disable-next-line array-callback-return
@@ -108,6 +102,7 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ history }: IAzure
                 password: kubeconfigUser && kubeconfigUser.password ? kubeconfigUser.password : '',
                 insecureSkipTLSVerify: false,
                 authProvider: 'azure',
+                authProviderAzure: credentials,
                 namespace: 'default',
               });
             }
@@ -115,7 +110,7 @@ const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ history }: IAzure
 
           return tmpClusters;
         } else {
-          throw new Error('Could not credentials for Azure');
+          throw new Error('Could not read credentials for Azure');
         }
       } catch (err) {
         throw err;

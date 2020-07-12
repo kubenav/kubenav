@@ -18,6 +18,7 @@ import React, { memo, useContext, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../declarations';
+import { kubernetesRequest } from '../../utils/api';
 import { AppContext } from '../../utils/context';
 import { resources } from '../../utils/resources';
 import useAsyncFn from '../../utils/useAsyncFn';
@@ -42,7 +43,14 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
 
   // useAsyncFn is a custom React hook which wrapps our API call.
   const [state, fetch, fetchInit] = useAsyncFn(
-    async () => await context.request('GET', page.detailsURL(match.params.namespace, match.params.name), ''),
+    async () =>
+      await kubernetesRequest(
+        'GET',
+        page.detailsURL(match.params.namespace, match.params.name),
+        '',
+        context.settings.timeout,
+        await context.kubernetesAuthWrapper(''),
+      ),
     [page, match.params.namespace, match.params.name],
     { loading: true, error: undefined, value: undefined },
   );

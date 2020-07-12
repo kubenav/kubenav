@@ -13,6 +13,7 @@ import { V1ClusterRole, V1ClusterRoleBindingList, V1Role, V1RoleBindingList, V1S
 import React, { useContext, useEffect } from 'react';
 
 import { IContext } from '../../../../declarations';
+import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import { resources } from '../../../../utils/resources';
 import useAsyncFn from '../../../../utils/useAsyncFn';
@@ -45,16 +46,20 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
         const roles: V1ClusterRole[] = [];
         const clusterRoles: V1Role[] = [];
 
-        const clusterRoleBindings: V1ClusterRoleBindingList = await context.request(
+        const clusterRoleBindings: V1ClusterRoleBindingList = await kubernetesRequest(
           'GET',
           resources['rbac'].pages['clusterrolebindings'].listURL(''),
           '',
+          context.settings.timeout,
+          await context.kubernetesAuthWrapper(''),
         );
 
-        const roleBindings: V1RoleBindingList = await context.request(
+        const roleBindings: V1RoleBindingList = await kubernetesRequest(
           'GET',
           resources['rbac'].pages['rolebindings'].listURL(namespace),
           '',
+          context.settings.timeout,
+          await context.kubernetesAuthWrapper(''),
         );
 
         if (clusterRoleBindings && clusterRoleBindings.items) {
@@ -64,10 +69,12 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
               item.subjects &&
               subjectsContainServiceAccount(namespace, serviceAccountName, item.subjects)
             ) {
-              const clusterRole: V1ClusterRole = await context.request(
+              const clusterRole: V1ClusterRole = await kubernetesRequest(
                 'GET',
                 resources['rbac'].pages['clusterroles'].detailsURL(namespace, item.roleRef.name),
                 '',
+                context.settings.timeout,
+                await context.kubernetesAuthWrapper(''),
               );
 
               clusterRoles.push(clusterRole);
@@ -76,10 +83,12 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
               item.subjects &&
               subjectsContainServiceAccount(namespace, serviceAccountName, item.subjects)
             ) {
-              const role: V1Role = await context.request(
+              const role: V1Role = await kubernetesRequest(
                 'GET',
                 resources['rbac'].pages['roles'].detailsURL(namespace, item.roleRef.name),
                 '',
+                context.settings.timeout,
+                await context.kubernetesAuthWrapper(''),
               );
 
               roles.push(role);
@@ -94,10 +103,12 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
               item.subjects &&
               subjectsContainServiceAccount(namespace, serviceAccountName, item.subjects)
             ) {
-              const clusterRole: V1ClusterRole = await context.request(
+              const clusterRole: V1ClusterRole = await kubernetesRequest(
                 'GET',
                 resources['rbac'].pages['clusterroles'].detailsURL(namespace, item.roleRef.name),
                 '',
+                context.settings.timeout,
+                await context.kubernetesAuthWrapper(''),
               );
 
               clusterRoles.push(clusterRole);
@@ -106,10 +117,12 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
               item.subjects &&
               subjectsContainServiceAccount(namespace, serviceAccountName, item.subjects)
             ) {
-              const role: V1Role = await context.request(
+              const role: V1Role = await kubernetesRequest(
                 'GET',
                 resources['rbac'].pages['roles'].detailsURL(namespace, item.roleRef.name),
                 '',
+                context.settings.timeout,
+                await context.kubernetesAuthWrapper(''),
               );
 
               roles.push(role);

@@ -70,15 +70,6 @@ export interface IAzureCluster {
   kubeconfig: IKubeconfig;
 }
 
-export interface IAzureCredentials {
-  subscriptionID: string;
-  clientID: string;
-  clientSecret: string;
-  tenantID: string;
-  resourceGroupName: string;
-  admin: boolean;
-}
-
 export interface ICluster {
   id: string;
   name: string;
@@ -90,8 +81,49 @@ export interface ICluster {
   username: string;
   password: string;
   insecureSkipTLSVerify: boolean;
-  authProvider: string;
+  authProvider: TAuthProvider;
+  authProviderAWS?: IClusterAuthProviderAWS;
+  authProviderAzure?: IClusterAuthProviderAzure;
+  authProviderGoogle?: IClusterAuthProviderGoogle;
+  authProviderOIDC?: IClusterAuthProviderOIDC;
   namespace: string;
+}
+
+export interface IClusterAuthProviderAWS {
+  accessKeyID: string;
+  clusterID: string;
+  region: string;
+  secretKey: string;
+}
+
+export interface IClusterAuthProviderAzure {
+  admin: boolean;
+  clientID: string;
+  clientSecret: string;
+  resourceGroupName: string;
+  subscriptionID: string;
+  tenantID: string;
+}
+
+export interface IClusterAuthProviderGoogle {
+  accessToken: string;
+  clientID: string;
+  expiresIn: string;
+  idToken: string;
+  refreshToken: string;
+  tokenType: string;
+}
+
+export interface IClusterAuthProviderOIDC {
+  name: string;
+  clientID: string;
+  clientSecret: string;
+  idToken: string;
+  idpIssuerURL: string;
+  refreshToken: string;
+  certificateAuthority: string;
+  accessToken: string;
+  expiry: number;
 }
 
 export interface IClusters {
@@ -106,25 +138,24 @@ export interface IContainerMetrics {
 export interface IContext {
   clusters?: IClusters;
   cluster?: string;
-  oidcProviders?: IOIDCProviders;
   settings: IAppSettings;
 
   addCluster: (newCluster: ICluster[]) => void;
-  addOIDCProvider: (provider: IOIDCProvider) => void;
   changeCluster: (id: string) => void;
   currentCluster: () => ICluster | undefined;
   deleteCluster: (id: string) => void;
-  deleteOIDCProvider: (name: string) => void;
   editCluster: (editCluster: ICluster) => void;
   editSettings: (settings: IAppSettings) => void;
   setNamespace: (namespace: string) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  request: (method: string, url: string, body: string, alternativeCluster?: ICluster) => Promise<any>;
+  kubernetesAuthWrapper: (clusterID: string) => Promise<ICluster>;
 }
 
-export interface IGoogleTokens {
+export interface IGoogleTokensAPIResponse {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   access_token: string;
+  error: string;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  error_description: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   expires_in: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -229,9 +260,11 @@ export interface IOIDCProviders {
   [key: string]: IOIDCProvider;
 }
 
-export interface IOIDCProviderToken {
+export interface IOIDCProviderTokenAPIResponse {
+  error: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   id_token: string;
+  message: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   refresh_token: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -272,6 +305,8 @@ export interface ITerminalResponse {
 }
 
 export type TActivator = 'block-button' | 'button' | 'item' | 'item-option';
+
+export type TAuthProvider = 'aws' | 'azure' | 'google' | 'kubeconfig' | 'oidc';
 
 export type TCondition =
   | V1DeploymentCondition

@@ -26,6 +26,7 @@ import React, { memo, useContext, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../../../declarations';
+import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import useAsyncFn from '../../../../utils/useAsyncFn';
 import Editor from '../../../misc/Editor';
@@ -60,7 +61,7 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
   // useAsyncFn is a custom React hook which wrapps our API call.
   const [state, fetch, fetchInit] = useAsyncFn(
     async () =>
-      await context.request(
+      await kubernetesRequest(
         'GET',
         getURL(
           match.params.crnamespace,
@@ -70,6 +71,8 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
           match.params.crname,
         ),
         '',
+        context.settings.timeout,
+        await context.kubernetesAuthWrapper(''),
       ),
     [],
     { loading: true, error: undefined, value: undefined },

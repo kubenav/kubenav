@@ -15,10 +15,10 @@ import {
 import React, { memo, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { ICluster, IContext } from '../../../../declarations';
+import { ICluster, IContext, IClusterAuthProviderAWS } from '../../../../declarations';
 import { getAWSClusters } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
-import { readAWSTokens } from '../../../../utils/storage';
+import { readTemporaryCredentials } from '../../../../utils/storage';
 import useAsyncFn from '../../../../utils/useAsyncFn';
 import ErrorCard from '../../../misc/ErrorCard';
 
@@ -32,38 +32,25 @@ const isChecked = (id: string, clusters: ICluster[]): boolean => {
   return false;
 };
 
-interface IMatchParams {
-  region: string;
-}
+type IAWSPageProps = RouteComponentProps;
 
-type IAWSPageProps = RouteComponentProps<IMatchParams>;
-
-const AWSPage: React.FunctionComponent<IAWSPageProps> = ({ match, history }: IAWSPageProps) => {
+const AWSPage: React.FunctionComponent<IAWSPageProps> = ({ history }: IAWSPageProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [state, , fetchInit] = useAsyncFn(
     async () => {
       try {
-        if (match.params.region) {
-          const tokens = readAWSTokens();
+        const credentials = readTemporaryCredentials('aws') as undefined | IClusterAuthProviderAWS;
 
-          if (!tokens.hasOwnProperty(match.params.region)) {
-            throw new Error('Could not find AWS credentials.');
-          }
-
-          const awsClusters = await getAWSClusters(
-            tokens[match.params.region].accessKeyID,
-            tokens[match.params.region].secretKey,
-            match.params.region,
-          );
-
+        if (credentials) {
+          const awsClusters = await getAWSClusters(credentials);
           const tmpClusters: ICluster[] = [];
 
           // eslint-disable-next-line
           awsClusters.map((cluster) => {
             tmpClusters.push({
-              id: `aws_${match.params.region}_${cluster.Name}`,
-              name: `aws_${match.params.region}_${cluster.Name}`,
+              id: `aws_${credentials.region}_${cluster.Name}`,
+              name: `aws_${credentials.region}_${cluster.Name}`,
               url: `${cluster.Endpoint}`,
               certificateAuthorityData: cluster.CertificateAuthority.Data,
               clientCertificateData: '',
@@ -73,17 +60,25 @@ const AWSPage: React.FunctionComponent<IAWSPageProps> = ({ match, history }: IAW
               password: '',
               insecureSkipTLSVerify: false,
               authProvider: 'aws',
+              authProviderAWS: {
+                accessKeyID: credentials.accessKeyID,
+                clusterID: cluster.Name,
+                region: credentials.region,
+                secretKey: credentials.secretKey,
+              },
               namespace: 'default',
             });
           });
 
           return tmpClusters;
+        } else {
+          throw new Error('Could not read credentials for AWS');
         }
       } catch (err) {
         throw err;
       }
     },
-    [match.params.region],
+    [],
     { loading: true, error: undefined, value: undefined },
   );
 

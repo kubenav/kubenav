@@ -4,6 +4,7 @@ import { checkmark, options } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 
 import { IContext } from '../../../declarations';
+import { kubernetesRequest } from '../../../utils/api';
 import { AppContext } from '../../../utils/context';
 
 const NamespacePopover: React.FunctionComponent = () => {
@@ -17,7 +18,13 @@ const NamespacePopover: React.FunctionComponent = () => {
 
   const loadNamespaces = async () => {
     try {
-      const data: V1NamespaceList = await context.request('GET', '/api/v1/namespaces', '');
+      const data: V1NamespaceList = await kubernetesRequest(
+        'GET',
+        '/api/v1/namespaces',
+        '',
+        context.settings.timeout,
+        await context.kubernetesAuthWrapper(''),
+      );
       setNamespaces(data);
       setShowPopover(true);
     } catch (err) {

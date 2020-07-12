@@ -22,15 +22,10 @@ export const GOOGLE_SCOPE = 'https://www.googleapis.com/auth/cloud-platform';
 export const OIDC_REDIRECT_URL = `${CUSTOM_URI_SCHEME}:/settings/clusters/oidc/redirect`;
 export const OIDC_REDIRECT_URL_WEB = 'https://kubenav.io/oidc.html';
 
-export const STORAGE_AWS_TOKENS = 'aws';
-export const STORAGE_AZURE_CREDENTIALS = 'azure';
 export const STORAGE_CLUSTER = 'cluster';
 export const STORAGE_CLUSTERS = 'clusters';
-export const STORAGE_GOOGLE_CLIENT_ID = 'google_clientid';
-export const STORAGE_GOOGLE_TOKENS = 'google';
-export const STORAGE_OIDC_PROVIDERS = 'oidc';
-export const STORAGE_OIDC_PROVIDERS_LAST = 'oidc_last';
 export const STORAGE_SETTINGS = 'settings';
+export const STORAGE_TEMPORARY_CREDENTIALS = 'temporary_credentials';
 
 export const LOG_TAIL_LINES = 1000;
 export const LOG_TERMINAL_OPTIONS = (darkMode: boolean): ITerminalOptions => {

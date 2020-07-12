@@ -3,6 +3,7 @@ import { trash } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 
 import { IContext, TActivator } from '../../../../declarations';
+import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 
 interface IDeleteItemProps {
@@ -20,7 +21,7 @@ const DeleteItem: React.FunctionComponent<IDeleteItemProps> = ({ activator, item
 
   const handleDelete = async () => {
     try {
-      await context.request('DELETE', url, '');
+      await kubernetesRequest('DELETE', url, '', context.settings.timeout, await context.kubernetesAuthWrapper(''));
     } catch (err) {
       setError(err);
     }

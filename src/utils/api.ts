@@ -3,21 +3,22 @@ import { isPlatform } from '@ionic/react';
 
 import {
   IAWSCluster,
-  IAWSTokens,
   IAzureCluster,
   ICluster,
   IClusters,
   IGoogleCluster,
   IGoogleProject,
-  IGoogleTokens,
-  IOIDCProvider,
-  IOIDCProviderToken,
+  IGoogleTokensAPIResponse,
+  IOIDCProviderTokenAPIResponse,
   ITerminalResponse,
   TSyncType,
+  IClusterAuthProviderAWS,
+  IClusterAuthProviderAzure,
+  IClusterAuthProviderGoogle,
+  IClusterAuthProviderOIDC,
 } from '../declarations';
 import { GOOGLE_REDIRECT_URI, OIDC_REDIRECT_URL_WEB, SERVER } from './constants';
 import { isJSON } from './helpers';
-import { readAWSTokens, readGoogleClientID, readGoogleTokens, saveGoogleTokens } from './storage';
 
 const { KubenavPlugin } = Plugins;
 
@@ -48,20 +49,16 @@ const checkServer = async (): Promise<boolean> => {
 // getAWSClusters returns all EKS clusters from AWS for the provided access key, secret access key and region. This
 // function is only available for the native mobile apps, on all other platforms an error is returned. For the desktop
 // implementation this is not needed, because we are using kubeconfig file from ~/.kube/config.
-export const getAWSClusters = async (
-  accessKeyId: string,
-  secretAccessKey: string,
-  region: string,
-): Promise<IAWSCluster[]> => {
+export const getAWSClusters = async (credentials: IClusterAuthProviderAWS): Promise<IAWSCluster[]> => {
   try {
     await checkServer();
 
     const response = await fetch(`${SERVER}/api/aws/clusters`, {
       method: 'post',
       body: JSON.stringify({
-        accessKeyId: accessKeyId,
-        secretAccessKey: secretAccessKey,
-        region: region,
+        accessKeyId: credentials.accessKeyID,
+        secretAccessKey: credentials.secretKey,
+        region: credentials.region,
       }),
     });
 
@@ -84,22 +81,17 @@ export const getAWSClusters = async (
 // getAWSToken returns a valid authentication token for API requests against a EKS cluster. This function is only
 // available for the native mobile apps, on all other platforms an error is returned. For the desktop implementation
 // this is not needed, because we are using kubeconfig file from ~/.kube/config.
-export const getAWSToken = async (
-  accessKeyId: string,
-  secretAccessKey: string,
-  region: string,
-  clusterID: string,
-): Promise<string> => {
+export const getAWSToken = async (credentials: IClusterAuthProviderAWS): Promise<string> => {
   try {
     await checkServer();
 
     const response = await fetch(`${SERVER}/api/aws/token`, {
       method: 'post',
       body: JSON.stringify({
-        accessKeyId: accessKeyId,
-        secretAccessKey: secretAccessKey,
-        region: region,
-        clusterID: clusterID,
+        accessKeyId: credentials.accessKeyID,
+        secretAccessKey: credentials.secretKey,
+        region: credentials.region,
+        clusterID: credentials.clusterID,
       }),
     });
 
@@ -121,26 +113,19 @@ export const getAWSToken = async (
 
 // getAzureClusters returns all AKS clusters from Azure for the provided subscription ID, client ID, client secret,
 // tenant ID and resource group. The user can decide if he want to retrieve the admin or user credentials.
-export const getAzureClusters = async (
-  subscriptionID: string,
-  clientID: string,
-  clientSecret: string,
-  tenantID: string,
-  resourceGroupName: string,
-  admin: boolean,
-): Promise<IAzureCluster[]> => {
+export const getAzureClusters = async (credentials: IClusterAuthProviderAzure): Promise<IAzureCluster[]> => {
   try {
     await checkServer();
 
     const response = await fetch(`${SERVER}/api/azure/clusters`, {
       method: 'post',
       body: JSON.stringify({
-        subscriptionID: subscriptionID,
-        clientID: clientID,
-        clientSecret: clientSecret,
-        tenantID: tenantID,
-        resourceGroupName: resourceGroupName,
-        admin: admin,
+        subscriptionID: credentials.subscriptionID,
+        clientID: credentials.clientID,
+        clientSecret: credentials.clientSecret,
+        tenantID: credentials.tenantID,
+        resourceGroupName: credentials.resourceGroupName,
+        admin: credentials.admin,
       }),
     });
 
@@ -207,49 +192,27 @@ export const getClusters = async (): Promise<IClusters | undefined> => {
 // getGoogleAccessToken returns a valid access token for Google. Therefore we read the saved tokens from the
 // localStorage. If the access token is expired, we request a new token from the Google API and save it. Then the
 // correct token is returned.
-const getGoogleAccessToken = async (): Promise<string> => {
-  const tokens = readGoogleTokens();
-  if (!tokens) {
-    throw new Error('Could not get access token.');
+export const getGoogleAccessToken = async (
+  credentials: IClusterAuthProviderGoogle,
+): Promise<IClusterAuthProviderGoogle> => {
+  if (new Date(credentials.expiresIn).getTime() > new Date().getTime()) {
+    return credentials;
   }
 
-  const expiresData = new Date(tokens.expires_in);
-  const accessToken = tokens.access_token;
-
-  if (expiresData.getTime() < new Date().getTime()) {
-    const newTokens = await getGoogleAccessTokenAPI(tokens.refresh_token);
-    saveGoogleTokens({
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      access_token: newTokens.access_token,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      expires_in: newTokens.expires_in,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      id_token: tokens.id_token,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      refresh_token: tokens.refresh_token,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      token_type: tokens.token_type,
-    });
-    return newTokens.access_token;
-  }
-
-  return accessToken;
-};
-
-// getGoogleAccessTokenAPI uses the refresh token to get a new valid access token for GKE clusters. Therefore a valid
-// refresh token is required.
-export const getGoogleAccessTokenAPI = async (refreshToken: string): Promise<IGoogleTokens> => {
   const response = await fetch(
-    `https://oauth2.googleapis.com/token?refresh_token=${refreshToken}&client_id=${readGoogleClientID()}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=refresh_token`,
+    `https://oauth2.googleapis.com/token?refresh_token=${credentials.refreshToken}&client_id=${credentials.clientID}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=refresh_token`,
     {
       method: 'POST',
     },
   );
 
-  const json = await response.json();
+  const json: IGoogleTokensAPIResponse = await response.json();
 
   if (response.status >= 200 && response.status < 300) {
-    return json;
+    credentials.accessToken = json.access_token;
+    credentials.expiresIn = json.expires_in;
+
+    return credentials;
   }
 
   if (json.error && json.error_description) {
@@ -261,10 +224,10 @@ export const getGoogleAccessTokenAPI = async (refreshToken: string): Promise<IGo
 
 // getGoogleClusters returns all available GKE clusters for the provided project. For the authentication against the
 // Google API a valid access token is required.
-export const getGoogleClusters = async (token: string, project: string): Promise<IGoogleCluster[]> => {
+export const getGoogleClusters = async (accessToken: string, project: string): Promise<IGoogleCluster[]> => {
   const response = await fetch(`https://container.googleapis.com/v1/projects/${project}/locations/-/clusters`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${accessToken}`,
     },
     method: 'GET',
   });
@@ -284,10 +247,10 @@ export const getGoogleClusters = async (token: string, project: string): Promise
 
 // getGoogleProjects returns all available projects for the authenticated user, from the Google API. Therefor a valid
 // access token is required.
-export const getGoogleProjects = async (token: string): Promise<IGoogleProject[]> => {
+export const getGoogleProjects = async (accessToken: string): Promise<IGoogleProject[]> => {
   const response = await fetch('https://cloudresourcemanager.googleapis.com/v1/projects', {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${accessToken}`,
     },
     method: 'GET',
   });
@@ -308,18 +271,25 @@ export const getGoogleProjects = async (token: string): Promise<IGoogleProject[]
 // getGoogleTokens is used to retrieve a refresh token from the Google API. This converts the returned code after the
 // login via Google into an refresh token.
 // See: https://developers.google.com/identity/protocols/OpenIDConnect#exchangecode
-export const getGoogleTokens = async (code: string): Promise<IGoogleTokens> => {
+export const getGoogleTokens = async (clientID: string, code: string): Promise<IClusterAuthProviderGoogle> => {
   const response = await fetch(
-    `https://oauth2.googleapis.com/token?code=${code}&client_id=${readGoogleClientID()}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=authorization_code`,
+    `https://oauth2.googleapis.com/token?code=${code}&client_id=${clientID}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=authorization_code`,
     {
       method: 'POST',
     },
   );
 
-  const json = await response.json();
+  const json: IGoogleTokensAPIResponse = await response.json();
 
   if (response.status >= 200 && response.status < 300) {
-    return json;
+    return {
+      accessToken: json.access_token,
+      clientID: clientID,
+      expiresIn: json.expires_in,
+      idToken: json.id_token,
+      refreshToken: json.refresh_token,
+      tokenType: json.token_type,
+    };
   }
 
   if (json.error && json.error_description) {
@@ -344,34 +314,6 @@ export const kubernetesRequest = async (
 ): Promise<any> => {
   try {
     await checkServer();
-
-    if (cluster.authProvider === 'google') {
-      if (!(cluster.clientCertificateData !== '' && cluster.clientKeyData !== '')) {
-        if (!(cluster.password !== '' && cluster.password !== '')) {
-          cluster.token = await getGoogleAccessToken();
-        }
-      }
-    }
-
-    if (cluster.authProvider === 'aws') {
-      const tokens: IAWSTokens = readAWSTokens();
-      const parts = cluster.id.split('_');
-
-      if (parts.length < 3) {
-        throw new Error('Invalid cluster id for authentication provider AWS.');
-      }
-
-      if (!tokens.hasOwnProperty(parts[1])) {
-        throw new Error('Could not find credentials for cluster.');
-      }
-
-      cluster.token = await getAWSToken(
-        tokens[parts[1]].accessKeyID,
-        tokens[parts[1]].secretKey,
-        parts[1],
-        parts.slice(2, parts.length).join('_'),
-      );
-    }
 
     const response = await fetch(`${SERVER}/api/kubernetes/request`, {
       method: 'post',
@@ -412,9 +354,9 @@ export const kubernetesRequest = async (
   }
 };
 
-// execRequest initialize the request to get a shell into a container. The generated session id is returned and can be
-// used to get the shell into the container.
-export const execRequest = async (url: string, cluster: ICluster): Promise<ITerminalResponse> => {
+// kubernetesExecRequest initialize the request to get a shell into a container. The generated session id is returned
+// and can be used to get the shell into the container.
+export const kubernetesExecRequest = async (url: string, cluster: ICluster): Promise<ITerminalResponse> => {
   try {
     await checkServer();
 
@@ -450,8 +392,8 @@ export const execRequest = async (url: string, cluster: ICluster): Promise<ITerm
   }
 };
 
-// logsRequest returns the session id to stream the log files of a container via server sent events.
-export const logsRequest = async (url: string, cluster: ICluster): Promise<ITerminalResponse> => {
+// kubernetesLogsRequest returns the session id to stream the log files of a container via server sent events.
+export const kubernetesLogsRequest = async (url: string, cluster: ICluster): Promise<ITerminalResponse> => {
   try {
     await checkServer();
 
@@ -520,17 +462,9 @@ export const sshRequest = async (key: string, address: string, user: string): Pr
 
 // getOIDCAccessToken returns a new id and access token for the provided OIDC provider. To get a new id and access token
 // a valid refresh token is required.
-export const getOIDCAccessToken = async (provider: IOIDCProvider): Promise<IOIDCProviderToken> => {
-  if (provider.expiry - 60 > Math.floor(Date.now() / 1000)) {
-    return {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      id_token: provider.idToken,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      refresh_token: provider.refreshToken,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      access_token: provider.accessToken,
-      expiry: provider.expiry,
-    };
+export const getOIDCAccessToken = async (credentials: IClusterAuthProviderOIDC): Promise<IClusterAuthProviderOIDC> => {
+  if (credentials.expiry - 60 > Math.floor(Date.now() / 1000)) {
+    return credentials;
   }
 
   try {
@@ -539,21 +473,25 @@ export const getOIDCAccessToken = async (provider: IOIDCProvider): Promise<IOIDC
     const response = await fetch(`${SERVER}/api/oidc/accesstoken`, {
       method: 'post',
       body: JSON.stringify({
-        discoveryURL: provider.idpIssuerURL,
-        clientID: provider.clientID,
-        clientSecret: provider.clientSecret,
-        certificateAuthority: provider.certificateAuthority ? provider.certificateAuthority : '',
+        discoveryURL: credentials.idpIssuerURL,
+        clientID: credentials.clientID,
+        clientSecret: credentials.clientSecret,
+        certificateAuthority: credentials.certificateAuthority ? credentials.certificateAuthority : '',
         redirectURL: OIDC_REDIRECT_URL_WEB,
-        refreshToken: provider.refreshToken,
+        refreshToken: credentials.refreshToken,
       }),
     });
 
-    const json = await response.json();
+    const json: IOIDCProviderTokenAPIResponse = await response.json();
 
     if (response.status >= 200 && response.status < 300) {
-      return json;
+      credentials.idToken = json.id_token;
+      credentials.accessToken = json.access_token;
+      credentials.expiry = json.expiry;
+
+      return credentials;
     } else {
-      if (json.error) {
+      if (json.error && json.message) {
         throw new Error(json.message);
       } else {
         throw new Error('An unknown error occured');
@@ -605,33 +543,35 @@ export const getOIDCLink = async (
 // getOIDCRefreshToken is used to exchange the returned code from the login against a refresh token. The refresh token
 // is used to get a new id and access token, which is used to make requests against the Kubernetes API.
 export const getOIDCRefreshToken = async (
-  discoveryURL: string,
-  clientID: string,
-  clientSecret: string,
-  certificateAuthority: string,
+  credentials: IClusterAuthProviderOIDC,
   code: string,
-): Promise<IOIDCProviderToken> => {
+): Promise<IClusterAuthProviderOIDC> => {
   try {
     await checkServer();
 
     const response = await fetch(`${SERVER}/api/oidc/refreshtoken`, {
       method: 'post',
       body: JSON.stringify({
-        discoveryURL: discoveryURL,
-        clientID: clientID,
-        clientSecret: clientSecret,
-        certificateAuthority: certificateAuthority,
+        discoveryURL: credentials.idpIssuerURL,
+        clientID: credentials.clientID,
+        clientSecret: credentials.clientSecret,
+        certificateAuthority: credentials.certificateAuthority,
         redirectURL: OIDC_REDIRECT_URL_WEB,
         code: code,
       }),
     });
 
-    const json = await response.json();
+    const json: IOIDCProviderTokenAPIResponse = await response.json();
 
     if (response.status >= 200 && response.status < 300) {
-      return json;
+      credentials.idToken = json.id_token;
+      credentials.refreshToken = json.refresh_token;
+      credentials.accessToken = json.access_token;
+      credentials.expiry = json.expiry;
+
+      return credentials;
     } else {
-      if (json.error) {
+      if (json.error && json.message) {
         throw new Error(json.message);
       } else {
         throw new Error('An unknown error occured');

@@ -23,6 +23,7 @@ import React, { memo, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../declarations';
+import { kubernetesRequest } from '../../utils/api';
 import { AppContext } from '../../utils/context';
 import { isNamespaced } from '../../utils/helpers';
 import { resources } from '../../utils/resources';
@@ -59,7 +60,14 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
 
   // useAsyncFn is a custom React hook which wrapps our API call.
   const [state, fetch, fetchInit] = useAsyncFn(
-    async () => await context.request('GET', page.listURL(cluster ? cluster.namespace : ''), ''),
+    async () =>
+      await kubernetesRequest(
+        'GET',
+        page.listURL(cluster ? cluster.namespace : ''),
+        '',
+        context.settings.timeout,
+        await context.kubernetesAuthWrapper(''),
+      ),
     [page, cluster?.id, cluster?.namespace],
     { loading: true, error: undefined, value: undefined },
   );

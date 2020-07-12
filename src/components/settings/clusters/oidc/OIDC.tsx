@@ -11,17 +11,13 @@ import {
   IonTextarea,
   IonToast,
 } from '@ionic/react';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 
-import { IContext } from '../../../../declarations';
 import { getOIDCLink } from '../../../../utils/api';
-import { AppContext } from '../../../../utils/context';
 import { isBase64 } from '../../../../utils/helpers';
-import { saveOIDCLastProvider } from '../../../../utils/storage';
+import { saveTemporaryCredentials } from '../../../../utils/storage';
 
 const OIDC: React.FunctionComponent = () => {
-  const context = useContext<IContext>(AppContext);
-
   const [name, setName] = useState<string>('');
   const [discoveryURL, setDiscoveryURL] = useState<string>('');
   const [clientID, setClientID] = useState<string>('');
@@ -60,7 +56,7 @@ const OIDC: React.FunctionComponent = () => {
     } else {
       const ca = isBase64(certificateAuthority) ? atob(certificateAuthority) : certificateAuthority;
 
-      context.addOIDCProvider({
+      saveTemporaryCredentials({
         name: name,
         clientID: clientID,
         clientSecret: clientSecret,
@@ -77,17 +73,12 @@ const OIDC: React.FunctionComponent = () => {
       } else {
         try {
           const url = await getOIDCLink(discoveryURL, clientID, clientSecret, ca);
-          saveOIDCLastProvider(name);
           window.location.replace(url);
         } catch (err) {
           setError(err.message);
         }
       }
     }
-  };
-
-  const existingOIDCProvider = () => {
-    window.location.replace('/settings/clusters/oidc');
   };
 
   return (
@@ -141,10 +132,6 @@ const OIDC: React.FunctionComponent = () => {
 
         <IonButton expand="block" onClick={() => addOIDCProvider()}>
           Add OIDC Provider
-        </IonButton>
-        <br />
-        <IonButton expand="block" onClick={() => existingOIDCProvider()}>
-          Use existing OIDC Provider
         </IonButton>
       </IonCardContent>
 
