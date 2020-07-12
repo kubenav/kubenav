@@ -28,9 +28,91 @@ export const readCluster = (): string | undefined => {
 
 // readClusters returns the saved clusters from localStorage. If there are no saved clusters, undefined is returned.
 export const readClusters = (): IClusters | undefined => {
-  return localStorage.getItem(STORAGE_CLUSTERS) !== null && localStorage.getItem(STORAGE_CLUSTERS) !== ''
-    ? (JSON.parse(localStorage.getItem(STORAGE_CLUSTERS) as string) as IClusters)
-    : undefined;
+  // return localStorage.getItem(STORAGE_CLUSTERS) !== null && localStorage.getItem(STORAGE_CLUSTERS) !== ''
+  //   ? (JSON.parse(localStorage.getItem(STORAGE_CLUSTERS) as string) as IClusters)
+  //   : undefined;
+
+  // DEPRECATED: Migrate old clusters to the new structure. This can be removed in one of the next version.
+  const clusters =
+    localStorage.getItem(STORAGE_CLUSTERS) !== null && localStorage.getItem(STORAGE_CLUSTERS) !== ''
+      ? (JSON.parse(localStorage.getItem(STORAGE_CLUSTERS) as string) as IClusters)
+      : undefined;
+
+  if (clusters === undefined || localStorage.getItem('migrated') !== 'true') {
+    return clusters;
+  }
+
+  const azureCredentials = localStorage.getItem('azure');
+  const awsCredentials = localStorage.getItem('aws');
+  const googleCredentials = localStorage.getItem('google');
+  const googleClientID = localStorage.getItem('google_clientid');
+  const oidcCredentials = localStorage.getItem('oidc');
+
+  for (const id in clusters) {
+    if (clusters[id].authProvider === '') {
+      clusters[id].authProvider = 'kubeconfig';
+    } else if (clusters[id].authProvider === 'aws') {
+      if (awsCredentials !== null) {
+        const parts = id.split('_');
+
+        if (parts.length >= 3) {
+          if (awsCredentials.hasOwnProperty(parts[1])) {
+            clusters[id].authProviderAWS = {
+              clusterID: parts.slice(2, parts.length).join('_'),
+              accessKeyID: awsCredentials[parts[1]].accessKeyID,
+              region: parts[1],
+              secretKey: awsCredentials[parts[1]].secretKey,
+            };
+          }
+        }
+      }
+    } else if (clusters[id].authProvider === 'google') {
+      if (googleCredentials !== null && googleClientID !== null) {
+        const parsed = JSON.parse(googleCredentials);
+
+        clusters[id].authProviderGoogle = {
+          accessToken: parsed.access_token,
+          clientID: googleClientID,
+          expiresIn: parsed.expires_in,
+          idToken: parsed.id_token,
+          refreshToken: parsed.refresh_token,
+          tokenType: parsed.token_type,
+        };
+      }
+    } else if (clusters[id].authProvider === 'azure') {
+      if (azureCredentials !== null) {
+        clusters[id].authProviderAzure = JSON.parse(azureCredentials) as IClusterAuthProviderAzure;
+      }
+    } else if (clusters[id].authProvider.startsWith('oidc__')) {
+      if (oidcCredentials !== null) {
+        const authProvider = clusters[id].authProvider.replace('oidc__', '');
+        const oidc = JSON.parse(oidcCredentials);
+        if (oidc.hasOwnProperty(authProvider)) {
+          clusters[id].authProviderOIDC = {
+            name: oidc[authProvider].name,
+            clientID: oidc[authProvider].clientID,
+            clientSecret: oidc[authProvider].clientSecret,
+            idToken: oidc[authProvider].idToken,
+            idpIssuerURL: oidc[authProvider].idpIssuerURL,
+            refreshToken: oidc[authProvider].refreshToken,
+            certificateAuthority: oidc[authProvider].certificateAuthority,
+            accessToken: oidc[authProvider].accessToken,
+            expiry: oidc[authProvider].expiry,
+          };
+        }
+      }
+    }
+  }
+
+  localStorage.setItem('migrated', 'true');
+  localStorage.removeItem('aws');
+  localStorage.removeItem('azure');
+  localStorage.removeItem('google_clientid');
+  localStorage.removeItem('google');
+  localStorage.removeItem('oidc');
+  localStorage.removeItem('oidc_last');
+
+  return clusters;
 };
 
 // readSettings returns the settings set by the user. If the user had not modified the settings yet, return the default

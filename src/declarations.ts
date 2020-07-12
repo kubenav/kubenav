@@ -306,7 +306,8 @@ export interface ITerminalResponse {
 
 export type TActivator = 'block-button' | 'button' | 'item' | 'item-option';
 
-export type TAuthProvider = 'aws' | 'azure' | 'google' | 'kubeconfig' | 'oidc';
+// DEPRECATED: The value '' can be removed when the migration is done.
+export type TAuthProvider = '' | 'aws' | 'azure' | 'google' | 'kubeconfig' | 'oidc';
 
 export type TCondition =
   | V1DeploymentCondition
