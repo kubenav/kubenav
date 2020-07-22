@@ -39,7 +39,13 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 
 	result, err := api.KubernetesRequest(r.Context(), request.Method, request.URL, request.Body, clientset)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Kubernetes API request failed: %s", err.Error()))
+		var apiError api.Error
+		if err := json.Unmarshal(result, &apiError); err != nil {
+			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Kubernetes API request failed: %s", err.Error()))
+			return
+		}
+
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Kubernetes API request failed: %s", apiError.Message))
 		return
 	}
 
