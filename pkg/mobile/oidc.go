@@ -48,19 +48,19 @@ func oidcGetLinkHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewDecoder(r.Body).Decode(&oidcRequest)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not decode request body")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 		return
 	}
 
 	ctx, err := oidcContext(r.Context(), oidcRequest.CertificateAuthority)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not create context: %s", err.Error()))
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create context: %s", err.Error()))
 		return
 	}
 
 	provider, err := oidc.NewProvider(ctx, oidcRequest.DiscoveryURL)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not create OIDC provider: %s", err.Error()))
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create OIDC provider: %s", err.Error()))
 		return
 	}
 
@@ -93,19 +93,19 @@ func oidcGetRefreshTokenHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewDecoder(r.Body).Decode(&oidcRequest)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not decode request body")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 		return
 	}
 
 	ctx, err := oidcContext(r.Context(), oidcRequest.CertificateAuthority)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not create context: %s", err.Error()))
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create context: %s", err.Error()))
 		return
 	}
 
 	provider, err := oidc.NewProvider(ctx, oidcRequest.DiscoveryURL)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not create OIDC provider: %s", err.Error()))
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create OIDC provider: %s", err.Error()))
 		return
 	}
 
@@ -119,13 +119,13 @@ func oidcGetRefreshTokenHandler(w http.ResponseWriter, r *http.Request) {
 
 	oauth2Token, err := oauth2Config.Exchange(ctx, oidcRequest.Code)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not get oauth token: %s", err.Error()))
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not get oauth token: %s", err.Error()))
 		return
 	}
 
 	idToken, ok := oauth2Token.Extra("id_token").(string)
 	if !ok {
-		middleware.Errorf(w, r, nil, http.StatusInternalServerError, "Could not get id token")
+		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Could not get id token")
 		return
 	}
 
@@ -154,19 +154,19 @@ func oidcGetAccessTokenHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewDecoder(r.Body).Decode(&oidcRequest)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not decode request body")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 		return
 	}
 
 	ctx, err := oidcContext(r.Context(), oidcRequest.CertificateAuthority)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not create context: %s", err.Error()))
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create context: %s", err.Error()))
 		return
 	}
 
 	provider, err := oidc.NewProvider(ctx, oidcRequest.DiscoveryURL)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not create OIDC provider: %s", err.Error()))
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create OIDC provider: %s", err.Error()))
 		return
 	}
 
@@ -181,7 +181,7 @@ func oidcGetAccessTokenHandler(w http.ResponseWriter, r *http.Request) {
 	ts := oauth2Config.TokenSource(ctx, &oauth2.Token{RefreshToken: oidcRequest.RefreshToken})
 	token, err := ts.Token()
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Could not get token: %s", err.Error()))
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not get token: %s", err.Error()))
 		return
 	}
 

@@ -31,6 +31,16 @@ type Response struct {
 	Data string `json:"data"`
 }
 
+// Error implements the structure of a response for a failed Kubernetes API request.
+type Error struct {
+	Kind       string `json:"kind"`
+	APIVersion string `json:"apiVersion"`
+	Status     string `json:"status"`
+	Message    string `json:"message"`
+	Reason     string `json:"reason"`
+	Code       int    `json:"code"`
+}
+
 // KubernetesRequest makes the request to the Kubernetes API server. A request contains a method, url, body and timeout.
 // The API server data is defined in the clientset.
 func KubernetesRequest(ctx context.Context, method, url, body string, clientset *kubernetes.Clientset) ([]byte, error) {

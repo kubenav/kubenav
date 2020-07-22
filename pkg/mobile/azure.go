@@ -44,7 +44,7 @@ func azureGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewDecoder(r.Body).Decode(&azureRequest)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not decode request body")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 		return
 	}
 
@@ -53,7 +53,7 @@ func azureGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 
 	authorizer, err := getAzureAuthorizer(azureRequest.ClientID, azureRequest.ClientSecret, azureRequest.TenantID)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not not create authorizer")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not not create authorizer: %s", err.Error()))
 		return
 	}
 	client.Authorizer = authorizer
@@ -62,7 +62,7 @@ func azureGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 
 	for list, err := client.ListComplete(ctx); list.NotDone(); err = list.Next() {
 		if err != nil {
-			middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not list clusters")
+			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not list clusters: %s", err.Error()))
 			return
 		}
 
@@ -72,13 +72,13 @@ func azureGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 		if azureRequest.Admin {
 			res, err = client.ListClusterAdminCredentials(ctx, azureRequest.ResourceGroupName, name)
 			if err != nil {
-				middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not list cluster credentials")
+				middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not list cluster credentials: %s", err.Error()))
 				return
 			}
 		} else {
 			res, err = client.ListClusterUserCredentials(ctx, azureRequest.ResourceGroupName, name)
 			if err != nil {
-				middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not list cluster credentials")
+				middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not list cluster credentials: %s", err.Error()))
 				return
 			}
 		}
@@ -87,7 +87,7 @@ func azureGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 			var kubeconfigJSON interface{}
 			err := yaml.Unmarshal(*kubeconfig.Value, &kubeconfigJSON)
 			if err != nil {
-				middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not umarshal Kubeconfig")
+				middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not umarshal Kubeconfig: %s", err.Error()))
 				return
 			}
 

@@ -42,7 +42,7 @@ func awsGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewDecoder(r.Body).Decode(&awsRequest)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not decode request body")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 		return
 	}
 
@@ -54,7 +54,7 @@ func awsGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 
 	sess, err := session.NewSession(&aws.Config{Region: aws.String(awsRequest.Region), Credentials: cred})
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create new AWS session")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create new AWS session: %s", err.Error()))
 		return
 	}
 
@@ -63,7 +63,7 @@ func awsGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 	for {
 		c, err := eksClient.ListClusters(&eks.ListClustersInput{NextToken: nextToken})
 		if err != nil {
-			middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not list EKS clusters")
+			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not list EKS clusters: %s", err.Error()))
 			return
 		}
 
@@ -79,7 +79,7 @@ func awsGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 	for _, name := range names {
 		cluster, err := eksClient.DescribeCluster(&eks.DescribeClusterInput{Name: name})
 		if err != nil {
-			middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not cluster details")
+			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not cluster details: %s", err.Error()))
 			return
 		}
 
@@ -107,7 +107,7 @@ func awsGetTokenHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewDecoder(r.Body).Decode(&awsRequest)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not decode request body")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 		return
 	}
 
@@ -115,7 +115,7 @@ func awsGetTokenHandler(w http.ResponseWriter, r *http.Request) {
 
 	sess, err := session.NewSession(&aws.Config{Region: aws.String(awsRequest.Region), Credentials: cred})
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create new AWS session")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create new AWS session: %s", err.Error()))
 		return
 	}
 
@@ -125,7 +125,7 @@ func awsGetTokenHandler(w http.ResponseWriter, r *http.Request) {
 	request.HTTPRequest.Header.Add("x-k8s-aws-id", awsRequest.ClusterID)
 	presignedURLString, err := request.Presign(60)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create presigned URL")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create presigned URL: %s", err.Error()))
 		return
 	}
 

@@ -27,19 +27,25 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not decode request body")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 		return
 	}
 
 	_, clientset, err := client.ConfigClientset(request.Cluster, time.Duration(request.Timeout)*time.Second)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create clientset")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 		return
 	}
 
 	result, err := api.KubernetesRequest(r.Context(), request.Method, request.URL, request.Body, clientset)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, fmt.Sprintf("Kubernetes API request failed: %s", err.Error()))
+		var apiError api.Error
+		if err := json.Unmarshal(result, &apiError); err != nil {
+			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Kubernetes API request failed: %s", err.Error()))
+			return
+		}
+
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Kubernetes API request failed: %s", apiError.Message))
 		return
 	}
 
@@ -65,19 +71,19 @@ func execHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not decode request body")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 		return
 	}
 
 	config, clientset, err := client.ConfigClientset(request.Cluster, time.Duration(request.Timeout)*time.Second)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create clientset")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 		return
 	}
 
 	sessionID, err := api.GenTerminalSessionID()
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not generate terminal session id")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not generate terminal session id: %s", err.Error()))
 		return
 	}
 
@@ -108,19 +114,19 @@ func logsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not decode request body")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 		return
 	}
 
 	_, clientset, err := client.ConfigClientset(request.Cluster, 6*time.Hour)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not create clientset")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 		return
 	}
 
 	sessionID, err := api.GenTerminalSessionID()
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not generate terminal session id")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not generate terminal session id: %s", err.Error()))
 		return
 	}
 
@@ -147,13 +153,13 @@ func sshHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not decode request body")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 		return
 	}
 
 	sessionID, err := api.GenTerminalSessionID()
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not generate terminal session id")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not generate terminal session id: %s", err.Error()))
 		return
 	}
 
