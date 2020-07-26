@@ -192,7 +192,7 @@ const Shell: React.FunctionComponent<IShellProps> = ({ showSearch, showSelect, t
       ) : null}
 
       <div
-        style={{ width: '100%', height: showSearch || showSelect ? 'calc(100% - 56px)' : '100%' }}
+        style={{ width: '100%', height: showSearch ? 'calc(100% - 56px)' : showSelect ? 'calc(100% - 58px)' : '100%' }}
         ref={termRef}
       ></div>
     </React.Fragment>
