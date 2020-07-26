@@ -1,5 +1,33 @@
 # Changelog
 
+## [2.2.0](https://github.com/kubenav/kubenav/tree/2.2.0) (2020-07-26)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/2.1.0...2.2.0)
+
+**Implemented enhancements:**
+
+- Feature\(ux\) Add empty cluster Page [\#131](https://github.com/kubenav/kubenav/issues/131)
+- \[Bug/Feature request\] cannot copy text from terminals [\#120](https://github.com/kubenav/kubenav/issues/120)
+- Add support for Pod Security Policies [\#130](https://github.com/kubenav/kubenav/pull/130) ([ricoberger](https://github.com/ricoberger))
+- Support Component Statuses [\#127](https://github.com/kubenav/kubenav/pull/127) ([ricoberger](https://github.com/ricoberger))
+- Add support for SSH connections to nodes [\#126](https://github.com/kubenav/kubenav/pull/126) ([ricoberger](https://github.com/ricoberger))
+- Support terminal selection on mobile and add new shortcut to copy text [\#124](https://github.com/kubenav/kubenav/pull/124) ([ricoberger](https://github.com/ricoberger))
+
+**Fixed bugs:**
+
+- Issue with DigitalOcean Kubernetes [\#132](https://github.com/kubenav/kubenav/issues/132)
+- Pod Status is green even the pod was evicted [\#128](https://github.com/kubenav/kubenav/issues/128)
+- Current Version 2.1.0 crashes on up to date ArchLinux [\#123](https://github.com/kubenav/kubenav/issues/123)
+- Fix scrolling in terminal [\#138](https://github.com/kubenav/kubenav/pull/138) ([ricoberger](https://github.com/ricoberger))
+- Fix panic for invalid Kubeconfig [\#125](https://github.com/kubenav/kubenav/pull/125) ([ricoberger](https://github.com/ricoberger))
+
+**Merged pull requests:**
+
+- Improve error handling for requests [\#137](https://github.com/kubenav/kubenav/pull/137) ([ricoberger](https://github.com/ricoberger))
+- Add description to cluster page [\#134](https://github.com/kubenav/kubenav/pull/134) ([ricoberger](https://github.com/ricoberger))
+- Fix path on macOS [\#133](https://github.com/kubenav/kubenav/pull/133) ([ricoberger](https://github.com/ricoberger))
+- Fix pod status [\#129](https://github.com/kubenav/kubenav/pull/129) ([ricoberger](https://github.com/ricoberger))
+
 ## [2.1.0](https://github.com/kubenav/kubenav/tree/2.1.0) (2020-06-28)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/2.0.0...2.1.0)
