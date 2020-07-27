@@ -38,7 +38,7 @@ export const readClusters = (): IClusters | undefined => {
       ? (JSON.parse(localStorage.getItem(STORAGE_CLUSTERS) as string) as IClusters)
       : undefined;
 
-  if (clusters === undefined || localStorage.getItem('migrated') !== 'true') {
+  if (clusters === undefined || localStorage.getItem('migrated') === 'true') {
     return clusters;
   }
 
@@ -87,9 +87,11 @@ export const readClusters = (): IClusters | undefined => {
       if (oidcCredentials !== null) {
         const authProvider = clusters[id].authProvider.replace('oidc__', '');
         const oidc = JSON.parse(oidcCredentials);
+
+        clusters[id].authProvider = 'oidc';
+
         if (oidc.hasOwnProperty(authProvider)) {
           clusters[id].authProviderOIDC = {
-            name: oidc[authProvider].name,
             clientID: oidc[authProvider].clientID,
             clientSecret: oidc[authProvider].clientSecret,
             idToken: oidc[authProvider].idToken,

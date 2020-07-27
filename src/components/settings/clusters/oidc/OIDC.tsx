@@ -18,17 +18,12 @@ import { isBase64 } from '../../../../utils/helpers';
 import { saveTemporaryCredentials } from '../../../../utils/storage';
 
 const OIDC: React.FunctionComponent = () => {
-  const [name, setName] = useState<string>('');
   const [discoveryURL, setDiscoveryURL] = useState<string>('');
   const [clientID, setClientID] = useState<string>('');
   const [clientSecret, setClientSecret] = useState<string>('');
   const [certificateAuthority, setCertificateAuthority] = useState<string>('');
   const [refreshToken, setRefreshToken] = useState<string>('');
   const [error, setError] = useState<string>('');
-
-  const handleName = (event) => {
-    setName(event.target.value);
-  };
 
   const handleDiscoveryURL = (event) => {
     setDiscoveryURL(event.target.value);
@@ -51,13 +46,12 @@ const OIDC: React.FunctionComponent = () => {
   };
 
   const addOIDCProvider = async () => {
-    if (name === '' || discoveryURL === '' || clientID === '' || clientSecret === '') {
+    if (discoveryURL === '' || clientID === '' || clientSecret === '') {
       setError('Discovery URL, Client ID and Client Secret are required.');
     } else {
       const ca = isBase64(certificateAuthority) ? atob(certificateAuthority) : certificateAuthority;
 
       saveTemporaryCredentials({
-        name: name,
         clientID: clientID,
         clientSecret: clientSecret,
         idpIssuerURL: discoveryURL,
@@ -92,11 +86,8 @@ const OIDC: React.FunctionComponent = () => {
 
       <IonCardContent>
         <p className="paragraph-margin-bottom">
-          Choose this option to use an OIDC provider for the authentication against your Kubernetes API server. If you
-          have already added an OIDC provider you can use the <b>Use existing OIDC Provider</b> button. If you add a new
-          OIDC provider you have to add the <b>Discovery URL</b> (this field is also known as
-          <code>idp-issuer-url</code>), a <b>Client ID</b> and a <b>Client Secret</b>. When you create the Client ID and
-          Client Secret you have to allow <code>https://kubenav.io/oidc.html</code> as redirect URL.
+          When you create the Client ID and Client Secret you have to allow <code>https://kubenav.io/oidc.html</code> as
+          redirect URL.
         </p>
         <p className="paragraph-margin-bottom">
           When your OIDC provider uses self signed certificate you have to set the <b>Certificate Authority</b> field.
@@ -104,10 +95,6 @@ const OIDC: React.FunctionComponent = () => {
         </p>
 
         <IonList className="paragraph-margin-bottom" lines="full">
-          <IonItem>
-            <IonLabel position="stacked">Name</IonLabel>
-            <IonInput type="text" required={true} value={name} onInput={handleName} />
-          </IonItem>
           <IonItem>
             <IonLabel position="stacked">Discovery URL</IonLabel>
             <IonInput type="text" required={true} value={discoveryURL} onInput={handleDiscoveryURL} />
