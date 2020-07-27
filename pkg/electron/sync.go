@@ -2,6 +2,7 @@ package electron
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/kubenav/kubenav/pkg/api/middleware"
@@ -31,13 +32,13 @@ func syncContextHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewDecoder(r.Body).Decode(&sync)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not decode sync body")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode sync body: %s", err.Error()))
 		return
 	}
 
 	err = client.ChangeContext(sync.Context)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not change context")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not change context: %s", err.Error()))
 		return
 	}
 
@@ -63,13 +64,13 @@ func syncNamespaceHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewDecoder(r.Body).Decode(&sync)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not decode sync body")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode sync body: %s", err.Error()))
 		return
 	}
 
 	err = client.ChangeNamespace(sync.Context, sync.Namespace)
 	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusInternalServerError, "Could not change namespace")
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not change context: %s", err.Error()))
 		return
 	}
 

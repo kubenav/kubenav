@@ -145,7 +145,7 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
         </IonToolbar>
       </IonHeader>
 
-      <IonContent>
+      <IonContent scrollX={false} scrollY={false}>
         {terminals.map((terminal, index) => {
           return activeTerminal === `term_${index}` ? (
             <Shell key={index} showSearch={showSearch} showSelect={showSelect} terminal={terminal} />
