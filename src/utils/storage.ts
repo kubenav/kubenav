@@ -53,15 +53,16 @@ export const readClusters = (): IClusters | undefined => {
       clusters[id].authProvider = 'kubeconfig';
     } else if (clusters[id].authProvider === 'aws') {
       if (awsCredentials !== null) {
+        const parsed = JSON.parse(awsCredentials);
         const parts = id.split('_');
 
         if (parts.length >= 3) {
-          if (awsCredentials.hasOwnProperty(parts[1])) {
+          if (parsed.hasOwnProperty(parts[1])) {
             clusters[id].authProviderAWS = {
               clusterID: parts.slice(2, parts.length).join('_'),
-              accessKeyID: awsCredentials[parts[1]].accessKeyID,
+              accessKeyID: parsed[parts[1]].accessKeyID,
               region: parts[1],
-              secretKey: awsCredentials[parts[1]].secretKey,
+              secretKey: parsed[parts[1]].secretKey,
             };
           }
         }
@@ -106,6 +107,7 @@ export const readClusters = (): IClusters | undefined => {
     }
   }
 
+  localStorage.setItem(STORAGE_CLUSTERS, JSON.stringify(clusters));
   localStorage.setItem('migrated', 'true');
   localStorage.removeItem('aws');
   localStorage.removeItem('azure');
