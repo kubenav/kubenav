@@ -10,8 +10,6 @@ import {
   IonLabel,
   IonList,
   IonPage,
-  IonSelect,
-  IonSelectOption,
   IonTextarea,
   IonTitle,
   IonToggle,
@@ -20,8 +18,9 @@ import {
 import React, { memo, useContext, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { IContext } from '../../../../declarations';
+import { IContext, IClusterAuthProviderOIDC } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
+import { readTemporaryCredentials } from '../../../../utils/storage';
 
 type IOIDCPageProps = RouteComponentProps;
 
@@ -33,7 +32,6 @@ const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }: IOIDCPag
   const [url, setURL] = useState<string>('');
   const [certificateAuthorityData, setCertificateAuthorityData] = useState<string>('');
   const [insecureSkipTLSVerify, setInsecureSkipTLSVerify] = useState<boolean>(false);
-  const [provider, setProvider] = useState<string>('');
 
   const handleName = (event) => {
     setName(event.target.value);
@@ -51,10 +49,6 @@ const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }: IOIDCPag
     setInsecureSkipTLSVerify(event.detail.checked);
   };
 
-  const handleProvider = (event) => {
-    setProvider(event.target.value);
-  };
-
   const addClusters = () => {
     if (name === '') {
       setError('Name is required');
@@ -62,29 +56,34 @@ const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }: IOIDCPag
       setError('Server is required');
     } else if (!url.startsWith('https://')) {
       setError('Invalid URL');
-    } else if (provider === '') {
-      setError('OIDC Provider is required');
     } else {
       try {
-        context.addCluster([
-          {
-            id: '',
-            name: name,
-            url: url,
-            certificateAuthorityData: certificateAuthorityData,
-            clientCertificateData: '',
-            clientKeyData: '',
-            token: '',
-            username: '',
-            password: '',
-            insecureSkipTLSVerify: insecureSkipTLSVerify,
-            authProvider: `oidc__${provider}`,
-            namespace: 'default',
-          },
-        ]);
+        const credentials = readTemporaryCredentials('oidc') as undefined | IClusterAuthProviderOIDC;
 
-        setError('');
-        history.push('/settings/clusters');
+        if (credentials) {
+          context.addCluster([
+            {
+              id: '',
+              name: name,
+              url: url,
+              certificateAuthorityData: certificateAuthorityData,
+              clientCertificateData: '',
+              clientKeyData: '',
+              token: '',
+              username: '',
+              password: '',
+              insecureSkipTLSVerify: insecureSkipTLSVerify,
+              authProvider: `oidc`,
+              authProviderOIDC: credentials,
+              namespace: 'default',
+            },
+          ]);
+
+          setError('');
+          history.push('/settings/clusters');
+        } else {
+          throw new Error('Could not read credentials for OIDC');
+        }
       } catch (err) {
         setError(err.message);
       }
@@ -123,20 +122,6 @@ const OIDCPage: React.FunctionComponent<IOIDCPageProps> = ({ history }: IOIDCPag
           <IonItem>
             <IonLabel>Insecure Skip TLS Verify</IonLabel>
             <IonToggle checked={insecureSkipTLSVerify} onIonChange={handleInsecureSkipTLSVerify} />
-          </IonItem>
-          <IonItem>
-            <IonLabel>OIDC Provider</IonLabel>
-            <IonSelect value={provider} onIonChange={handleProvider}>
-              {context.oidcProviders
-                ? Object.keys(context.oidcProviders).map((provider) => {
-                    return (
-                      <IonSelectOption key={provider} value={provider}>
-                        {provider}
-                      </IonSelectOption>
-                    );
-                  })
-                : null}
-            </IonSelect>
           </IonItem>
         </IonList>
 

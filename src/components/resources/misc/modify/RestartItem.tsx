@@ -5,6 +5,7 @@ import { reload } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 
 import { IContext, TActivator } from '../../../../declarations';
+import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 
 interface IRestartItemProps {
@@ -33,7 +34,13 @@ const RestartItem: React.FunctionComponent<IRestartItemProps> = ({ activator, it
       }
 
       const diff = jsonpatch.compare(item, copy);
-      await context.request('PATCH', url, JSON.stringify(diff));
+      await kubernetesRequest(
+        'PATCH',
+        url,
+        JSON.stringify(diff),
+        context.settings.timeout,
+        await context.kubernetesAuthWrapper(''),
+      );
     } catch (err) {
       setError(err);
     }

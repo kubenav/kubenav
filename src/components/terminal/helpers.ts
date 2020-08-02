@@ -2,7 +2,7 @@ import SockJS from 'sockjs-client';
 import { Terminal } from 'xterm';
 
 import { IContext, ITerminalContext } from '../../declarations';
-import { execRequest, logsRequest, sshRequest } from '../../utils/api';
+import { kubernetesRequest, kubernetesExecRequest, kubernetesLogsRequest, sshRequest } from '../../utils/api';
 import { LOG_TERMINAL_OPTIONS, SERVER, SHELL_TERMINAL_OPTIONS } from '../../utils/constants';
 
 export const addShell = async (
@@ -15,9 +15,9 @@ export const addShell = async (
 
   try {
     if (context.clusters && context.cluster) {
-      const { id } = await execRequest(
+      const { id } = await kubernetesExecRequest(
         `${url}/exec?command=sh&container=${container}&stdin=true&stdout=true&stderr=true&tty=true`,
-        context.clusters[context.cluster],
+        await context.kubernetesAuthWrapper(''),
       );
 
       const webSocket = new SockJS(`${SERVER}/api/kubernetes/exec/sockjs?${id}`);
@@ -87,7 +87,7 @@ export const addLogs = async (
       try {
         const parameters = `container=${container}&tailLines=10&follow=true`;
 
-        const { id } = await logsRequest(`${url}/log?${parameters}`, context.clusters[context.cluster]);
+        const { id } = await kubernetesLogsRequest(`${url}/log?${parameters}`, await context.kubernetesAuthWrapper(''));
 
         const eventSource = new EventSource(`${SERVER}/api/kubernetes/logs/${id}`);
 
@@ -129,7 +129,13 @@ export const addLogs = async (
         // function and so an object instead of a string is returned. In this case we have to revert the parsing.
         // Befor writing the logs to the terminal we have to replace all '\n' with '\n\r' to print the new lines.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const data: any = await context.request('GET', `${url}/log?${parameters}`, '');
+        const data: any = await kubernetesRequest(
+          'GET',
+          `${url}/log?${parameters}`,
+          '',
+          context.settings.timeout,
+          await context.kubernetesAuthWrapper(''),
+        );
 
         term.write(`${typeof data === 'string' ? data : JSON.stringify(data)}\n\r`);
       } catch (err) {

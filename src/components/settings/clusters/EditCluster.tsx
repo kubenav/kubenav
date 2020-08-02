@@ -7,6 +7,8 @@ import {
   IonIcon,
   IonInput,
   IonItem,
+  IonItemDivider,
+  IonItemGroup,
   IonItemOption,
   IonLabel,
   IonList,
@@ -19,7 +21,15 @@ import {
 import { close, create } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 
-import { ICluster, IContext } from '../../../declarations';
+import {
+  ICluster,
+  IClusterAuthProviderAWS,
+  IClusterAuthProviderAzure,
+  IClusterAuthProviderGoogle,
+  IClusterAuthProviderOIDC,
+  IContext,
+  TAuthProvider,
+} from '../../../declarations';
 import { AppContext } from '../../../utils/context';
 
 interface IEditClusterProps {
@@ -41,6 +51,17 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
   const [password, setPassword] = useState<string>(cluster.password);
   const [insecureSkipTLSVerify, setInsecureSkipTLSVerify] = useState<boolean>(cluster.insecureSkipTLSVerify);
   const [namespace, setNamespace] = useState<string>(cluster.namespace);
+  const [authProvider] = useState<TAuthProvider>(cluster.authProvider);
+  const [authProviderAWS, setAuthProviderAWS] = useState<IClusterAuthProviderAWS | undefined>(cluster.authProviderAWS);
+  const [authProviderAzure, setAuthProviderAzure] = useState<IClusterAuthProviderAzure | undefined>(
+    cluster.authProviderAzure,
+  );
+  const [authProviderGoogle, setAuthProviderGoogle] = useState<IClusterAuthProviderGoogle | undefined>(
+    cluster.authProviderGoogle,
+  );
+  const [authProviderOIDC, setAuthProviderOIDC] = useState<IClusterAuthProviderOIDC | undefined>(
+    cluster.authProviderOIDC,
+  );
 
   const handleName = (event) => {
     setName(event.target.value);
@@ -82,6 +103,50 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
     setNamespace(event.target.value);
   };
 
+  const handleAuthProviderAWS = (event) => {
+    setAuthProviderAWS((prevState) =>
+      prevState
+        ? {
+            ...prevState,
+            [event.target.name]: event.target.value,
+          }
+        : undefined,
+    );
+  };
+
+  const handleAuthProviderAzure = (event) => {
+    setAuthProviderAzure((prevState) =>
+      prevState
+        ? {
+            ...prevState,
+            [event.target.name]: event.target.value,
+          }
+        : undefined,
+    );
+  };
+
+  const handleAuthProviderGoogle = (event) => {
+    setAuthProviderGoogle((prevState) =>
+      prevState
+        ? {
+            ...prevState,
+            [event.target.name]: event.target.value,
+          }
+        : undefined,
+    );
+  };
+
+  const handleAuthProviderOIDC = (event) => {
+    setAuthProviderOIDC((prevState) =>
+      prevState
+        ? {
+            ...prevState,
+            [event.target.name]: event.target.value,
+          }
+        : undefined,
+    );
+  };
+
   const editCluster = () => {
     if (name === '') {
       setError('Name is required');
@@ -89,14 +154,6 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
       setError('URL is required');
     } else if (!url.startsWith('https://')) {
       setError('Invalid URL');
-    } else if (
-      clientCertificateData === '' &&
-      clientKeyData === '' &&
-      token === '' &&
-      username === '' &&
-      password === ''
-    ) {
-      setError('Client Certificate Data and Client Key Data or Token or Username and Password is required');
     } else {
       context.editCluster({
         id: cluster.id,
@@ -110,6 +167,10 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
         password: password,
         insecureSkipTLSVerify: insecureSkipTLSVerify,
         authProvider: cluster.authProvider,
+        authProviderAWS: authProviderAWS,
+        authProviderAzure: authProviderAzure,
+        authProviderGoogle: authProviderGoogle,
+        authProviderOIDC: authProviderOIDC,
         namespace: namespace,
       });
 
@@ -151,46 +212,214 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
         </IonHeader>
         <IonContent>
           <IonList lines="full">
-            <IonItem>
-              <IonLabel position="stacked">Name</IonLabel>
-              <IonInput type="text" required={true} value={name} onInput={handleName} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">URL</IonLabel>
-              <IonInput type="text" inputmode="url" required={true} value={url} onInput={handleURL} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Certificate Authority Data</IonLabel>
-              <IonTextarea autoGrow={true} value={certificateAuthorityData} onInput={handleCertificateAuthorityData} />
-            </IonItem>
-            <IonItem>
-              <IonLabel>Insecure Skip TLS Verify</IonLabel>
-              <IonToggle checked={insecureSkipTLSVerify} onIonChange={handleInsecureSkipTLSVerify} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Client Certificate Data</IonLabel>
-              <IonTextarea autoGrow={true} value={clientCertificateData} onInput={handleClientCertificateData} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Client Key Data</IonLabel>
-              <IonTextarea autoGrow={true} value={clientKeyData} onInput={handleClientKeyData} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Token</IonLabel>
-              <IonTextarea autoGrow={true} value={token} onInput={handleToken} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Username</IonLabel>
-              <IonInput type="text" value={username} onInput={handleUsername} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Password</IonLabel>
-              <IonInput type="password" value={password} onInput={handlePassword} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Namespace</IonLabel>
-              <IonInput type="text" value={namespace} onInput={handleNamespace} />
-            </IonItem>
+            <IonItemGroup>
+              <IonItemDivider>
+                <IonLabel>Cluster</IonLabel>
+              </IonItemDivider>
+              <IonItem>
+                <IonLabel position="stacked">Name</IonLabel>
+                <IonInput type="text" required={true} value={name} onInput={handleName} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">URL</IonLabel>
+                <IonInput type="text" inputmode="url" required={true} value={url} onInput={handleURL} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Certificate Authority Data</IonLabel>
+                <IonTextarea
+                  autoGrow={true}
+                  value={certificateAuthorityData}
+                  onInput={handleCertificateAuthorityData}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel>Insecure Skip TLS Verify</IonLabel>
+                <IonToggle checked={insecureSkipTLSVerify} onIonChange={handleInsecureSkipTLSVerify} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Client Certificate Data</IonLabel>
+                <IonTextarea autoGrow={true} value={clientCertificateData} onInput={handleClientCertificateData} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Client Key Data</IonLabel>
+                <IonTextarea autoGrow={true} value={clientKeyData} onInput={handleClientKeyData} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Token</IonLabel>
+                <IonTextarea autoGrow={true} value={token} onInput={handleToken} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Username</IonLabel>
+                <IonInput type="text" value={username} onInput={handleUsername} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Password</IonLabel>
+                <IonInput type="password" value={password} onInput={handlePassword} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Namespace</IonLabel>
+                <IonInput type="text" value={namespace} onInput={handleNamespace} />
+              </IonItem>
+            </IonItemGroup>
+            {authProvider === 'aws' && authProviderAWS ? (
+              <IonItemGroup>
+                <IonItemDivider>
+                  <IonLabel>AWS</IonLabel>
+                </IonItemDivider>
+                <IonItem>
+                  <IonLabel position="stacked">Access Key ID</IonLabel>
+                  <IonInput
+                    type="text"
+                    value={authProviderAWS.accessKeyID}
+                    name="accessKeyID"
+                    onInput={handleAuthProviderAWS}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="stacked">Secret Key</IonLabel>
+                  <IonInput
+                    type="text"
+                    value={authProviderAWS.secretKey}
+                    name="secretKey"
+                    onInput={handleAuthProviderAWS}
+                  />
+                </IonItem>
+              </IonItemGroup>
+            ) : null}
+            {authProvider === 'azure' && authProviderAzure ? (
+              <IonItemGroup>
+                <IonItemDivider>
+                  <IonLabel>Azure</IonLabel>
+                </IonItemDivider>
+                <IonItem>
+                  <IonLabel position="stacked">Subscription ID</IonLabel>
+                  <IonInput
+                    type="text"
+                    required={true}
+                    value={authProviderAzure.subscriptionID}
+                    name="subscriptionID"
+                    onInput={handleAuthProviderAzure}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="stacked">Client ID</IonLabel>
+                  <IonInput
+                    type="text"
+                    required={true}
+                    value={authProviderAzure.clientID}
+                    name="clientID"
+                    onInput={handleAuthProviderAzure}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="stacked">Client Secret</IonLabel>
+                  <IonInput
+                    type="text"
+                    required={true}
+                    value={authProviderAzure.clientSecret}
+                    name="clientSecret"
+                    onInput={handleAuthProviderAzure}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="stacked">Tenant ID</IonLabel>
+                  <IonInput
+                    type="text"
+                    required={true}
+                    value={authProviderAzure.tenantID}
+                    name="tenantID"
+                    onInput={handleAuthProviderAzure}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="stacked">Resource Group Name</IonLabel>
+                  <IonInput
+                    type="text"
+                    required={true}
+                    value={authProviderAzure.resourceGroupName}
+                    name="resourceGroupName"
+                    onInput={handleAuthProviderAzure}
+                  />
+                </IonItem>
+              </IonItemGroup>
+            ) : null}
+            {authProvider === 'google' && authProviderGoogle ? (
+              <IonItemGroup>
+                <IonItemDivider>
+                  <IonLabel>Google</IonLabel>
+                </IonItemDivider>
+                <IonItem>
+                  <IonLabel position="stacked">Client ID</IonLabel>
+                  <IonInput
+                    type="text"
+                    required={true}
+                    value={authProviderGoogle.clientID}
+                    name="clientID"
+                    onInput={handleAuthProviderGoogle}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="stacked">Refresh Token</IonLabel>
+                  <IonInput
+                    type="text"
+                    required={true}
+                    value={authProviderGoogle.refreshToken}
+                    name="refreshToken"
+                    onInput={handleAuthProviderGoogle}
+                  />
+                </IonItem>
+              </IonItemGroup>
+            ) : null}
+            {authProvider === 'oidc' && authProviderOIDC ? (
+              <IonItemGroup>
+                <IonItemDivider>
+                  <IonLabel>OIDC</IonLabel>
+                </IonItemDivider>
+                <IonItem>
+                  <IonLabel position="stacked">Discovery URL</IonLabel>
+                  <IonInput
+                    type="text"
+                    required={true}
+                    value={authProviderOIDC.idpIssuerURL}
+                    name="idpIssuerURL"
+                    onInput={handleAuthProviderOIDC}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="stacked">Client ID</IonLabel>
+                  <IonInput
+                    type="text"
+                    required={true}
+                    value={authProviderOIDC.clientID}
+                    name="clientID"
+                    onInput={handleAuthProviderOIDC}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="stacked">Client Secret</IonLabel>
+                  <IonInput
+                    type="text"
+                    required={true}
+                    value={authProviderOIDC.clientSecret}
+                    name="clientSecret"
+                    onInput={handleAuthProviderOIDC}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="stacked">Certificate Authority (optional)</IonLabel>
+                  <IonTextarea
+                    autoGrow={true}
+                    value={authProviderOIDC.certificateAuthority}
+                    name="certificateAuthority"
+                    onInput={handleAuthProviderOIDC}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="stacked">Refresh Token (optional)</IonLabel>
+                  <IonTextarea autoGrow={true} value={authProviderOIDC.refreshToken} onInput={handleAuthProviderOIDC} />
+                </IonItem>
+              </IonItemGroup>
+            ) : null}
           </IonList>
         </IonContent>
       </IonModal>

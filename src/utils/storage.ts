@@ -1,28 +1,19 @@
-import { IAppSettings, IAWSTokens, IAzureCredentials, IClusters, IGoogleTokens, IOIDCProviders } from '../declarations';
+import {
+  IAppSettings,
+  IClusterAuthProviderAWS,
+  IClusterAuthProviderAzure,
+  IClusterAuthProviderGoogle,
+  IClusterAuthProviderOIDC,
+  IClusters,
+  TAuthProvider,
+} from '../declarations';
 import {
   DEFAULT_SETTINGS,
-  STORAGE_AWS_TOKENS,
-  STORAGE_AZURE_CREDENTIALS,
   STORAGE_CLUSTER,
   STORAGE_CLUSTERS,
-  STORAGE_GOOGLE_CLIENT_ID,
-  STORAGE_GOOGLE_TOKENS,
-  STORAGE_OIDC_PROVIDERS,
-  STORAGE_OIDC_PROVIDERS_LAST,
   STORAGE_SETTINGS,
+  STORAGE_TEMPORARY_CREDENTIALS,
 } from './constants';
-
-// readAWSTokens returns the tokens required for API requests against AWS. If there is no entry in the localStorage an
-// empty object is returned. Therefore it must be checked if the needed region property exists.
-export const readAWSTokens = (): IAWSTokens => {
-  return localStorage.getItem(STORAGE_AWS_TOKENS) ? JSON.parse(localStorage.getItem(STORAGE_AWS_TOKENS) as string) : {};
-};
-
-// readAzureCredentials returns the save IDs for Azure. If there are no IDs saved the function returns undefined.
-export const readAzureCredentials = (): IAzureCredentials | undefined => {
-  const ids = localStorage.getItem(STORAGE_AZURE_CREDENTIALS);
-  return ids ? JSON.parse(ids) : undefined;
-};
 
 // readCluster returns the saved active cluster from localStorage. If there is no value in the localStorage or the saved
 // active cluster is not in the saved cluster, undefined is returned.
@@ -37,43 +28,95 @@ export const readCluster = (): string | undefined => {
 
 // readClusters returns the saved clusters from localStorage. If there are no saved clusters, undefined is returned.
 export const readClusters = (): IClusters | undefined => {
-  return localStorage.getItem(STORAGE_CLUSTERS) !== null && localStorage.getItem(STORAGE_CLUSTERS) !== ''
-    ? (JSON.parse(localStorage.getItem(STORAGE_CLUSTERS) as string) as IClusters)
-    : undefined;
-};
+  // return localStorage.getItem(STORAGE_CLUSTERS) !== null && localStorage.getItem(STORAGE_CLUSTERS) !== ''
+  //   ? (JSON.parse(localStorage.getItem(STORAGE_CLUSTERS) as string) as IClusters)
+  //   : undefined;
 
-// readGoogleClientID returns the Google client id from localStorage. If there is no client id, an empty string is
-// returned. The user will then get an error message from Google, that a valid client id is required.
-export const readGoogleClientID = (): string => {
-  const clientID = localStorage.getItem(STORAGE_GOOGLE_CLIENT_ID);
-  return clientID ? clientID : '';
-};
+  // DEPRECATED: Migrate old clusters to the new structure. This can be removed in one of the next version.
+  const clusters =
+    localStorage.getItem(STORAGE_CLUSTERS) !== null && localStorage.getItem(STORAGE_CLUSTERS) !== ''
+      ? (JSON.parse(localStorage.getItem(STORAGE_CLUSTERS) as string) as IClusters)
+      : undefined;
 
-// readGoogleTokens returns the tokens required for Google from localStorage.
-export const readGoogleTokens = (): IGoogleTokens | undefined => {
-  const googleTokens = localStorage.getItem(STORAGE_GOOGLE_TOKENS);
-  return googleTokens ? JSON.parse(googleTokens) : undefined;
-};
-
-// readOIDCLastProvider returns the saved name of the last used OIDC provider. This is used to assign a redirect to the
-// added OIDC provider.
-export const readOIDCLastProvider = (): string => {
-  const provider = localStorage.getItem(STORAGE_OIDC_PROVIDERS_LAST);
-  if (provider) {
-    return provider;
+  if (clusters === undefined || localStorage.getItem('migrated') === 'true') {
+    return clusters;
   }
 
-  return '';
-};
+  const azureCredentials = localStorage.getItem('azure');
+  const awsCredentials = localStorage.getItem('aws');
+  const googleCredentials = localStorage.getItem('google');
+  const googleClientID = localStorage.getItem('google_clientid');
+  const oidcCredentials = localStorage.getItem('oidc');
 
-// readOIDCProviders returns all saved OIDC providers.
-export const readOIDCProviders = (): IOIDCProviders | undefined => {
-  const providers = localStorage.getItem(STORAGE_OIDC_PROVIDERS);
-  if (providers) {
-    return JSON.parse(providers);
+  for (const id in clusters) {
+    if (clusters[id].authProvider === '') {
+      clusters[id].authProvider = 'kubeconfig';
+    } else if (clusters[id].authProvider === 'aws') {
+      if (awsCredentials !== null) {
+        const parsed = JSON.parse(awsCredentials);
+        const parts = id.split('_');
+
+        if (parts.length >= 3) {
+          if (parsed.hasOwnProperty(parts[1])) {
+            clusters[id].authProviderAWS = {
+              clusterID: parts.slice(2, parts.length).join('_'),
+              accessKeyID: parsed[parts[1]].accessKeyID,
+              region: parts[1],
+              secretKey: parsed[parts[1]].secretKey,
+            };
+          }
+        }
+      }
+    } else if (clusters[id].authProvider === 'google') {
+      if (googleCredentials !== null && googleClientID !== null) {
+        const parsed = JSON.parse(googleCredentials);
+
+        clusters[id].authProviderGoogle = {
+          accessToken: parsed.access_token,
+          clientID: googleClientID,
+          expiresIn: parsed.expires_in,
+          idToken: parsed.id_token,
+          refreshToken: parsed.refresh_token,
+          tokenType: parsed.token_type,
+        };
+      }
+    } else if (clusters[id].authProvider === 'azure') {
+      if (azureCredentials !== null) {
+        clusters[id].authProviderAzure = JSON.parse(azureCredentials) as IClusterAuthProviderAzure;
+      }
+    } else if (clusters[id].authProvider.startsWith('oidc__')) {
+      if (oidcCredentials !== null) {
+        const authProvider = clusters[id].authProvider.replace('oidc__', '');
+        const oidc = JSON.parse(oidcCredentials);
+
+        clusters[id].authProvider = 'oidc';
+
+        if (oidc.hasOwnProperty(authProvider)) {
+          clusters[id].authProviderOIDC = {
+            clientID: oidc[authProvider].clientID,
+            clientSecret: oidc[authProvider].clientSecret,
+            idToken: oidc[authProvider].idToken,
+            idpIssuerURL: oidc[authProvider].idpIssuerURL,
+            refreshToken: oidc[authProvider].refreshToken,
+            certificateAuthority: oidc[authProvider].certificateAuthority,
+            accessToken: oidc[authProvider].accessToken,
+            expiry: oidc[authProvider].expiry,
+          };
+        }
+      }
+    }
   }
 
-  return undefined;
+  localStorage.setItem(STORAGE_CLUSTERS, JSON.stringify(clusters));
+  localStorage.setItem('migrated', 'true');
+  localStorage.removeItem('aws');
+  localStorage.removeItem('azure');
+  localStorage.removeItem('google_clientid');
+  localStorage.removeItem('google');
+  localStorage.removeItem('oidc');
+  localStorage.removeItem('oidc_last');
+
+  return clusters;
 };
 
 // readSettings returns the settings set by the user. If the user had not modified the settings yet, return the default
@@ -96,6 +139,32 @@ export const readSettings = (): IAppSettings => {
   return DEFAULT_SETTINGS;
 };
 
+// readTemporaryCredentials returns the temporary stored creedentials for a cloud provider or ODIC from localStorage.
+export const readTemporaryCredentials = (
+  authProvider: TAuthProvider,
+):
+  | undefined
+  | IClusterAuthProviderAWS
+  | IClusterAuthProviderAzure
+  | IClusterAuthProviderGoogle
+  | IClusterAuthProviderOIDC => {
+  const credentials = localStorage.getItem(STORAGE_TEMPORARY_CREDENTIALS);
+
+  if (credentials === null) {
+    return undefined;
+  } else if (authProvider === 'aws') {
+    return JSON.parse(credentials) as IClusterAuthProviderAWS;
+  } else if (authProvider === 'azure') {
+    return JSON.parse(credentials) as IClusterAuthProviderAzure;
+  } else if (authProvider === 'google') {
+    return JSON.parse(credentials) as IClusterAuthProviderGoogle;
+  } else if (authProvider === 'oidc') {
+    return JSON.parse(credentials) as IClusterAuthProviderOIDC;
+  } else {
+    return undefined;
+  }
+};
+
 // removeCluster removes the saved cluster from localStorage.
 export const removeCluster = (): void => {
   localStorage.removeItem(STORAGE_CLUSTER);
@@ -106,19 +175,9 @@ export const removeClusters = (): void => {
   localStorage.removeItem(STORAGE_CLUSTERS);
 };
 
-// removeOIDCProviders removes the saved OIDC providers from localStorage.
-export const removeOIDCProviders = (): void => {
-  localStorage.removeItem(STORAGE_OIDC_PROVIDERS);
-};
-
-// saveAWSTokens saves the provided tokens to localStorage.
-export const saveAWSTokens = (tokens: IAWSTokens): void => {
-  localStorage.setItem(STORAGE_AWS_TOKENS, JSON.stringify(tokens));
-};
-
-// saveAzureCredentials saves the provided IDs (client, tenant, subscription) for Azure to localStorage.
-export const saveAzureCredentials = (ids: IAzureCredentials): void => {
-  localStorage.setItem(STORAGE_AZURE_CREDENTIALS, JSON.stringify(ids));
+// removeTemporaryCredentials removes the temporary saved credentials from localStorage.
+export const removeTemporaryCredentials = (): void => {
+  localStorage.removeItem(STORAGE_TEMPORARY_CREDENTIALS);
 };
 
 // saveCluster saves the given cluster id to localStorage.
@@ -131,32 +190,18 @@ export const saveClusters = (clusters: IClusters): void => {
   localStorage.setItem(STORAGE_CLUSTERS, JSON.stringify(clusters));
 };
 
-// saveGoogleTokens saves the returned Google tokens for authenticated API requests to the localStorage. Before the
-// tokens are saved, the expire date is transformed for better access in the app.
-export const saveGoogleTokens = (tokens: IGoogleTokens): void => {
-  const expiresData = new Date();
-  expiresData.setSeconds(expiresData.getSeconds() + parseInt(tokens.expires_in) - 300);
-  tokens.expires_in = expiresData.toDateString();
-  localStorage.setItem(STORAGE_GOOGLE_TOKENS, JSON.stringify(tokens));
-};
-
-// saveGoogleClientID saves the Google client id to the localStorage.
-export const saveGoogleClientID = (clientID: string): void => {
-  localStorage.setItem(STORAGE_GOOGLE_CLIENT_ID, clientID);
-};
-
-// saveOIDCLastProvider is used to save the name of the last used OIDC provider, This is used to assign the OIDC
-// provider to the redirect if the provider is added.
-export const saveOIDCLastProvider = (provider: string): void => {
-  localStorage.setItem(STORAGE_OIDC_PROVIDERS_LAST, provider);
-};
-
-// saveOIDCProviders is used to save all OIDC providers to localStorage.
-export const saveOIDCProviders = (providers: IOIDCProviders): void => {
-  localStorage.setItem(STORAGE_OIDC_PROVIDERS, JSON.stringify(providers));
-};
-
 // saveSettings saves the users settings to the localStorage.
 export const saveSettings = (settings: IAppSettings): void => {
   localStorage.setItem(STORAGE_SETTINGS, JSON.stringify(settings));
+};
+
+// saveTemporaryCredentials saves the credentials for a cloud provider or OIDC temporary to the localStorage.
+export const saveTemporaryCredentials = (
+  credentials:
+    | IClusterAuthProviderAWS
+    | IClusterAuthProviderAzure
+    | IClusterAuthProviderGoogle
+    | IClusterAuthProviderOIDC,
+): void => {
+  localStorage.setItem(STORAGE_TEMPORARY_CREDENTIALS, JSON.stringify(credentials));
 };

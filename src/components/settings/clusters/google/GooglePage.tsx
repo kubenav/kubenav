@@ -15,10 +15,10 @@ import {
 import React, { memo, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { ICluster, IContext } from '../../../../declarations';
+import { ICluster, IContext, IClusterAuthProviderGoogle } from '../../../../declarations';
 import { getGoogleClusters, getGoogleProjects, getGoogleTokens } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
-import { saveGoogleTokens } from '../../../../utils/storage';
+import { readTemporaryCredentials } from '../../../../utils/storage';
 import useAsyncFn from '../../../../utils/useAsyncFn';
 import ErrorCard from '../../../misc/ErrorCard';
 
@@ -47,38 +47,44 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
         }
 
         if (params.code) {
-          const tokens = await getGoogleTokens(params.code);
-          saveGoogleTokens(tokens);
-          const projects = await getGoogleProjects(tokens.access_token);
+          let credentials = readTemporaryCredentials('google') as undefined | IClusterAuthProviderGoogle;
 
-          for (const project of projects) {
-            const projectClusters = await getGoogleClusters(tokens.access_token, project.projectId);
+          if (credentials && credentials.clientID) {
+            credentials = await getGoogleTokens(credentials.clientID, params.code);
+            const projects = await getGoogleProjects(credentials.accessToken);
 
-            const tmpClusters: ICluster[] = [];
+            for (const project of projects) {
+              const projectClusters = await getGoogleClusters(credentials.accessToken, project.projectId);
 
-            if (projectClusters) {
-              // eslint-disable-next-line
+              const tmpClusters: ICluster[] = [];
+
+              if (projectClusters) {
+                // eslint-disable-next-line
               projectClusters.map((cluster) => {
-                tmpClusters.push({
-                  id: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
-                  name: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
-                  url: `https://${cluster.endpoint}`,
-                  certificateAuthorityData: cluster.masterAuth.clusterCaCertificate,
-                  clientCertificateData: cluster.masterAuth.clientCertificate
-                    ? cluster.masterAuth.clientCertificate
-                    : '',
-                  clientKeyData: cluster.masterAuth.clientKey ? cluster.masterAuth.clientKey : '',
-                  token: '',
-                  username: cluster.masterAuth.username ? cluster.masterAuth.username : '',
-                  password: cluster.masterAuth.password ? cluster.masterAuth.password : '',
-                  insecureSkipTLSVerify: false,
-                  authProvider: 'google',
-                  namespace: 'default',
+                  tmpClusters.push({
+                    id: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
+                    name: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
+                    url: `https://${cluster.endpoint}`,
+                    certificateAuthorityData: cluster.masterAuth.clusterCaCertificate,
+                    clientCertificateData: cluster.masterAuth.clientCertificate
+                      ? cluster.masterAuth.clientCertificate
+                      : '',
+                    clientKeyData: cluster.masterAuth.clientKey ? cluster.masterAuth.clientKey : '',
+                    token: '',
+                    username: cluster.masterAuth.username ? cluster.masterAuth.username : '',
+                    password: cluster.masterAuth.password ? cluster.masterAuth.password : '',
+                    insecureSkipTLSVerify: false,
+                    authProvider: 'google',
+                    authProviderGoogle: credentials,
+                    namespace: 'default',
+                  });
                 });
-              });
 
-              return tmpClusters;
+                return tmpClusters;
+              }
             }
+          } else {
+            throw new Error('Could not read credentials for Google');
           }
         }
       } catch (err) {

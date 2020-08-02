@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext, IPodMetrics } from '../../../../declarations';
+import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import Permissions from '../../configAndStorage/serviceAccounts/Permissions';
 import List from '../../misc/List';
@@ -32,12 +33,14 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data: IPodMetrics = await context.request(
+        const data: IPodMetrics = await kubernetesRequest(
           'GET',
           `/apis/metrics.k8s.io/v1beta1/namespaces/${
             item.metadata && item.metadata.namespace ? item.metadata.namespace : ''
           }/pods/${item.metadata && item.metadata.name ? item.metadata.name : ''}`,
           '',
+          context.settings.timeout,
+          await context.kubernetesAuthWrapper(''),
         );
         setMetrics(data);
       } catch (err) {

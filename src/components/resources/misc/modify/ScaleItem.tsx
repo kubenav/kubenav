@@ -4,6 +4,7 @@ import { copy } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 
 import { IContext, TActivator } from '../../../../declarations';
+import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 
 interface IScaleItemProps {
@@ -20,7 +21,13 @@ const ScaleItem: React.FunctionComponent<IScaleItemProps> = ({ activator, item, 
 
   const handleScale = async (replicas: number) => {
     try {
-      await context.request('PATCH', url, `[{"op": "replace", "path": "/spec/replicas", "value": ${replicas}}]`);
+      await kubernetesRequest(
+        'PATCH',
+        url,
+        `[{"op": "replace", "path": "/spec/replicas", "value": ${replicas}}]`,
+        context.settings.timeout,
+        await context.kubernetesAuthWrapper(''),
+      );
     } catch (err) {
       setError(err);
     }

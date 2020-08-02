@@ -56,7 +56,7 @@ const App: React.FunctionComponent = () => (
                 exact={true}
               />
               <Route path="/settings/clusters" component={ClustersPage} exact={true} />
-              <Route path="/settings/clusters/aws/:region" component={ClustersAWSPage} exact={true} />
+              <Route path="/settings/clusters/aws" component={ClustersAWSPage} exact={true} />
               <Route path="/settings/clusters/azure" component={ClustersAzurePage} exact={true} />
               <Route path="/settings/clusters/google" component={ClustersGooglePage} exact={true} />
               <Route path="/settings/clusters/kubeconfig" component={ClustersKubeconfigPage} exact={true} />

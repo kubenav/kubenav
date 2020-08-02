@@ -2,6 +2,7 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonList }
 import React, { useContext, useEffect } from 'react';
 
 import { IContext } from '../../../declarations';
+import { kubernetesRequest } from '../../../utils/api';
 import { AppContext } from '../../../utils/context';
 import { resources } from '../../../utils/resources';
 import useAsyncFn from '../../../utils/useAsyncFn';
@@ -30,7 +31,14 @@ const List: React.FunctionComponent<IListProps> = ({
   const Component = page.listItemComponent;
 
   const [state, , fetchInit] = useAsyncFn(
-    async () => await context.request('GET', `${page.listURL(namespace)}${selector ? '?' + selector : ''}`, ''),
+    async () =>
+      await kubernetesRequest(
+        'GET',
+        `${page.listURL(namespace)}${selector ? '?' + selector : ''}`,
+        '',
+        context.settings.timeout,
+        await context.kubernetesAuthWrapper(''),
+      ),
     [section, type, namespace, selector, filter],
     { loading: true, error: undefined, value: undefined },
   );

@@ -19,10 +19,10 @@ import {
 import React, { memo, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps, useLocation } from 'react-router';
 
-import { IContext } from '../../../../declarations';
+import { IContext, IClusterAuthProviderOIDC } from '../../../../declarations';
 import { getOIDCRefreshToken } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
-import { readOIDCLastProvider } from '../../../../utils/storage';
+import { readTemporaryCredentials } from '../../../../utils/storage';
 import useAsyncFn from '../../../../utils/useAsyncFn';
 import ErrorCard from '../../../misc/ErrorCard';
 
@@ -35,37 +35,24 @@ type IOIDCRedirectPageProps = RouteComponentProps;
 const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ history }: IOIDCRedirectPageProps) => {
   const context = useContext<IContext>(AppContext);
   const query = useQuery();
+  const [provider, setProvider] = useState<undefined | IClusterAuthProviderOIDC>(undefined);
 
   const [state, , fetchInit] = useAsyncFn(
     async () => {
       try {
-        const lastProvider = readOIDCLastProvider();
+        let credentials = readTemporaryCredentials('oidc') as undefined | IClusterAuthProviderOIDC;
 
-        if (query.get('error')) {
-          throw new Error(query.get('error') as string);
-        }
-
-        if (query.get('code')) {
-          if (context.oidcProviders && context.oidcProviders.hasOwnProperty(lastProvider)) {
-            const provider = context.oidcProviders[lastProvider];
-
-            const tokens = await getOIDCRefreshToken(
-              provider.idpIssuerURL,
-              provider.clientID,
-              provider.clientSecret,
-              provider.certificateAuthority,
-              query.get('code') as string,
-            );
-
-            provider.refreshToken = tokens.refresh_token;
-            provider.idToken = tokens.id_token;
-            provider.accessToken = tokens.access_token;
-            provider.expiry = tokens.expiry;
-
-            context.addOIDCProvider(provider);
-          } else {
-            throw new Error('Could not find OIDC provider.');
+        if (credentials) {
+          if (query.get('error')) {
+            throw new Error(query.get('error') as string);
           }
+
+          if (query.get('code')) {
+            credentials = await getOIDCRefreshToken(credentials, query.get('code') as string);
+            setProvider(credentials);
+          }
+        } else {
+          throw new Error('Could not read credentials for OIDC');
         }
       } catch (err) {
         throw err;
@@ -122,7 +109,8 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
             username: '',
             password: '',
             insecureSkipTLSVerify: insecureSkipTLSVerify,
-            authProvider: `oidc__${readOIDCLastProvider()}`,
+            authProvider: 'oidc',
+            authProviderOIDC: provider,
             namespace: 'default',
           },
         ]);

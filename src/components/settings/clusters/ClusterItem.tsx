@@ -3,6 +3,7 @@ import { radioButtonOff, radioButtonOn, trash } from 'ionicons/icons';
 import React, { useContext, useEffect, useState } from 'react';
 
 import { ICluster, IContext } from '../../../declarations';
+import { kubernetesRequest } from '../../../utils/api';
 import { AppContext } from '../../../utils/context';
 import EditCluster from './EditCluster';
 
@@ -18,7 +19,13 @@ const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IC
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await context.request('GET', '', '', cluster);
+        const data = await kubernetesRequest(
+          'GET',
+          '',
+          '',
+          context.settings.timeout,
+          await context.kubernetesAuthWrapper(cluster.id),
+        );
         if (data && data.paths) {
           setStatus(true);
         } else {

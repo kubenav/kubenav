@@ -116,7 +116,7 @@ const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history
             username: user.username ? user.username : '',
             password: user.password ? user.password : '',
             insecureSkipTLSVerify: cluster['insecure-skip-tls-verify'] ? cluster['insecure-skip-tls-verify'] : false,
-            authProvider: '',
+            authProvider: 'kubeconfig',
             namespace: 'default',
           });
         }

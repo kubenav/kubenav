@@ -13,7 +13,7 @@ import {
 } from '@ionic/react';
 import React, { useState } from 'react';
 
-import { saveAzureCredentials } from '../../../../utils/storage';
+import { saveTemporaryCredentials } from '../../../../utils/storage';
 
 const Azure: React.FunctionComponent = () => {
   const [subscriptionID, setSubscriptionID] = useState<string>('');
@@ -58,7 +58,7 @@ const Azure: React.FunctionComponent = () => {
     ) {
       setError('Subscription ID, Client ID, Client Secret, Tenant ID and Resource Group Name are required.');
     } else {
-      saveAzureCredentials({
+      saveTemporaryCredentials({
         subscriptionID: subscriptionID,
         clientID: clientID,
         clientSecret: clientSecret,

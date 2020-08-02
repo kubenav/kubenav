@@ -102,7 +102,7 @@ const ManualPage: React.FunctionComponent<IManualPageProps> = ({ history }: IMan
             username: username,
             password: password,
             insecureSkipTLSVerify: insecureSkipTLSVerify,
-            authProvider: '',
+            authProvider: 'kubeconfig',
             namespace: 'default',
           },
         ]);

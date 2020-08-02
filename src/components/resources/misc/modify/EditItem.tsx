@@ -18,6 +18,7 @@ import yaml from 'js-yaml';
 import React, { useContext, useState } from 'react';
 
 import { IContext, TActivator } from '../../../../declarations';
+import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import Editor from '../../../misc/Editor';
 
@@ -38,7 +39,13 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ activator, item, ur
   const handleSave = async () => {
     try {
       const diff = jsonpatch.compare(item, yaml.safeLoad(value));
-      await context.request('PATCH', url, JSON.stringify(diff));
+      await kubernetesRequest(
+        'PATCH',
+        url,
+        JSON.stringify(diff),
+        context.settings.timeout,
+        await context.kubernetesAuthWrapper(''),
+      );
       setShowModal(false);
     } catch (err) {
       setError(err);

@@ -18,6 +18,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext, INodeMetrics } from '../../../../declarations';
+import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import { formatBytes, formatResourceValue } from '../../../../utils/helpers';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
@@ -44,10 +45,12 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data: INodeMetrics = await context.request(
+        const data: INodeMetrics = await kubernetesRequest(
           'GET',
           `/apis/metrics.k8s.io/v1beta1/nodes/${item.metadata && item.metadata ? item.metadata.name : ''}`,
           '',
+          context.settings.timeout,
+          await context.kubernetesAuthWrapper(''),
         );
         setMetrics(data);
       } catch (err) {

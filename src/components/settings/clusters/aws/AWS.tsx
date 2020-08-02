@@ -14,8 +14,7 @@ import {
 } from '@ionic/react';
 import React, { useState } from 'react';
 
-import { IAWSTokens } from '../../../../declarations';
-import { readAWSTokens, saveAWSTokens } from '../../../../utils/storage';
+import { saveTemporaryCredentials } from '../../../../utils/storage';
 
 const AWS: React.FunctionComponent = () => {
   const [accessKeyID, setAccessKeyID] = useState<string>('');
@@ -39,16 +38,14 @@ const AWS: React.FunctionComponent = () => {
     if (accessKeyID === '' || region === '' || secretKey === '') {
       setError('Access Key ID, Secret Key and Region are required.');
     } else {
-      const tokens: IAWSTokens = readAWSTokens();
-
-      tokens[region] = {
+      saveTemporaryCredentials({
         accessKeyID: accessKeyID,
+        clusterID: '',
+        region: region,
         secretKey: secretKey,
-      };
+      });
 
-      saveAWSTokens(tokens);
-
-      window.location.replace(`/settings/clusters/aws/${region}`);
+      window.location.replace(`/settings/clusters/aws`);
     }
   };
 
