@@ -52,9 +52,9 @@ const ClustersPage: React.FunctionComponent = () => {
           <IonCard>
             <IonCardContent>
               <p className="paragraph-margin-bottom">
-                It looks like you have not configured a cluster yet. Kubenav loads your clusters from{' '}
+                It looks like you have not configured a cluster yet. kubenav loads your clusters from{' '}
                 <code>~/.kube/.kubeconfig</code>, <code>~/.kube/.config</code> or the <code>KUBECONFIG</code>{' '}
-                environment variable. You can also pass a Kubeconfig to Kubenav via the <code>-kubeconfig</code> flag.
+                environment variable. You can also pass a Kubeconfig to kubenav via the <code>-kubeconfig</code> flag.
               </p>
               <p>
                 With the <code>-include-kubeconfig</code> and <code>-exlude-kubeconfig</code> flags you can specify a
