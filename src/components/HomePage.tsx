@@ -62,8 +62,8 @@ const HomePage: React.FunctionComponent = () => {
             </IonCardHeader>
             <IonCardContent>
               <p className="paragraph-margin-bottom">
-                Welcome to the kubenav app. After you added a cluster you can start the exploration of them within the
-                kubenav app. To add a new Kubernetes cluster to the app use the button <b>Add a Cluster</b> or the
+                Welcome to the kubenav app. Once you have added a cluster, you can start the exploration of them within
+                the kubenav app. To add a new Kubernetes cluster to the app use the button <b>Add a Cluster</b> or the
                 <b> Clusters</b> item from the menu.
               </p>
               <IonButton expand="block" routerLink="/settings/clusters" routerDirection="none">
