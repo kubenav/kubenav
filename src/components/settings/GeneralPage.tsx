@@ -30,6 +30,8 @@ const GeneralPage: React.FunctionComponent = () => {
       sshKey: context.settings.sshKey,
       sshPort: context.settings.sshPort,
       sshUser: context.settings.sshUser,
+      proxyEnabled: context.settings.proxyEnabled,
+      proxyAddress: context.settings.proxyAddress,
     });
   };
 
@@ -40,6 +42,8 @@ const GeneralPage: React.FunctionComponent = () => {
       sshKey: context.settings.sshKey,
       sshPort: context.settings.sshPort,
       sshUser: context.settings.sshUser,
+      proxyEnabled: context.settings.proxyEnabled,
+      proxyAddress: context.settings.proxyAddress,
     });
   };
 
@@ -50,6 +54,8 @@ const GeneralPage: React.FunctionComponent = () => {
       sshKey: event.target.value,
       sshPort: context.settings.sshPort,
       sshUser: context.settings.sshUser,
+      proxyEnabled: context.settings.proxyEnabled,
+      proxyAddress: context.settings.proxyAddress,
     });
   };
 
@@ -60,6 +66,8 @@ const GeneralPage: React.FunctionComponent = () => {
       sshKey: context.settings.sshKey,
       sshPort: event.target.value,
       sshUser: context.settings.sshUser,
+      proxyEnabled: context.settings.proxyEnabled,
+      proxyAddress: context.settings.proxyAddress,
     });
   };
 
@@ -70,6 +78,32 @@ const GeneralPage: React.FunctionComponent = () => {
       sshKey: context.settings.sshKey,
       sshPort: context.settings.sshPort,
       sshUser: event.target.value,
+      proxyEnabled: context.settings.proxyEnabled,
+      proxyAddress: context.settings.proxyAddress,
+    });
+  };
+
+  const toggleProxyEnabled = (event) => {
+    context.editSettings({
+      darkMode: context.settings.darkMode,
+      timeout: context.settings.timeout,
+      sshKey: context.settings.sshKey,
+      sshPort: context.settings.sshPort,
+      sshUser: context.settings.sshUser,
+      proxyEnabled: event.detail.checked,
+      proxyAddress: context.settings.proxyAddress,
+    });
+  };
+
+  const changeProxyAddress = (event) => {
+    context.editSettings({
+      darkMode: context.settings.darkMode,
+      timeout: context.settings.timeout,
+      sshKey: context.settings.sshKey,
+      sshPort: context.settings.sshPort,
+      sshUser: context.settings.sshUser,
+      proxyEnabled: context.settings.proxyEnabled,
+      proxyAddress: event.target.value,
     });
   };
 
@@ -114,6 +148,25 @@ const GeneralPage: React.FunctionComponent = () => {
             <IonItem>
               <IonLabel position="stacked">User</IonLabel>
               <IonInput type="text" required={true} value={context.settings.sshUser} onInput={changeSSHUser} />
+            </IonItem>
+          </IonItemGroup>
+
+          <IonItemGroup>
+            <IonItemDivider>
+              <IonLabel>Proxy</IonLabel>
+            </IonItemDivider>
+            <IonItem>
+              <IonLabel>Enabled</IonLabel>
+              <IonToggle checked={context.settings.proxyEnabled} onIonChange={toggleProxyEnabled} />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Address</IonLabel>
+              <IonInput
+                type="text"
+                required={true}
+                value={context.settings.proxyAddress}
+                onInput={changeProxyAddress}
+              />
             </IonItem>
           </IonItemGroup>
         </IonList>

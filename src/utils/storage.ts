@@ -133,6 +133,8 @@ export const readSettings = (): IAppSettings => {
       sshKey: settings.sshKey ? settings.sshKey : DEFAULT_SETTINGS.sshKey,
       sshPort: settings.sshPort ? settings.sshPort : DEFAULT_SETTINGS.sshPort,
       sshUser: settings.sshUser ? settings.sshUser : DEFAULT_SETTINGS.sshUser,
+      proxyEnabled: settings.hasOwnProperty('proxyEnabled') ? settings.proxyEnabled : DEFAULT_SETTINGS.proxyEnabled,
+      proxyAddress: settings.proxyAddress ? settings.proxyAddress : DEFAULT_SETTINGS.proxyAddress,
     };
   }
 

@@ -49,7 +49,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
           'GET',
           `/apis/metrics.k8s.io/v1beta1/nodes/${item.metadata && item.metadata ? item.metadata.name : ''}`,
           '',
-          context.settings.timeout,
+          context.settings,
           await context.kubernetesAuthWrapper(''),
         );
         setMetrics(data);

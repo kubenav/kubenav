@@ -38,7 +38,7 @@ const RestartItem: React.FunctionComponent<IRestartItemProps> = ({ activator, it
         'PATCH',
         url,
         JSON.stringify(diff),
-        context.settings.timeout,
+        context.settings,
         await context.kubernetesAuthWrapper(''),
       );
     } catch (err) {

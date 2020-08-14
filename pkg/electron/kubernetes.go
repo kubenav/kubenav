@@ -31,7 +31,7 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, clientset, err := client.ConfigClientset(request.Cluster, time.Duration(request.Timeout)*time.Second)
+	_, clientset, err := client.ConfigClientset(request.Cluster, time.Duration(request.Timeout)*time.Second, request.Proxy)
 	if err != nil {
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 		return
@@ -75,7 +75,7 @@ func execHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	config, clientset, err := client.ConfigClientset(request.Cluster, time.Duration(request.Timeout)*time.Second)
+	config, clientset, err := client.ConfigClientset(request.Cluster, time.Duration(request.Timeout)*time.Second, request.Proxy)
 	if err != nil {
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 		return
@@ -118,7 +118,7 @@ func logsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, clientset, err := client.ConfigClientset(request.Cluster, 6*time.Hour)
+	_, clientset, err := client.ConfigClientset(request.Cluster, 6*time.Hour, request.Proxy)
 	if err != nil {
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 		return

@@ -71,7 +71,7 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
           match.params.crname,
         ),
         '',
-        context.settings.timeout,
+        context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
     [],

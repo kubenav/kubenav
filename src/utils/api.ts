@@ -2,6 +2,7 @@ import { Plugins } from '@capacitor/core';
 import { isPlatform } from '@ionic/react';
 
 import {
+  IAppSettings,
   IAWSCluster,
   IAzureCluster,
   ICluster,
@@ -308,7 +309,7 @@ export const kubernetesRequest = async (
   method: string,
   url: string,
   body: string,
-  timeout: number,
+  settings: IAppSettings,
   cluster: ICluster,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
@@ -330,7 +331,8 @@ export const kubernetesRequest = async (
         username: cluster ? cluster.username : '',
         password: cluster ? cluster.password : '',
         insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
-        timeout: timeout ? timeout : 60,
+        timeout: settings.timeout ? settings.timeout : 60,
+        proxy: settings.proxyEnabled ? settings.proxyAddress : '',
       }),
     });
 

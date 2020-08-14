@@ -23,7 +23,7 @@ const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IC
           'GET',
           '',
           '',
-          context.settings.timeout,
+          context.settings,
           await context.kubernetesAuthWrapper(cluster.id),
         );
         if (data && data.paths) {

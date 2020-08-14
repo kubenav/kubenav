@@ -22,7 +22,7 @@ const NamespacePopover: React.FunctionComponent = () => {
         'GET',
         '/api/v1/namespaces',
         '',
-        context.settings.timeout,
+        context.settings,
         await context.kubernetesAuthWrapper(''),
       );
       setNamespaces(data);

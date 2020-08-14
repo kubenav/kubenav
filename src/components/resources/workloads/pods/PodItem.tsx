@@ -30,7 +30,7 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
             item.metadata && item.metadata.namespace ? item.metadata.namespace : ''
           }/pods/${item.metadata && item.metadata.name ? item.metadata.name : ''}`,
           '',
-          context.settings.timeout,
+          context.settings,
           await context.kubernetesAuthWrapper(''),
         );
         setMetrics(data);

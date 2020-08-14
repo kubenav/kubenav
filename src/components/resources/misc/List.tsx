@@ -36,7 +36,7 @@ const List: React.FunctionComponent<IListProps> = ({
         'GET',
         `${page.listURL(namespace)}${selector ? '?' + selector : ''}`,
         '',
-        context.settings.timeout,
+        context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
     [section, type, namespace, selector, filter],

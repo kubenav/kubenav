@@ -64,7 +64,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
         'GET',
         getURL(cluster ? cluster.namespace : '', match.params.group, match.params.version, match.params.name),
         '',
-        context.settings.timeout,
+        context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
     [cluster?.id, cluster?.namespace],

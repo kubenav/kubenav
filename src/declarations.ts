@@ -44,6 +44,8 @@ export interface IAppSettings {
   sshKey: string;
   sshPort: string;
   sshUser: string;
+  proxyEnabled: boolean;
+  proxyAddress: string;
 }
 
 export interface IAWSCluster {

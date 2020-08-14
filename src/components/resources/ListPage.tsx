@@ -65,7 +65,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
         'GET',
         page.listURL(cluster ? cluster.namespace : ''),
         '',
-        context.settings.timeout,
+        context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
     [page, cluster?.id, cluster?.namespace],
