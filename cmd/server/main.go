@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"path"
 	"strings"
 
 	"github.com/kubenav/kubenav/pkg/electron"
@@ -20,6 +21,7 @@ var (
 	fs                    = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
 	debugFlag             = fs.Bool("debug", false, "Enable debug mode.")
 	inclusterFlag         = fs.Bool("incluster", false, "Use the in cluster configuration. Only needed for a Kubernetes based Deployment using the Docker image.")
+	ionicFlag             = fs.String("ionic", "build", "Path to the Ionic app.")
 	kubeconfigFlag        = fs.String("kubeconfig", "", "Optional Kubeconfig file.")
 	kubeconfigIncludeFlag = fs.String("kubeconfig-include", "", "Comma separated list of globs to include in the Kubeconfig.")
 	kubeconfigExcludeFlag = fs.String("kubeconfig-exclude", "", "Comma separated list of globs to exclude from the Kubeconfig. This flag must be used in combination with the '-kubeconfig-include' flag.")
@@ -52,12 +54,12 @@ func main() {
 	router := http.NewServeMux()
 	electron.Register(router, *syncFlag, client)
 
-	index, err := ioutil.ReadFile("build/index.html")
+	index, err := ioutil.ReadFile(path.Join(*ionicFlag, "index.html"))
 	if err != nil {
 		log.WithError(err).Fatalf("Could not load index.html file")
 	}
 
-	staticHandler := http.StripPrefix("/", http.FileServer(http.Dir("build")))
+	staticHandler := http.StripPrefix("/", http.FileServer(http.Dir(*ionicFlag)))
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(r.URL.Path, ".") {
 			staticHandler.ServeHTTP(w, r)
