@@ -30,7 +30,9 @@ import {
   IContext,
   TAuthProvider,
 } from '../../../declarations';
+import { getOIDCLink } from '../../../utils/api';
 import { AppContext } from '../../../utils/context';
+import { saveTemporaryCredentials } from '../../../utils/storage';
 
 interface IEditClusterProps {
   cluster: ICluster;
@@ -145,6 +147,30 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
           }
         : undefined,
     );
+  };
+
+  const reAuthenticateOIDC = async () => {
+    if (authProviderOIDC) {
+      saveTemporaryCredentials({
+        clientID: authProviderOIDC.clientID,
+        clientSecret: authProviderOIDC.clientSecret,
+        idpIssuerURL: authProviderOIDC.idpIssuerURL,
+        refreshToken: authProviderOIDC.refreshToken,
+        certificateAuthority: authProviderOIDC.certificateAuthority,
+        idToken: '',
+        accessToken: '',
+        expiry: 0,
+        clusterID: cluster.id,
+      });
+
+      const url = await getOIDCLink(
+        authProviderOIDC.idpIssuerURL,
+        authProviderOIDC.clientID,
+        authProviderOIDC.clientSecret,
+        authProviderOIDC.certificateAuthority,
+      );
+      window.location.replace(url);
+    }
   };
 
   const editCluster = () => {
@@ -418,6 +444,10 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
                   <IonLabel position="stacked">Refresh Token (optional)</IonLabel>
                   <IonTextarea autoGrow={true} value={authProviderOIDC.refreshToken} onInput={handleAuthProviderOIDC} />
                 </IonItem>
+
+                <IonButton expand="block" onClick={() => reAuthenticateOIDC()}>
+                  Re-Authenticate
+                </IonButton>
               </IonItemGroup>
             ) : null}
           </IonList>

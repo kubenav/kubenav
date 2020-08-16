@@ -123,6 +123,7 @@ export interface IClusterAuthProviderOIDC {
   certificateAuthority: string;
   accessToken: string;
   expiry: number;
+  clusterID?: string;
 }
 
 export interface IClusters {
