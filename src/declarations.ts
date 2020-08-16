@@ -112,6 +112,7 @@ export interface IClusterAuthProviderGoogle {
   idToken: string;
   refreshToken: string;
   tokenType: string;
+  clusterID?: string;
 }
 
 export interface IClusterAuthProviderOIDC {
@@ -123,6 +124,7 @@ export interface IClusterAuthProviderOIDC {
   certificateAuthority: string;
   accessToken: string;
   expiry: number;
+  clusterID?: string;
 }
 
 export interface IClusters {

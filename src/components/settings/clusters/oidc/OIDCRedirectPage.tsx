@@ -37,6 +37,15 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
   const query = useQuery();
   const [provider, setProvider] = useState<undefined | IClusterAuthProviderOIDC>(undefined);
 
+  const [error, setError] = useState<string>('');
+
+  const [clusterID, setClusterID] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [url, setURL] = useState<string>('');
+  const [certificateAuthorityData, setCertificateAuthorityData] = useState<string>('');
+  const [insecureSkipTLSVerify, setInsecureSkipTLSVerify] = useState<boolean>(false);
+  const [namespace, setNamespace] = useState<string>('default');
+
   const [state, , fetchInit] = useAsyncFn(
     async () => {
       try {
@@ -51,6 +60,15 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
             credentials = await getOIDCRefreshToken(credentials, query.get('code') as string);
             setProvider(credentials);
           }
+
+          if (context.clusters && credentials.clusterID) {
+            setClusterID(credentials.clusterID);
+            setName(context.clusters[credentials.clusterID].name);
+            setURL(context.clusters[credentials.clusterID].url);
+            setCertificateAuthorityData(context.clusters[credentials.clusterID].certificateAuthorityData);
+            setInsecureSkipTLSVerify(context.clusters[credentials.clusterID].insecureSkipTLSVerify);
+            setNamespace(context.clusters[credentials.clusterID].namespace);
+          }
         } else {
           throw new Error('Could not read credentials for OIDC');
         }
@@ -61,12 +79,6 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
     [],
     { loading: true, error: undefined, value: undefined },
   );
-
-  const [error, setError] = useState<string>('');
-  const [name, setName] = useState<string>('');
-  const [url, setURL] = useState<string>('');
-  const [certificateAuthorityData, setCertificateAuthorityData] = useState<string>('');
-  const [insecureSkipTLSVerify, setInsecureSkipTLSVerify] = useState<boolean>(false);
 
   useEffect(() => {
     fetchInit();
@@ -123,6 +135,39 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
     }
   };
 
+  const editClusters = () => {
+    if (name === '') {
+      setError('Name is required');
+    } else if (url === '') {
+      setError('Server is required');
+    } else if (!url.startsWith('https://')) {
+      setError('Invalid URL');
+    } else {
+      try {
+        context.editCluster({
+          id: clusterID,
+          name: name,
+          url: url,
+          certificateAuthorityData: certificateAuthorityData,
+          clientCertificateData: '',
+          clientKeyData: '',
+          token: '',
+          username: '',
+          password: '',
+          insecureSkipTLSVerify: insecureSkipTLSVerify,
+          authProvider: 'oidc',
+          authProviderOIDC: provider,
+          namespace: namespace,
+        });
+
+        setError('');
+        history.push('/settings/clusters');
+      } catch (err) {
+        setError(err.message);
+      }
+    }
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -130,10 +175,14 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Add Clusters</IonTitle>
+          <IonTitle>{clusterID ? 'Edit' : 'Add'} Clusters</IonTitle>
           {state.error ? null : (
             <IonButtons slot="primary">
-              <IonButton onClick={() => addClusters()}>Add</IonButton>
+              {clusterID ? (
+                <IonButton onClick={() => editClusters()}>Save</IonButton>
+              ) : (
+                <IonButton onClick={() => addClusters()}>Add</IonButton>
+              )}
             </IonButtons>
           )}
         </IonToolbar>

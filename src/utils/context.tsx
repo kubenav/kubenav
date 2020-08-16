@@ -254,6 +254,7 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
         if (credentials) {
           credentials = await getGoogleAccessToken(credentials);
           clusters[clusterID].token = credentials.accessToken;
+          clusters[clusterID].authProviderGoogle = credentials;
         } else {
           throw new Error('AWS credentials are missing');
         }

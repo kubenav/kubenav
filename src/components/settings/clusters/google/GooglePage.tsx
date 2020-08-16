@@ -50,37 +50,45 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
           let credentials = readTemporaryCredentials('google') as undefined | IClusterAuthProviderGoogle;
 
           if (credentials && credentials.clientID) {
-            credentials = await getGoogleTokens(credentials.clientID, params.code);
-            const projects = await getGoogleProjects(credentials.accessToken);
+            if (credentials.clusterID && context.clusters) {
+              const cluster = context.clusters[credentials.clusterID];
+              credentials = await getGoogleTokens(credentials.clientID, params.code);
+              cluster.authProviderGoogle = credentials;
+              context.editCluster(cluster);
+              history.push('/settings/clusters');
+            } else {
+              credentials = await getGoogleTokens(credentials.clientID, params.code);
+              const projects = await getGoogleProjects(credentials.accessToken);
 
-            for (const project of projects) {
-              const projectClusters = await getGoogleClusters(credentials.accessToken, project.projectId);
+              for (const project of projects) {
+                const projectClusters = await getGoogleClusters(credentials.accessToken, project.projectId);
 
-              const tmpClusters: ICluster[] = [];
+                const tmpClusters: ICluster[] = [];
 
-              if (projectClusters) {
-                // eslint-disable-next-line
-              projectClusters.map((cluster) => {
-                  tmpClusters.push({
-                    id: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
-                    name: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
-                    url: `https://${cluster.endpoint}`,
-                    certificateAuthorityData: cluster.masterAuth.clusterCaCertificate,
-                    clientCertificateData: cluster.masterAuth.clientCertificate
-                      ? cluster.masterAuth.clientCertificate
-                      : '',
-                    clientKeyData: cluster.masterAuth.clientKey ? cluster.masterAuth.clientKey : '',
-                    token: '',
-                    username: cluster.masterAuth.username ? cluster.masterAuth.username : '',
-                    password: cluster.masterAuth.password ? cluster.masterAuth.password : '',
-                    insecureSkipTLSVerify: false,
-                    authProvider: 'google',
-                    authProviderGoogle: credentials,
-                    namespace: 'default',
+                if (projectClusters) {
+                  // eslint-disable-next-line
+                projectClusters.map((cluster) => {
+                    tmpClusters.push({
+                      id: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
+                      name: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
+                      url: `https://${cluster.endpoint}`,
+                      certificateAuthorityData: cluster.masterAuth.clusterCaCertificate,
+                      clientCertificateData: cluster.masterAuth.clientCertificate
+                        ? cluster.masterAuth.clientCertificate
+                        : '',
+                      clientKeyData: cluster.masterAuth.clientKey ? cluster.masterAuth.clientKey : '',
+                      token: '',
+                      username: cluster.masterAuth.username ? cluster.masterAuth.username : '',
+                      password: cluster.masterAuth.password ? cluster.masterAuth.password : '',
+                      insecureSkipTLSVerify: false,
+                      authProvider: 'google',
+                      authProviderGoogle: credentials,
+                      namespace: 'default',
+                    });
                   });
-                });
 
-                return tmpClusters;
+                  return tmpClusters;
+                }
               }
             }
           } else {

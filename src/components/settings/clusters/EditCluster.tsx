@@ -30,7 +30,15 @@ import {
   IContext,
   TAuthProvider,
 } from '../../../declarations';
+import { getOIDCLink } from '../../../utils/api';
+import {
+  GOOGLE_OAUTH2_ENDPOINT,
+  GOOGLE_REDIRECT_URI,
+  GOOGLE_RESPONSE_TYPE,
+  GOOGLE_SCOPE,
+} from '../../../utils/constants';
 import { AppContext } from '../../../utils/context';
+import { saveTemporaryCredentials } from '../../../utils/storage';
 
 interface IEditClusterProps {
   cluster: ICluster;
@@ -145,6 +153,48 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
           }
         : undefined,
     );
+  };
+
+  const reAuthenticateOIDC = async () => {
+    if (authProviderOIDC) {
+      saveTemporaryCredentials({
+        clientID: authProviderOIDC.clientID,
+        clientSecret: authProviderOIDC.clientSecret,
+        idpIssuerURL: authProviderOIDC.idpIssuerURL,
+        refreshToken: authProviderOIDC.refreshToken,
+        certificateAuthority: authProviderOIDC.certificateAuthority,
+        idToken: '',
+        accessToken: '',
+        expiry: 0,
+        clusterID: cluster.id,
+      });
+
+      const url = await getOIDCLink(
+        authProviderOIDC.idpIssuerURL,
+        authProviderOIDC.clientID,
+        authProviderOIDC.clientSecret,
+        authProviderOIDC.certificateAuthority,
+      );
+      window.location.replace(url);
+    }
+  };
+
+  const reAuthenticateGoogle = async () => {
+    if (authProviderGoogle) {
+      saveTemporaryCredentials({
+        accessToken: '',
+        clientID: authProviderGoogle.clientID,
+        expiresIn: '',
+        idToken: '',
+        refreshToken: '',
+        tokenType: '',
+        clusterID: cluster.id,
+      });
+
+      window.location.replace(
+        `${GOOGLE_OAUTH2_ENDPOINT}?client_id=${authProviderGoogle.clientID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=${GOOGLE_RESPONSE_TYPE}&scope=${GOOGLE_SCOPE}`,
+      );
+    }
   };
 
   const editCluster = () => {
@@ -368,6 +418,9 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
                     onInput={handleAuthProviderGoogle}
                   />
                 </IonItem>
+                <IonButton expand="block" onClick={() => reAuthenticateGoogle()}>
+                  Re-Authenticate
+                </IonButton>
               </IonItemGroup>
             ) : null}
             {authProvider === 'oidc' && authProviderOIDC ? (
@@ -418,6 +471,10 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
                   <IonLabel position="stacked">Refresh Token (optional)</IonLabel>
                   <IonTextarea autoGrow={true} value={authProviderOIDC.refreshToken} onInput={handleAuthProviderOIDC} />
                 </IonItem>
+
+                <IonButton expand="block" onClick={() => reAuthenticateOIDC()}>
+                  Re-Authenticate
+                </IonButton>
               </IonItemGroup>
             ) : null}
           </IonList>
