@@ -211,6 +211,9 @@ export const getGoogleAccessToken = async (
   if (response.status >= 200 && response.status < 300) {
     credentials.accessToken = json.access_token;
     credentials.expiresIn = json.expires_in;
+    credentials.idToken = json.id_token;
+    credentials.refreshToken = json.refresh_token;
+    credentials.tokenType = json.token_type;
 
     return credentials;
   }
