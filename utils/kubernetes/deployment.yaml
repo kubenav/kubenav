@@ -19,7 +19,7 @@ spec:
       serviceAccountName: kubenav
       containers:
         - name: kubenav
-          image: kubenav/kubenav:0742c773
+          image: kubenav/kubenav:2.2.0
           imagePullPolicy: IfNotPresent
           args:
              # Use the in cluster configuration for kubenav. This allows to manage only the cluster where kubenav is
