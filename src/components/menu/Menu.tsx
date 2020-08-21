@@ -13,7 +13,7 @@ import {
   IonToolbar,
   isPlatform,
 } from '@ionic/react';
-import React, { memo, useContext } from 'react';
+import React, { memo, useContext, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { IAppSections, IContext } from '../../declarations';
@@ -38,8 +38,11 @@ interface IMenuProps extends RouteComponentProps {
 
 const Menu: React.FunctionComponent<IMenuProps> = ({ sections, history, location }: IMenuProps) => {
   const context = useContext<IContext>(AppContext);
+  const [eventSourceInitialized, setEventSourceInitialized] = useState<boolean>(false);
 
-  if (isPlatform('electron')) {
+  if (isPlatform('electron') && !eventSourceInitialized) {
+    setEventSourceInitialized(true);
+
     const eventSource = new EventSource(`${SERVER}/api/electron`);
 
     eventSource.addEventListener('navigation', async (event) => {
