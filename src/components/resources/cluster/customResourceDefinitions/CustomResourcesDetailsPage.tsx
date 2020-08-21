@@ -144,6 +144,7 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
                   section="cluster"
                   type="events"
                   namespace={state.value.metadata.namespace}
+                  parent={state.value}
                   selector={`fieldSelector=involvedObject.name=${state.value.metadata.name}`}
                 />
               </IonRow>

@@ -219,6 +219,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
             section="workloads"
             type="pods"
             namespace=""
+            parent={item}
             selector={`fieldSelector=spec.nodeName=${item.metadata.name}`}
           />
         </IonRow>
@@ -231,6 +232,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
             section="cluster"
             type="events"
             namespace=""
+            parent={item}
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>

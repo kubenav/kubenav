@@ -83,6 +83,7 @@ const StatefulSetDetails: React.FunctionComponent<IStatefulSetDetailsProps> = ({
             section="workloads"
             type="pods"
             namespace={item.metadata.namespace}
+            parent={item}
             selector={`labelSelector=${labelSelector(item.spec.selector)}`}
           />
         </IonRow>
@@ -95,6 +96,7 @@ const StatefulSetDetails: React.FunctionComponent<IStatefulSetDetailsProps> = ({
             section="cluster"
             type="events"
             namespace={item.metadata.namespace}
+            parent={item}
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>

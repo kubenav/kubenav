@@ -115,6 +115,7 @@ const ServiceDetails: React.FunctionComponent<IServiceDetailsProps> = ({ item, t
             section="workloads"
             type="pods"
             namespace={item.metadata.namespace}
+            parent={item}
             selector={`labelSelector=${matchLabels(item.spec.selector)}`}
           />
         </IonRow>
@@ -127,6 +128,7 @@ const ServiceDetails: React.FunctionComponent<IServiceDetailsProps> = ({ item, t
             section="cluster"
             type="events"
             namespace={item.metadata.namespace}
+            parent={item}
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>

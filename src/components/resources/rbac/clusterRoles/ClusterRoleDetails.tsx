@@ -43,6 +43,7 @@ const ClusterRoleDetails: React.FunctionComponent<IClusterRoleDetailsProps> = ({
             section="cluster"
             type="events"
             namespace=""
+            parent={item}
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>

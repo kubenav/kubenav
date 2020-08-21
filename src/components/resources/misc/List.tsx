@@ -12,6 +12,8 @@ interface IListProps {
   section: string;
   type: string;
   namespace: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  parent: any;
   selector?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filter?: (item: any) => boolean;
@@ -22,6 +24,7 @@ const List: React.FunctionComponent<IListProps> = ({
   section,
   type,
   namespace,
+  parent,
   selector,
   filter,
 }: IListProps) => {
@@ -30,7 +33,7 @@ const List: React.FunctionComponent<IListProps> = ({
   const page = resources[section].pages[type];
   const Component = page.listItemComponent;
 
-  const [state, , fetchInit] = useAsyncFn(
+  const [state, fetch, fetchInit] = useAsyncFn(
     async () =>
       await kubernetesRequest(
         'GET',
@@ -46,6 +49,10 @@ const List: React.FunctionComponent<IListProps> = ({
   useEffect(() => {
     fetchInit();
   }, [fetchInit]);
+
+  useEffect(() => {
+    fetch();
+  }, [parent, fetch]);
 
   if (state.value && state.value.items && state.value.items.filter(filter ? filter : () => true).length > 0) {
     return (

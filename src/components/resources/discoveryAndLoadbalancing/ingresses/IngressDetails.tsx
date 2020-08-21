@@ -113,6 +113,7 @@ const IngressDetails: React.FunctionComponent<IIngressDetailsProps> = ({ item, t
             section="cluster"
             type="events"
             namespace={item.metadata.namespace}
+            parent={item}
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>

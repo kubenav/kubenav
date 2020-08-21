@@ -78,6 +78,7 @@ const PodDisruptionBudgetDetails: React.FunctionComponent<IPodDisruptionBudgetDe
             section="workloads"
             type="pods"
             namespace={item.metadata.namespace}
+            parent={item}
             selector={`labelSelector=${labelSelector(item.spec.selector)}`}
           />
         </IonRow>
@@ -90,6 +91,7 @@ const PodDisruptionBudgetDetails: React.FunctionComponent<IPodDisruptionBudgetDe
             section="cluster"
             type="events"
             namespace={item.metadata.namespace}
+            parent={item}
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>

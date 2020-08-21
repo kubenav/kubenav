@@ -64,6 +64,7 @@ const JobDetails: React.FunctionComponent<IJobDetailsProps> = ({ item, type }: I
             section="workloads"
             type="pods"
             namespace={item.metadata.namespace}
+            parent={item}
             selector={`labelSelector=${labelSelector(item.spec.selector)}`}
           />
         </IonRow>
@@ -76,6 +77,7 @@ const JobDetails: React.FunctionComponent<IJobDetailsProps> = ({ item, type }: I
             section="cluster"
             type="events"
             namespace={item.metadata.namespace}
+            parent={item}
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>

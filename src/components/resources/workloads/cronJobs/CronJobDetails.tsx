@@ -44,6 +44,7 @@ const CronJobDetails: React.FunctionComponent<ICronJobDetailsProps> = ({ item, t
             section="workloads"
             type="jobs"
             namespace={item.metadata.namespace}
+            parent={item}
             filter={(job: V1Job) =>
               job.metadata && job.metadata.ownerReferences && job.metadata.ownerReferences.length === 1
                 ? job.metadata.ownerReferences[0].name ===
@@ -61,6 +62,7 @@ const CronJobDetails: React.FunctionComponent<ICronJobDetailsProps> = ({ item, t
             section="cluster"
             type="events"
             namespace={item.metadata.namespace}
+            parent={item}
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>
