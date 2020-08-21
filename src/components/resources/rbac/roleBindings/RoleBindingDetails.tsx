@@ -75,6 +75,7 @@ const RoleBindingDetails: React.FunctionComponent<IRoleBindingDetailsProps> = ({
             section="cluster"
             type="events"
             namespace={item.metadata.namespace}
+            parent={item}
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>

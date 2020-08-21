@@ -70,6 +70,7 @@ const ReplicationControllerDetails: React.FunctionComponent<IReplicationControll
             section="workloads"
             type="pods"
             namespace={item.metadata.namespace}
+            parent={item}
             selector={`labelSelector=${labelSelector(item.spec.selector)}`}
           />
         </IonRow>
@@ -82,6 +83,7 @@ const ReplicationControllerDetails: React.FunctionComponent<IReplicationControll
             section="cluster"
             type="events"
             namespace={item.metadata.namespace}
+            parent={item}
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>

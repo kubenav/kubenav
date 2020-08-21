@@ -82,6 +82,7 @@ const DeploymentDetails: React.FunctionComponent<IDeploymentDetailsProps> = ({
             section="workloads"
             type="pods"
             namespace={item.metadata.namespace}
+            parent={item}
             selector={`labelSelector=${labelSelector(item.spec.selector)}`}
           />
         </IonRow>
@@ -94,6 +95,7 @@ const DeploymentDetails: React.FunctionComponent<IDeploymentDetailsProps> = ({
             section="cluster"
             type="events"
             namespace={item.metadata.namespace}
+            parent={item}
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>
