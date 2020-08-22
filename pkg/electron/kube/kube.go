@@ -2,6 +2,8 @@ package kube
 
 import (
 	"errors"
+	"net/http"
+	"net/url"
 	"time"
 
 	"k8s.io/client-go/kubernetes"
@@ -128,7 +130,7 @@ func (c *Client) ChangeNamespace(context, namespace string) error {
 }
 
 // ConfigClientset creates the config and clientset for an Kubernetes API call.
-func (c *Client) ConfigClientset(context string, timeout time.Duration) (*rest.Config, *kubernetes.Clientset, error) {
+func (c *Client) ConfigClientset(context string, timeout time.Duration, proxy string) (*rest.Config, *kubernetes.Clientset, error) {
 	raw, err := c.config.RawConfig()
 	if err != nil {
 		return nil, nil, err
@@ -143,6 +145,15 @@ func (c *Client) ConfigClientset(context string, timeout time.Duration) (*rest.C
 	}
 
 	restClient.Timeout = timeout
+
+	if proxy != "" {
+		proxyURL, err := url.Parse(proxy)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		restClient.Transport = &http.Transport{Proxy: http.ProxyURL(proxyURL)}
+	}
 
 	clientset, err := kubernetes.NewForConfig(restClient)
 	if err != nil {

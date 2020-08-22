@@ -23,6 +23,7 @@ type Request struct {
 	Password                 string `json:"password"`
 	InsecureSkipTLSVerify    bool   `json:"insecureSkipTLSVerify"`
 	Timeout                  int64  `json:"timeout"`
+	Proxy                    string `json:"proxy"`
 }
 
 // Response is the structure, which is used to return the data from an API request against the Kubernetes API server to

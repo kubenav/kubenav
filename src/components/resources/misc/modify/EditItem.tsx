@@ -43,7 +43,7 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ activator, item, ur
         'PATCH',
         url,
         JSON.stringify(diff),
-        context.settings.timeout,
+        context.settings,
         await context.kubernetesAuthWrapper(''),
       );
       setShowModal(false);

@@ -21,7 +21,7 @@ const DeleteItem: React.FunctionComponent<IDeleteItemProps> = ({ activator, item
 
   const handleDelete = async () => {
     try {
-      await kubernetesRequest('DELETE', url, '', context.settings.timeout, await context.kubernetesAuthWrapper(''));
+      await kubernetesRequest('DELETE', url, '', context.settings, await context.kubernetesAuthWrapper(''));
     } catch (err) {
       setError(err);
     }

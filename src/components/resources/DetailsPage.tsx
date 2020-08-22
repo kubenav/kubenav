@@ -48,7 +48,7 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
         'GET',
         page.detailsURL(match.params.namespace, match.params.name),
         '',
-        context.settings.timeout,
+        context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
     [page, match.params.namespace, match.params.name],

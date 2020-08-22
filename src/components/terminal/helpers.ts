@@ -133,7 +133,7 @@ export const addLogs = async (
           'GET',
           `${url}/log?${parameters}`,
           '',
-          context.settings.timeout,
+          context.settings,
           await context.kubernetesAuthWrapper(''),
         );
 

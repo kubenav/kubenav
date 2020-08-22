@@ -3,6 +3,8 @@ package kube
 import (
 	"encoding/base64"
 	"fmt"
+	"net/http"
+	"net/url"
 	"time"
 
 	"k8s.io/client-go/kubernetes"
@@ -12,7 +14,7 @@ import (
 
 // ConfigClientset can be used to create an config and clientset for an Kubernetes API call from the fields from an
 // API request.
-func ConfigClientset(server, certificateAuthorityData, clientCertificateData, clientKeyData, token, username, password string, insecureSkipTLSVerify bool, timeout time.Duration) (*rest.Config, *kubernetes.Clientset, error) {
+func ConfigClientset(server, certificateAuthorityData, clientCertificateData, clientKeyData, token, username, password string, insecureSkipTLSVerify bool, timeout time.Duration, proxy string) (*rest.Config, *kubernetes.Clientset, error) {
 	config, err := clientcmd.NewClientConfigFromBytes([]byte(`apiVersion: v1
 clusters:
 - cluster:
@@ -46,6 +48,15 @@ users:
 	}
 
 	restClient.Timeout = timeout
+
+	if proxy != "" {
+		proxyURL, err := url.Parse(proxy)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		restClient.Transport = &http.Transport{Proxy: http.ProxyURL(proxyURL)}
+	}
 
 	clientset, err := kubernetes.NewForConfig(restClient)
 	if err != nil {

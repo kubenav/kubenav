@@ -50,7 +50,7 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
           'GET',
           resources['rbac'].pages['clusterrolebindings'].listURL(''),
           '',
-          context.settings.timeout,
+          context.settings,
           await context.kubernetesAuthWrapper(''),
         );
 
@@ -58,7 +58,7 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
           'GET',
           resources['rbac'].pages['rolebindings'].listURL(namespace),
           '',
-          context.settings.timeout,
+          context.settings,
           await context.kubernetesAuthWrapper(''),
         );
 
@@ -73,7 +73,7 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
                 'GET',
                 resources['rbac'].pages['clusterroles'].detailsURL(namespace, item.roleRef.name),
                 '',
-                context.settings.timeout,
+                context.settings,
                 await context.kubernetesAuthWrapper(''),
               );
 
@@ -87,7 +87,7 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
                 'GET',
                 resources['rbac'].pages['roles'].detailsURL(namespace, item.roleRef.name),
                 '',
-                context.settings.timeout,
+                context.settings,
                 await context.kubernetesAuthWrapper(''),
               );
 
@@ -107,7 +107,7 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
                 'GET',
                 resources['rbac'].pages['clusterroles'].detailsURL(namespace, item.roleRef.name),
                 '',
-                context.settings.timeout,
+                context.settings,
                 await context.kubernetesAuthWrapper(''),
               );
 
@@ -121,7 +121,7 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
                 'GET',
                 resources['rbac'].pages['roles'].detailsURL(namespace, item.roleRef.name),
                 '',
-                context.settings.timeout,
+                context.settings,
                 await context.kubernetesAuthWrapper(''),
               );
 

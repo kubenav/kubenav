@@ -25,7 +25,7 @@ const ScaleItem: React.FunctionComponent<IScaleItemProps> = ({ activator, item, 
         'PATCH',
         url,
         `[{"op": "replace", "path": "/spec/replicas", "value": ${replicas}}]`,
-        context.settings.timeout,
+        context.settings,
         await context.kubernetesAuthWrapper(''),
       );
     } catch (err) {
