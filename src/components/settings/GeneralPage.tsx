@@ -164,6 +164,7 @@ const GeneralPage: React.FunctionComponent = () => {
               <IonInput
                 type="text"
                 required={true}
+                placeholder="http://localhost:8888"
                 value={context.settings.proxyAddress}
                 onInput={changeProxyAddress}
               />

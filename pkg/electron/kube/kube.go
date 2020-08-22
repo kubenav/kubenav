@@ -147,8 +147,6 @@ func (c *Client) ConfigClientset(context string, timeout time.Duration, proxy st
 	restClient.Timeout = timeout
 
 	if proxy != "" {
-		// TODO: Support insecure-skip-tls-verify like kubectl: HTTPS_PROXY=http://localhost:8888 kubectl --insecure-skip-tls-verify get namespaces
-		// See:  https://github.com/kubernetes/kubernetes/blob/7bd4c53b275f5ce4378119783802350e7de09073/pkg/kubelet/client/kubelet_client.go
 		proxyURL, err := url.Parse(proxy)
 		if err != nil {
 			return nil, nil, err
