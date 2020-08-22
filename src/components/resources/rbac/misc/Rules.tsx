@@ -37,49 +37,49 @@ const Rules: React.FunctionComponent<IRulesProps> = ({ rules }: IRulesProps) => 
                             {rule.resourceNames ? ` (${rule.resourceNames.join(',')})` : ''}
                           </td>
                           <td>
-                            {rule.verbs.includes('get') ? (
+                            {rule.verbs.includes('get') || rule.verbs.includes('*') ? (
                               <IonIcon icon={checkmark} color="success" />
                             ) : (
                               <IonIcon icon={close} color="danger" />
                             )}
                           </td>
                           <td>
-                            {rule.verbs.includes('list') ? (
+                            {rule.verbs.includes('list') || rule.verbs.includes('*') ? (
                               <IonIcon icon={checkmark} color="success" />
                             ) : (
                               <IonIcon icon={close} color="danger" />
                             )}
                           </td>
                           <td>
-                            {rule.verbs.includes('create') ? (
+                            {rule.verbs.includes('create') || rule.verbs.includes('*') ? (
                               <IonIcon icon={checkmark} color="success" />
                             ) : (
                               <IonIcon icon={close} color="danger" />
                             )}
                           </td>
                           <td>
-                            {rule.verbs.includes('update') ? (
+                            {rule.verbs.includes('update') || rule.verbs.includes('*') ? (
                               <IonIcon icon={checkmark} color="success" />
                             ) : (
                               <IonIcon icon={close} color="danger" />
                             )}
                           </td>
                           <td>
-                            {rule.verbs.includes('patch') ? (
+                            {rule.verbs.includes('patch') || rule.verbs.includes('*') ? (
                               <IonIcon icon={checkmark} color="success" />
                             ) : (
                               <IonIcon icon={close} color="danger" />
                             )}
                           </td>
                           <td>
-                            {rule.verbs.includes('delete') ? (
+                            {rule.verbs.includes('delete') || rule.verbs.includes('*') ? (
                               <IonIcon icon={checkmark} color="success" />
                             ) : (
                               <IonIcon icon={close} color="danger" />
                             )}
                           </td>
                           <td>
-                            {rule.verbs.includes('watch') ? (
+                            {rule.verbs.includes('watch') || rule.verbs.includes('*') ? (
                               <IonIcon icon={checkmark} color="success" />
                             ) : (
                               <IonIcon icon={close} color="danger" />
