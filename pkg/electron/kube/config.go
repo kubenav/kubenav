@@ -46,7 +46,7 @@ func loadInClusterConfig() (clientcmd.ClientConfig, error) {
 	}, &clientcmd.ConfigOverrides{}), nil
 }
 
-// loadConfigFile implements the logic from kubectl to load Kubeconfig files. If the -kubeconfig flag is provided this
+// loadConfigFile implements the logic from kubectl to load Kubeconfig files. If the --kubeconfig flag is provided this
 // file is used. When the flag isn't provided the KUBECONFIG variable or the default Kubeconfig directory is used.
 func loadConfigFile(kubeconfig string) (clientcmd.ClientConfig, error) {
 	if len(kubeconfig) > 0 {
@@ -75,7 +75,7 @@ func loadConfigFile(kubeconfig string) (clientcmd.ClientConfig, error) {
 // loadConfigFiles loads and merged multiple Kubeconfig file by the provided glob. If a file matches the exlude glob the
 // file isn't included in the final config object.
 //
-// Example: -kubeconfig-include ~/Documents/kubeconfigs1/kube*,~/Documents/kubeconfigs2/kube*
+// Example: --kubeconfig.include ~/Documents/kubeconfigs1/kube*,~/Documents/kubeconfigs2/kube*
 func loadConfigFiles(includeKubeconfig, excludeKubeconfig string) (clientcmd.ClientConfig, error) {
 	includes, err := getFilesFromString(includeKubeconfig)
 	if err != nil {

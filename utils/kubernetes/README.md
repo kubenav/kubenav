@@ -11,13 +11,13 @@ kubectl apply -f https://raw.githubusercontent.com/kubenav/kubenav/master/utils/
 kubectl apply -f https://raw.githubusercontent.com/kubenav/kubenav/master/utils/kubernetes/service.yaml
 ```
 
-This will deploy kubenav with the `-incluster` flag, which enables the in cluster mode of kubenav, where only the cluster where kubenav is running is available via the dashboard. To access the dashboard you can create an Ingress or you can use the created service:
+This will deploy kubenav with the `--incluster` flag, which enables the in cluster mode of kubenav, where only the cluster where kubenav is running is available via the dashboard. To access the dashboard you can create an Ingress or you can use the created service:
 
 ```sh
 kubectl port-forward --namespace kubenav svc/kubenav 14122
 ```
 
-It is also possible to use the kubenav server with multiple Kubernetes cluster. For this you have to create a [secret](./secret.yaml) with your base64 encoded Kubeconfig file. Then you mount your Kubeconfig file and set the path via the `-kubeconfig` flag:
+It is also possible to use the kubenav server with multiple Kubernetes cluster. For this you have to create a [secret](./secret.yaml) with your base64 encoded Kubeconfig file. Then you mount your Kubeconfig file and set the path via the `--kubeconfig` flag:
 
 ```yaml
 ---
@@ -44,7 +44,7 @@ spec:
           image: kubenav/kubenav:0742c773
           imagePullPolicy: IfNotPresent
           args:
-             - -kubeconfig=/kubenav/kubeconfig/kubeconfig
+             - --kubeconfig=/kubenav/kubeconfig/kubeconfig
           ports:
             - name: http
               containerPort: 14122
