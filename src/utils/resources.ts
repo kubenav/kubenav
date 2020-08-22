@@ -302,7 +302,7 @@ export const resources: IAppSections = {
         },
         detailsComponent: PersistentVolumeClaimDetails,
       },
-      podDisruptionBudgets: {
+      poddisruptionbudgets: {
         singleText: 'Pod Disruption Budget',
         pluralText: 'Pod Disruption Budgets',
         icon: '/assets/icons/kubernetes/pdb.png',
