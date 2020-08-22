@@ -24,11 +24,11 @@ spec:
           args:
              # Use the in cluster configuration for kubenav. This allows to manage only the cluster where kubenav is
              # deployed.
-             - -incluster
+             - --incluster
              # Use a Kubeconfig to manage all clusters defined in the Kubeconfig file within the deployed kubenav. The
              # command-line flag can also be replaced with a KUBECONFIG environment variable which contains the path to
              # the Kubeconfig file.
-             #- -kubeconfig=/kubenav/kubeconfig/kubeconfig
+             #- --kubeconfig=/kubenav/kubeconfig/kubeconfig
           ports:
             - name: http
               containerPort: 14122
