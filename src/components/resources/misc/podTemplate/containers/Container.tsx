@@ -37,6 +37,7 @@ import Editor from '../../../../misc/Editor';
 import IonCardEqualHeight from '../../../../misc/IonCardEqualHeight';
 import AddLogs from '../../../../terminal/AddLogs';
 import AddShell from '../../../../terminal/AddShell';
+import Port from '../../Port';
 import Row from '../../template/Row';
 
 // getState returns the current state of the given container. This is used for the list view for init containers and
@@ -232,15 +233,23 @@ const Container: React.FunctionComponent<IContainerProps> = ({
                         obj={container}
                         objKey="ports"
                         title="Ports"
-                        value={(ports) => (
-                          <ul className="no-margin-list">
-                            {ports.map((port: V1ContainerPort, index) => (
-                              <li key={index}>
-                                {port.containerPort} {port.name ? `(${port.name})` : ''}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
+                        value={(ports) =>
+                          ports.map((port: V1ContainerPort, index: number) => {
+                            return (
+                              <Port
+                                key={index}
+                                name={name ? name : ''}
+                                namespace={namespace ? namespace : ''}
+                                selector=""
+                                port={port.containerPort}
+                              >
+                                <IonLabel>
+                                  {port.containerPort} {port.name ? `(${port.name})` : ''}
+                                </IonLabel>
+                              </Port>
+                            );
+                          })
+                        }
                       />
                     </IonGrid>
                   </IonCardContent>

@@ -175,3 +175,64 @@ func sshHandler(w http.ResponseWriter, r *http.Request) {
 	middleware.Write(w, r, api.TerminalResponse{ID: sessionID})
 	return
 }
+
+// portForwardingHandler handles the requests to initialize the port forwarding to a pod.
+func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		middleware.Write(w, r, nil)
+		return
+	}
+
+	var request api.PortForwardRequest
+	if r.Body == nil {
+		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
+		return
+	}
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
+		return
+	}
+
+	config, _, err := kube.ConfigClientset(request.URL, request.CertificateAuthorityData, request.ClientCertificateData, request.ClientKeyData, request.Token, request.Username, request.Password, request.InsecureSkipTLSVerify, time.Duration(request.Timeout)*time.Second, request.Proxy)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
+		return
+	}
+
+	pf, err := api.NewPortForwarding(config, request.URL, request.PodPort, request.LocalPort)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not initialize port forwarding: %s", err.Error()))
+		return
+	}
+	go pf.Start()
+
+	middleware.Write(w, r, api.PortForwardResponse{ID: pf.ID, PodPort: pf.PodPort, LocalPort: pf.LocalPort})
+	return
+}
+
+// portForwardingStopHandler handles the requests to initialize the port forwarding to a pod.
+func portForwardingStopHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		middleware.Write(w, r, nil)
+		return
+	}
+
+	var request api.PortForwardResponse
+	if r.Body == nil {
+		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
+		return
+	}
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
+		return
+	}
+
+	if _, ok := api.PortForwardSessions[request.ID]; ok {
+		api.PortForwardSessions[request.ID].Stop()
+	}
+
+	middleware.Write(w, r, nil)
+	return
+}
