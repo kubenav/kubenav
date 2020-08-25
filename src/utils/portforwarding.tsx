@@ -160,8 +160,15 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
           setMessagePort(0);
         }}
         message={message}
-        duration={6000}
+        duration={3000}
         buttons={[
+          {
+            side: 'end',
+            text: 'Copy',
+            handler: () => {
+              Clipboard.write({ string: `${messagePort}` });
+            },
+          },
           {
             side: 'end',
             text: 'Open',
@@ -172,13 +179,6 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
               } else {
                 window.open(`http://localhost:${messagePort}`, '_system', 'location=yes');
               }
-            },
-          },
-          {
-            side: 'end',
-            text: 'Copy',
-            handler: () => {
-              Clipboard.write({ string: `${messagePort}` });
             },
           },
         ]}
@@ -196,6 +196,18 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
         header="Select Action"
         buttons={[
           {
+            text: 'Stop',
+            handler: () => {
+              remove(selectedPortForwarding);
+            },
+          },
+          {
+            text: 'Copy',
+            handler: () => {
+              Clipboard.write({ string: `${portForwardings[selectedPortForwarding].localPort}` });
+            },
+          },
+          {
             text: 'Open',
             handler: () => {
               if (isPlatform('electron')) {
@@ -210,18 +222,6 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
                   'location=yes',
                 );
               }
-            },
-          },
-          {
-            text: 'Copy',
-            handler: () => {
-              Clipboard.write({ string: `${portForwardings[selectedPortForwarding].localPort}` });
-            },
-          },
-          {
-            text: 'Stop',
-            handler: () => {
-              remove(selectedPortForwarding);
             },
           },
         ]}
