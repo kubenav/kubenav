@@ -238,6 +238,9 @@ const Container: React.FunctionComponent<IContainerProps> = ({
                             return (
                               <Port
                                 key={index}
+                                enabled={
+                                  status !== undefined && (port.protocol === undefined || port.protocol === 'TCP')
+                                }
                                 name={name ? name : ''}
                                 namespace={namespace ? namespace : ''}
                                 selector=""

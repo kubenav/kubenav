@@ -76,13 +76,14 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                     return (
                       <Port
                         key={index}
+                        enabled={port.protocol === undefined || port.protocol === 'TCP'}
                         name={item.metadata && item.metadata.name ? item.metadata.name : ''}
                         namespace={item.metadata && item.metadata.namespace ? item.metadata.namespace : ''}
                         selector=""
                         port={port.containerPort}
                       >
                         <IonLabel>
-                          {port.containerPort} {port.name ? `(${port.name})` : ''}
+                          {container.name}: {port.containerPort} {port.name ? `(${port.name})` : ''}
                         </IonLabel>
                       </Port>
                     );

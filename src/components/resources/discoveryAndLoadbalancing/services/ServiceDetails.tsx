@@ -48,6 +48,7 @@ const ServiceDetails: React.FunctionComponent<IServiceDetailsProps> = ({ item, t
                 return (
                   <Port
                     key={index}
+                    enabled={port.protocol === undefined || port.protocol === 'TCP'}
                     name=""
                     namespace={item.metadata && item.metadata.namespace ? item.metadata.namespace : ''}
                     selector={

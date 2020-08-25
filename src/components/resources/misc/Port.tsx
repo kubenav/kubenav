@@ -1,4 +1,4 @@
-import { IonAlert, IonChip } from '@ionic/react';
+import { IonAlert, IonChip, IonToast } from '@ionic/react';
 import { V1PodList } from '@kubernetes/client-node';
 import React, { useContext, useState, ReactElement } from 'react';
 
@@ -8,6 +8,7 @@ import { AppContext } from '../../../utils/context';
 import { PortForwardingContext } from '../../../utils/portforwarding';
 
 interface IPortProps {
+  enabled: boolean;
   name: string;
   namespace: string;
   selector: string;
@@ -15,10 +16,18 @@ interface IPortProps {
   children: ReactElement;
 }
 
-const Port: React.FunctionComponent<IPortProps> = ({ name, namespace, selector, port, children }: IPortProps) => {
+const Port: React.FunctionComponent<IPortProps> = ({
+  enabled,
+  name,
+  namespace,
+  selector,
+  port,
+  children,
+}: IPortProps) => {
   const context = useContext<IContext>(AppContext);
   const portForwardingContext = useContext<IPortForwardingContext>(PortForwardingContext);
   const [showPortLocalInput, setShowPortLocalInput] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   const portForward = async (localPort: number) => {
     try {
@@ -50,7 +59,7 @@ const Port: React.FunctionComponent<IPortProps> = ({ name, namespace, selector, 
         });
       }
     } catch (err) {
-      // Do nothing.
+      setError(`Error: ${err.message}`);
     }
   };
 
@@ -74,7 +83,9 @@ const Port: React.FunctionComponent<IPortProps> = ({ name, namespace, selector, 
         ]}
       />
 
-      <IonChip className="unset-chip-height" onClick={() => setShowPortLocalInput(true)}>
+      <IonToast isOpen={error !== ''} onDidDismiss={() => setError('')} message={error} duration={3000} />
+
+      <IonChip className="unset-chip-height" onClick={enabled ? () => setShowPortLocalInput(true) : undefined}>
         {children}
       </IonChip>
     </React.Fragment>
