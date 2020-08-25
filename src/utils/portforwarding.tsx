@@ -39,6 +39,8 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
   const [error, setError] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [messagePort, setMessagePort] = useState<number>(0);
+  const [showPortForwardingActions, setShowPortForwardingActions] = useState<boolean>(false);
+  const [selectedPortForwarding, setSelectedPortForwarding] = useState<number>(0);
 
   const add = async (portForwarding: IPortForwarding) => {
     try {
@@ -86,7 +88,9 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
       buttons.push({
         text: `${portForwardings[i].localPort}:${portForwardings[i].podPort} ${portForwardings[i].podName}`,
         handler: () => {
-          remove(i);
+          setShowPortForwardings(false);
+          setSelectedPortForwarding(i);
+          setShowPortForwardingActions(true);
         },
       });
     }
@@ -149,8 +153,44 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
       <IonActionSheet
         isOpen={showPortForwardings}
         onDidDismiss={() => setShowPortForwardings(false)}
-        header="Stop Port Forwarding"
+        header="Port Forwardings"
         buttons={buttons}
+      />
+      <IonActionSheet
+        isOpen={showPortForwardingActions}
+        onDidDismiss={() => setShowPortForwardingActions(false)}
+        header="Select Action"
+        buttons={[
+          {
+            text: 'Open',
+            handler: () => {
+              if (isPlatform('electron')) {
+                // eslint-disable-next-line @typescript-eslint/no-var-requires
+                window
+                  .require('electron')
+                  .shell.openExternal(`http://localhost:${portForwardings[selectedPortForwarding].localPort}`);
+              } else {
+                window.open(
+                  `http://localhost:${portForwardings[selectedPortForwarding].localPort}`,
+                  '_system',
+                  'location=yes',
+                );
+              }
+            },
+          },
+          {
+            text: 'Copy',
+            handler: () => {
+              Clipboard.write({ string: `${portForwardings[selectedPortForwarding].localPort}` });
+            },
+          },
+          {
+            text: 'Stop',
+            handler: () => {
+              remove(selectedPortForwarding);
+            },
+          },
+        ]}
       />
     </PortForwardingContext.Provider>
   );
