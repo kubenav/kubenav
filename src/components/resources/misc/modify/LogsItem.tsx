@@ -84,31 +84,76 @@ const LogsItem: React.FunctionComponent<ILogsItemProps> = ({ activator, item, ur
           {
             text: `Last ${LOG_TAIL_LINES} Log Lines`,
             handler: () => {
-              addLogs(context, terminalContext, url, container, false, LOG_TAIL_LINES, false);
+              addLogs(
+                context,
+                terminalContext,
+                url,
+                item.metadata && item.metadata.name ? item.metadata.name : '',
+                container,
+                false,
+                LOG_TAIL_LINES,
+                false,
+              );
             },
           },
           {
             text: 'All Log Lines',
             handler: () => {
-              addLogs(context, terminalContext, url, container, false, 0, false);
+              addLogs(
+                context,
+                terminalContext,
+                url,
+                item.metadata && item.metadata.name ? item.metadata.name : '',
+                container,
+                false,
+                0,
+                false,
+              );
             },
           },
           {
             text: `Previous Last ${LOG_TAIL_LINES} Log Lines`,
             handler: () => {
-              addLogs(context, terminalContext, url, container, true, LOG_TAIL_LINES, false);
+              addLogs(
+                context,
+                terminalContext,
+                url,
+                item.metadata && item.metadata.name ? item.metadata.name : '',
+                container,
+                true,
+                LOG_TAIL_LINES,
+                false,
+              );
             },
           },
           {
             text: 'All Previous Log Lines',
             handler: () => {
-              addLogs(context, terminalContext, url, container, true, 0, false);
+              addLogs(
+                context,
+                terminalContext,
+                url,
+                item.metadata && item.metadata.name ? item.metadata.name : '',
+                container,
+                true,
+                0,
+                false,
+              );
             },
           },
           {
             text: 'Stream Log Lines',
             handler: () => {
-              addLogs(context, terminalContext, url, container, false, LOG_TAIL_LINES, true);
+              addLogs(
+                context,
+                terminalContext,
+                url,
+                item.metadata && item.metadata.name ? item.metadata.name : '',
+                container,
+                false,
+                LOG_TAIL_LINES,
+                true,
+              );
             },
           },
         ]}

@@ -27,7 +27,9 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({
     return (
       <IonItemOption
         color="primary"
-        onClick={() => addShell(context, terminalContext, `/api/v1/namespaces/${namespace}/pods/${pod}`, container)}
+        onClick={() =>
+          addShell(context, terminalContext, `/api/v1/namespaces/${namespace}/pods/${pod}`, pod, container)
+        }
       >
         <IonIcon slot="start" icon={terminal} />
         Term
@@ -40,7 +42,7 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({
         slot="end"
         onClick={(e) => {
           e.stopPropagation();
-          addShell(context, terminalContext, `/api/v1/namespaces/${namespace}/pods/${pod}`, container);
+          addShell(context, terminalContext, `/api/v1/namespaces/${namespace}/pods/${pod}`, pod, container);
         }}
       >
         <IonIcon slot="start" icon={terminal} />

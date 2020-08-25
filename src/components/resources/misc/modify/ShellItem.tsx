@@ -28,7 +28,13 @@ const ShellItem: React.FunctionComponent<IShellItemProps> = ({ activator, item, 
         buttons.push({
           text: container.name,
           handler: () => {
-            addShell(context, terminalContext, url, container.name);
+            addShell(
+              context,
+              terminalContext,
+              url,
+              item.metadata && item.metadata.name ? item.metadata.name : '',
+              container.name,
+            );
           },
         });
       }
@@ -39,7 +45,13 @@ const ShellItem: React.FunctionComponent<IShellItemProps> = ({ activator, item, 
         buttons.push({
           text: container.name,
           handler: () => {
-            addShell(context, terminalContext, url, container.name);
+            addShell(
+              context,
+              terminalContext,
+              url,
+              item.metadata && item.metadata.name ? item.metadata.name : '',
+              container.name,
+            );
           },
         });
       }
@@ -58,7 +70,13 @@ const ShellItem: React.FunctionComponent<IShellItemProps> = ({ activator, item, 
           detail={false}
           onClick={() =>
             buttons.length === 1
-              ? addShell(context, terminalContext, url, buttons[0].text ? buttons[0].text : '')
+              ? addShell(
+                  context,
+                  terminalContext,
+                  url,
+                  item.metadata && item.metadata.name ? item.metadata.name : '',
+                  buttons[0].text ? buttons[0].text : '',
+                )
               : setShowActionSheet(true)
           }
         >

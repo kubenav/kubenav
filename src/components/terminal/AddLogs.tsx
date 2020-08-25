@@ -34,7 +34,7 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              addLogs(context, terminalContext, url, container, false, LOG_TAIL_LINES, false);
+              addLogs(context, terminalContext, url, pod, container, false, LOG_TAIL_LINES, false);
             }}
           >
             <IonLabel>{`Last ${LOG_TAIL_LINES} Log Lines`}</IonLabel>
@@ -45,7 +45,7 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              addLogs(context, terminalContext, url, container, false, 0, false);
+              addLogs(context, terminalContext, url, pod, container, false, 0, false);
             }}
           >
             <IonLabel>All Log Lines</IonLabel>
@@ -56,7 +56,7 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              addLogs(context, terminalContext, url, container, true, LOG_TAIL_LINES, false);
+              addLogs(context, terminalContext, url, pod, container, true, LOG_TAIL_LINES, false);
             }}
           >
             <IonLabel>{`Previous Last ${LOG_TAIL_LINES} Log Lines`}</IonLabel>
@@ -67,7 +67,7 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              addLogs(context, terminalContext, url, container, true, 0, false);
+              addLogs(context, terminalContext, url, pod, container, true, 0, false);
             }}
           >
             <IonLabel>All Previous Log Lines</IonLabel>
@@ -78,7 +78,7 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              addLogs(context, terminalContext, url, container, false, LOG_TAIL_LINES, true);
+              addLogs(context, terminalContext, url, pod, container, false, LOG_TAIL_LINES, true);
             }}
           >
             <IonLabel>Stream Log Lines</IonLabel>

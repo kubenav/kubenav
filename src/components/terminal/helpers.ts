@@ -9,6 +9,7 @@ export const addShell = async (
   context: IContext,
   terminalContext: ITerminalContext,
   url: string,
+  pod: string,
   container: string,
 ): Promise<void> => {
   const term = new Terminal(SHELL_TERMINAL_OPTIONS(context.settings.darkMode));
@@ -56,7 +57,7 @@ export const addShell = async (
       };
 
       terminalContext.add({
-        name: container,
+        name: `${pod} - ${container}`,
         shell: term,
         webSocket: webSocket,
       });
@@ -65,7 +66,7 @@ export const addShell = async (
     term.write(`${err.message}\n\r`);
 
     terminalContext.add({
-      name: container,
+      name: `${pod} - ${container}`,
       shell: term,
     });
   }
@@ -75,6 +76,7 @@ export const addLogs = async (
   context: IContext,
   terminalContext: ITerminalContext,
   url: string,
+  pod: string,
   container: string,
   previous: boolean,
   tailLines: number,
@@ -101,7 +103,7 @@ export const addLogs = async (
         };
 
         terminalContext.add({
-          name: container,
+          name: `${pod} - ${container}`,
           shell: term,
           eventSource: eventSource,
         });
@@ -109,7 +111,7 @@ export const addLogs = async (
         term.write(`${err.message}\n\r`);
 
         terminalContext.add({
-          name: container,
+          name: `${pod} - ${container}`,
           shell: term,
         });
       }
@@ -143,7 +145,7 @@ export const addLogs = async (
       }
 
       terminalContext.add({
-        name: container,
+        name: `${pod} - ${container}`,
         shell: term,
       });
     }

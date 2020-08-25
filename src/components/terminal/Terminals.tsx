@@ -110,6 +110,7 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
                 {terminals.map((terminal, index) => {
                   return (
                     <IonItem
+                      class="item item-text-wrap"
                       key={index}
                       button={true}
                       detail={false}
@@ -118,7 +119,7 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
                         removeTerminal(index);
                       }}
                     >
-                      <IonLabel>{terminal.name}</IonLabel>
+                      <p>{terminal.name}</p>
                     </IonItem>
                   );
                 })}
@@ -136,7 +137,7 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
           >
             {terminals.map((terminal, index) => {
               return (
-                <IonSegmentButton key={index} value={`term_${index}`}>
+                <IonSegmentButton key={index} style={{ maxWidth: 'none' }} value={`term_${index}`}>
                   <IonLabel>{terminal.name}</IonLabel>
                 </IonSegmentButton>
               );
