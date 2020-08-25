@@ -1,13 +1,27 @@
 import { Plugins } from '@capacitor/core';
 import { ActionSheetButton, IonActionSheet, IonFab, IonFabButton, IonIcon, IonToast, isPlatform } from '@ionic/react';
 import { repeatOutline } from 'ionicons/icons';
-import React, { useContext, useState, ReactElement } from 'react';
+import React, { useContext, useEffect, useState, ReactElement } from 'react';
 
-import { IContext, IPortForwarding, IPortForwardingContext } from '../declarations';
-import { kubernetesPortForwardingRequest, kubernetesPortForwardingStopRequest } from './api';
+import { IContext, IPortForwarding, IPortForwardingActiveSessions, IPortForwardingContext } from '../declarations';
+import {
+  kubernetesPortForwardingActiveSessions,
+  kubernetesPortForwardingRequest,
+  kubernetesPortForwardingStopRequest,
+} from './api';
 import { AppContext } from './context';
 
 const { Clipboard } = Plugins;
+
+const isSessionActive = (sessionID: string, activeSessions: IPortForwardingActiveSessions): boolean => {
+  for (const activeSession in activeSessions) {
+    if (activeSession === sessionID) {
+      return true;
+    }
+  }
+
+  return false;
+};
 
 // Creates a Context object. When React renders a component that subscribes to this Context object it will read the
 // current context value from the closest matching Provider above it in the tree.
@@ -41,6 +55,26 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
   const [messagePort, setMessagePort] = useState<number>(0);
   const [showPortForwardingActions, setShowPortForwardingActions] = useState<boolean>(false);
   const [selectedPortForwarding, setSelectedPortForwarding] = useState<number>(0);
+
+  useEffect(() => {
+    const getActiveSessions = async () => {
+      const sessions = await kubernetesPortForwardingActiveSessions();
+
+      const tmpPortForwardings: IPortForwarding[] = [];
+      for (let i = 0; i < portForwardings.length; i++) {
+        if (isSessionActive(portForwardings[i].id, sessions)) {
+          tmpPortForwardings.push(portForwardings[i]);
+        }
+      }
+
+      setPortForwardings(tmpPortForwardings);
+    };
+
+    const interval = setInterval(() => getActiveSessions(), 10000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [portForwardings]);
 
   const add = async (portForwarding: IPortForwarding) => {
     try {
@@ -108,7 +142,7 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
         add: add,
       }}
     >
-      {!showPortForwardings && portForwardings.length > 0 ? (
+      {!showPortForwardings && !showPortForwardingActions && portForwardings.length > 0 ? (
         <IonFab vertical="bottom" horizontal="end" slot="fixed" style={{ bottom: '76px' }}>
           <IonFabButton onClick={() => setShowPortForwardings(true)}>
             <IonIcon icon={repeatOutline} color="#326ce5" />

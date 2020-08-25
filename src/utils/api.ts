@@ -15,6 +15,7 @@ import {
   IGoogleProject,
   IGoogleTokensAPIResponse,
   IOIDCProviderTokenAPIResponse,
+  IPortForwardingActiveSessions,
   IPortForwardingResponse,
   ITerminalResponse,
   TSyncType,
@@ -380,6 +381,31 @@ export const kubernetesExecRequest = async (url: string, cluster: ICluster): Pro
         password: cluster ? cluster.password : '',
         insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
       }),
+    });
+
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
+    } else {
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// kubernetesPortForwardingActiveSessions returns all active port forwarding sessions.
+export const kubernetesPortForwardingActiveSessions = async (): Promise<IPortForwardingActiveSessions> => {
+  try {
+    await checkServer();
+
+    const response = await fetch(`${SERVER}/api/kubernetes/portforwarding/sessions`, {
+      method: 'get',
     });
 
     const json = await response.json();
