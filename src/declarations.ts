@@ -290,6 +290,29 @@ export interface IPodMetricsList {
   metadata?: V1ListMeta;
 }
 
+export interface IPortForwarding {
+  id: string;
+  podName: string;
+  podNamespace: string;
+  podPort: number;
+  localPort: number;
+}
+
+export interface IPortForwardingActiveSessions {
+  [key: string]: IPortForwardingResponse;
+}
+
+export interface IPortForwardingContext {
+  portForwardings: IPortForwarding[];
+  add: (portForwarding: IPortForwarding) => Promise<void>;
+}
+
+export interface IPortForwardingResponse {
+  id: string;
+  podPort: number;
+  localPort: number;
+}
+
 export interface ITerminal {
   name: string;
   shell?: Terminal;

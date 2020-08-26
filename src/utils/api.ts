@@ -6,17 +6,19 @@ import {
   IAWSCluster,
   IAzureCluster,
   ICluster,
+  IClusterAuthProviderAWS,
+  IClusterAuthProviderAzure,
+  IClusterAuthProviderGoogle,
+  IClusterAuthProviderOIDC,
   IClusters,
   IGoogleCluster,
   IGoogleProject,
   IGoogleTokensAPIResponse,
   IOIDCProviderTokenAPIResponse,
+  IPortForwardingActiveSessions,
+  IPortForwardingResponse,
   ITerminalResponse,
   TSyncType,
-  IClusterAuthProviderAWS,
-  IClusterAuthProviderAzure,
-  IClusterAuthProviderGoogle,
-  IClusterAuthProviderOIDC,
 } from '../declarations';
 import { GOOGLE_REDIRECT_URI, OIDC_REDIRECT_URL_WEB, SERVER } from './constants';
 import { isJSON } from './helpers';
@@ -386,6 +388,104 @@ export const kubernetesExecRequest = async (url: string, cluster: ICluster): Pro
     if (response.status >= 200 && response.status < 300) {
       return json;
     } else {
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// kubernetesPortForwardingActiveSessions returns all active port forwarding sessions.
+export const kubernetesPortForwardingActiveSessions = async (): Promise<IPortForwardingActiveSessions> => {
+  try {
+    await checkServer();
+
+    const response = await fetch(`${SERVER}/api/kubernetes/portforwarding`, {
+      method: 'get',
+    });
+
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
+    } else {
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// kubernetesPortForwardingRequest initialize the port forwarding to a pod. The generated session id which is returned
+// can be used to close the port forwarding.
+export const kubernetesPortForwardingRequest = async (
+  url: string,
+  podPort: number,
+  localPort: number,
+  cluster: ICluster,
+): Promise<IPortForwardingResponse> => {
+  try {
+    await checkServer();
+
+    const response = await fetch(`${SERVER}/api/kubernetes/portforwarding`, {
+      method: 'post',
+      body: JSON.stringify({
+        server: SERVER,
+        cluster: cluster ? cluster.id : '',
+        url: cluster ? cluster.url + url : '',
+        certificateAuthorityData: cluster ? cluster.certificateAuthorityData : '',
+        clientCertificateData: cluster ? cluster.clientCertificateData : '',
+        clientKeyData: cluster ? cluster.clientKeyData : '',
+        token: cluster ? cluster.token : '',
+        username: cluster ? cluster.username : '',
+        password: cluster ? cluster.password : '',
+        insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
+        podPort: podPort,
+        localPort: localPort,
+      }),
+    });
+
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
+    } else {
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// kubernetesPortForwardingStopRequest closes a formaly opened port by the session id.
+export const kubernetesPortForwardingStopRequest = async (id: string): Promise<boolean> => {
+  try {
+    await checkServer();
+
+    const response = await fetch(`${SERVER}/api/kubernetes/portforwarding`, {
+      method: 'delete',
+      body: JSON.stringify({
+        id: id,
+      }),
+    });
+
+    if (response.status >= 200 && response.status < 300) {
+      return true;
+    } else {
+      const json = await response.json();
+
       if (json.error) {
         throw new Error(json.message);
       } else {

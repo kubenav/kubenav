@@ -1,5 +1,5 @@
-import { IonCol, IonGrid, IonRow } from '@ionic/react';
-import { V1Pod } from '@kubernetes/client-node';
+import { IonCol, IonGrid, IonLabel, IonRow } from '@ionic/react';
+import { V1Container, V1ContainerPort, V1Pod } from '@kubernetes/client-node';
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -12,6 +12,7 @@ import Affinities from '../../misc/podTemplate/affinities/Affinities';
 import Containers from '../../misc/podTemplate/containers/Containers';
 import Tolerations from '../../misc/podTemplate/tolerations/Tolerations';
 import Volumes from '../../misc/podTemplate/volumes/Volumes';
+import Port from '../../misc/Port';
 import Conditions from '../../misc/template/Conditions';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
@@ -64,6 +65,35 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
           <Row obj={item} objKey="spec.serviceAccountName" title="Service Account" />
           <Row obj={item} objKey="spec.restartPolicy" title="Restart Policy" />
           <Row obj={item} objKey="spec.terminationGracePeriodSeconds" title="Termination Grace Period Seconds" />
+          <Row
+            obj={item}
+            objKey="spec.containers"
+            title="Ports"
+            value={(containers) =>
+              containers.map((container: V1Container) => {
+                if (container.ports) {
+                  return container.ports.map((port: V1ContainerPort, index: number) => {
+                    return (
+                      <Port
+                        key={index}
+                        enabled={port.protocol === undefined || port.protocol === 'TCP'}
+                        name={item.metadata && item.metadata.name ? item.metadata.name : ''}
+                        namespace={item.metadata && item.metadata.namespace ? item.metadata.namespace : ''}
+                        selector=""
+                        port={port.containerPort}
+                      >
+                        <IonLabel>
+                          {container.name}: {port.containerPort} {port.name ? `(${port.name})` : ''}
+                        </IonLabel>
+                      </Port>
+                    );
+                  });
+                }
+
+                return null;
+              })
+            }
+          />
         </Configuration>
 
         <Status>

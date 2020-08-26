@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { matchLabels } from '../../../../utils/helpers';
 import List from '../../misc/List';
+import Port from '../../misc/Port';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
 import Row from '../../misc/template/Row';
@@ -43,9 +44,22 @@ const ServiceDetails: React.FunctionComponent<IServiceDetailsProps> = ({ item, t
             objKey="spec.ports"
             title="Ports"
             value={(ports) =>
-              ports.map((port: V1ServicePort, index) => {
+              ports.map((port: V1ServicePort, index: number) => {
                 return (
-                  <IonChip key={index} className="unset-chip-height">
+                  <Port
+                    key={index}
+                    enabled={port.protocol === undefined || port.protocol === 'TCP'}
+                    name=""
+                    namespace={item.metadata && item.metadata.namespace ? item.metadata.namespace : ''}
+                    selector={
+                      item.spec && item.spec.selector
+                        ? Object.keys(item.spec.selector)
+                            .map((key) => `${key}=${item.spec && item.spec.selector ? item.spec.selector[key] : ''}`)
+                            .join(',')
+                        : ''
+                    }
+                    port={port.port}
+                  >
                     <IonLabel>
                       {port.name ? `${port.name} ` : ''}
                       {port.port}
@@ -53,7 +67,7 @@ const ServiceDetails: React.FunctionComponent<IServiceDetailsProps> = ({ item, t
                       {port.protocol ? `/${port.protocol}` : ''}
                       {port.targetPort ? ` > ${port.targetPort}` : ''}
                     </IonLabel>
-                  </IonChip>
+                  </Port>
                 );
               })
             }
