@@ -175,61 +175,63 @@ func sshHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// portForwardingHandler handles the requests to initialize the port forwarding to a pod.
+// portForwardingHandler handles all requests related to port forwarding.
+//   - GET: Return all active port forwarding sessions
+//   - POST: Initialize a new port forwarding session
+//   - DELETE: Delete a port forwarding session
 func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
+	if r.Method == http.MethodGet {
+		middleware.Write(w, r, api.PortForwardSessions)
+		return
+	}
+
+	if r.Method == http.MethodPost {
+		var request api.PortForwardRequest
+		if r.Body == nil {
+			middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
+			return
+		}
+		err := json.NewDecoder(r.Body).Decode(&request)
+		if err != nil {
+			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
+			return
+		}
+
+		config, _, err := client.ConfigClientset(request.Cluster, time.Duration(request.Timeout)*time.Second, request.Proxy)
+		if err != nil {
+			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
+			return
+		}
+
+		pf, err := api.NewPortForwarding(config, request.URL, request.PodPort, request.LocalPort)
+		if err != nil {
+			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not initialize port forwarding: %s", err.Error()))
+			return
+		}
+		go pf.Start()
+
+		middleware.Write(w, r, api.PortForwardResponse{ID: pf.ID, PodPort: pf.PodPort, LocalPort: pf.LocalPort})
+		return
+	}
+
+	if r.Method == http.MethodDelete {
+		var request api.PortForwardResponse
+		if r.Body == nil {
+			middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
+			return
+		}
+		err := json.NewDecoder(r.Body).Decode(&request)
+		if err != nil {
+			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
+			return
+		}
+
+		if _, ok := api.PortForwardSessions[request.ID]; ok {
+			api.PortForwardSessions[request.ID].Stop()
+		}
+
 		middleware.Write(w, r, nil)
 		return
-	}
-
-	var request api.PortForwardRequest
-	if r.Body == nil {
-		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
-		return
-	}
-	err := json.NewDecoder(r.Body).Decode(&request)
-	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
-		return
-	}
-
-	config, _, err := client.ConfigClientset(request.Cluster, time.Duration(request.Timeout)*time.Second, request.Proxy)
-	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
-		return
-	}
-
-	pf, err := api.NewPortForwarding(config, request.URL, request.PodPort, request.LocalPort)
-	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not initialize port forwarding: %s", err.Error()))
-		return
-	}
-	go pf.Start()
-
-	middleware.Write(w, r, api.PortForwardResponse{ID: pf.ID, PodPort: pf.PodPort, LocalPort: pf.LocalPort})
-	return
-}
-
-// portForwardingStopHandler handles the requests to initialize the port forwarding to a pod.
-func portForwardingStopHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		middleware.Write(w, r, nil)
-		return
-	}
-
-	var request api.PortForwardResponse
-	if r.Body == nil {
-		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
-		return
-	}
-	err := json.NewDecoder(r.Body).Decode(&request)
-	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
-		return
-	}
-
-	if _, ok := api.PortForwardSessions[request.ID]; ok {
-		api.PortForwardSessions[request.ID].Stop()
 	}
 
 	middleware.Write(w, r, nil)

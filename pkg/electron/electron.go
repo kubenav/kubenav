@@ -32,8 +32,6 @@ func Register(router *http.ServeMux, sync bool, kubeClient *kube.Client) {
 	router.HandleFunc("/api/kubernetes/ssh", middleware.Cors(sshHandler))
 	router.Handle("/api/kubernetes/ssh/sockjs/", api.CreateSSHHandler("/api/kubernetes/ssh/sockjs"))
 	router.HandleFunc("/api/kubernetes/portforwarding", middleware.Cors(portForwardingHandler))
-	router.HandleFunc("/api/kubernetes/portforwarding/sessions", middleware.Cors(api.ActivePortForwardingSessions))
-	router.HandleFunc("/api/kubernetes/portforwarding/stop", middleware.Cors(portForwardingStopHandler))
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {

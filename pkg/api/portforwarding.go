@@ -9,8 +9,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/kubenav/kubenav/pkg/api/middleware"
-
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/portforward"
 	"k8s.io/client-go/transport/spdy"
@@ -45,12 +43,6 @@ type PortForward struct {
 	stopChan  chan struct{}
 	out       *bytes.Buffer
 	errOut    *bytes.Buffer
-}
-
-// ActivePortForwardingSessions returns all active port forwarding sessions.
-func ActivePortForwardingSessions(w http.ResponseWriter, r *http.Request) {
-	middleware.Write(w, r, PortForwardSessions)
-	return
 }
 
 // NewPortForwarding returns a new PortForward struct with all details needed to start the port forwarding. It also adds

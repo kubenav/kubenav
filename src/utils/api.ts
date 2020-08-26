@@ -404,7 +404,7 @@ export const kubernetesPortForwardingActiveSessions = async (): Promise<IPortFor
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/kubernetes/portforwarding/sessions`, {
+    const response = await fetch(`${SERVER}/api/kubernetes/portforwarding`, {
       method: 'get',
     });
 
@@ -474,8 +474,8 @@ export const kubernetesPortForwardingStopRequest = async (id: string): Promise<b
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/kubernetes/portforwarding/stop`, {
-      method: 'post',
+    const response = await fetch(`${SERVER}/api/kubernetes/portforwarding`, {
+      method: 'delete',
       body: JSON.stringify({
         id: id,
       }),
