@@ -147,3 +147,27 @@ ion-avatar {
   width: 100%;
   cursor: pointer;
 }
+
+/* Terminal
+   Customization for the terminal */
+.terminal-tab-close-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 4px 2px;
+}
+
+.segment-button-layout-icon-end.segment-button-checked .terminal-tab-close-button-color {
+  color: var(--ion-color-primary);
+}
+
+.segment-button-layout-icon-end .terminal-tab-close-button-color {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.terminal-tab-label {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: calc(100% - 112px);
+}
