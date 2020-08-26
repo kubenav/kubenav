@@ -103,26 +103,6 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
                   <IonLabel>Select</IonLabel>
                 </IonItem>
               </IonItemGroup>
-              <IonItemGroup>
-                <IonItemDivider>
-                  <IonLabel>Close</IonLabel>
-                </IonItemDivider>
-                {terminals.map((terminal, index) => {
-                  return (
-                    <IonItem
-                      key={index}
-                      button={true}
-                      detail={false}
-                      onClick={() => {
-                        setShowPopover(false);
-                        removeTerminal(index);
-                      }}
-                    >
-                      <IonLabel>{terminal.name}</IonLabel>
-                    </IonItem>
-                  );
-                })}
-              </IonItemGroup>
             </IonList>
           </IonPopover>
         </IonToolbar>
@@ -136,8 +116,19 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
           >
             {terminals.map((terminal, index) => {
               return (
-                <IonSegmentButton key={index} value={`term_${index}`}>
-                  <IonLabel>{terminal.name}</IonLabel>
+                <IonSegmentButton key={index} value={`term_${index}`} layout="icon-end">
+                  <IonButton
+                    fill="clear"
+                    className="terminal-tab-close-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      removeTerminal(index);
+                    }}
+                  >
+                    <IonIcon slot="icon-only" icon={close} className="terminal-tab-close-button-color" />
+                  </IonButton>
+                  <IonLabel className="terminal-tab-label">{terminal.name} iajsdoi ajsoidj aoisjd ioajs doij</IonLabel>
                 </IonSegmentButton>
               );
             })}
