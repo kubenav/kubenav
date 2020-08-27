@@ -43,7 +43,7 @@ On desktop kubenav will automatic load all configured clusters from the default 
 
 > **Note:** kubenav is based on [Electron](https://www.electronjs.org) and [go-astilectron](https://github.com/asticode/go-astilectron), which will be downloaded on the first start of the app. Therefore the first start of the app can take a bit longer with a slow internet connection.
 
-Similar to the [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) it is also possible to deploy kubenav to your Kubernetes cluster. More information on the deployment of kubenav to Kubernetes can be found in [`utils/kubernetes`](./utils/kubernetes) folder.
+Similar to the [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) it is also possible to [deploy kubenav to your Kubernetes cluster](https://github.com/kubenav/deploy). More information on the deployment of kubenav to Kubernetes can be found in [`kubenav/deploy`](https://github.com/kubenav/deploy) repository.
 
 ## Beta and Nightly Builds
 
