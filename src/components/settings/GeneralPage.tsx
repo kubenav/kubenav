@@ -10,6 +10,7 @@ import {
   IonList,
   IonMenuButton,
   IonPage,
+  IonRange,
   IonTextarea,
   IonTitle,
   IonToggle,
@@ -29,6 +30,10 @@ const GeneralPage: React.FunctionComponent = () => {
 
   const handleToggleChange = (event) => {
     context.editSettings({ ...context.settings, [event.target.name]: event.detail.checked });
+  };
+
+  const handleRangeChange = (event) => {
+    context.editSettings({ ...context.settings, [event.target.name]: event.detail.value });
   };
 
   return (
@@ -53,12 +58,16 @@ const GeneralPage: React.FunctionComponent = () => {
             </IonItem>
             <IonItem>
               <IonLabel position="stacked">Timeout (in seconds)</IonLabel>
-              <IonInput
-                type="number"
-                required={true}
+              <IonRange
+                min={10}
+                max={120}
+                step={10}
+                pin={true}
+                snaps={true}
+                color="primary"
                 name="timeout"
                 value={context.settings.timeout}
-                onInput={handleValueChange}
+                onIonChange={handleRangeChange}
               />
             </IonItem>
           </IonItemGroup>
@@ -67,23 +76,31 @@ const GeneralPage: React.FunctionComponent = () => {
               <IonLabel>Terminal</IonLabel>
             </IonItemDivider>
             <IonItem>
-              <IonLabel position="stacked">Font Size</IonLabel>
-              <IonInput
-                type="number"
-                required={true}
+              <IonLabel position="stacked">Font Size (in px)</IonLabel>
+              <IonRange
+                min={8}
+                max={48}
+                step={2}
+                pin={true}
+                snaps={true}
+                color="primary"
                 name="terminalFontSize"
                 value={context.settings.terminalFontSize}
-                onInput={handleValueChange}
+                onIonChange={handleRangeChange}
               />
             </IonItem>
             <IonItem>
-              <IonLabel position="stacked">Scrollback</IonLabel>
-              <IonInput
-                type="number"
-                required={true}
+              <IonLabel position="stacked">Scrollback (in lines)</IonLabel>
+              <IonRange
+                min={1000}
+                max={50000}
+                step={1000}
+                pin={true}
+                snaps={true}
+                color="primary"
                 name="terminalScrollback"
                 value={context.settings.terminalScrollback}
-                onInput={handleValueChange}
+                onIonChange={handleRangeChange}
               />
             </IonItem>
           </IonItemGroup>
