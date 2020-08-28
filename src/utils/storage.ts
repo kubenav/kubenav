@@ -135,6 +135,10 @@ export const readSettings = (): IAppSettings => {
       sshUser: settings.sshUser ? settings.sshUser : DEFAULT_SETTINGS.sshUser,
       proxyEnabled: settings.hasOwnProperty('proxyEnabled') ? settings.proxyEnabled : DEFAULT_SETTINGS.proxyEnabled,
       proxyAddress: settings.proxyAddress ? settings.proxyAddress : DEFAULT_SETTINGS.proxyAddress,
+      terminalFontSize: settings.terminalFontSize ? settings.terminalFontSize : DEFAULT_SETTINGS.terminalFontSize,
+      terminalScrollback: settings.terminalScrollback
+        ? settings.terminalScrollback
+        : DEFAULT_SETTINGS.terminalScrollback,
     };
   }
 

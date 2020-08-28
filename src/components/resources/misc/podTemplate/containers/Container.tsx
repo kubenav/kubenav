@@ -32,6 +32,7 @@ import yaml from 'js-yaml';
 import React, { useState } from 'react';
 
 import { IContainerMetrics } from '../../../../../declarations';
+import { IS_SERVER } from '../../../../../utils/constants';
 import { formatResourceValue } from '../../../../../utils/helpers';
 import Editor from '../../../../misc/Editor';
 import IonCardEqualHeight from '../../../../misc/IonCardEqualHeight';
@@ -239,7 +240,9 @@ const Container: React.FunctionComponent<IContainerProps> = ({
                               <Port
                                 key={index}
                                 enabled={
-                                  status !== undefined && (port.protocol === undefined || port.protocol === 'TCP')
+                                  !IS_SERVER &&
+                                  status !== undefined &&
+                                  (port.protocol === undefined || port.protocol === 'TCP')
                                 }
                                 name={name ? name : ''}
                                 namespace={namespace ? namespace : ''}

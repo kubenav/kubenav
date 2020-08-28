@@ -21,6 +21,7 @@ var (
 	debugFlag             bool
 	debugIonicFlag        string
 	inclusterFlag         bool
+	inclusterNameFlag     string
 	kubeconfigFlag        string
 	kubeconfigIncludeFlag string
 	kubeconfigExcludeFlag string
@@ -46,7 +47,7 @@ var rootCmd = &cobra.Command{
 		log.Infof(version.BuildContext())
 
 		// Create the client for the interaction with the Kubernetes API.
-		client, err := kube.NewClient(inclusterFlag, kubeconfigFlag, kubeconfigIncludeFlag, kubeconfigExcludeFlag)
+		client, err := kube.NewClient(inclusterFlag, inclusterNameFlag, kubeconfigFlag, kubeconfigIncludeFlag, kubeconfigExcludeFlag)
 		if err != nil {
 			log.WithError(err).Fatalf("Could not create Kubernetes client")
 		}
@@ -98,6 +99,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolVar(&debugFlag, "debug", false, "Enable debug mode.")
 	rootCmd.PersistentFlags().StringVar(&debugIonicFlag, "debug.ionic", "build", "Path to the Ionic app.")
 	rootCmd.PersistentFlags().BoolVar(&inclusterFlag, "incluster", false, "Use the in cluster configuration.")
+	rootCmd.PersistentFlags().StringVar(&inclusterNameFlag, "incluster.name", "kubenav", "The name which should be displayed when using the incluster flag.")
 	rootCmd.PersistentFlags().StringVar(&kubeconfigFlag, "kubeconfig", "", "Optional Kubeconfig file.")
 	rootCmd.PersistentFlags().StringVar(&kubeconfigIncludeFlag, "kubeconfig.include", "", "Comma separated list of globs to include in the Kubeconfig.")
 	rootCmd.PersistentFlags().StringVar(&kubeconfigExcludeFlag, "kubeconfig.exclude", "", "Comma separated list of globs to exclude from the Kubeconfig. This flag must be used in combination with the '--kubeconfig.include' flag.")

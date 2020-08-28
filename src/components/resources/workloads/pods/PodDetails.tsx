@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { IContext, IPodMetrics } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
+import { IS_SERVER } from '../../../../utils/constants';
 import { AppContext } from '../../../../utils/context';
 import Permissions from '../../configAndStorage/serviceAccounts/Permissions';
 import List from '../../misc/List';
@@ -76,7 +77,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                     return (
                       <Port
                         key={index}
-                        enabled={port.protocol === undefined || port.protocol === 'TCP'}
+                        enabled={!IS_SERVER && (port.protocol === undefined || port.protocol === 'TCP')}
                         name={item.metadata && item.metadata.name ? item.metadata.name : ''}
                         namespace={item.metadata && item.metadata.namespace ? item.metadata.namespace : ''}
                         selector=""

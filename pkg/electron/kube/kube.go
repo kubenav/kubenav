@@ -37,12 +37,12 @@ type Cluster struct {
 }
 
 // NewClient returns a new API client for a Kubernetes cluster.
-func NewClient(incluster bool, kubeconfig, kubeconfigInclude, kubeconfigExclude string) (*Client, error) {
+func NewClient(incluster bool, inclusterName, kubeconfig, kubeconfigInclude, kubeconfigExclude string) (*Client, error) {
 	var config clientcmd.ClientConfig
 	var err error
 
 	if incluster {
-		config, err = loadInClusterConfig()
+		config, err = loadInClusterConfig(inclusterName)
 		if err != nil {
 			return nil, err
 		}

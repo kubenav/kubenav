@@ -23,88 +23,12 @@ import { AppContext } from '../../utils/context';
 const GeneralPage: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);
 
-  const changeTimeout = (event) => {
-    context.editSettings({
-      darkMode: context.settings.darkMode,
-      timeout: parseInt(event.target.value),
-      sshKey: context.settings.sshKey,
-      sshPort: context.settings.sshPort,
-      sshUser: context.settings.sshUser,
-      proxyEnabled: context.settings.proxyEnabled,
-      proxyAddress: context.settings.proxyAddress,
-    });
+  const handleValueChange = (event) => {
+    context.editSettings({ ...context.settings, [event.target.name]: event.target.value });
   };
 
-  const toggleDarkMode = (event) => {
-    context.editSettings({
-      darkMode: event.detail.checked,
-      timeout: context.settings.timeout,
-      sshKey: context.settings.sshKey,
-      sshPort: context.settings.sshPort,
-      sshUser: context.settings.sshUser,
-      proxyEnabled: context.settings.proxyEnabled,
-      proxyAddress: context.settings.proxyAddress,
-    });
-  };
-
-  const changeSSHKey = (event) => {
-    context.editSettings({
-      darkMode: context.settings.darkMode,
-      timeout: context.settings.timeout,
-      sshKey: event.target.value,
-      sshPort: context.settings.sshPort,
-      sshUser: context.settings.sshUser,
-      proxyEnabled: context.settings.proxyEnabled,
-      proxyAddress: context.settings.proxyAddress,
-    });
-  };
-
-  const changeSSHPort = (event) => {
-    context.editSettings({
-      darkMode: context.settings.darkMode,
-      timeout: context.settings.timeout,
-      sshKey: context.settings.sshKey,
-      sshPort: event.target.value,
-      sshUser: context.settings.sshUser,
-      proxyEnabled: context.settings.proxyEnabled,
-      proxyAddress: context.settings.proxyAddress,
-    });
-  };
-
-  const changeSSHUser = (event) => {
-    context.editSettings({
-      darkMode: context.settings.darkMode,
-      timeout: context.settings.timeout,
-      sshKey: context.settings.sshKey,
-      sshPort: context.settings.sshPort,
-      sshUser: event.target.value,
-      proxyEnabled: context.settings.proxyEnabled,
-      proxyAddress: context.settings.proxyAddress,
-    });
-  };
-
-  const toggleProxyEnabled = (event) => {
-    context.editSettings({
-      darkMode: context.settings.darkMode,
-      timeout: context.settings.timeout,
-      sshKey: context.settings.sshKey,
-      sshPort: context.settings.sshPort,
-      sshUser: context.settings.sshUser,
-      proxyEnabled: event.detail.checked,
-      proxyAddress: context.settings.proxyAddress,
-    });
-  };
-
-  const changeProxyAddress = (event) => {
-    context.editSettings({
-      darkMode: context.settings.darkMode,
-      timeout: context.settings.timeout,
-      sshKey: context.settings.sshKey,
-      sshPort: context.settings.sshPort,
-      sshUser: context.settings.sshUser,
-      proxyEnabled: context.settings.proxyEnabled,
-      proxyAddress: event.target.value,
-    });
+  const handleToggleChange = (event) => {
+    context.editSettings({ ...context.settings, [event.target.name]: event.detail.checked });
   };
 
   return (
@@ -125,11 +49,42 @@ const GeneralPage: React.FunctionComponent = () => {
             </IonItemDivider>
             <IonItem>
               <IonLabel>Dark Mode</IonLabel>
-              <IonToggle checked={context.settings.darkMode} onIonChange={toggleDarkMode} />
+              <IonToggle name="darkMode" checked={context.settings.darkMode} onIonChange={handleToggleChange} />
             </IonItem>
             <IonItem>
               <IonLabel position="stacked">Timeout (in seconds)</IonLabel>
-              <IonInput type="number" required={true} value={context.settings.timeout} onInput={changeTimeout} />
+              <IonInput
+                type="number"
+                required={true}
+                name="timeout"
+                value={context.settings.timeout}
+                onInput={handleValueChange}
+              />
+            </IonItem>
+          </IonItemGroup>
+          <IonItemGroup>
+            <IonItemDivider>
+              <IonLabel>Terminal</IonLabel>
+            </IonItemDivider>
+            <IonItem>
+              <IonLabel position="stacked">Font Size</IonLabel>
+              <IonInput
+                type="number"
+                required={true}
+                name="terminalFontSize"
+                value={context.settings.terminalFontSize}
+                onInput={handleValueChange}
+              />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Scrollback</IonLabel>
+              <IonInput
+                type="number"
+                required={true}
+                name="terminalScrollback"
+                value={context.settings.terminalScrollback}
+                onInput={handleValueChange}
+              />
             </IonItem>
           </IonItemGroup>
 
@@ -139,15 +94,27 @@ const GeneralPage: React.FunctionComponent = () => {
             </IonItemDivider>
             <IonItem>
               <IonLabel position="stacked">Port</IonLabel>
-              <IonInput type="text" required={true} value={context.settings.sshPort} onInput={changeSSHPort} />
+              <IonInput
+                type="text"
+                required={true}
+                name="sshPort"
+                value={context.settings.sshPort}
+                onInput={handleValueChange}
+              />
             </IonItem>
             <IonItem>
               <IonLabel position="stacked">Private Key</IonLabel>
-              <IonTextarea autoGrow={true} value={context.settings.sshKey} onInput={changeSSHKey} />
+              <IonTextarea autoGrow={true} name="sshKey" value={context.settings.sshKey} onInput={handleValueChange} />
             </IonItem>
             <IonItem>
               <IonLabel position="stacked">User</IonLabel>
-              <IonInput type="text" required={true} value={context.settings.sshUser} onInput={changeSSHUser} />
+              <IonInput
+                type="text"
+                required={true}
+                name="sshUser"
+                value={context.settings.sshUser}
+                onInput={handleValueChange}
+              />
             </IonItem>
           </IonItemGroup>
 
@@ -157,7 +124,7 @@ const GeneralPage: React.FunctionComponent = () => {
             </IonItemDivider>
             <IonItem>
               <IonLabel>Enabled</IonLabel>
-              <IonToggle checked={context.settings.proxyEnabled} onIonChange={toggleProxyEnabled} />
+              <IonToggle name="proxyEnabled" checked={context.settings.proxyEnabled} onIonChange={handleToggleChange} />
             </IonItem>
             <IonItem>
               <IonLabel position="stacked">Address</IonLabel>
@@ -165,8 +132,9 @@ const GeneralPage: React.FunctionComponent = () => {
                 type="text"
                 required={true}
                 placeholder="http://localhost:8888"
+                name="proxyAddress"
                 value={context.settings.proxyAddress}
-                onInput={changeProxyAddress}
+                onInput={handleValueChange}
               />
             </IonItem>
           </IonItemGroup>

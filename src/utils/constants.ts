@@ -3,6 +3,7 @@ import { ITerminalOptions } from 'xterm';
 import { IAppSettings } from '../declarations';
 
 export const CUSTOM_URI_SCHEME = 'io.kubenav.kubenav';
+export const IS_SERVER = process.env.REACT_APP_SERVER === 'true' ? true : false;
 export const SERVER = process.env.REACT_APP_SERVER === 'true' ? '' : 'http://localhost:14122';
 export const VERSION = process.env.REACT_APP_VERSION;
 
@@ -14,6 +15,8 @@ export const DEFAULT_SETTINGS: IAppSettings = {
   sshUser: '',
   proxyEnabled: false,
   proxyAddress: '',
+  terminalFontSize: 12,
+  terminalScrollback: 10000,
 };
 
 export const GOOGLE_OAUTH2_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/auth';
@@ -30,24 +33,24 @@ export const STORAGE_SETTINGS = 'settings';
 export const STORAGE_TEMPORARY_CREDENTIALS = 'temporary_credentials';
 
 export const LOG_TAIL_LINES = 1000;
-export const LOG_TERMINAL_OPTIONS = (darkMode: boolean): ITerminalOptions => {
+export const LOG_TERMINAL_OPTIONS = (fontSize: number, scrollback: number, darkMode: boolean): ITerminalOptions => {
   return {
-    fontSize: 12,
+    fontSize: fontSize,
     bellStyle: 'sound',
     cursorBlink: true,
     disableStdin: true,
     convertEol: true,
-    scrollback: 10000,
+    scrollback: scrollback,
     theme: darkMode ? TERMINAL_DARK_THEME : TERMINAL_LIGHT_THEME,
   };
 };
 
-export const SHELL_TERMINAL_OPTIONS = (darkMode: boolean): ITerminalOptions => {
+export const SHELL_TERMINAL_OPTIONS = (fontSize: number, scrollback: number, darkMode: boolean): ITerminalOptions => {
   return {
-    fontSize: 12,
+    fontSize: fontSize,
     bellStyle: 'sound',
     cursorBlink: true,
-    scrollback: 10000,
+    scrollback: scrollback,
     theme: darkMode ? TERMINAL_DARK_THEME : TERMINAL_LIGHT_THEME,
   };
 };

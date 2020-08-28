@@ -62,7 +62,7 @@ var rootCmd = &cobra.Command{
 		log.Infof(version.BuildContext())
 
 		// Create the client for the interaction with the Kubernetes API.
-		client, err := kube.NewClient(false, kubeconfigFlag, kubeconfigIncludeFlag, kubeconfigExcludeFlag)
+		client, err := kube.NewClient(false, "", kubeconfigFlag, kubeconfigIncludeFlag, kubeconfigExcludeFlag)
 		if err != nil {
 			log.WithError(err).Fatalf("Could not create Kubernetes client")
 		}
