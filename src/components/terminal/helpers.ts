@@ -11,7 +11,13 @@ export const addShell = async (
   url: string,
   container: string,
 ): Promise<void> => {
-  const term = new Terminal(SHELL_TERMINAL_OPTIONS(context.settings.darkMode));
+  const term = new Terminal(
+    SHELL_TERMINAL_OPTIONS(
+      context.settings.terminalFontSize,
+      context.settings.terminalScrollback,
+      context.settings.darkMode,
+    ),
+  );
 
   try {
     if (context.clusters && context.cluster) {
@@ -80,7 +86,13 @@ export const addLogs = async (
   tailLines: number,
   follow: boolean,
 ): Promise<void> => {
-  const term = new Terminal(LOG_TERMINAL_OPTIONS(context.settings.darkMode));
+  const term = new Terminal(
+    LOG_TERMINAL_OPTIONS(
+      context.settings.terminalFontSize,
+      context.settings.terminalScrollback,
+      context.settings.darkMode,
+    ),
+  );
 
   if (context.clusters && context.cluster) {
     if (follow) {
@@ -156,7 +168,13 @@ export const addSSH = async (
   node: string,
   ip: string,
 ): Promise<void> => {
-  const term = new Terminal(SHELL_TERMINAL_OPTIONS(context.settings.darkMode));
+  const term = new Terminal(
+    SHELL_TERMINAL_OPTIONS(
+      context.settings.terminalFontSize,
+      context.settings.terminalScrollback,
+      context.settings.darkMode,
+    ),
+  );
 
   try {
     if (context.clusters && context.cluster) {

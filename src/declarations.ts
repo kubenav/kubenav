@@ -46,6 +46,8 @@ export interface IAppSettings {
   sshUser: string;
   proxyEnabled: boolean;
   proxyAddress: string;
+  terminalFontSize: number;
+  terminalScrollback: number;
 }
 
 export interface IAWSCluster {
