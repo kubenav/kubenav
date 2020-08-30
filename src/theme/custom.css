@@ -171,3 +171,9 @@ ion-avatar {
   overflow: hidden;
   max-width: calc(100% - 112px);
 }
+
+/* Fix layout for using IonLabel together with IonRange in IonItem
+   without this the IonLabel height is cutted to 15px */
+.label-for-range {
+  min-height: 18px;
+}

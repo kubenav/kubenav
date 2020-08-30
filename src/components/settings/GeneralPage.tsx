@@ -57,13 +57,14 @@ const GeneralPage: React.FunctionComponent = () => {
               <IonToggle name="darkMode" checked={context.settings.darkMode} onIonChange={handleToggleChange} />
             </IonItem>
             <IonItem>
-              <IonLabel position="stacked">Timeout (in seconds)</IonLabel>
+              <IonLabel className="label-for-range" position="stacked">
+                Timeout (in seconds)
+              </IonLabel>
               <IonRange
                 min={10}
                 max={120}
                 step={10}
                 pin={true}
-                snaps={true}
                 color="primary"
                 name="timeout"
                 value={context.settings.timeout}
@@ -76,13 +77,14 @@ const GeneralPage: React.FunctionComponent = () => {
               <IonLabel>Terminal</IonLabel>
             </IonItemDivider>
             <IonItem>
-              <IonLabel position="stacked">Font Size (in px)</IonLabel>
+              <IonLabel className="label-for-range" position="stacked">
+                Font Size (in px)
+              </IonLabel>
               <IonRange
                 min={8}
                 max={48}
                 step={2}
                 pin={true}
-                snaps={true}
                 color="primary"
                 name="terminalFontSize"
                 value={context.settings.terminalFontSize}
@@ -90,13 +92,14 @@ const GeneralPage: React.FunctionComponent = () => {
               />
             </IonItem>
             <IonItem>
-              <IonLabel position="stacked">Scrollback (in lines)</IonLabel>
+              <IonLabel className="label-for-range" position="stacked">
+                Scrollback (in lines)
+              </IonLabel>
               <IonRange
                 min={1000}
                 max={50000}
                 step={1000}
                 pin={true}
-                snaps={true}
                 color="primary"
                 name="terminalScrollback"
                 value={context.settings.terminalScrollback}
