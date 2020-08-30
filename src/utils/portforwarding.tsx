@@ -166,7 +166,7 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
             side: 'end',
             text: 'Copy',
             handler: () => {
-              Clipboard.write({ string: `${messagePort}` });
+              Clipboard.write({ string: `localhost:${messagePort}` });
             },
           },
           {
@@ -204,7 +204,7 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
           {
             text: 'Copy',
             handler: () => {
-              Clipboard.write({ string: `${portForwardings[selectedPortForwarding].localPort}` });
+              Clipboard.write({ string: `localhost:${portForwardings[selectedPortForwarding].localPort}` });
             },
           },
           {
