@@ -151,10 +151,8 @@ ion-avatar {
 /* Terminal
    Customization for the terminal */
 .terminal-tab-close-button {
-  position: absolute;
-  right: 0;
-  top: 0;
-  margin: 4px 2px;
+  --padding-start: 0px;
+  --padding-end: 0px;
 }
 
 .segment-button-layout-icon-end.segment-button-checked .terminal-tab-close-button-color {
@@ -162,14 +160,7 @@ ion-avatar {
 }
 
 .segment-button-layout-icon-end .terminal-tab-close-button-color {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.terminal-tab-label {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  max-width: calc(100% - 112px);
+  color: rgba(var(--ion-color-light-contrast-rgb), 0.6);
 }
 
 /* Fix layout for using IonLabel together with IonRange in IonItem

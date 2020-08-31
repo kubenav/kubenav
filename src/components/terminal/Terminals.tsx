@@ -115,7 +115,7 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
           >
             {terminals.map((terminal, index) => {
               return (
-                <IonSegmentButton key={index} value={`term_${index}`} layout="icon-end">
+                <IonSegmentButton key={index} mode="md" value={`term_${index}`} layout="icon-end">
                   <IonButton
                     fill="clear"
                     className="terminal-tab-close-button"
@@ -127,7 +127,7 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
                   >
                     <IonIcon slot="icon-only" icon={close} className="terminal-tab-close-button-color" />
                   </IonButton>
-                  <IonLabel className="terminal-tab-label">{terminal.name}</IonLabel>
+                  <IonLabel>{terminal.name}</IonLabel>
                 </IonSegmentButton>
               );
             })}
