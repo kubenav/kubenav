@@ -160,7 +160,7 @@ ion-avatar {
 }
 
 .segment-button-layout-icon-end .terminal-tab-close-button-color {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(var(--ion-color-light-contrast-rgb), 0.6);
 }
 
 /* Fix layout for using IonLabel together with IonRange in IonItem
