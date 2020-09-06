@@ -437,7 +437,7 @@ const Container: React.FunctionComponent<IContainerProps> = ({
 
             {context.settings.prometheusEnabled && status !== undefined ? (
               <IonRow>
-                <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+                <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
                   <IonCardEqualHeight>
                     <IonCardHeader>
                       <IonCardTitle>Memory Usage (in MiB)</IonCardTitle>
@@ -465,7 +465,7 @@ const Container: React.FunctionComponent<IContainerProps> = ({
                   </IonCardEqualHeight>
                 </IonCol>
 
-                <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+                <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
                   <IonCardEqualHeight>
                     <IonCardHeader>
                       <IonCardTitle>CPU Usage</IonCardTitle>

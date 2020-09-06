@@ -179,7 +179,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
 
       {context.settings.prometheusEnabled ? (
         <IonRow>
-          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
             <IonCardEqualHeight>
               <IonCardHeader>
                 <IonCardTitle>Memory Usage (in MiB)</IonCardTitle>
@@ -219,7 +219,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
             </IonCardEqualHeight>
           </IonCol>
 
-          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
             <IonCardEqualHeight>
               <IonCardHeader>
                 <IonCardTitle>CPU Usage</IonCardTitle>
@@ -251,7 +251,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
             </IonCardEqualHeight>
           </IonCol>
 
-          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
             <IonCardEqualHeight>
               <IonCardHeader>
                 <IonCardTitle>Network I/O (in MiB)</IonCardTitle>
@@ -275,7 +275,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
             </IonCardEqualHeight>
           </IonCol>
 
-          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
             <IonCardEqualHeight>
               <IonCardHeader>
                 <IonCardTitle>Total Restarts</IonCardTitle>

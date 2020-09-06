@@ -86,7 +86,7 @@ const PersistentVolumeClaimDetails: React.FunctionComponent<IPersistentVolumeCla
 
       {context.settings.prometheusEnabled ? (
         <IonRow>
-          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
             <IonCardEqualHeight>
               <IonCardHeader>
                 <IonCardTitle>Volume Space Usage (in GiB)</IonCardTitle>
@@ -116,7 +116,7 @@ const PersistentVolumeClaimDetails: React.FunctionComponent<IPersistentVolumeCla
             </IonCardEqualHeight>
           </IonCol>
 
-          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
             <IonCardEqualHeight>
               <IonCardHeader>
                 <IonCardTitle>Volume inodes Usage</IonCardTitle>

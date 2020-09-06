@@ -187,11 +187,15 @@ func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 		var sessions []api.PortForwardResponse
 
 		for _, session := range api.PortForwardSessions {
-			sessions = append(sessions, api.PortForwardResponse{
-				ID:        session.ID,
-				PodPort:   session.PodPort,
-				LocalPort: session.LocalPort,
-			})
+			if !strings.HasPrefix(session.ID, "plugins_") {
+				sessions = append(sessions, api.PortForwardResponse{
+					ID:           session.ID,
+					PodName:      session.PodName,
+					PodNamespace: session.PodNamespace,
+					PodPort:      session.PodPort,
+					LocalPort:    session.LocalPort,
+				})
+			}
 		}
 
 		middleware.Write(w, r, sessions)

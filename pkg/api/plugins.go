@@ -25,11 +25,11 @@ func DoPluginAction(config *rest.Config, clientset *kubernetes.Clientset, name, 
 		return nil, err
 	}
 
-	defer func() {
-		if _, ok := PortForwardSessions[pf.ID]; ok {
-			PortForwardSessions[pf.ID].Stop()
+	defer func(sessionID string) {
+		if _, ok := PortForwardSessions[sessionID]; ok {
+			PortForwardSessions[sessionID].Stop()
 		}
-	}()
+	}(pf.ID)
 
 	go pf.Start()
 	time.Sleep(5 * time.Second)
