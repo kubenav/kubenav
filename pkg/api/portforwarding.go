@@ -17,16 +17,17 @@ import (
 // PortForwardRequest is the structure of a request to initalize the port forwarding.
 type PortForwardRequest struct {
 	Request
-	PodPort   int64 `json:"podPort"`
-	LocalPort int64 `json:"localPort"`
+	PortForwardResponse
 }
 
 // PortForwardResponse is the structure of an initialized port forwarding request. It contains the session id which can
 // be used to close the opened port and the port number.
 type PortForwardResponse struct {
-	ID        string `json:"id"`
-	PodPort   int64  `json:"podPort"`
-	LocalPort int64  `json:"localPort"`
+	ID           string `json:"id"`
+	PodName      string `json:"podName"`
+	PodNamespace string `json:"podNamespace"`
+	PodPort      int64  `json:"podPort"`
+	LocalPort    int64  `json:"localPort"`
 }
 
 // PortForwardSessions holds all open port forwarding sessions.
@@ -34,9 +35,11 @@ var PortForwardSessions = make(map[string]*PortForward)
 
 // PortForward is the structure with all needed data for a port forwarding.
 type PortForward struct {
-	ID        string
-	PodPort   int64
-	LocalPort int64
+	ID           string
+	PodName      string
+	PodNamespace string
+	PodPort      int64
+	LocalPort    int64
 
 	forwarder *portforward.PortForwarder
 	readyChan chan struct{}
@@ -48,7 +51,7 @@ type PortForward struct {
 // NewPortForwarding returns a new PortForward struct with all details needed to start the port forwarding. It also adds
 // it to the map of port forwarding sessions.
 // When the local port is 0 a random port is picked.
-func NewPortForwarding(config *rest.Config, podURL string, podPort, localPort int64) (*PortForward, error) {
+func NewPortForwarding(config *rest.Config, sessionPrefix, podURL, podName, podNamespace string, podPort, localPort int64) (*PortForward, error) {
 	if localPort == 0 {
 		listener, err := net.Listen("tcp", "127.0.0.1:0")
 		if err != nil {
@@ -83,11 +86,14 @@ func NewPortForwarding(config *rest.Config, podURL string, podPort, localPort in
 	if err != nil {
 		return nil, err
 	}
+	sessionID = sessionPrefix + sessionID
 
 	pf := &PortForward{
-		ID:        sessionID,
-		PodPort:   podPort,
-		LocalPort: localPort,
+		ID:           sessionID,
+		PodName:      podName,
+		PodNamespace: podNamespace,
+		PodPort:      podPort,
+		LocalPort:    localPort,
 
 		forwarder: forwarder,
 		readyChan: readyChan,

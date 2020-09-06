@@ -14,8 +14,8 @@ import {
   IGoogleCluster,
   IGoogleProject,
   IGoogleTokensAPIResponse,
+  IJsonData,
   IOIDCProviderTokenAPIResponse,
-  IPortForwardingActiveSessions,
   IPortForwardingResponse,
   ITerminalResponse,
   TSyncType,
@@ -400,7 +400,7 @@ export const kubernetesExecRequest = async (url: string, cluster: ICluster): Pro
 };
 
 // kubernetesPortForwardingActiveSessions returns all active port forwarding sessions.
-export const kubernetesPortForwardingActiveSessions = async (): Promise<IPortForwardingActiveSessions> => {
+export const kubernetesPortForwardingActiveSessions = async (): Promise<IPortForwardingResponse[] | null> => {
   try {
     await checkServer();
 
@@ -428,6 +428,8 @@ export const kubernetesPortForwardingActiveSessions = async (): Promise<IPortFor
 // can be used to close the port forwarding.
 export const kubernetesPortForwardingRequest = async (
   url: string,
+  podName: string,
+  podNamespace: string,
   podPort: number,
   localPort: number,
   cluster: ICluster,
@@ -448,6 +450,8 @@ export const kubernetesPortForwardingRequest = async (
         username: cluster ? cluster.username : '',
         password: cluster ? cluster.password : '',
         insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
+        podName: podName,
+        podNamespace: podNamespace,
         podPort: podPort,
         localPort: localPort,
       }),
@@ -505,6 +509,52 @@ export const kubernetesLogsRequest = async (url: string, cluster: ICluster): Pro
     const response = await fetch(`${SERVER}/api/kubernetes/logs`, {
       method: 'post',
       body: JSON.stringify({
+        server: SERVER,
+        cluster: cluster ? cluster.id : '',
+        url: cluster ? cluster.url + url : '',
+        certificateAuthorityData: cluster ? cluster.certificateAuthorityData : '',
+        clientCertificateData: cluster ? cluster.clientCertificateData : '',
+        clientKeyData: cluster ? cluster.clientKeyData : '',
+        token: cluster ? cluster.token : '',
+        username: cluster ? cluster.username : '',
+        password: cluster ? cluster.password : '',
+        insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
+      }),
+    });
+
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
+    } else {
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const pluginRequest = async (
+  name: string,
+  port: number,
+  data: IJsonData,
+  url: string,
+  cluster: ICluster,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> => {
+  try {
+    await checkServer();
+
+    const response = await fetch(`${SERVER}/api/kubernetes/plugins`, {
+      method: 'post',
+      body: JSON.stringify({
+        name: name,
+        port: port,
+        data: data,
         server: SERVER,
         cluster: cluster ? cluster.id : '',
         url: cluster ? cluster.url + url : '',

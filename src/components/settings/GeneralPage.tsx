@@ -19,6 +19,7 @@ import {
 import React, { memo, useContext } from 'react';
 
 import { IContext } from '../../declarations';
+import { IS_SERVER } from '../../utils/constants';
 import { AppContext } from '../../utils/context';
 
 const GeneralPage: React.FunctionComponent = () => {
@@ -26,6 +27,10 @@ const GeneralPage: React.FunctionComponent = () => {
 
   const handleValueChange = (event) => {
     context.editSettings({ ...context.settings, [event.target.name]: event.target.value });
+  };
+
+  const handleNumberValueChange = (event) => {
+    context.editSettings({ ...context.settings, [event.target.name]: parseInt(event.target.value) });
   };
 
   const handleToggleChange = (event) => {
@@ -137,6 +142,55 @@ const GeneralPage: React.FunctionComponent = () => {
               />
             </IonItem>
           </IonItemGroup>
+
+          {IS_SERVER ? null : (
+            <IonItemGroup>
+              <IonItemDivider>
+                <IonLabel>Prometheus</IonLabel>
+              </IonItemDivider>
+              <IonItem>
+                <IonLabel>Enabled</IonLabel>
+                <IonToggle
+                  name="prometheusEnabled"
+                  checked={context.settings.prometheusEnabled}
+                  onIonChange={handleToggleChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Namespace</IonLabel>
+                <IonInput
+                  type="text"
+                  required={true}
+                  placeholder="monitoring"
+                  name="prometheusNamespace"
+                  value={context.settings.prometheusNamespace}
+                  onInput={handleValueChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Selector</IonLabel>
+                <IonInput
+                  type="text"
+                  required={true}
+                  placeholder="app=prometheus"
+                  name="prometheusSelector"
+                  value={context.settings.prometheusSelector}
+                  onInput={handleValueChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Port</IonLabel>
+                <IonInput
+                  type="number"
+                  required={true}
+                  placeholder="9090"
+                  name="prometheusPort"
+                  value={context.settings.prometheusPort}
+                  onInput={handleNumberValueChange}
+                />
+              </IonItem>
+            </IonItemGroup>
+          )}
 
           <IonItemGroup>
             <IonItemDivider>

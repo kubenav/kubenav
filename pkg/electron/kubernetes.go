@@ -180,11 +180,29 @@ func sshHandler(w http.ResponseWriter, r *http.Request) {
 //   - POST: Initialize a new port forwarding session
 //   - DELETE: Delete a port forwarding session
 func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
+	// GET returns all active port forwarding sessions. We filter the active sessions to exclude the sessions needed for
+	// plugins.
 	if r.Method == http.MethodGet {
-		middleware.Write(w, r, api.PortForwardSessions)
+		var sessions []api.PortForwardResponse
+
+		for _, session := range api.PortForwardSessions {
+			if !strings.HasPrefix(session.ID, "plugins_") {
+				sessions = append(sessions, api.PortForwardResponse{
+					ID:           session.ID,
+					PodName:      session.PodName,
+					PodNamespace: session.PodNamespace,
+					PodPort:      session.PodPort,
+					LocalPort:    session.LocalPort,
+				})
+			}
+		}
+
+		middleware.Write(w, r, sessions)
 		return
 	}
 
+	// POST initializes a new port forwarding session and returns the session ID the pod data and the used local Port,
+	// which is randomly specified when the user choosed 0 as local pod.
 	if r.Method == http.MethodPost {
 		var request api.PortForwardRequest
 		if r.Body == nil {
@@ -203,17 +221,24 @@ func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		pf, err := api.NewPortForwarding(config, request.URL, request.PodPort, request.LocalPort)
+		pf, err := api.NewPortForwarding(config, "", request.URL, request.PodName, request.PodNamespace, request.PodPort, request.LocalPort)
 		if err != nil {
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not initialize port forwarding: %s", err.Error()))
 			return
 		}
 		go pf.Start()
 
-		middleware.Write(w, r, api.PortForwardResponse{ID: pf.ID, PodPort: pf.PodPort, LocalPort: pf.LocalPort})
+		middleware.Write(w, r, api.PortForwardResponse{
+			ID:           pf.ID,
+			PodName:      request.PodName,
+			PodNamespace: request.PodNamespace,
+			PodPort:      pf.PodPort,
+			LocalPort:    pf.LocalPort,
+		})
 		return
 	}
 
+	// DELETE closes a port forwarding session by the specified session id.
 	if r.Method == http.MethodDelete {
 		var request api.PortForwardResponse
 		if r.Body == nil {
@@ -235,5 +260,39 @@ func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	middleware.Write(w, r, nil)
+	return
+}
+
+// pluginHandler handles all requests for plugins
+func pluginHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		middleware.Write(w, r, nil)
+		return
+	}
+
+	var request api.PluginRequest
+	if r.Body == nil {
+		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
+		return
+	}
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
+		return
+	}
+
+	config, clientset, err := client.ConfigClientset(request.Cluster, time.Duration(request.Timeout)*time.Second, request.Proxy)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
+		return
+	}
+
+	data, err := api.DoPluginAction(config, clientset, request.Name, request.URL, request.Port, request.Data)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("An error occured: %s", err.Error()))
+		return
+	}
+
+	middleware.Write(w, r, data)
 	return
 }

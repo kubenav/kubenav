@@ -139,6 +139,16 @@ export const readSettings = (): IAppSettings => {
       terminalScrollback: settings.terminalScrollback
         ? settings.terminalScrollback
         : DEFAULT_SETTINGS.terminalScrollback,
+      prometheusEnabled: settings.hasOwnProperty('prometheusEnabled')
+        ? settings.prometheusEnabled
+        : DEFAULT_SETTINGS.prometheusEnabled,
+      prometheusNamespace: settings.prometheusNamespace
+        ? settings.prometheusNamespace
+        : DEFAULT_SETTINGS.prometheusNamespace,
+      prometheusSelector: settings.prometheusSelector
+        ? settings.prometheusSelector
+        : DEFAULT_SETTINGS.prometheusSelector,
+      prometheusPort: settings.prometheusPort ? settings.prometheusPort : DEFAULT_SETTINGS.prometheusPort,
     };
   }
 

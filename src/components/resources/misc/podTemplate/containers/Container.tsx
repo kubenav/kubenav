@@ -29,10 +29,11 @@ import {
 } from '@kubernetes/client-node';
 import { close } from 'ionicons/icons';
 import yaml from 'js-yaml';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
-import { IContainerMetrics } from '../../../../../declarations';
+import { IContainerMetrics, IContext } from '../../../../../declarations';
 import { IS_SERVER } from '../../../../../utils/constants';
+import { AppContext } from '../../../../../utils/context';
 import { formatResourceValue } from '../../../../../utils/helpers';
 import Editor from '../../../../misc/Editor';
 import IonCardEqualHeight from '../../../../misc/IonCardEqualHeight';
@@ -40,6 +41,7 @@ import AddLogs from '../../../../terminal/AddLogs';
 import AddShell from '../../../../terminal/AddShell';
 import Port from '../../Port';
 import Row from '../../template/Row';
+import Prometheus from '../../../../plugins/Prometheus';
 
 // getState returns the current state of the given container. This is used for the list view for init containers and
 // containers.
@@ -74,6 +76,7 @@ const Container: React.FunctionComponent<IContainerProps> = ({
   namespace,
   status,
 }: IContainerProps) => {
+  const context = useContext<IContext>(AppContext);
   const [showModal, setShowModal] = useState(false);
 
   const containerState = (state: V1ContainerState): string => {
@@ -431,6 +434,78 @@ const Container: React.FunctionComponent<IContainerProps> = ({
                 </IonCol>
               ) : null}
             </IonRow>
+
+            {context.settings.prometheusEnabled && status !== undefined ? (
+              <IonRow>
+                <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
+                  <IonCardEqualHeight>
+                    <IonCardHeader>
+                      <IonCardTitle>Memory Usage (in MiB)</IonCardTitle>
+                    </IonCardHeader>
+                    <Prometheus
+                      queries={[
+                        {
+                          label: 'Current',
+                          query: `sum(container_memory_usage_bytes{job="kubelet", namespace="${namespace}", pod="${name}", container="${container.name}", container!="POD"}) / 1024 / 1024`,
+                        },
+                        {
+                          label: 'Requested',
+                          query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${namespace}", resource="memory", pod="${name}", container="${container.name}"}) / 1024 / 1024`,
+                        },
+                        {
+                          label: 'Limit',
+                          query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${namespace}", resource="memory", pod="${name}", container="${container.name}"}) / 1024 / 1024`,
+                        },
+                        {
+                          label: 'Cache',
+                          query: `sum(container_memory_cache{job="kubelet", namespace="${namespace}", pod="${name}", container="${container.name}", container!="POD"}) / 1024 / 1024`,
+                        },
+                      ]}
+                    />
+                  </IonCardEqualHeight>
+                </IonCol>
+
+                <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
+                  <IonCardEqualHeight>
+                    <IonCardHeader>
+                      <IonCardTitle>CPU Usage</IonCardTitle>
+                    </IonCardHeader>
+                    <Prometheus
+                      queries={[
+                        {
+                          label: 'Current',
+                          query: `sum(irate(container_cpu_usage_seconds_total{job="kubelet", namespace="${namespace}", image!="", pod="${name}", container="${container.name}", container!="POD"}[4m]))`,
+                        },
+                        {
+                          label: 'Requested',
+                          query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${namespace}", resource="cpu", pod="${name}", container="${container.name}"})`,
+                        },
+                        {
+                          label: 'Limit',
+                          query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${namespace}", resource="cpu", pod="${name}", container="${container.name}"})`,
+                        },
+                      ]}
+                    />
+                  </IonCardEqualHeight>
+                </IonCol>
+
+                <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="12">
+                  <IonCardEqualHeight>
+                    <IonCardHeader>
+                      <IonCardTitle>Total Restarts</IonCardTitle>
+                    </IonCardHeader>
+                    <Prometheus
+                      queries={[
+                        {
+                          label: 'Restarts',
+                          query: `max(kube_pod_container_status_restarts_total{job="kube-state-metrics", namespace="${namespace}", pod="${name}", container="${container.name}"})`,
+                        },
+                      ]}
+                    />
+                  </IonCardEqualHeight>
+                </IonCol>
+              </IonRow>
+            ) : null}
           </IonGrid>
         </IonContent>
       </IonModal>
