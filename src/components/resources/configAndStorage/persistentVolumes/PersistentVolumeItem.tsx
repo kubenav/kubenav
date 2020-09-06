@@ -4,6 +4,7 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { timeDifference } from '../../../../utils/helpers';
+import ItemStatus from '../../misc/template/ItemStatus';
 
 interface IPersistentVolumeItemProps extends RouteComponentProps {
   item: V1PersistentVolume;
@@ -16,6 +17,18 @@ const PersistentVolumeItem: React.FunctionComponent<IPersistentVolumeItemProps> 
   section,
   type,
 }: IPersistentVolumeItemProps) => {
+  const status = (): string => {
+    if (item.status === undefined || item.status.phase === 'Released' || item.status.phase === 'Available') {
+      return 'warning';
+    }
+
+    if (item.status.phase === 'Failed') {
+      return 'danger';
+    }
+
+    return 'success';
+  };
+
   // - Phase: Indicates if a volume is available, bound to a claim, or released by a claim.
   // - Capacity: Resources of the volume.
   // - Access Modes: Contains all ways the volume can be mounted.
@@ -28,6 +41,7 @@ const PersistentVolumeItem: React.FunctionComponent<IPersistentVolumeItemProps> 
       }`}
       routerDirection="forward"
     >
+      <ItemStatus status={status()} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>
