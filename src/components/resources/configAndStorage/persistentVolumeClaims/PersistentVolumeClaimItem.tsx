@@ -4,6 +4,7 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { timeDifference } from '../../../../utils/helpers';
+import ItemStatus from '../../misc/template/ItemStatus';
 
 interface IPersistentVolumeClaimItemProps extends RouteComponentProps {
   item: V1PersistentVolumeClaim;
@@ -16,6 +17,14 @@ const PersistentVolumeClaimItem: React.FunctionComponent<IPersistentVolumeClaimI
   section,
   type,
 }: IPersistentVolumeClaimItemProps) => {
+  const status = (): string => {
+    if (item.status && item.status.phase === 'Bound') {
+      return 'success';
+    }
+
+    return 'warning';
+  };
+
   // - Phase: The current phase of PersistentVolumeClaim.
   // - Capacity: The actual resources of the underlying volume.
   // - Access Modes: The actual access modes the volume backing the PVC has.
@@ -27,6 +36,7 @@ const PersistentVolumeClaimItem: React.FunctionComponent<IPersistentVolumeClaimI
       }`}
       routerDirection="forward"
     >
+      <ItemStatus status={status()} />
       <IonLabel>
         <h2>{item.metadata ? item.metadata.name : ''}</h2>
         <p>
