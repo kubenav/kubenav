@@ -3,7 +3,7 @@ import { ActionSheetButton, IonActionSheet, IonFab, IonFabButton, IonIcon, IonTo
 import { repeatOutline } from 'ionicons/icons';
 import React, { useContext, useEffect, useState, ReactElement } from 'react';
 
-import { IContext, IPortForwarding, IPortForwardingActiveSessions, IPortForwardingContext } from '../declarations';
+import { IContext, IPortForwarding, IPortForwardingContext } from '../declarations';
 import {
   kubernetesPortForwardingActiveSessions,
   kubernetesPortForwardingRequest,
@@ -12,16 +12,6 @@ import {
 import { AppContext } from './context';
 
 const { Clipboard } = Plugins;
-
-const isSessionActive = (sessionID: string, activeSessions: IPortForwardingActiveSessions): boolean => {
-  for (const activeSession in activeSessions) {
-    if (activeSession === sessionID) {
-      return true;
-    }
-  }
-
-  return false;
-};
 
 // Creates a Context object. When React renders a component that subscribes to this Context object it will read the
 // current context value from the closest matching Provider above it in the tree.
@@ -60,14 +50,20 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
     const getActiveSessions = async () => {
       const sessions = await kubernetesPortForwardingActiveSessions();
 
-      const tmpPortForwardings: IPortForwarding[] = [];
-      for (let i = 0; i < portForwardings.length; i++) {
-        if (isSessionActive(portForwardings[i].id, sessions)) {
-          tmpPortForwardings.push(portForwardings[i]);
+      if (sessions !== null && sessions.length > 0) {
+        const tmpPortForwardings: IPortForwarding[] = [];
+        for (let i = 0; i < sessions.length; i++) {
+          tmpPortForwardings.push({
+            id: sessions[i].id,
+            podName: sessions[i].podName,
+            podNamespace: sessions[i].podNamespace,
+            podPort: sessions[i].podPort,
+            localPort: sessions[i].localPort,
+          });
         }
-      }
 
-      setPortForwardings(tmpPortForwardings);
+        setPortForwardings(tmpPortForwardings);
+      }
     };
 
     const interval = setInterval(() => getActiveSessions(), 10000);
@@ -80,6 +76,8 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
     try {
       const pf = await kubernetesPortForwardingRequest(
         `/api/v1/namespaces/${portForwarding.podNamespace}/pods/${portForwarding.podName}/portforward`,
+        portForwarding.podName,
+        portForwarding.podNamespace,
         portForwarding.podPort,
         portForwarding.localPort,
         await context.kubernetesAuthWrapper(''),

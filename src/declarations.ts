@@ -48,6 +48,10 @@ export interface IAppSettings {
   proxyAddress: string;
   terminalFontSize: number;
   terminalScrollback: number;
+  prometheusEnabled: boolean;
+  prometheusNamespace: string;
+  prometheusSelector: string;
+  prometheusPort: number;
 }
 
 export interface IAWSCluster {
@@ -190,6 +194,11 @@ export interface IGoogleClusterMasterAuth {
   clientKey?: string;
 }
 
+export interface IJsonData {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+}
+
 export interface IKubeconfig {
   clusters: IKubeconfigClusterRef[];
   contexts: IKubeconfigContextRef[];
@@ -277,6 +286,12 @@ export interface IOIDCProviderTokenAPIResponse {
   expiry: number;
 }
 
+export interface IPluginPrometheus {
+  enabled: boolean;
+  namespace: string;
+  selector: string;
+}
+
 export interface IPodMetrics {
   apiVersion?: string;
   metadata?: V1ObjectMeta;
@@ -300,10 +315,6 @@ export interface IPortForwarding {
   localPort: number;
 }
 
-export interface IPortForwardingActiveSessions {
-  [key: string]: IPortForwardingResponse;
-}
-
 export interface IPortForwardingContext {
   portForwardings: IPortForwarding[];
   add: (portForwarding: IPortForwarding) => Promise<void>;
@@ -311,6 +322,8 @@ export interface IPortForwardingContext {
 
 export interface IPortForwardingResponse {
   id: string;
+  podName: string;
+  podNamespace: string;
   podPort: number;
   localPort: number;
 }

@@ -17,6 +17,10 @@ export const DEFAULT_SETTINGS: IAppSettings = {
   proxyAddress: '',
   terminalFontSize: 12,
   terminalScrollback: 10000,
+  prometheusEnabled: false,
+  prometheusNamespace: 'monitoring',
+  prometheusSelector: 'app=prometheus',
+  prometheusPort: 9090,
 };
 
 export const GOOGLE_OAUTH2_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/auth';
