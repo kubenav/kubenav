@@ -80,7 +80,7 @@ const LogsItem: React.FunctionComponent<ILogsItemProps> = ({ activator, item, ur
       <IonActionSheet
         isOpen={showActionSheetOptions}
         onDidDismiss={() => setShowActionSheetOptions(false)}
-        header="Select a Option"
+        header="Select an Option"
         buttons={[
           {
             text: `Last ${LOG_TAIL_LINES} Log Lines`,
