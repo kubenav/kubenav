@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -94,6 +95,14 @@ func execHandler(w http.ResponseWriter, r *http.Request) {
 	})
 
 	shell := ""
+	requestURL, err := url.Parse(request.URL)
+	if err == nil {
+		commands, ok := requestURL.Query()["command"]
+		if ok || len(commands[0]) >= 1 {
+			shell = commands[0]
+		}
+	}
+
 	go api.WaitForTerminal(config, clientset, &request, shell, sessionID)
 
 	middleware.Write(w, r, api.TerminalResponse{ID: sessionID})
