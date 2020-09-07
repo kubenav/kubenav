@@ -10,6 +10,7 @@ export const addShell = async (
   terminalContext: ITerminalContext,
   url: string,
   container: string,
+  shell: string,
 ): Promise<void> => {
   const term = new Terminal(
     SHELL_TERMINAL_OPTIONS(
@@ -22,7 +23,7 @@ export const addShell = async (
   try {
     if (context.clusters && context.cluster) {
       const { id } = await kubernetesExecRequest(
-        `${url}/exec?command=sh&container=${container}&stdin=true&stdout=true&stderr=true&tty=true`,
+        `${url}/exec?command=${shell}&container=${container}&stdin=true&stdout=true&stderr=true&tty=true`,
         await context.kubernetesAuthWrapper(''),
       );
 
