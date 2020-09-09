@@ -1,4 +1,4 @@
-package api
+package terminal
 
 import (
 	"net/http"

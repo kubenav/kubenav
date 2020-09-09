@@ -1,10 +1,11 @@
-package api
+package terminal
 
 import (
 	"fmt"
 	"io"
 	"net/http"
 	"strings"
+	"sync"
 
 	"k8s.io/client-go/kubernetes"
 )
@@ -15,8 +16,35 @@ type LogSession struct {
 	URL       string
 }
 
-// LogSessions holds all open log sessions.
-var LogSessions = make(map[string]LogSession)
+// LogSessionMap stores a map of all LogSession objects and a lock to avoid concurrent conflict.
+type LogSessionMap struct {
+	Sessions map[string]LogSession
+	Lock     sync.RWMutex
+}
+
+// Get return a given logSession by sessionID.
+func (sm *LogSessionMap) Get(sessionID string) LogSession {
+	sm.Lock.RLock()
+	defer sm.Lock.RUnlock()
+	return sm.Sessions[sessionID]
+}
+
+// Set store a LogSession to LogSessionMap.
+func (sm *LogSessionMap) Set(sessionID string, session LogSession) {
+	sm.Lock.Lock()
+	defer sm.Lock.Unlock()
+	sm.Sessions[sessionID] = session
+}
+
+// Delete removes a session from the active sessions.
+func (sm *LogSessionMap) Delete(sessionID string) {
+	sm.Lock.Lock()
+	defer sm.Lock.Unlock()
+	delete(sm.Sessions, sessionID)
+}
+
+// LogSessions holds all active sessions for streamed logs.
+var LogSessions = LogSessionMap{Sessions: make(map[string]LogSession)}
 
 // StreamLogsHandler handles the requests to stream the logs of a container.
 func StreamLogsHandler(w http.ResponseWriter, r *http.Request) {
@@ -26,14 +54,11 @@ func StreamLogsHandler(w http.ResponseWriter, r *http.Request) {
 
 	params := strings.Split(r.URL.Path, "/")
 	sessionID := params[len(params)-1]
-	logSession, ok := LogSessions[sessionID]
-	if !ok {
-		return
-	}
+	logSession := LogSessions.Get(sessionID)
 
 	readCloser, err := logSession.ClientSet.RESTClient().Get().RequestURI(logSession.URL).Stream(r.Context())
 	if err != nil {
-		delete(LogSessions, sessionID)
+		LogSessions.Delete(sessionID)
 		return
 	}
 	defer readCloser.Close()
@@ -41,13 +66,13 @@ func StreamLogsHandler(w http.ResponseWriter, r *http.Request) {
 	for {
 		select {
 		case <-r.Context().Done():
-			delete(LogSessions, sessionID)
+			LogSessions.Delete(sessionID)
 			return
 		default:
 			p := make([]byte, 2048)
 			n, err := readCloser.Read(p)
 			if err != nil {
-				delete(LogSessions, sessionID)
+				LogSessions.Delete(sessionID)
 
 				if err == io.EOF {
 					return

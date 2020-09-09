@@ -1,4 +1,4 @@
-package mobile
+package api
 
 import (
 	"context"
@@ -24,14 +24,16 @@ type AzureRequest struct {
 	Admin             bool   `json:"admin"`
 }
 
-// AzureCluster is the structure of the response for loading all clusters from Microsoft Azure.
+// AzureCluster is the structure of the response for loading all AKS clusters from Microsoft Azure.
 type AzureCluster struct {
 	Name       string      `json:"name"`
 	Kubeconfig interface{} `json:"kubeconfig"`
 }
 
 // azureGetClustersHandler return all Kubeconfigs for all AKS clusters for the provided subscription and resource group.
-func azureGetClustersHandler(w http.ResponseWriter, r *http.Request) {
+// To handle the authentication against the Azure API a user must also provide a valid client id and client secret.
+// The complete guide to create the needed credentails can be found here: https://kubenav.io/help/microsoft-azure-creating-app-credentials.html
+func (c *Client) azureGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		middleware.Write(w, r, nil)
 		return
@@ -102,6 +104,8 @@ func azureGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// getAzureAuthorizer returns a new authorizer for the provided client id, client secret and tenant id. The autorizer is
+// needed to make requests against the Azure API.
 func getAzureAuthorizer(clientID, clientSecret, tenantID string) (autorest.Authorizer, error) {
 	oauthConfig, err := adal.NewOAuthConfig("https://login.microsoftonline.com/", tenantID)
 	if err != nil {
@@ -116,7 +120,8 @@ func getAzureAuthorizer(clientID, clientSecret, tenantID string) (autorest.Autho
 	return autorest.NewBearerAuthorizer(token), nil
 }
 
-// convert the map[interface{}]interface{} returned from yaml.Unmarshal to a map[string]interface{} for the usage in json.Marshal.
+// convert the map[interface{}]interface{} returned from yaml.Unmarshal to a map[string]interface{} for the usage in
+// json.Marshal.
 // See: https://stackoverflow.com/a/40737676
 func convert(i interface{}) interface{} {
 	switch x := i.(type) {

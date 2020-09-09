@@ -1,4 +1,4 @@
-package mobile
+package api
 
 import (
 	"context"
@@ -35,7 +35,7 @@ type OIDCResponse struct {
 }
 
 // oidcGetLinkHandler returns the link for the configured OIDC provider. The Link can then be used by the user to login.
-func oidcGetLinkHandler(w http.ResponseWriter, r *http.Request) {
+func (c *Client) oidcGetLinkHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		middleware.Write(w, r, nil)
 		return
@@ -80,7 +80,9 @@ func oidcGetLinkHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func oidcGetRefreshTokenHandler(w http.ResponseWriter, r *http.Request) {
+// oidcGetRefreshTokenHandler returns a refresh token for the configured OIDC provider. The refresh token can be used to
+// get a new access token via the oidcGetAccessTokenHandler function.
+func (c *Client) oidcGetRefreshTokenHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		middleware.Write(w, r, nil)
 		return
@@ -140,8 +142,8 @@ func oidcGetRefreshTokenHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// OIDCGetAccessToken is used to retrieve an access token from a refresh token.
-func oidcGetAccessTokenHandler(w http.ResponseWriter, r *http.Request) {
+// oidcGetAccessTokenHandler is used to retrieve an access token from a refresh token.
+func (c *Client) oidcGetAccessTokenHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		middleware.Write(w, r, nil)
 		return

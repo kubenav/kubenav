@@ -1,4 +1,4 @@
-package api
+package kube
 
 import (
 	"context"
@@ -8,8 +8,8 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-// Request is the structure if the request data for an Kubernetes API server request. The data is needed for the
-// authentication against the API server and the real request against the Kubernetes API.
+// Request is the structure of an API request to interact with the Kubernetes API. Most of the fields are used for the
+// mobile version of kubenav, because the cluster data is only accessible via the frontend.
 type Request struct {
 	Cluster                  string `json:"cluster"`
 	Method                   string `json:"method"`
@@ -27,7 +27,7 @@ type Request struct {
 }
 
 // Response is the structure, which is used to return the data from an API request against the Kubernetes API server to
-// the kubenav client.
+// the kubenav frontend.
 type Response struct {
 	Data string `json:"data"`
 }
@@ -43,7 +43,8 @@ type Error struct {
 }
 
 // KubernetesRequest makes the request to the Kubernetes API server. A request contains a method, url, body and timeout.
-// The API server data is defined in the clientset.
+// The API server data is defined in the clientset, which can be retrieved via the GetConfigAndClientset method of the
+// kube client.
 func KubernetesRequest(ctx context.Context, method, url, body string, clientset *kubernetes.Clientset) ([]byte, error) {
 	if method == "GET" {
 		return clientset.RESTClient().Get().RequestURI(url).DoRaw(ctx)

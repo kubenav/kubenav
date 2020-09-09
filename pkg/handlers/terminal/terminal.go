@@ -1,4 +1,8 @@
-package api
+// Package terminal implements the functions for all terminal interactions in the frontend. These includes to get a
+// shell into a Pod, SSH sessions for a Node and the streaming of log files.
+// The implementation is very similar to the implementation in the "Kubernetes Dashboard", you can find the file
+// here: https://github.com/kubernetes/dashboard/blob/master/src/app/backend/handler/terminal.go
+package terminal
 
 import (
 	"crypto/rand"
@@ -17,9 +21,6 @@ import (
 	"k8s.io/client-go/tools/remotecommand"
 )
 
-// The implementation is taken from the "Kubernetes Dashboard", you can find the file
-// here: https://github.com/kubernetes/dashboard/blob/master/src/app/backend/handler/terminal.go
-
 const END_OF_TRANSMISSION = "\u0004"
 
 // TerminalResponse is sent by execHandler. The ID is a random session id that binds the original REST request and the
@@ -28,7 +29,7 @@ type TerminalResponse struct {
 	ID string `json:"id"`
 }
 
-// PtyHandler is what remotecommand expects from a pty
+// PtyHandler is what remotecommand expects from a pty.
 type PtyHandler interface {
 	io.Reader
 	io.Writer
@@ -36,7 +37,7 @@ type PtyHandler interface {
 	GetSizeChan() chan remotecommand.TerminalSize
 }
 
-// TerminalSession implements PtyHandler (using a SockJS connection)
+// TerminalSession implements PtyHandler (using a SockJS connection).
 type TerminalSession struct {
 	ID            string
 	Bound         chan error
@@ -74,12 +75,12 @@ func (t TerminalSession) GetSizeChan() chan remotecommand.TerminalSize {
 	return t.SizeChan
 }
 
-// Read handles pty->process messages (stdin, resize)
-// Called in a loop from remotecommand as long as the process is running
+// Read handles pty->process messages (stdin, resize).
+// Called in a loop from remotecommand as long as the process is running.
 func (t TerminalSession) Read(p []byte) (int, error) {
 	m, err := t.SockJSSession.Recv()
 	if err != nil {
-		// Send terminated signal to process to avoid resource leak
+		// Send terminated signal to process to avoid resource leak.
 		return copy(p, END_OF_TRANSMISSION), err
 	}
 
@@ -99,8 +100,8 @@ func (t TerminalSession) Read(p []byte) (int, error) {
 	}
 }
 
-// Write handles process->pty stdout
-// Called from remotecommand whenever there is any output
+// Write handles process->pty stdout.
+// Called from remotecommand whenever there is any output.
 func (t TerminalSession) Write(p []byte) (int, error) {
 	msg, err := json.Marshal(TerminalMessage{
 		Op:   "stdout",
@@ -116,29 +117,29 @@ func (t TerminalSession) Write(p []byte) (int, error) {
 	return len(p), nil
 }
 
-// SessionMap stores a map of all TerminalSession objects and a lock to avoid concurrent conflict
+// SessionMap stores a map of all TerminalSession objects and a lock to avoid concurrent conflict.
 type SessionMap struct {
 	Sessions map[string]TerminalSession
 	Lock     sync.RWMutex
 }
 
-// Get return a given terminalSession by sessionID
+// Get return a given terminalSession by sessionID.
 func (sm *SessionMap) Get(sessionID string) TerminalSession {
 	sm.Lock.RLock()
 	defer sm.Lock.RUnlock()
 	return sm.Sessions[sessionID]
 }
 
-// Set store a TerminalSession to SessionMap
+// Set store a TerminalSession to SessionMap.
 func (sm *SessionMap) Set(sessionID string, session TerminalSession) {
 	sm.Lock.Lock()
 	defer sm.Lock.Unlock()
 	sm.Sessions[sessionID] = session
 }
 
-// Close shuts down the SockJS connection and sends the status code and reason to the client
-// Can happen if the process exits or if there is an error starting up the process
-// For now the status code is unused and reason is shown to the user (unless "")
+// Close shuts down the SockJS connection and sends the status code and reason to the client.
+// Can happen if the process exits or if there is an error starting up the process.
+// For now the status code is unused and reason is shown to the user (unless "").
 func (sm *SessionMap) Close(sessionID string, status uint32, reason string) {
 	sm.Lock.Lock()
 	defer sm.Lock.Unlock()
@@ -150,9 +151,10 @@ func (sm *SessionMap) Close(sessionID string, status uint32, reason string) {
 	delete(sm.Sessions, sessionID)
 }
 
+// TerminalSessions holds all active terminal sessions.
 var TerminalSessions = SessionMap{Sessions: make(map[string]TerminalSession)}
 
-// handleTerminalSession is Called by net/http for any new /api/kubernetes/exec/sockjs connections
+// handleTerminalSession is Called by net/http for any new /api/kubernetes/exec/sockjs connections.
 func handleTerminalSession(session sockjs.Session) {
 	var (
 		buf             string
@@ -182,16 +184,14 @@ func handleTerminalSession(session sockjs.Session) {
 	terminalSession.Bound <- nil
 }
 
-// CreateAttachHandler is called from main for /api/kubernetes/exec/sockjs
+// CreateAttachHandler is called from main for /api/kubernetes/exec/sockjs.
 func CreateAttachHandler(path string) http.Handler {
 	return sockjs.NewHandler(path, sockjs.DefaultOptions, handleTerminalSession)
 }
 
-// startProcess is called by execHandler
-// Executed cmd in the container specified in request and connects it up with the ptyHandler (a session)
-func startProcess(config *rest.Config, clientset *kubernetes.Clientset, request *Request, cmd []string, ptyHandler PtyHandler) error {
-	reqURL, err := url.Parse(request.URL)
-
+// startProcess is called by execHandler.
+// Executed cmd in the container specified in request and connects it up with the ptyHandler (a session).
+func startProcess(config *rest.Config, clientset *kubernetes.Clientset, reqURL *url.URL, cmd []string, ptyHandler PtyHandler) error {
 	exec, err := remotecommand.NewSPDYExecutor(config, "POST", reqURL)
 	if err != nil {
 		return err
@@ -225,7 +225,7 @@ func GenTerminalSessionID() (string, error) {
 	return string(id), nil
 }
 
-// isValidShell checks if the shell is an allowed one
+// isValidShell checks if the shell is an allowed one.
 func isValidShell(validShells []string, shell string) bool {
 	for _, validShell := range validShells {
 		if validShell == shell {
@@ -235,9 +235,9 @@ func isValidShell(validShells []string, shell string) bool {
 	return false
 }
 
-// WaitForTerminal is called from execHandler as a goroutine
-// Waits for the SockJS connection to be opened by the client the session to be bound in handleTerminalSession
-func WaitForTerminal(config *rest.Config, clientset *kubernetes.Clientset, request *Request, shell string, sessionID string) {
+// WaitForTerminal is called from execHandler as a goroutine.
+// Waits for the SockJS connection to be opened by the client the session to be bound in handleTerminalSession.
+func WaitForTerminal(config *rest.Config, clientset *kubernetes.Clientset, reqURL *url.URL, shell string, sessionID string) {
 	select {
 	case <-TerminalSessions.Get(sessionID).Bound:
 		close(TerminalSessions.Get(sessionID).Bound)
@@ -247,13 +247,12 @@ func WaitForTerminal(config *rest.Config, clientset *kubernetes.Clientset, reque
 
 		if isValidShell(validShells, shell) {
 			cmd := []string{shell}
-			err = startProcess(config, clientset, request, cmd, TerminalSessions.Get(sessionID))
+			err = startProcess(config, clientset, reqURL, cmd, TerminalSessions.Get(sessionID))
 		} else {
-			// No shell given or it was not valid: try some shells until one succeeds or all fail
-			// FIXME: if the first shell fails then the first keyboard event is lost
+			// No shell given or it was not valid: try some shells until one succeeds or all fail.
 			for _, testShell := range validShells {
 				cmd := []string{testShell}
-				if err = startProcess(config, clientset, request, cmd, TerminalSessions.Get(sessionID)); err == nil {
+				if err = startProcess(config, clientset, reqURL, cmd, TerminalSessions.Get(sessionID)); err == nil {
 					break
 				}
 			}

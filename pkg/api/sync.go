@@ -1,4 +1,4 @@
-package electron
+package api
 
 import (
 	"encoding/json"
@@ -14,13 +14,15 @@ type Sync struct {
 	Namespace string `json:"namespace"`
 }
 
-// syncContextHandler applies the changes of the current context to the loaded Kubeconfig.
-func syncContextHandler(w http.ResponseWriter, r *http.Request) {
+// syncContextHandler applies the changes of the current cluster/context to the loaded Kubeconfig file. The used
+// kubeClient.ChangeContext() function to get the current cluster/context only works for the server and desktop
+// implementation of kubenav. When this function is called on mobile an error is returned.
+func (c *Client) syncContextHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		middleware.Write(w, r, nil)
 	}
 
-	if !syncKubeconfig {
+	if !c.syncKubeconfig {
 		middleware.Write(w, r, nil)
 		return
 	}
@@ -36,7 +38,7 @@ func syncContextHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = client.ChangeContext(sync.Context)
+	err = c.kubeClient.ChangeContext(sync.Context)
 	if err != nil {
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not change context: %s", err.Error()))
 		return
@@ -46,13 +48,15 @@ func syncContextHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// syncContextHandler applies the changes of the current namespace to the loaded Kubeconfig.
-func syncNamespaceHandler(w http.ResponseWriter, r *http.Request) {
+// syncContextHandler applies the changes of the current namespace to the loaded Kubeconfig. The used
+// kubeClient.ChangeNamespace() function to get the current cluster/context only works for the server and desktop
+// implementation of kubenav. When this function is called on mobile an error is returned
+func (c *Client) syncNamespaceHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		middleware.Write(w, r, nil)
 	}
 
-	if !syncKubeconfig {
+	if !c.syncKubeconfig {
 		middleware.Write(w, r, nil)
 		return
 	}
@@ -68,7 +72,7 @@ func syncNamespaceHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = client.ChangeNamespace(sync.Context, sync.Namespace)
+	err = c.kubeClient.ChangeNamespace(sync.Context, sync.Namespace)
 	if err != nil {
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not change context: %s", err.Error()))
 		return
