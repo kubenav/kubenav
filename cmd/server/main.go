@@ -8,8 +8,8 @@ import (
 	"path"
 	"strings"
 
-	"github.com/kubenav/kubenav/pkg/electron"
-	"github.com/kubenav/kubenav/pkg/electron/kube"
+	"github.com/kubenav/kubenav/pkg/api"
+	"github.com/kubenav/kubenav/pkg/kube"
 	"github.com/kubenav/kubenav/pkg/version"
 
 	"github.com/sirupsen/logrus"
@@ -18,20 +18,17 @@ import (
 )
 
 var (
-	debugFlag             bool
-	debugIonicFlag        string
-	inclusterFlag         bool
-	inclusterNameFlag     string
-	kubeconfigFlag        string
-	kubeconfigIncludeFlag string
-	kubeconfigExcludeFlag string
-	syncFlag              bool
+	debugFlag         bool
+	debugIonicFlag    string
+	inclusterFlag     bool
+	inclusterNameFlag string
+	kubeconfigFlag    string
 )
 
 var rootCmd = &cobra.Command{
 	Use:                "kubenav",
-	Short:              "kubenav - export Prometheus metrics from your logs.",
-	Long:               "kubenav - export Prometheus metrics from your logs.",
+	Short:              "kubenav - the navigator for your Kubernetes clusters right in your pocket.",
+	Long:               "kubenav - the navigator for your Kubernetes clusters right in your pocket.",
 	FParseErrWhitelist: cobra.FParseErrWhitelist{UnknownFlags: true},
 	Run: func(cmd *cobra.Command, args []string) {
 		// Setup the logger and print the version information.
@@ -46,15 +43,14 @@ var rootCmd = &cobra.Command{
 		log.Infof(version.Info())
 		log.Infof(version.BuildContext())
 
-		// Create the client for the interaction with the Kubernetes API.
-		client, err := kube.NewClient(inclusterFlag, inclusterNameFlag, kubeconfigFlag, kubeconfigIncludeFlag, kubeconfigExcludeFlag)
+		kubeClient, err := kube.NewClient(false, inclusterFlag, inclusterNameFlag, kubeconfigFlag, "", "")
 		if err != nil {
 			log.WithError(err).Fatalf("Could not create Kubernetes client")
 		}
 
-		// Register the API for the Electron app and start the server.
 		router := http.NewServeMux()
-		electron.Register(router, syncFlag, client)
+		apiClient := api.NewClient(false, kubeClient)
+		apiClient.Register(router)
 
 		index, err := ioutil.ReadFile(path.Join(debugIonicFlag, "index.html"))
 		if err != nil {
@@ -101,9 +97,6 @@ func init() {
 	rootCmd.PersistentFlags().BoolVar(&inclusterFlag, "incluster", false, "Use the in cluster configuration.")
 	rootCmd.PersistentFlags().StringVar(&inclusterNameFlag, "incluster.name", "kubenav", "The name which should be displayed when using the incluster flag.")
 	rootCmd.PersistentFlags().StringVar(&kubeconfigFlag, "kubeconfig", "", "Optional Kubeconfig file.")
-	rootCmd.PersistentFlags().StringVar(&kubeconfigIncludeFlag, "kubeconfig.include", "", "Comma separated list of globs to include in the Kubeconfig.")
-	rootCmd.PersistentFlags().StringVar(&kubeconfigExcludeFlag, "kubeconfig.exclude", "", "Comma separated list of globs to exclude from the Kubeconfig. This flag must be used in combination with the '--kubeconfig.include' flag.")
-	rootCmd.PersistentFlags().BoolVar(&syncFlag, "kubeconfig.sync", false, "Sync the changes from kubenav with the used Kubeconfig file.")
 }
 
 func main() {

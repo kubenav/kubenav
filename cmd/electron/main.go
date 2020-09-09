@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kubenav/kubenav/pkg/electron"
-	"github.com/kubenav/kubenav/pkg/electron/kube"
+	"github.com/kubenav/kubenav/pkg/api"
+	"github.com/kubenav/kubenav/pkg/kube"
 	"github.com/kubenav/kubenav/pkg/version"
 
 	"github.com/asticode/go-astikit"
@@ -45,8 +45,8 @@ var messageChannel = make(chan Message)
 
 var rootCmd = &cobra.Command{
 	Use:                "kubenav",
-	Short:              "kubenav - export Prometheus metrics from your logs.",
-	Long:               "kubenav - export Prometheus metrics from your logs.",
+	Short:              "kubenav - the navigator for your Kubernetes clusters right in your pocket.",
+	Long:               "kubenav - the navigator for your Kubernetes clusters right in your pocket.",
 	FParseErrWhitelist: cobra.FParseErrWhitelist{UnknownFlags: true},
 	Run: func(cmd *cobra.Command, args []string) {
 		// Setup the logger and print the version information.
@@ -62,7 +62,7 @@ var rootCmd = &cobra.Command{
 		log.Infof(version.BuildContext())
 
 		// Create the client for the interaction with the Kubernetes API.
-		client, err := kube.NewClient(false, "", kubeconfigFlag, kubeconfigIncludeFlag, kubeconfigExcludeFlag)
+		kubeClient, err := kube.NewClient(false, false, "", kubeconfigFlag, kubeconfigIncludeFlag, kubeconfigExcludeFlag)
 		if err != nil {
 			log.WithError(err).Fatalf("Could not create Kubernetes client")
 		}
@@ -72,7 +72,8 @@ var rootCmd = &cobra.Command{
 		// frontend from the embedded assets.
 		go func() {
 			router := http.NewServeMux()
-			electron.Register(router, syncFlag, client)
+			apiClient := api.NewClient(syncFlag, kubeClient)
+			apiClient.Register(router)
 
 			// Add route for Server Sent Events. The events are handled via the message channel. Possible events are
 			// "navigation" and "cluster". These events are handled by the frontend to navigate to another page or to modify
@@ -133,7 +134,7 @@ var rootCmd = &cobra.Command{
 		// Check if a new version is available and create the menu. For the menu we need the result from the version check
 		// and the Kubernetes client and logger.
 		updateAvailable := checkVersion(version.Version, log)
-		menuOptions, err := getMenuOptions(updateAvailable, client, log)
+		menuOptions, err := getMenuOptions(updateAvailable, kubeClient, log)
 		if err != nil {
 			log.WithError(err).Fatalf("Could not create menu")
 		}

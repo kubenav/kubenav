@@ -1,4 +1,4 @@
-package mobile
+package api
 
 import (
 	"encoding/base64"
@@ -28,8 +28,10 @@ type AWSTokenResponse struct {
 	Token string `json:"token"`
 }
 
-// awsGetClustersHandler returns all EKS clusters from AWS.
-func awsGetClustersHandler(w http.ResponseWriter, r *http.Request) {
+// awsGetClustersHandler returns all EKS clusters from AWS. The user have to provide an access key id, a secret
+// access key and a region. With these credentials we are creating an new EKS client and we are loading all clusters for
+// the specified region.
+func (c *Client) awsGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		middleware.Write(w, r, nil)
 		return
@@ -92,9 +94,9 @@ func awsGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// awsGetTokenHandler returns a bearer token for Kubernetes API requests.
+// awsGetTokenHandler returns a bearer token for which then can be used for a request against the Kubernetes API.
 // See: https://github.com/kubernetes-sigs/aws-iam-authenticator/blob/7547c74e660f8d34d9980f2c69aa008eed1f48d0/pkg/token/token.go#L310
-func awsGetTokenHandler(w http.ResponseWriter, r *http.Request) {
+func (c *Client) awsGetTokenHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		middleware.Write(w, r, nil)
 		return

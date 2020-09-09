@@ -1,42 +1,27 @@
-package kube
+// Package server implements the Kubernetes API client interface for the server and desktop version of kubenav.
+package server
 
 import (
-	"errors"
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/kubenav/kubenav/pkg/kube/types"
 
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 )
 
-var (
-	// ErrConfigNotFound is thrown if there is not a confgiuration file for Kubernetes.
-	ErrConfigNotFound = errors.New("config not found")
-)
-
-// Client implements an API client for a Kubernetes cluster.
+// Client implements an API client for the Kubernetes API.
 type Client struct {
 	config clientcmd.ClientConfig
 }
 
-// Cluster implements the cluster type used in the React app.
-type Cluster struct {
-	ID                       string `json:"id"`
-	Name                     string `json:"name"`
-	URL                      string `json:"url"`
-	CertificateAuthorityData string `json:"certificateAuthorityData"`
-	ClientCertificateData    string `json:"clientCertificateData"`
-	ClientKeyData            string `json:"clientKeyData"`
-	Token                    string `json:"token"`
-	Username                 string `json:"username"`
-	Password                 string `json:"password"`
-	AuthProvider             string `json:"authProvider"`
-	Namespace                string `json:"namespace"`
-}
-
-// NewClient returns a new API client for a Kubernetes cluster.
+// NewClient returns a new API client for Kubernetes.
+// When the incluster option is true, we are using the in cluster configuration for the client, when a slice of
+// Kubeconfig files is provided which should be included/excluded we are loading these files. By default we are using
+// the standard way to load the cluster configuration.
 func NewClient(incluster bool, inclusterName, kubeconfig, kubeconfigInclude, kubeconfigExclude string) (*Client, error) {
 	var config clientcmd.ClientConfig
 	var err error
@@ -74,18 +59,18 @@ func (c *Client) Cluster() (string, error) {
 }
 
 // Clusters returns all clusters from the loaded Kubeconfig file in the format for the React app.
-func (c *Client) Clusters() (map[string]Cluster, error) {
+func (c *Client) Clusters() (map[string]types.Cluster, error) {
 	raw, err := c.config.RawConfig()
 	if err != nil {
 		return nil, err
 	}
 
-	var clusters map[string]Cluster
-	clusters = make(map[string]Cluster)
+	var clusters map[string]types.Cluster
+	clusters = make(map[string]types.Cluster)
 
 	for context, details := range raw.Contexts {
 		if cluster, ok := raw.Clusters[details.Cluster]; ok && cluster.Server != "" {
-			clusters[context] = Cluster{
+			clusters[context] = types.Cluster{
 				ID:        context,
 				Name:      context,
 				URL:       cluster.Server,
@@ -129,14 +114,16 @@ func (c *Client) ChangeNamespace(context, namespace string) error {
 	return clientcmd.ModifyConfig(c.config.ConfigAccess(), *config, true)
 }
 
-// ConfigClientset creates the config and clientset for an Kubernetes API call.
-func (c *Client) ConfigClientset(context string, timeout time.Duration, proxy string) (*rest.Config, *kubernetes.Clientset, error) {
+// GetConfigAndClientset returns an rest client and the clientset to interact with a Kubernetes cluster.
+// The server and desktop implementation mainly uses the "cluster" argument, because only need to select the current
+// cluster (for kubenav this is the same like the context) to interact with.
+func (c *Client) GetConfigAndClientset(cluster, server, certificateAuthorityData, clientCertificateData, clientKeyData, token, username, password string, insecureSkipTLSVerify bool, timeout time.Duration, proxy string) (*rest.Config, *kubernetes.Clientset, error) {
 	raw, err := c.config.RawConfig()
 	if err != nil {
 		return nil, nil, err
 	}
 
-	override := &clientcmd.ConfigOverrides{CurrentContext: context}
+	override := &clientcmd.ConfigOverrides{CurrentContext: cluster}
 	currentContextConfig := clientcmd.NewNonInteractiveClientConfig(raw, override.CurrentContext, override, &clientcmd.ClientConfigLoadingRules{})
 
 	restClient, err := currentContextConfig.ClientConfig()

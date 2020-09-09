@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"sort"
 
-	"github.com/kubenav/kubenav/pkg/electron/kube"
+	"github.com/kubenav/kubenav/pkg/kube"
 
 	"github.com/asticode/go-astikit"
 	"github.com/asticode/go-astilectron"
@@ -127,7 +127,7 @@ func createFileMenu(updateAvailable bool, log *logrus.Logger) *astilectron.MenuI
 }
 
 // getMenuOptions returns the menu for the Electron app.
-func getMenuOptions(updateAvailable bool, client *kube.Client, log *logrus.Logger) ([]*astilectron.MenuItemOptions, error) {
+func getMenuOptions(updateAvailable bool, client kube.Client, log *logrus.Logger) ([]*astilectron.MenuItemOptions, error) {
 	fileMenu := createFileMenu(updateAvailable, log)
 
 	// Load all clusters from the Kubeconfig file and sort the clusters alphabetical. Then iterate over the clusters and
@@ -310,6 +310,14 @@ func getMenuOptions(updateAvailable bool, client *kube.Client, log *logrus.Logge
 							},
 						},
 						{
+							Label: astikit.StrPtr("Pod Disruption Budgets"),
+							OnClick: func(e astilectron.Event) (deleteListener bool) {
+								log.Debugf("Menu item 'Pod Disruption Budgets' has been clicked")
+								messageChannel <- Message{Event: "navigation", Data: "/resources/config-and-storage/poddisruptionbudgets"}
+								return
+							},
+						},
+						{
 							Label: astikit.StrPtr("Secrets"),
 							OnClick: func(e astilectron.Event) (deleteListener bool) {
 								log.Debugf("Menu item 'Secrets' has been clicked")
@@ -376,6 +384,14 @@ func getMenuOptions(updateAvailable bool, client *kube.Client, log *logrus.Logge
 					Label: astikit.StrPtr("Cluster"),
 					SubMenu: []*astilectron.MenuItemOptions{
 						{
+							Label: astikit.StrPtr("Component Statuses"),
+							OnClick: func(e astilectron.Event) (deleteListener bool) {
+								log.Debugf("Menu item 'Component Statuses' has been clicked")
+								messageChannel <- Message{Event: "navigation", Data: "/resources/cluster/componentstatuses"}
+								return
+							},
+						},
+						{
 							Label: astikit.StrPtr("Custom Resource Definitions"),
 							OnClick: func(e astilectron.Event) (deleteListener bool) {
 								log.Debugf("Menu item 'Custom Resource Definitions' has been clicked")
@@ -404,6 +420,14 @@ func getMenuOptions(updateAvailable bool, client *kube.Client, log *logrus.Logge
 							OnClick: func(e astilectron.Event) (deleteListener bool) {
 								log.Debugf("Menu item 'Nodes' has been clicked")
 								messageChannel <- Message{Event: "navigation", Data: "/resources/cluster/nodes"}
+								return
+							},
+						},
+						{
+							Label: astikit.StrPtr("Pod Security Policies"),
+							OnClick: func(e astilectron.Event) (deleteListener bool) {
+								log.Debugf("Menu item 'Pod Security Policies' has been clicked")
+								messageChannel <- Message{Event: "navigation", Data: "/resources/cluster/podsecuritypolicies"}
 								return
 							},
 						},
