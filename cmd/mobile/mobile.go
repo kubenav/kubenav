@@ -16,7 +16,7 @@ import (
 func StartServer() {
 	router := http.NewServeMux()
 	kubeClient, _ := kube.NewClient(true, false, "", "", "", "")
-	apiClient := api.NewClient(false, kubeClient)
+	apiClient := api.NewClient(false, nil, kubeClient)
 	apiClient.Register(router)
 
 	if err := http.ListenAndServe(":14122", router); err != nil {

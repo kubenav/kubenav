@@ -72,7 +72,7 @@ var rootCmd = &cobra.Command{
 		// frontend from the embedded assets.
 		go func() {
 			router := http.NewServeMux()
-			apiClient := api.NewClient(syncFlag, kubeClient)
+			apiClient := api.NewClient(syncFlag, nil, kubeClient)
 			apiClient.Register(router)
 
 			// Add route for Server Sent Events. The events are handled via the message channel. Possible events are

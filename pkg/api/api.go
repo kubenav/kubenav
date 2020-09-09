@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/kubenav/kubenav/pkg/api/middleware"
+	"github.com/kubenav/kubenav/pkg/handlers/plugins"
 	"github.com/kubenav/kubenav/pkg/handlers/terminal"
 	"github.com/kubenav/kubenav/pkg/kube"
 )
@@ -11,6 +12,7 @@ import (
 // Client implements the structure of our API client.
 type Client struct {
 	syncKubeconfig bool
+	pluginConfig   *plugins.Config
 	kubeClient     kube.Client
 }
 
@@ -60,9 +62,10 @@ func (c *Client) Register(router *http.ServeMux) {
 }
 
 // NewClient returns an new API client which then can be used to register all API routes to an existing router.
-func NewClient(syncKubeconfig bool, kubeClient kube.Client) *Client {
+func NewClient(syncKubeconfig bool, pluginConfig *plugins.Config, kubeClient kube.Client) *Client {
 	return &Client{
 		syncKubeconfig: syncKubeconfig,
+		pluginConfig:   pluginConfig,
 		kubeClient:     kubeClient,
 	}
 }

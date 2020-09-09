@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/kubenav/kubenav/pkg/api"
+	"github.com/kubenav/kubenav/pkg/handlers/plugins"
 	"github.com/kubenav/kubenav/pkg/kube"
 	"github.com/kubenav/kubenav/pkg/version"
 
@@ -18,11 +19,13 @@ import (
 )
 
 var (
-	debugFlag         bool
-	debugIonicFlag    string
-	inclusterFlag     bool
-	inclusterNameFlag string
-	kubeconfigFlag    string
+	debugFlag                   bool
+	debugIonicFlag              string
+	inclusterFlag               bool
+	inclusterNameFlag           string
+	kubeconfigFlag              string
+	pluginPrometheusAddressFlag string
+	pluginPrometheusEnabledFlag bool
 )
 
 var rootCmd = &cobra.Command{
@@ -49,7 +52,10 @@ var rootCmd = &cobra.Command{
 		}
 
 		router := http.NewServeMux()
-		apiClient := api.NewClient(false, kubeClient)
+		apiClient := api.NewClient(false, &plugins.Config{
+			PrometheusEnabled: pluginPrometheusEnabledFlag,
+			PrometheusAddress: pluginPrometheusAddressFlag,
+		}, kubeClient)
 		apiClient.Register(router)
 
 		index, err := ioutil.ReadFile(path.Join(debugIonicFlag, "index.html"))
@@ -97,6 +103,8 @@ func init() {
 	rootCmd.PersistentFlags().BoolVar(&inclusterFlag, "incluster", false, "Use the in cluster configuration.")
 	rootCmd.PersistentFlags().StringVar(&inclusterNameFlag, "incluster.name", "kubenav", "The name which should be displayed when using the incluster flag.")
 	rootCmd.PersistentFlags().StringVar(&kubeconfigFlag, "kubeconfig", "", "Optional Kubeconfig file.")
+	rootCmd.PersistentFlags().StringVar(&pluginPrometheusAddressFlag, "plugin.prometheus.address", "", "The address for Prometheus.")
+	rootCmd.PersistentFlags().BoolVar(&pluginPrometheusEnabledFlag, "plugin.prometheus.enabled", false, "Enable the Prometheus plugin.")
 }
 
 func main() {

@@ -1,11 +1,12 @@
-package plugins
+// Package helpers implements some useful function which are shared between multiple plugins.
+package helpers
 
 import (
 	"github.com/mitchellh/mapstructure"
 )
 
-// mapToStruct converts the map from a plugin request which can contain additional data, to a struct.
-func mapToStruct(request map[string]interface{}, result interface{}) error {
+// MapToStruct converts the map from a plugin request which can contain additional data, to a struct.
+func MapToStruct(request map[string]interface{}, result interface{}) error {
 	cfg := &mapstructure.DecoderConfig{
 		Metadata: nil,
 		Result:   result,

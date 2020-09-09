@@ -188,9 +188,9 @@ func (c *Client) kubernetesSSHHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // kubernetesPortForwardingHandler handles all requests related to port forwarding.
-//   - GET: Return all active port forwarding sessions
-//   - POST: Initialize a new port forwarding session
-//   - DELETE: Delete a port forwarding session
+//   - GET: Return all active port forwarding sessions.
+//   - POST: Initialize a new port forwarding session.
+//   - DELETE: Delete a port forwarding session.
 func (c *Client) kubernetesPortForwardingHandler(w http.ResponseWriter, r *http.Request) {
 	// GET returns all active port forwarding sessions. We filter the active sessions to exclude the sessions needed for
 	// plugins.
@@ -276,36 +276,48 @@ func (c *Client) kubernetesPortForwardingHandler(w http.ResponseWriter, r *http.
 	return
 }
 
-// kubernetesPluginHandler handles all requests for plugins
+// kubernetesPluginHandler handles all requests for plugins.
+//   - GET: Return the settings for plugins.
+//   - POST: Executes the action for a plugin.
 func (c *Client) kubernetesPluginHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		middleware.Write(w, r, nil)
+	// GET returns the server side configured settings for a plugin. This is only used for kubenav when it runs inside
+	// a Kubernetes cluster and allows us to enable a plugin via a command-line flag and to use the cluster URL of this
+	// plugin. So we haven't to use port forwarding when running inside a Kubernetes cluster.
+	if r.Method == http.MethodGet {
+		middleware.Write(w, r, c.pluginConfig)
 		return
 	}
 
-	var request plugins.Request
-	if r.Body == nil {
-		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
-		return
-	}
-	err := json.NewDecoder(r.Body).Decode(&request)
-	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
+	// POST executes the plugin logic. For example the Prometheus plugin allows us to run queries against Prometheus and
+	// visulize the results in our React app.
+	if r.Method == http.MethodPost {
+		var request plugins.Request
+		if r.Body == nil {
+			middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
+			return
+		}
+		err := json.NewDecoder(r.Body).Decode(&request)
+		if err != nil {
+			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
+			return
+		}
+
+		config, clientset, err := c.kubeClient.GetConfigAndClientset(request.Cluster, request.URL, request.CertificateAuthorityData, request.ClientCertificateData, request.ClientKeyData, request.Token, request.Username, request.Password, request.InsecureSkipTLSVerify, time.Duration(request.Timeout)*time.Second, request.Proxy)
+		if err != nil {
+			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
+			return
+		}
+
+		data, err := plugins.Run(config, clientset, request.Name, request.URL, request.Port, request.Address, request.Data)
+		if err != nil {
+			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("An error occured: %s", err.Error()))
+			return
+		}
+
+		middleware.Write(w, r, data)
 		return
 	}
 
-	config, clientset, err := c.kubeClient.GetConfigAndClientset(request.Cluster, request.URL, request.CertificateAuthorityData, request.ClientCertificateData, request.ClientKeyData, request.Token, request.Username, request.Password, request.InsecureSkipTLSVerify, time.Duration(request.Timeout)*time.Second, request.Proxy)
-	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
-		return
-	}
-
-	data, err := plugins.DoPluginAction(config, clientset, request.Name, request.URL, request.Port, request.Data)
-	if err != nil {
-		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("An error occured: %s", err.Error()))
-		return
-	}
-
-	middleware.Write(w, r, data)
+	middleware.Write(w, r, nil)
 	return
 }

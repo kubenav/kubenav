@@ -82,6 +82,8 @@ var Sessions = SessionMap{Sessions: make(map[string]*PortForwardSession)}
 
 // NewPortForwarding returns a new PortForward struct with all details needed to start the port forwarding. It also adds
 // it to the map of port forwarding sessions.
+// The sessionPrefix is used to filter the returned port forwarding sessions in our API, so that sessions for plugins
+// are not included in the returned list.
 // When the local port is 0 a random port is picked.
 func NewPortForwarding(config *rest.Config, sessionPrefix, podURL, podName, podNamespace string, podPort, localPort int64) (*PortForwardSession, error) {
 	if localPort == 0 {
