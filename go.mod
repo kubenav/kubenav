@@ -12,7 +12,7 @@ require (
 	github.com/asticode/go-astikit v0.8.0
 	github.com/asticode/go-astilectron v0.16.0
 	github.com/asticode/go-astilectron-bootstrap v0.4.0
-	github.com/asticode/go-astilectron-bundler v0.7.0 // indirect
+	github.com/asticode/go-astilectron-bundler v0.7.0
 	github.com/aws/aws-sdk-go v1.30.20
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/elazarl/go-bindata-assetfs v1.0.0
@@ -27,7 +27,7 @@ require (
 	github.com/sirupsen/logrus v1.6.0
 	github.com/spf13/cobra v1.0.0
 	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073
-	golang.org/x/mobile v0.0.0-20200801112145-973feb4309de // indirect
+	golang.org/x/mobile v0.0.0-20200801112145-973feb4309de
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
 	golang.org/x/sys v0.0.0-20200420163511-1957bb5e6d1f // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
