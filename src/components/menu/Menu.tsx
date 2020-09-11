@@ -17,7 +17,13 @@ import React, { memo, useContext, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { IAppSections, IContext } from '../../declarations';
-import { CUSTOM_URI_SCHEME, GOOGLE_REDIRECT_URI, OIDC_REDIRECT_URL, SERVER } from '../../utils/constants';
+import {
+  CUSTOM_URI_SCHEME,
+  GOOGLE_REDIRECT_URI,
+  INCLUSTER_URL,
+  IS_INCLUSTER,
+  OIDC_REDIRECT_URL,
+} from '../../utils/constants';
 import { AppContext } from '../../utils/context';
 import Clusters from './Clusters';
 import Sections from './Sections';
@@ -43,7 +49,7 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections, history, location
   if (isPlatform('electron') && !eventSourceInitialized) {
     setEventSourceInitialized(true);
 
-    const eventSource = new EventSource(`${SERVER}/api/electron`);
+    const eventSource = new EventSource(`${INCLUSTER_URL}/api/electron`);
 
     eventSource.addEventListener('navigation', async (event) => {
       const msg = event as MessageEvent;
@@ -80,21 +86,23 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections, history, location
       </IonHeader>
       <IonContent>
         <IonList>
-          <Clusters />
+          {IS_INCLUSTER || (context.clusters && Object.keys(context.clusters).length === 1) ? null : <Clusters />}
 
           <Sections sections={sections} isMenu={true} />
 
           <IonListHeader mode="md">
             <IonLabel>Settings</IonLabel>
           </IonListHeader>
-          <IonMenuToggle autoHide={false}>
-            <IonItem routerLink="/settings/clusters" routerDirection="root">
-              <IonAvatar slot="start">
-                <img alt="Clusters" src="/assets/icons/kubernetes/kubernetes.png" />
-              </IonAvatar>
-              <IonLabel>Clusters</IonLabel>
-            </IonItem>
-          </IonMenuToggle>
+          {IS_INCLUSTER ? null : (
+            <IonMenuToggle autoHide={false}>
+              <IonItem routerLink="/settings/clusters" routerDirection="root">
+                <IonAvatar slot="start">
+                  <img alt="Clusters" src="/assets/icons/kubernetes/kubernetes.png" />
+                </IonAvatar>
+                <IonLabel>Clusters</IonLabel>
+              </IonItem>
+            </IonMenuToggle>
+          )}
           <IonMenuToggle autoHide={false}>
             <IonItem routerLink="/settings/general" routerDirection="root">
               <IonAvatar slot="start">

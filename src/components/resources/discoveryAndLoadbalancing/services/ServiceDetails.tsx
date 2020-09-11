@@ -3,7 +3,7 @@ import { V1LoadBalancerIngress, V1Service, V1ServicePort } from '@kubernetes/cli
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { IS_SERVER } from '../../../../utils/constants';
+import { IS_INCLUSTER } from '../../../../utils/constants';
 import { matchLabels } from '../../../../utils/helpers';
 import List from '../../misc/List';
 import Port from '../../misc/Port';
@@ -49,7 +49,7 @@ const ServiceDetails: React.FunctionComponent<IServiceDetailsProps> = ({ item, t
                 return (
                   <Port
                     key={index}
-                    enabled={!IS_SERVER && (port.protocol === undefined || port.protocol === 'TCP')}
+                    enabled={!IS_INCLUSTER && (port.protocol === undefined || port.protocol === 'TCP')}
                     name=""
                     namespace={item.metadata && item.metadata.namespace ? item.metadata.namespace : ''}
                     selector={

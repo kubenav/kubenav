@@ -215,7 +215,7 @@ const HorizontalPodAutoscalerDetails: React.FunctionComponent<IHorizontalPodAuto
 
       {item.status && item.status.conditions ? (
         <IonRow>
-          <Conditions conditions={item.status.conditions} forceFullWidth={true} />
+          <Conditions conditions={item.status.conditions} />
         </IonRow>
       ) : null}
 

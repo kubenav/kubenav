@@ -28,10 +28,10 @@ type Client interface {
 // NewClient returns a new Kubernetes API client.
 // The mobile version of kubenav needs no additional parameters, but for the server and desktop version we provide more
 // configuration options which are set via command-line arguments and therefor we have to pass them to the client.
-func NewClient(isMobile bool, incluster bool, inclusterName string, kubeconfig string, kubeconfigInclude string, kubeconfigExclude string) (Client, error) {
+func NewClient(isMobile bool, incluster bool, kubeconfig string, kubeconfigInclude string, kubeconfigExclude string) (Client, error) {
 	if isMobile {
 		return mobile.NewClient()
 	}
 
-	return server.NewClient(incluster, inclusterName, kubeconfig, kubeconfigInclude, kubeconfigExclude)
+	return server.NewClient(incluster, kubeconfig, kubeconfigInclude, kubeconfigExclude)
 }

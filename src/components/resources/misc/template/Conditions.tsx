@@ -7,21 +7,11 @@ import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
 
 interface IPodConditionsProps {
   conditions: TCondition[];
-  forceFullWidth?: boolean;
 }
 
-const Conditions: React.FunctionComponent<IPodConditionsProps> = ({
-  conditions,
-  forceFullWidth,
-}: IPodConditionsProps) => {
+const Conditions: React.FunctionComponent<IPodConditionsProps> = ({ conditions }: IPodConditionsProps) => {
   return (
-    <IonCol
-      sizeXs="12"
-      sizeSm="12"
-      sizeMd="12"
-      sizeLg={forceFullWidth ? '12' : '6'}
-      sizeXl={forceFullWidth ? '12' : '6'}
-    >
+    <IonCol>
       <IonCardEqualHeight>
         <IonCardHeader>
           <IonCardTitle>Conditions</IonCardTitle>

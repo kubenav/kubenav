@@ -1,20 +1,16 @@
-import { IonCardHeader, IonCardTitle, IonCol, IonGrid, IonLabel, IonRow } from '@ionic/react';
+import { IonCardHeader, IonCardTitle, IonCol, IonGrid, IonLabel, IonRouterLink, IonRow } from '@ionic/react';
 import { V1Container, V1ContainerPort, V1Pod } from '@kubernetes/client-node';
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext, IPodMetrics } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
-import { IS_SERVER } from '../../../../utils/constants';
+import { IS_INCLUSTER } from '../../../../utils/constants';
 import { AppContext } from '../../../../utils/context';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
 import Prometheus from '../../../plugins/Prometheus';
-import Permissions from '../../configAndStorage/serviceAccounts/Permissions';
 import List from '../../misc/List';
-import Affinities from '../../misc/podTemplate/affinities/Affinities';
 import Containers from '../../misc/podTemplate/containers/Containers';
-import Tolerations from '../../misc/podTemplate/tolerations/Tolerations';
-import Volumes from '../../misc/podTemplate/volumes/Volumes';
 import Port from '../../misc/Port';
 import Conditions from '../../misc/template/Conditions';
 import Configuration from '../../misc/template/Configuration';
@@ -64,8 +60,34 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
       <IonRow>
         <Configuration>
           <Row obj={item} objKey="spec.priority" title="Priority" />
-          <Row obj={item} objKey="spec.nodeName" title="Node" />
-          <Row obj={item} objKey="spec.serviceAccountName" title="Service Account" />
+          <Row
+            obj={item}
+            objKey="spec.nodeName"
+            title="Node"
+            value={(nodeName: string) => (
+              <IonRouterLink
+                routerLink={`/resources/cluster/nodes/${item.metadata ? item.metadata.namespace : ''}/${nodeName}`}
+                routerDirection="forward"
+              >
+                {nodeName}
+              </IonRouterLink>
+            )}
+          />
+          <Row
+            obj={item}
+            objKey="spec.serviceAccountName"
+            title="Service Account"
+            value={(serviceAccountName: string) => (
+              <IonRouterLink
+                routerLink={`/resources/config-and-storage/serviceaccounts/${
+                  item.metadata ? item.metadata.namespace : ''
+                }/${serviceAccountName}`}
+                routerDirection="forward"
+              >
+                {serviceAccountName}
+              </IonRouterLink>
+            )}
+          />
           <Row obj={item} objKey="spec.restartPolicy" title="Restart Policy" />
           <Row obj={item} objKey="spec.terminationGracePeriodSeconds" title="Termination Grace Period Seconds" />
           <Row
@@ -79,7 +101,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                     return (
                       <Port
                         key={index}
-                        enabled={!IS_SERVER && (port.protocol === undefined || port.protocol === 'TCP')}
+                        enabled={!IS_INCLUSTER && (port.protocol === undefined || port.protocol === 'TCP')}
                         name={item.metadata && item.metadata.name ? item.metadata.name : ''}
                         namespace={item.metadata && item.metadata.namespace ? item.metadata.namespace : ''}
                         selector=""
@@ -149,19 +171,10 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
         ) : null}
       </IonRow>
 
-      <IonRow>
-        {item.status && item.status.conditions ? <Conditions conditions={item.status.conditions} /> : null}
-        {item.spec && item.spec.volumes ? <Volumes volumes={item.spec.volumes} /> : null}
-        {item.spec &&
-        item.spec.tolerations &&
-        item.spec.tolerations.filter((toleration) => !!toleration.key).length > 0 ? (
-          <Tolerations tolerations={item.spec.tolerations} />
-        ) : null}
-        {item.spec && item.spec.affinity ? <Affinities affinities={item.spec.affinity} /> : null}
-      </IonRow>
-
-      {item.metadata && item.metadata.namespace && item.spec && item.spec.serviceAccountName ? (
-        <Permissions namespace={item.metadata.namespace} serviceAccountName={item.spec.serviceAccountName} />
+      {item.status && item.status.conditions ? (
+        <IonRow>
+          <Conditions conditions={item.status.conditions} />
+        </IonRow>
       ) : null}
 
       {item.metadata && item.metadata.name && item.metadata.namespace ? (

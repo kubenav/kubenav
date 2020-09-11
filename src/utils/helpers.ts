@@ -10,29 +10,6 @@ export const capitalize = (s: any) => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
-// formatBytes converts a given number of the unit bytes into a human readable string.
-// If the si parameter is true, the function uses 1000 instead of 1024 to convert the given number.
-// See: https://stackoverflow.com/a/14919494
-export const formatBytes = (bytes: number, si: boolean): string => {
-  const thresh = si ? 1000 : 1024;
-  const units = si
-    ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-    : ['kiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
-
-  if (Math.abs(bytes) < thresh) {
-    return bytes + ' B';
-  }
-
-  let u = -1;
-
-  do {
-    bytes /= thresh;
-    ++u;
-  } while (Math.abs(bytes) >= thresh && u < units.length - 1);
-
-  return bytes.toFixed(1) + ' ' + units[u];
-};
-
 // formatResourceValue converts the given value for CPU, memory or ephemeral storage to another unit.
 // Idea: Maybe we can reuse the formatBytes function for memory and ephemeral storage.
 export const formatResourceValue = (type: string, value: string): string => {

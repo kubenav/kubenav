@@ -1,44 +1,36 @@
-import { IonButton, IonIcon, IonItemOption } from '@ionic/react';
+import { IonChip, IonIcon, IonLabel } from '@ionic/react';
 import { terminal } from 'ionicons/icons';
 import React, { useContext } from 'react';
 
-import { IContext, ITerminalContext, TActivator } from '../../declarations';
+import { IContext, ITerminalContext } from '../../declarations';
 import { AppContext } from '../../utils/context';
 import { TerminalContext } from '../../utils/terminal';
 import { addSSH } from './helpers';
 
 interface IAddShellProps {
-  activator: TActivator;
+  type: string;
   node: string;
   ip: string;
 }
 
-const AddShell: React.FunctionComponent<IAddShellProps> = ({ activator, node, ip }: IAddShellProps) => {
+const AddShell: React.FunctionComponent<IAddShellProps> = ({ type, node, ip }: IAddShellProps) => {
   const context = useContext<IContext>(AppContext);
   const terminalContext = useContext<ITerminalContext>(TerminalContext);
 
-  if (activator === 'item-option') {
-    return (
-      <IonItemOption color="primary" onClick={() => addSSH(context, terminalContext, node, ip)}>
-        <IonIcon slot="start" icon={terminal} />
-        SSH
-      </IonItemOption>
-    );
-  } else {
-    return (
-      <IonButton
-        fill="outline"
-        slot="end"
-        onClick={(e) => {
-          e.stopPropagation();
-          addSSH(context, terminalContext, node, ip);
-        }}
-      >
-        <IonIcon slot="start" icon={terminal} />
-        SSH
-      </IonButton>
-    );
-  }
+  return (
+    <IonChip
+      className="unset-chip-height"
+      onClick={(e) => {
+        e.stopPropagation();
+        addSSH(context, terminalContext, node, ip);
+      }}
+    >
+      <IonIcon icon={terminal} color="primary" />
+      <IonLabel>
+        {type}: {ip}
+      </IonLabel>
+    </IonChip>
+  );
 };
 
 export default AddShell;
