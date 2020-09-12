@@ -1,12 +1,16 @@
 import { IonCardContent, IonCardHeader, IonCardTitle, IonCol } from '@ionic/react';
 import React from 'react';
 
-import { TCondition } from '../../../../declarations';
-import { getProperty, timeDifference } from '../../../../utils/helpers';
+import { getProperty } from '../../../../utils/helpers';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
+import Condition, { TCondition } from './Condition';
+
+interface IConditions {
+  [key: string]: TCondition;
+}
 
 interface IPodConditionsProps {
-  conditions: TCondition[];
+  conditions: TCondition[] | IConditions;
 }
 
 const Conditions: React.FunctionComponent<IPodConditionsProps> = ({ conditions }: IPodConditionsProps) => {
@@ -32,46 +36,9 @@ const Conditions: React.FunctionComponent<IPodConditionsProps> = ({ conditions }
                 </tr>
               </thead>
               <tbody>
-                {conditions.map((condition, index) => (
-                  <tr key={index}>
-                    <td>{condition.type}</td>
-                    <td>{condition.status}</td>
-                    {getProperty(condition, 'lastProbeTime') ? (
-                      <td>
-                        {timeDifference(
-                          new Date().getTime(),
-                          new Date(getProperty(condition, 'lastProbeTime').toString()).getTime(),
-                        )}
-                      </td>
-                    ) : null}
-                    {getProperty(condition, 'lastUpdateTime') ? (
-                      <td>
-                        {timeDifference(
-                          new Date().getTime(),
-                          new Date(getProperty(condition, 'lastUpdateTime').toString()).getTime(),
-                        )}
-                      </td>
-                    ) : null}
-                    {getProperty(condition, 'lastHeartbeatTime') ? (
-                      <td>
-                        {timeDifference(
-                          new Date().getTime(),
-                          new Date(getProperty(condition, 'lastHeartbeatTime').toString()).getTime(),
-                        )}
-                      </td>
-                    ) : null}
-                    <td>
-                      {condition.lastTransitionTime
-                        ? timeDifference(
-                            new Date().getTime(),
-                            new Date(condition.lastTransitionTime.toString()).getTime(),
-                          )
-                        : null}
-                    </td>
-                    <td>{condition.reason}</td>
-                    <td>{condition.message}</td>
-                  </tr>
-                ))}
+                {conditions instanceof Array
+                  ? conditions.map((condition, index) => <Condition key={index} condition={condition} />)
+                  : Object.keys(conditions).map((key) => <Condition key={key} condition={conditions[key]} />)}
               </tbody>
             </table>
           </div>

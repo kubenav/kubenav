@@ -44,10 +44,15 @@ const getURL = (namespace: string, group: string, version: string, name: string)
 };
 
 const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageProps> = ({
+  location,
   match,
 }: ICustomResourcesListPageProps) => {
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
+
+  // scope can be "Cluster" or "Namespaced", for a cluster scoped CRD we have to set the namespace to "" to retrive all
+  // CRs.
+  const scope = new URLSearchParams(location.search).get('scope');
 
   // namespace and showNamespace is used to group all items by namespace and to only show the namespace once via the
   // IonItemDivider component.
@@ -62,7 +67,12 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
     async () =>
       await kubernetesRequest(
         'GET',
-        getURL(cluster ? cluster.namespace : '', match.params.group, match.params.version, match.params.name),
+        getURL(
+          scope === 'Cluster' ? '' : cluster ? cluster.namespace : '',
+          match.params.group,
+          match.params.version,
+          match.params.name,
+        ),
         '',
         context.settings,
         await context.kubernetesAuthWrapper(''),

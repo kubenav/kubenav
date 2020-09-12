@@ -20,7 +20,7 @@ const CustomResourceDefinitionItem: React.FunctionComponent<ICustomResourceDefin
     <IonItem
       routerLink={`/customresources/${item.spec ? item.spec.group : ''}/${item.spec ? item.spec.version : ''}/${
         item.spec && item.spec.names ? item.spec.names.plural : ''
-      }`}
+      }?scope=${item.spec && item.spec.scope ? item.spec.scope : ''}`}
       routerDirection="forward"
     >
       <IonLabel>
