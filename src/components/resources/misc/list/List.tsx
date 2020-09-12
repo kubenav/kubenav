@@ -1,11 +1,11 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonList } from '@ionic/react';
 import React, { useContext, useEffect } from 'react';
 
-import { IContext } from '../../../declarations';
-import { kubernetesRequest } from '../../../utils/api';
-import { AppContext } from '../../../utils/context';
-import { resources } from '../../../utils/resources';
-import useAsyncFn from '../../../utils/useAsyncFn';
+import { IContext } from '../../../../declarations';
+import { kubernetesRequest } from '../../../../utils/api';
+import { AppContext } from '../../../../utils/context';
+import { resources } from '../../../../utils/resources';
+import useAsyncFn from '../../../../utils/useAsyncFn';
 
 interface IListProps {
   name: string;

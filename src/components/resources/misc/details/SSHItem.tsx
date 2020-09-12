@@ -6,7 +6,7 @@ import React, { useContext, useState } from 'react';
 import { IContext, ITerminalContext, TActivator } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import { TerminalContext } from '../../../../utils/terminal';
-import { addSSH } from '../../../terminal/helpers';
+import { addSSH } from '../../../plugins/terminal/helpers';
 
 interface ISSHItemProps {
   activator: TActivator;

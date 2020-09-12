@@ -7,7 +7,7 @@ import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
 import Prometheus from '../../../plugins/Prometheus';
-import List from '../../misc/List';
+import List from '../../misc/list/List';
 import Conditions from '../../misc/template/Conditions';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';

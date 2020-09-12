@@ -18,7 +18,7 @@ import {
 import { close, ellipsisHorizontal, ellipsisVertical } from 'ionicons/icons';
 import React, { useState, useEffect } from 'react';
 
-import { ITerminal } from '../../declarations';
+import { ITerminal } from '../../../declarations';
 import Shell from './Shell';
 
 interface ITerminalsProps {

@@ -7,7 +7,7 @@ import { LOG_TAIL_LINES } from '../../../../utils/constants';
 import { IContext, ITerminalContext, TActivator } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import { TerminalContext } from '../../../../utils/terminal';
-import { addLogs } from '../../../terminal/helpers';
+import { addLogs } from '../../../plugins/terminal/helpers';
 
 interface ILogsItemProps {
   activator: TActivator;

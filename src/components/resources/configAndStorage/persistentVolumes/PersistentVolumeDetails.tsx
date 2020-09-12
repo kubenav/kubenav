@@ -3,7 +3,7 @@ import { V1PersistentVolume } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import List from '../../misc/List';
+import List from '../../misc/list/List';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
 import Row from '../../misc/template/Row';

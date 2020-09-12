@@ -56,6 +56,10 @@ th, td {
   white-space: nowrap;
 }
 
+th.center, td.center {
+  text-align: center;
+}
+
 th:last-child, td:last-child {
   border-right: none;
 }

@@ -8,7 +8,7 @@ import { SearchAddon } from 'xterm-addon-search';
 
 import 'xterm/css/xterm.css';
 
-import { ITerminal } from '../../declarations';
+import { ITerminal } from '../../../declarations';
 
 const { Clipboard, Keyboard } = Plugins;
 

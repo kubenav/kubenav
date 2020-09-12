@@ -26,9 +26,9 @@ import { IContext } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import useAsyncFn from '../../../../utils/useAsyncFn';
+import Namespaces from '../../misc/list/Namespaces';
 import LoadingErrorCard from '../../../misc/LoadingErrorCard';
-import ItemOptions from '../../misc/modify/ItemOptions';
-import NamespacePopover from '../../misc/NamespacePopover';
+import ItemOptions from '../../misc/details/ItemOptions';
 import CustomResourceItem from './CustomResourceItem';
 
 interface IMatchParams {
@@ -98,7 +98,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
                 <IonIcon slot="icon-only" icon={refresh} />
               </IonButton>
             ) : null}
-            <NamespacePopover />
+            <Namespaces />
           </IonButtons>
         </IonToolbar>
       </IonHeader>

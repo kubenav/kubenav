@@ -2,18 +2,18 @@ import { IonChip, IonIcon, IonLabel } from '@ionic/react';
 import { terminal } from 'ionicons/icons';
 import React, { useContext } from 'react';
 
-import { IContext, ITerminalContext } from '../../declarations';
-import { AppContext } from '../../utils/context';
-import { TerminalContext } from '../../utils/terminal';
+import { IContext, ITerminalContext } from '../../../declarations';
+import { AppContext } from '../../../utils/context';
+import { TerminalContext } from '../../../utils/terminal';
 import { addSSH } from './helpers';
 
-interface IAddShellProps {
+interface IAddSSHProps {
   type: string;
   node: string;
   ip: string;
 }
 
-const AddShell: React.FunctionComponent<IAddShellProps> = ({ type, node, ip }: IAddShellProps) => {
+const AddSSH: React.FunctionComponent<IAddSSHProps> = ({ type, node, ip }: IAddSSHProps) => {
   const context = useContext<IContext>(AppContext);
   const terminalContext = useContext<ITerminalContext>(TerminalContext);
 
@@ -33,4 +33,4 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({ type, node, ip }: I
   );
 };
 
-export default AddShell;
+export default AddSSH;
