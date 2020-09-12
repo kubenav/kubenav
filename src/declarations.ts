@@ -1,15 +1,4 @@
-import {
-  V1DeploymentCondition,
-  V1JobCondition,
-  V1ListMeta,
-  V1NodeCondition,
-  V1ObjectMeta,
-  V1PersistentVolumeClaimCondition,
-  V1PodCondition,
-  V1ReplicaSetCondition,
-  V1ReplicationControllerCondition,
-  V1StatefulSetCondition,
-} from '@kubernetes/client-node';
+import { V1ListMeta, V1ObjectMeta } from '@kubernetes/client-node';
 import React from 'react';
 import { Terminal } from 'xterm';
 
@@ -349,15 +338,5 @@ export type TActivator = 'block-button' | 'button' | 'item' | 'item-option';
 
 // DEPRECATED: The value '' can be removed when the migration is done.
 export type TAuthProvider = '' | 'aws' | 'azure' | 'google' | 'kubeconfig' | 'oidc';
-
-export type TCondition =
-  | V1DeploymentCondition
-  | V1JobCondition
-  | V1NodeCondition
-  | V1PodCondition
-  | V1PersistentVolumeClaimCondition
-  | V1ReplicaSetCondition
-  | V1ReplicationControllerCondition
-  | V1StatefulSetCondition;
 
 export type TSyncType = 'context' | 'namespace';

@@ -6,7 +6,7 @@ import React, { useContext, useState } from 'react';
 import { IContext, ITerminalContext, TActivator } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import { TerminalContext } from '../../../../utils/terminal';
-import { addShell } from '../../../terminal/helpers';
+import { addShell } from '../../../plugins/terminal/helpers';
 
 interface IShellItemProps {
   activator: TActivator;

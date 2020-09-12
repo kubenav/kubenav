@@ -3,7 +3,7 @@ import { V1ConfigMap } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import List from '../../misc/List';
+import List from '../../misc/list/List';
 import Data from '../../misc/template/Data';
 import Metadata from '../../misc/template/Metadata';
 

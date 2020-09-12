@@ -22,7 +22,7 @@ import { kubernetesRequest } from '../../utils/api';
 import { AppContext } from '../../utils/context';
 import { resources } from '../../utils/resources';
 import useAsyncFn from '../../utils/useAsyncFn';
-import DetailsPopover from './misc/DetailsPopover';
+import Details from './misc/details/Details';
 import LoadingErrorCard from '../misc/LoadingErrorCard';
 
 interface IMatchParams {
@@ -83,7 +83,7 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
               </IonButton>
             ) : null}
             {state.value ? (
-              <DetailsPopover
+              <Details
                 type={match.params.type}
                 item={state.value}
                 url={page.detailsURL(

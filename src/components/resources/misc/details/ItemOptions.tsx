@@ -2,7 +2,7 @@ import { IonItemOptions, IonItemSliding } from '@ionic/react';
 import React, { ReactElement } from 'react';
 
 import DeleteItem from './DeleteItem';
-import EditItem from './EditItem';
+import ViewItem from './ViewItem';
 
 interface IItemOptionsProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -17,7 +17,7 @@ const ItemOptions: React.FunctionComponent<IItemOptionsProps> = ({ item, url, ch
       {children}
 
       <IonItemOptions side="end">
-        <EditItem activator="item-option" item={item} url={url} />
+        <ViewItem activator="item-option" item={item} />
         <DeleteItem activator="item-option" item={item} url={url} />
       </IonItemOptions>
     </IonItemSliding>

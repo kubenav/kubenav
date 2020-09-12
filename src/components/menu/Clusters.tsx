@@ -4,10 +4,12 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { IContext } from '../../declarations';
 import { AppContext } from '../../utils/context';
+import useWindowWidth from '../../utils/useWindowWidth';
 
 const Clusters: React.FunctionComponent<RouteComponentProps> = ({ history, location }: RouteComponentProps) => {
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
+  const width = useWindowWidth();
 
   // The change cluster function is used to change the current cluster. The function doesn't work for the
   // /settings/clusters page, because the function is also triggered when the cluster is changed on this page. Therefore
@@ -48,9 +50,9 @@ const Clusters: React.FunctionComponent<RouteComponentProps> = ({ history, locat
               disabled={location.pathname.startsWith('/settings/clusters')}
               value={cluster.id}
               onIonChange={(e) => changeCluster(e.detail.value)}
-              interface={isPlatform('hybrid') ? 'action-sheet' : 'popover'}
+              interface={isPlatform('hybrid') || width < 992 ? 'action-sheet' : 'popover'}
               interfaceOptions={
-                isPlatform('hybrid')
+                isPlatform('hybrid') || width < 992
                   ? {
                       header: 'Select Cluster',
                     }

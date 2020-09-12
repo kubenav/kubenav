@@ -3,7 +3,7 @@ import { terminal as terminalIcon } from 'ionicons/icons';
 import React, { useState, ReactElement } from 'react';
 
 import { ITerminal, ITerminalContext } from '../declarations';
-import Terminals from '../components/terminal/Terminals';
+import Terminals from '../components/plugins/terminal/Terminals';
 
 // Creates a Context object. When React renders a component that subscribes to this Context object it will read the
 // current context value from the closest matching Provider above it in the tree.

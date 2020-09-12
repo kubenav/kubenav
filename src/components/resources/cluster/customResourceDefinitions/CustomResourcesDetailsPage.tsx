@@ -24,8 +24,8 @@ import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import useAsyncFn from '../../../../utils/useAsyncFn';
 import LoadingErrorCard from '../../../misc/LoadingErrorCard';
-import List from '../../misc/List';
-import DetailsPopover from '../../misc/DetailsPopover';
+import List from '../../misc/list/List';
+import Details from '../../misc/details/Details';
 import Conditions from '../../misc/template/Conditions';
 import Metadata from '../../misc/template/Metadata';
 
@@ -101,7 +101,7 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
               </IonButton>
             ) : null}
             {state.value ? (
-              <DetailsPopover
+              <Details
                 type="customresources"
                 item={state.value}
                 url={getURL(

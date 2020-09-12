@@ -2,25 +2,27 @@ import { IonButton, IonIcon, IonList, IonPopover, isPlatform } from '@ionic/reac
 import { ellipsisHorizontal, ellipsisVertical } from 'ionicons/icons';
 import React, { useState } from 'react';
 
-import DeleteItem from './modify/DeleteItem';
-import EditItem from './modify/EditItem';
-import LogsItem from './modify/LogsItem';
-import RestartItem from './modify/RestartItem';
-import ScaleItem from './modify/ScaleItem';
-import ShellItem from './modify/ShellItem';
-import SSHItem from './modify/SSHItem';
-import ViewItem from './modify/ViewItem';
+import useWindowWidth from '../../../../utils/useWindowWidth';
+import DeleteItem from './DeleteItem';
+import EditItem from './EditItem';
+import LogsItem from './LogsItem';
+import RestartItem from './RestartItem';
+import ScaleItem from './ScaleItem';
+import ShellItem from './ShellItem';
+import SSHItem from './SSHItem';
+import ViewItem from './ViewItem';
 
-interface IDetailsPopoverProps {
+interface IDetailsProps {
   type: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
   url: string;
 }
 
-const DetailsPopover: React.FunctionComponent<IDetailsPopoverProps> = ({ type, item, url }: IDetailsPopoverProps) => {
+const Details: React.FunctionComponent<IDetailsProps> = ({ type, item, url }: IDetailsProps) => {
   const [showPopover, setShowPopover] = useState<boolean>(false);
   const [popoverEvent, setPopoverEvent] = useState();
+  const width = useWindowWidth();
 
   return (
     <React.Fragment>
@@ -35,9 +37,13 @@ const DetailsPopover: React.FunctionComponent<IDetailsPopoverProps> = ({ type, i
           {type === 'deployments' || type === 'statefulsets' || type === 'daemonsets' ? (
             <RestartItem activator="item" item={item} url={url} />
           ) : null}
-          {isPlatform('hybrid') && type === 'pods' ? <LogsItem activator="item" item={item} url={url} /> : null}
-          {isPlatform('hybrid') && type === 'pods' ? <ShellItem activator="item" item={item} url={url} /> : null}
-          {isPlatform('hybrid') && type === 'nodes' ? <SSHItem activator="item" item={item} /> : null}
+          {(isPlatform('hybrid') || width < 992) && type === 'pods' ? (
+            <LogsItem activator="item" item={item} url={url} />
+          ) : null}
+          {(isPlatform('hybrid') || width < 992) && type === 'pods' ? (
+            <ShellItem activator="item" item={item} url={url} />
+          ) : null}
+          {(isPlatform('hybrid') || width < 992) && type === 'nodes' ? <SSHItem activator="item" item={item} /> : null}
           <ViewItem activator="item" item={item} />
           <EditItem activator="item" item={item} url={url} />
           <DeleteItem activator="item" item={item} url={url} />
@@ -58,4 +64,4 @@ const DetailsPopover: React.FunctionComponent<IDetailsPopoverProps> = ({ type, i
   );
 };
 
-export default DetailsPopover;
+export default Details;

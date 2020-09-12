@@ -1,25 +1,21 @@
 import { IonButton, IonIcon, IonItem, IonItemOption, IonLabel, IonList, IonPopover } from '@ionic/react';
-import { terminal } from 'ionicons/icons';
+import { list } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 
-import { IContext, ITerminalContext, TActivator } from '../../declarations';
-import { AppContext } from '../../utils/context';
-import { TerminalContext } from '../../utils/terminal';
-import { addShell } from './helpers';
+import { IContext, ITerminalContext, TActivator } from '../../../declarations';
+import { LOG_TAIL_LINES } from '../../../utils/constants';
+import { AppContext } from '../../../utils/context';
+import { TerminalContext } from '../../../utils/terminal';
+import { addLogs } from './helpers';
 
-interface IAddShellProps {
+interface IAddLogsProps {
   activator: TActivator;
   namespace: string;
   pod: string;
   container: string;
 }
 
-const AddShell: React.FunctionComponent<IAddShellProps> = ({
-  activator,
-  namespace,
-  pod,
-  container,
-}: IAddShellProps) => {
+const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace, pod, container }: IAddLogsProps) => {
   const context = useContext<IContext>(AppContext);
   const terminalContext = useContext<ITerminalContext>(TerminalContext);
 
@@ -38,10 +34,10 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              addShell(context, terminalContext, url, container, 'bash');
+              addLogs(context, terminalContext, url, container, false, LOG_TAIL_LINES, false);
             }}
           >
-            <IonLabel>bash</IonLabel>
+            <IonLabel>{`Last ${LOG_TAIL_LINES} Log Lines`}</IonLabel>
           </IonItem>
           <IonItem
             button={true}
@@ -49,10 +45,10 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              addShell(context, terminalContext, url, container, 'sh');
+              addLogs(context, terminalContext, url, container, false, 0, false);
             }}
           >
-            <IonLabel>sh</IonLabel>
+            <IonLabel>All Log Lines</IonLabel>
           </IonItem>
           <IonItem
             button={true}
@@ -60,10 +56,10 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              addShell(context, terminalContext, url, container, 'powershell');
+              addLogs(context, terminalContext, url, container, true, LOG_TAIL_LINES, false);
             }}
           >
-            <IonLabel>powershell</IonLabel>
+            <IonLabel>{`Previous Last ${LOG_TAIL_LINES} Log Lines`}</IonLabel>
           </IonItem>
           <IonItem
             button={true}
@@ -71,10 +67,21 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
-              addShell(context, terminalContext, url, container, 'cmd');
+              addLogs(context, terminalContext, url, container, true, 0, false);
             }}
           >
-            <IonLabel>cmd</IonLabel>
+            <IonLabel>All Previous Log Lines</IonLabel>
+          </IonItem>
+          <IonItem
+            button={true}
+            detail={false}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowPopover(false);
+              addLogs(context, terminalContext, url, container, false, LOG_TAIL_LINES, true);
+            }}
+          >
+            <IonLabel>Stream Log Lines</IonLabel>
           </IonItem>
         </IonList>
       </IonPopover>
@@ -89,14 +96,15 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({
             setShowPopover(true);
           }}
         >
-          <IonIcon slot="start" icon={terminal} />
-          Term
+          <IonIcon slot="start" icon={list} />
+          Logs
         </IonItemOption>
       ) : null}
 
       {activator === 'button' ? (
         <IonButton
-          fill="outline"
+          size="small"
+          fill="clear"
           slot="end"
           onClick={(e) => {
             e.stopPropagation();
@@ -106,12 +114,11 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({
             setShowPopover(true);
           }}
         >
-          <IonIcon slot="start" icon={terminal} />
-          Term
+          <IonIcon slot="icon-only" icon={list} />
         </IonButton>
       ) : null}
     </React.Fragment>
   );
 };
 
-export default AddShell;
+export default AddLogs;

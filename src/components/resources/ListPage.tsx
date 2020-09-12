@@ -29,8 +29,8 @@ import { isNamespaced } from '../../utils/helpers';
 import { resources } from '../../utils/resources';
 import useAsyncFn from '../../utils/useAsyncFn';
 import LoadingErrorCard from '../misc/LoadingErrorCard';
-import ItemOptions from './misc/modify/ItemOptions';
-import NamespacePopover from './misc/NamespacePopover';
+import Namespaces from './misc/list/Namespaces';
+import ItemOptions from './misc/details/ItemOptions';
 
 interface IMatchParams {
   section: string;
@@ -99,7 +99,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
                 <IonIcon slot="icon-only" icon={refresh} />
               </IonButton>
             ) : null}
-            {isNamespaced(match.params.type) ? <NamespacePopover /> : null}
+            {isNamespaced(match.params.type) ? <Namespaces /> : null}
           </IonButtons>
         </IonToolbar>
       </IonHeader>

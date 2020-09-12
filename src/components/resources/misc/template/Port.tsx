@@ -2,10 +2,10 @@ import { IonAlert, IonChip, IonToast } from '@ionic/react';
 import { V1Container, V1PodList } from '@kubernetes/client-node';
 import React, { useContext, useState, ReactElement } from 'react';
 
-import { IContext, IPortForwardingContext } from '../../../declarations';
-import { kubernetesRequest } from '../../../utils/api';
-import { AppContext } from '../../../utils/context';
-import { PortForwardingContext } from '../../../utils/portforwarding';
+import { IContext, IPortForwardingContext } from '../../../../declarations';
+import { kubernetesRequest } from '../../../../utils/api';
+import { AppContext } from '../../../../utils/context';
+import { PortForwardingContext } from '../../../../utils/portforwarding';
 
 // getPortFromTargetPort is used to get the port from a specified target port in a service.
 // If the target port is a number we directly return the port number.

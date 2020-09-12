@@ -3,11 +3,11 @@ import { V1Namespace, V1NamespaceList } from '@kubernetes/client-node';
 import { checkmark, options } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 
-import { IContext } from '../../../declarations';
-import { kubernetesRequest } from '../../../utils/api';
-import { AppContext } from '../../../utils/context';
+import { IContext } from '../../../../declarations';
+import { kubernetesRequest } from '../../../../utils/api';
+import { AppContext } from '../../../../utils/context';
 
-const NamespacePopover: React.FunctionComponent = () => {
+const Namespaces: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
 
@@ -99,4 +99,4 @@ const NamespacePopover: React.FunctionComponent = () => {
   );
 };
 
-export default NamespacePopover;
+export default Namespaces;

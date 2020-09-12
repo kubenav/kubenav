@@ -5,10 +5,10 @@ import { RouteComponentProps } from 'react-router';
 
 import { IS_INCLUSTER } from '../../../../utils/constants';
 import { matchLabels } from '../../../../utils/helpers';
-import List from '../../misc/List';
-import Port from '../../misc/Port';
+import List from '../../misc/list/List';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
+import Port from '../../misc/template/Port';
 import Row from '../../misc/template/Row';
 import Status from '../../misc/template/Status';
 
