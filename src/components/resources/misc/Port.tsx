@@ -1,5 +1,5 @@
 import { IonAlert, IonChip, IonToast } from '@ionic/react';
-import { V1PodList } from '@kubernetes/client-node';
+import { V1Container, V1PodList } from '@kubernetes/client-node';
 import React, { useContext, useState, ReactElement } from 'react';
 
 import { IContext, IPortForwardingContext } from '../../../declarations';
@@ -7,12 +7,38 @@ import { kubernetesRequest } from '../../../utils/api';
 import { AppContext } from '../../../utils/context';
 import { PortForwardingContext } from '../../../utils/portforwarding';
 
+// getPortFromTargetPort is used to get the port from a specified target port in a service.
+// If the target port is a number we directly return the port number.
+// Therefor we have to iterate over each container and port in a pod. If the port was found we return the container port
+// number.
+// If we couldn't found the correct port we are returning 0, which isn't a valid port for the port forwarding.
+// eslint-disable-next-line @typescript-eslint/ban-types
+const getPortFromTargetPort = (targetPort: object, containers: V1Container[]): number => {
+  if (!isNaN((targetPort as unknown) as number)) {
+    return (targetPort as unknown) as number;
+  }
+
+  for (const container of containers) {
+    if (container.ports) {
+      for (const port of container.ports) {
+        if (port.name === ((targetPort as unknown) as string)) {
+          return port.containerPort;
+        }
+      }
+    }
+  }
+
+  return 0;
+};
+
 interface IPortProps {
   enabled: boolean;
   name: string;
   namespace: string;
   selector: string;
   port: number;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  targetPort?: object;
   children: ReactElement;
 }
 
@@ -22,6 +48,7 @@ const Port: React.FunctionComponent<IPortProps> = ({
   namespace,
   selector,
   port,
+  targetPort,
   children,
 }: IPortProps) => {
   const context = useContext<IContext>(AppContext);
@@ -41,6 +68,13 @@ const Port: React.FunctionComponent<IPortProps> = ({
         );
 
         if (podList.items.length > 0 && podList.items[0].metadata) {
+          if (targetPort && podList.items[0].spec && podList.items[0].spec.containers) {
+            port = getPortFromTargetPort(targetPort, podList.items[0].spec.containers);
+            if (port === 0) {
+              throw new Error('Target port was not found.');
+            }
+          }
+
           await portForwardingContext.add({
             id: '',
             podName: podList.items[0].metadata.name ? podList.items[0].metadata.name : '',
@@ -48,6 +82,8 @@ const Port: React.FunctionComponent<IPortProps> = ({
             podPort: port,
             localPort: localPort,
           });
+        } else {
+          throw new Error('Pod was not found.');
         }
       } else {
         await portForwardingContext.add({
