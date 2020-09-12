@@ -59,6 +59,19 @@ const EndpointDetails: React.FunctionComponent<IEndpointDetailsProps> = ({ item,
                     <IonCardTitle>Addresses</IonCardTitle>
                   </IonCardHeader>
                   <IonCardContent>
+                    {subset.ports
+                      ? subset.ports.map((port: V1EndpointPort, index: number) => {
+                          return (
+                            <IonChip key={index} className="unset-chip-height">
+                              <IonLabel>
+                                {port.name} {port.port}
+                                {port.protocol ? `/${port.protocol}` : ''}
+                              </IonLabel>
+                            </IonChip>
+                          );
+                        })
+                      : null}
+
                     <IonList>
                       {subset.addresses
                         ? subset.addresses.map((address: V1EndpointAddress, index: number) => {
@@ -78,23 +91,6 @@ const EndpointDetails: React.FunctionComponent<IEndpointDetailsProps> = ({ item,
                           })
                         : null}
                     </IonList>
-                  </IonCardContent>
-                  <IonCardHeader>
-                    <IonCardTitle>Ports</IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    {subset.ports
-                      ? subset.ports.map((port: V1EndpointPort, index: number) => {
-                          return (
-                            <IonChip key={index} className="unset-chip-height">
-                              <IonLabel>
-                                {port.name} {port.port}
-                                {port.protocol ? `/${port.protocol}` : ''}
-                              </IonLabel>
-                            </IonChip>
-                          );
-                        })
-                      : null}
                   </IonCardContent>
                 </IonCard>
               </IonCol>

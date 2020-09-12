@@ -1,11 +1,10 @@
-import { IonGrid, IonItemDivider, IonLabel, IonRow } from '@ionic/react';
+import { IonGrid, IonRow } from '@ionic/react';
 import { V1beta1CronJob, V1Job } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { timeDifference } from '../../../../utils/helpers';
 import List from '../../misc/List';
-import Containers from '../../misc/podTemplate/containers/Containers';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
 import Row from '../../misc/template/Row';
@@ -67,35 +66,6 @@ const CronJobDetails: React.FunctionComponent<ICronJobDetailsProps> = ({ item, t
           />
         </IonRow>
       ) : null}
-
-      <IonItemDivider>
-        <IonLabel>Job Template</IonLabel>
-      </IonItemDivider>
-
-      <IonRow>
-        {item.spec &&
-        item.spec.jobTemplate.spec &&
-        item.spec.jobTemplate.spec.template.spec &&
-        item.spec.jobTemplate.spec.template.spec.initContainers &&
-        item.spec.jobTemplate.spec.template.spec.initContainers.length > 0 ? (
-          <Containers
-            containers={item.spec.jobTemplate.spec.template.spec.initContainers}
-            statuses={undefined}
-            title="Init Containers"
-          />
-        ) : null}
-        {item.spec &&
-        item.spec.jobTemplate.spec &&
-        item.spec.jobTemplate.spec.template.spec &&
-        item.spec.jobTemplate.spec.template.spec.containers &&
-        item.spec.jobTemplate.spec.template.spec.containers.length > 0 ? (
-          <Containers
-            containers={item.spec.jobTemplate.spec.template.spec.containers}
-            statuses={undefined}
-            title="Containers"
-          />
-        ) : null}
-      </IonRow>
     </IonGrid>
   );
 };

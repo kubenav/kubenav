@@ -22,12 +22,12 @@ type Client struct {
 // When the incluster option is true, we are using the in cluster configuration for the client, when a slice of
 // Kubeconfig files is provided which should be included/excluded we are loading these files. By default we are using
 // the standard way to load the cluster configuration.
-func NewClient(incluster bool, inclusterName, kubeconfig, kubeconfigInclude, kubeconfigExclude string) (*Client, error) {
+func NewClient(incluster bool, kubeconfig, kubeconfigInclude, kubeconfigExclude string) (*Client, error) {
 	var config clientcmd.ClientConfig
 	var err error
 
 	if incluster {
-		config, err = loadInClusterConfig(inclusterName)
+		config, err = loadInClusterConfig()
 		if err != nil {
 			return nil, err
 		}

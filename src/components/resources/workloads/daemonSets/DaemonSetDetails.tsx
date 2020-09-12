@@ -5,7 +5,6 @@ import { RouteComponentProps } from 'react-router';
 
 import { labelSelector } from '../../../../utils/helpers';
 import List from '../../misc/List';
-import PodTemplate from '../../misc/podTemplate/PodTemplate';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
 import Row from '../../misc/template/Row';
@@ -105,8 +104,6 @@ const DaemonSetDetails: React.FunctionComponent<IDaemonSetDetailsProps> = ({ ite
           />
         </IonRow>
       ) : null}
-
-      {item.spec && item.spec.template ? <PodTemplate template={item.spec.template} /> : null}
     </IonGrid>
   );
 };

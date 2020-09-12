@@ -15,7 +15,7 @@ import (
 // new API client and register all API routes. Finally we start the server which always listen on port 14122.
 func StartServer() {
 	router := http.NewServeMux()
-	kubeClient, _ := kube.NewClient(true, false, "", "", "", "")
+	kubeClient, _ := kube.NewClient(true, false, "", "", "")
 	apiClient := api.NewClient(false, nil, kubeClient)
 	apiClient.Register(router)
 

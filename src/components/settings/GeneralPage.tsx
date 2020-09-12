@@ -19,7 +19,7 @@ import {
 import React, { memo, useContext } from 'react';
 
 import { IContext } from '../../declarations';
-import { IS_SERVER } from '../../utils/constants';
+import { IS_INCLUSTER } from '../../utils/constants';
 import { AppContext } from '../../utils/context';
 
 const GeneralPage: React.FunctionComponent = () => {
@@ -55,7 +55,7 @@ const GeneralPage: React.FunctionComponent = () => {
         <IonList>
           <IonItemGroup>
             <IonItemDivider>
-              <IonLabel>Appearance</IonLabel>
+              <IonLabel>General</IonLabel>
             </IonItemDivider>
             <IonItem>
               <IonLabel>Dark Mode</IonLabel>
@@ -63,7 +63,7 @@ const GeneralPage: React.FunctionComponent = () => {
             </IonItem>
             <IonItem>
               <IonLabel className="label-for-range" position="stacked">
-                Timeout (in seconds)
+                Request Timeout (in seconds)
               </IonLabel>
               <IonRange
                 min={10}
@@ -76,14 +76,9 @@ const GeneralPage: React.FunctionComponent = () => {
                 onIonChange={handleRangeChange}
               />
             </IonItem>
-          </IonItemGroup>
-          <IonItemGroup>
-            <IonItemDivider>
-              <IonLabel>Terminal</IonLabel>
-            </IonItemDivider>
             <IonItem>
               <IonLabel className="label-for-range" position="stacked">
-                Font Size (in px)
+                Terminal Font Size (in px)
               </IonLabel>
               <IonRange
                 min={8}
@@ -98,7 +93,7 @@ const GeneralPage: React.FunctionComponent = () => {
             </IonItem>
             <IonItem>
               <IonLabel className="label-for-range" position="stacked">
-                Scrollback (in lines)
+                Terminal Scrollback (in lines)
               </IonLabel>
               <IonRange
                 min={1000}
@@ -143,7 +138,7 @@ const GeneralPage: React.FunctionComponent = () => {
             </IonItem>
           </IonItemGroup>
 
-          {IS_SERVER ? null : (
+          {IS_INCLUSTER ? null : (
             <IonItemGroup>
               <IonItemDivider>
                 <IonLabel>Prometheus</IonLabel>

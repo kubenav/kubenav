@@ -20,7 +20,7 @@ import {
   ITerminalResponse,
   TSyncType,
 } from '../declarations';
-import { GOOGLE_REDIRECT_URI, OIDC_REDIRECT_URL_WEB, SERVER } from './constants';
+import { GOOGLE_REDIRECT_URI, INCLUSTER_URL, OIDC_REDIRECT_URL_WEB } from './constants';
 import { isJSON } from './helpers';
 
 const { KubenavPlugin } = Plugins;
@@ -30,7 +30,7 @@ const { KubenavPlugin } = Plugins;
 const checkServer = async (): Promise<boolean> => {
   if (isPlatform('hybrid')) {
     try {
-      const response = await fetch(`${SERVER}/api/health`);
+      const response = await fetch(`${INCLUSTER_URL}/api/health`);
 
       if (response.status >= 200 && response.status < 300) {
         return true;
@@ -56,7 +56,7 @@ export const getAWSClusters = async (credentials: IClusterAuthProviderAWS): Prom
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/aws/clusters`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/aws/clusters`, {
       method: 'post',
       body: JSON.stringify({
         accessKeyId: credentials.accessKeyID,
@@ -88,7 +88,7 @@ export const getAWSToken = async (credentials: IClusterAuthProviderAWS): Promise
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/aws/token`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/aws/token`, {
       method: 'post',
       body: JSON.stringify({
         accessKeyId: credentials.accessKeyID,
@@ -120,7 +120,7 @@ export const getAzureClusters = async (credentials: IClusterAuthProviderAzure): 
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/azure/clusters`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/azure/clusters`, {
       method: 'post',
       body: JSON.stringify({
         subscriptionID: credentials.subscriptionID,
@@ -153,7 +153,7 @@ export const getAzureClusters = async (credentials: IClusterAuthProviderAzure): 
 // also saved in localStorage at startup.
 export const getCluster = async (): Promise<string | undefined> => {
   try {
-    const response = await fetch(`${SERVER}/api/cluster`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/cluster`, {
       method: 'GET',
     });
 
@@ -172,7 +172,7 @@ export const getCluster = async (): Promise<string | undefined> => {
 // getClusters returns all clusters from the Kubeconfig file on desktop.
 export const getClusters = async (): Promise<IClusters | undefined> => {
   try {
-    const response = await fetch(`${SERVER}/api/clusters`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/clusters`, {
       method: 'GET',
     });
 
@@ -321,10 +321,10 @@ export const kubernetesRequest = async (
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/kubernetes/request`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/kubernetes/request`, {
       method: 'post',
       body: JSON.stringify({
-        server: SERVER,
+        server: INCLUSTER_URL,
         cluster: cluster ? cluster.id : '',
         method: method,
         url: cluster ? cluster.url + url : '',
@@ -367,10 +367,10 @@ export const kubernetesExecRequest = async (url: string, cluster: ICluster): Pro
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/kubernetes/exec`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/kubernetes/exec`, {
       method: 'post',
       body: JSON.stringify({
-        server: SERVER,
+        server: INCLUSTER_URL,
         cluster: cluster ? cluster.id : '',
         url: cluster ? cluster.url + url : '',
         certificateAuthorityData: cluster ? cluster.certificateAuthorityData : '',
@@ -404,7 +404,7 @@ export const kubernetesPortForwardingActiveSessions = async (): Promise<IPortFor
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/kubernetes/portforwarding`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/kubernetes/portforwarding`, {
       method: 'get',
     });
 
@@ -437,10 +437,10 @@ export const kubernetesPortForwardingRequest = async (
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/kubernetes/portforwarding`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/kubernetes/portforwarding`, {
       method: 'post',
       body: JSON.stringify({
-        server: SERVER,
+        server: INCLUSTER_URL,
         cluster: cluster ? cluster.id : '',
         url: cluster ? cluster.url + url : '',
         certificateAuthorityData: cluster ? cluster.certificateAuthorityData : '',
@@ -478,7 +478,7 @@ export const kubernetesPortForwardingStopRequest = async (id: string): Promise<b
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/kubernetes/portforwarding`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/kubernetes/portforwarding`, {
       method: 'delete',
       body: JSON.stringify({
         id: id,
@@ -506,10 +506,10 @@ export const kubernetesLogsRequest = async (url: string, cluster: ICluster): Pro
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/kubernetes/logs`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/kubernetes/logs`, {
       method: 'post',
       body: JSON.stringify({
-        server: SERVER,
+        server: INCLUSTER_URL,
         cluster: cluster ? cluster.id : '',
         url: cluster ? cluster.url + url : '',
         certificateAuthorityData: cluster ? cluster.certificateAuthorityData : '',
@@ -549,13 +549,13 @@ export const pluginRequest = async (
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/kubernetes/plugins`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/kubernetes/plugins`, {
       method: 'post',
       body: JSON.stringify({
         name: name,
         port: port,
         data: data,
-        server: SERVER,
+        server: INCLUSTER_URL,
         cluster: cluster ? cluster.id : '',
         url: cluster ? cluster.url + url : '',
         certificateAuthorityData: cluster ? cluster.certificateAuthorityData : '',
@@ -590,7 +590,7 @@ export const sshRequest = async (key: string, address: string, user: string): Pr
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/kubernetes/ssh`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/kubernetes/ssh`, {
       method: 'post',
       body: JSON.stringify({
         key: key,
@@ -625,7 +625,7 @@ export const getOIDCAccessToken = async (credentials: IClusterAuthProviderOIDC):
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/oidc/accesstoken`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/oidc/accesstoken`, {
       method: 'post',
       body: JSON.stringify({
         discoveryURL: credentials.idpIssuerURL,
@@ -668,7 +668,7 @@ export const getOIDCLink = async (
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/oidc/link`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/oidc/link`, {
       method: 'post',
       body: JSON.stringify({
         discoveryURL: discoveryURL,
@@ -704,7 +704,7 @@ export const getOIDCRefreshToken = async (
   try {
     await checkServer();
 
-    const response = await fetch(`${SERVER}/api/oidc/refreshtoken`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/oidc/refreshtoken`, {
       method: 'post',
       body: JSON.stringify({
         discoveryURL: credentials.idpIssuerURL,
@@ -740,7 +740,7 @@ export const getOIDCRefreshToken = async (
 // syncKubeconfig is used to applie the changes to the current context or namespace to the loaded Kubeconfig file.
 export const syncKubeconfig = async (context: string, namespace: string, syncType: TSyncType): Promise<boolean> => {
   try {
-    const response = await fetch(`${SERVER}/api/sync/${syncType}`, {
+    const response = await fetch(`${INCLUSTER_URL}/api/sync/${syncType}`, {
       method: 'post',
       body: JSON.stringify({
         context: context,

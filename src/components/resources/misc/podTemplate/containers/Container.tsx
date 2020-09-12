@@ -32,7 +32,7 @@ import yaml from 'js-yaml';
 import React, { useContext, useState } from 'react';
 
 import { IContainerMetrics, IContext } from '../../../../../declarations';
-import { IS_SERVER } from '../../../../../utils/constants';
+import { IS_INCLUSTER } from '../../../../../utils/constants';
 import { AppContext } from '../../../../../utils/context';
 import { formatResourceValue } from '../../../../../utils/helpers';
 import Editor from '../../../../misc/Editor';
@@ -243,7 +243,7 @@ const Container: React.FunctionComponent<IContainerProps> = ({
                               <Port
                                 key={index}
                                 enabled={
-                                  !IS_SERVER &&
+                                  !IS_INCLUSTER &&
                                   status !== undefined &&
                                   (port.protocol === undefined || port.protocol === 'TCP')
                                 }

@@ -5,7 +5,6 @@ import { RouteComponentProps } from 'react-router';
 
 import { labelSelector } from '../../../../utils/helpers';
 import List from '../../misc/List';
-import PodTemplate from '../../misc/podTemplate/PodTemplate';
 import Conditions from '../../misc/template/Conditions';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
@@ -100,8 +99,6 @@ const DeploymentDetails: React.FunctionComponent<IDeploymentDetailsProps> = ({
           />
         </IonRow>
       ) : null}
-
-      {item.spec && item.spec.template ? <PodTemplate template={item.spec.template} /> : null}
     </IonGrid>
   );
 };

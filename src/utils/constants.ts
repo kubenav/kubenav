@@ -3,8 +3,8 @@ import { ITerminalOptions } from 'xterm';
 import { IAppSettings } from '../declarations';
 
 export const CUSTOM_URI_SCHEME = 'io.kubenav.kubenav';
-export const IS_SERVER = process.env.REACT_APP_SERVER === 'true' ? true : false;
-export const SERVER = process.env.REACT_APP_SERVER === 'true' ? '' : 'http://localhost:14122';
+export const INCLUSTER_URL = process.env.REACT_APP_INCLUSTER === 'true' ? '' : 'http://localhost:14122';
+export const IS_INCLUSTER = process.env.REACT_APP_INCLUSTER === 'true' ? true : false;
 export const VERSION = process.env.REACT_APP_VERSION;
 
 export const DEFAULT_SETTINGS: IAppSettings = {

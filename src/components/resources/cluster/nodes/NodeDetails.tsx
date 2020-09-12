@@ -1,18 +1,4 @@
-import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonCol,
-  IonGrid,
-  IonItem,
-  IonItemOptions,
-  IonItemSliding,
-  IonLabel,
-  IonList,
-  IonRow,
-  isPlatform,
-} from '@ionic/react';
+import { IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonRow } from '@ionic/react';
 import { V1Node, V1NodeAddress } from '@kubernetes/client-node';
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -20,7 +6,7 @@ import { RouteComponentProps } from 'react-router';
 import { IContext, INodeMetrics } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
-import { formatBytes, formatResourceValue } from '../../../../utils/helpers';
+import { formatResourceValue } from '../../../../utils/helpers';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
 import AddSSH from '../../../terminal/AddSSH';
 import List from '../../misc/List';
@@ -63,11 +49,6 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
     }
   }, [item, type, context]);
 
-  const imageName = (names: string[], long: boolean): string => {
-    if (long) return names.reduce((a, b) => (a.length > b.length ? a : b));
-    return names.reduce((a, b) => (a.length <= b.length ? a : b));
-  };
-
   return (
     <IonGrid>
       <IonRow>
@@ -96,15 +77,16 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
             obj={item}
             objKey="status.addresses"
             title="Addresses"
-            value={(addresses: V1NodeAddress[]) => (
-              <ul className="no-margin-list">
-                {addresses.map((address, index) => (
-                  <li key={index}>
-                    {address.type}: {address.address}
-                  </li>
-                ))}
-              </ul>
-            )}
+            value={(addresses: V1NodeAddress[]) =>
+              addresses.map((address, index) => (
+                <AddSSH
+                  key={index}
+                  type={address.type}
+                  node={item.metadata && item.metadata.name ? item.metadata.name : ''}
+                  ip={address.address}
+                />
+              ))
+            }
           />
           <Row obj={item} objKey="status.phase" title="Phase" />
           <Row
@@ -118,53 +100,9 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
 
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
-      {item.status && item.status.addresses ? (
-        <IonRow>
-          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="12">
-            <IonCard>
-              <IonCardHeader>
-                <IonCardTitle>Addresses</IonCardTitle>
-              </IonCardHeader>
-              <IonCardContent>
-                <IonList>
-                  {item.status.addresses.map((address, index) => (
-                    <IonItemSliding key={index}>
-                      <IonItem>
-                        <IonLabel>
-                          <h2>
-                            {address.type}: {address.address}
-                          </h2>
-                        </IonLabel>
-                        {!isPlatform('hybrid') ? (
-                          <AddSSH
-                            activator="button"
-                            node={item.metadata && item.metadata.name ? item.metadata.name : ''}
-                            ip={address.address}
-                          />
-                        ) : null}
-                      </IonItem>
-
-                      {isPlatform('hybrid') ? (
-                        <IonItemOptions side="end">
-                          <AddSSH
-                            activator="item-option"
-                            node={item.metadata && item.metadata.name ? item.metadata.name : ''}
-                            ip={address.address}
-                          />
-                        </IonItemOptions>
-                      ) : null}
-                    </IonItemSliding>
-                  ))}
-                </IonList>
-              </IonCardContent>
-            </IonCard>
-          </IonCol>
-        </IonRow>
-      ) : null}
-
       <IonRow>
         {item.status && item.status.capacity && item.status.allocatable ? (
-          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
+          <IonCol>
             <IonCardEqualHeight>
               <IonCardHeader>
                 <IonCardTitle>Resources</IonCardTitle>
@@ -208,9 +146,13 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
             </IonCardEqualHeight>
           </IonCol>
         ) : null}
-
-        {item.status && item.status.conditions ? <Conditions conditions={item.status.conditions} /> : null}
       </IonRow>
+
+      {item.status && item.status.conditions ? (
+        <IonRow>
+          <Conditions conditions={item.status.conditions} />
+        </IonRow>
+      ) : null}
 
       {item.metadata && item.metadata.name ? (
         <IonRow>
@@ -235,35 +177,6 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
             parent={item}
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
-        </IonRow>
-      ) : null}
-
-      {item.status && item.status.images ? (
-        <IonRow>
-          <IonCol>
-            <IonCardEqualHeight>
-              <IonCardHeader>
-                <IonCardTitle>Images</IonCardTitle>
-              </IonCardHeader>
-              <IonCardContent>
-                <IonList>
-                  {item.status.images.map((image, index) => {
-                    return (
-                      <IonItem key={index}>
-                        <IonLabel>
-                          <h2>{imageName(image.names, false)}</h2>
-                          <p>
-                            {image.sizeBytes ? `Size: ${formatBytes(image.sizeBytes, false)} | ` : null}
-                            {imageName(image.names, true)}
-                          </p>
-                        </IonLabel>
-                      </IonItem>
-                    );
-                  })}
-                </IonList>
-              </IonCardContent>
-            </IonCardEqualHeight>
-          </IonCol>
         </IonRow>
       ) : null}
     </IonGrid>

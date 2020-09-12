@@ -3,7 +3,7 @@ import { Terminal } from 'xterm';
 
 import { IContext, ITerminalContext } from '../../declarations';
 import { kubernetesRequest, kubernetesExecRequest, kubernetesLogsRequest, sshRequest } from '../../utils/api';
-import { LOG_TERMINAL_OPTIONS, SERVER, SHELL_TERMINAL_OPTIONS } from '../../utils/constants';
+import { INCLUSTER_URL, LOG_TERMINAL_OPTIONS, SHELL_TERMINAL_OPTIONS } from '../../utils/constants';
 
 export const addShell = async (
   context: IContext,
@@ -27,7 +27,7 @@ export const addShell = async (
         await context.kubernetesAuthWrapper(''),
       );
 
-      const webSocket = new SockJS(`${SERVER}/api/kubernetes/exec/sockjs?${id}`);
+      const webSocket = new SockJS(`${INCLUSTER_URL}/api/kubernetes/exec/sockjs?${id}`);
 
       term?.onData((str) => {
         webSocket.send(
@@ -102,7 +102,7 @@ export const addLogs = async (
 
         const { id } = await kubernetesLogsRequest(`${url}/log?${parameters}`, await context.kubernetesAuthWrapper(''));
 
-        const eventSource = new EventSource(`${SERVER}/api/kubernetes/logs/${id}`);
+        const eventSource = new EventSource(`${INCLUSTER_URL}/api/kubernetes/logs/${id}`);
 
         eventSource.onmessage = (event: MessageEvent) => {
           term.write(`${event.data}\n\r`);
@@ -185,7 +185,7 @@ export const addSSH = async (
         context.settings.sshUser,
       );
 
-      const webSocket = new SockJS(`${SERVER}/api/kubernetes/ssh/sockjs?${id}`);
+      const webSocket = new SockJS(`${INCLUSTER_URL}/api/kubernetes/ssh/sockjs?${id}`);
 
       term?.onData((str) => {
         webSocket.send(

@@ -22,7 +22,6 @@ var (
 	debugFlag                   bool
 	debugIonicFlag              string
 	inclusterFlag               bool
-	inclusterNameFlag           string
 	kubeconfigFlag              string
 	pluginPrometheusAddressFlag string
 	pluginPrometheusEnabledFlag bool
@@ -46,7 +45,7 @@ var rootCmd = &cobra.Command{
 		log.Infof(version.Info())
 		log.Infof(version.BuildContext())
 
-		kubeClient, err := kube.NewClient(false, inclusterFlag, inclusterNameFlag, kubeconfigFlag, "", "")
+		kubeClient, err := kube.NewClient(false, inclusterFlag, kubeconfigFlag, "", "")
 		if err != nil {
 			log.WithError(err).Fatalf("Could not create Kubernetes client")
 		}
@@ -101,7 +100,6 @@ func init() {
 	rootCmd.PersistentFlags().BoolVar(&debugFlag, "debug", false, "Enable debug mode.")
 	rootCmd.PersistentFlags().StringVar(&debugIonicFlag, "debug.ionic", "build", "Path to the Ionic app.")
 	rootCmd.PersistentFlags().BoolVar(&inclusterFlag, "incluster", false, "Use the in cluster configuration.")
-	rootCmd.PersistentFlags().StringVar(&inclusterNameFlag, "incluster.name", "kubenav", "The name which should be displayed when using the incluster flag.")
 	rootCmd.PersistentFlags().StringVar(&kubeconfigFlag, "kubeconfig", "", "Optional Kubeconfig file.")
 	rootCmd.PersistentFlags().StringVar(&pluginPrometheusAddressFlag, "plugin.prometheus.address", "", "The address for Prometheus.")
 	rootCmd.PersistentFlags().BoolVar(&pluginPrometheusEnabledFlag, "plugin.prometheus.enabled", false, "Enable the Prometheus plugin.")

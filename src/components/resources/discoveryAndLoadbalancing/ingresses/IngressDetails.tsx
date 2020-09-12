@@ -1,4 +1,14 @@
-import { IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonRow } from '@ionic/react';
+import {
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonCol,
+  IonGrid,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonRow,
+} from '@ionic/react';
 import { NetworkingV1beta1Ingress } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -39,37 +49,26 @@ const IngressDetails: React.FunctionComponent<IIngressDetailsProps> = ({ item, t
                 <IonCardTitle>Rules</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
-                <IonGrid>
-                  <IonRow>
-                    <IonCol>
-                      <b>Host</b>
-                    </IonCol>
-                    <IonCol>
-                      <b>HTTP</b>
-                    </IonCol>
-                  </IonRow>
+                <IonList>
                   {item.spec.rules.map((rule, index) => {
                     return (
-                      <IonRow key={index}>
-                        <IonCol>{rule.host}</IonCol>
-                        <IonCol>
+                      <IonItem key={index}>
+                        <IonLabel>
+                          <h2>{rule.host}</h2>
                           {rule.http &&
                             rule.http.paths.map((path, index) => {
                               return (
-                                <div key={index}>
-                                  Path: {path.path}
-                                  <br />
-                                  Service Name: {path.backend.serviceName}
-                                  <br />
-                                  Service Port: {path.backend.servicePort}
-                                </div>
+                                <p key={index}>
+                                  Path: {path.path} | Service Name: {path.backend.serviceName} | Service Port:{' '}
+                                  {path.backend.servicePort}
+                                </p>
                               );
                             })}
-                        </IonCol>
-                      </IonRow>
+                        </IonLabel>
+                      </IonItem>
                     );
                   })}
-                </IonGrid>
+                </IonList>
               </IonCardContent>
             </IonCardEqualHeight>
           </IonCol>
@@ -82,24 +81,18 @@ const IngressDetails: React.FunctionComponent<IIngressDetailsProps> = ({ item, t
                 <IonCardTitle>TLS</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
-                <IonGrid>
-                  <IonRow>
-                    <IonCol>
-                      <b>Secret Name</b>
-                    </IonCol>
-                    <IonCol>
-                      <b>Hosts</b>
-                    </IonCol>
-                  </IonRow>
+                <IonList>
                   {item.spec.tls.map((tls, index) => {
                     return (
-                      <IonRow key={index}>
-                        <IonCol>{tls.secretName}</IonCol>
-                        <IonCol>{tls.hosts && tls.hosts.join(', ')}</IonCol>
-                      </IonRow>
+                      <IonItem key={index}>
+                        <IonLabel>
+                          <h2>{tls.secretName}</h2>
+                          <p>Hosts: {tls.hosts && tls.hosts.join(', ')}</p>
+                        </IonLabel>
+                      </IonItem>
                     );
                   })}
-                </IonGrid>
+                </IonList>
               </IonCardContent>
             </IonCardEqualHeight>
           </IonCol>

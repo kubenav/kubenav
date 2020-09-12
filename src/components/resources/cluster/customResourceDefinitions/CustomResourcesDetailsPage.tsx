@@ -3,11 +3,6 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonCol,
   IonContent,
   IonHeader,
   IonIcon,
@@ -21,7 +16,6 @@ import {
   isPlatform,
 } from '@ionic/react';
 import { refresh } from 'ionicons/icons';
-import yaml from 'js-yaml';
 import React, { memo, useContext, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -29,7 +23,6 @@ import { IContext } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import useAsyncFn from '../../../../utils/useAsyncFn';
-import Editor from '../../../misc/Editor';
 import LoadingErrorCard from '../../../misc/LoadingErrorCard';
 import List from '../../misc/List';
 import DetailsPopover from '../../misc/DetailsPopover';
@@ -133,7 +126,7 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
 
             {state.value.status && state.value.status.conditions ? (
               <IonRow>
-                <Conditions conditions={state.value.status.conditions} forceFullWidth={true} />
+                <Conditions conditions={state.value.status.conditions} />
               </IonRow>
             ) : null}
 
@@ -149,19 +142,6 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
                 />
               </IonRow>
             ) : null}
-
-            <IonRow>
-              <IonCol>
-                <IonCard>
-                  <IonCardHeader>
-                    <IonCardTitle>YAML</IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <Editor readOnly={true} value={yaml.safeDump(state.value)} />
-                  </IonCardContent>
-                </IonCard>
-              </IonCol>
-            </IonRow>
           </IonGrid>
         ) : state.loading ? null : (
           <LoadingErrorCard

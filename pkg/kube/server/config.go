@@ -14,7 +14,7 @@ import (
 )
 
 // loadInClusterConfig loads the Kubeconfig from the in cluster configuration.
-func loadInClusterConfig(name string) (clientcmd.ClientConfig, error) {
+func loadInClusterConfig() (clientcmd.ClientConfig, error) {
 	config, err := rest.InClusterConfig()
 	if err != nil {
 		return nil, err
@@ -23,22 +23,22 @@ func loadInClusterConfig(name string) (clientcmd.ClientConfig, error) {
 	return clientcmd.NewDefaultClientConfig(clientcmdapi.Config{
 		APIVersion:     "v1",
 		Kind:           "Config",
-		CurrentContext: name,
+		CurrentContext: "kubenav",
 		Contexts: map[string]*clientcmdapi.Context{
-			name: {
-				Cluster:   name,
-				AuthInfo:  name,
+			"kubenav": {
+				Cluster:   "kubenav",
+				AuthInfo:  "kubenav",
 				Namespace: "default",
 			},
 		},
 		Clusters: map[string]*clientcmdapi.Cluster{
-			name: {
+			"kubenav": {
 				Server:               config.Host,
 				CertificateAuthority: config.TLSClientConfig.CAFile,
 			},
 		},
 		AuthInfos: map[string]*clientcmdapi.AuthInfo{
-			name: {
+			"kubenav": {
 				Token:     config.BearerToken,
 				TokenFile: config.BearerTokenFile,
 			},
