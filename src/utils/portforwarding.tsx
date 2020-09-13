@@ -84,6 +84,7 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
         portForwarding.podNamespace,
         portForwarding.podPort,
         portForwarding.localPort,
+        context.settings,
         await context.kubernetesAuthWrapper(''),
       );
 

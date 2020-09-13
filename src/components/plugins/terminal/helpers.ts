@@ -24,6 +24,7 @@ export const addShell = async (
     if (context.clusters && context.cluster) {
       const { id } = await kubernetesExecRequest(
         `${url}/exec?command=${shell}&container=${container}&stdin=true&stdout=true&stderr=true&tty=true`,
+        context.settings,
         await context.kubernetesAuthWrapper(''),
       );
 
@@ -100,7 +101,11 @@ export const addLogs = async (
       try {
         const parameters = `container=${container}&tailLines=10&follow=true`;
 
-        const { id } = await kubernetesLogsRequest(`${url}/log?${parameters}`, await context.kubernetesAuthWrapper(''));
+        const { id } = await kubernetesLogsRequest(
+          `${url}/log?${parameters}`,
+          context.settings,
+          await context.kubernetesAuthWrapper(''),
+        );
 
         const eventSource = new EventSource(`${INCLUSTER_URL}/api/kubernetes/logs/${id}`);
 

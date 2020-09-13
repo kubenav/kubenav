@@ -302,13 +302,14 @@ func (c *Client) kubernetesPluginHandler(w http.ResponseWriter, r *http.Request)
 			return
 		}
 
-		config, clientset, err := c.kubeClient.GetConfigAndClientset(request.Cluster, request.URL, request.CertificateAuthorityData, request.ClientCertificateData, request.ClientKeyData, request.Token, request.Username, request.Password, request.InsecureSkipTLSVerify, time.Duration(request.Timeout)*time.Second, request.Proxy)
+		requestTimeout := time.Duration(request.Timeout) * time.Second
+		config, clientset, err := c.kubeClient.GetConfigAndClientset(request.Cluster, request.URL, request.CertificateAuthorityData, request.ClientCertificateData, request.ClientKeyData, request.Token, request.Username, request.Password, request.InsecureSkipTLSVerify, requestTimeout, request.Proxy)
 		if err != nil {
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 			return
 		}
 
-		data, err := plugins.Run(config, clientset, request.Name, request.URL, request.Port, request.Address, request.Data)
+		data, err := plugins.Run(config, clientset, request.Name, request.URL, request.Port, request.Address, requestTimeout, request.Data)
 		if err != nil {
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("An error occured: %s", err.Error()))
 			return

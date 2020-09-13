@@ -384,7 +384,11 @@ export const kubernetesRequest = async (
 
 // kubernetesExecRequest initialize the request to get a shell into a container. The generated session id is returned
 // and can be used to get the shell into the container.
-export const kubernetesExecRequest = async (url: string, cluster: ICluster): Promise<ITerminalResponse> => {
+export const kubernetesExecRequest = async (
+  url: string,
+  settings: IAppSettings,
+  cluster: ICluster,
+): Promise<ITerminalResponse> => {
   try {
     await checkServer();
 
@@ -401,6 +405,8 @@ export const kubernetesExecRequest = async (url: string, cluster: ICluster): Pro
         username: cluster ? cluster.username : '',
         password: cluster ? cluster.password : '',
         insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
+        timeout: settings.timeout ? settings.timeout : 60,
+        proxy: settings.proxyEnabled ? settings.proxyAddress : '',
       }),
     });
 
@@ -453,6 +459,7 @@ export const kubernetesPortForwardingRequest = async (
   podNamespace: string,
   podPort: number,
   localPort: number,
+  settings: IAppSettings,
   cluster: ICluster,
 ): Promise<IPortForwardingResponse> => {
   try {
@@ -461,6 +468,10 @@ export const kubernetesPortForwardingRequest = async (
     const response = await fetch(`${INCLUSTER_URL}/api/kubernetes/portforwarding`, {
       method: 'post',
       body: JSON.stringify({
+        podName: podName,
+        podNamespace: podNamespace,
+        podPort: podPort,
+        localPort: localPort,
         server: INCLUSTER_URL,
         cluster: cluster ? cluster.id : '',
         url: cluster ? cluster.url + url : '',
@@ -471,10 +482,8 @@ export const kubernetesPortForwardingRequest = async (
         username: cluster ? cluster.username : '',
         password: cluster ? cluster.password : '',
         insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
-        podName: podName,
-        podNamespace: podNamespace,
-        podPort: podPort,
-        localPort: localPort,
+        timeout: settings.timeout ? settings.timeout : 60,
+        proxy: settings.proxyEnabled ? settings.proxyAddress : '',
       }),
     });
 
@@ -523,7 +532,11 @@ export const kubernetesPortForwardingStopRequest = async (id: string): Promise<b
 };
 
 // kubernetesLogsRequest returns the session id to stream the log files of a container via server sent events.
-export const kubernetesLogsRequest = async (url: string, cluster: ICluster): Promise<ITerminalResponse> => {
+export const kubernetesLogsRequest = async (
+  url: string,
+  settings: IAppSettings,
+  cluster: ICluster,
+): Promise<ITerminalResponse> => {
   try {
     await checkServer();
 
@@ -540,6 +553,8 @@ export const kubernetesLogsRequest = async (url: string, cluster: ICluster): Pro
         username: cluster ? cluster.username : '',
         password: cluster ? cluster.password : '',
         insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
+        timeout: settings.timeout ? settings.timeout : 60,
+        proxy: settings.proxyEnabled ? settings.proxyAddress : '',
       }),
     });
 
@@ -565,6 +580,7 @@ export const pluginRequest = async (
   address: string,
   data: IJsonData,
   url: string,
+  settings: IAppSettings,
   cluster: ICluster,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
@@ -588,6 +604,8 @@ export const pluginRequest = async (
         username: cluster ? cluster.username : '',
         password: cluster ? cluster.password : '',
         insecureSkipTLSVerify: cluster ? cluster.insecureSkipTLSVerify : false,
+        timeout: settings.timeout ? settings.timeout : 60,
+        proxy: settings.proxyEnabled ? settings.proxyAddress : '',
       }),
     });
 

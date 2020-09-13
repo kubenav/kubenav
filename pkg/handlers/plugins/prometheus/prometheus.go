@@ -36,7 +36,7 @@ type Result struct {
 // As first we are converting the additional plugin data to the needed data for Prometheus. The we are initializing a
 // new client for the Prometheus API. Last but not least we are sending each query to the Prometheus API and collecting
 // the results in a slice of Results.
-func RunQueries(address string, requestData map[string]interface{}) (interface{}, error) {
+func RunQueries(address string, timeout time.Duration, requestData map[string]interface{}) (interface{}, error) {
 	var promData Data
 	err := helpers.MapToStruct(requestData, &promData)
 	if err != nil {
@@ -51,7 +51,7 @@ func RunQueries(address string, requestData map[string]interface{}) (interface{}
 	}
 
 	v1api := v1.NewAPI(client)
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 	r := v1.Range{
 		Start: time.Unix(promData.Start, 0),

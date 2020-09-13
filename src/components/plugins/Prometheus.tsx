@@ -98,6 +98,7 @@ const Prometheus: React.FunctionComponent<IPrometheusProps> = ({ queries }: IPro
             end: Math.floor(Date.now() / 1000),
           },
           url,
+          context.settings,
           await context.kubernetesAuthWrapper(''),
         );
 
