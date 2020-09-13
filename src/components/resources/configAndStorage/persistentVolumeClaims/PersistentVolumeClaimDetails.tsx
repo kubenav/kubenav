@@ -1,12 +1,11 @@
-import { IonCardHeader, IonCardTitle, IonCol, IonGrid, IonRow } from '@ionic/react';
+import { IonGrid, IonRow } from '@ionic/react';
 import { V1PersistentVolumeClaim } from '@kubernetes/client-node';
 import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
-import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
-import Prometheus from '../../../plugins/Prometheus';
+import Dashboard from '../../../plugins/prometheus/Dashboard';
 import List from '../../misc/list/List';
 import Conditions from '../../misc/template/Conditions';
 import Configuration from '../../misc/template/Configuration';
@@ -85,61 +84,67 @@ const PersistentVolumeClaimDetails: React.FunctionComponent<IPersistentVolumeCla
       ) : null}
 
       {context.settings.prometheusEnabled ? (
-        <IonRow>
-          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
-            <IonCardEqualHeight>
-              <IonCardHeader>
-                <IonCardTitle>Volume Space Usage (in GiB)</IonCardTitle>
-              </IonCardHeader>
-              <Prometheus
-                queries={[
-                  {
-                    label: 'Used Space',
-                    query: `(
-                      sum without(instance, node) (kubelet_volume_stats_capacity_bytes{job="kubelet", namespace="${
-                        item.metadata ? item.metadata.namespace : ''
-                      }", persistentvolumeclaim="${item.metadata ? item.metadata.name : ''}"})
-                      -
-                      sum without(instance, node) (kubelet_volume_stats_available_bytes{job="kubelet", namespace="${
-                        item.metadata ? item.metadata.namespace : ''
-                      }", persistentvolumeclaim="${item.metadata ? item.metadata.name : ''}"})
-                    ) / 1024 / 1024 / 1024`,
-                  },
-                  {
-                    label: 'Total Space',
-                    query: `sum without(instance, node) (kubelet_volume_stats_capacity_bytes{job="kubelet", namespace="${
+        <Dashboard
+          title="Metrics"
+          charts={[
+            {
+              title: 'Volume Space Usage (in GiB)',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Used Space',
+                  query: `(
+                    sum without(instance, node) (kubelet_volume_stats_capacity_bytes{job="kubelet", namespace="${
                       item.metadata ? item.metadata.namespace : ''
-                    }", persistentvolumeclaim="${item.metadata ? item.metadata.name : ''}"}) / 1024 / 1024 / 1024`,
-                  },
-                ]}
-              />
-            </IonCardEqualHeight>
-          </IonCol>
-
-          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
-            <IonCardEqualHeight>
-              <IonCardHeader>
-                <IonCardTitle>Volume inodes Usage</IonCardTitle>
-              </IonCardHeader>
-              <Prometheus
-                queries={[
-                  {
-                    label: 'Used inodes',
-                    query: `sum without(instance, node) (kubelet_volume_stats_inodes_used{job="kubelet", namespace="${
+                    }", persistentvolumeclaim="${item.metadata ? item.metadata.name : ''}"})
+                    -
+                    sum without(instance, node) (kubelet_volume_stats_available_bytes{job="kubelet", namespace="${
                       item.metadata ? item.metadata.namespace : ''
-                    }", persistentvolumeclaim="${item.metadata ? item.metadata.name : ''}"})`,
-                  },
-                  {
-                    label: 'Total inodes',
-                    query: `sum without(instance, node) (kubelet_volume_stats_inodes{job="kubelet", namespace="${
-                      item.metadata ? item.metadata.namespace : ''
-                    }", persistentvolumeclaim="${item.metadata ? item.metadata.name : ''}"})`,
-                  },
-                ]}
-              />
-            </IonCardEqualHeight>
-          </IonCol>
-        </IonRow>
+                    }", persistentvolumeclaim="${item.metadata ? item.metadata.name : ''}"})
+                  ) / 1024 / 1024 / 1024`,
+                },
+                {
+                  label: 'Total Space',
+                  query: `sum without(instance, node) (kubelet_volume_stats_capacity_bytes{job="kubelet", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", persistentvolumeclaim="${item.metadata ? item.metadata.name : ''}"}) / 1024 / 1024 / 1024`,
+                },
+              ],
+            },
+            {
+              title: 'Volume inodes Usage',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Used inodes',
+                  query: `sum without(instance, node) (kubelet_volume_stats_inodes_used{job="kubelet", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", persistentvolumeclaim="${item.metadata ? item.metadata.name : ''}"})`,
+                },
+                {
+                  label: 'Total inodes',
+                  query: `sum without(instance, node) (kubelet_volume_stats_inodes{job="kubelet", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", persistentvolumeclaim="${item.metadata ? item.metadata.name : ''}"})`,
+                },
+              ],
+            },
+          ]}
+        />
       ) : null}
     </IonGrid>
   );
