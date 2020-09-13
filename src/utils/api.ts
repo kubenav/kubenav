@@ -14,6 +14,7 @@ import {
   IGoogleCluster,
   IGoogleProject,
   IGoogleTokensAPIResponse,
+  IInclusterSettings,
   IJsonData,
   IOIDCProviderTokenAPIResponse,
   IPortForwardingResponse,
@@ -305,6 +306,26 @@ export const getGoogleTokens = async (clientID: string, code: string): Promise<I
   }
 };
 
+// getInclusterSettings returns the settings for kubenav which can be set via command-line flags with the incluster
+// mode.
+export const getInclusterSettings = async (): Promise<IInclusterSettings | undefined> => {
+  try {
+    const response = await fetch(`${INCLUSTER_URL}/api/kubernetes/plugins`, {
+      method: 'GET',
+    });
+
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
+    }
+
+    return undefined;
+  } catch (err) {
+    return undefined;
+  }
+};
+
 // kubernetesRequest is used for operations against the Kubernetes API server. Before the request is execute the
 // provided authentication provider is checked. If the authentication provider is Google and client certificates or
 // username and password are not configured, an valid access token is requested. If the authentication provider is AWS,
@@ -541,6 +562,7 @@ export const kubernetesLogsRequest = async (url: string, cluster: ICluster): Pro
 export const pluginRequest = async (
   name: string,
   port: number,
+  address: string,
   data: IJsonData,
   url: string,
   cluster: ICluster,
@@ -554,6 +576,7 @@ export const pluginRequest = async (
       body: JSON.stringify({
         name: name,
         port: port,
+        address: address,
         data: data,
         server: INCLUSTER_URL,
         cluster: cluster ? cluster.id : '',

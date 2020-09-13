@@ -41,6 +41,7 @@ export interface IAppSettings {
   prometheusNamespace: string;
   prometheusSelector: string;
   prometheusPort: number;
+  prometheusAddress: string;
 }
 
 export interface IAWSCluster {
@@ -181,6 +182,13 @@ export interface IGoogleClusterMasterAuth {
   clusterCaCertificate: string;
   clientCertificate?: string;
   clientKey?: string;
+}
+
+// IInclusterSettings must have the same structure as the Config struct from the plugins package.
+// See: pkg/handlers/plugins/plugins.go
+export interface IInclusterSettings {
+  prometheusEnabled: boolean;
+  prometheusAddress: string;
 }
 
 export interface IJsonData {

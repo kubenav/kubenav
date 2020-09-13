@@ -149,6 +149,7 @@ export const readSettings = (): IAppSettings => {
         ? settings.prometheusSelector
         : DEFAULT_SETTINGS.prometheusSelector,
       prometheusPort: settings.prometheusPort ? settings.prometheusPort : DEFAULT_SETTINGS.prometheusPort,
+      prometheusAddress: '',
     };
   }
 

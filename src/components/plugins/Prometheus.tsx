@@ -5,6 +5,7 @@ import { Area, AreaChart, Legend, ResponsiveContainer, XAxis, YAxis } from 'rech
 
 import { IContext } from '../../declarations';
 import { kubernetesRequest, pluginRequest } from '../../utils/api';
+import { IS_INCLUSTER } from '../../utils/constants';
 import { AppContext } from '../../utils/context';
 import useAsyncFn from '../../utils/useAsyncFn';
 
@@ -67,48 +68,55 @@ const Prometheus: React.FunctionComponent<IPrometheusProps> = ({ queries }: IPro
   const [state, fetch] = useAsyncFn(
     async () => {
       try {
-        const podList: V1PodList = await kubernetesRequest(
-          'GET',
-          `/api/v1/namespaces/${context.settings.prometheusNamespace}/pods?labelSelector=${context.settings.prometheusSelector}`,
-          '',
-          context.settings,
-          await context.kubernetesAuthWrapper(''),
-        );
+        let url = '';
 
-        if (podList.items.length > 0 && podList.items[0].metadata) {
-          const prometheusResults: IPluginPrometheusResult[] = await pluginRequest(
-            'prometheus',
-            context.settings.prometheusPort,
-            {
-              queries: queries,
-              start: Math.floor(Date.now() / 1000) - timeDiff,
-              end: Math.floor(Date.now() / 1000),
-            },
-            `/api/v1/namespaces/${podList.items[0].metadata.namespace}/pods/${podList.items[0].metadata.name}/portforward`,
+        if (!IS_INCLUSTER) {
+          const podList: V1PodList = await kubernetesRequest(
+            'GET',
+            `/api/v1/namespaces/${context.settings.prometheusNamespace}/pods?labelSelector=${context.settings.prometheusSelector}`,
+            '',
+            context.settings,
             await context.kubernetesAuthWrapper(''),
           );
 
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const series: any = [];
-
-          for (let i = 0; i < prometheusResults.length; i++) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const data: any = [];
-            for (let j = 0; j < prometheusResults[i].values.length; j++) {
-              data.push({
-                time: prometheusResults[i].values[j][0],
-                value: parseFloat(prometheusResults[i].values[j][1]),
-              });
-            }
-            series.push({ name: prometheusResults[i].label, data: data });
+          if (podList.items.length > 0 && podList.items[0].metadata) {
+            url = `/api/v1/namespaces/${podList.items[0].metadata.namespace}/pods/${podList.items[0].metadata.name}/portforward`;
+          } else {
+            throw new Error(
+              `Could not found pod in namespace "${context.settings.prometheusNamespace}" with selector "${context.settings.prometheusSelector}".`,
+            );
           }
-
-          return series;
-        } else {
-          throw new Error(
-            `Could not found pod in namespace "${context.settings.prometheusNamespace}" with selector "${context.settings.prometheusSelector}".`,
-          );
         }
+
+        const prometheusResults: IPluginPrometheusResult[] = await pluginRequest(
+          'prometheus',
+          context.settings.prometheusPort,
+          context.settings.prometheusAddress,
+          {
+            queries: queries,
+            start: Math.floor(Date.now() / 1000) - timeDiff,
+            end: Math.floor(Date.now() / 1000),
+          },
+          url,
+          await context.kubernetesAuthWrapper(''),
+        );
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const series: any = [];
+
+        for (let i = 0; i < prometheusResults.length; i++) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const data: any = [];
+          for (let j = 0; j < prometheusResults[i].values.length; j++) {
+            data.push({
+              time: prometheusResults[i].values[j][0],
+              value: parseFloat(prometheusResults[i].values[j][1]),
+            });
+          }
+          series.push({ name: prometheusResults[i].label, data: data });
+        }
+
+        return series;
       } catch (err) {
         throw err;
       }

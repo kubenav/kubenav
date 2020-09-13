@@ -48,21 +48,25 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
 
   useEffect(() => {
     const getActiveSessions = async () => {
-      const sessions = await kubernetesPortForwardingActiveSessions();
+      try {
+        const sessions = await kubernetesPortForwardingActiveSessions();
 
-      if (sessions !== null && sessions.length > 0) {
-        const tmpPortForwardings: IPortForwarding[] = [];
-        for (let i = 0; i < sessions.length; i++) {
-          tmpPortForwardings.push({
-            id: sessions[i].id,
-            podName: sessions[i].podName,
-            podNamespace: sessions[i].podNamespace,
-            podPort: sessions[i].podPort,
-            localPort: sessions[i].localPort,
-          });
+        if (sessions !== null && sessions.length > 0) {
+          const tmpPortForwardings: IPortForwarding[] = [];
+          for (let i = 0; i < sessions.length; i++) {
+            tmpPortForwardings.push({
+              id: sessions[i].id,
+              podName: sessions[i].podName,
+              podNamespace: sessions[i].podNamespace,
+              podPort: sessions[i].podPort,
+              localPort: sessions[i].localPort,
+            });
+          }
+
+          setPortForwardings(tmpPortForwardings);
         }
-
-        setPortForwardings(tmpPortForwardings);
+      } catch (err) {
+        setError(`Could not get active port forwarding sessions: ${err.message}`);
       }
     };
 

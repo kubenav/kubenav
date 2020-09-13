@@ -21,6 +21,7 @@ export const DEFAULT_SETTINGS: IAppSettings = {
   prometheusNamespace: 'monitoring',
   prometheusSelector: 'app=prometheus',
   prometheusPort: 9090,
+  prometheusAddress: '',
 };
 
 export const GOOGLE_OAUTH2_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/auth';
