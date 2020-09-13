@@ -1,5 +1,6 @@
-import { IonItem, IonItemOptions, IonItemSliding, IonLabel } from '@ionic/react';
+import { IonIcon, IonItem, IonItemOptions, IonItemSliding, IonLabel } from '@ionic/react';
 import { V1Container, V1ContainerStatus } from '@kubernetes/client-node';
+import { checkmark, close } from 'ionicons/icons';
 import React from 'react';
 
 import { IContainerMetrics } from '../../../../declarations';
@@ -64,7 +65,13 @@ const Container: React.FunctionComponent<IContainerProps> = ({
     return (
       <tr>
         <td>{container.name}</td>
-        <td>{status && status.ready ? '1' : '0'}</td>
+        <td>
+          {status && status.ready ? (
+            <IonIcon icon={checkmark} color="success" />
+          ) : (
+            <IonIcon icon={close} color="danger" />
+          )}
+        </td>
         <td>{status && status.restartCount ? status.restartCount : 0}</td>
         <td>{status ? getState(status) : ''}</td>
         <td className="center">
@@ -135,7 +142,9 @@ const Container: React.FunctionComponent<IContainerProps> = ({
             {container.resources && container.resources.limits && container.resources.limits.hasOwnProperty('cpu')
               ? formatResourceValue('cpu', container.resources.limits['cpu'])
               : '-'}
-            ) | Memory:{' '}
+            )
+            <br />
+            Memory:{' '}
             {metrics && metrics.usage && metrics.usage.hasOwnProperty('memory')
               ? formatResourceValue('memory', metrics.usage['memory'])
               : '-'}{' '}

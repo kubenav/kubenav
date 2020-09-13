@@ -1,4 +1,4 @@
-import { IonCardHeader, IonCardTitle, IonCol, IonGrid, IonLabel, IonRouterLink, IonRow } from '@ionic/react';
+import { IonCol, IonGrid, IonLabel, IonRouterLink, IonRow } from '@ionic/react';
 import { V1Container, V1ContainerPort, V1Pod } from '@kubernetes/client-node';
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -7,8 +7,7 @@ import { IContext, IPodMetrics } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { IS_INCLUSTER } from '../../../../utils/constants';
 import { AppContext } from '../../../../utils/context';
-import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
-import Prometheus from '../../../plugins/Prometheus';
+import Dashboard from '../../../plugins/prometheus/Dashboard';
 import List from '../../misc/list/List';
 import Containers from './Containers';
 import Conditions from '../../misc/template/Conditions';
@@ -191,121 +190,141 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
       ) : null}
 
       {context.settings.prometheusEnabled ? (
-        <IonRow>
-          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
-            <IonCardEqualHeight>
-              <IonCardHeader>
-                <IonCardTitle>Memory Usage (in MiB)</IonCardTitle>
-              </IonCardHeader>
-              <Prometheus
-                queries={[
-                  {
-                    label: 'Current',
-                    query: `sum(container_memory_usage_bytes{job="kubelet", namespace="${
-                      item.metadata ? item.metadata.namespace : ''
-                    }", pod="${
-                      item.metadata ? item.metadata.name : ''
-                    }", container!="", container!="POD"}) / 1024 / 1024`,
-                  },
-                  {
-                    label: 'Requested',
-                    query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${
-                      item.metadata ? item.metadata.namespace : ''
-                    }", resource="memory", pod="${item.metadata ? item.metadata.name : ''}"}) / 1024 / 1024`,
-                  },
-                  {
-                    label: 'Limit',
-                    query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${
-                      item.metadata ? item.metadata.namespace : ''
-                    }", resource="memory", pod="${item.metadata ? item.metadata.name : ''}"}) / 1024 / 1024`,
-                  },
-                  {
-                    label: 'Cache',
-                    query: `sum(container_memory_cache{job="kubelet", namespace="${
-                      item.metadata ? item.metadata.namespace : ''
-                    }", pod="${
-                      item.metadata ? item.metadata.name : ''
-                    }", container!="", container!="POD"}) / 1024 / 1024`,
-                  },
-                ]}
-              />
-            </IonCardEqualHeight>
-          </IonCol>
-
-          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
-            <IonCardEqualHeight>
-              <IonCardHeader>
-                <IonCardTitle>CPU Usage</IonCardTitle>
-              </IonCardHeader>
-              <Prometheus
-                queries={[
-                  {
-                    label: 'Current',
-                    query: `sum(irate(container_cpu_usage_seconds_total{job="kubelet", namespace="${
-                      item.metadata ? item.metadata.namespace : ''
-                    }", image!="", pod="${
-                      item.metadata ? item.metadata.name : ''
-                    }", container!="", container!="POD"}[4m]))`,
-                  },
-                  {
-                    label: 'Requested',
-                    query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${
-                      item.metadata ? item.metadata.namespace : ''
-                    }", resource="cpu", pod="${item.metadata ? item.metadata.name : ''}"})`,
-                  },
-                  {
-                    label: 'Limit',
-                    query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${
-                      item.metadata ? item.metadata.namespace : ''
-                    }", resource="cpu", pod="${item.metadata ? item.metadata.name : ''}"})`,
-                  },
-                ]}
-              />
-            </IonCardEqualHeight>
-          </IonCol>
-
-          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
-            <IonCardEqualHeight>
-              <IonCardHeader>
-                <IonCardTitle>Network I/O (in MiB)</IonCardTitle>
-              </IonCardHeader>
-              <Prometheus
-                queries={[
-                  {
-                    label: 'RX',
-                    query: `sort_desc(sum by (pod) (irate(container_network_receive_bytes_total{job="kubelet", namespace="${
-                      item.metadata ? item.metadata.namespace : ''
-                    }", pod="${item.metadata ? item.metadata.name : ''}"}[4m]))) / 1024 / 1024`,
-                  },
-                  {
-                    label: 'TX',
-                    query: `sort_desc(sum by (pod) (irate(container_network_transmit_bytes_total{job="kubelet", namespace="${
-                      item.metadata ? item.metadata.namespace : ''
-                    }", pod="${item.metadata ? item.metadata.name : ''}"}[4m]))) / 1024 / 1024`,
-                  },
-                ]}
-              />
-            </IonCardEqualHeight>
-          </IonCol>
-
-          <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="6">
-            <IonCardEqualHeight>
-              <IonCardHeader>
-                <IonCardTitle>Total Restarts</IonCardTitle>
-              </IonCardHeader>
-              <Prometheus
-                queries={[
-                  {
-                    label: 'Restarts',
-                    query: `max(kube_pod_container_status_restarts_total{job="kube-state-metrics", namespace="${
-                      item.metadata ? item.metadata.namespace : ''
-                    }", pod="${item.metadata ? item.metadata.name : ''}"})`,
-                  },
-                ]}
-              />
-            </IonCardEqualHeight>
-          </IonCol>
-        </IonRow>
+        <Dashboard
+          title="Metrics"
+          variables={{
+            Container: [item.spec ? item.spec.containers.map((container) => container.name).join('|') : ''].concat(
+              item.spec && item.spec.containers ? item.spec.containers.map((container) => container.name) : [],
+            ),
+          }}
+          initialVariables={{
+            Container: item.spec ? item.spec.containers.map((container) => container.name).join('|') : '',
+          }}
+          charts={[
+            {
+              title: 'Memory Usage (in MiB)',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Current',
+                  query: `sum(container_memory_usage_bytes{job="kubelet", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", pod="${
+                    item.metadata ? item.metadata.name : ''
+                  }", container=~"<Container>", container!="POD"}) / 1024 / 1024`,
+                },
+                {
+                  label: 'Requested',
+                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", resource="memory", pod="${
+                    item.metadata ? item.metadata.name : ''
+                  }", container=~"<Container>"}) / 1024 / 1024`,
+                },
+                {
+                  label: 'Limit',
+                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", resource="memory", pod="${
+                    item.metadata ? item.metadata.name : ''
+                  }", container=~"<Container>"}) / 1024 / 1024`,
+                },
+                {
+                  label: 'Cache',
+                  query: `sum(container_memory_cache{job="kubelet", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", pod="${
+                    item.metadata ? item.metadata.name : ''
+                  }", container=~"<Container>", container!="POD"}) / 1024 / 1024`,
+                },
+              ],
+            },
+            {
+              title: 'CPU Usage',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Current',
+                  query: `sum(irate(container_cpu_usage_seconds_total{job="kubelet", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", image!="", pod="${
+                    item.metadata ? item.metadata.name : ''
+                  }", container=~"<Container>", container!="POD"}[4m]))`,
+                },
+                {
+                  label: 'Requested',
+                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", resource="cpu", pod="${item.metadata ? item.metadata.name : ''}", container=~"<Container>"})`,
+                },
+                {
+                  label: 'Limit',
+                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", resource="cpu", pod="${item.metadata ? item.metadata.name : ''}", container=~"<Container>"})`,
+                },
+              ],
+            },
+            {
+              title: 'Network I/O (in MiB)',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'RX',
+                  query: `sort_desc(sum by (pod) (irate(container_network_receive_bytes_total{job="kubelet", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", pod="${item.metadata ? item.metadata.name : ''}"}[4m]))) / 1024 / 1024`,
+                },
+                {
+                  label: 'TX',
+                  query: `sort_desc(sum by (pod) (irate(container_network_transmit_bytes_total{job="kubelet", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", pod="${item.metadata ? item.metadata.name : ''}"}[4m]))) / 1024 / 1024`,
+                },
+              ],
+            },
+            {
+              title: 'Total Restarts',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Restarts',
+                  query: `max(kube_pod_container_status_restarts_total{job="kube-state-metrics", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", pod="${item.metadata ? item.metadata.name : ''}", container=~"<Container>"})`,
+                },
+              ],
+            },
+          ]}
+        />
       ) : null}
     </IonGrid>
   );

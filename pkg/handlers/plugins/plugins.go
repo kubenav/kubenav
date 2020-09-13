@@ -39,7 +39,7 @@ type Request struct {
 // use.
 // When the address value isn't empty we asume that kubenav is running inside a Kubernetes cluster and using this
 // address instead of port forwarding.
-func Run(config *rest.Config, clientset *kubernetes.Clientset, name, podURL string, port int64, address string, data map[string]interface{}) (interface{}, error) {
+func Run(config *rest.Config, clientset *kubernetes.Clientset, name, podURL string, port int64, address string, timeout time.Duration, data map[string]interface{}) (interface{}, error) {
 	var err error
 	var result interface{}
 
@@ -61,7 +61,7 @@ func Run(config *rest.Config, clientset *kubernetes.Clientset, name, podURL stri
 
 	switch name {
 	case "prometheus":
-		result, err = prometheus.RunQueries(address, data)
+		result, err = prometheus.RunQueries(address, timeout, data)
 	}
 
 	return result, err

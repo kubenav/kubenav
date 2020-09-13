@@ -3,8 +3,16 @@ import { isPlatform } from '@ionic/react';
 import React, { useEffect, useState, ReactElement } from 'react';
 
 import { IAppSettings, ICluster, IClusters, IContext } from '../declarations';
-import { getCluster, getClusters, getOIDCAccessToken, syncKubeconfig, getAWSToken, getGoogleAccessToken } from './api';
-import { DEFAULT_SETTINGS } from './constants';
+import {
+  getCluster,
+  getClusters,
+  getOIDCAccessToken,
+  getInclusterSettings,
+  syncKubeconfig,
+  getAWSToken,
+  getGoogleAccessToken,
+} from './api';
+import { DEFAULT_SETTINGS, IS_INCLUSTER } from './constants';
 import { isBase64, randomString } from './helpers';
 import {
   readCluster,
@@ -16,6 +24,7 @@ import {
   saveClusters,
   saveSettings,
 } from './storage';
+import useAsyncFn from './useAsyncFn';
 
 const { SplashScreen } = Plugins;
 
@@ -58,40 +67,57 @@ interface IAppContextProvider {
 // Every Context object comes with a Provider React component that allows consuming components to subscribe to context
 // changes.
 export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = ({ children }: IAppContextProvider) => {
-  const [loading, setLoading] = useState<boolean>(true);
   const [settings, setSettings] = useState<IAppSettings>(readSettings());
   const [cluster, setCluster] = useState<string | undefined>(undefined);
   const [clusters, setClusters] = useState<IClusters | undefined>(undefined);
 
   // When the component is rendered we are initializing the cluster and clusters variables.
-  // For the desktop version we are calling the internal API endpoint to retrieve a list of clusters from the Kubeconfig
-  // file. For the electron version we are saving the current context in the localStorage, but for development we are
-  // making an API request to retrieve the current context during startup.
-  // For the mobile version we only use the localStorage which holds all cluster information.
-  useEffect(() => {
-    const fetchData = async () => {
-      // Apply dark mode if it was returned from the storage api. This could be set by the user or the default from
-      // the system.
-      document.body.classList.toggle('dark', settings.darkMode);
+  // For the desktop and incluster version we are calling the internal API endpoint to retrieve a list of clusters from
+  // the loaded Kubeconfig or incluster configuration. The mobile version of kubenav loads all clusters from
+  // localStorage.
+  // For the incluster version of kubenav we are also loading all settings which were configured via command-line flags.
+  // This allows us to use the cluster address for plugins instead if port forwarding.
+  const [state, , fetchInit] = useAsyncFn(
+    async () => {
+      try {
+        document.body.classList.toggle('dark', settings.darkMode);
 
-      if (!isPlatform('hybrid')) {
-        const receivedClusters = await getClusters();
-        const activeCluster = await getCluster();
-        setClusters(receivedClusters);
-        setCluster(activeCluster);
-      } else {
-        setClusters(readClusters());
-        setCluster(readCluster());
+        if (!isPlatform('hybrid')) {
+          if (IS_INCLUSTER) {
+            const inclusterSettings = await getInclusterSettings();
+
+            if (inclusterSettings) {
+              setSettings({
+                ...settings,
+                prometheusEnabled: inclusterSettings.prometheusEnabled,
+                prometheusAddress: inclusterSettings.prometheusAddress,
+              });
+            }
+          }
+
+          const receivedClusters = await getClusters();
+          const activeCluster = await getCluster();
+          setClusters(receivedClusters);
+          setCluster(activeCluster);
+        } else {
+          setClusters(readClusters());
+          setCluster(readCluster());
+        }
+
+        await SplashScreen.hide();
+
+        return true;
+      } catch (err) {
+        throw err;
       }
+    },
+    [],
+    { loading: true, error: undefined, value: undefined },
+  );
 
-      setLoading(false);
-      await SplashScreen.hide();
-    };
-
-    if (loading) {
-      fetchData();
-    }
-  }, [loading, settings.darkMode]);
+  useEffect(() => {
+    fetchInit();
+  }, [fetchInit]);
 
   // addCluster is used to add new clusters. We are using an array of clusters instead of a cluster object to add
   // multiple clusters with one call. If we want to add multiple clusters and call this function multiple times, there
@@ -295,7 +321,7 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
         kubernetesAuthWrapper: kubernetesAuthWrapper,
       }}
     >
-      {loading ? null : children}
+      {state.loading ? null : children}
     </AppContext.Provider>
   );
 };

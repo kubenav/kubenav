@@ -187,26 +187,32 @@ const GeneralPage: React.FunctionComponent = () => {
             </IonItemGroup>
           )}
 
-          <IonItemGroup>
-            <IonItemDivider>
-              <IonLabel>Proxy</IonLabel>
-            </IonItemDivider>
-            <IonItem>
-              <IonLabel>Enabled</IonLabel>
-              <IonToggle name="proxyEnabled" checked={context.settings.proxyEnabled} onIonChange={handleToggleChange} />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">Address</IonLabel>
-              <IonInput
-                type="text"
-                required={true}
-                placeholder="http://localhost:8888"
-                name="proxyAddress"
-                value={context.settings.proxyAddress}
-                onInput={handleValueChange}
-              />
-            </IonItem>
-          </IonItemGroup>
+          {IS_INCLUSTER ? null : (
+            <IonItemGroup>
+              <IonItemDivider>
+                <IonLabel>Proxy</IonLabel>
+              </IonItemDivider>
+              <IonItem>
+                <IonLabel>Enabled</IonLabel>
+                <IonToggle
+                  name="proxyEnabled"
+                  checked={context.settings.proxyEnabled}
+                  onIonChange={handleToggleChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Address</IonLabel>
+                <IonInput
+                  type="text"
+                  required={true}
+                  placeholder="http://localhost:8888"
+                  name="proxyAddress"
+                  value={context.settings.proxyAddress}
+                  onInput={handleValueChange}
+                />
+              </IonItem>
+            </IonItemGroup>
+          )}
         </IonList>
       </IonContent>
     </IonPage>
