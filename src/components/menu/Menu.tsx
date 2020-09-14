@@ -86,14 +86,14 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections, history, location
       </IonHeader>
       <IonContent>
         <IonList>
-          {IS_INCLUSTER || (context.clusters && Object.keys(context.clusters).length === 1) ? null : <Clusters />}
+          {context.clusters && Object.keys(context.clusters).length <= 1 ? null : <Clusters />}
 
           <Sections sections={sections} isMenu={true} />
 
           <IonListHeader mode="md">
             <IonLabel>Settings</IonLabel>
           </IonListHeader>
-          {IS_INCLUSTER ? null : (
+          {IS_INCLUSTER && context.clusters && Object.keys(context.clusters).length <= 1 ? null : (
             <IonMenuToggle autoHide={false}>
               <IonItem routerLink="/settings/clusters" routerDirection="root">
                 <IonAvatar slot="start">
