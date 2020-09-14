@@ -9,6 +9,7 @@ import {
   kubernetesPortForwardingRequest,
   kubernetesPortForwardingStopRequest,
 } from './api';
+import { IS_INCLUSTER } from './constants';
 import { AppContext } from './context';
 
 const { Clipboard } = Plugins;
@@ -47,30 +48,36 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
   const [selectedPortForwarding, setSelectedPortForwarding] = useState<number>(0);
 
   useEffect(() => {
+    // getActiveSessions tries to get all active port forwarding sessions from the Go backend. So that the list is
+    // always up to date, also when an other operation regarding opening/deleting a session failes. Since port
+    // forwarding is disabled for the incluster mode we do not have to make the API call.
     const getActiveSessions = async () => {
-      try {
-        const sessions = await kubernetesPortForwardingActiveSessions();
+      if (!IS_INCLUSTER) {
+        try {
+          const sessions = await kubernetesPortForwardingActiveSessions();
 
-        if (sessions !== null && sessions.length > 0) {
-          const tmpPortForwardings: IPortForwarding[] = [];
-          for (let i = 0; i < sessions.length; i++) {
-            tmpPortForwardings.push({
-              id: sessions[i].id,
-              podName: sessions[i].podName,
-              podNamespace: sessions[i].podNamespace,
-              podPort: sessions[i].podPort,
-              localPort: sessions[i].localPort,
-            });
+          if (sessions !== null && sessions.length > 0) {
+            const tmpPortForwardings: IPortForwarding[] = [];
+            for (let i = 0; i < sessions.length; i++) {
+              tmpPortForwardings.push({
+                id: sessions[i].id,
+                podName: sessions[i].podName,
+                podNamespace: sessions[i].podNamespace,
+                podPort: sessions[i].podPort,
+                localPort: sessions[i].localPort,
+              });
+            }
+
+            setPortForwardings(tmpPortForwardings);
           }
-
-          setPortForwardings(tmpPortForwardings);
+        } catch (err) {
+          setError(`Could not get active port forwarding sessions: ${err.message}`);
         }
-      } catch (err) {
-        setError(`Could not get active port forwarding sessions: ${err.message}`);
       }
     };
 
     const interval = setInterval(() => getActiveSessions(), 10000);
+
     return () => {
       clearInterval(interval);
     };
