@@ -193,7 +193,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
         <Dashboard
           title="Metrics"
           variables={
-            item.spec
+            item.spec && item.spec.containers
               ? {
                   Container:
                     item.spec.containers.length === 1
@@ -205,7 +205,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
               : undefined
           }
           initialVariables={
-            item.spec
+            item.spec && item.spec.containers
               ? {
                   Container:
                     item.spec.containers.length === 1
