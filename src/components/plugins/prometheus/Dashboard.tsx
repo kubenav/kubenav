@@ -149,6 +149,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
                         <IonItem>
                           <IonLabel>{variable}</IonLabel>
                           <IonSelect
+                            interface="popover"
                             value={selectedVariables[variable]}
                             onIonChange={(e) =>
                               setSelectedVariables((prevState) => ({ ...prevState, [variable]: e.detail.value }))
@@ -168,7 +169,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
                 <IonCol>
                   <IonItem>
                     <IonLabel>Time</IonLabel>
-                    <IonSelect value={timeDiff} onIonChange={(e) => setTimeDiff(e.detail.value)}>
+                    <IonSelect interface="popover" value={timeDiff} onIonChange={(e) => setTimeDiff(e.detail.value)}>
                       <IonSelectOption value={300}>Last 5 minutes</IonSelectOption>
                       <IonSelectOption value={900}>Last 15 minutes</IonSelectOption>
                       <IonSelectOption value={1800}>Last 30 minutes</IonSelectOption>

@@ -192,14 +192,28 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
       {context.settings.prometheusEnabled ? (
         <Dashboard
           title="Metrics"
-          variables={{
-            Container: [item.spec ? item.spec.containers.map((container) => container.name).join('|') : ''].concat(
-              item.spec && item.spec.containers ? item.spec.containers.map((container) => container.name) : [],
-            ),
-          }}
-          initialVariables={{
-            Container: item.spec ? item.spec.containers.map((container) => container.name).join('|') : '',
-          }}
+          variables={
+            item.spec
+              ? {
+                  Container:
+                    item.spec.containers.length === 1
+                      ? item.spec.containers.map((container) => container.name)
+                      : [item.spec.containers.map((container) => container.name).join('|')].concat(
+                          item.spec.containers.map((container) => container.name),
+                        ),
+                }
+              : undefined
+          }
+          initialVariables={
+            item.spec
+              ? {
+                  Container:
+                    item.spec.containers.length === 1
+                      ? item.spec.containers.map((container) => container.name)[0]
+                      : item.spec.containers.map((container) => container.name).join('|'),
+                }
+              : undefined
+          }
           charts={[
             {
               title: 'Memory Usage (in MiB)',
