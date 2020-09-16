@@ -4,6 +4,7 @@ import { Terminal } from 'xterm';
 import { IContext, ITerminalContext } from '../../../declarations';
 import { kubernetesRequest, kubernetesExecRequest, kubernetesLogsRequest, sshRequest } from '../../../utils/api';
 import { INCLUSTER_URL, LOG_TERMINAL_OPTIONS, SHELL_TERMINAL_OPTIONS } from '../../../utils/constants';
+import { isDarkMode } from '../../../utils/helpers';
 
 export const addShell = async (
   context: IContext,
@@ -16,7 +17,7 @@ export const addShell = async (
     SHELL_TERMINAL_OPTIONS(
       context.settings.terminalFontSize,
       context.settings.terminalScrollback,
-      context.settings.darkMode,
+      isDarkMode(context.settings.theme),
     ),
   );
 
@@ -92,7 +93,7 @@ export const addLogs = async (
     LOG_TERMINAL_OPTIONS(
       context.settings.terminalFontSize,
       context.settings.terminalScrollback,
-      context.settings.darkMode,
+      isDarkMode(context.settings.theme),
     ),
   );
 
@@ -178,7 +179,7 @@ export const addSSH = async (
     SHELL_TERMINAL_OPTIONS(
       context.settings.terminalFontSize,
       context.settings.terminalScrollback,
-      context.settings.darkMode,
+      isDarkMode(context.settings.theme),
     ),
   );
 

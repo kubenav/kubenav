@@ -28,7 +28,7 @@ export interface IAppSections {
 }
 
 export interface IAppSettings {
-  darkMode: boolean;
+  theme: TTheme;
   timeout: number;
   sshKey: string;
   sshPort: string;
@@ -348,3 +348,5 @@ export type TActivator = 'block-button' | 'button' | 'item' | 'item-option';
 export type TAuthProvider = '' | 'aws' | 'azure' | 'google' | 'kubeconfig' | 'oidc';
 
 export type TSyncType = 'context' | 'namespace';
+
+export type TTheme = 'system' | 'dark' | 'light';

@@ -11,6 +11,8 @@ import {
   IonMenuButton,
   IonPage,
   IonRange,
+  IonSelect,
+  IonSelectOption,
   IonTextarea,
   IonTitle,
   IonToggle,
@@ -41,6 +43,10 @@ const GeneralPage: React.FunctionComponent = () => {
     context.editSettings({ ...context.settings, [event.target.name]: event.detail.value });
   };
 
+  const handleSelect = (event) => {
+    context.editSettings({ ...context.settings, [event.target.name]: event.detail.value });
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -58,8 +64,12 @@ const GeneralPage: React.FunctionComponent = () => {
               <IonLabel>General</IonLabel>
             </IonItemDivider>
             <IonItem>
-              <IonLabel>Dark Mode</IonLabel>
-              <IonToggle name="darkMode" checked={context.settings.darkMode} onIonChange={handleToggleChange} />
+              <IonLabel>Theme</IonLabel>
+              <IonSelect value={context.settings.theme} name="theme" onIonChange={handleSelect} interface="popover">
+                <IonSelectOption value="system">System</IonSelectOption>
+                <IonSelectOption value="dark">Dark</IonSelectOption>
+                <IonSelectOption value="light">Light</IonSelectOption>
+              </IonSelect>
             </IonItem>
             <IonItem>
               <IonLabel className="label-for-range" position="stacked">

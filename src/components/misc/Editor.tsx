@@ -8,6 +8,7 @@ import 'ace-builds/src-noconflict/theme-nord_dark';
 
 import { IContext } from '../../declarations';
 import { AppContext } from '../../utils/context';
+import { isDarkMode } from '../../utils/helpers';
 
 interface IEditorProps {
   onChange?: (newValue: string) => void;
@@ -47,7 +48,7 @@ const Editor: React.FunctionComponent<IEditorProps> = ({
       }}
       showPrintMargin={false}
       tabSize={2}
-      theme={context.settings.darkMode ? 'nord_dark' : 'github'}
+      theme={isDarkMode(context.settings.theme) ? 'nord_dark' : 'github'}
       value={value}
       width="100%"
     />

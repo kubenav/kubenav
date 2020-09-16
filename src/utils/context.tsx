@@ -13,7 +13,7 @@ import {
   getGoogleAccessToken,
 } from './api';
 import { DEFAULT_SETTINGS, IS_INCLUSTER } from './constants';
-import { isBase64, randomString } from './helpers';
+import { isBase64, isDarkMode, randomString } from './helpers';
 import {
   readCluster,
   readClusters,
@@ -80,7 +80,8 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
   const [state, , fetchInit] = useAsyncFn(
     async () => {
       try {
-        document.body.classList.toggle('dark', settings.darkMode);
+        // Apply the initial dark mode setting, how it was saved in the localStorage.
+        document.body.classList.toggle('dark', isDarkMode(settings.theme));
 
         if (!isPlatform('hybrid')) {
           if (IS_INCLUSTER) {
@@ -118,6 +119,24 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
   useEffect(() => {
     fetchInit();
   }, [fetchInit]);
+
+  // Listen for changes of the system theme by checking if the document matches the media query using matchMedia(). We
+  // only change the theme when the user uses "system" for the theme determination.
+  // NOTE: Currently we can not use the "addEventListener" or "removeEventListener" functions
+  // (https://stackoverflow.com/a/56466334/4104109), because they are not supported on Safari and iOS.
+  useEffect(() => {
+    const toggleDarkMode = (mediaQuery: MediaQueryListEvent) => {
+      if (settings.theme === 'system') {
+        document.body.classList.toggle('dark', mediaQuery.matches);
+      }
+    };
+
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    prefersDark.addListener(toggleDarkMode);
+    return () => {
+      prefersDark.removeListener(toggleDarkMode);
+    };
+  }, [settings]);
 
   // addCluster is used to add new clusters. We are using an array of clusters instead of a cluster object to add
   // multiple clusters with one call. If we want to add multiple clusters and call this function multiple times, there
@@ -231,7 +250,8 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
   // editSettings changes the users settings to the ones provided. We are also saving these settings to the localStorage
   // via the storage api.
   const editSettings = (settings: IAppSettings) => {
-    document.body.classList.toggle('dark', settings.darkMode);
+    // Always apply the theme variable.
+    document.body.classList.toggle('dark', isDarkMode(settings.theme));
 
     setSettings(settings);
     saveSettings(settings);
