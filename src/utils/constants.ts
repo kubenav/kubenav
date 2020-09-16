@@ -8,7 +8,7 @@ export const IS_INCLUSTER = process.env.REACT_APP_INCLUSTER === 'true' ? true : 
 export const VERSION = process.env.REACT_APP_VERSION;
 
 export const DEFAULT_SETTINGS: IAppSettings = {
-  darkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
+  theme: 'system',
   timeout: 60,
   sshKey: '',
   sshPort: '22',

@@ -1,5 +1,7 @@
 import { V1LabelSelector, V1Subject } from '@kubernetes/client-node';
 
+import { TTheme } from '../declarations';
+
 // capitalize uppercase the first letter of a string
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 export const capitalize = (s: any) => {
@@ -89,6 +91,17 @@ export const isBase64 = (str: string): boolean => {
   return (
     firstPaddingChar === -1 || firstPaddingChar === len - 1 || (firstPaddingChar === len - 2 && str[len - 1] === '=')
   );
+};
+
+// isDarkMode checks the given theme value and returns a boolean value, which indicates if the dark mode should be used.
+export const isDarkMode = (theme: TTheme): boolean => {
+  if (theme === 'dark') {
+    return true;
+  } else if (theme === 'light') {
+    return false;
+  } else {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
 };
 
 // isJSON checks a given string if it is valid JSON.

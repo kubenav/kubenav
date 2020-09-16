@@ -4,6 +4,7 @@ import { Area, AreaChart, Legend, ResponsiveContainer, XAxis, YAxis } from 'rech
 
 import { IContext } from '../../../declarations';
 import { AppContext } from '../../../utils/context';
+import { isDarkMode } from '../../../utils/helpers';
 
 const colorsLight = [
   '#10dc60',
@@ -103,8 +104,8 @@ const ChartDetailsArea: React.FunctionComponent<IChartDetailsAreaProps> = ({
                 dataKey="value"
                 data={serie.data}
                 name={serie.name}
-                stroke={context.settings.darkMode ? colorsDark[index] : colorsLight[index]}
-                fill={context.settings.darkMode ? colorsDark[index] : colorsLight[index]}
+                stroke={isDarkMode(context.settings.theme) ? colorsDark[index] : colorsLight[index]}
+                fill={isDarkMode(context.settings.theme) ? colorsDark[index] : colorsLight[index]}
                 fillOpacity={0.2}
               />
             ))}

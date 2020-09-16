@@ -127,8 +127,9 @@ export const readSettings = (): IAppSettings => {
 
   if (settingsFromStorage) {
     const settings = JSON.parse(settingsFromStorage);
+
     return {
-      darkMode: settings.hasOwnProperty('darkMode') ? settings.darkMode : DEFAULT_SETTINGS.darkMode,
+      theme: settings.theme ? settings.theme : DEFAULT_SETTINGS.theme,
       timeout: settings.timeout ? settings.timeout : DEFAULT_SETTINGS.timeout,
       sshKey: settings.sshKey ? settings.sshKey : DEFAULT_SETTINGS.sshKey,
       sshPort: settings.sshPort ? settings.sshPort : DEFAULT_SETTINGS.sshPort,
