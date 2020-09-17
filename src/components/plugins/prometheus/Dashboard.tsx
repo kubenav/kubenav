@@ -135,9 +135,9 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
             <IonCardTitle>{title}</IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
-            {isFetching ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
-
-            {!isError && data ? (
+            {isFetching ? (
+              <IonProgressBar slot="fixed" type="indeterminate" color="primary" />
+            ) : !isError && data ? (
               <IonRow>
                 {variables && selectedVariables
                   ? Object.keys(variables).map((variable) => (

@@ -30,7 +30,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
   const cluster = context.currentCluster();
 
   const { data } = useQuery<IPodMetrics, Error>(
-    [cluster ? cluster.id : '', item, type],
+    ['Pod', cluster ? cluster.id : '', item, type],
     async () =>
       await kubernetesRequest(
         'GET',
