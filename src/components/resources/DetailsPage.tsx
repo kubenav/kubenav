@@ -14,14 +14,14 @@ import {
   isPlatform,
 } from '@ionic/react';
 import { refresh } from 'ionicons/icons';
-import React, { memo, useContext, useEffect } from 'react';
+import React, { memo, useContext } from 'react';
+import { useQuery } from 'react-query';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../declarations';
 import { kubernetesRequest } from '../../utils/api';
 import { AppContext } from '../../utils/context';
 import { resources } from '../../utils/resources';
-import useAsyncFn from '../../utils/useAsyncFn';
 import Details from './misc/details/Details';
 import LoadingErrorCard from '../misc/LoadingErrorCard';
 
@@ -41,8 +41,8 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
   const page = resources[match.params.section].pages[match.params.type];
   const Component = page.detailsComponent;
 
-  // useAsyncFn is a custom React hook which wrapps our API call.
-  const [state, fetch, fetchInit] = useAsyncFn(
+  const { isError, isFetching, data, error, refetch } = useQuery(
+    [cluster ? cluster.id : '', match.params.namespace, match.params.name],
     async () =>
       await kubernetesRequest(
         'GET',
@@ -51,21 +51,14 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
         context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
-    [page, match.params.namespace, match.params.name],
-    { loading: true, error: undefined, value: undefined },
+    context.settings.queryConfig,
   );
-
-  // When the component is rendered the first time and on every route change or a modification to the context
-  // object we are loading all items for the corresponding resource.
-  useEffect(() => {
-    fetchInit();
-  }, [fetchInit]);
 
   // The doRefresh method is used for a manual reload of the items for the corresponding resource. The
   // event.detail.complete() call is required to finish the animation of the IonRefresher component.
   const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();
-    fetch();
+    refetch();
   };
 
   return (
@@ -75,20 +68,20 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
           <IonButtons slot="start">
             <IonBackButton defaultHref={`/resources/${match.params.section}/${match.params.type}`} />
           </IonButtons>
-          <IonTitle>{state.value && state.value.metadata ? state.value.metadata.name : ''}</IonTitle>
+          <IonTitle>{data && data.metadata ? data.metadata.name : ''}</IonTitle>
           <IonButtons slot="primary">
             {!isPlatform('hybrid') ? (
-              <IonButton onClick={() => fetch()}>
+              <IonButton onClick={() => refetch()}>
                 <IonIcon slot="icon-only" icon={refresh} />
               </IonButton>
             ) : null}
-            {state.value ? (
+            {data ? (
               <Details
                 type={match.params.type}
-                item={state.value}
+                item={data}
                 url={page.detailsURL(
-                  state.value.metadata ? state.value.metadata.namespace : '',
-                  state.value.metadata ? state.value.metadata.name : '',
+                  data.metadata ? data.metadata.namespace : '',
+                  data.metadata ? data.metadata.name : '',
                 )}
               />
             ) : null}
@@ -96,16 +89,16 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {state.loading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
+        {isFetching ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
         <IonRefresher slot="fixed" onIonRefresh={doRefresh} />
 
-        {!state.error && cluster && state.value ? (
-          <Component item={state.value} section={match.params.section} type={match.params.type} />
-        ) : state.loading ? null : (
+        {!isError && cluster && data ? (
+          <Component item={data} section={match.params.section} type={match.params.type} />
+        ) : isFetching ? null : (
           <LoadingErrorCard
             cluster={context.cluster}
             clusters={context.clusters}
-            error={state.error}
+            error={error}
             icon={page.icon}
             text={`Could not get ${page.singleText}`}
           />

@@ -1,5 +1,6 @@
 import { V1ListMeta, V1ObjectMeta } from '@kubernetes/client-node';
 import React from 'react';
+import { QueryConfig } from 'react-query';
 import { Terminal } from 'xterm';
 
 export interface IAppPage {
@@ -30,18 +31,20 @@ export interface IAppSections {
 export interface IAppSettings {
   theme: TTheme;
   timeout: number;
+  terminalFontSize: number;
+  terminalScrollback: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  queryConfig: QueryConfig<any, Error>;
   sshKey: string;
   sshPort: string;
   sshUser: string;
-  proxyEnabled: boolean;
-  proxyAddress: string;
-  terminalFontSize: number;
-  terminalScrollback: number;
   prometheusEnabled: boolean;
   prometheusNamespace: string;
   prometheusSelector: string;
   prometheusPort: number;
   prometheusAddress: string;
+  proxyEnabled: boolean;
+  proxyAddress: string;
 }
 
 export interface IAWSCluster {

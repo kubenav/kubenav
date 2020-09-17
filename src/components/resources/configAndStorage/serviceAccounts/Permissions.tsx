@@ -10,13 +10,13 @@ import {
   IonRow,
 } from '@ionic/react';
 import { V1ClusterRole, V1ClusterRoleBindingList, V1Role, V1RoleBindingList, V1Subject } from '@kubernetes/client-node';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
+import { useQuery } from 'react-query';
 
 import { IContext } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import { resources } from '../../../../utils/resources';
-import useAsyncFn from '../../../../utils/useAsyncFn';
 import Rules from '../../rbac/misc/Rules';
 
 interface IPermissionsProps {
@@ -40,7 +40,8 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
 }: IPermissionsProps) => {
   const context = useContext<IContext>(AppContext);
 
-  const [state, , fetchInit] = useAsyncFn(
+  const { isError, isFetching, data } = useQuery(
+    [namespace, serviceAccountName],
     async () => {
       try {
         const roles: V1ClusterRole[] = [];
@@ -138,15 +139,10 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
         throw err;
       }
     },
-    [namespace, serviceAccountName],
-    { loading: true, error: undefined, value: undefined },
+    context.settings.queryConfig,
   );
 
-  useEffect(() => {
-    fetchInit();
-  }, [fetchInit]);
-
-  if (state.value && state.value.clusterRoles.length === 0 && state.value.roles.length === 0) {
+  if (data && data.clusterRoles.length === 0 && data.roles.length === 0) {
     return null;
   } else {
     return (
@@ -156,15 +152,15 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
             <IonCardHeader>
               <IonCardTitle>Permissions</IonCardTitle>
             </IonCardHeader>
-            {state.loading ? (
+            {isFetching ? (
               <IonCardContent>
                 <IonProgressBar slot="fixed" type="indeterminate" color="primary" />
               </IonCardContent>
             ) : null}
-            {!state.error && state.value ? (
+            {!isError && data ? (
               <React.Fragment>
-                {state.value && state.value.clusterRoles
-                  ? state.value.clusterRoles.map((clusterRole, index) => {
+                {data && data.clusterRoles
+                  ? data.clusterRoles.map((clusterRole, index) => {
                       return (
                         <React.Fragment key={index}>
                           <IonCardHeader>
@@ -187,8 +183,8 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
                       );
                     })
                   : null}
-                {state.value && state.value.roles
-                  ? state.value.roles.map((role, index) => {
+                {data && data.roles
+                  ? data.roles.map((role, index) => {
                       return (
                         <React.Fragment key={index}>
                           <IonCardHeader>

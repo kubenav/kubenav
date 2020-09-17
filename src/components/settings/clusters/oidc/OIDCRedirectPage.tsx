@@ -16,17 +16,17 @@ import {
   IonToggle,
   IonToolbar,
 } from '@ionic/react';
-import React, { memo, useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useState } from 'react';
+import { useQuery } from 'react-query';
 import { RouteComponentProps, useLocation } from 'react-router';
 
 import { IContext, IClusterAuthProviderOIDC } from '../../../../declarations';
 import { getOIDCRefreshToken } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import { readTemporaryCredentials } from '../../../../utils/storage';
-import useAsyncFn from '../../../../utils/useAsyncFn';
 import ErrorCard from '../../../misc/ErrorCard';
 
-const useQuery = () => {
+const useQueryParameter = () => {
   return new URLSearchParams(useLocation().search);
 };
 
@@ -34,10 +34,10 @@ type IOIDCRedirectPageProps = RouteComponentProps;
 
 const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ history }: IOIDCRedirectPageProps) => {
   const context = useContext<IContext>(AppContext);
-  const query = useQuery();
+  const query = useQueryParameter();
   const [provider, setProvider] = useState<undefined | IClusterAuthProviderOIDC>(undefined);
 
-  const [error, setError] = useState<string>('');
+  const [inputError, setInputError] = useState<string>('');
 
   const [clusterID, setClusterID] = useState<string>('');
   const [name, setName] = useState<string>('');
@@ -46,7 +46,8 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
   const [insecureSkipTLSVerify, setInsecureSkipTLSVerify] = useState<boolean>(false);
   const [namespace, setNamespace] = useState<string>('default');
 
-  const [state, , fetchInit] = useAsyncFn(
+  const { isError, isFetching, error } = useQuery(
+    'OIDCRedirectPage',
     async () => {
       try {
         let credentials = readTemporaryCredentials('oidc') as undefined | IClusterAuthProviderOIDC;
@@ -76,13 +77,8 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
         throw err;
       }
     },
-    [],
-    { loading: true, error: undefined, value: undefined },
+    context.settings.queryConfig,
   );
-
-  useEffect(() => {
-    fetchInit();
-  }, [fetchInit]);
 
   const handleName = (event) => {
     setName(event.target.value);
@@ -102,11 +98,11 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
 
   const addClusters = () => {
     if (name === '') {
-      setError('Name is required');
+      setInputError('Name is required');
     } else if (url === '') {
-      setError('Server is required');
+      setInputError('Server is required');
     } else if (!url.startsWith('https://')) {
-      setError('Invalid URL');
+      setInputError('Invalid URL');
     } else {
       try {
         context.addCluster([
@@ -127,21 +123,21 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
           },
         ]);
 
-        setError('');
+        setInputError('');
         history.push('/settings/clusters');
       } catch (err) {
-        setError(err.message);
+        setInputError(err.message);
       }
     }
   };
 
   const editClusters = () => {
     if (name === '') {
-      setError('Name is required');
+      setInputError('Name is required');
     } else if (url === '') {
-      setError('Server is required');
+      setInputError('Server is required');
     } else if (!url.startsWith('https://')) {
-      setError('Invalid URL');
+      setInputError('Invalid URL');
     } else {
       try {
         context.editCluster({
@@ -160,10 +156,10 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
           namespace: namespace,
         });
 
-        setError('');
+        setInputError('');
         history.push('/settings/clusters');
       } catch (err) {
-        setError(err.message);
+        setInputError(err.message);
       }
     }
   };
@@ -176,7 +172,7 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
             <IonMenuButton />
           </IonButtons>
           <IonTitle>{clusterID ? 'Edit' : 'Add'} Clusters</IonTitle>
-          {state.error ? null : (
+          {isError ? null : (
             <IonButtons slot="primary">
               {clusterID ? (
                 <IonButton onClick={() => editClusters()}>Save</IonButton>
@@ -188,10 +184,10 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {state.loading ? (
+        {isFetching ? (
           <IonProgressBar slot="fixed" type="indeterminate" color="primary" />
-        ) : state.error ? (
-          <ErrorCard error={state.error} text="OIDC Error" icon="/assets/icons/kubernetes/kubernetes.png" />
+        ) : isError ? (
+          <ErrorCard error={error} text="OIDC Error" icon="/assets/icons/kubernetes/kubernetes.png" />
         ) : (
           <IonList lines="full">
             <IonItem>
@@ -213,12 +209,12 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
           </IonList>
         )}
 
-        {error !== '' ? (
+        {inputError !== '' ? (
           <IonAlert
-            isOpen={error !== ''}
-            onDidDismiss={() => setError('')}
+            isOpen={inputError !== ''}
+            onDidDismiss={() => setInputError('')}
             header="Could not add cluster"
-            message={error}
+            message={inputError}
             buttons={['OK']}
           />
         ) : null}

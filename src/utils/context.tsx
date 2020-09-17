@@ -1,6 +1,7 @@
 import { Plugins } from '@capacitor/core';
 import { isPlatform } from '@ionic/react';
 import React, { useEffect, useState, ReactElement } from 'react';
+import { useQuery } from 'react-query';
 
 import { IAppSettings, ICluster, IClusters, IContext } from '../declarations';
 import {
@@ -24,7 +25,6 @@ import {
   saveClusters,
   saveSettings,
 } from './storage';
-import useAsyncFn from './useAsyncFn';
 
 const { SplashScreen } = Plugins;
 
@@ -77,7 +77,8 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
   // localStorage.
   // For the incluster version of kubenav we are also loading all settings which were configured via command-line flags.
   // This allows us to use the cluster address for plugins instead if port forwarding.
-  const [state, , fetchInit] = useAsyncFn(
+  const { isFetching } = useQuery(
+    'context',
     async () => {
       try {
         // Apply the initial dark mode setting, how it was saved in the localStorage.
@@ -112,13 +113,8 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
         throw err;
       }
     },
-    [],
-    { loading: true, error: undefined, value: undefined },
+    settings.queryConfig,
   );
-
-  useEffect(() => {
-    fetchInit();
-  }, [fetchInit]);
 
   // Listen for changes of the system theme by checking if the document matches the media query using matchMedia(). We
   // only change the theme when the user uses "system" for the theme determination.
@@ -274,7 +270,7 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
 
   const kubernetesAuthWrapper = async (clusterID: string): Promise<ICluster> => {
     if (!clusters || !cluster) {
-      throw new Error('Could not found cluster');
+      throw new Error('Could not found Cluster');
     }
 
     if (clusterID === '') {
@@ -282,7 +278,7 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
       if (c) {
         clusterID = c.id;
       } else {
-        throw new Error('Could not found cluster');
+        throw new Error('Could not found Cluster');
       }
     }
 
@@ -341,7 +337,7 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
         kubernetesAuthWrapper: kubernetesAuthWrapper,
       }}
     >
-      {state.loading ? null : children}
+      {isFetching ? null : children}
     </AppContext.Provider>
   );
 };

@@ -13,13 +13,13 @@ import {
   IonSelectOption,
 } from '@ionic/react';
 import { V1PodList } from '@kubernetes/client-node';
-import React, { memo, useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useState } from 'react';
+import { useQuery } from 'react-query';
 
 import { IContext } from '../../../declarations';
 import { kubernetesRequest, pluginRequest } from '../../../utils/api';
 import { IS_INCLUSTER } from '../../../utils/constants';
 import { AppContext } from '../../../utils/context';
-import useAsyncFn from '../../../utils/useAsyncFn';
 import Chart, { IChart, IChartResult, IPrometheusQuery } from './Chart';
 
 interface IVariables {
@@ -81,7 +81,8 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
   // series.
   // If kubenav is running inside a Kubernetes cluster (incluster mode), we are not using port forwarding. Instead we
   // are using the configured cluster url.
-  const [state, fetch] = useAsyncFn(
+  const { isError, isFetching, data, error, refetch } = useQuery(
+    ['dashboard', title, variables, initialVariables, charts],
     async () => {
       try {
         let url = '';
@@ -99,7 +100,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
             url = `/api/v1/namespaces/${podList.items[0].metadata.namespace}/pods/${podList.items[0].metadata.name}/portforward`;
           } else {
             throw new Error(
-              `Could not found pod in namespace "${context.settings.prometheusNamespace}" with selector "${context.settings.prometheusSelector}".`,
+              `Could not found Pod in Namespace "${context.settings.prometheusNamespace}" with selector "${context.settings.prometheusSelector}".`,
             );
           }
         }
@@ -123,13 +124,8 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
         throw err;
       }
     },
-    [charts, timeDiff, selectedVariables],
-    { loading: true, error: undefined, value: undefined },
+    context.settings.queryConfig,
   );
-
-  useEffect(() => {
-    fetch();
-  }, [fetch]);
 
   return (
     <IonRow>
@@ -139,9 +135,9 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
             <IonCardTitle>{title}</IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
-            {state.loading ? (
+            {isFetching ? (
               <IonProgressBar slot="fixed" type="indeterminate" color="primary" />
-            ) : !state.error && state.value ? (
+            ) : !isError && data ? (
               <IonRow>
                 {variables && selectedVariables
                   ? Object.keys(variables).map((variable) => (
@@ -151,9 +147,10 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
                           <IonSelect
                             interface="popover"
                             value={selectedVariables[variable]}
-                            onIonChange={(e) =>
-                              setSelectedVariables((prevState) => ({ ...prevState, [variable]: e.detail.value }))
-                            }
+                            onIonChange={(e) => {
+                              setSelectedVariables((prevState) => ({ ...prevState, [variable]: e.detail.value }));
+                              refetch();
+                            }}
                           >
                             {variables[variable].map((v, index) => (
                               <IonSelectOption key={index} value={v}>
@@ -169,7 +166,14 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
                 <IonCol>
                   <IonItem>
                     <IonLabel>Time</IonLabel>
-                    <IonSelect interface="popover" value={timeDiff} onIonChange={(e) => setTimeDiff(e.detail.value)}>
+                    <IonSelect
+                      interface="popover"
+                      value={timeDiff}
+                      onIonChange={(e) => {
+                        setTimeDiff(e.detail.value);
+                        refetch();
+                      }}
+                    >
                       <IonSelectOption value={300}>Last 5 minutes</IonSelectOption>
                       <IonSelectOption value={900}>Last 15 minutes</IonSelectOption>
                       <IonSelectOption value={1800}>Last 30 minutes</IonSelectOption>
@@ -185,10 +189,10 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
                   </IonItem>
                 </IonCol>
               </IonRow>
-            ) : state.error ? (
+            ) : isError ? (
               <div style={{ textAlign: 'center' }}>
-                <p className="paragraph-margin-bottom">{state.error ? state.error.message : ''}</p>
-                <IonButton expand="block" onClick={() => fetch()}>
+                <p className="paragraph-margin-bottom">{error ? error.message : ''}</p>
+                <IonButton expand="block" onClick={() => refetch()}>
                   Reload
                 </IonButton>
               </div>
@@ -197,9 +201,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
         </IonCard>
       </IonCol>
 
-      {!state.error && state.value
-        ? state.value.map((chart, index) => <Chart key={index} timeDiff={timeDiff} chart={chart} />)
-        : null}
+      {!isError && data ? data.map((chart, index) => <Chart key={index} timeDiff={timeDiff} chart={chart} />) : null}
     </IonRow>
   );
 };

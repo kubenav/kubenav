@@ -16,13 +16,13 @@ import {
   isPlatform,
 } from '@ionic/react';
 import { refresh } from 'ionicons/icons';
-import React, { memo, useContext, useEffect } from 'react';
+import React, { memo, useContext } from 'react';
+import { useQuery } from 'react-query';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
-import useAsyncFn from '../../../../utils/useAsyncFn';
 import LoadingErrorCard from '../../../misc/LoadingErrorCard';
 import List from '../../misc/list/List';
 import Details from '../../misc/details/Details';
@@ -51,8 +51,15 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
 
-  // useAsyncFn is a custom React hook which wrapps our API call.
-  const [state, fetch, fetchInit] = useAsyncFn(
+  const { isError, isFetching, data, error, refetch } = useQuery(
+    [
+      cluster ? cluster.id : '',
+      match.params.crnamespace,
+      match.params.group,
+      match.params.version,
+      match.params.name,
+      match.params.crname,
+    ],
     async () =>
       await kubernetesRequest(
         'GET',
@@ -67,21 +74,14 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
         context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
-    [],
-    { loading: true, error: undefined, value: undefined },
+    context.settings.queryConfig,
   );
-
-  // When the component is rendered the first time and on every route change or a modification to the context
-  // object we are loading all items for the corresponding resource.
-  useEffect(() => {
-    fetchInit();
-  }, [fetchInit]);
 
   // The doRefresh method is used for a manual reload of the items for the corresponding resource. The
   // event.detail.complete() call is required to finish the animation of the IonRefresher component.
   const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();
-    fetch();
+    refetch();
   };
 
   return (
@@ -96,14 +96,14 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
           <IonTitle>{match.params.crname}</IonTitle>
           <IonButtons slot="primary">
             {!isPlatform('hybrid') ? (
-              <IonButton onClick={() => fetch()}>
+              <IonButton onClick={() => refetch()}>
                 <IonIcon slot="icon-only" icon={refresh} />
               </IonButton>
             ) : null}
-            {state.value ? (
+            {data ? (
               <Details
                 type="customresources"
-                item={state.value}
+                item={data}
                 url={getURL(
                   match.params.crnamespace,
                   match.params.group,
@@ -117,37 +117,37 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {state.loading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
+        {isFetching ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
         <IonRefresher slot="fixed" onIonRefresh={doRefresh} />
 
-        {!state.error && cluster && state.value ? (
+        {!isError && cluster && data ? (
           <IonGrid>
-            {state.value.metadata ? <Metadata metadata={state.value.metadata} type="customresource" /> : null}
+            {data.metadata ? <Metadata metadata={data.metadata} type="customresource" /> : null}
 
-            {state.value.status && state.value.status.conditions ? (
+            {data.status && data.status.conditions ? (
               <IonRow>
-                <Conditions conditions={state.value.status.conditions} />
+                <Conditions conditions={data.status.conditions} />
               </IonRow>
             ) : null}
 
-            {state.value.metadata && state.value.metadata.name && state.value.metadata.namespace ? (
+            {data.metadata && data.metadata.name && data.metadata.namespace ? (
               <IonRow>
                 <List
                   name="Events"
                   section="cluster"
                   type="events"
-                  namespace={state.value.metadata.namespace}
-                  parent={state.value}
-                  selector={`fieldSelector=involvedObject.name=${state.value.metadata.name}`}
+                  namespace={data.metadata.namespace}
+                  parent={data}
+                  selector={`fieldSelector=involvedObject.name=${data.metadata.name}`}
                 />
               </IonRow>
             ) : null}
           </IonGrid>
-        ) : state.loading ? null : (
+        ) : isFetching ? null : (
           <LoadingErrorCard
             cluster={context.cluster}
             clusters={context.clusters}
-            error={state.error}
+            error={error}
             icon="/assets/icons/kubernetes/crd.png"
             text={`Could not get Custom Resource "${match.params.crname}"`}
           />

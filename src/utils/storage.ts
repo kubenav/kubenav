@@ -131,15 +131,14 @@ export const readSettings = (): IAppSettings => {
     return {
       theme: settings.theme ? settings.theme : DEFAULT_SETTINGS.theme,
       timeout: settings.timeout ? settings.timeout : DEFAULT_SETTINGS.timeout,
-      sshKey: settings.sshKey ? settings.sshKey : DEFAULT_SETTINGS.sshKey,
-      sshPort: settings.sshPort ? settings.sshPort : DEFAULT_SETTINGS.sshPort,
-      sshUser: settings.sshUser ? settings.sshUser : DEFAULT_SETTINGS.sshUser,
-      proxyEnabled: settings.hasOwnProperty('proxyEnabled') ? settings.proxyEnabled : DEFAULT_SETTINGS.proxyEnabled,
-      proxyAddress: settings.proxyAddress ? settings.proxyAddress : DEFAULT_SETTINGS.proxyAddress,
       terminalFontSize: settings.terminalFontSize ? settings.terminalFontSize : DEFAULT_SETTINGS.terminalFontSize,
       terminalScrollback: settings.terminalScrollback
         ? settings.terminalScrollback
         : DEFAULT_SETTINGS.terminalScrollback,
+      queryConfig: DEFAULT_SETTINGS.queryConfig,
+      sshKey: settings.sshKey ? settings.sshKey : DEFAULT_SETTINGS.sshKey,
+      sshPort: settings.sshPort ? settings.sshPort : DEFAULT_SETTINGS.sshPort,
+      sshUser: settings.sshUser ? settings.sshUser : DEFAULT_SETTINGS.sshUser,
       prometheusEnabled: settings.hasOwnProperty('prometheusEnabled')
         ? settings.prometheusEnabled
         : DEFAULT_SETTINGS.prometheusEnabled,
@@ -151,6 +150,8 @@ export const readSettings = (): IAppSettings => {
         : DEFAULT_SETTINGS.prometheusSelector,
       prometheusPort: settings.prometheusPort ? settings.prometheusPort : DEFAULT_SETTINGS.prometheusPort,
       prometheusAddress: '',
+      proxyEnabled: settings.hasOwnProperty('proxyEnabled') ? settings.proxyEnabled : DEFAULT_SETTINGS.proxyEnabled,
+      proxyAddress: settings.proxyAddress ? settings.proxyAddress : DEFAULT_SETTINGS.proxyAddress,
     };
   }
 
