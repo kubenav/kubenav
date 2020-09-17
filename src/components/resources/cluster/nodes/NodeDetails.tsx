@@ -1,7 +1,8 @@
 import { IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonRow } from '@ionic/react';
 import { V1Node, V1NodeAddress } from '@kubernetes/client-node';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
+import { useQuery } from 'react-query';
 
 import { IContext, INodeMetrics } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
@@ -25,29 +26,20 @@ interface INodeDetailsProps extends RouteComponentProps {
 
 const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }: INodeDetailsProps) => {
   const context = useContext<IContext>(AppContext);
+  const cluster = context.currentCluster();
 
-  const [metrics, setMetrics] = useState<INodeMetrics>();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data: INodeMetrics = await kubernetesRequest(
-          'GET',
-          `/apis/metrics.k8s.io/v1beta1/nodes/${item.metadata && item.metadata ? item.metadata.name : ''}`,
-          '',
-          context.settings,
-          await context.kubernetesAuthWrapper(''),
-        );
-        setMetrics(data);
-      } catch (err) {
-        // TODO: Implement error handling.
-      }
-    };
-
-    if (item.metadata && item.metadata.name) {
-      fetchData();
-    }
-  }, [item, type, context]);
+  const { data } = useQuery<INodeMetrics, Error>(
+    [cluster ? cluster.id : '', item, type],
+    async () =>
+      await kubernetesRequest(
+        'GET',
+        `/apis/metrics.k8s.io/v1beta1/nodes/${item.metadata && item.metadata.name ? item.metadata.name : ''}`,
+        '',
+        context.settings,
+        await context.kubernetesAuthWrapper(''),
+      ),
+    context.settings.queryConfig,
+  );
 
   return (
     <IonGrid>
@@ -135,7 +127,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
                                 item.status && item.status.allocatable ? item.status.allocatable[key] : '',
                               )}
                             </td>
-                            <td>{metrics && metrics.usage ? formatResourceValue(key, metrics.usage[key]) : null}</td>
+                            <td>{data && data.usage ? formatResourceValue(key, data.usage[key]) : null}</td>
                           </tr>
                         );
                       })}

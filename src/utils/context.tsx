@@ -270,7 +270,7 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
 
   const kubernetesAuthWrapper = async (clusterID: string): Promise<ICluster> => {
     if (!clusters || !cluster) {
-      throw new Error('Could not found cluster');
+      throw new Error('Could not found Cluster');
     }
 
     if (clusterID === '') {
@@ -278,7 +278,7 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
       if (c) {
         clusterID = c.id;
       } else {
-        throw new Error('Could not found cluster');
+        throw new Error('Could not found Cluster');
       }
     }
 

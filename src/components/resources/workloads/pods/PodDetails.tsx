@@ -1,7 +1,8 @@
 import { IonCol, IonGrid, IonLabel, IonRouterLink, IonRow } from '@ionic/react';
 import { V1Container, V1ContainerPort, V1Pod } from '@kubernetes/client-node';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
+import { useQuery } from 'react-query';
 
 import { IContext, IPodMetrics } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
@@ -26,31 +27,22 @@ interface IPodDetailsProps extends RouteComponentProps {
 
 const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: IPodDetailsProps) => {
   const context = useContext<IContext>(AppContext);
+  const cluster = context.currentCluster();
 
-  const [metrics, setMetrics] = useState<IPodMetrics>();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data: IPodMetrics = await kubernetesRequest(
-          'GET',
-          `/apis/metrics.k8s.io/v1beta1/namespaces/${
-            item.metadata && item.metadata.namespace ? item.metadata.namespace : ''
-          }/pods/${item.metadata && item.metadata.name ? item.metadata.name : ''}`,
-          '',
-          context.settings,
-          await context.kubernetesAuthWrapper(''),
-        );
-        setMetrics(data);
-      } catch (err) {
-        // TODO: Implement error handling.
-      }
-    };
-
-    if (item.metadata && item.metadata.namespace && item.metadata.name) {
-      fetchData();
-    }
-  }, [item, type, context]);
+  const { data } = useQuery<IPodMetrics, Error>(
+    [cluster ? cluster.id : '', item, type],
+    async () =>
+      await kubernetesRequest(
+        'GET',
+        `/apis/metrics.k8s.io/v1beta1/namespaces/${
+          item.metadata && item.metadata.namespace ? item.metadata.namespace : ''
+        }/pods/${item.metadata && item.metadata.name ? item.metadata.name : ''}`,
+        '',
+        context.settings,
+        await context.kubernetesAuthWrapper(''),
+      ),
+    context.settings.queryConfig,
+  );
 
   const status = getStatus(item);
 
@@ -149,7 +141,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
             containers={item.spec.initContainers}
             logs={true}
             terminal={true}
-            metrics={metrics ? metrics.containers : undefined}
+            metrics={data ? data.containers : undefined}
             name={item.metadata ? item.metadata.name : ''}
             namespace={item.metadata ? item.metadata.namespace : ''}
             statuses={item.status && item.status.initContainerStatuses ? item.status.initContainerStatuses : undefined}
@@ -161,7 +153,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
             containers={item.spec.containers}
             logs={true}
             terminal={true}
-            metrics={metrics ? metrics.containers : undefined}
+            metrics={data ? data.containers : undefined}
             name={item.metadata ? item.metadata.name : ''}
             namespace={item.metadata ? item.metadata.namespace : ''}
             statuses={item.status && item.status.containerStatuses ? item.status.containerStatuses : undefined}

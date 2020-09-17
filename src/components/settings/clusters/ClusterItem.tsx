@@ -1,6 +1,7 @@
 import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, isPlatform } from '@ionic/react';
 import { radioButtonOff, radioButtonOn, trash } from 'ionicons/icons';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
+import { useQuery } from 'react-query';
 
 import { ICluster, IContext } from '../../../declarations';
 import { kubernetesRequest } from '../../../utils/api';
@@ -14,10 +15,9 @@ interface IClusterItemProps {
 const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IClusterItemProps) => {
   const context = useContext<IContext>(AppContext);
 
-  const [status, setStatus] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
+  const { data } = useQuery<boolean, Error>(
+    ['ClusterItem', cluster],
+    async () => {
       try {
         const data = await kubernetesRequest(
           'GET',
@@ -27,18 +27,16 @@ const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IC
           await context.kubernetesAuthWrapper(cluster.id),
         );
         if (data && data.paths) {
-          setStatus(true);
+          return true;
         } else {
-          setStatus(false);
+          return false;
         }
       } catch (err) {
-        setStatus(false);
+        return false;
       }
-    };
-
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    },
+    context.settings.queryConfig,
+  );
 
   const changeCluster = async (id: string) => {
     await context.changeCluster(id);
@@ -49,7 +47,7 @@ const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IC
       <IonItem button={true} onClick={() => changeCluster(cluster.id)}>
         <IonIcon
           slot="end"
-          color={status ? 'success' : 'danger'}
+          color={data ? 'success' : 'danger'}
           icon={context.cluster && cluster.id === context.cluster ? radioButtonOn : radioButtonOff}
         />
         <IonLabel>{cluster.name}</IonLabel>
