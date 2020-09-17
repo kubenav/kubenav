@@ -1,11 +1,11 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonList } from '@ionic/react';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
+import { useQuery } from 'react-query';
 
 import { IContext } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import { resources } from '../../../../utils/resources';
-import useAsyncFn from '../../../../utils/useAsyncFn';
 
 interface IListProps {
   name: string;
@@ -33,7 +33,8 @@ const List: React.FunctionComponent<IListProps> = ({
   const page = resources[section].pages[type];
   const Component = page.listItemComponent;
 
-  const [state, fetch, fetchInit] = useAsyncFn(
+  const { data } = useQuery(
+    [name, namespace, type, section, selector ? selector : '', parent],
     async () =>
       await kubernetesRequest(
         'GET',
@@ -42,19 +43,10 @@ const List: React.FunctionComponent<IListProps> = ({
         context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
-    [section, type, namespace, selector, filter],
-    { loading: true, error: undefined, value: undefined },
+    context.settings.queryConfig,
   );
 
-  useEffect(() => {
-    fetchInit();
-  }, [fetchInit]);
-
-  useEffect(() => {
-    fetch();
-  }, [parent, fetch]);
-
-  if (state.value && state.value.items && state.value.items.filter(filter ? filter : () => true).length > 0) {
+  if (data && data.items && data.items.filter(filter ? filter : () => true).length > 0) {
     return (
       <IonCol>
         <IonCard>
@@ -63,7 +55,7 @@ const List: React.FunctionComponent<IListProps> = ({
           </IonCardHeader>
           <IonCardContent>
             <IonList>
-              {state.value.items.filter(filter ? filter : () => true).map((item, index) => {
+              {data.items.filter(filter ? filter : () => true).map((item, index) => {
                 return <Component key={index} item={item} section={section} type={type} />;
               })}
             </IonList>

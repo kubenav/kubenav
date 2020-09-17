@@ -6,7 +6,7 @@ import { IClusters } from '../../declarations';
 interface ILoadingErrorCard {
   cluster?: string;
   clusters?: IClusters;
-  error?: Error;
+  error: Error | null;
   icon: string;
   text: string;
 }

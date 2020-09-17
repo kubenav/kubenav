@@ -19,13 +19,13 @@ import {
   isPlatform,
 } from '@ionic/react';
 import { refresh } from 'ionicons/icons';
-import React, { memo, useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useState } from 'react';
+import { useQuery } from 'react-query';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
-import useAsyncFn from '../../../../utils/useAsyncFn';
 import Namespaces from '../../misc/list/Namespaces';
 import LoadingErrorCard from '../../../misc/LoadingErrorCard';
 import ItemOptions from '../../misc/details/ItemOptions';
@@ -62,8 +62,14 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
   // searchText is used to search and filter the list of items.
   const [searchText, setSearchText] = useState<string>('');
 
-  // useAsyncFn is a custom React hook which wrapps our API call.
-  const [state, fetch, fetchInit] = useAsyncFn(
+  const { isError, isFetching, data, error, refetch } = useQuery(
+    [
+      cluster ? cluster.id : '',
+      cluster ? cluster.namespace : '',
+      match.params.group,
+      match.params.version,
+      match.params.name,
+    ],
     async () =>
       await kubernetesRequest(
         'GET',
@@ -77,21 +83,14 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
         context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
-    [cluster?.id, cluster?.namespace],
-    { loading: true, error: undefined, value: undefined },
+    context.settings.queryConfig,
   );
-
-  // When the component is rendered the first time and on every route change or a modification to the context
-  // object we are loading all items for the corresponding resource.
-  useEffect(() => {
-    fetchInit();
-  }, [fetchInit]);
 
   // The doRefresh method is used for a manual reload of the items for the corresponding resource. The
   // event.detail.complete() call is required to finish the animation of the IonRefresher component.
   const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();
-    fetch();
+    refetch();
   };
 
   return (
@@ -104,7 +103,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
           <IonTitle>{match.params.name}</IonTitle>
           <IonButtons slot="primary">
             {!isPlatform('hybrid') ? (
-              <IonButton onClick={() => fetch()}>
+              <IonButton onClick={() => refetch()}>
                 <IonIcon slot="icon-only" icon={refresh} />
               </IonButton>
             ) : null}
@@ -113,10 +112,10 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {state.loading ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
+        {isFetching ? <IonProgressBar slot="fixed" type="indeterminate" color="primary" /> : null}
         <IonRefresher slot="fixed" onIonRefresh={doRefresh} />
 
-        {!state.error && cluster ? (
+        {!isError && cluster ? (
           <React.Fragment>
             <IonSearchbar
               inputmode="search"
@@ -125,8 +124,8 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
             />
 
             <IonList>
-              {state.value && state.value.items
-                ? state.value.items
+              {data && data.items
+                ? data.items
                     .filter((item) => {
                       const regex = new RegExp(searchText, 'gi');
                       return item.metadata && item.metadata.name && item.metadata.name.match(regex);
@@ -169,11 +168,11 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
                 : null}
             </IonList>
           </React.Fragment>
-        ) : state.loading ? null : (
+        ) : isFetching ? null : (
           <LoadingErrorCard
             cluster={context.cluster}
             clusters={context.clusters}
-            error={state.error}
+            error={error}
             icon="/assets/icons/kubernetes/crd.png"
             text={`Could not get Custom Resources "${match.params.name}"`}
           />

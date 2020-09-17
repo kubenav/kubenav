@@ -2,7 +2,7 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/rea
 import React from 'react';
 
 interface IErrorCard {
-  error?: Error;
+  error: Error | null;
   icon: string;
   text: string;
 }
