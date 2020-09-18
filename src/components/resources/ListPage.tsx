@@ -80,6 +80,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
     fetchItems,
     {
       ...context.settings.queryConfig,
+      refetchInterval: context.settings.queryRefetchInterval,
       getFetchMore: (lastGroup) =>
         lastGroup.metadata && lastGroup.metadata.continue ? lastGroup.metadata.continue : '',
     },

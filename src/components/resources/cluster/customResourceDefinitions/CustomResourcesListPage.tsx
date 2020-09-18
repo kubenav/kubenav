@@ -89,6 +89,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
     fetchItems,
     {
       ...context.settings.queryConfig,
+      refetchInterval: context.settings.queryRefetchInterval,
       getFetchMore: (lastGroup) =>
         lastGroup.metadata && lastGroup.metadata.continue ? lastGroup.metadata.continue : '',
     },

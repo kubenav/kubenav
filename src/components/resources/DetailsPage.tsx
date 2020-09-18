@@ -51,7 +51,7 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
         context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
-    context.settings.queryConfig,
+    { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
   );
 
   // The doRefresh method is used for a manual reload of the items for the corresponding resource. The
