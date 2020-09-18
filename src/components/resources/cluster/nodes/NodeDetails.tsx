@@ -29,7 +29,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
   const cluster = context.currentCluster();
 
   const { data } = useQuery<INodeMetrics, Error>(
-    [cluster ? cluster.id : '', item, type],
+    ['NodeDetails', cluster ? cluster.id : '', item, type],
     async () =>
       await kubernetesRequest(
         'GET',

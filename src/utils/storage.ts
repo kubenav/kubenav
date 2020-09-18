@@ -135,6 +135,9 @@ export const readSettings = (): IAppSettings => {
       terminalScrollback: settings.terminalScrollback
         ? settings.terminalScrollback
         : DEFAULT_SETTINGS.terminalScrollback,
+      queryRefetchInterval: settings.queryRefetchInterval
+        ? settings.queryRefetchInterval
+        : DEFAULT_SETTINGS.queryRefetchInterval,
       queryConfig: DEFAULT_SETTINGS.queryConfig,
       sshKey: settings.sshKey ? settings.sshKey : DEFAULT_SETTINGS.sshKey,
       sshPort: settings.sshPort ? settings.sshPort : DEFAULT_SETTINGS.sshPort,

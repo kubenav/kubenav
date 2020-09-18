@@ -43,6 +43,10 @@ const GeneralPage: React.FunctionComponent = () => {
     context.editSettings({ ...context.settings, [event.target.name]: event.detail.value });
   };
 
+  const handleRangeChangeQueryRefetchInterval = (event) => {
+    context.editSettings({ ...context.settings, [event.target.name]: event.detail.value * 1000 });
+  };
+
   const handleSelect = (event) => {
     context.editSettings({ ...context.settings, [event.target.name]: event.detail.value });
   };
@@ -114,6 +118,21 @@ const GeneralPage: React.FunctionComponent = () => {
                 name="terminalScrollback"
                 value={context.settings.terminalScrollback}
                 onIonChange={handleRangeChange}
+              />
+            </IonItem>
+            <IonItem>
+              <IonLabel className="label-for-range" position="stacked">
+                Refresh Interval (in seconds)
+              </IonLabel>
+              <IonRange
+                min={30}
+                max={600}
+                step={30}
+                pin={true}
+                color="primary"
+                name="queryRefetchInterval"
+                value={context.settings.queryRefetchInterval / 1000}
+                onIonChange={handleRangeChangeQueryRefetchInterval}
               />
             </IonItem>
           </IonItemGroup>

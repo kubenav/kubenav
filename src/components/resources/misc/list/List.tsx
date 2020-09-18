@@ -34,11 +34,11 @@ const List: React.FunctionComponent<IListProps> = ({
   const Component = page.listItemComponent;
 
   const { data } = useQuery(
-    [name, namespace, type, section, selector ? selector : '', parent],
+    ['List', name, namespace, type, section, selector ? selector : '', parent],
     async () =>
       await kubernetesRequest(
         'GET',
-        `${page.listURL(namespace)}${selector ? '?' + selector : ''}`,
+        `${page.listURL(namespace)}?limit=100${selector ? '&' + selector : ''}`,
         '',
         context.settings,
         await context.kubernetesAuthWrapper(''),

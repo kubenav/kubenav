@@ -53,6 +53,7 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
 
   const { isError, isFetching, data, error, refetch } = useQuery(
     [
+      'CustomResourcesDetailsPage',
       cluster ? cluster.id : '',
       match.params.crnamespace,
       match.params.group,
@@ -74,7 +75,7 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
         context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
-    context.settings.queryConfig,
+    { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
   );
 
   // The doRefresh method is used for a manual reload of the items for the corresponding resource. The
