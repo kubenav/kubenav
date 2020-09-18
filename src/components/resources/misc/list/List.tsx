@@ -38,7 +38,7 @@ const List: React.FunctionComponent<IListProps> = ({
     async () =>
       await kubernetesRequest(
         'GET',
-        `${page.listURL(namespace)}${selector ? '?' + selector : ''}`,
+        `${page.listURL(namespace)}?limit=100${selector ? '&' + selector : ''}`,
         '',
         context.settings,
         await context.kubernetesAuthWrapper(''),

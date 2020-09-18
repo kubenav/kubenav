@@ -5,6 +5,8 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonItemDivider,
   IonItemGroup,
   IonLabel,
@@ -20,7 +22,7 @@ import {
 } from '@ionic/react';
 import { refresh } from 'ionicons/icons';
 import React, { memo, useContext, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useInfiniteQuery } from 'react-query';
 import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../declarations';
@@ -58,17 +60,29 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
   // searchText is used to search and filter the list of items.
   const [searchText, setSearchText] = useState<string>('');
 
-  const { isError, isFetching, data, error, refetch } = useQuery(
-    [cluster ? cluster.id : '', cluster ? cluster.namespace : '', match.params.section, match.params.type],
-    async () =>
-      await kubernetesRequest(
-        'GET',
-        page.listURL(cluster ? cluster.namespace : ''),
-        '',
-        context.settings,
-        await context.kubernetesAuthWrapper(''),
-      ),
-    context.settings.queryConfig,
+  const fetchItems = async (key, cursor) =>
+    await kubernetesRequest(
+      'GET',
+      `${page.listURL(cluster ? cluster.namespace : '')}?limit=50${cursor ? `&continue=${cursor}` : ''}`,
+      '',
+      context.settings,
+      await context.kubernetesAuthWrapper(''),
+    );
+
+  const { isError, isFetching, isFetchingMore, canFetchMore, data, error, fetchMore, refetch } = useInfiniteQuery(
+    // NOTE: Array keys (https://react-query.tanstack.com/docs/guides/queries#array-keys) do not work with
+    // useInfiniteQuery, therefore we are creating a string only query key with the values, which normaly are used as
+    // query key.
+    // [cluster ? cluster.id : '', cluster ? cluster.namespace : '', match.params.section, match.params.type],
+    `ListPage_${cluster ? cluster.id : ''}_${cluster ? cluster.namespace : ''}_${match.params.section}_${
+      match.params.type
+    }`,
+    fetchItems,
+    {
+      ...context.settings.queryConfig,
+      getFetchMore: (lastGroup) =>
+        lastGroup.metadata && lastGroup.metadata.continue ? lastGroup.metadata.continue : '',
+    },
   );
 
   // The doRefresh method is used for a manual reload of the items for the corresponding resource. The
@@ -76,6 +90,13 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
   const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();
     refetch();
+  };
+
+  // allGroups is used to fetch additional items from the Kubernetes API. When the fetchMore funtion is finished we have
+  // to call the complete() method on the infinite scroll instance.
+  const loadMore = async (event: CustomEvent<void>) => {
+    await fetchMore();
+    (event.target as HTMLIonInfiniteScrollElement).complete();
   };
 
   return (
@@ -109,50 +130,58 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
             />
 
             <IonList>
-              {data && data.items
-                ? data.items
-                    .filter((item) => {
-                      const regex = new RegExp(searchText, 'gi');
-                      return item.metadata && item.metadata.name && item.metadata.name.match(regex);
-                    })
-                    .map((item, index) => {
-                      if (
-                        isNamespaced(match.params.type) &&
-                        item.metadata &&
-                        item.metadata.namespace &&
-                        item.metadata.namespace !== namespace
-                      ) {
-                        namespace = item.metadata.namespace;
-                        showNamespace = true;
-                      } else {
-                        showNamespace = false;
-                      }
+              {data
+                ? data.map((group, i) => (
+                    <React.Fragment key={i}>
+                      {group && group.items
+                        ? group.items
+                            .filter((item) => {
+                              const regex = new RegExp(searchText, 'gi');
+                              return item.metadata && item.metadata.name && item.metadata.name.match(regex);
+                            })
+                            .map((item, j) => {
+                              if (
+                                isNamespaced(match.params.type) &&
+                                item.metadata &&
+                                item.metadata.namespace &&
+                                item.metadata.namespace !== namespace
+                              ) {
+                                namespace = item.metadata.namespace;
+                                showNamespace = true;
+                              } else {
+                                showNamespace = false;
+                              }
 
-                      return (
-                        <IonItemGroup key={index}>
-                          {showNamespace ? (
-                            <IonItemDivider>
-                              <IonLabel>{namespace}</IonLabel>
-                            </IonItemDivider>
-                          ) : null}
-                          <ItemOptions
-                            item={item}
-                            url={page.detailsURL(
-                              item.metadata ? item.metadata.namespace : '',
-                              item.metadata ? item.metadata.name : '',
-                            )}
-                          >
-                            <Component
-                              key={index}
-                              item={item}
-                              section={match.params.section}
-                              type={match.params.type}
-                            />
-                          </ItemOptions>
-                        </IonItemGroup>
-                      );
-                    })
+                              return (
+                                <IonItemGroup key={j}>
+                                  {showNamespace ? (
+                                    <IonItemDivider>
+                                      <IonLabel>{namespace}</IonLabel>
+                                    </IonItemDivider>
+                                  ) : null}
+                                  <ItemOptions
+                                    item={item}
+                                    url={page.detailsURL(
+                                      item.metadata ? item.metadata.namespace : '',
+                                      item.metadata ? item.metadata.name : '',
+                                    )}
+                                  >
+                                    <Component item={item} section={match.params.section} type={match.params.type} />
+                                  </ItemOptions>
+                                </IonItemGroup>
+                              );
+                            })
+                        : null}
+                    </React.Fragment>
+                  ))
                 : null}
+              <IonInfiniteScroll
+                threshold="10%"
+                disabled={!canFetchMore || (isFetchingMore as boolean)}
+                onIonInfinite={loadMore}
+              >
+                <IonInfiniteScrollContent loadingText={`Loading more ${page.pluralText}...`}></IonInfiniteScrollContent>
+              </IonInfiniteScroll>
             </IonList>
           </React.Fragment>
         ) : isFetching ? null : (
