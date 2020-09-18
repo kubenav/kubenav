@@ -41,7 +41,7 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
   const context = useContext<IContext>(AppContext);
 
   const { isError, isFetching, data } = useQuery(
-    [namespace, serviceAccountName],
+    ['Permissions', namespace, serviceAccountName],
     async () => {
       try {
         const roles: V1ClusterRole[] = [];

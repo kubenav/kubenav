@@ -82,7 +82,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
     // NOTE: Array keys (https://react-query.tanstack.com/docs/guides/queries#array-keys) do not work with
     // useInfiniteQuery, therefore we are creating a string only query key with the values, which normaly are used as
     // query key.
-    // [cluster ? cluster.id : '', cluster ? cluster.namespace : '', match.params.group, match.params.version, match.params.name],
+    // ['CustomResourcesListPage', cluster ? cluster.id : '', cluster ? cluster.namespace : '', match.params.group, match.params.version, match.params.name],
     `CustomResourcesListPage_${cluster ? cluster.id : ''}_${cluster ? cluster.namespace : ''}_${match.params.group}_${
       match.params.version
     }_${match.params.name}`,

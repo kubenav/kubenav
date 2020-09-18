@@ -73,7 +73,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
     // NOTE: Array keys (https://react-query.tanstack.com/docs/guides/queries#array-keys) do not work with
     // useInfiniteQuery, therefore we are creating a string only query key with the values, which normaly are used as
     // query key.
-    // [cluster ? cluster.id : '', cluster ? cluster.namespace : '', match.params.section, match.params.type],
+    // ['ListPage', cluster ? cluster.id : '', cluster ? cluster.namespace : '', match.params.section, match.params.type],
     `ListPage_${cluster ? cluster.id : ''}_${cluster ? cluster.namespace : ''}_${match.params.section}_${
       match.params.type
     }`,

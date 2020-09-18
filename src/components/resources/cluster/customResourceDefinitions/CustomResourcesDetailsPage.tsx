@@ -53,6 +53,7 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
 
   const { isError, isFetching, data, error, refetch } = useQuery(
     [
+      'CustomResourcesDetailsPage',
       cluster ? cluster.id : '',
       match.params.crnamespace,
       match.params.group,
