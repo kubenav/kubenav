@@ -73,6 +73,7 @@ type ChartsResult struct {
 	Results []Result  `json:"results"`
 }
 
+// DashboardResult is the structure of the returned data. It contains the results for the variables and the charts.
 type DashboardResult struct {
 	Variables    []Variable     `json:"variables"`
 	ChartsResult []ChartsResult `json:"chartsResult"`
