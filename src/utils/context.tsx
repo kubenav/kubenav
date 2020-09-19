@@ -99,6 +99,21 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
 
           const receivedClusters = await getClusters();
           const activeCluster = await getCluster();
+
+          // When kubenav is running with the incluster mode, we are using the users last viewed namespaces as initial
+          // namespace.
+          if (IS_INCLUSTER && receivedClusters) {
+            const tmpClusters = readClusters();
+
+            if (tmpClusters) {
+              Object.keys(receivedClusters).forEach((key) => {
+                if (tmpClusters.hasOwnProperty(key)) {
+                  receivedClusters[key].namespace = tmpClusters[key].namespace;
+                }
+              });
+            }
+          }
+
           setClusters(receivedClusters);
           setCluster(activeCluster);
         } else {
