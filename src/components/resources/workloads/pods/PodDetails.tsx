@@ -41,7 +41,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
         context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
-    context.settings.queryConfig,
+    { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
   );
 
   const status = getStatus(item);
@@ -184,28 +184,18 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
       {context.settings.prometheusEnabled ? (
         <Dashboard
           title="Metrics"
-          variables={
-            item.spec && item.spec.containers
-              ? {
-                  Container:
-                    item.spec.containers.length === 1
-                      ? item.spec.containers.map((container) => container.name)
-                      : [item.spec.containers.map((container) => container.name).join('|')].concat(
-                          item.spec.containers.map((container) => container.name),
-                        ),
-                }
-              : undefined
-          }
-          initialVariables={
-            item.spec && item.spec.containers
-              ? {
-                  Container:
-                    item.spec.containers.length === 1
-                      ? item.spec.containers.map((container) => container.name)[0]
-                      : item.spec.containers.map((container) => container.name).join('|'),
-                }
-              : undefined
-          }
+          variables={[
+            {
+              name: 'Container',
+              label: 'container',
+              query: `kube_pod_container_info{namespace="${item.metadata ? item.metadata.namespace : ''}", pod="${
+                item.metadata ? item.metadata.name : ''
+              }"}`,
+              values: [],
+              value: '',
+              allowAll: true,
+            },
+          ]}
           charts={[
             {
               title: 'Memory Usage (in MiB)',
@@ -224,7 +214,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                     item.metadata ? item.metadata.namespace : ''
                   }", pod="${
                     item.metadata ? item.metadata.name : ''
-                  }", container=~"<Container>", container!="POD"}) / 1024 / 1024`,
+                  }", container=~"{{ .Container }}", container!="POD"}) / 1024 / 1024`,
                 },
                 {
                   label: 'Requested',
@@ -232,7 +222,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                     item.metadata ? item.metadata.namespace : ''
                   }", resource="memory", pod="${
                     item.metadata ? item.metadata.name : ''
-                  }", container=~"<Container>"}) / 1024 / 1024`,
+                  }", container=~"{{ .Container }}"}) / 1024 / 1024`,
                 },
                 {
                   label: 'Limit',
@@ -240,7 +230,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                     item.metadata ? item.metadata.namespace : ''
                   }", resource="memory", pod="${
                     item.metadata ? item.metadata.name : ''
-                  }", container=~"<Container>"}) / 1024 / 1024`,
+                  }", container=~"{{ .Container }}"}) / 1024 / 1024`,
                 },
                 {
                   label: 'Cache',
@@ -248,7 +238,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                     item.metadata ? item.metadata.namespace : ''
                   }", pod="${
                     item.metadata ? item.metadata.name : ''
-                  }", container=~"<Container>", container!="POD"}) / 1024 / 1024`,
+                  }", container=~"{{ .Container }}", container!="POD"}) / 1024 / 1024`,
                 },
               ],
             },
@@ -269,19 +259,23 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                     item.metadata ? item.metadata.namespace : ''
                   }", image!="", pod="${
                     item.metadata ? item.metadata.name : ''
-                  }", container=~"<Container>", container!="POD"}[4m]))`,
+                  }", container=~"{{ .Container }}", container!="POD"}[4m]))`,
                 },
                 {
                   label: 'Requested',
                   query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${
                     item.metadata ? item.metadata.namespace : ''
-                  }", resource="cpu", pod="${item.metadata ? item.metadata.name : ''}", container=~"<Container>"})`,
+                  }", resource="cpu", pod="${
+                    item.metadata ? item.metadata.name : ''
+                  }", container=~"{{ .Container }}"})`,
                 },
                 {
                   label: 'Limit',
                   query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${
                     item.metadata ? item.metadata.namespace : ''
-                  }", resource="cpu", pod="${item.metadata ? item.metadata.name : ''}", container=~"<Container>"})`,
+                  }", resource="cpu", pod="${
+                    item.metadata ? item.metadata.name : ''
+                  }", container=~"{{ .Container }}"})`,
                 },
               ],
             },
@@ -325,7 +319,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                   label: 'Restarts',
                   query: `max(kube_pod_container_status_restarts_total{job="kube-state-metrics", namespace="${
                     item.metadata ? item.metadata.namespace : ''
-                  }", pod="${item.metadata ? item.metadata.name : ''}", container=~"<Container>"})`,
+                  }", pod="${item.metadata ? item.metadata.name : ''}", container=~"{{ .Container }}"})`,
                 },
               ],
             },

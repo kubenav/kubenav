@@ -20,60 +20,36 @@ import { IContext } from '../../../declarations';
 import { kubernetesRequest, pluginRequest } from '../../../utils/api';
 import { IS_INCLUSTER } from '../../../utils/constants';
 import { AppContext } from '../../../utils/context';
-import Chart, { IChart, IChartResult, IPrometheusQuery } from './Chart';
+import Chart, { IChart, IChartResult } from './Chart';
 
-interface IVariables {
-  [key: string]: string[];
+interface IVariable {
+  name: string;
+  label: string;
+  query: string;
+  values: string[];
+  value: string;
+  allowAll: boolean;
 }
 
-interface ISelectedVariables {
-  [key: string]: string;
+interface IDashboardResult {
+  variables: IVariable[];
+  chartsResult: IChartResult[];
 }
 
 interface IDashboardProps {
   title: string;
-  variables?: IVariables;
-  initialVariables?: ISelectedVariables;
+  variables?: IVariable[];
   charts: IChart[];
 }
 
-const replaceVariables = (charts: IChart[], variables: ISelectedVariables): IChart[] => {
-  const pattern = /<\s*(\w+?)\s*>/g;
-  const tmpCharts: IChart[] = [];
-
-  for (const chart of charts) {
-    const tmpQueries: IPrometheusQuery[] = [];
-    for (const query of chart.queries) {
-      tmpQueries.push({
-        label: query.label,
-        query: query.query.replace(pattern, (m, token) => variables[token] || ''),
-      });
-    }
-
-    tmpCharts.push({
-      title: chart.title,
-      size: chart.size,
-      type: chart.type,
-      queries: tmpQueries,
-    });
-  }
-
-  return tmpCharts;
-};
-
-const Dashboard: React.FunctionComponent<IDashboardProps> = ({
-  title,
-  variables,
-  initialVariables,
-  charts,
-}: IDashboardProps) => {
+const Dashboard: React.FunctionComponent<IDashboardProps> = ({ title, variables, charts }: IDashboardProps) => {
   const context = useContext<IContext>(AppContext);
 
   // By default we are rendering the data for the last 1 hour. The intervall can be changed via an IonSelect field,
   // which retriggered the "fetch" function to get the new Prometheus data.
   // Variables can be used to drill down the data, for example on the details page of a Pod we can select a container.
   const [timeDiff, setTimeDiff] = useState<number>(3600);
-  const [selectedVariables, setSelectedVariables] = useState<ISelectedVariables | undefined>(initialVariables);
+  const [selectedVariables, setSelectedVariables] = useState<IVariable[] | undefined>(variables);
 
   // Get all Pods, which are matching the defined namespace and selector from the settings. When we find a Pod, this Pod
   // is used to fetch the metrics. Therefor we are sending the charts to the Pod via port forwarding. The returned
@@ -81,8 +57,8 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
   // series.
   // If kubenav is running inside a Kubernetes cluster (incluster mode), we are not using port forwarding. Instead we
   // are using the configured cluster url.
-  const { isError, isFetching, data, error, refetch } = useQuery(
-    ['Dashboard', title, variables, initialVariables, charts],
+  const { isError, isFetching, data, error, refetch } = useQuery<IDashboardResult, Error>(
+    ['Dashboard', title, variables, charts],
     async () => {
       try {
         let url = '';
@@ -105,12 +81,13 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
           }
         }
 
-        const chartsResult: IChartResult[] = await pluginRequest(
+        const dashboardResult: IDashboardResult = await pluginRequest(
           'prometheus',
           context.settings.prometheusPort,
           context.settings.prometheusAddress,
           {
-            charts: selectedVariables ? replaceVariables(charts, selectedVariables) : charts,
+            variables: selectedVariables ? selectedVariables : [],
+            charts: charts,
             start: Math.floor(Date.now() / 1000) - timeDiff,
             end: Math.floor(Date.now() / 1000),
           },
@@ -119,7 +96,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
           await context.kubernetesAuthWrapper(''),
         );
 
-        return chartsResult;
+        return dashboardResult;
       } catch (err) {
         throw err;
       }
@@ -139,22 +116,26 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
               <IonProgressBar slot="fixed" type="indeterminate" color="primary" />
             ) : !isError && data ? (
               <IonRow>
-                {variables && selectedVariables
-                  ? Object.keys(variables).map((variable) => (
-                      <IonCol key={variable}>
+                {data && data.variables
+                  ? data.variables.map((variable, index) => (
+                      <IonCol key={index}>
                         <IonItem>
-                          <IonLabel>{variable}</IonLabel>
+                          <IonLabel>{variable.name}</IonLabel>
                           <IonSelect
                             interface="popover"
-                            value={selectedVariables[variable]}
+                            value={variable.value}
                             onIonChange={(e) => {
-                              setSelectedVariables((prevState) => ({ ...prevState, [variable]: e.detail.value }));
-                              refetch();
+                              if (selectedVariables && data.variables) {
+                                const tmpVariales = data.variables;
+                                tmpVariales[index].value = e.detail.value;
+                                setSelectedVariables(tmpVariales);
+                                refetch();
+                              }
                             }}
                           >
-                            {variables[variable].map((v, index) => (
-                              <IonSelectOption key={index} value={v}>
-                                {v}
+                            {variable.values.map((value) => (
+                              <IonSelectOption key={value} value={value}>
+                                {value}
                               </IonSelectOption>
                             ))}
                           </IonSelect>
@@ -201,7 +182,9 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
         </IonCard>
       </IonCol>
 
-      {!isError && data ? data.map((chart, index) => <Chart key={index} timeDiff={timeDiff} chart={chart} />) : null}
+      {!isError && data && data.chartsResult
+        ? data.chartsResult.map((chart, index) => <Chart key={index} timeDiff={timeDiff} chart={chart} />)
+        : null}
     </IonRow>
   );
 };

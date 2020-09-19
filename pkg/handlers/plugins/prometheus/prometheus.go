@@ -3,6 +3,7 @@ package prometheus
 import (
 	"context"
 	"sort"
+	"strings"
 	"sync"
 	"time"
 
@@ -38,11 +39,22 @@ type Chart struct {
 	Queries []Query   `json:"queries"`
 }
 
+// Variable is the structure of a variable which can be used in the queries.
+type Variable struct {
+	Name     string   `json:"name"`
+	Label    string   `json:"label"`
+	Query    string   `json:"query"`
+	Values   []string `json:"values"`
+	Value    string   `json:"value"`
+	AllowAll bool     `json:"allowAll"`
+}
+
 // Data contains all queries and the start and end timestamp for the specified Prometheus queries.
 type Data struct {
-	Charts []Chart `json:"charts"`
-	Start  int64   `json:"start"`
-	End    int64   `json:"end"`
+	Charts    []Chart    `json:"charts"`
+	Variables []Variable `json:"variables"`
+	Start     int64      `json:"start"`
+	End       int64      `json:"end"`
 }
 
 // Result defines the structure for the Prometheus results containing the label and the values in the format
@@ -59,6 +71,12 @@ type ChartsResult struct {
 	Size    ChartSize `json:"size"`
 	Type    string    `json:"type"`
 	Results []Result  `json:"results"`
+}
+
+// DashboardResult is the structure of the returned data. It contains the results for the variables and the charts.
+type DashboardResult struct {
+	Variables    []Variable     `json:"variables"`
+	ChartsResult []ChartsResult `json:"chartsResult"`
 }
 
 // RunQueries runs queries against Prometheus and returns the timeseries data.
@@ -88,6 +106,44 @@ func RunQueries(address string, timeout time.Duration, requestData map[string]in
 		Step:  time.Duration((promData.End-promData.Start)/100) * time.Second,
 	}
 
+	var variables map[string]string
+	variables = make(map[string]string, len(promData.Variables))
+
+	for i := 0; i < len(promData.Variables); i++ {
+		query, err := queryInterpolation(promData.Variables[i].Query, variables)
+		if err != nil {
+			return nil, err
+		}
+
+		labelSets, err := v1api.Series(ctx, []string{query}, r.Start, r.End)
+		if err != nil {
+			return nil, err
+		}
+
+		var values []string
+		for _, labelSet := range labelSets {
+			if value, ok := labelSet[model.LabelName(promData.Variables[i].Label)]; ok {
+				values = appendIfMissing(values, string(value))
+			}
+		}
+
+		promData.Variables[i].Values = values
+
+		if promData.Variables[i].AllowAll {
+			promData.Variables[i].Values = append([]string{strings.Join(promData.Variables[i].Values, "|")}, promData.Variables[i].Values...)
+		}
+
+		if promData.Variables[i].Value == "" && len(promData.Variables[i].Values) > 0 {
+			promData.Variables[i].Value = promData.Variables[i].Values[0]
+		} else {
+			if !valueExists(promData.Variables[i].Values, promData.Variables[i].Value) && len(promData.Variables[i].Values) > 0 {
+				promData.Variables[i].Value = promData.Variables[i].Values[0]
+			}
+		}
+
+		variables[promData.Variables[i].Name] = promData.Variables[i].Value
+	}
+
 	var chartsResult []ChartsResult
 	var waitgroup sync.WaitGroup
 
@@ -101,7 +157,19 @@ func RunQueries(address string, timeout time.Duration, requestData map[string]in
 			var results []Result
 
 			for _, query := range chart.Queries {
-				result, err := v1api.QueryRange(ctx, query.Query, r)
+				interpolatedQuery, err := queryInterpolation(query.Query, variables)
+				if err != nil {
+					chartsResult = append(chartsResult, ChartsResult{
+						Title:   chart.Title,
+						Size:    chart.Size,
+						Type:    chart.Type,
+						Results: nil,
+					})
+
+					return
+				}
+
+				result, err := v1api.QueryRange(ctx, interpolatedQuery, r)
 				if err != nil {
 					chartsResult = append(chartsResult, ChartsResult{
 						Title:   chart.Title,
@@ -152,5 +220,8 @@ func RunQueries(address string, timeout time.Duration, requestData map[string]in
 		return chartsResult[i].Index < chartsResult[j].Index
 	})
 
-	return chartsResult, nil
+	return DashboardResult{
+		Variables:    promData.Variables,
+		ChartsResult: chartsResult,
+	}, nil
 }

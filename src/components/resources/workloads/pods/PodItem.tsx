@@ -33,7 +33,7 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
         context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
-    context.settings.queryConfig,
+    { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
   );
 
   const podStatus = getStatus(item);
