@@ -20,9 +20,12 @@ import {
   V2beta1PodsMetricStatus,
   V2beta1ResourceMetricStatus,
 } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
+import Dashboard from '../../../plugins/prometheus/Dashboard';
 import List from '../../misc/list/List';
 import Conditions from '../../misc/template/Conditions';
 import Configuration from '../../misc/template/Configuration';
@@ -165,6 +168,8 @@ const HorizontalPodAutoscalerDetails: React.FunctionComponent<IHorizontalPodAuto
   item,
   type,
 }: IHorizontalPodAutoscalerDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       <IonRow>
@@ -230,6 +235,51 @@ const HorizontalPodAutoscalerDetails: React.FunctionComponent<IHorizontalPodAuto
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>
+      ) : null}
+
+      {context.settings.prometheusEnabled ? (
+        <Dashboard
+          title="Metrics"
+          charts={[
+            {
+              title: 'Replicas',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '12',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Desired',
+                  query: `kube_hpa_status_desired_replicas{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", hpa="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+                {
+                  label: 'Current',
+                  query: `kube_hpa_status_current_replicas{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", hpa="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+                {
+                  label: 'Min',
+                  query: `kube_hpa_spec_min_replicas{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", hpa="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+                {
+                  label: 'Max',
+                  query: `kube_hpa_spec_max_replicas{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", hpa="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+              ],
+            },
+          ]}
+        />
       ) : null}
     </IonGrid>
   );

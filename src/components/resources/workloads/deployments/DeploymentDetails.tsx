@@ -1,9 +1,12 @@
 import { IonChip, IonGrid, IonLabel, IonRow } from '@ionic/react';
 import { V1Deployment, V1DeploymentStrategy } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
 import { labelSelector } from '../../../../utils/helpers';
+import Dashboard from '../../../plugins/prometheus/Dashboard';
 import List from '../../misc/list/List';
 import Conditions from '../../misc/template/Conditions';
 import Configuration from '../../misc/template/Configuration';
@@ -21,6 +24,8 @@ const DeploymentDetails: React.FunctionComponent<IDeploymentDetailsProps> = ({
   item,
   type,
 }: IDeploymentDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   const updateStrategy = (strategy: V1DeploymentStrategy): string => {
     if (strategy.rollingUpdate && strategy.rollingUpdate.maxSurge && strategy.rollingUpdate.maxUnavailable) {
       return `${strategy.type ? `${strategy.type}: ` : ''}Max Surge ${
@@ -98,6 +103,83 @@ const DeploymentDetails: React.FunctionComponent<IDeploymentDetailsProps> = ({
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>
+      ) : null}
+
+      {context.settings.prometheusEnabled ? (
+        <Dashboard
+          title="Metrics"
+          charts={[
+            {
+              title: 'Replicas',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '12',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Desired',
+                  query: `kube_deployment_spec_replicas{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", deployment="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+                {
+                  label: 'Current',
+                  query: `kube_deployment_status_replicas{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", deployment="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+              ],
+            },
+            {
+              title: 'Replicas (Available)',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Available',
+                  query: `kube_deployment_status_replicas_available{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", deployment="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+                {
+                  label: 'Unavailable',
+                  query: `kube_deployment_status_replicas_unavailable{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", deployment="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+              ],
+            },
+            {
+              title: 'Replicas (Updated)',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Updated',
+                  query: `kube_deployment_status_replicas_updated{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", deployment="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+              ],
+            },
+          ]}
+        />
       ) : null}
     </IonGrid>
   );

@@ -8,6 +8,7 @@ import { IContext, INodeMetrics } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import { formatResourceValue } from '../../../../utils/helpers';
+import Dashboard from '../../../plugins/prometheus/Dashboard';
 import AddSSH from '../../../plugins/terminal/AddSSH';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
 import List from '../../misc/list/List';
@@ -16,6 +17,7 @@ import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
 import Row from '../../misc/template/Row';
 import Status from '../../misc/template/Status';
+import Metrics from './Metrics';
 import { getStatus } from './nodeHelpers';
 
 interface INodeDetailsProps extends RouteComponentProps {
@@ -170,6 +172,123 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>
+      ) : null}
+
+      {context.settings.prometheusEnabled ? (
+        <Dashboard
+          title="Metrics"
+          charts={[
+            {
+              title: 'Memory Usage (in GiB)',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Current',
+                  query: `sum(container_memory_usage_bytes{job="kubelet", node="${
+                    item.metadata ? item.metadata.name : ''
+                  }", container!="", container!="POD"}) / 1024 / 1024 / 1024`,
+                },
+                {
+                  label: 'Requested',
+                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", node="${
+                    item.metadata ? item.metadata.name : ''
+                  }", resource="memory", container!=""}) / 1024 / 1024 / 1024`,
+                },
+                {
+                  label: 'Limit',
+                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", node="${
+                    item.metadata ? item.metadata.name : ''
+                  }", resource="memory", container!=""}) / 1024 / 1024 / 1024`,
+                },
+                {
+                  label: 'Cache',
+                  query: `sum(container_memory_cache{job="kubelet", node="${
+                    item.metadata ? item.metadata.name : ''
+                  }", container!="", container!="POD"}) / 1024 / 1024 / 1024`,
+                },
+                {
+                  label: 'Allocatable',
+                  query: `sum(kube_node_status_allocatable_memory_bytes{job="kube-state-metrics", node="${
+                    item.metadata ? item.metadata.name : ''
+                  }"}) / 1024 / 1024 / 1024`,
+                },
+              ],
+            },
+            {
+              title: 'CPU Usage',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Current',
+                  query: `sum(irate(container_cpu_usage_seconds_total{job="kubelet", node="${
+                    item.metadata ? item.metadata.name : ''
+                  }", image!="", container!="", container!="POD"}[4m]))`,
+                },
+                {
+                  label: 'Requested',
+                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", node="${
+                    item.metadata ? item.metadata.name : ''
+                  }", resource="cpu", container!=""})`,
+                },
+                {
+                  label: 'Limit',
+                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", node="${
+                    item.metadata ? item.metadata.name : ''
+                  }", resource="cpu", container!=""})`,
+                },
+                {
+                  label: 'Allocatable',
+                  query: `sum(kube_node_status_allocatable_cpu_cores{job="kube-state-metrics", node="${
+                    item.metadata ? item.metadata.name : ''
+                  }"})`,
+                },
+              ],
+            },
+            {
+              title: 'Pods',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '12',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Current',
+                  query: `count(kube_pod_info{job="kube-state-metrics", node="${
+                    item.metadata ? item.metadata.name : ''
+                  }"})`,
+                },
+                {
+                  label: 'Allocatable',
+                  query: `sum(kube_node_status_allocatable_pods{job="kube-state-metrics", node="${
+                    item.metadata ? item.metadata.name : ''
+                  }"})`,
+                },
+              ],
+            },
+          ]}
+        />
+      ) : null}
+
+      {context.settings.prometheusEnabled ? (
+        <Metrics name={item.metadata && item.metadata.name ? item.metadata.name : ''} />
       ) : null}
     </IonGrid>
   );

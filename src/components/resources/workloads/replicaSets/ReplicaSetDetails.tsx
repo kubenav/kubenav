@@ -1,9 +1,12 @@
 import { IonChip, IonGrid, IonLabel, IonRow } from '@ionic/react';
 import { V1ReplicaSet } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
 import { labelSelector } from '../../../../utils/helpers';
+import Dashboard from '../../../plugins/prometheus/Dashboard';
 import List from '../../misc/list/List';
 import Conditions from '../../misc/template/Conditions';
 import Configuration from '../../misc/template/Configuration';
@@ -21,6 +24,8 @@ const ReplicaSetDetails: React.FunctionComponent<IReplicaSetDetailsProps> = ({
   item,
   type,
 }: IReplicaSetDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       <IonRow>
@@ -86,6 +91,58 @@ const ReplicaSetDetails: React.FunctionComponent<IReplicaSetDetailsProps> = ({
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>
+      ) : null}
+
+      {context.settings.prometheusEnabled ? (
+        <Dashboard
+          title="Metrics"
+          charts={[
+            {
+              title: 'Replicas',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '12',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Desired',
+                  query: `kube_replicaset_spec_replicas{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", replicaset="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+                {
+                  label: 'Current',
+                  query: `kube_replicaset_status_replicas{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", replicaset="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+              ],
+            },
+            {
+              title: 'Replicas (Ready)',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '12',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Ready',
+                  query: `kube_replicaset_status_ready_replicas{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", replicaset="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+              ],
+            },
+          ]}
+        />
       ) : null}
     </IonGrid>
   );

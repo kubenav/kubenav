@@ -1,9 +1,12 @@
 import { IonChip, IonGrid, IonLabel, IonRow } from '@ionic/react';
 import { V1StatefulSet, V1StatefulSetUpdateStrategy } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
 import { labelSelector } from '../../../../utils/helpers';
+import Dashboard from '../../../plugins/prometheus/Dashboard';
 import List from '../../misc/list/List';
 import Conditions from '../../misc/template/Conditions';
 import Configuration from '../../misc/template/Configuration';
@@ -21,6 +24,8 @@ const StatefulSetDetails: React.FunctionComponent<IStatefulSetDetailsProps> = ({
   item,
   type,
 }: IStatefulSetDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   const updateStrategy = (strategy: V1StatefulSetUpdateStrategy): string => {
     if (strategy.rollingUpdate && strategy.rollingUpdate.partition) {
       return `${strategy.type ? `${strategy.type}: ` : ''}Partition ${strategy.rollingUpdate.partition}`;
@@ -99,6 +104,77 @@ const StatefulSetDetails: React.FunctionComponent<IStatefulSetDetailsProps> = ({
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>
+      ) : null}
+
+      {context.settings.prometheusEnabled ? (
+        <Dashboard
+          title="Metrics"
+          charts={[
+            {
+              title: 'Replicas',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '12',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Desired',
+                  query: `kube_statefulset_replicas{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", statefulset="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+                {
+                  label: 'Current',
+                  query: `kube_statefulset_status_replicas_current{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", statefulset="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+              ],
+            },
+            {
+              title: 'Replicas (Ready)',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Ready',
+                  query: `kube_statefulset_status_replicas_ready{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", statefulset="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+              ],
+            },
+            {
+              title: 'Replicas (Updated)',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Updated',
+                  query: `kube_statefulset_status_replicas_updated{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", statefulset="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+              ],
+            },
+          ]}
+        />
       ) : null}
     </IonGrid>
   );

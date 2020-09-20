@@ -1,9 +1,12 @@
 import { IonChip, IonGrid, IonLabel, IonRow } from '@ionic/react';
 import { V1DaemonSet, V1DaemonSetUpdateStrategy } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
 import { labelSelector } from '../../../../utils/helpers';
+import Dashboard from '../../../plugins/prometheus/Dashboard';
 import List from '../../misc/list/List';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
@@ -17,6 +20,8 @@ interface IDaemonSetDetailsProps extends RouteComponentProps {
 }
 
 const DaemonSetDetails: React.FunctionComponent<IDaemonSetDetailsProps> = ({ item, type }: IDaemonSetDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   const updateStrategy = (strategy: V1DaemonSetUpdateStrategy): string => {
     if (strategy.rollingUpdate && strategy.rollingUpdate.maxUnavailable) {
       return `${strategy.type ? `${strategy.type}: ` : ''}Max Unavailable ${strategy.rollingUpdate.maxUnavailable}`;
@@ -103,6 +108,108 @@ const DaemonSetDetails: React.FunctionComponent<IDaemonSetDetailsProps> = ({ ite
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>
+      ) : null}
+
+      {context.settings.prometheusEnabled ? (
+        <Dashboard
+          title="Metrics"
+          charts={[
+            {
+              title: 'Number (Scheduled)',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '12',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Desired',
+                  query: `kube_daemonset_status_desired_number_scheduled{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", daemonset="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+                {
+                  label: 'Current',
+                  query: `kube_daemonset_status_current_number_scheduled{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", daemonset="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+                {
+                  label: 'Misscheduled',
+                  query: `kube_daemonset_status_number_misscheduled{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", daemonset="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+              ],
+            },
+            {
+              title: 'Number (Ready)',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '4',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Ready',
+                  query: `kube_daemonset_status_number_ready{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", daemonset="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+              ],
+            },
+            {
+              title: 'Number (Available)',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '4',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Available',
+                  query: `kube_daemonset_status_number_available{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", daemonset="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+                {
+                  label: 'Unavailable',
+                  query: `kube_daemonset_status_number_unavailable{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", daemonset="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+              ],
+            },
+            {
+              title: 'Number (Updated)',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '4',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Updated',
+                  query: `kube_daemonset_updated_number_scheduled{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", daemonset="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+              ],
+            },
+          ]}
+        />
       ) : null}
     </IonGrid>
   );
