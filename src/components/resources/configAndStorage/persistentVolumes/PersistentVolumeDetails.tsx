@@ -1,8 +1,11 @@
 import { IonGrid, IonRow } from '@ionic/react';
 import { V1PersistentVolume } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
+import Dashboard from '../../../plugins/prometheus/Dashboard';
 import List from '../../misc/list/List';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
@@ -19,6 +22,8 @@ const PersistentVolumeDetails: React.FunctionComponent<IPersistentVolumeDetailsP
   item,
   type,
 }: IPersistentVolumeDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       <IonRow>
@@ -65,6 +70,33 @@ const PersistentVolumeDetails: React.FunctionComponent<IPersistentVolumeDetailsP
             selector={`fieldSelector=involvedObject.name=${item.metadata.name}`}
           />
         </IonRow>
+      ) : null}
+
+      {context.settings.prometheusEnabled ? (
+        <Dashboard
+          title="Metrics"
+          charts={[
+            {
+              title: 'Capacity (in GiB)',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '12',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Capacity',
+                  query: `kube_persistentvolume_capacity_bytes{persistentvolume="${
+                    item.metadata ? item.metadata.name : ''
+                  }"} / 1024 / 1024 / 1024`,
+                },
+              ],
+            },
+          ]}
+        />
       ) : null}
     </IonGrid>
   );

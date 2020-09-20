@@ -36,6 +36,11 @@ const colorsDark = [
   '#477be8',
 ];
 
+const getColor = (index: number, darkMode: boolean): string => {
+  const colors = darkMode ? colorsDark : colorsLight;
+  return colors[index % colors.length];
+};
+
 export interface IPrometheusResult {
   label: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -104,8 +109,8 @@ const ChartDetailsArea: React.FunctionComponent<IChartDetailsAreaProps> = ({
                 dataKey="value"
                 data={serie.data}
                 name={serie.name}
-                stroke={isDarkMode(context.settings.theme) ? colorsDark[index] : colorsLight[index]}
-                fill={isDarkMode(context.settings.theme) ? colorsDark[index] : colorsLight[index]}
+                stroke={getColor(index, isDarkMode(context.settings.theme))}
+                fill={getColor(index, isDarkMode(context.settings.theme))}
                 fillOpacity={0.2}
               />
             ))}

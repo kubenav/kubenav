@@ -1,8 +1,11 @@
 import { IonGrid, IonRow } from '@ionic/react';
 import { V1Namespace } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
+import Dashboard from '../../../plugins/prometheus/Dashboard';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
 import Row from '../../misc/template/Row';
@@ -15,6 +18,8 @@ interface INamespaceDetailsProps extends RouteComponentProps {
 }
 
 const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ item, type }: INamespaceDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       <IonRow>
@@ -34,6 +39,82 @@ const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ ite
       </IonRow>
 
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
+
+      {context.settings.prometheusEnabled ? (
+        <Dashboard
+          title="Metrics"
+          charts={[
+            {
+              title: 'Memory Usage (in MiB)',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Current',
+                  query: `sum(container_memory_usage_bytes{job="kubelet", namespace="${
+                    item.metadata ? item.metadata.name : ''
+                  }", container!="", container!="POD"}) / 1024 / 1024`,
+                },
+                {
+                  label: 'Requested',
+                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${
+                    item.metadata ? item.metadata.name : ''
+                  }", resource="memory", container!=""}) / 1024 / 1024`,
+                },
+                {
+                  label: 'Limit',
+                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${
+                    item.metadata ? item.metadata.name : ''
+                  }", resource="memory", container!=""}) / 1024 / 1024`,
+                },
+                {
+                  label: 'Cache',
+                  query: `sum(container_memory_cache{job="kubelet", namespace="${
+                    item.metadata ? item.metadata.name : ''
+                  }", container!="", container!="POD"}) / 1024 / 1024`,
+                },
+              ],
+            },
+            {
+              title: 'CPU Usage',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Current',
+                  query: `sum(irate(container_cpu_usage_seconds_total{job="kubelet", namespace="${
+                    item.metadata ? item.metadata.name : ''
+                  }", image!="", container!="", container!="POD"}[4m]))`,
+                },
+                {
+                  label: 'Requested',
+                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${
+                    item.metadata ? item.metadata.name : ''
+                  }", resource="cpu", container!=""})`,
+                },
+                {
+                  label: 'Limit',
+                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${
+                    item.metadata ? item.metadata.name : ''
+                  }", resource="cpu", container!=""})`,
+                },
+              ],
+            },
+          ]}
+        />
+      ) : null}
     </IonGrid>
   );
 };

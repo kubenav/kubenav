@@ -194,10 +194,25 @@ func RunQueries(address string, timeout time.Duration, requestData map[string]in
 				}
 
 				for _, stream := range data {
-					results = append(results, Result{
-						Label:  query.Label,
-						Values: stream.Values,
-					})
+					var labels map[string]string
+					labels = make(map[string]string)
+
+					for key, value := range stream.Metric {
+						labels[string(key)] = string(value)
+					}
+
+					label, err := queryInterpolation(query.Label, labels)
+					if err != nil {
+						results = append(results, Result{
+							Label:  query.Label,
+							Values: stream.Values,
+						})
+					} else {
+						results = append(results, Result{
+							Label:  label,
+							Values: stream.Values,
+						})
+					}
 				}
 			}
 

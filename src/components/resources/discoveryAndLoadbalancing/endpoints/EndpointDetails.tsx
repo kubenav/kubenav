@@ -19,9 +19,12 @@ import {
   V1EndpointSubset,
   V1ObjectReference,
 } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
+import Dashboard from '../../../plugins/prometheus/Dashboard';
 import Metadata from '../../misc/template/Metadata';
 
 interface IEndpointDetailsProps extends RouteComponentProps {
@@ -31,6 +34,8 @@ interface IEndpointDetailsProps extends RouteComponentProps {
 }
 
 const EndpointDetails: React.FunctionComponent<IEndpointDetailsProps> = ({ item, type }: IEndpointDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   const itemLink = (ref: V1ObjectReference | undefined): string => {
     if (ref && ref.kind && ref.kind.toLowerCase() === 'pod') {
       return `/resources/workloads/pods/${ref.namespace ? ref.namespace : ''}/${ref.name ? ref.name : ''}`;
@@ -97,6 +102,39 @@ const EndpointDetails: React.FunctionComponent<IEndpointDetailsProps> = ({ item,
             );
           })}
         </IonRow>
+      ) : null}
+
+      {context.settings.prometheusEnabled ? (
+        <Dashboard
+          title="Metrics"
+          charts={[
+            {
+              title: 'Addresses',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '12',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Available',
+                  query: `kube_endpoint_address_available{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", endpoint="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+                {
+                  label: 'Not Ready',
+                  query: `kube_endpoint_address_not_ready{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", endpoint="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+              ],
+            },
+          ]}
+        />
       ) : null}
     </IonGrid>
   );
