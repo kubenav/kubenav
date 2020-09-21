@@ -16,7 +16,7 @@ export const DEFAULT_SETTINGS: IAppSettings = {
   queryConfig: {
     retry: false,
     refetchInterval: false,
-    refetchIntervalInBackground: false,
+    refetchIntervalInBackground: true,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   },

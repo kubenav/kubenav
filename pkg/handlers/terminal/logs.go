@@ -23,10 +23,12 @@ type LogSessionMap struct {
 }
 
 // Get return a given logSession by sessionID.
-func (sm *LogSessionMap) Get(sessionID string) LogSession {
+func (sm *LogSessionMap) Get(sessionID string) (LogSession, bool) {
 	sm.Lock.RLock()
 	defer sm.Lock.RUnlock()
-	return sm.Sessions[sessionID]
+
+	session, ok := sm.Sessions[sessionID]
+	return session, ok
 }
 
 // Set store a LogSession to LogSessionMap.
@@ -40,7 +42,10 @@ func (sm *LogSessionMap) Set(sessionID string, session LogSession) {
 func (sm *LogSessionMap) Delete(sessionID string) {
 	sm.Lock.Lock()
 	defer sm.Lock.Unlock()
-	delete(sm.Sessions, sessionID)
+
+	if _, ok := sm.Sessions[sessionID]; ok {
+		delete(sm.Sessions, sessionID)
+	}
 }
 
 // LogSessions holds all active sessions for streamed logs.
@@ -54,7 +59,11 @@ func StreamLogsHandler(w http.ResponseWriter, r *http.Request) {
 
 	params := strings.Split(r.URL.Path, "/")
 	sessionID := params[len(params)-1]
-	logSession := LogSessions.Get(sessionID)
+	logSession, ok := LogSessions.Get(sessionID)
+	if !ok {
+		LogSessions.Delete(sessionID)
+		return
+	}
 
 	readCloser, err := logSession.ClientSet.RESTClient().Get().RequestURI(logSession.URL).Stream(r.Context())
 	if err != nil {

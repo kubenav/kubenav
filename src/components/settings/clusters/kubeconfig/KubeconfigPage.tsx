@@ -83,7 +83,7 @@ const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history
     } else {
       try {
         const clusters: ICluster[] = [];
-        const config: IKubeconfig = yaml.safeLoad(kubeconfig);
+        const config: IKubeconfig = yaml.safeLoad(kubeconfig) as IKubeconfig;
 
         for (const ctx of config.contexts) {
           const cluster = getKubeconfigCluster(ctx.context.cluster, config.clusters);
