@@ -1,5 +1,5 @@
 import { IonCol, IonRow } from '@ionic/react';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Area, AreaChart, Legend, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
 import { IContext } from '../../../declarations';
@@ -57,6 +57,7 @@ const ChartDetailsArea: React.FunctionComponent<IChartDetailsAreaProps> = ({
   results,
 }: IChartDetailsAreaProps) => {
   const context = useContext<IContext>(AppContext);
+  const [selected, setSelected] = useState<string>('');
 
   // formatTime is use to formate the shown values for the x axis. If the user selected a time span lower then 24h we
   // are showing the "hh:mm" for timespans larger then 24h we are showing "MM/DD hh:mm".
@@ -102,18 +103,32 @@ const ChartDetailsArea: React.FunctionComponent<IChartDetailsAreaProps> = ({
               tickFormatter={formatTime}
             />
             <YAxis dataKey="value" />
-            <Legend />
-            {series.map((serie, index) => (
-              <Area
-                key={index}
-                dataKey="value"
-                data={serie.data}
-                name={serie.name}
-                stroke={getColor(index, isDarkMode(context.settings.theme))}
-                fill={getColor(index, isDarkMode(context.settings.theme))}
-                fillOpacity={0.2}
-              />
-            ))}
+            <Legend onClick={(e) => (selected === e.payload.name ? setSelected('') : setSelected(e.payload.name))} />
+            {selected === ''
+              ? series.map((serie, index) => (
+                  <Area
+                    key={index}
+                    dataKey="value"
+                    data={serie.data}
+                    name={serie.name}
+                    stroke={getColor(index, isDarkMode(context.settings.theme))}
+                    fill={getColor(index, isDarkMode(context.settings.theme))}
+                    fillOpacity={0.2}
+                  />
+                ))
+              : series
+                  .filter((serie) => serie.name === selected)
+                  .map((serie, index) => (
+                    <Area
+                      key={index}
+                      dataKey="value"
+                      data={serie.data}
+                      name={serie.name}
+                      stroke={getColor(index, isDarkMode(context.settings.theme))}
+                      fill={getColor(index, isDarkMode(context.settings.theme))}
+                      fillOpacity={0.2}
+                    />
+                  ))}
           </AreaChart>
         </ResponsiveContainer>
       </IonCol>
