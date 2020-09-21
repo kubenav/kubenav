@@ -50,7 +50,9 @@ func Run(config *rest.Config, clientset *kubernetes.Clientset, name, podURL stri
 		}
 
 		defer func(sessionID string) {
-			portforwarding.Sessions.Get(sessionID).Stop()
+			if session, ok := portforwarding.Sessions.Get(sessionID); ok {
+				session.Stop()
+			}
 		}(pf.ID)
 
 		go pf.Start()

@@ -266,7 +266,9 @@ func (c *Client) kubernetesPortForwardingHandler(w http.ResponseWriter, r *http.
 			return
 		}
 
-		portforwarding.Sessions.Get(request.ID).Stop()
+		if session, ok := portforwarding.Sessions.Get(request.ID); ok {
+			session.Stop()
+		}
 
 		middleware.Write(w, r, nil)
 		return

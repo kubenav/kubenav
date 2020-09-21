@@ -57,10 +57,12 @@ type SessionMap struct {
 }
 
 // Get return a given portForwardSession by sessionID.
-func (sm *SessionMap) Get(sessionID string) *PortForwardSession {
+func (sm *SessionMap) Get(sessionID string) (*PortForwardSession, bool) {
 	sm.Lock.RLock()
 	defer sm.Lock.RUnlock()
-	return sm.Sessions[sessionID]
+
+	session, ok := sm.Sessions[sessionID]
+	return session, ok
 }
 
 // Set store a PortForwardSession to SessionMap.
@@ -74,7 +76,10 @@ func (sm *SessionMap) Set(sessionID string, session *PortForwardSession) {
 func (sm *SessionMap) Delete(sessionID string) {
 	sm.Lock.Lock()
 	defer sm.Lock.Unlock()
-	delete(sm.Sessions, sessionID)
+
+	if _, ok := sm.Sessions[sessionID]; ok {
+		delete(sm.Sessions, sessionID)
+	}
 }
 
 // Sessions holds all active port forwarding sessions.
