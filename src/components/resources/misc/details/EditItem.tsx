@@ -38,15 +38,18 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ activator, item, ur
 
   const handleSave = async () => {
     try {
-      const diff = jsonpatch.compare(item, yaml.safeLoad(value));
-      await kubernetesRequest(
-        'PATCH',
-        url,
-        JSON.stringify(diff),
-        context.settings,
-        await context.kubernetesAuthWrapper(''),
-      );
-      setShowModal(false);
+      const yamlObj = yaml.safeLoad(value);
+      if (yamlObj) {
+        const diff = jsonpatch.compare(item, yamlObj);
+        await kubernetesRequest(
+          'PATCH',
+          url,
+          JSON.stringify(diff),
+          context.settings,
+          await context.kubernetesAuthWrapper(''),
+        );
+        setShowModal(false);
+      }
     } catch (err) {
       setError(err);
     }
