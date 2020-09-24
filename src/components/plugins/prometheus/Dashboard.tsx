@@ -36,8 +36,8 @@ interface IDashboardResult {
   chartsResult: IChartResult[];
 }
 
-interface IDashboardProps {
-  title: string;
+export interface IDashboardProps {
+  title?: string;
   variables?: IVariable[];
   charts: IChart[];
 }
@@ -108,9 +108,11 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ title, variables,
     <IonRow>
       <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="12">
         <IonCard>
-          <IonCardHeader>
-            <IonCardTitle>{title}</IonCardTitle>
-          </IonCardHeader>
+          {title ? (
+            <IonCardHeader>
+              <IonCardTitle>{title}</IonCardTitle>
+            </IonCardHeader>
+          ) : null}
           <IonCardContent>
             {isFetching ? (
               <IonProgressBar slot="fixed" type="indeterminate" color="primary" />

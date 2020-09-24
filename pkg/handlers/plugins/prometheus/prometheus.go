@@ -129,7 +129,7 @@ func RunQueries(address string, timeout time.Duration, requestData map[string]in
 
 		promData.Variables[i].Values = values
 
-		if promData.Variables[i].AllowAll {
+		if promData.Variables[i].AllowAll && len(promData.Variables[i].Values) > 1 {
 			promData.Variables[i].Values = append([]string{strings.Join(promData.Variables[i].Values, "|")}, promData.Variables[i].Values...)
 		}
 
@@ -146,10 +146,10 @@ func RunQueries(address string, timeout time.Duration, requestData map[string]in
 
 	var chartsResult []ChartsResult
 	var waitgroup sync.WaitGroup
+	waitgroup.Add(len(promData.Charts))
 
 	for index, chart := range promData.Charts {
 		chart.Index = index
-		waitgroup.Add(1)
 
 		go func(chart Chart) {
 			defer waitgroup.Done()

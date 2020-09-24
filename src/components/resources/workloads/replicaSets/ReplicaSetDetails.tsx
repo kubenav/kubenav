@@ -98,7 +98,7 @@ const ReplicaSetDetails: React.FunctionComponent<IReplicaSetDetailsProps> = ({
           title="Metrics"
           charts={[
             {
-              title: 'Replicas',
+              title: 'Pods',
               size: {
                 xs: '12',
                 sm: '12',
@@ -120,19 +120,6 @@ const ReplicaSetDetails: React.FunctionComponent<IReplicaSetDetailsProps> = ({
                     item.metadata ? item.metadata.namespace : ''
                   }", replicaset="${item.metadata ? item.metadata.name : ''}"}`,
                 },
-              ],
-            },
-            {
-              title: 'Replicas (Ready)',
-              size: {
-                xs: '12',
-                sm: '12',
-                md: '12',
-                lg: '12',
-                xl: '12',
-              },
-              type: 'area',
-              queries: [
                 {
                   label: 'Ready',
                   query: `kube_replicaset_status_ready_replicas{namespace="${

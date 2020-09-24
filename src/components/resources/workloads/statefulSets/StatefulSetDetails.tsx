@@ -111,7 +111,7 @@ const StatefulSetDetails: React.FunctionComponent<IStatefulSetDetailsProps> = ({
           title="Metrics"
           charts={[
             {
-              title: 'Replicas',
+              title: 'Pods',
               size: {
                 xs: '12',
                 sm: '12',
@@ -133,38 +133,12 @@ const StatefulSetDetails: React.FunctionComponent<IStatefulSetDetailsProps> = ({
                     item.metadata ? item.metadata.namespace : ''
                   }", statefulset="${item.metadata ? item.metadata.name : ''}"}`,
                 },
-              ],
-            },
-            {
-              title: 'Replicas (Ready)',
-              size: {
-                xs: '12',
-                sm: '12',
-                md: '12',
-                lg: '12',
-                xl: '6',
-              },
-              type: 'area',
-              queries: [
                 {
                   label: 'Ready',
                   query: `kube_statefulset_status_replicas_ready{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", statefulset="${item.metadata ? item.metadata.name : ''}"}`,
                 },
-              ],
-            },
-            {
-              title: 'Replicas (Updated)',
-              size: {
-                xs: '12',
-                sm: '12',
-                md: '12',
-                lg: '12',
-                xl: '6',
-              },
-              type: 'area',
-              queries: [
                 {
                   label: 'Updated',
                   query: `kube_statefulset_status_replicas_updated{namespace="${
