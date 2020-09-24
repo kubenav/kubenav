@@ -242,7 +242,7 @@ const HorizontalPodAutoscalerDetails: React.FunctionComponent<IHorizontalPodAuto
           title="Metrics"
           charts={[
             {
-              title: 'Replicas',
+              title: 'Pods',
               size: {
                 xs: '12',
                 sm: '12',

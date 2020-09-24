@@ -110,7 +110,7 @@ const DeploymentDetails: React.FunctionComponent<IDeploymentDetailsProps> = ({
           title="Metrics"
           charts={[
             {
-              title: 'Replicas',
+              title: 'Pods',
               size: {
                 xs: '12',
                 sm: '12',
@@ -132,47 +132,15 @@ const DeploymentDetails: React.FunctionComponent<IDeploymentDetailsProps> = ({
                     item.metadata ? item.metadata.namespace : ''
                   }", deployment="${item.metadata ? item.metadata.name : ''}"}`,
                 },
-              ],
-            },
-            {
-              title: 'Replicas (Available)',
-              size: {
-                xs: '12',
-                sm: '12',
-                md: '12',
-                lg: '12',
-                xl: '6',
-              },
-              type: 'area',
-              queries: [
-                {
-                  label: 'Available',
-                  query: `kube_deployment_status_replicas_available{namespace="${
-                    item.metadata ? item.metadata.namespace : ''
-                  }", deployment="${item.metadata ? item.metadata.name : ''}"}`,
-                },
-                {
-                  label: 'Unavailable',
-                  query: `kube_deployment_status_replicas_unavailable{namespace="${
-                    item.metadata ? item.metadata.namespace : ''
-                  }", deployment="${item.metadata ? item.metadata.name : ''}"}`,
-                },
-              ],
-            },
-            {
-              title: 'Replicas (Updated)',
-              size: {
-                xs: '12',
-                sm: '12',
-                md: '12',
-                lg: '12',
-                xl: '6',
-              },
-              type: 'area',
-              queries: [
                 {
                   label: 'Updated',
                   query: `kube_deployment_status_replicas_updated{namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", deployment="${item.metadata ? item.metadata.name : ''}"}`,
+                },
+                {
+                  label: 'Available',
+                  query: `kube_deployment_status_replicas_available{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", deployment="${item.metadata ? item.metadata.name : ''}"}`,
                 },

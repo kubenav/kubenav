@@ -115,7 +115,7 @@ const DaemonSetDetails: React.FunctionComponent<IDaemonSetDetailsProps> = ({ ite
           title="Metrics"
           charts={[
             {
-              title: 'Number (Scheduled)',
+              title: 'Pods',
               size: {
                 xs: '12',
                 sm: '12',
@@ -138,68 +138,17 @@ const DaemonSetDetails: React.FunctionComponent<IDaemonSetDetailsProps> = ({ ite
                   }", daemonset="${item.metadata ? item.metadata.name : ''}"}`,
                 },
                 {
-                  label: 'Misscheduled',
-                  query: `kube_daemonset_status_number_misscheduled{namespace="${
-                    item.metadata ? item.metadata.namespace : ''
-                  }", daemonset="${item.metadata ? item.metadata.name : ''}"}`,
-                },
-              ],
-            },
-            {
-              title: 'Number (Ready)',
-              size: {
-                xs: '12',
-                sm: '12',
-                md: '12',
-                lg: '12',
-                xl: '4',
-              },
-              type: 'area',
-              queries: [
-                {
                   label: 'Ready',
                   query: `kube_daemonset_status_number_ready{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", daemonset="${item.metadata ? item.metadata.name : ''}"}`,
                 },
-              ],
-            },
-            {
-              title: 'Number (Available)',
-              size: {
-                xs: '12',
-                sm: '12',
-                md: '12',
-                lg: '12',
-                xl: '4',
-              },
-              type: 'area',
-              queries: [
                 {
-                  label: 'Available',
-                  query: `kube_daemonset_status_number_available{namespace="${
+                  label: 'Misscheduled',
+                  query: `kube_daemonset_status_number_misscheduled{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", daemonset="${item.metadata ? item.metadata.name : ''}"}`,
                 },
-                {
-                  label: 'Unavailable',
-                  query: `kube_daemonset_status_number_unavailable{namespace="${
-                    item.metadata ? item.metadata.namespace : ''
-                  }", daemonset="${item.metadata ? item.metadata.name : ''}"}`,
-                },
-              ],
-            },
-            {
-              title: 'Number (Updated)',
-              size: {
-                xs: '12',
-                sm: '12',
-                md: '12',
-                lg: '12',
-                xl: '4',
-              },
-              type: 'area',
-              queries: [
                 {
                   label: 'Updated',
                   query: `kube_daemonset_updated_number_scheduled{namespace="${
