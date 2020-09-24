@@ -78,6 +78,12 @@ td {
   overflow-x: auto;
 }
 
+.container-details-link {
+  cursor: pointer;
+  background: transparent;
+  color: var(--ion-color-primary);
+}
+
 /* Scroll to bottom button in editor */
 .editor-scroll-to-bottom-button {
   position: absolute;
