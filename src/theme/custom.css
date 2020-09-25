@@ -183,3 +183,29 @@ ion-avatar {
 .label-for-range {
   min-height: 18px;
 }
+
+/* Tooltip
+   The tooltip css classes can be used to show additional information via tooltip, when a user hovers a component on
+   desktop. We are using the same colors as the IonToast component uses as background color and color. */
+.tooltip {
+  position: relative;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: var(--ion-color-step-800, #333333);
+  color: var(--ion-color-step-50, #f2f2f2);
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
