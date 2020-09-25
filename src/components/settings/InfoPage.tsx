@@ -107,6 +107,22 @@ const InfoPage: React.FunctionComponent = () => {
                 </IonAvatar>
                 <IonLabel>Twitter</IonLabel>
               </IonItem>
+
+              <IonListHeader mode="md">
+                <IonLabel>Donation</IonLabel>
+              </IonListHeader>
+              <IonItem onClick={() => openLink('https://github.com/sponsors/ricoberger')} button={true}>
+                <IonAvatar slot="start">
+                  <img alt="GitHub Sponsors" src="/assets/icons/misc/github.png" />
+                </IonAvatar>
+                <IonLabel>GitHub Sponsors</IonLabel>
+              </IonItem>
+              <IonItem onClick={() => openLink('https://www.paypal.me/ricoberger')} button={true}>
+                <IonAvatar slot="start">
+                  <img alt="PayPal" src="/assets/icons/misc/paypal.png" />
+                </IonAvatar>
+                <IonLabel>PayPal</IonLabel>
+              </IonItem>
             </IonList>
           </IonCardContent>
         </IonCard>
