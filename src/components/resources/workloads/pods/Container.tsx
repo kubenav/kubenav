@@ -83,36 +83,54 @@ const Container: React.FunctionComponent<IContainerProps> = ({
           <td>{status && status.restartCount ? status.restartCount : 0}</td>
           <td>{status ? getState(status) : ''}</td>
           <td className="center">
-            {metrics && metrics.usage && metrics.usage.hasOwnProperty('cpu')
-              ? formatResourceValue('cpu', metrics.usage['cpu'])
-              : '-'}
+            <div className="tooltip">
+              {metrics && metrics.usage && metrics.usage.hasOwnProperty('cpu')
+                ? formatResourceValue('cpu', metrics.usage['cpu'])
+                : '-'}
+              <span className="tooltiptext">CPU Usage</span>
+            </div>
           </td>
           <td className="center">
-            {container.resources && container.resources.requests && container.resources.requests.hasOwnProperty('cpu')
-              ? formatResourceValue('cpu', container.resources.requests['cpu'])
-              : '-'}
+            <div className="tooltip">
+              {container.resources && container.resources.requests && container.resources.requests.hasOwnProperty('cpu')
+                ? formatResourceValue('cpu', container.resources.requests['cpu'])
+                : '-'}
+              <span className="tooltiptext">CPU Request</span>
+            </div>
           </td>
           <td className="center">
-            {container.resources && container.resources.limits && container.resources.limits.hasOwnProperty('cpu')
-              ? formatResourceValue('cpu', container.resources.limits['cpu'])
-              : '-'}
+            <div className="tooltip">
+              {container.resources && container.resources.limits && container.resources.limits.hasOwnProperty('cpu')
+                ? formatResourceValue('cpu', container.resources.limits['cpu'])
+                : '-'}
+              <span className="tooltiptext">CPU Limit</span>
+            </div>
           </td>
           <td className="center">
-            {metrics && metrics.usage && metrics.usage.hasOwnProperty('memory')
-              ? formatResourceValue('memory', metrics.usage['memory'])
-              : '-'}
+            <div className="tooltip">
+              {metrics && metrics.usage && metrics.usage.hasOwnProperty('memory')
+                ? formatResourceValue('memory', metrics.usage['memory'])
+                : '-'}
+              <span className="tooltiptext">Memory Usage</span>
+            </div>
           </td>
           <td className="center">
-            {container.resources &&
-            container.resources.requests &&
-            container.resources.requests.hasOwnProperty('memory')
-              ? formatResourceValue('memory', container.resources.requests['memory'])
-              : '-'}
+            <div className="tooltip">
+              {container.resources &&
+              container.resources.requests &&
+              container.resources.requests.hasOwnProperty('memory')
+                ? formatResourceValue('memory', container.resources.requests['memory'])
+                : '-'}
+              <span className="tooltiptext">Memory Request</span>
+            </div>
           </td>
           <td className="center">
-            {container.resources && container.resources.limits && container.resources.limits.hasOwnProperty('memory')
-              ? formatResourceValue('memory', container.resources.limits['memory'])
-              : '-'}
+            <div className="tooltip">
+              {container.resources && container.resources.limits && container.resources.limits.hasOwnProperty('memory')
+                ? formatResourceValue('memory', container.resources.limits['memory'])
+                : '-'}
+              <span className="tooltiptext">Memory Limit</span>
+            </div>
           </td>
           <td className="center">
             {logs && name && namespace ? (
