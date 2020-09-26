@@ -86,11 +86,7 @@ const Azure: React.FunctionComponent = () => {
           Client ID, Tenant ID, Client Secret and the name of the Resource Group. These credentials are used to retrieve
           the Kubeconfig files for your cluster. You can also choose between the user and admin configuration. For the
           creation of the Azure credentials you can use the following guide:{' '}
-          <a
-            href="https://kubenav.io/help/microsoft-azure-creating-app-credentials.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href="https://docs.kubenav.io/mobile/microsoft-azure/" target="_blank" rel="noopener noreferrer">
             Microsoft Azure: Creating App Credentials
           </a>
           .

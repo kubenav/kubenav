@@ -61,7 +61,7 @@ const Google: React.FunctionComponent = () => {
           Choose this option to import your GKE clusters from the Google Cloud Platform. First of all you have to add
           the client ID of your Google OAuth application. More information for the setup of Google OAuth 2.0 can be
           found on the following page:{' '}
-          <a href="https://kubenav.io/help/google-oauth2-configuration.html" target="_blank" rel="noopener noreferrer">
+          <a href="https://docs.kubenav.io/mobile/google/" target="_blank" rel="noopener noreferrer">
             Google OAuth 2.0 Configuration
           </a>
           . When you have added the client ID click the button sign in with Google. You will be redirect to the Google
