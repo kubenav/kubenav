@@ -88,6 +88,15 @@ cd kubenav
 npm install
 ```
 
+You must build the kubenav project at least once before running on any native platform:
+
+```sh
+ionic build
+
+make bindings-android
+make bindings-ios
+```
+
 To use kubenav in your browser you need to build and start the server. The server listening on port `14122`:
 
 ```sh
@@ -98,15 +107,6 @@ Now you can start the app and open [localhost:8100](http://localhost:8100) in yo
 
 ```sh
 ionic serve
-```
-
-You must build the kubenav project at least once before running on any native platform:
-
-```sh
-ionic build
-
-make bindings-android
-make bindings-ios
 ```
 
 Every time you perform a build (e.g. `ionic build`) that changes your web directory (default: `build`), you'll need to copy those changes down to your native projects:
