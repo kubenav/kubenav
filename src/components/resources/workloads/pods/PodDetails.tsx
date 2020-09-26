@@ -99,7 +99,9 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                         port={port.containerPort}
                       >
                         <IonLabel>
-                          {container.name}: {port.containerPort} {port.name ? `(${port.name})` : ''}
+                          {container.name}: {port.containerPort}
+                          {port.protocol ? `/${port.protocol}` : ''}
+                          {port.name ? ` (${port.name})` : ''}
                         </IonLabel>
                       </Port>
                     );
