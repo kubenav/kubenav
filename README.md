@@ -30,7 +30,7 @@ The app is developed using [Ionic Framework](https://ionicframework.com) and [Ca
 - **Terminal:** Get a shell into a container, right from your phone.
 - **Manage multiple Clusters:** Add multiple clusters via `kubeconfig` or your prefered Cloud Provider, including Google, AWS and Azure.
 - **Port-Forwarding:** Create a port-forwarding connection to one of your Pods and open the served page in your browser.
-- **Prometheus Integration:** kubenav allows you to view your Prometheus metrics direclty in the dashboard via the Prometheus plugin.
+- **Prometheus Integration:** kubenav allows you to view your Prometheus metrics directly in the dashboard via the Prometheus plugin.
 
 ## Usage
 
