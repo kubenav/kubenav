@@ -143,7 +143,9 @@ const Container: React.FunctionComponent<IContainerProps> = ({
                               port={port.containerPort}
                             >
                               <IonLabel>
-                                {port.containerPort} {port.name ? `(${port.name})` : ''}
+                                {port.containerPort}
+                                {port.protocol ? `/${port.protocol}` : ''}
+                                {port.name ? ` (${port.name})` : ''}
                               </IonLabel>
                             </Port>
                           );
