@@ -1,5 +1,84 @@
 # Changelog
 
+## [3.0.0](https://github.com/kubenav/kubenav/tree/3.0.0) (2020-09-27)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/2.2.0...3.0.0)
+
+**Breaking changes:**
+
+- Use cobra for command and flag parsing [\#154](https://github.com/kubenav/kubenav/pull/154) ([ricoberger](https://github.com/ricoberger))
+- Rework cluster configuration [\#135](https://github.com/kubenav/kubenav/pull/135) ([ricoberger](https://github.com/ricoberger))
+
+**Implemented enhancements:**
+
+- feature request: hover tool tips for usage columns [\#199](https://github.com/kubenav/kubenav/issues/199)
+- Feature Request: app crashes if too many events try to be listed [\#178](https://github.com/kubenav/kubenav/issues/178)
+- Feature Request: export/save yaml to file [\#177](https://github.com/kubenav/kubenav/issues/177)
+- Feature Request: use either bash or sh for terminal sessions [\#172](https://github.com/kubenav/kubenav/issues/172)
+- Feature request: Auto dark mode [\#167](https://github.com/kubenav/kubenav/issues/167)
+- Feature Request: font size of log window [\#161](https://github.com/kubenav/kubenav/issues/161)
+- feature request: Close button on tab Logs [\#157](https://github.com/kubenav/kubenav/issues/157)
+- feature request: auto refresh pages automatically [\#153](https://github.com/kubenav/kubenav/issues/153)
+- feature request: portforward for pods/services [\#152](https://github.com/kubenav/kubenav/issues/152)
+- add options to use a proxy [\#140](https://github.com/kubenav/kubenav/issues/140)
+- Add status for PVs and PVCs [\#171](https://github.com/kubenav/kubenav/pull/171) ([ricoberger](https://github.com/ricoberger))
+- Add Prometheus Plugin [\#169](https://github.com/kubenav/kubenav/pull/169) ([ricoberger](https://github.com/ricoberger))
+- Add Support for Port-Forwarding [\#156](https://github.com/kubenav/kubenav/pull/156) ([ricoberger](https://github.com/ricoberger))
+
+**Fixed bugs:**
+
+- BUG: selecting a longhorn crd generates a blank white screen [\#182](https://github.com/kubenav/kubenav/issues/182)
+- Bug: port-forward for grafana service uses wrong port [\#179](https://github.com/kubenav/kubenav/issues/179)
+- Missing log/terminal headers on mobile [\#166](https://github.com/kubenav/kubenav/issues/166)
+- new ionrange sliders look squashed on laptop [\#164](https://github.com/kubenav/kubenav/issues/164)
+- pods/events section on deployments arent refreshed when clicking refresh button [\#148](https://github.com/kubenav/kubenav/issues/148)
+- after changing namespace 5 times via quick menu, the app locks up? [\#143](https://github.com/kubenav/kubenav/issues/143)
+- clicking links opens up another electron window instead of default browser [\#141](https://github.com/kubenav/kubenav/issues/141)
+- Bug: No OIDC re-authentication when refresh token is expired [\#136](https://github.com/kubenav/kubenav/issues/136)
+- Fix permissions table [\#155](https://github.com/kubenav/kubenav/pull/155) ([ricoberger](https://github.com/ricoberger))
+
+**Closed issues:**
+
+- BUG: pod container details panel vanished? [\#196](https://github.com/kubenav/kubenav/issues/196)
+- BUG: auto-refresh bugs [\#194](https://github.com/kubenav/kubenav/issues/194)
+- Donation links [\#174](https://github.com/kubenav/kubenav/issues/174)
+- going back a page doesnt refresh the old page until refresh clicked [\#173](https://github.com/kubenav/kubenav/issues/173)
+- Why $HOME/.kube/.config [\#170](https://github.com/kubenav/kubenav/issues/170)
+
+**Merged pull requests:**
+
+- include protocol in port label in container details [\#206](https://github.com/kubenav/kubenav/pull/206) ([si458](https://github.com/si458))
+- Final preparations for 3.0.0 release [\#205](https://github.com/kubenav/kubenav/pull/205) ([ricoberger](https://github.com/ricoberger))
+- add port protocols to poddetails [\#203](https://github.com/kubenav/kubenav/pull/203) ([si458](https://github.com/si458))
+- Add donation links for GitHub Sponsors and Paypal [\#201](https://github.com/kubenav/kubenav/pull/201) ([ricoberger](https://github.com/ricoberger))
+- Add tooltip for container resource usage [\#200](https://github.com/kubenav/kubenav/pull/200) ([ricoberger](https://github.com/ricoberger))
+- Container Details and Prometheus Dashboards [\#198](https://github.com/kubenav/kubenav/pull/198) ([ricoberger](https://github.com/ricoberger))
+- Various fixes and improvements [\#195](https://github.com/kubenav/kubenav/pull/195) ([ricoberger](https://github.com/ricoberger))
+- Support Prometheus metrics for several resources [\#192](https://github.com/kubenav/kubenav/pull/192) ([ricoberger](https://github.com/ricoberger))
+- Use Prometheus query for variable values [\#191](https://github.com/kubenav/kubenav/pull/191) ([ricoberger](https://github.com/ricoberger))
+- Infinite scrolling and automatic refetching of data [\#189](https://github.com/kubenav/kubenav/pull/189) ([ricoberger](https://github.com/ricoberger))
+- Rework the logic to fetch data [\#188](https://github.com/kubenav/kubenav/pull/188) ([ricoberger](https://github.com/ricoberger))
+- Support automatic theme changing [\#187](https://github.com/kubenav/kubenav/pull/187) ([ricoberger](https://github.com/ricoberger))
+- Several small fixes and improvements [\#185](https://github.com/kubenav/kubenav/pull/185) ([ricoberger](https://github.com/ricoberger))
+- Improve Prometheus Plugin [\#184](https://github.com/kubenav/kubenav/pull/184) ([ricoberger](https://github.com/ricoberger))
+- Restructure React Components [\#183](https://github.com/kubenav/kubenav/pull/183) ([ricoberger](https://github.com/ricoberger))
+- Fix port forwarding for services with target port [\#181](https://github.com/kubenav/kubenav/pull/181) ([ricoberger](https://github.com/ricoberger))
+- Clean up frontend [\#180](https://github.com/kubenav/kubenav/pull/180) ([ricoberger](https://github.com/ricoberger))
+- Rework Go Code [\#176](https://github.com/kubenav/kubenav/pull/176) ([ricoberger](https://github.com/ricoberger))
+- Add option to select shell for terminal [\#175](https://github.com/kubenav/kubenav/pull/175) ([ricoberger](https://github.com/ricoberger))
+- Fix terminal tabs for mobile devices [\#168](https://github.com/kubenav/kubenav/pull/168) ([ricoberger](https://github.com/ricoberger))
+- Update npm packages [\#165](https://github.com/kubenav/kubenav/pull/165) ([ricoberger](https://github.com/ricoberger))
+- Use IonRange in settings [\#163](https://github.com/kubenav/kubenav/pull/163) ([ricoberger](https://github.com/ricoberger))
+- Add Terminal settings, disable port forwarding, customize cluster name [\#162](https://github.com/kubenav/kubenav/pull/162) ([ricoberger](https://github.com/ricoberger))
+- Add close button to terminal tabs [\#159](https://github.com/kubenav/kubenav/pull/159) ([ricoberger](https://github.com/ricoberger))
+- Fix namespace switching bug for Electron [\#151](https://github.com/kubenav/kubenav/pull/151) ([ricoberger](https://github.com/ricoberger))
+- Refresh lists when details page is refreshed [\#150](https://github.com/kubenav/kubenav/pull/150) ([ricoberger](https://github.com/ricoberger))
+- Update deployment.yaml [\#149](https://github.com/kubenav/kubenav/pull/149) ([si458](https://github.com/si458))
+- Add re-authentication support for OIDC and Google [\#147](https://github.com/kubenav/kubenav/pull/147) ([ricoberger](https://github.com/ricoberger))
+- Open links from Electron in external browser [\#146](https://github.com/kubenav/kubenav/pull/146) ([ricoberger](https://github.com/ricoberger))
+- Add debugging configuration for VS Code [\#145](https://github.com/kubenav/kubenav/pull/145) ([ricoberger](https://github.com/ricoberger))
+- Add support for Proxy [\#144](https://github.com/kubenav/kubenav/pull/144) ([ricoberger](https://github.com/ricoberger))
+
 ## [2.2.0](https://github.com/kubenav/kubenav/tree/2.2.0) (2020-07-26)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/2.1.0...2.2.0)
@@ -23,6 +102,7 @@
 
 **Merged pull requests:**
 
+- Minor grammatical changes [\#139](https://github.com/kubenav/kubenav/pull/139) ([obrienrobert](https://github.com/obrienrobert))
 - Improve error handling for requests [\#137](https://github.com/kubenav/kubenav/pull/137) ([ricoberger](https://github.com/ricoberger))
 - Add description to cluster page [\#134](https://github.com/kubenav/kubenav/pull/134) ([ricoberger](https://github.com/ricoberger))
 - Fix path on macOS [\#133](https://github.com/kubenav/kubenav/pull/133) ([ricoberger](https://github.com/ricoberger))
@@ -91,7 +171,6 @@
 - Add version check [\#65](https://github.com/kubenav/kubenav/pull/65) ([ricoberger](https://github.com/ricoberger))
 - Update Capacitor to version 2 [\#64](https://github.com/kubenav/kubenav/pull/64) ([ricoberger](https://github.com/ricoberger))
 - Remove kubenav-plugin Dependency [\#63](https://github.com/kubenav/kubenav/pull/63) ([ricoberger](https://github.com/ricoberger))
-- Support insecure-skip-tls-verify and timeout [\#59](https://github.com/kubenav/kubenav/pull/59) ([ricoberger](https://github.com/ricoberger))
 
 **Fixed bugs:**
 
@@ -129,6 +208,10 @@
 ## [1.4.1](https://github.com/kubenav/kubenav/tree/1.4.1) (2020-04-14)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/1.4.0...1.4.1)
+
+**Implemented enhancements:**
+
+- Support insecure-skip-tls-verify and timeout [\#59](https://github.com/kubenav/kubenav/pull/59) ([ricoberger](https://github.com/ricoberger))
 
 **Fixed bugs:**
 
