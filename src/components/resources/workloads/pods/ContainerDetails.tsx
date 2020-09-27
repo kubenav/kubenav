@@ -275,6 +275,19 @@ const Container: React.FunctionComponent<IContainerProps> = ({
                 </IonCardEqualHeight>
               </IonCol>
             ) : null}
+
+            {container.securityContext ? (
+              <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
+                <IonCardEqualHeight>
+                  <IonCardHeader>
+                    <IonCardTitle>Security Context</IonCardTitle>
+                  </IonCardHeader>
+                  <IonCardContent>
+                    <Editor readOnly={true} value={yaml.safeDump(container.securityContext)} />
+                  </IonCardContent>
+                </IonCardEqualHeight>
+              </IonCol>
+            ) : null}
           </IonRow>
         </IonGrid>
       </IonContent>
