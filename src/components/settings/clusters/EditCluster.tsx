@@ -184,7 +184,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
       saveTemporaryCredentials({
         accessToken: '',
         clientID: authProviderGoogle.clientID,
-        expiresIn: '',
+        expires: 0,
         idToken: '',
         refreshToken: '',
         tokenType: '',

@@ -74,7 +74,7 @@ export const readClusters = (): IClusters | undefined => {
         clusters[id].authProviderGoogle = {
           accessToken: parsed.access_token,
           clientID: googleClientID,
-          expiresIn: parsed.expires_in,
+          expires: 0,
           idToken: parsed.id_token,
           refreshToken: parsed.refresh_token,
           tokenType: parsed.token_type,

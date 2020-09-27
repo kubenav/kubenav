@@ -199,79 +199,90 @@ export const getClusters = async (): Promise<IClusters | undefined> => {
 export const getGoogleAccessToken = async (
   credentials: IClusterAuthProviderGoogle,
 ): Promise<IClusterAuthProviderGoogle> => {
-  if (new Date(credentials.expiresIn).getTime() > new Date().getTime()) {
+  if (credentials.expires - 60 > new Date().getTime()) {
     return credentials;
   }
 
-  const response = await fetch(
-    `https://oauth2.googleapis.com/token?refresh_token=${credentials.refreshToken}&client_id=${credentials.clientID}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=refresh_token`,
-    {
-      method: 'POST',
-    },
-  );
+  try {
+    const response = await fetch(
+      `https://oauth2.googleapis.com/token?refresh_token=${credentials.refreshToken}&client_id=${credentials.clientID}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=refresh_token`,
+      {
+        method: 'POST',
+      },
+    );
 
-  const json: IGoogleTokensAPIResponse = await response.json();
+    const json: IGoogleTokensAPIResponse = await response.json();
 
-  if (response.status >= 200 && response.status < 300) {
-    credentials.accessToken = json.access_token;
-    credentials.expiresIn = json.expires_in;
-    credentials.idToken = json.id_token;
-    credentials.refreshToken = json.refresh_token;
-    credentials.tokenType = json.token_type;
+    if (response.status >= 200 && response.status < 300) {
+      credentials.accessToken = json.access_token;
+      credentials.expires = new Date().getTime() + json.expires_in * 1000;
+      credentials.idToken = json.id_token;
+      credentials.tokenType = json.token_type;
 
-    return credentials;
-  }
+      return credentials;
+    }
 
-  if (json.error && json.error_description) {
-    throw new Error(`${json.error}: ${json.error_description}`);
-  } else {
-    throw new Error('An unknown error occurred.');
+    if (json.error && json.error_description) {
+      throw new Error(`${json.error}: ${json.error_description}`);
+    } else {
+      throw new Error('An unknown error occurred.');
+    }
+  } catch (err) {
+    throw err;
   }
 };
 
 // getGoogleClusters returns all available GKE clusters for the provided project. For the authentication against the
 // Google API a valid access token is required.
 export const getGoogleClusters = async (accessToken: string, project: string): Promise<IGoogleCluster[]> => {
-  const response = await fetch(`https://container.googleapis.com/v1/projects/${project}/locations/-/clusters`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    method: 'GET',
-  });
+  try {
+    const response = await fetch(`https://container.googleapis.com/v1/projects/${project}/locations/-/clusters`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      method: 'GET',
+    });
 
-  const json = await response.json();
+    const json = await response.json();
 
-  if (response.status >= 200 && response.status < 300) {
-    return json.clusters;
-  }
+    if (response.status >= 200 && response.status < 300) {
+      return json.clusters;
+    }
 
-  if (json.error.message) {
-    throw new Error(json.error.message);
-  } else {
-    throw new Error('An unknown error occurred.');
+    if (json.error.message) {
+      throw new Error(json.error.message);
+    } else {
+      throw new Error('An unknown error occurred.');
+    }
+  } catch (err) {
+    throw err;
   }
 };
 
 // getGoogleProjects returns all available projects for the authenticated user, from the Google API. Therefor a valid
 // access token is required.
 export const getGoogleProjects = async (accessToken: string): Promise<IGoogleProject[]> => {
-  const response = await fetch('https://cloudresourcemanager.googleapis.com/v1/projects', {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    method: 'GET',
-  });
+  try {
+    const response = await fetch('https://cloudresourcemanager.googleapis.com/v1/projects', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      method: 'GET',
+    });
 
-  const json = await response.json();
+    const json = await response.json();
 
-  if (response.status >= 200 && response.status < 300) {
-    return json.projects;
-  }
+    if (response.status >= 200 && response.status < 300) {
+      return json.projects;
+    }
 
-  if (json.error.message) {
-    throw new Error(json.error.message);
-  } else {
-    throw new Error('An unknown error occurred.');
+    if (json.error.message) {
+      throw new Error(json.error.message);
+    } else {
+      throw new Error('An unknown error occurred.');
+    }
+  } catch (err) {
+    throw err;
   }
 };
 
@@ -279,30 +290,34 @@ export const getGoogleProjects = async (accessToken: string): Promise<IGooglePro
 // login via Google into an refresh token.
 // See: https://developers.google.com/identity/protocols/OpenIDConnect#exchangecode
 export const getGoogleTokens = async (clientID: string, code: string): Promise<IClusterAuthProviderGoogle> => {
-  const response = await fetch(
-    `https://oauth2.googleapis.com/token?code=${code}&client_id=${clientID}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=authorization_code`,
-    {
-      method: 'POST',
-    },
-  );
+  try {
+    const response = await fetch(
+      `https://oauth2.googleapis.com/token?code=${code}&client_id=${clientID}&redirect_uri=${GOOGLE_REDIRECT_URI}&grant_type=authorization_code`,
+      {
+        method: 'POST',
+      },
+    );
 
-  const json: IGoogleTokensAPIResponse = await response.json();
+    const json: IGoogleTokensAPIResponse = await response.json();
 
-  if (response.status >= 200 && response.status < 300) {
-    return {
-      accessToken: json.access_token,
-      clientID: clientID,
-      expiresIn: json.expires_in,
-      idToken: json.id_token,
-      refreshToken: json.refresh_token,
-      tokenType: json.token_type,
-    };
-  }
+    if (response.status >= 200 && response.status < 300) {
+      return {
+        accessToken: json.access_token,
+        clientID: clientID,
+        expires: new Date().getTime() + json.expires_in * 1000,
+        idToken: json.id_token,
+        refreshToken: json.refresh_token,
+        tokenType: json.token_type,
+      };
+    }
 
-  if (json.error && json.error_description) {
-    throw new Error(`${json.error}: ${json.error_description}`);
-  } else {
-    throw new Error('An unknown error occurred.');
+    if (json.error && json.error_description) {
+      throw new Error(`${json.error}: ${json.error_description}`);
+    } else {
+      throw new Error('An unknown error occurred.');
+    }
+  } catch (err) {
+    throw err;
   }
 };
 

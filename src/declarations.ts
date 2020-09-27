@@ -110,7 +110,7 @@ export interface IClusterAuthProviderAzure {
 export interface IClusterAuthProviderGoogle {
   accessToken: string;
   clientID: string;
-  expiresIn: string;
+  expires: number;
   idToken: string;
   refreshToken: string;
   tokenType: string;
@@ -160,7 +160,7 @@ export interface IGoogleTokensAPIResponse {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   error_description: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  expires_in: string;
+  expires_in: number;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   id_token: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention

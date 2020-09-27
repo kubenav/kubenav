@@ -35,7 +35,7 @@ const Google: React.FunctionComponent = () => {
       saveTemporaryCredentials({
         accessToken: '',
         clientID: clientID,
-        expiresIn: '',
+        expires: 0,
         idToken: '',
         refreshToken: '',
         tokenType: '',
