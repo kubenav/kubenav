@@ -108,7 +108,9 @@ const Shell: React.FunctionComponent<IShellProps> = ({ showSearch, showSelect, t
   }, [showSelect]);
 
   const updateTerminalSize = () => {
-    fitAddon.fit();
+    setTimeout(() => {
+      fitAddon.fit();
+    }, 100);
   };
 
   const search = (event) => {
