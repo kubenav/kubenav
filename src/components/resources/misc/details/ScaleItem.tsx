@@ -81,7 +81,7 @@ const ScaleItem: React.FunctionComponent<IScaleItemProps> = ({ activator, item, 
         ]}
         buttons={[
           { text: 'Cancel', role: 'cancel', handler: () => setShowAlert(false) },
-          { text: 'Scale', handler: (data) => handleScale(data.replicas) },
+          { text: 'Scale', handler: (data) => handleScale(data.replicas ? data.replicas : 0) },
         ]}
       />
     </React.Fragment>
