@@ -19,7 +19,7 @@ The app is developed using [Ionic Framework](https://ionicframework.com) and [Ca
 
 ## Features
 
-- **Available for mobile, desktop and web:** kubenav provides the same experience for mobile and desktop, with nearly 100% code sharing.
+- **Available for mobile, desktop and web:** kubenav provides the same experience for mobile, desktop and web, with nearly 100% code sharing.
 - **Manage Resources:** All major resources like Deployments, StatefulSets, DaemonSets, Pods, etc. are supported.
 - **Custom Resource Definitions:** View all Custom Resource Definitions and mange Custom Resources.
 - **Modify Resources:** Edit and delete all available resources or scale your Deployments, StatefulSets, DaemonSets.
