@@ -42,9 +42,10 @@ import { saveTemporaryCredentials } from '../../../utils/storage';
 
 interface IEditClusterProps {
   cluster: ICluster;
+  closeItemSliding: () => void;
 }
 
-const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IEditClusterProps) => {
+const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, closeItemSliding }: IEditClusterProps) => {
   const context = useContext<IContext>(AppContext);
 
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -241,7 +242,13 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster }: IE
         />
       ) : null}
 
-      <IonItemOption color="primary" onClick={() => setShowModal(true)}>
+      <IonItemOption
+        color="primary"
+        onClick={() => {
+          closeItemSliding();
+          setShowModal(true);
+        }}
+      >
         <IonIcon slot="start" icon={create} />
         Edit
       </IonItemOption>

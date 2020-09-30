@@ -2,10 +2,10 @@ import { IonChip, IonIcon, IonLabel } from '@ionic/react';
 import { terminal } from 'ionicons/icons';
 import React, { useContext } from 'react';
 
-import { IContext, ITerminalContext } from '../../../declarations';
-import { AppContext } from '../../../utils/context';
-import { TerminalContext } from '../../../utils/terminal';
-import { addSSH } from './helpers';
+import { IContext, ITerminalContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
+import { TerminalContext } from '../../../../utils/terminal';
+import { addSSH } from '../../../plugins/terminal/helpers';
 
 interface IAddSSHProps {
   type: string;

@@ -8,16 +8,48 @@ import { IContext, TActivator } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 
-interface IRestartItemProps {
+interface IRestartItemActivatorProps {
   activator: TActivator;
+  onClick: () => void;
+}
+
+export const RestartItemActivator: React.FunctionComponent<IRestartItemActivatorProps> = ({
+  activator,
+  onClick,
+}: IRestartItemActivatorProps) => {
+  if (activator === 'item-option') {
+    return (
+      <IonItemOption color="danger" onClick={onClick}>
+        <IonIcon slot="start" icon={reload} />
+        Restart
+      </IonItemOption>
+    );
+  } else if (activator === 'button') {
+    return (
+      <IonButton onClick={onClick}>
+        <IonIcon slot="icon-only" icon={reload} />
+      </IonButton>
+    );
+  } else {
+    return (
+      <IonItem button={true} detail={false} onClick={onClick}>
+        <IonIcon slot="end" color="primary" icon={reload} />
+        <IonLabel>Restart</IonLabel>
+      </IonItem>
+    );
+  }
+};
+
+interface IRestartItemProps {
+  show: boolean;
+  hide: () => void;
   item: V1DaemonSet | V1Deployment | V1StatefulSet;
   url: string;
 }
 
-const RestartItem: React.FunctionComponent<IRestartItemProps> = ({ activator, item, url }: IRestartItemProps) => {
+const RestartItem: React.FunctionComponent<IRestartItemProps> = ({ show, hide, item, url }: IRestartItemProps) => {
   const context = useContext<IContext>(AppContext);
 
-  const [showAlert, setShowAlert] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
   const handleRestart = async () => {
@@ -48,26 +80,6 @@ const RestartItem: React.FunctionComponent<IRestartItemProps> = ({ activator, it
 
   return (
     <React.Fragment>
-      {activator === 'item-option' ? (
-        <IonItemOption color="danger" onClick={() => setShowAlert(true)}>
-          <IonIcon slot="start" icon={reload} />
-          Restart
-        </IonItemOption>
-      ) : null}
-
-      {activator === 'button' ? (
-        <IonButton onClick={() => setShowAlert(true)}>
-          <IonIcon slot="icon-only" icon={reload} />
-        </IonButton>
-      ) : null}
-
-      {activator === 'item' ? (
-        <IonItem button={true} detail={false} onClick={() => setShowAlert(true)}>
-          <IonIcon slot="end" color="primary" icon={reload} />
-          <IonLabel>Restart</IonLabel>
-        </IonItem>
-      ) : null}
-
       {error !== '' ? (
         <IonAlert
           isOpen={error !== ''}
@@ -79,14 +91,14 @@ const RestartItem: React.FunctionComponent<IRestartItemProps> = ({ activator, it
       ) : null}
 
       <IonAlert
-        isOpen={showAlert}
-        onDidDismiss={() => setShowAlert(false)}
+        isOpen={show}
+        onDidDismiss={hide}
         header={item.metadata ? item.metadata.name : ''}
         message={`Do you really want to restart ${
           item.metadata && item.metadata.namespace ? `${item.metadata.namespace}/` : ''
         }${item.metadata ? item.metadata.name : ''}?`}
         buttons={[
-          { text: 'Cancel', role: 'cancel', handler: () => setShowAlert(false) },
+          { text: 'Cancel', role: 'cancel', handler: hide },
           { text: 'Restart', handler: () => handleRestart() },
         ]}
       />

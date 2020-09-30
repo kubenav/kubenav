@@ -26,13 +26,13 @@ import { close } from 'ionicons/icons';
 import yaml from 'js-yaml';
 import React from 'react';
 
-import { IS_INCLUSTER } from '../../../../utils/constants';
-import Editor from '../../../misc/Editor';
-import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
-import Row from '../../misc/template/Row';
-import Port from '../../misc/template/Port';
+import { IS_INCLUSTER } from '../../../../../utils/constants';
+import Editor from '../../../../misc/Editor';
+import IonCardEqualHeight from '../../../../misc/IonCardEqualHeight';
+import Row from '../../../misc/template/Row';
+import Port from '../../../misc/template/Port';
 
-interface IContainerProps {
+interface IDetailsProps {
   name?: string;
   namespace?: string;
   container: V1Container;
@@ -41,14 +41,14 @@ interface IContainerProps {
   setShowModal: (value: boolean) => void;
 }
 
-const Container: React.FunctionComponent<IContainerProps> = ({
+const Details: React.FunctionComponent<IDetailsProps> = ({
   name,
   namespace,
   container,
   status,
   showModal,
   setShowModal,
-}: IContainerProps) => {
+}: IDetailsProps) => {
   const containerState = (state: V1ContainerState): string => {
     if (state.running) {
       return `Started at ${state.running.startedAt}`;
@@ -295,4 +295,4 @@ const Container: React.FunctionComponent<IContainerProps> = ({
   );
 };
 
-export default Container;
+export default Details;

@@ -7,16 +7,48 @@ import { IContext, TActivator } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 
-interface IScaleItemProps {
+interface IScaleItemActivatorProps {
   activator: TActivator;
+  onClick: () => void;
+}
+
+export const ScaleItemActivator: React.FunctionComponent<IScaleItemActivatorProps> = ({
+  activator,
+  onClick,
+}: IScaleItemActivatorProps) => {
+  if (activator === 'item-option') {
+    return (
+      <IonItemOption color="danger" onClick={onClick}>
+        <IonIcon slot="start" icon={copy} />
+        Scale
+      </IonItemOption>
+    );
+  } else if (activator === 'button') {
+    return (
+      <IonButton onClick={onClick}>
+        <IonIcon slot="icon-only" icon={copy} />
+      </IonButton>
+    );
+  } else {
+    return (
+      <IonItem button={true} detail={false} onClick={onClick}>
+        <IonIcon slot="end" color="primary" icon={copy} />
+        <IonLabel>Scale</IonLabel>
+      </IonItem>
+    );
+  }
+};
+
+interface IScaleItemProps {
+  show: boolean;
+  hide: () => void;
   item: V1Deployment | V1StatefulSet | V1ReplicaSet | V1ReplicationController;
   url: string;
 }
 
-const ScaleItem: React.FunctionComponent<IScaleItemProps> = ({ activator, item, url }: IScaleItemProps) => {
+const ScaleItem: React.FunctionComponent<IScaleItemProps> = ({ show, hide, item, url }: IScaleItemProps) => {
   const context = useContext<IContext>(AppContext);
 
-  const [showAlert, setShowAlert] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
   const handleScale = async (replicas: number) => {
@@ -35,26 +67,6 @@ const ScaleItem: React.FunctionComponent<IScaleItemProps> = ({ activator, item, 
 
   return (
     <React.Fragment>
-      {activator === 'item-option' ? (
-        <IonItemOption color="danger" onClick={() => setShowAlert(true)}>
-          <IonIcon slot="start" icon={copy} />
-          Scale
-        </IonItemOption>
-      ) : null}
-
-      {activator === 'button' ? (
-        <IonButton onClick={() => setShowAlert(true)}>
-          <IonIcon slot="icon-only" icon={copy} />
-        </IonButton>
-      ) : null}
-
-      {activator === 'item' ? (
-        <IonItem button={true} detail={false} onClick={() => setShowAlert(true)}>
-          <IonIcon slot="end" color="primary" icon={copy} />
-          <IonLabel>Scale</IonLabel>
-        </IonItem>
-      ) : null}
-
       {error !== '' ? (
         <IonAlert
           isOpen={error !== ''}
@@ -66,8 +78,8 @@ const ScaleItem: React.FunctionComponent<IScaleItemProps> = ({ activator, item, 
       ) : null}
 
       <IonAlert
-        isOpen={showAlert}
-        onDidDismiss={() => setShowAlert(false)}
+        isOpen={show}
+        onDidDismiss={hide}
         header={item.metadata ? item.metadata.name : ''}
         message={`Enter a new number of replicas for ${
           item.metadata && item.metadata.namespace ? `${item.metadata.namespace}/` : ''
@@ -80,7 +92,7 @@ const ScaleItem: React.FunctionComponent<IScaleItemProps> = ({ activator, item, 
           },
         ]}
         buttons={[
-          { text: 'Cancel', role: 'cancel', handler: () => setShowAlert(false) },
+          { text: 'Cancel', role: 'cancel', handler: hide },
           { text: 'Scale', handler: (data) => handleScale(data.replicas ? data.replicas : 0) },
         ]}
       />

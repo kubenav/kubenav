@@ -22,17 +22,49 @@ import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import Editor from '../../../misc/Editor';
 
-interface IEditItemProps {
+interface IEditItemActivatorProps {
   activator: TActivator;
+  onClick: () => void;
+}
+
+export const EditItemActivator: React.FunctionComponent<IEditItemActivatorProps> = ({
+  activator,
+  onClick,
+}: IEditItemActivatorProps) => {
+  if (activator === 'item-option') {
+    return (
+      <IonItemOption color="primary" onClick={onClick}>
+        <IonIcon slot="start" icon={create} />
+        Edit
+      </IonItemOption>
+    );
+  } else if (activator === 'button') {
+    return (
+      <IonButton onClick={onClick}>
+        <IonIcon slot="icon-only" icon={create} />
+      </IonButton>
+    );
+  } else {
+    return (
+      <IonItem button={true} detail={false} onClick={onClick}>
+        <IonIcon slot="end" color="primary" icon={create} />
+        <IonLabel>Edit</IonLabel>
+      </IonItem>
+    );
+  }
+};
+
+interface IEditItemProps {
+  show: boolean;
+  hide: () => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
   url: string;
 }
 
-const EditItem: React.FunctionComponent<IEditItemProps> = ({ activator, item, url }: IEditItemProps) => {
+const EditItem: React.FunctionComponent<IEditItemProps> = ({ show, hide, item, url }: IEditItemProps) => {
   const context = useContext<IContext>(AppContext);
 
-  const [showModal, setShowModal] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [value, setValue] = useState<string>(yaml.safeDump(item));
 
@@ -48,7 +80,7 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ activator, item, ur
           context.settings,
           await context.kubernetesAuthWrapper(''),
         );
-        setShowModal(false);
+        hide();
       }
     } catch (err) {
       setError(err);
@@ -67,31 +99,11 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ activator, item, ur
         />
       ) : null}
 
-      {activator === 'item-option' ? (
-        <IonItemOption color="primary" onClick={() => setShowModal(true)}>
-          <IonIcon slot="start" icon={create} />
-          Edit
-        </IonItemOption>
-      ) : null}
-
-      {activator === 'button' ? (
-        <IonButton onClick={() => setShowModal(true)}>
-          <IonIcon slot="icon-only" icon={create} />
-        </IonButton>
-      ) : null}
-
-      {activator === 'item' ? (
-        <IonItem button={true} detail={false} onClick={() => setShowModal(true)}>
-          <IonIcon slot="end" color="primary" icon={create} />
-          <IonLabel>Edit</IonLabel>
-        </IonItem>
-      ) : null}
-
-      <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
+      <IonModal isOpen={show} onDidDismiss={hide}>
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonButton onClick={() => setShowModal(false)}>
+              <IonButton onClick={hide}>
                 <IonIcon slot="icon-only" icon={close} />
               </IonButton>
             </IonButtons>

@@ -3,14 +3,16 @@ import { ellipsisHorizontal, ellipsisVertical } from 'ionicons/icons';
 import React, { useState } from 'react';
 
 import useWindowWidth from '../../../../utils/useWindowWidth';
-import DeleteItem from './DeleteItem';
-import EditItem from './EditItem';
-import LogsItem from './LogsItem';
-import RestartItem from './RestartItem';
-import ScaleItem from './ScaleItem';
-import ShellItem from './ShellItem';
-import SSHItem from './SSHItem';
-import ViewItem from './ViewItem';
+import DeleteItem, { DeleteItemActivator } from './DeleteItem';
+import EditItem, { EditItemActivator } from './EditItem';
+import LogsItem, { LogsItemActivator } from './LogsItem';
+import RestartItem, { RestartItemActivator } from './RestartItem';
+import ScaleItem, { ScaleItemActivator } from './ScaleItem';
+import ShellItem, { ShellItemActivator } from './ShellItem';
+import SSHItem, { SSHItemActivator } from './SSHItem';
+import ViewItem, { ViewItemActivator } from './ViewItem';
+
+type TShow = '' | 'delete' | 'edit' | 'logs' | 'restart' | 'scale' | 'shell' | 'ssh' | 'view';
 
 interface IDetailsProps {
   type: string;
@@ -20,9 +22,15 @@ interface IDetailsProps {
 }
 
 const Details: React.FunctionComponent<IDetailsProps> = ({ type, item, url }: IDetailsProps) => {
+  const [show, setShow] = useState<TShow>('');
   const [showPopover, setShowPopover] = useState<boolean>(false);
   const [popoverEvent, setPopoverEvent] = useState();
   const width = useWindowWidth();
+
+  const showType = (type: TShow) => {
+    setShowPopover(false);
+    setShow(type);
+  };
 
   return (
     <React.Fragment>
@@ -32,23 +40,34 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ type, item, url }: ID
           type === 'statefulsets' ||
           type === 'replicationcontrollers' ||
           type === 'replicasets' ? (
-            <ScaleItem activator="item" item={item} url={url} />
+            <ScaleItemActivator activator="item" onClick={() => showType('scale')} />
           ) : null}
           {type === 'deployments' || type === 'statefulsets' || type === 'daemonsets' ? (
-            <RestartItem activator="item" item={item} url={url} />
+            <RestartItemActivator activator="item" onClick={() => showType('restart')} />
           ) : null}
           {(isPlatform('hybrid') || width < 992) && type === 'pods' ? (
-            <LogsItem activator="item" item={item} url={url} />
+            <LogsItemActivator activator="item" onClick={() => showType('logs')} />
           ) : null}
           {(isPlatform('hybrid') || width < 992) && type === 'pods' ? (
-            <ShellItem activator="item" item={item} url={url} />
+            <ShellItemActivator activator="item" onClick={() => showType('shell')} />
           ) : null}
-          {(isPlatform('hybrid') || width < 992) && type === 'nodes' ? <SSHItem activator="item" item={item} /> : null}
-          <ViewItem activator="item" item={item} />
-          <EditItem activator="item" item={item} url={url} />
-          <DeleteItem activator="item" item={item} url={url} />
+          {(isPlatform('hybrid') || width < 992) && type === 'nodes' ? (
+            <SSHItemActivator activator="item" onClick={() => showType('ssh')} item={item} />
+          ) : null}
+          <ViewItemActivator activator="item" onClick={() => showType('view')} />
+          <EditItemActivator activator="item" onClick={() => showType('edit')} />
+          <DeleteItemActivator activator="item" onClick={() => showType('delete')} />
         </IonList>
       </IonPopover>
+
+      <ScaleItem show={show === 'scale'} hide={() => setShow('')} item={item} url={url} />
+      <RestartItem show={show === 'restart'} hide={() => setShow('')} item={item} url={url} />
+      <LogsItem show={show === 'logs'} hide={() => setShow('')} item={item} url={url} />
+      <ShellItem show={show === 'shell'} hide={() => setShow('')} item={item} url={url} />
+      <SSHItem show={show === 'ssh'} hide={() => setShow('')} item={item} />
+      <ViewItem show={show === 'view'} hide={() => setShow('')} item={item} />
+      <EditItem show={show === 'edit'} hide={() => setShow('')} item={item} url={url} />
+      <DeleteItem show={show === 'delete'} hide={() => setShow('')} item={item} url={url} />
 
       <IonButton
         onClick={(e) => {

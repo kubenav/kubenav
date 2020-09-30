@@ -2,20 +2,27 @@ import { IonButton, IonIcon, IonItem, IonItemOption, IonLabel, IonList, IonPopov
 import { list } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 
-import { IContext, ITerminalContext, TActivator } from '../../../declarations';
-import { LOG_TAIL_LINES } from '../../../utils/constants';
-import { AppContext } from '../../../utils/context';
-import { TerminalContext } from '../../../utils/terminal';
-import { addLogs } from './helpers';
+import { IContext, ITerminalContext, TActivator } from '../../../../../declarations';
+import { LOG_TAIL_LINES } from '../../../../../utils/constants';
+import { AppContext } from '../../../../../utils/context';
+import { TerminalContext } from '../../../../../utils/terminal';
+import { addLogs } from '../../../../plugins/terminal/helpers';
 
 interface IAddLogsProps {
   activator: TActivator;
   namespace: string;
   pod: string;
   container: string;
+  closeItemSliding?: () => void;
 }
 
-const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace, pod, container }: IAddLogsProps) => {
+const AddLogs: React.FunctionComponent<IAddLogsProps> = ({
+  activator,
+  namespace,
+  pod,
+  container,
+  closeItemSliding,
+}: IAddLogsProps) => {
   const context = useContext<IContext>(AppContext);
   const terminalContext = useContext<ITerminalContext>(TerminalContext);
 
@@ -34,6 +41,9 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
+              if (closeItemSliding) {
+                closeItemSliding();
+              }
               addLogs(context, terminalContext, url, container, false, LOG_TAIL_LINES, false);
             }}
           >
@@ -45,6 +55,9 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
+              if (closeItemSliding) {
+                closeItemSliding();
+              }
               addLogs(context, terminalContext, url, container, false, 0, false);
             }}
           >
@@ -56,6 +69,9 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
+              if (closeItemSliding) {
+                closeItemSliding();
+              }
               addLogs(context, terminalContext, url, container, true, LOG_TAIL_LINES, false);
             }}
           >
@@ -67,6 +83,9 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
+              if (closeItemSliding) {
+                closeItemSliding();
+              }
               addLogs(context, terminalContext, url, container, true, 0, false);
             }}
           >
@@ -78,6 +97,9 @@ const AddLogs: React.FunctionComponent<IAddLogsProps> = ({ activator, namespace,
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
+              if (closeItemSliding) {
+                closeItemSliding();
+              }
               addLogs(context, terminalContext, url, container, false, LOG_TAIL_LINES, true);
             }}
           >
