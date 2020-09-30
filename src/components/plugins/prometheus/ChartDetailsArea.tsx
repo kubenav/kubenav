@@ -37,6 +37,10 @@ const colorsDark = [
 ];
 
 const getColor = (index: number, darkMode: boolean): string => {
+  if (index < 0) {
+    index = 0;
+  }
+
   const colors = darkMode ? colorsDark : colorsLight;
   return colors[index % colors.length];
 };
@@ -124,8 +128,14 @@ const ChartDetailsArea: React.FunctionComponent<IChartDetailsAreaProps> = ({
                       dataKey="value"
                       data={serie.data}
                       name={serie.name}
-                      stroke={getColor(index, isDarkMode(context.settings.theme))}
-                      fill={getColor(index, isDarkMode(context.settings.theme))}
+                      stroke={getColor(
+                        series.findIndex((s) => s.name === selected),
+                        isDarkMode(context.settings.theme),
+                      )}
+                      fill={getColor(
+                        series.findIndex((s) => s.name === selected),
+                        isDarkMode(context.settings.theme),
+                      )}
                       fillOpacity={0.2}
                     />
                   ))}
