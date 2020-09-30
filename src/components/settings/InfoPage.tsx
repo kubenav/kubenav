@@ -95,6 +95,12 @@ const InfoPage: React.FunctionComponent = () => {
                 </IonAvatar>
                 <IonLabel>Website</IonLabel>
               </IonItem>
+              <IonItem onClick={() => openLink('https://docs.kubenav.io')} button={true}>
+                <IonAvatar slot="start">
+                  <img alt="Documentation" src="/assets/icons/misc/documentation.png" />
+                </IonAvatar>
+                <IonLabel>Documentation</IonLabel>
+              </IonItem>
               <IonItem onClick={() => openLink('https://github.com/kubenav/kubenav')} button={true}>
                 <IonAvatar slot="start">
                   <img alt="GitHub" src="/assets/icons/misc/github.png" />
