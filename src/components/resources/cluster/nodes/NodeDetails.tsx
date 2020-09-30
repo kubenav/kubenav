@@ -11,7 +11,6 @@ import { formatResourceValue } from '../../../../utils/helpers';
 import Dashboard from '../../../plugins/prometheus/Dashboard';
 import DashboardItem from '../../../plugins/prometheus/DashboardItem';
 import DashboardList from '../../../plugins/prometheus/DashboardList';
-import AddSSH from '../../../plugins/terminal/AddSSH';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
 import List from '../../misc/list/List';
 import Conditions from '../../misc/template/Conditions';
@@ -19,6 +18,7 @@ import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
 import Row from '../../misc/template/Row';
 import Status from '../../misc/template/Status';
+import AddSSH from './AddSSH';
 import { getStatus } from './nodeHelpers';
 
 interface INodeDetailsProps extends RouteComponentProps {

@@ -10,7 +10,7 @@ import { IS_INCLUSTER } from '../../../../utils/constants';
 import { AppContext } from '../../../../utils/context';
 import Dashboard from '../../../plugins/prometheus/Dashboard';
 import List from '../../misc/list/List';
-import Containers from './Containers';
+import Containers from './containers/Containers';
 import Conditions from '../../misc/template/Conditions';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';

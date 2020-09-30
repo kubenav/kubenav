@@ -9,20 +9,39 @@ import { AppContext } from '../../../../utils/context';
 import { TerminalContext } from '../../../../utils/terminal';
 import { addLogs } from '../../../plugins/terminal/helpers';
 
-interface ILogsItemProps {
+interface ILogsItemActivatorProps {
   activator: TActivator;
+  onClick: () => void;
+}
+
+export const LogsItemActivator: React.FunctionComponent<ILogsItemActivatorProps> = ({
+  activator,
+  onClick,
+}: ILogsItemActivatorProps) => {
+  if (activator === 'item') {
+    return (
+      <IonItem button={true} detail={false} onClick={onClick}>
+        <IonIcon slot="end" color="primary" icon={list} />
+        <IonLabel>Logs</IonLabel>
+      </IonItem>
+    );
+  } else {
+    return null;
+  }
+};
+
+interface ILogsItemProps {
+  show: boolean;
+  hide: () => void;
   item: V1Pod;
   url: string;
 }
 
-const LogsItem: React.FunctionComponent<ILogsItemProps> = ({ activator, item, url }: ILogsItemProps) => {
+const LogsItem: React.FunctionComponent<ILogsItemProps> = ({ show, hide, item, url }: ILogsItemProps) => {
   const context = useContext<IContext>(AppContext);
   const terminalContext = useContext<ITerminalContext>(TerminalContext);
 
-  const [showActionSheetContainer, setShowActionSheetContainer] = useState<boolean>(false);
-  const [showActionSheetOptions, setShowActionSheetOptions] = useState<boolean>(false);
-
-  const generateButtons = (): ActionSheetButton[] => {
+  const generateContainerButtons = (): ActionSheetButton[] => {
     const buttons: ActionSheetButton[] = [];
 
     if (item.spec && item.spec.initContainers) {
@@ -31,7 +50,7 @@ const LogsItem: React.FunctionComponent<ILogsItemProps> = ({ activator, item, ur
           text: container.name,
           handler: () => {
             setContainer(container.name);
-            setShowActionSheetOptions(true);
+            return false;
           },
         });
       }
@@ -43,7 +62,7 @@ const LogsItem: React.FunctionComponent<ILogsItemProps> = ({ activator, item, ur
           text: container.name,
           handler: () => {
             setContainer(container.name);
-            setShowActionSheetOptions(true);
+            return false;
           },
         });
       }
@@ -52,67 +71,59 @@ const LogsItem: React.FunctionComponent<ILogsItemProps> = ({ activator, item, ur
     return buttons;
   };
 
-  const buttons = generateButtons();
-  const [container, setContainer] = useState<string>(
-    buttons.length === 1 ? (buttons[0].text ? buttons[0].text : '') : '',
-  );
+  const containerButtons = generateContainerButtons();
+  const initialContainer =
+    containerButtons.length === 1 ? (containerButtons[0].text ? containerButtons[0].text : '') : '';
+  const [container, setContainer] = useState<string>(initialContainer);
+
+  const optionButtons = [
+    {
+      text: `Last ${LOG_TAIL_LINES} Log Lines`,
+      handler: () => {
+        addLogs(context, terminalContext, url, container, false, LOG_TAIL_LINES, false);
+        setContainer(initialContainer);
+      },
+    },
+    {
+      text: 'All Log Lines',
+      handler: () => {
+        addLogs(context, terminalContext, url, container, false, 0, false);
+        setContainer(initialContainer);
+      },
+    },
+    {
+      text: `Previous Last ${LOG_TAIL_LINES} Log Lines`,
+      handler: () => {
+        addLogs(context, terminalContext, url, container, true, LOG_TAIL_LINES, false);
+        setContainer(initialContainer);
+      },
+    },
+    {
+      text: 'All Previous Log Lines',
+      handler: () => {
+        addLogs(context, terminalContext, url, container, true, 0, false);
+        setContainer(initialContainer);
+      },
+    },
+    {
+      text: 'Stream Log Lines',
+      handler: () => {
+        addLogs(context, terminalContext, url, container, false, LOG_TAIL_LINES, true);
+        setContainer(initialContainer);
+      },
+    },
+  ];
 
   return (
     <React.Fragment>
-      {activator === 'item' ? (
-        <IonItem
-          button={true}
-          detail={false}
-          onClick={() => (buttons.length === 1 ? setShowActionSheetOptions(true) : setShowActionSheetContainer(true))}
-        >
-          <IonIcon slot="end" color="primary" icon={list} />
-          <IonLabel>Logs</IonLabel>
-        </IonItem>
-      ) : null}
-
       <IonActionSheet
-        isOpen={showActionSheetContainer}
-        onDidDismiss={() => setShowActionSheetContainer(false)}
-        header="Select a Container"
-        buttons={buttons}
-      />
-
-      <IonActionSheet
-        isOpen={showActionSheetOptions}
-        onDidDismiss={() => setShowActionSheetOptions(false)}
-        header="Select an Option"
-        buttons={[
-          {
-            text: `Last ${LOG_TAIL_LINES} Log Lines`,
-            handler: () => {
-              addLogs(context, terminalContext, url, container, false, LOG_TAIL_LINES, false);
-            },
-          },
-          {
-            text: 'All Log Lines',
-            handler: () => {
-              addLogs(context, terminalContext, url, container, false, 0, false);
-            },
-          },
-          {
-            text: `Previous Last ${LOG_TAIL_LINES} Log Lines`,
-            handler: () => {
-              addLogs(context, terminalContext, url, container, true, LOG_TAIL_LINES, false);
-            },
-          },
-          {
-            text: 'All Previous Log Lines',
-            handler: () => {
-              addLogs(context, terminalContext, url, container, true, 0, false);
-            },
-          },
-          {
-            text: 'Stream Log Lines',
-            handler: () => {
-              addLogs(context, terminalContext, url, container, false, LOG_TAIL_LINES, true);
-            },
-          },
-        ]}
+        isOpen={show}
+        onDidDismiss={() => {
+          hide();
+          setContainer(initialContainer);
+        }}
+        header={container === '' ? 'Select a Container' : 'Select an Option'}
+        buttons={container === '' ? containerButtons : optionButtons}
       />
     </React.Fragment>
   );

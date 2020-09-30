@@ -1,13 +1,13 @@
 import { IonIcon, IonItem, IonItemOptions, IonItemSliding, IonLabel } from '@ionic/react';
 import { V1Container, V1ContainerStatus } from '@kubernetes/client-node';
 import { checkmark, close } from 'ionicons/icons';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
-import { IContainerMetrics } from '../../../../declarations';
-import { formatResourceValue } from '../../../../utils/helpers';
-import AddLogs from '../../../plugins/terminal/AddLogs';
-import AddShell from '../../../plugins/terminal/AddShell';
-import ContainerDetails from './ContainerDetails';
+import { IContainerMetrics } from '../../../../../declarations';
+import { formatResourceValue } from '../../../../../utils/helpers';
+import AddLogs from './AddLogs';
+import AddShell from './AddShell';
+import Details from './Details';
 
 // getState returns the current state of the given container. This is used for the list view for init containers and
 // containers.
@@ -44,7 +44,14 @@ const Container: React.FunctionComponent<IContainerProps> = ({
   namespace,
   status,
 }: IContainerProps) => {
+  const itemSlidingRef = useRef<HTMLIonItemSlidingElement>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+
+  const closeItemSliding = () => {
+    if (itemSlidingRef && itemSlidingRef.current) {
+      itemSlidingRef.current.close();
+    }
+  };
 
   let resources: string[] = [];
 
@@ -144,7 +151,7 @@ const Container: React.FunctionComponent<IContainerProps> = ({
           </td>
         </tr>
       ) : (
-        <IonItemSliding>
+        <IonItemSliding ref={itemSlidingRef}>
           <IonItem button={true} onClick={() => setShowDetailsModal(true)}>
             <IonLabel>
               <h2>{container.name}</h2>
@@ -195,17 +202,29 @@ const Container: React.FunctionComponent<IContainerProps> = ({
           {name && namespace ? (
             <IonItemOptions side="end">
               {logs ? (
-                <AddLogs activator="item-option" namespace={namespace} pod={name} container={container.name} />
+                <AddLogs
+                  activator="item-option"
+                  namespace={namespace}
+                  pod={name}
+                  container={container.name}
+                  closeItemSliding={closeItemSliding}
+                />
               ) : null}
               {terminal ? (
-                <AddShell activator="item-option" namespace={namespace} pod={name} container={container.name} />
+                <AddShell
+                  activator="item-option"
+                  namespace={namespace}
+                  pod={name}
+                  container={container.name}
+                  closeItemSliding={closeItemSliding}
+                />
               ) : null}
             </IonItemOptions>
           ) : null}
         </IonItemSliding>
       )}
 
-      <ContainerDetails
+      <Details
         name={name}
         namespace={namespace}
         container={container}

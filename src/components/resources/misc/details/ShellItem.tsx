@@ -8,20 +8,39 @@ import { AppContext } from '../../../../utils/context';
 import { TerminalContext } from '../../../../utils/terminal';
 import { addShell } from '../../../plugins/terminal/helpers';
 
-interface IShellItemProps {
+interface IShellItemActivatorProps {
   activator: TActivator;
+  onClick: () => void;
+}
+
+export const ShellItemActivator: React.FunctionComponent<IShellItemActivatorProps> = ({
+  activator,
+  onClick,
+}: IShellItemActivatorProps) => {
+  if (activator === 'item') {
+    return (
+      <IonItem button={true} detail={false} onClick={onClick}>
+        <IonIcon slot="end" color="primary" icon={terminal} />
+        <IonLabel>Shell</IonLabel>
+      </IonItem>
+    );
+  } else {
+    return null;
+  }
+};
+
+interface IShellItemProps {
+  show: boolean;
+  hide: () => void;
   item: V1Pod;
   url: string;
 }
 
-const ShellItem: React.FunctionComponent<IShellItemProps> = ({ activator, item, url }: IShellItemProps) => {
+const ShellItem: React.FunctionComponent<IShellItemProps> = ({ show, hide, item, url }: IShellItemProps) => {
   const context = useContext<IContext>(AppContext);
   const terminalContext = useContext<ITerminalContext>(TerminalContext);
 
-  const [showActionSheetContainer, setShowActionSheetContainer] = useState<boolean>(false);
-  const [showActionSheetShell, setShowActionSheetShell] = useState<boolean>(false);
-
-  const generateButtons = (): ActionSheetButton[] => {
+  const generateContainerButtons = (): ActionSheetButton[] => {
     const buttons: ActionSheetButton[] = [];
 
     if (item.spec && item.spec.initContainers) {
@@ -30,7 +49,7 @@ const ShellItem: React.FunctionComponent<IShellItemProps> = ({ activator, item, 
           text: container.name,
           handler: () => {
             setContainer(container.name);
-            setShowActionSheetShell(true);
+            return false;
           },
         });
       }
@@ -42,7 +61,7 @@ const ShellItem: React.FunctionComponent<IShellItemProps> = ({ activator, item, 
           text: container.name,
           handler: () => {
             setContainer(container.name);
-            setShowActionSheetShell(true);
+            return false;
           },
         });
       }
@@ -51,61 +70,52 @@ const ShellItem: React.FunctionComponent<IShellItemProps> = ({ activator, item, 
     return buttons;
   };
 
-  const buttons = generateButtons();
-  const [container, setContainer] = useState<string>(
-    buttons.length === 1 ? (buttons[0].text ? buttons[0].text : '') : '',
-  );
+  const containerButtons = generateContainerButtons();
+  const initialContainer =
+    containerButtons.length === 1 ? (containerButtons[0].text ? containerButtons[0].text : '') : '';
+  const [container, setContainer] = useState<string>(initialContainer);
+
+  const optionButtons = [
+    {
+      text: 'bash',
+      handler: () => {
+        addShell(context, terminalContext, url, container, 'bash');
+        setContainer(initialContainer);
+      },
+    },
+    {
+      text: 'sh',
+      handler: () => {
+        addShell(context, terminalContext, url, container, 'sh');
+        setContainer(initialContainer);
+      },
+    },
+    {
+      text: 'powershell',
+      handler: () => {
+        addShell(context, terminalContext, url, container, 'powershell');
+        setContainer(initialContainer);
+      },
+    },
+    {
+      text: 'cmd',
+      handler: () => {
+        addShell(context, terminalContext, url, container, 'cmd');
+        setContainer(initialContainer);
+      },
+    },
+  ];
 
   return (
     <React.Fragment>
-      {activator === 'item' ? (
-        <IonItem
-          button={true}
-          detail={false}
-          onClick={() => (buttons.length === 1 ? setShowActionSheetShell(true) : setShowActionSheetContainer(true))}
-        >
-          <IonIcon slot="end" color="primary" icon={terminal} />
-          <IonLabel>Shell</IonLabel>
-        </IonItem>
-      ) : null}
-
       <IonActionSheet
-        isOpen={showActionSheetContainer}
-        onDidDismiss={() => setShowActionSheetContainer(false)}
-        header="Select a Container"
-        buttons={buttons}
-      />
-
-      <IonActionSheet
-        isOpen={showActionSheetShell}
-        onDidDismiss={() => setShowActionSheetShell(false)}
-        header="Select a Shell"
-        buttons={[
-          {
-            text: 'bash',
-            handler: () => {
-              addShell(context, terminalContext, url, container, 'bash');
-            },
-          },
-          {
-            text: 'sh',
-            handler: () => {
-              addShell(context, terminalContext, url, container, 'sh');
-            },
-          },
-          {
-            text: 'powershell',
-            handler: () => {
-              addShell(context, terminalContext, url, container, 'powershell');
-            },
-          },
-          {
-            text: 'cmd',
-            handler: () => {
-              addShell(context, terminalContext, url, container, 'cmd');
-            },
-          },
-        ]}
+        isOpen={show}
+        onDidDismiss={() => {
+          hide();
+          setContainer(initialContainer);
+        }}
+        header={container === '' ? 'Select a Container' : 'Select a Shell'}
+        buttons={container === '' ? containerButtons : optionButtons}
       />
     </React.Fragment>
   );

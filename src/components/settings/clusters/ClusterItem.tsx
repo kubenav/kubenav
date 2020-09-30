@@ -1,6 +1,6 @@
 import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, isPlatform } from '@ionic/react';
 import { radioButtonOff, radioButtonOn, trash } from 'ionicons/icons';
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { useQuery } from 'react-query';
 
 import { ICluster, IContext } from '../../../declarations';
@@ -14,6 +14,14 @@ interface IClusterItemProps {
 
 const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IClusterItemProps) => {
   const context = useContext<IContext>(AppContext);
+
+  const itemSlidingRef = useRef<HTMLIonItemSlidingElement>(null);
+
+  const closeItemSliding = () => {
+    if (itemSlidingRef && itemSlidingRef.current) {
+      itemSlidingRef.current.close();
+    }
+  };
 
   const { data } = useQuery<boolean, Error>(
     ['ClusterItem', cluster],
@@ -43,7 +51,7 @@ const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IC
   };
 
   return (
-    <IonItemSliding>
+    <IonItemSliding ref={itemSlidingRef}>
       <IonItem button={true} onClick={() => changeCluster(cluster.id)}>
         <IonIcon
           slot="end"
@@ -52,10 +60,16 @@ const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IC
         />
         <IonLabel>{cluster.name}</IonLabel>
       </IonItem>
-      {isPlatform('hybrid') ? (
+      {isPlatform('hybrid') || true ? (
         <IonItemOptions side="end">
-          <EditCluster cluster={cluster} />
-          <IonItemOption color="danger" onClick={() => context.deleteCluster(cluster.id)}>
+          <EditCluster cluster={cluster} closeItemSliding={closeItemSliding} />
+          <IonItemOption
+            color="danger"
+            onClick={() => {
+              closeItemSliding();
+              context.deleteCluster(cluster.id);
+            }}
+          >
             <IonIcon slot="start" icon={trash} />
             Delete
           </IonItemOption>

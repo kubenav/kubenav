@@ -2,9 +2,9 @@ import { IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonList, isPlatfor
 import { V1Container, V1ContainerStatus } from '@kubernetes/client-node';
 import React from 'react';
 
-import { IContainerMetrics } from '../../../../declarations';
-import useWindowWidth from '../../../../utils/useWindowWidth';
-import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
+import { IContainerMetrics } from '../../../../../declarations';
+import useWindowWidth from '../../../../../utils/useWindowWidth';
+import IonCardEqualHeight from '../../../../misc/IonCardEqualHeight';
 import Container from './Container';
 
 interface IContainersProps {

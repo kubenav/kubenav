@@ -2,16 +2,17 @@ import { IonButton, IonIcon, IonItem, IonItemOption, IonLabel, IonList, IonPopov
 import { terminal } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 
-import { IContext, ITerminalContext, TActivator } from '../../../declarations';
-import { AppContext } from '../../../utils/context';
-import { TerminalContext } from '../../../utils/terminal';
-import { addShell } from './helpers';
+import { IContext, ITerminalContext, TActivator } from '../../../../../declarations';
+import { AppContext } from '../../../../../utils/context';
+import { TerminalContext } from '../../../../../utils/terminal';
+import { addShell } from '../../../../plugins/terminal/helpers';
 
 interface IAddShellProps {
   activator: TActivator;
   namespace: string;
   pod: string;
   container: string;
+  closeItemSliding?: () => void;
 }
 
 const AddShell: React.FunctionComponent<IAddShellProps> = ({
@@ -19,6 +20,7 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({
   namespace,
   pod,
   container,
+  closeItemSliding,
 }: IAddShellProps) => {
   const context = useContext<IContext>(AppContext);
   const terminalContext = useContext<ITerminalContext>(TerminalContext);
@@ -38,6 +40,9 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
+              if (closeItemSliding) {
+                closeItemSliding();
+              }
               addShell(context, terminalContext, url, container, 'bash');
             }}
           >
@@ -49,6 +54,9 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
+              if (closeItemSliding) {
+                closeItemSliding();
+              }
               addShell(context, terminalContext, url, container, 'sh');
             }}
           >
@@ -60,6 +68,9 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
+              if (closeItemSliding) {
+                closeItemSliding();
+              }
               addShell(context, terminalContext, url, container, 'powershell');
             }}
           >
@@ -71,6 +82,9 @@ const AddShell: React.FunctionComponent<IAddShellProps> = ({
             onClick={(e) => {
               e.stopPropagation();
               setShowPopover(false);
+              if (closeItemSliding) {
+                closeItemSliding();
+              }
               addShell(context, terminalContext, url, container, 'cmd');
             }}
           >
