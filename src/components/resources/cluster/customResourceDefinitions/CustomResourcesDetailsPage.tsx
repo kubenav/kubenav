@@ -1,11 +1,9 @@
 import { RefresherEventDetail } from '@ionic/core';
 import {
   IonBackButton,
-  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
-  IonIcon,
   IonGrid,
   IonPage,
   IonProgressBar,
@@ -13,9 +11,7 @@ import {
   IonRow,
   IonTitle,
   IonToolbar,
-  isPlatform,
 } from '@ionic/react';
-import { refresh } from 'ionicons/icons';
 import React, { memo, useContext } from 'react';
 import { useQuery } from 'react-query';
 import { RouteComponentProps } from 'react-router';
@@ -96,13 +92,9 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
           </IonButtons>
           <IonTitle>{match.params.crname}</IonTitle>
           <IonButtons slot="primary">
-            {!isPlatform('hybrid') ? (
-              <IonButton onClick={() => refetch()}>
-                <IonIcon slot="icon-only" icon={refresh} />
-              </IonButton>
-            ) : null}
             {data ? (
               <Details
+                refresh={refetch}
                 type="customresources"
                 item={data}
                 url={getURL(

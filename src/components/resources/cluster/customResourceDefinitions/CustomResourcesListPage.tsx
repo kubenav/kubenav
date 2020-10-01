@@ -1,11 +1,9 @@
 import { RefresherEventDetail } from '@ionic/core';
 import {
   IonBackButton,
-  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
-  IonIcon,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonItemDivider,
@@ -18,9 +16,7 @@ import {
   IonSearchbar,
   IonTitle,
   IonToolbar,
-  isPlatform,
 } from '@ionic/react';
-import { refresh } from 'ionicons/icons';
 import React, { memo, useContext, useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import { RouteComponentProps } from 'react-router';
@@ -28,6 +24,7 @@ import { RouteComponentProps } from 'react-router';
 import { IContext } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
+import Details from '../../misc/list/Details';
 import Namespaces from '../../misc/list/Namespaces';
 import LoadingErrorCard from '../../../misc/LoadingErrorCard';
 import ItemOptions from '../../misc/details/ItemOptions';
@@ -118,12 +115,8 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
           </IonButtons>
           <IonTitle>{match.params.name}</IonTitle>
           <IonButtons slot="primary">
-            {!isPlatform('hybrid') ? (
-              <IonButton onClick={() => refetch()}>
-                <IonIcon slot="icon-only" icon={refresh} />
-              </IonButton>
-            ) : null}
             <Namespaces />
+            <Details refresh={refetch} />
           </IonButtons>
         </IonToolbar>
       </IonHeader>
