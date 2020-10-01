@@ -50,9 +50,9 @@ const Clusters: React.FunctionComponent<RouteComponentProps> = ({ history, locat
               disabled={location.pathname.startsWith('/settings/clusters')}
               value={cluster.id}
               onIonChange={(e) => changeCluster(e.detail.value)}
-              interface={isPlatform('hybrid') || width < 992 ? 'action-sheet' : 'popover'}
+              interface={isPlatform('hybrid') || isPlatform('mobile') || width < 992 ? 'action-sheet' : 'popover'}
               interfaceOptions={
-                isPlatform('hybrid') || width < 992
+                isPlatform('hybrid') || isPlatform('mobile') || width < 992
                   ? {
                       header: 'Select Cluster',
                     }

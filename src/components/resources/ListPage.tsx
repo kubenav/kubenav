@@ -1,10 +1,8 @@
 import { RefresherEventDetail } from '@ionic/core';
 import {
-  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
-  IonIcon,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonItemDivider,
@@ -18,9 +16,7 @@ import {
   IonSearchbar,
   IonTitle,
   IonToolbar,
-  isPlatform,
 } from '@ionic/react';
-import { refresh } from 'ionicons/icons';
 import React, { memo, useContext, useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import { RouteComponentProps } from 'react-router';
@@ -31,6 +27,7 @@ import { AppContext } from '../../utils/context';
 import { isNamespaced } from '../../utils/helpers';
 import { resources } from '../../utils/resources';
 import LoadingErrorCard from '../misc/LoadingErrorCard';
+import Details from './misc/list/Details';
 import Namespaces from './misc/list/Namespaces';
 import ItemOptions from './misc/details/ItemOptions';
 
@@ -109,12 +106,8 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
           </IonButtons>
           <IonTitle>{page.pluralText}</IonTitle>
           <IonButtons slot="primary">
-            {!isPlatform('hybrid') ? (
-              <IonButton onClick={() => refetch()}>
-                <IonIcon slot="icon-only" icon={refresh} />
-              </IonButton>
-            ) : null}
             {isNamespaced(match.params.type) ? <Namespaces /> : null}
+            <Details refresh={refetch} />
           </IonButtons>
         </IonToolbar>
       </IonHeader>

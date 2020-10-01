@@ -53,7 +53,7 @@ const Containers: React.FunctionComponent<IContainersProps> = ({
           <IonCardTitle>{title}</IonCardTitle>
         </IonCardHeader>
         <IonCardContent>
-          {isPlatform('hybrid') || width < 992 ? (
+          {isPlatform('hybrid') || isPlatform('mobile') || width < 992 ? (
             <IonList>
               {containers.map((container, index) => (
                 <Container

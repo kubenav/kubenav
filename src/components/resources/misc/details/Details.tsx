@@ -1,5 +1,5 @@
-import { IonButton, IonIcon, IonList, IonPopover, isPlatform } from '@ionic/react';
-import { ellipsisHorizontal, ellipsisVertical } from 'ionicons/icons';
+import { IonButton, IonIcon, IonItem, IonLabel, IonList, IonPopover, isPlatform } from '@ionic/react';
+import { ellipsisHorizontal, ellipsisVertical, refresh as refreshIcon } from 'ionicons/icons';
 import React, { useState } from 'react';
 
 import useWindowWidth from '../../../../utils/useWindowWidth';
@@ -15,13 +15,14 @@ import ViewItem, { ViewItemActivator } from './ViewItem';
 type TShow = '' | 'delete' | 'edit' | 'logs' | 'restart' | 'scale' | 'shell' | 'ssh' | 'view';
 
 interface IDetailsProps {
+  refresh: () => void;
   type: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
   url: string;
 }
 
-const Details: React.FunctionComponent<IDetailsProps> = ({ type, item, url }: IDetailsProps) => {
+const Details: React.FunctionComponent<IDetailsProps> = ({ refresh, type, item, url }: IDetailsProps) => {
   const [show, setShow] = useState<TShow>('');
   const [showPopover, setShowPopover] = useState<boolean>(false);
   const [popoverEvent, setPopoverEvent] = useState();
@@ -36,6 +37,17 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ type, item, url }: ID
     <React.Fragment>
       <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
         <IonList>
+          <IonItem
+            button={true}
+            detail={false}
+            onClick={() => {
+              refresh();
+              showType('');
+            }}
+          >
+            <IonIcon slot="end" color="primary" icon={refreshIcon} />
+            <IonLabel>Refresh</IonLabel>
+          </IonItem>
           {type === 'deployments' ||
           type === 'statefulsets' ||
           type === 'replicationcontrollers' ||
@@ -45,13 +57,13 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ type, item, url }: ID
           {type === 'deployments' || type === 'statefulsets' || type === 'daemonsets' ? (
             <RestartItemActivator activator="item" onClick={() => showType('restart')} />
           ) : null}
-          {(isPlatform('hybrid') || width < 992) && type === 'pods' ? (
+          {(isPlatform('hybrid') || isPlatform('mobile') || width < 992) && type === 'pods' ? (
             <LogsItemActivator activator="item" onClick={() => showType('logs')} />
           ) : null}
-          {(isPlatform('hybrid') || width < 992) && type === 'pods' ? (
+          {(isPlatform('hybrid') || isPlatform('mobile') || width < 992) && type === 'pods' ? (
             <ShellItemActivator activator="item" onClick={() => showType('shell')} />
           ) : null}
-          {(isPlatform('hybrid') || width < 992) && type === 'nodes' ? (
+          {(isPlatform('hybrid') || isPlatform('mobile') || width < 992) && type === 'nodes' ? (
             <SSHItemActivator activator="item" onClick={() => showType('ssh')} item={item} />
           ) : null}
           <ViewItemActivator activator="item" onClick={() => showType('view')} />
