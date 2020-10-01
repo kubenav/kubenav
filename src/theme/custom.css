@@ -170,6 +170,12 @@ ion-avatar {
   --padding-end: 0px;
 }
 
+.terminal-tab-label {
+  max-width: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .segment-button-layout-icon-end.segment-button-checked .terminal-tab-close-button-color {
   color: var(--ion-color-primary);
 }
