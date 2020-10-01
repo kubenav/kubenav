@@ -127,7 +127,7 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
                   >
                     <IonIcon slot="icon-only" icon={close} className="terminal-tab-close-button-color" />
                   </IonButton>
-                  <IonLabel>{terminal.name}</IonLabel>
+                  <IonLabel className="terminal-tab-label">{terminal.name}</IonLabel>
                 </IonSegmentButton>
               );
             })}
