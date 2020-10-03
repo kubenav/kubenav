@@ -15,6 +15,7 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/typography.css';
 
+import BookmarksPage from './components/bookmarks/BookmarksPage';
 import HomePage from './components/HomePage';
 import Menu from './components/menu/Menu';
 import CustomResourcesDetailsPage from './components/resources/cluster/customResourceDefinitions/CustomResourcesDetailsPage';
@@ -49,6 +50,7 @@ const App: React.FunctionComponent = () => (
               <Menu sections={resources} />
               <IonRouterOutlet id="main">
                 <Route path="/" component={HomePage} exact={true} />
+                <Route path="/bookmarks" component={BookmarksPage} exact={true} />
                 <Route path="/resources/:section/:type" component={ListPage} exact={true} />
                 <Route path="/resources/:section/:type/:namespace/:name" component={DetailsPage} exact={true} />
                 <Route path="/customresources/:group/:version/:name" component={CustomResourcesListPage} exact={true} />

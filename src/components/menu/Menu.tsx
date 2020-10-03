@@ -87,6 +87,14 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections, history, location
       <IonContent>
         <IonList>
           {context.clusters && Object.keys(context.clusters).length <= 1 ? null : <Clusters />}
+          <IonMenuToggle autoHide={false}>
+            <IonItem routerLink="/bookmarks" routerDirection="root">
+              <IonAvatar slot="start">
+                <img alt="Bookmarks" src="/assets/icons/misc/bookmarks.png" />
+              </IonAvatar>
+              <IonLabel>Bookmarks</IonLabel>
+            </IonItem>
+          </IonMenuToggle>
 
           <Sections sections={sections} isMenu={true} />
 

@@ -40,6 +40,7 @@ export const GOOGLE_SCOPE = 'https://www.googleapis.com/auth/cloud-platform';
 export const OIDC_REDIRECT_URL = `${CUSTOM_URI_SCHEME}:/settings/clusters/oidc/redirect`;
 export const OIDC_REDIRECT_URL_WEB = 'https://kubenav.io/oidc.html';
 
+export const STORAGE_BOOKMARKS = 'bookmarks';
 export const STORAGE_CLUSTER = 'cluster';
 export const STORAGE_CLUSTERS = 'clusters';
 export const STORAGE_SETTINGS = 'settings';

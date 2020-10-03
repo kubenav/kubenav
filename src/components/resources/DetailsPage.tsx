@@ -75,6 +75,11 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
                   data.metadata ? data.metadata.namespace : '',
                   data.metadata ? data.metadata.name : '',
                 )}
+                bookmark={{
+                  title: `${page.singleText}${data.metadata ? `: ${data.metadata.name}` : ''}`,
+                  url: match.url,
+                  namespace: data.metadata ? data.metadata.namespace : '',
+                }}
               />
             ) : null}
           </IonButtons>

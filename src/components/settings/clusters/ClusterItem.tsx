@@ -60,7 +60,7 @@ const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IC
         />
         <IonLabel>{cluster.name}</IonLabel>
       </IonItem>
-      {isPlatform('hybrid') || true ? (
+      {isPlatform('hybrid') ? (
         <IonItemOptions side="end">
           <EditCluster cluster={cluster} closeItemSliding={closeItemSliding} />
           <IonItemOption

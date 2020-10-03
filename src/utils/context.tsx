@@ -3,7 +3,7 @@ import { isPlatform } from '@ionic/react';
 import React, { useEffect, useState, ReactElement } from 'react';
 import { useQuery } from 'react-query';
 
-import { IAppSettings, ICluster, IClusters, IContext } from '../declarations';
+import { IAppSettings, IBookmark, ICluster, IClusters, IContext } from '../declarations';
 import {
   getCluster,
   getClusters,
@@ -16,11 +16,13 @@ import {
 import { DEFAULT_SETTINGS, IS_INCLUSTER } from './constants';
 import { isBase64, isDarkMode, randomString } from './helpers';
 import {
+  readBookmarks,
   readCluster,
   readClusters,
   readSettings,
   removeCluster,
   removeClusters,
+  saveBookmarks,
   saveCluster,
   saveClusters,
   saveSettings,
@@ -34,6 +36,7 @@ export const AppContext = React.createContext<IContext>({
   clusters: undefined,
   cluster: undefined,
   settings: DEFAULT_SETTINGS,
+  bookmarks: [],
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   addCluster: () => {},
@@ -44,6 +47,8 @@ export const AppContext = React.createContext<IContext>({
   },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   deleteCluster: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  editBookmarks: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   editCluster: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -68,6 +73,7 @@ interface IAppContextProvider {
 // changes.
 export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = ({ children }: IAppContextProvider) => {
   const [settings, setSettings] = useState<IAppSettings>(readSettings());
+  const [bookmarks, setBookmarks] = useState<IBookmark[]>(readBookmarks());
   const [cluster, setCluster] = useState<string | undefined>(undefined);
   const [clusters, setClusters] = useState<IClusters | undefined>(undefined);
 
@@ -234,6 +240,12 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
     }
   };
 
+  // editBookmarks sets the bookmarks to the bookmarks context and saves all bookmarks to localStorage.
+  const editBookmarks = (editBookmarks: IBookmark[]) => {
+    setBookmarks(editBookmarks);
+    saveBookmarks(editBookmarks);
+  };
+
   // editCluster replaces a cluster with the new provided cluster.
   // Like in the addCluster function we are validating the provided URL and the provided certificate data. If the user
   // provides a base64 encoded certificate, it will be decoded before it is saved.
@@ -341,11 +353,13 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
         clusters: clusters,
         cluster: cluster,
         settings: settings,
+        bookmarks: bookmarks,
 
         addCluster: addCluster,
         changeCluster: changeCluster,
         currentCluster: currentCluster,
         deleteCluster: deleteCluster,
+        editBookmarks: editBookmarks,
         editCluster: editCluster,
         editSettings: editSettings,
         setNamespace: setNamespace,

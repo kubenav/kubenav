@@ -107,7 +107,14 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
           <IonTitle>{page.pluralText}</IonTitle>
           <IonButtons slot="primary">
             {isNamespaced(match.params.type) ? <Namespaces /> : null}
-            <Details refresh={refetch} />
+            <Details
+              refresh={refetch}
+              bookmark={{
+                title: page.pluralText,
+                url: match.url,
+                namespace: isNamespaced(match.params.type) ? (cluster ? cluster.namespace : '') : '',
+              }}
+            />
           </IonButtons>
         </IonToolbar>
       </IonHeader>
