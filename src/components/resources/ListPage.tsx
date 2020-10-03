@@ -177,7 +177,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
                   ))
                 : null}
               <IonInfiniteScroll
-                threshold="10%"
+                threshold="25%"
                 disabled={!canFetchMore || (isFetchingMore as boolean)}
                 onIonInfinite={loadMore}
               >
