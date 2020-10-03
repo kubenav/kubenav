@@ -1,5 +1,6 @@
 import {
   IAppSettings,
+  IBookmark,
   IClusterAuthProviderAWS,
   IClusterAuthProviderAzure,
   IClusterAuthProviderGoogle,
@@ -9,11 +10,23 @@ import {
 } from '../declarations';
 import {
   DEFAULT_SETTINGS,
+  STORAGE_BOOKMARKS,
   STORAGE_CLUSTER,
   STORAGE_CLUSTERS,
   STORAGE_SETTINGS,
   STORAGE_TEMPORARY_CREDENTIALS,
 } from './constants';
+
+// readBookmarks returns the saved bookmarks of a user from localStorage.
+export const readBookmarks = (): IBookmark[] => {
+  const bookmarks = localStorage.getItem(STORAGE_BOOKMARKS);
+
+  if (bookmarks === null) {
+    return [];
+  }
+
+  return JSON.parse(bookmarks);
+};
 
 // readCluster returns the saved active cluster from localStorage. If there is no value in the localStorage or the saved
 // active cluster is not in the saved cluster, undefined is returned.
@@ -200,6 +213,11 @@ export const removeClusters = (): void => {
 // removeTemporaryCredentials removes the temporary saved credentials from localStorage.
 export const removeTemporaryCredentials = (): void => {
   localStorage.removeItem(STORAGE_TEMPORARY_CREDENTIALS);
+};
+
+// saveBookmarks saves the given bookmarks to localStorage.
+export const saveBookmarks = (bookmarks: IBookmark[]): void => {
+  localStorage.setItem(STORAGE_BOOKMARKS, JSON.stringify(bookmarks));
 };
 
 // saveCluster saves the given cluster id to localStorage.

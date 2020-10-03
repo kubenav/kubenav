@@ -72,6 +72,12 @@ export interface IAzureCluster {
   kubeconfig: IKubeconfig;
 }
 
+export interface IBookmark {
+  title: string;
+  url: string;
+  namespace: string;
+}
+
 export interface ICluster {
   id: string;
   name: string;
@@ -142,11 +148,13 @@ export interface IContext {
   clusters?: IClusters;
   cluster?: string;
   settings: IAppSettings;
+  bookmarks: IBookmark[];
 
   addCluster: (newCluster: ICluster[]) => void;
   changeCluster: (id: string) => void;
   currentCluster: () => ICluster | undefined;
   deleteCluster: (id: string) => void;
+  editBookmarks: (editBookmarks: IBookmark[]) => void;
   editCluster: (editCluster: ICluster) => void;
   editSettings: (settings: IAppSettings) => void;
   setNamespace: (namespace: string) => void;

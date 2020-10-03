@@ -116,7 +116,14 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
           <IonTitle>{match.params.name}</IonTitle>
           <IonButtons slot="primary">
             <Namespaces />
-            <Details refresh={refetch} />
+            <Details
+              refresh={refetch}
+              bookmark={{
+                title: match.params.name,
+                url: match.url,
+                namespace: cluster ? cluster.namespace : '',
+              }}
+            />
           </IonButtons>
         </IonToolbar>
       </IonHeader>

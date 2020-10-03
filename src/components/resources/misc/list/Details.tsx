@@ -2,13 +2,17 @@ import { IonButton, IonIcon, IonItem, IonLabel, IonList, IonPopover } from '@ion
 import { ellipsisHorizontal, ellipsisVertical, refresh as refreshIcon } from 'ionicons/icons';
 import React, { useState } from 'react';
 
+import { IBookmark } from '../../../../declarations';
+import Bookmark from '../shared/Bookmark';
+
 type TShow = '';
 
 interface IDetailsProps {
   refresh: () => void;
+  bookmark: IBookmark;
 }
 
-const Details: React.FunctionComponent<IDetailsProps> = ({ refresh }: IDetailsProps) => {
+const Details: React.FunctionComponent<IDetailsProps> = ({ refresh, bookmark }: IDetailsProps) => {
   const [, setShow] = useState<TShow>('');
   const [showPopover, setShowPopover] = useState<boolean>(false);
   const [popoverEvent, setPopoverEvent] = useState();
@@ -33,6 +37,7 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ refresh }: IDetailsPr
             <IonIcon slot="end" color="primary" icon={refreshIcon} />
             <IonLabel>Refresh</IonLabel>
           </IonItem>
+          <Bookmark bookmark={bookmark} hide={() => showType('')} />
         </IonList>
       </IonPopover>
 

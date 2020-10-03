@@ -2,7 +2,9 @@ import { IonButton, IonIcon, IonItem, IonLabel, IonList, IonPopover, isPlatform 
 import { ellipsisHorizontal, ellipsisVertical, refresh as refreshIcon } from 'ionicons/icons';
 import React, { useState } from 'react';
 
+import { IBookmark } from '../../../../declarations';
 import useWindowWidth from '../../../../utils/useWindowWidth';
+import Bookmark from '../shared/Bookmark';
 import DeleteItem, { DeleteItemActivator } from './DeleteItem';
 import EditItem, { EditItemActivator } from './EditItem';
 import LogsItem, { LogsItemActivator } from './LogsItem';
@@ -20,9 +22,10 @@ interface IDetailsProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
   url: string;
+  bookmark: IBookmark;
 }
 
-const Details: React.FunctionComponent<IDetailsProps> = ({ refresh, type, item, url }: IDetailsProps) => {
+const Details: React.FunctionComponent<IDetailsProps> = ({ refresh, type, item, url, bookmark }: IDetailsProps) => {
   const [show, setShow] = useState<TShow>('');
   const [showPopover, setShowPopover] = useState<boolean>(false);
   const [popoverEvent, setPopoverEvent] = useState();
@@ -48,6 +51,7 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ refresh, type, item, 
             <IonIcon slot="end" color="primary" icon={refreshIcon} />
             <IonLabel>Refresh</IonLabel>
           </IonItem>
+          <Bookmark bookmark={bookmark} hide={() => showType('')} />
           {type === 'deployments' ||
           type === 'statefulsets' ||
           type === 'replicationcontrollers' ||

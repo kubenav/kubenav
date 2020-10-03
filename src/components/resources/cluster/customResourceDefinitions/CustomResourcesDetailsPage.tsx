@@ -104,6 +104,7 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
                   match.params.name,
                   match.params.crname,
                 )}
+                bookmark={{ title: match.params.crname, url: match.url, namespace: '' }}
               />
             ) : null}
           </IonButtons>
