@@ -119,31 +119,33 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ title, variables,
             ) : !isError && data ? (
               <IonRow>
                 {data && data.variables
-                  ? data.variables.map((variable, index) => (
-                      <IonCol key={index}>
-                        <IonItem>
-                          <IonLabel>{variable.name}</IonLabel>
-                          <IonSelect
-                            interface="popover"
-                            value={variable.value}
-                            onIonChange={(e) => {
-                              if (selectedVariables && data.variables) {
-                                const tmpVariales = data.variables;
-                                tmpVariales[index].value = e.detail.value;
-                                setSelectedVariables(tmpVariales);
-                                refetch();
-                              }
-                            }}
-                          >
-                            {variable.values.map((value) => (
-                              <IonSelectOption key={value} value={value}>
-                                {value}
-                              </IonSelectOption>
-                            ))}
-                          </IonSelect>
-                        </IonItem>
-                      </IonCol>
-                    ))
+                  ? data.variables.map((variable, index) =>
+                      variable.value && variable.values ? (
+                        <IonCol key={index}>
+                          <IonItem>
+                            <IonLabel>{variable.name}</IonLabel>
+                            <IonSelect
+                              interface="popover"
+                              value={variable.value}
+                              onIonChange={(e) => {
+                                if (selectedVariables && data.variables) {
+                                  const tmpVariales = data.variables;
+                                  tmpVariales[index].value = e.detail.value;
+                                  setSelectedVariables(tmpVariales);
+                                  refetch();
+                                }
+                              }}
+                            >
+                              {variable.values.map((value) => (
+                                <IonSelectOption key={value} value={value}>
+                                  {value}
+                                </IonSelectOption>
+                              ))}
+                            </IonSelect>
+                          </IonItem>
+                        </IonCol>
+                      ) : null,
+                    )
                   : null}
 
                 <IonCol>
