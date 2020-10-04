@@ -53,7 +53,7 @@ const ClusterMetrics: React.FunctionComponent = () => {
       try {
         const nodeMetrics: INodeMetricsList = await kubernetesRequest(
           'GET',
-          `/apis/metrics.k8s.io/v1beta1/nodes`,
+          '/apis/metrics.k8s.io/v1beta1/nodes',
           '',
           context.settings,
           await context.kubernetesAuthWrapper(''),
@@ -61,7 +61,7 @@ const ClusterMetrics: React.FunctionComponent = () => {
 
         const nodeList: V1NodeList = await kubernetesRequest(
           'GET',
-          `/api/v1/nodes`,
+          '/api/v1/nodes',
           '',
           context.settings,
           await context.kubernetesAuthWrapper(''),
@@ -69,7 +69,7 @@ const ClusterMetrics: React.FunctionComponent = () => {
 
         const podList: V1PodList = await kubernetesRequest(
           'GET',
-          `/api/v1/pods`,
+          '/api/v1/pods',
           '',
           context.settings,
           await context.kubernetesAuthWrapper(''),

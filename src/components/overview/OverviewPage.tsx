@@ -11,7 +11,6 @@ import {
   IonHeader,
   IonMenuButton,
   IonPage,
-  IonRow,
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
@@ -19,7 +18,7 @@ import React, { memo, useContext } from 'react';
 
 import { IContext } from '../../declarations';
 import { AppContext } from '../../utils/context';
-import List from '../resources/misc/list/List';
+import Warnings from './Warnings';
 import ClusterMetrics from './ClusterMetrics';
 
 const OverviewPage: React.FunctionComponent = () => {
@@ -39,17 +38,7 @@ const OverviewPage: React.FunctionComponent = () => {
         {context.clusters && context.cluster ? (
           <IonGrid>
             <ClusterMetrics />
-
-            <IonRow>
-              <List
-                name="Warnings"
-                section="cluster"
-                type="events"
-                namespace=""
-                parent=""
-                selector="fieldSelector=type=Warning"
-              />
-            </IonRow>
+            <Warnings />
           </IonGrid>
         ) : (
           <IonCard>
