@@ -16,8 +16,8 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/typography.css';
 
 import BookmarksPage from './components/bookmarks/BookmarksPage';
-import HomePage from './components/HomePage';
 import Menu from './components/menu/Menu';
+import OverviewPage from './components/overview/OverviewPage';
 import CustomResourcesDetailsPage from './components/resources/cluster/customResourceDefinitions/CustomResourcesDetailsPage';
 import CustomResourcesListPage from './components/resources/cluster/customResourceDefinitions/CustomResourcesListPage';
 import DetailsPage from './components/resources/DetailsPage';
@@ -49,7 +49,7 @@ const App: React.FunctionComponent = () => (
             <IonSplitPane contentId="main" className={isPlatform('hybrid') ? '' : 'menu-width'}>
               <Menu sections={resources} />
               <IonRouterOutlet id="main">
-                <Route path="/" component={HomePage} exact={true} />
+                <Route path="/" component={OverviewPage} exact={true} />
                 <Route path="/bookmarks" component={BookmarksPage} exact={true} />
                 <Route path="/resources/:section/:type" component={ListPage} exact={true} />
                 <Route path="/resources/:section/:type/:namespace/:name" component={DetailsPage} exact={true} />

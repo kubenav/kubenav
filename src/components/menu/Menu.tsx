@@ -88,6 +88,14 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections, history, location
         <IonList>
           {context.clusters && Object.keys(context.clusters).length <= 1 ? null : <Clusters />}
           <IonMenuToggle autoHide={false}>
+            <IonItem routerLink="/" routerDirection="root">
+              <IonAvatar slot="start">
+                <img alt="Overview" src="/assets/icons/kubernetes/kubernetes.png" />
+              </IonAvatar>
+              <IonLabel>Overview</IonLabel>
+            </IonItem>
+          </IonMenuToggle>
+          <IonMenuToggle autoHide={false}>
             <IonItem routerLink="/bookmarks" routerDirection="root">
               <IonAvatar slot="start">
                 <img alt="Bookmarks" src="/assets/icons/misc/bookmarks.png" />

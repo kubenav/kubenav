@@ -7,21 +7,22 @@ import {
   IonCardSubtitle,
   IonCardTitle,
   IonContent,
+  IonGrid,
   IonHeader,
-  IonList,
   IonMenuButton,
   IonPage,
+  IonRow,
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
 import React, { memo, useContext } from 'react';
 
-import { IContext } from '../declarations';
-import { AppContext } from '../utils/context';
-import { resources } from '../utils/resources';
-import Sections from './menu/Sections';
+import { IContext } from '../../declarations';
+import { AppContext } from '../../utils/context';
+import List from '../resources/misc/list/List';
+import ClusterMetrics from './ClusterMetrics';
 
-const HomePage: React.FunctionComponent = () => {
+const OverviewPage: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);
 
   return (
@@ -31,28 +32,25 @@ const HomePage: React.FunctionComponent = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Home</IonTitle>
+          <IonTitle>Overview</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         {context.clusters && context.cluster ? (
-          <IonCard>
-            <img alt="kubenav" src="/assets/card-header.png" />
-            <IonCardHeader>
-              <IonCardSubtitle>Welcome to kubenav</IonCardSubtitle>
-              <IonCardTitle>Explore your Kubernetes Clusters</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <p className="paragraph-margin-bottom">
-                Welcome back to the kubenav app. You are ready to explore your Kubernetes clusters. To get an overview
-                of your running Nodes, Deployments, Pods and Containers select the corresponding item from the menu or
-                from below.
-              </p>
-              <IonList>
-                <Sections sections={resources} isMenu={false} />
-              </IonList>
-            </IonCardContent>
-          </IonCard>
+          <IonGrid>
+            <ClusterMetrics />
+
+            <IonRow>
+              <List
+                name="Warnings"
+                section="cluster"
+                type="events"
+                namespace=""
+                parent=""
+                selector="fieldSelector=type=Warning"
+              />
+            </IonRow>
+          </IonGrid>
         ) : (
           <IonCard>
             <img alt="kubenav" src="/assets/card-header.png" />
@@ -77,6 +75,6 @@ const HomePage: React.FunctionComponent = () => {
   );
 };
 
-export default memo(HomePage, (): boolean => {
+export default memo(OverviewPage, (): boolean => {
   return true;
 });
