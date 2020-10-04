@@ -45,6 +45,37 @@ const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ ite
           title="Metrics"
           charts={[
             {
+              title: 'CPU Usage',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Current',
+                  query: `sum(irate(container_cpu_usage_seconds_total{job="kubelet", namespace="${
+                    item.metadata ? item.metadata.name : ''
+                  }", image!="", container!="", container!="POD"}[4m]))`,
+                },
+                {
+                  label: 'Requested',
+                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${
+                    item.metadata ? item.metadata.name : ''
+                  }", resource="cpu", container!=""})`,
+                },
+                {
+                  label: 'Limit',
+                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${
+                    item.metadata ? item.metadata.name : ''
+                  }", resource="cpu", container!=""})`,
+                },
+              ],
+            },
+            {
               title: 'Memory Usage (in MiB)',
               size: {
                 xs: '12',
@@ -78,37 +109,6 @@ const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ ite
                   query: `sum(container_memory_cache{job="kubelet", namespace="${
                     item.metadata ? item.metadata.name : ''
                   }", container!="", container!="POD"}) / 1024 / 1024`,
-                },
-              ],
-            },
-            {
-              title: 'CPU Usage',
-              size: {
-                xs: '12',
-                sm: '12',
-                md: '12',
-                lg: '12',
-                xl: '6',
-              },
-              type: 'area',
-              queries: [
-                {
-                  label: 'Current',
-                  query: `sum(irate(container_cpu_usage_seconds_total{job="kubelet", namespace="${
-                    item.metadata ? item.metadata.name : ''
-                  }", image!="", container!="", container!="POD"}[4m]))`,
-                },
-                {
-                  label: 'Requested',
-                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${
-                    item.metadata ? item.metadata.name : ''
-                  }", resource="cpu", container!=""})`,
-                },
-                {
-                  label: 'Limit',
-                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${
-                    item.metadata ? item.metadata.name : ''
-                  }", resource="cpu", container!=""})`,
                 },
               ],
             },
