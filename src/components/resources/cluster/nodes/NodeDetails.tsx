@@ -180,6 +180,43 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
           title="Metrics"
           charts={[
             {
+              title: 'CPU Usage',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Current',
+                  query: `sum(irate(container_cpu_usage_seconds_total{job="kubelet", node="${
+                    item.metadata ? item.metadata.name : ''
+                  }", image!="", container!="", container!="POD"}[4m]))`,
+                },
+                {
+                  label: 'Requested',
+                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", node="${
+                    item.metadata ? item.metadata.name : ''
+                  }", resource="cpu", container!=""})`,
+                },
+                {
+                  label: 'Limit',
+                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", node="${
+                    item.metadata ? item.metadata.name : ''
+                  }", resource="cpu", container!=""})`,
+                },
+                {
+                  label: 'Allocatable',
+                  query: `sum(kube_node_status_allocatable_cpu_cores{job="kube-state-metrics", node="${
+                    item.metadata ? item.metadata.name : ''
+                  }"})`,
+                },
+              ],
+            },
+            {
               title: 'Memory Usage (in GiB)',
               size: {
                 xs: '12',
@@ -219,43 +256,6 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
                   query: `sum(kube_node_status_allocatable_memory_bytes{job="kube-state-metrics", node="${
                     item.metadata ? item.metadata.name : ''
                   }"}) / 1024 / 1024 / 1024`,
-                },
-              ],
-            },
-            {
-              title: 'CPU Usage',
-              size: {
-                xs: '12',
-                sm: '12',
-                md: '12',
-                lg: '12',
-                xl: '6',
-              },
-              type: 'area',
-              queries: [
-                {
-                  label: 'Current',
-                  query: `sum(irate(container_cpu_usage_seconds_total{job="kubelet", node="${
-                    item.metadata ? item.metadata.name : ''
-                  }", image!="", container!="", container!="POD"}[4m]))`,
-                },
-                {
-                  label: 'Requested',
-                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", node="${
-                    item.metadata ? item.metadata.name : ''
-                  }", resource="cpu", container!=""})`,
-                },
-                {
-                  label: 'Limit',
-                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", node="${
-                    item.metadata ? item.metadata.name : ''
-                  }", resource="cpu", container!=""})`,
-                },
-                {
-                  label: 'Allocatable',
-                  query: `sum(kube_node_status_allocatable_cpu_cores{job="kube-state-metrics", node="${
-                    item.metadata ? item.metadata.name : ''
-                  }"})`,
                 },
               ],
             },

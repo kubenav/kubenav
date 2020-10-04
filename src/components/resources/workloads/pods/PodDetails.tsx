@@ -200,6 +200,43 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
           ]}
           charts={[
             {
+              title: 'CPU Usage',
+              size: {
+                xs: '12',
+                sm: '12',
+                md: '12',
+                lg: '12',
+                xl: '6',
+              },
+              type: 'area',
+              queries: [
+                {
+                  label: 'Current',
+                  query: `sum(irate(container_cpu_usage_seconds_total{job="kubelet", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", image!="", pod="${
+                    item.metadata ? item.metadata.name : ''
+                  }", container=~"{{ .Container }}", container!="POD"}[4m]))`,
+                },
+                {
+                  label: 'Requested',
+                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", resource="cpu", pod="${
+                    item.metadata ? item.metadata.name : ''
+                  }", container=~"{{ .Container }}"})`,
+                },
+                {
+                  label: 'Limit',
+                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${
+                    item.metadata ? item.metadata.namespace : ''
+                  }", resource="cpu", pod="${
+                    item.metadata ? item.metadata.name : ''
+                  }", container=~"{{ .Container }}"})`,
+                },
+              ],
+            },
+            {
               title: 'Memory Usage (in MiB)',
               size: {
                 xs: '12',
@@ -241,43 +278,6 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                   }", pod="${
                     item.metadata ? item.metadata.name : ''
                   }", container=~"{{ .Container }}", container!="POD"}) / 1024 / 1024`,
-                },
-              ],
-            },
-            {
-              title: 'CPU Usage',
-              size: {
-                xs: '12',
-                sm: '12',
-                md: '12',
-                lg: '12',
-                xl: '6',
-              },
-              type: 'area',
-              queries: [
-                {
-                  label: 'Current',
-                  query: `sum(irate(container_cpu_usage_seconds_total{job="kubelet", namespace="${
-                    item.metadata ? item.metadata.namespace : ''
-                  }", image!="", pod="${
-                    item.metadata ? item.metadata.name : ''
-                  }", container=~"{{ .Container }}", container!="POD"}[4m]))`,
-                },
-                {
-                  label: 'Requested',
-                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${
-                    item.metadata ? item.metadata.namespace : ''
-                  }", resource="cpu", pod="${
-                    item.metadata ? item.metadata.name : ''
-                  }", container=~"{{ .Container }}"})`,
-                },
-                {
-                  label: 'Limit',
-                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${
-                    item.metadata ? item.metadata.namespace : ''
-                  }", resource="cpu", pod="${
-                    item.metadata ? item.metadata.name : ''
-                  }", container=~"{{ .Container }}"})`,
                 },
               ],
             },
