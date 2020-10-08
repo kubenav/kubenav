@@ -7,7 +7,7 @@ import { IContext, INodeMetricsList } from '../../declarations';
 import { kubernetesRequest } from '../../utils/api';
 import { AppContext } from '../../utils/context';
 import { formatResourceValue, isDarkMode } from '../../utils/helpers';
-import ClusterMetric, { IMetric } from './ClusterMetric';
+import ChartDetailsRadialBar, { IMetric } from '../plugins/prometheus/ChartDetailsRadialBar';
 
 const podResources = (containers: V1Container[]): number[] => {
   let cpuRequests = 0;
@@ -165,13 +165,13 @@ const ClusterMetrics: React.FunctionComponent = () => {
   return (
     <IonRow>
       <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
-        <ClusterMetric title="CPU" data={data && data.cpu ? data.cpu : undefined} unit="m" />
+        <ChartDetailsRadialBar title="CPU" data={data && data.cpu ? data.cpu : undefined} unit="m" />
       </IonCol>
       <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
-        <ClusterMetric title="Memory" data={data && data.memory ? data.memory : undefined} unit="Mi" />
+        <ChartDetailsRadialBar title="Memory" data={data && data.memory ? data.memory : undefined} unit="Mi" />
       </IonCol>
       <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
-        <ClusterMetric title="Pods" data={data && data.pods ? data.pods : undefined} unit="" />
+        <ChartDetailsRadialBar title="Pods" data={data && data.pods ? data.pods : undefined} unit="" />
       </IonCol>
     </IonRow>
   );

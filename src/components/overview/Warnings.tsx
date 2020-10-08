@@ -29,10 +29,11 @@ interface IEvent {
 
 const Warnings: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);
+  const cluster = context.currentCluster();
   const width = useWindowWidth();
 
   const { data } = useQuery<IEvent[], Error>(
-    ['OverviewWarnings'],
+    ['OverviewWarnings', cluster],
     async () => {
       try {
         const eventList: V1EventList = await kubernetesRequest(
@@ -69,6 +70,8 @@ const Warnings: React.FunctionComponent = () => {
               routerLink = `/resources/workloads/replicationcontrollers/${event.involvedObject.namespace}/${event.involvedObject.name}`;
             } else if (event.involvedObject.kind === 'StatefulSet') {
               routerLink = `/resources/workloads/statefulsets/${event.involvedObject.namespace}/${event.involvedObject.name}`;
+            } else if (event.involvedObject.kind === 'Endpoints') {
+              routerLink = `/resources/discovery-and-loadbalancing/endpoints/${event.involvedObject.namespace}/${event.involvedObject.name}`;
             } else if (event.involvedObject.kind === 'HorizontalPodAutoscaler') {
               routerLink = `/resources/discovery-and-loadbalancing/horizontalpodautoscalers/${event.involvedObject.namespace}/${event.involvedObject.name}`;
             }
