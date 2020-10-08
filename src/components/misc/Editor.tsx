@@ -1,3 +1,4 @@
+import { Plugins } from '@capacitor/core';
 import React, { useContext, useRef } from 'react';
 import AceEditor from 'react-ace';
 
@@ -9,6 +10,8 @@ import 'ace-builds/src-noconflict/theme-nord_dark';
 import { IContext } from '../../declarations';
 import { AppContext } from '../../utils/context';
 import { isDarkMode } from '../../utils/helpers';
+
+const { Keyboard } = Plugins;
 
 interface IEditorProps {
   onChange?: (newValue: string) => void;
@@ -33,6 +36,14 @@ const Editor: React.FunctionComponent<IEditorProps> = ({
       onChange(newValue);
     }
   };
+
+  Keyboard.addListener('keyboardDidShow', () => {
+    editor.current?.editor.resize();
+  });
+
+  Keyboard.addListener('keyboardDidHide', () => {
+    editor.current?.editor.resize();
+  });
 
   return (
     <AceEditor
