@@ -2,14 +2,13 @@ import { IonItem, IonLabel } from '@ionic/react';
 import { V1Pod } from '@kubernetes/client-node';
 import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
-import { useQuery } from 'react-query';
 
-import { IContext, IPodMetrics } from '../../../../declarations';
-import { kubernetesRequest } from '../../../../utils/api';
+import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import { timeDifference } from '../../../../utils/helpers';
 import ItemStatus from '../../misc/template/ItemStatus';
-import { getReady, getResources, getRestarts, getStatus } from './podHelpers';
+import { getReady, getRestarts, getStatus } from './podHelpers';
+import PodItemMetrics from './PodItemMetrics';
 
 interface IPodItemProps extends RouteComponentProps {
   item: V1Pod;
@@ -19,22 +18,6 @@ interface IPodItemProps extends RouteComponentProps {
 
 const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }: IPodItemProps) => {
   const context = useContext<IContext>(AppContext);
-  const cluster = context.currentCluster();
-
-  const { data } = useQuery<IPodMetrics, Error>(
-    ['Pod', cluster ? cluster.id : '', item, type],
-    async () =>
-      await kubernetesRequest(
-        'GET',
-        `/apis/metrics.k8s.io/v1beta1/namespaces/${
-          item.metadata && item.metadata.namespace ? item.metadata.namespace : ''
-        }/pods/${item.metadata && item.metadata.name ? item.metadata.name : ''}`,
-        '',
-        context.settings,
-        await context.kubernetesAuthWrapper(''),
-      ),
-    { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
-  );
 
   const podStatus = getStatus(item);
 
@@ -68,11 +51,7 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
         <p>
           Ready: {getReady(item)} | Restarts: {getRestarts(item)} | Phase: {podStatus.phase}
           {podStatus.reason ? ` | Reason: ${podStatus.reason}` : ''}
-          {item.spec && item.spec.initContainers && item.spec.containers
-            ? ` | ${getResources(item.spec.initContainers.concat(item.spec.containers), data)}`
-            : item.spec && item.spec.containers
-            ? ` | ${getResources(item.spec.containers, data)}`
-            : ''}
+          {context.settings.enablePodMetrics ? <PodItemMetrics item={item} type={type} /> : null}
           {item.metadata && item.metadata.creationTimestamp
             ? ` | Age: ${timeDifference(
                 new Date().getTime(),

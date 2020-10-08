@@ -148,6 +148,9 @@ export const readSettings = (): IAppSettings => {
       terminalScrollback: settings.terminalScrollback
         ? settings.terminalScrollback
         : DEFAULT_SETTINGS.terminalScrollback,
+      enablePodMetrics: settings.hasOwnProperty('enablePodMetrics')
+        ? settings.enablePodMetrics
+        : DEFAULT_SETTINGS.enablePodMetrics,
       queryRefetchInterval: settings.queryRefetchInterval
         ? settings.queryRefetchInterval
         : DEFAULT_SETTINGS.queryRefetchInterval,
