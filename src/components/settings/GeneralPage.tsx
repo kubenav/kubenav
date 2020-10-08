@@ -121,6 +121,14 @@ const GeneralPage: React.FunctionComponent = () => {
               />
             </IonItem>
             <IonItem>
+              <IonLabel>Show Pod Metrics in List View</IonLabel>
+              <IonToggle
+                name="showPodMetricsInListViews"
+                checked={context.settings.showPodMetricsInListViews}
+                onIonChange={handleToggleChange}
+              />
+            </IonItem>
+            <IonItem>
               <IonLabel className="label-for-range" position="stacked">
                 Refresh Interval (in seconds)
               </IonLabel>

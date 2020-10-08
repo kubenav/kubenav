@@ -12,6 +12,7 @@ export const DEFAULT_SETTINGS: IAppSettings = {
   timeout: 60,
   terminalFontSize: 12,
   terminalScrollback: 10000,
+  showPodMetricsInListViews: true,
   queryRefetchInterval: 5 * 60 * 1000,
   queryConfig: {
     retry: false,
