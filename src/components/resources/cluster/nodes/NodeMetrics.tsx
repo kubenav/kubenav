@@ -1,13 +1,14 @@
 import { IonCol, IonRow } from '@ionic/react';
-import { V1Container, V1NodeList, V1PodList } from '@kubernetes/client-node';
+import { V1Node } from '@kubernetes/client-node';
+import { V1Container, V1PodList } from '@kubernetes/client-node';
 import React, { memo, useContext } from 'react';
 import { useQuery } from 'react-query';
 
-import { IContext, INodeMetricsList } from '../../declarations';
-import { kubernetesRequest } from '../../utils/api';
-import { AppContext } from '../../utils/context';
-import { formatResourceValue, isDarkMode } from '../../utils/helpers';
-import ChartDetailsRadialBar, { IMetric } from '../plugins/prometheus/ChartDetailsRadialBar';
+import { IContext, INodeMetrics } from '../../../../declarations';
+import { kubernetesRequest } from '../../../../utils/api';
+import { AppContext } from '../../../../utils/context';
+import { formatResourceValue, isDarkMode } from '../../../../utils/helpers';
+import ChartDetailsRadialBar, { IMetric } from '../../../plugins/prometheus/ChartDetailsRadialBar';
 
 const podResources = (containers: V1Container[]): number[] => {
   let cpuRequests = 0;
@@ -42,82 +43,53 @@ interface IMetrics {
   pods: IMetric[];
 }
 
-const ClusterMetrics: React.FunctionComponent = () => {
+interface INodeMetricsProps {
+  item: V1Node;
+  metrics: INodeMetrics;
+}
+
+const NodeMetrics: React.FunctionComponent<INodeMetricsProps> = ({ item, metrics }: INodeMetricsProps) => {
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = useQuery<IMetrics, Error>(
-    ['ClusterMetrics', cluster ? cluster.id : ''],
+    ['NodeMetrics', cluster ? cluster.id : ''],
     async () => {
       try {
-        const nodeMetrics: INodeMetricsList = await kubernetesRequest(
-          'GET',
-          '/apis/metrics.k8s.io/v1beta1/nodes',
-          '',
-          context.settings,
-          await context.kubernetesAuthWrapper(''),
-        );
-
-        const nodeList: V1NodeList = await kubernetesRequest(
-          'GET',
-          '/api/v1/nodes',
-          '',
-          context.settings,
-          await context.kubernetesAuthWrapper(''),
-        );
-
         const podList: V1PodList = await kubernetesRequest(
           'GET',
-          '/api/v1/pods',
+          `/api/v1/pods?fieldSelector=spec.nodeName=${item.metadata ? item.metadata.name : ''}`,
           '',
           context.settings,
           await context.kubernetesAuthWrapper(''),
         );
 
-        let cpuUsage = 0;
-        let memoryUsage = 0;
-        for (const metric of nodeMetrics.items) {
-          cpuUsage = cpuUsage + parseInt(formatResourceValue('cpu', metric.usage ? metric.usage['cpu'] : '0'));
-          memoryUsage =
-            memoryUsage + parseInt(formatResourceValue('memory', metric.usage ? metric.usage['memory'] : '0'));
-        }
+        const cpuUsage = parseInt(formatResourceValue('cpu', metrics.usage ? metrics.usage['cpu'] : '0'));
+        const cpuCapacity = parseInt(
+          formatResourceValue(
+            'cpu',
+            item.status && item.status.capacity && item.status.capacity['cpu'] ? item.status.capacity['cpu'] : '0',
+          ),
+        );
 
-        let cpuCapacity = 0;
-        let memoryCapacity = 0;
-        let podsCapacity = 0;
-        for (const node of nodeList.items) {
-          cpuCapacity =
-            cpuCapacity +
-            parseInt(
-              formatResourceValue(
-                'cpu',
-                node.status && node.status.capacity && node.status.capacity['cpu'] ? node.status.capacity['cpu'] : '0',
-              ),
-            );
-          memoryCapacity =
-            memoryCapacity +
-            parseInt(
-              formatResourceValue(
-                'memory',
-                node.status && node.status.capacity && node.status.capacity['memory']
-                  ? node.status.capacity['memory']
-                  : '0',
-              ),
-            );
-          podsCapacity =
-            podsCapacity +
-            parseInt(
-              formatResourceValue(
-                'memory',
-                node.status && node.status.capacity && node.status.capacity['pods']
-                  ? node.status.capacity['pods']
-                  : '0',
-              ),
-            );
-        }
+        const memoryUsage = parseInt(formatResourceValue('memory', metrics.usage ? metrics.usage['memory'] : '0'));
+        const memoryCapacity = parseInt(
+          formatResourceValue(
+            'memory',
+            item.status && item.status.capacity && item.status.capacity['memory']
+              ? item.status.capacity['memory']
+              : '0',
+          ),
+        );
 
         const podsUsage = podList.items.length;
+        const podsCapacity = parseInt(
+          formatResourceValue(
+            'memory',
+            item.status && item.status.capacity && item.status.capacity['pods'] ? item.status.capacity['pods'] : '0',
+          ),
+        );
 
         let cpuRequest = 0;
         let cpuLimit = 0;
@@ -177,6 +149,6 @@ const ClusterMetrics: React.FunctionComponent = () => {
   );
 };
 
-export default memo(ClusterMetrics, (): boolean => {
+export default memo(NodeMetrics, (): boolean => {
   return true;
 });

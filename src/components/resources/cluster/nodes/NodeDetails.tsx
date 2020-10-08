@@ -20,6 +20,7 @@ import Row from '../../misc/template/Row';
 import Status from '../../misc/template/Status';
 import AddSSH from './AddSSH';
 import { getStatus } from './nodeHelpers';
+import NodeMetrics from './NodeMetrics';
 
 interface INodeDetailsProps extends RouteComponentProps {
   item: V1Node;
@@ -94,6 +95,8 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
       </IonRow>
 
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
+
+      {data ? <NodeMetrics item={item} metrics={data} /> : null}
 
       <IonRow>
         {item.status && item.status.capacity && item.status.allocatable ? (

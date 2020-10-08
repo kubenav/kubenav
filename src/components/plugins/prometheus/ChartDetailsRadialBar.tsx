@@ -2,7 +2,7 @@ import { IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonRow } from '@io
 import React from 'react';
 import { RadialBar, RadialBarChart, ResponsiveContainer } from 'recharts';
 
-import IonCardEqualHeight from '../misc/IonCardEqualHeight';
+import IonCardEqualHeight from '../../misc/IonCardEqualHeight';
 
 export interface IMetric {
   name: string;
@@ -10,13 +10,17 @@ export interface IMetric {
   fill: string;
 }
 
-interface IClusterMetricProps {
+interface IChartDetailsRadialBarProps {
   title: string;
   data?: IMetric[];
   unit: string;
 }
 
-const ClusterMetric: React.FunctionComponent<IClusterMetricProps> = ({ title, data, unit }: IClusterMetricProps) => {
+const ChartDetailsRadialBar: React.FunctionComponent<IChartDetailsRadialBarProps> = ({
+  title,
+  data,
+  unit,
+}: IChartDetailsRadialBarProps) => {
   return (
     <IonCardEqualHeight>
       <IonCardHeader>
@@ -25,8 +29,8 @@ const ClusterMetric: React.FunctionComponent<IClusterMetricProps> = ({ title, da
       <IonCardContent>
         <div style={{ height: '250px', width: '100%' }}>
           <ResponsiveContainer>
-            <RadialBarChart innerRadius="25%" barSize={5} data={data} startAngle={90} endAngle={-270}>
-              <RadialBar minAngle={15} background={true} dataKey="value" />
+            <RadialBarChart innerRadius="25%" barSize={10} data={data} startAngle={90} endAngle={-270}>
+              <RadialBar background={true} dataKey="value" />
             </RadialBarChart>
           </ResponsiveContainer>
         </div>
@@ -51,4 +55,4 @@ const ClusterMetric: React.FunctionComponent<IClusterMetricProps> = ({ title, da
   );
 };
 
-export default ClusterMetric;
+export default ChartDetailsRadialBar;
