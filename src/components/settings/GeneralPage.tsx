@@ -121,10 +121,10 @@ const GeneralPage: React.FunctionComponent = () => {
               />
             </IonItem>
             <IonItem>
-              <IonLabel>Show Pod Metrics in List View</IonLabel>
+              <IonLabel>Enable Pod Metrics</IonLabel>
               <IonToggle
-                name="showPodMetricsInListViews"
-                checked={context.settings.showPodMetricsInListViews}
+                name="enablePodMetrics"
+                checked={context.settings.enablePodMetrics}
                 onIonChange={handleToggleChange}
               />
             </IonItem>

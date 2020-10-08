@@ -51,7 +51,7 @@ const PodItem: React.FunctionComponent<IPodItemProps> = ({ item, section, type }
         <p>
           Ready: {getReady(item)} | Restarts: {getRestarts(item)} | Phase: {podStatus.phase}
           {podStatus.reason ? ` | Reason: ${podStatus.reason}` : ''}
-          {context.settings.showPodMetricsInListViews ? <PodItemMetrics item={item} type={type} /> : null}
+          {context.settings.enablePodMetrics ? <PodItemMetrics item={item} type={type} /> : null}
           {item.metadata && item.metadata.creationTimestamp
             ? ` | Age: ${timeDifference(
                 new Date().getTime(),
