@@ -242,6 +242,21 @@ export interface IKubeconfigUser {
   token?: string;
   username?: string;
   password?: string;
+  'auth-provider'?: IKubeconfigUserAuthProvider;
+}
+
+export interface IKubeconfigUserAuthProvider {
+  name: string;
+  config: IKubeconfigUserAuthProviderOIDC;
+}
+
+export interface IKubeconfigUserAuthProviderOIDC {
+  'client-id'?: string;
+  'client-secret'?: string;
+  'id-token'?: string;
+  'idp-issuer-url'?: string;
+  'refresh-token'?: string;
+  'idp-certificate-authority-data'?: string;
 }
 
 export interface IKubeconfigUserRef {
