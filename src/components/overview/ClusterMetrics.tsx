@@ -47,7 +47,7 @@ const ClusterMetrics: React.FunctionComponent = () => {
   const cluster = context.currentCluster();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data } = useQuery<IMetrics, Error>(
+  const { isError, data } = useQuery<IMetrics, Error>(
     ['ClusterMetrics', cluster ? cluster.id : ''],
     async () => {
       try {
@@ -162,19 +162,23 @@ const ClusterMetrics: React.FunctionComponent = () => {
     { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
   );
 
-  return (
-    <IonRow>
-      <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
-        <ChartDetailsRadialBar title="CPU" data={data && data.cpu ? data.cpu : undefined} unit="m" />
-      </IonCol>
-      <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
-        <ChartDetailsRadialBar title="Memory" data={data && data.memory ? data.memory : undefined} unit="Mi" />
-      </IonCol>
-      <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
-        <ChartDetailsRadialBar title="Pods" data={data && data.pods ? data.pods : undefined} unit="" />
-      </IonCol>
-    </IonRow>
-  );
+  if (isError || data === undefined) {
+    return null;
+  } else {
+    return (
+      <IonRow>
+        <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
+          <ChartDetailsRadialBar title="CPU" data={data && data.cpu ? data.cpu : undefined} unit="m" />
+        </IonCol>
+        <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
+          <ChartDetailsRadialBar title="Memory" data={data && data.memory ? data.memory : undefined} unit="Mi" />
+        </IonCol>
+        <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
+          <ChartDetailsRadialBar title="Pods" data={data && data.pods ? data.pods : undefined} unit="" />
+        </IonCol>
+      </IonRow>
+    );
+  }
 };
 
 export default memo(ClusterMetrics, (): boolean => {

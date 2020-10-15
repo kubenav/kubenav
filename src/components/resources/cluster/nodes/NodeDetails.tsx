@@ -96,7 +96,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
 
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
-      {data ? <NodeMetrics item={item} metrics={data} /> : null}
+      {data && context.settings.enablePodMetrics ? <NodeMetrics item={item} metrics={data} /> : null}
 
       <IonRow>
         {item.status && item.status.capacity && item.status.allocatable ? (

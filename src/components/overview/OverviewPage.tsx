@@ -38,7 +38,7 @@ const OverviewPage: React.FunctionComponent = () => {
       <IonContent>
         {context.clusters && context.cluster ? (
           <IonGrid>
-            <ClusterMetrics />
+            {context.settings.enablePodMetrics ? <ClusterMetrics /> : null}
             <Warnings />
 
             {context.settings.prometheusEnabled ? (
