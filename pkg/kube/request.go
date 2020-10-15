@@ -52,6 +52,8 @@ func KubernetesRequest(ctx context.Context, method, url, body string, clientset 
 		return clientset.RESTClient().Delete().RequestURI(url).DoRaw(ctx)
 	} else if method == "PATCH" {
 		return clientset.RESTClient().Patch(types.JSONPatchType).RequestURI(url).Body([]byte(body)).DoRaw(ctx)
+	} else if method == "POST" {
+		return clientset.RESTClient().Post().RequestURI(url).Body([]byte(body)).DoRaw(ctx)
 	}
 
 	return []byte(``), fmt.Errorf("Request method is not implemented")
