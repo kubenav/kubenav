@@ -163,6 +163,7 @@ func getMenuOptions(updateAvailable bool, client kube.Client, log *logrus.Logger
 				{Label: astikit.StrPtr("Select All"), Role: astilectron.MenuItemRoleSelectAll},
 				{Type: astilectron.MenuItemTypeSeparator},
 				{Label: astikit.StrPtr("Reload"), Role: astilectron.MenuItemRoleReload},
+				{Label: astikit.StrPtr("Full Screen"), Role: astilectron.MenuItemRoleToggleFullScreen},
 			},
 		},
 		{
