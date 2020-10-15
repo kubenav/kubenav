@@ -162,8 +162,6 @@ const ClusterMetrics: React.FunctionComponent = () => {
     { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
   );
 
-  console.log(data);
-
   if (isError || data === undefined) {
     return null;
   } else {
