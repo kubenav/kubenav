@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { IBookmark } from '../../../../declarations';
 import useWindowWidth from '../../../../utils/useWindowWidth';
 import Bookmark from '../shared/Bookmark';
+import CreateJobItem, { CreateJobItemActivator } from './CreateJobItem';
 import DeleteItem, { DeleteItemActivator } from './DeleteItem';
 import EditItem, { EditItemActivator } from './EditItem';
 import LogsItem, { LogsItemActivator } from './LogsItem';
@@ -14,7 +15,7 @@ import ShellItem, { ShellItemActivator } from './ShellItem';
 import SSHItem, { SSHItemActivator } from './SSHItem';
 import ViewItem, { ViewItemActivator } from './ViewItem';
 
-type TShow = '' | 'delete' | 'edit' | 'logs' | 'restart' | 'scale' | 'shell' | 'ssh' | 'view';
+type TShow = '' | 'createjob' | 'delete' | 'edit' | 'logs' | 'restart' | 'scale' | 'shell' | 'ssh' | 'view';
 
 interface IDetailsProps {
   refresh: () => void;
@@ -52,6 +53,9 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ refresh, type, item, 
             <IonLabel>Refresh</IonLabel>
           </IonItem>
           <Bookmark bookmark={bookmark} hide={() => showType('')} />
+          {type === 'cronjobs' ? (
+            <CreateJobItemActivator activator="item" onClick={() => showType('createjob')} />
+          ) : null}
           {type === 'deployments' ||
           type === 'statefulsets' ||
           type === 'replicationcontrollers' ||
@@ -76,6 +80,7 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ refresh, type, item, 
         </IonList>
       </IonPopover>
 
+      <CreateJobItem show={show === 'createjob'} hide={() => setShow('')} item={item} />
       <ScaleItem show={show === 'scale'} hide={() => setShow('')} item={item} url={url} />
       <RestartItem show={show === 'restart'} hide={() => setShow('')} item={item} url={url} />
       <LogsItem show={show === 'logs'} hide={() => setShow('')} item={item} url={url} />
