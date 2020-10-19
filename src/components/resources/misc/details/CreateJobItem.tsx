@@ -43,13 +43,17 @@ const CreateJobItem: React.FunctionComponent<ICreateJobItemProps> = ({ show, hid
 
   const [error, setError] = useState<string>('');
 
+  const jobName = `${item.metadata && item.metadata.name ? item.metadata.name : ''}-manual-${randomString(
+    6,
+  )}`.toLowerCase();
+
   const handleCreateJob = async () => {
     try {
       if (item.metadata && item.metadata.namespace && item.metadata.name && item.spec && item.spec.jobTemplate.spec) {
         const jobURL = resources.workloads.pages.jobs.listURL(
           item.metadata && item.metadata.namespace ? item.metadata.namespace : '',
         );
-        const jobName = `${item.metadata.name}-manual-${randomString(6)}`.toLowerCase();
+
         const job: V1Job = {
           kind: 'Job',
           apiVersion: 'batch/v1',
@@ -97,7 +101,7 @@ const CreateJobItem: React.FunctionComponent<ICreateJobItemProps> = ({ show, hid
         <IonAlert
           isOpen={error !== ''}
           onDidDismiss={() => setError('')}
-          header={`Could not create Job ${item.metadata ? item.metadata.name : ''}`}
+          header={`Could not create Job ${jobName}`}
           message={error}
           buttons={['OK']}
         />
@@ -107,9 +111,7 @@ const CreateJobItem: React.FunctionComponent<ICreateJobItemProps> = ({ show, hid
         isOpen={show}
         onDidDismiss={hide}
         header={item.metadata ? item.metadata.name : ''}
-        message={`Do you really want to create the Job ${
-          item.metadata && item.metadata.namespace ? `${item.metadata.namespace}/` : ''
-        }${item.metadata ? item.metadata.name : ''}?`}
+        message={`Do you really want to create the Job ${jobName}?`}
         buttons={[
           { text: 'Cancel', role: 'cancel', handler: hide },
           { text: 'Create', handler: () => handleCreateJob() },
