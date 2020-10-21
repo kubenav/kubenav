@@ -7,6 +7,8 @@ export interface IAppPage {
   icon: string;
   singleText: string;
   pluralText: string;
+  apiVersion: string;
+  kind: string;
   listURL: (namespace: string) => string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   listItemComponent: React.FunctionComponent<any>;

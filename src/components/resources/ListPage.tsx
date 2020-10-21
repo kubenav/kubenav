@@ -114,6 +114,8 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
                 url: match.url,
                 namespace: isNamespaced(match.params.type) ? (cluster ? cluster.namespace : '') : '',
               }}
+              type={match.params.type}
+              page={page}
             />
           </IonButtons>
         </IonToolbar>

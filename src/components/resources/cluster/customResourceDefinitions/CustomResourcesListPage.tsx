@@ -123,6 +123,7 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
                 url: match.url,
                 namespace: cluster ? cluster.namespace : '',
               }}
+              type="customresourcedefinitions"
             />
           </IonButtons>
         </IonToolbar>

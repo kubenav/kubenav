@@ -2,18 +2,21 @@ import { IonButton, IonIcon, IonItem, IonLabel, IonList, IonPopover } from '@ion
 import { ellipsisHorizontal, ellipsisVertical, refresh as refreshIcon } from 'ionicons/icons';
 import React, { useState } from 'react';
 
-import { IBookmark } from '../../../../declarations';
+import { IAppPage, IBookmark } from '../../../../declarations';
 import Bookmark from '../shared/Bookmark';
+import CreateItem, { CreateItemActivator } from './CreateItem';
 
-type TShow = '';
+type TShow = '' | 'create';
 
 interface IDetailsProps {
   refresh: () => void;
   bookmark: IBookmark;
+  type: string;
+  page?: IAppPage;
 }
 
-const Details: React.FunctionComponent<IDetailsProps> = ({ refresh, bookmark }: IDetailsProps) => {
-  const [, setShow] = useState<TShow>('');
+const Details: React.FunctionComponent<IDetailsProps> = ({ refresh, bookmark, type, page }: IDetailsProps) => {
+  const [show, setShow] = useState<TShow>('');
   const [showPopover, setShowPopover] = useState<boolean>(false);
   const [popoverEvent, setPopoverEvent] = useState();
 
@@ -38,8 +41,19 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ refresh, bookmark }: 
             <IonLabel>Refresh</IonLabel>
           </IonItem>
           <Bookmark bookmark={bookmark} hide={() => showType('')} />
+          {page !== undefined &&
+          type !== 'componentstatuses' &&
+          type !== 'customresourcedefinitions' &&
+          type !== 'events' &&
+          type !== 'nodes' ? (
+            <CreateItemActivator activator="item" onClick={() => showType('create')} />
+          ) : null}
         </IonList>
       </IonPopover>
+
+      {page !== undefined ? (
+        <CreateItem show={show === 'create'} hide={() => setShow('')} type={type} page={page} />
+      ) : null}
 
       <IonButton
         onClick={(e) => {
