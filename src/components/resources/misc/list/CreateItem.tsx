@@ -16,7 +16,7 @@ import {
 } from '@ionic/react';
 import { close, create } from 'ionicons/icons';
 import yaml from 'js-yaml';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { IAppPage, IContext, TActivator } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
@@ -24,67 +24,104 @@ import { AppContext } from '../../../../utils/context';
 import { isNamespaced } from '../../../../utils/helpers';
 import Editor from '../../../misc/Editor';
 
-const createYAML = (
-  type: string,
-  apiVersion: string,
-  kind: string,
-  name: string,
-  namespace: string,
-  replicas: number,
-  image: string,
-): string => {
+interface IValues {
+  name: string;
+  namespace: string;
+  replicas: number;
+  image: string;
+}
+
+const initialValues: IValues = {
+  name: '',
+  namespace: '',
+  replicas: 1,
+  image: '',
+};
+
+const createYAML = (type: string, apiVersion: string, kind: string, values: IValues): string => {
   if (type === 'deployments' || type === 'statefulsets') {
     return `apiVersion: ${apiVersion}
-    kind: ${kind}
+kind: ${kind}
+metadata:
+  labels:
+    app: ${values.name}
+  name: ${values.name}
+  namespace: ${values.namespace}
+spec:
+  replicas: ${values.replicas}
+  selector:
+    matchLabels:
+      app: ${values.name}
+  template:
     metadata:
       labels:
-        app: ${name}
-      name: ${name}
-      namespace: ${namespace}
+        app: ${values.name}
     spec:
-      replicas: ${replicas}
-      selector:
-        matchLabels:
-          app: ${name}
-      template:
-        metadata:
-          labels:
-            app: ${name}
-        spec:
-          containers:
-            - name: ${name}
-              image: ${image}`;
+      containers:
+        - name: ${values.name}
+          image: ${values.image}`;
   } else if (type === 'daemonsets' || type === 'jobs') {
     return `apiVersion: ${apiVersion}
-    kind: ${kind}
+kind: ${kind}
+metadata:
+  labels:
+    app: ${values.name}
+  name: ${values.name}
+  namespace: ${values.namespace}
+spec:
+  selector:
+    matchLabels:
+      app: ${values.name}
+  template:
     metadata:
       labels:
-        app: ${name}
-      name: ${name}
-      namespace: ${namespace}
+        app: ${values.name}
     spec:
-      selector:
-        matchLabels:
-          app: ${name}
+      containers:
+        - name: ${values.name}
+          image: ${values.image}`;
+  } else if (type === 'pods') {
+    return `apiVersion: ${apiVersion}
+kind: ${kind}
+metadata:
+  labels:
+    app: ${values.name}
+  name: ${values.name}
+  namespace: ${values.namespace}
+spec:
+  containers:
+    - name: ${values.name}
+      image: ${values.image}`;
+  } else if (type === 'cronjobs') {
+    return `apiVersion: ${apiVersion}
+kind: ${kind}
+metadata:
+  labels:
+    app: ${values.name}
+  name: ${values.name}
+  namespace: ${values.namespace}
+spec:
+  jobTemplate:
+    spec:
       template:
         metadata:
           labels:
-            app: ${name}
+            app: ${values.name}
         spec:
           containers:
-            - name: ${name}
-              image: ${image}`;
+            - name: ${values.name}
+              image: ${values.image}`;
   } else if (isNamespaced(type)) {
     return `apiVersion: ${apiVersion}
-    kind: ${kind}
-    metadata:
-      name: ${name}
-      namespace: ${namespace}`;
+kind: ${kind}
+metadata:
+  name: ${values.name}
+  namespace: ${values.namespace}`;
   } else {
     return `apiVersion: ${apiVersion}
-    kind: ${kind}
-    metadata:
-      name: ${name}`;
+kind: ${kind}
+metadata:
+  name: ${values.name}`;
   }
 };
 
@@ -129,39 +166,22 @@ interface ICreateItemProps {
 
 const CreateItem: React.FunctionComponent<ICreateItemProps> = ({ type, page, show, hide }: ICreateItemProps) => {
   const context = useContext<IContext>(AppContext);
+  const cluster = context.currentCluster();
 
   const [error, setError] = useState<string>('');
   const [view, setView] = useState<number>(0);
-  const [valueName, setValueName] = useState<string>('');
-  const [valueNamespace, setValueNamespace] = useState<string>('');
-  const [valueReplicas, setValueReplicas] = useState<number>(1);
-  const [valueImage, setValueImage] = useState<string>('');
   const [value, setValue] = useState<string>('');
+  const [values, setValues] = useState<IValues>(
+    cluster ? { ...initialValues, namespace: cluster.namespace } : initialValues,
+  );
 
   const handleNextView = () => {
-    setValue(createYAML(type, page.apiVersion, page.kind, valueName, valueNamespace, valueReplicas, valueImage));
+    setValue(createYAML(type, page.apiVersion, page.kind, values));
     setView(1);
   };
 
-  const handleName = (event) => {
-    setValueName(event.target.value);
-  };
-
-  const handleNamespace = (event) => {
-    setValueNamespace(event.target.value);
-  };
-
-  const handleReplicas = (event) => {
-    setValueReplicas(event.target.value);
-  };
-
-  const handleImage = (event) => {
-    setValueImage(event.target.value);
-  };
-
-  const handleHide = () => {
-    setView(0);
-    hide();
+  const handleValues = (event) => {
+    setValues({ ...values, [event.target.name]: event.target.value });
   };
 
   const handleCreate = async () => {
@@ -177,11 +197,16 @@ const CreateItem: React.FunctionComponent<ICreateItemProps> = ({ type, page, sho
           await context.kubernetesAuthWrapper(''),
         );
       }
-      handleHide();
+      hide();
     } catch (err) {
       setError(err);
     }
   };
+
+  useEffect(() => {
+    setView(0);
+    setValues(cluster ? { ...initialValues, namespace: cluster.namespace } : initialValues);
+  }, [cluster, show]);
 
   return (
     <React.Fragment>
@@ -195,11 +220,11 @@ const CreateItem: React.FunctionComponent<ICreateItemProps> = ({ type, page, sho
         />
       ) : null}
 
-      <IonModal isOpen={show} onDidDismiss={handleHide}>
+      <IonModal isOpen={show} onDidDismiss={hide}>
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonButton onClick={handleHide}>
+              <IonButton onClick={hide}>
                 <IonIcon slot="icon-only" icon={close} />
               </IonButton>
             </IonButtons>
@@ -218,24 +243,41 @@ const CreateItem: React.FunctionComponent<ICreateItemProps> = ({ type, page, sho
             <IonList lines="full">
               <IonItem>
                 <IonLabel position="stacked">Name</IonLabel>
-                <IonInput type="text" required={true} value={valueName} onInput={handleName} />
+                <IonInput type="text" required={true} name="name" value={values.name} onInput={handleValues} />
               </IonItem>
               {isNamespaced(type) ? (
                 <IonItem>
                   <IonLabel position="stacked">Namespace</IonLabel>
-                  <IonInput type="text" required={true} value={valueNamespace} onInput={handleNamespace} />
+                  <IonInput
+                    type="text"
+                    required={true}
+                    name="namespace"
+                    value={values.namespace}
+                    onInput={handleValues}
+                  />
                 </IonItem>
               ) : null}
               {type === 'deployments' || type === 'statefulsets' ? (
                 <IonItem>
                   <IonLabel position="stacked">Replicas</IonLabel>
-                  <IonInput type="number" required={true} value={valueReplicas} onInput={handleReplicas} />
+                  <IonInput
+                    type="number"
+                    required={true}
+                    name="replicas"
+                    value={values.replicas}
+                    onInput={handleValues}
+                  />
                 </IonItem>
               ) : null}
-              {type === 'daemonsets' || type === 'deployments' || type === 'statefulsets' || type === 'jobs' ? (
+              {type === 'cronjobs' ||
+              type === 'daemonsets' ||
+              type === 'deployments' ||
+              type === 'jobs' ||
+              type === 'pods' ||
+              type === 'statefulsets' ? (
                 <IonItem>
                   <IonLabel position="stacked">Image</IonLabel>
-                  <IonInput type="text" required={true} value={valueImage} onInput={handleImage} />
+                  <IonInput type="text" required={true} name="image" value={values.image} onInput={handleValues} />
                 </IonItem>
               ) : null}
             </IonList>
