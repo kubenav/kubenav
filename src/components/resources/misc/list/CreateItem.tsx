@@ -160,11 +160,18 @@ export const CreateItemActivator: React.FunctionComponent<ICreateItemActivatorPr
 interface ICreateItemProps {
   page: IAppPage;
   type: string;
+  refresh: () => void;
   show: boolean;
   hide: () => void;
 }
 
-const CreateItem: React.FunctionComponent<ICreateItemProps> = ({ type, page, show, hide }: ICreateItemProps) => {
+const CreateItem: React.FunctionComponent<ICreateItemProps> = ({
+  type,
+  page,
+  refresh,
+  show,
+  hide,
+}: ICreateItemProps) => {
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
 
@@ -198,6 +205,7 @@ const CreateItem: React.FunctionComponent<ICreateItemProps> = ({ type, page, sho
         );
       }
       hide();
+      refresh();
     } catch (err) {
       setError(err);
     }

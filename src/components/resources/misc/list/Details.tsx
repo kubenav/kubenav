@@ -52,7 +52,7 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ refresh, bookmark, ty
       </IonPopover>
 
       {page !== undefined ? (
-        <CreateItem show={show === 'create'} hide={() => setShow('')} type={type} page={page} />
+        <CreateItem show={show === 'create'} hide={() => setShow('')} type={type} page={page} refresh={refresh} />
       ) : null}
 
       <IonButton
