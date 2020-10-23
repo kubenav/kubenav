@@ -77,6 +77,8 @@ export const resources: IAppSections = {
         singleText: 'Cron Job',
         pluralText: 'Cron Jobs',
         icon: '/assets/icons/kubernetes/cronjob.png',
+        kind: 'CronJob',
+        apiVersion: 'batch/v1beta1',
         listURL: (namespace: string): string => {
           return namespace ? `/apis/batch/v1beta1/namespaces/${namespace}/cronjobs` : `/apis/batch/v1beta1/cronjobs`;
         },
@@ -90,6 +92,8 @@ export const resources: IAppSections = {
         singleText: 'Daemon Set',
         pluralText: 'Daemon Sets',
         icon: '/assets/icons/kubernetes/ds.png',
+        kind: 'DaemonSet',
+        apiVersion: 'apps/v1',
         listURL: (namespace: string): string => {
           return namespace ? `/apis/apps/v1/namespaces/${namespace}/daemonsets` : `/apis/apps/v1/daemonsets`;
         },
@@ -103,6 +107,8 @@ export const resources: IAppSections = {
         singleText: 'Deployment',
         pluralText: 'Deployments',
         icon: '/assets/icons/kubernetes/deploy.png',
+        kind: 'Deployment',
+        apiVersion: 'apps/v1',
         listURL: (namespace: string): string => {
           return namespace ? `/apis/apps/v1/namespaces/${namespace}/deployments` : `/apis/apps/v1/deployments`;
         },
@@ -116,6 +122,8 @@ export const resources: IAppSections = {
         singleText: 'Job',
         pluralText: 'Jobs',
         icon: '/assets/icons/kubernetes/job.png',
+        kind: 'Job',
+        apiVersion: 'batch/v1',
         listURL: (namespace: string): string => {
           return namespace ? `/apis/batch/v1/namespaces/${namespace}/jobs` : `/apis/batch/v1/jobs`;
         },
@@ -129,6 +137,8 @@ export const resources: IAppSections = {
         singleText: 'Pod',
         pluralText: 'Pods',
         icon: '/assets/icons/kubernetes/pod.png',
+        kind: 'Pod',
+        apiVersion: 'v1',
         listURL: (namespace: string): string => {
           return namespace ? `/api/v1/namespaces/${namespace}/pods` : `/api/v1/pods`;
         },
@@ -142,6 +152,8 @@ export const resources: IAppSections = {
         singleText: 'Replica Set',
         pluralText: 'Replica Sets',
         icon: '/assets/icons/kubernetes/rs.png',
+        kind: 'ReplicaSet',
+        apiVersion: 'apps/v1',
         listURL: (namespace: string): string => {
           return namespace ? `/apis/apps/v1/namespaces/${namespace}/replicasets` : `/apis/apps/v1/replicasets`;
         },
@@ -155,6 +167,8 @@ export const resources: IAppSections = {
         singleText: 'Replication Controller',
         pluralText: 'Replication Controllers',
         icon: '/assets/icons/kubernetes/deploy.png',
+        kind: 'ReplicationController',
+        apiVersion: 'v1',
         listURL: (namespace: string): string => {
           return namespace
             ? `/api/v1/namespaces/${namespace}/replicationcontrollers`
@@ -170,6 +184,8 @@ export const resources: IAppSections = {
         singleText: 'Stateful Set',
         pluralText: 'Stateful Sets',
         icon: '/assets/icons/kubernetes/sts.png',
+        kind: 'StatefulSet',
+        apiVersion: 'apps/v1',
         listURL: (namespace: string): string => {
           return namespace ? `/apis/apps/v1/namespaces/${namespace}/statefulsets` : `/apis/apps/v1/statefulsets`;
         },
@@ -188,6 +204,8 @@ export const resources: IAppSections = {
         singleText: 'Endpoint',
         pluralText: 'Endpoints',
         icon: '/assets/icons/kubernetes/ep.png',
+        kind: 'Endpoints',
+        apiVersion: 'v1',
         listURL: (namespace: string): string => {
           return namespace ? `/api/v1/namespaces/${namespace}/endpoints` : `/api/v1/endpoints`;
         },
@@ -201,6 +219,8 @@ export const resources: IAppSections = {
         singleText: 'Horizontal Pod Autoscaler',
         pluralText: 'Horizontal Pod Autoscalers',
         icon: '/assets/icons/kubernetes/hpa.png',
+        kind: 'HorizontalPodAutoscaler',
+        apiVersion: 'autoscaling/v2beta1',
         listURL: (namespace: string): string => {
           return namespace
             ? `/apis/autoscaling/v2beta1/namespaces/${namespace}/horizontalpodautoscalers`
@@ -216,6 +236,8 @@ export const resources: IAppSections = {
         singleText: 'Ingresse',
         pluralText: 'Ingresses',
         icon: '/assets/icons/kubernetes/ing.png',
+        kind: 'Ingresse',
+        apiVersion: 'networking.k8s.io/v1beta1',
         listURL: (namespace: string): string => {
           return namespace
             ? `/apis/networking.k8s.io/v1beta1/namespaces/${namespace}/ingresses`
@@ -231,6 +253,8 @@ export const resources: IAppSections = {
         singleText: 'Network Policy',
         pluralText: 'Network Policies',
         icon: '/assets/icons/kubernetes/netpol.png',
+        kind: 'NetworkPolicy',
+        apiVersion: 'networking.k8s.io/v1',
         listURL: (namespace: string): string => {
           return namespace
             ? `/apis/networking.k8s.io/v1/namespaces/${namespace}/networkpolicies`
@@ -246,6 +270,8 @@ export const resources: IAppSections = {
         singleText: 'Service',
         pluralText: 'Services',
         icon: '/assets/icons/kubernetes/svc.png',
+        kind: 'Service',
+        apiVersion: 'v1',
         listURL: (namespace: string): string => {
           return namespace ? `/api/v1/namespaces/${namespace}/services` : `/api/v1/services`;
         },
@@ -264,6 +290,8 @@ export const resources: IAppSections = {
         singleText: 'Config Map',
         pluralText: 'Config Maps',
         icon: '/assets/icons/kubernetes/cm.png',
+        kind: 'ConfigMap',
+        apiVersion: 'v1',
         listURL: (namespace: string): string => {
           return namespace ? `/api/v1/namespaces/${namespace}/configmaps` : `/api/v1/configmaps`;
         },
@@ -278,6 +306,8 @@ export const resources: IAppSections = {
         pluralText: 'Persistent Volumes',
         icon: '/assets/icons/kubernetes/pv.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        kind: 'PersistentVolume',
+        apiVersion: 'v1',
         listURL: (namespace: string): string => {
           return `/api/v1/persistentvolumes`;
         },
@@ -291,6 +321,8 @@ export const resources: IAppSections = {
         singleText: 'Persistent Volume Claim',
         pluralText: 'Persistent Volume Claims',
         icon: '/assets/icons/kubernetes/pvc.png',
+        kind: 'PersistentVolumeClaim',
+        apiVersion: 'v1',
         listURL: (namespace: string): string => {
           return namespace
             ? `/api/v1/namespaces/${namespace}/persistentvolumeclaims`
@@ -306,6 +338,8 @@ export const resources: IAppSections = {
         singleText: 'Pod Disruption Budget',
         pluralText: 'Pod Disruption Budgets',
         icon: '/assets/icons/kubernetes/pdb.png',
+        kind: 'PodDisruptionBudget',
+        apiVersion: 'policy/v1beta1',
         listURL: (namespace: string): string => {
           return namespace
             ? `/apis/policy/v1beta1/namespaces/${namespace}/poddisruptionbudgets`
@@ -321,6 +355,8 @@ export const resources: IAppSections = {
         singleText: 'Secret',
         pluralText: 'Secrets',
         icon: '/assets/icons/kubernetes/secret.png',
+        kind: 'Secret',
+        apiVersion: 'v1',
         listURL: (namespace: string): string => {
           return namespace ? `/api/v1/namespaces/${namespace}/secrets` : `/api/v1/secrets`;
         },
@@ -334,6 +370,8 @@ export const resources: IAppSections = {
         singleText: 'Service Account',
         pluralText: 'Service Accounts',
         icon: '/assets/icons/kubernetes/sa.png',
+        kind: 'ServiceAccount',
+        apiVersion: 'v1',
         listURL: (namespace: string): string => {
           return namespace ? `/api/v1/namespaces/${namespace}/serviceaccounts` : `/api/v1/serviceaccounts`;
         },
@@ -348,6 +386,8 @@ export const resources: IAppSections = {
         pluralText: 'Storage Classes',
         icon: '/assets/icons/kubernetes/sc.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        kind: 'StorageClass',
+        apiVersion: 'storage.k8s.io/v1',
         listURL: (namespace: string): string => {
           return `/apis/storage.k8s.io/v1/storageclasses`;
         },
@@ -367,6 +407,8 @@ export const resources: IAppSections = {
         pluralText: 'Cluster Roles',
         icon: '/assets/icons/kubernetes/c-role.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        kind: 'ClusterRole',
+        apiVersion: 'rbac.authorization.k8s.io/v1',
         listURL: (namespace: string): string => {
           return `/apis/rbac.authorization.k8s.io/v1/clusterroles`;
         },
@@ -381,6 +423,8 @@ export const resources: IAppSections = {
         pluralText: 'Cluster Role Bindings',
         icon: '/assets/icons/kubernetes/c-rb.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        kind: 'ClusterRoleBinding',
+        apiVersion: 'rbac.authorization.k8s.io/v1',
         listURL: (namespace: string): string => {
           return `/apis/rbac.authorization.k8s.io/v1/clusterrolebindings`;
         },
@@ -394,6 +438,8 @@ export const resources: IAppSections = {
         singleText: 'Role',
         pluralText: 'Roles',
         icon: '/assets/icons/kubernetes/role.png',
+        kind: 'Role',
+        apiVersion: 'rbac.authorization.k8s.io/v1',
         listURL: (namespace: string): string => {
           return namespace
             ? `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/roles`
@@ -409,6 +455,8 @@ export const resources: IAppSections = {
         singleText: 'Role Binding',
         pluralText: 'Role Bindings',
         icon: '/assets/icons/kubernetes/rb.png',
+        kind: 'RoleBinding',
+        apiVersion: 'rbac.authorization.k8s.io/v1',
         listURL: (namespace: string): string => {
           return namespace
             ? `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/rolebindings`
@@ -430,6 +478,8 @@ export const resources: IAppSections = {
         pluralText: 'Component Statuses',
         icon: '/assets/icons/kubernetes/master.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        kind: 'ComponentStatus',
+        apiVersion: 'v1',
         listURL: (namespace: string): string => {
           return `/api/v1/componentstatuses`;
         },
@@ -445,6 +495,8 @@ export const resources: IAppSections = {
         pluralText: 'Custom Resource Definitions',
         icon: '/assets/icons/kubernetes/crd.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        kind: '',
+        apiVersion: '',
         listURL: (namespace: string): string => {
           return `/apis/apiextensions.k8s.io/v1beta1/customresourcedefinitions`;
         },
@@ -459,6 +511,8 @@ export const resources: IAppSections = {
         singleText: 'Event',
         pluralText: 'Events',
         icon: '/assets/icons/kubernetes/events.png',
+        kind: 'Event',
+        apiVersion: 'v1',
         listURL: (namespace: string): string => {
           return namespace ? `/api/v1/namespaces/${namespace}/events` : `/api/v1/events`;
         },
@@ -473,6 +527,8 @@ export const resources: IAppSections = {
         pluralText: 'Namespaces',
         icon: '/assets/icons/kubernetes/ns.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        kind: 'Namespace',
+        apiVersion: 'v1',
         listURL: (namespace: string): string => {
           return `/api/v1/namespaces`;
         },
@@ -487,6 +543,8 @@ export const resources: IAppSections = {
         pluralText: 'Nodes',
         icon: '/assets/icons/kubernetes/node.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        kind: 'Node',
+        apiVersion: 'v1',
         listURL: (namespace: string): string => {
           return `/api/v1/nodes`;
         },
@@ -501,6 +559,8 @@ export const resources: IAppSections = {
         pluralText: 'Pod Security Policies',
         icon: '/assets/icons/kubernetes/psp.png',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        kind: 'PodSecurityPolicy',
+        apiVersion: 'policy/v1beta1',
         listURL: (namespace: string): string => {
           return `/apis/policy/v1beta1/podsecuritypolicies`;
         },

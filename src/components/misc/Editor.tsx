@@ -1,4 +1,5 @@
 import { Plugins } from '@capacitor/core';
+import { isPlatform } from '@ionic/react';
 import React, { useContext, useRef } from 'react';
 import AceEditor from 'react-ace';
 
@@ -37,13 +38,15 @@ const Editor: React.FunctionComponent<IEditorProps> = ({
     }
   };
 
-  Keyboard.addListener('keyboardDidShow', () => {
-    editor.current?.editor.resize();
-  });
+  if (isPlatform('hybrid')) {
+    Keyboard.addListener('keyboardDidShow', () => {
+      editor.current?.editor.resize();
+    });
 
-  Keyboard.addListener('keyboardDidHide', () => {
-    editor.current?.editor.resize();
-  });
+    Keyboard.addListener('keyboardDidHide', () => {
+      editor.current?.editor.resize();
+    });
+  }
 
   return (
     <AceEditor
