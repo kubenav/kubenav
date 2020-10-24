@@ -1,7 +1,7 @@
 import { IonButton, IonIcon, IonItem, IonLabel, IonList, IonPopover, IonSpinner } from '@ionic/react';
 import { V1Namespace, V1NamespaceList } from '@kubernetes/client-node';
 import { checkmark, options } from 'ionicons/icons';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 
 import { IContext } from '../../../../declarations';
@@ -15,7 +15,7 @@ const Namespaces: React.FunctionComponent = () => {
   const [showPopover, setShowPopover] = useState<boolean>(false);
   const [popoverEvent, setPopoverEvent] = useState();
 
-  const { isError, isLoading, error, data } = useQuery<V1NamespaceList, Error>(
+  const { isError, isLoading, error, data, refetch } = useQuery<V1NamespaceList, Error>(
     ['Namespaces', cluster ? cluster.id : ''],
     async () =>
       await kubernetesRequest(
@@ -38,6 +38,12 @@ const Namespaces: React.FunctionComponent = () => {
     context.setNamespace('');
     setShowPopover(false);
   };
+
+  useEffect(() => {
+    if (showPopover) {
+      refetch();
+    }
+  }, [showPopover, refetch]);
 
   return (
     <React.Fragment>
