@@ -25,8 +25,9 @@ import { kubernetesRequest } from '../../../utils/api';
 import { AppContext } from '../../../utils/context';
 import LoadingErrorCard from '../../misc/LoadingErrorCard';
 import Namespaces from '../../resources/misc/list/Namespaces';
+import ItemStatus from '../../resources/misc/template/ItemStatus';
 import Details from './Details';
-import { IHelmReleases } from './helpers';
+import { IHelmRelease, IHelmReleases } from './helpers';
 
 // ReleasesPage shows a list of the selected resource. The list can be filtered by namespace and each item contains a status
 // indicator, to get an overview of problems in the cluster.
@@ -97,6 +98,22 @@ const ReleasesPage: React.FunctionComponent = () => {
     },
   );
 
+  const status = (helmRelease: IHelmRelease): string => {
+    if (
+      helmRelease.status === 'deployed' ||
+      helmRelease.status === 'superseded' ||
+      helmRelease.status === 'uninstalled'
+    ) {
+      return 'success';
+    }
+
+    if (helmRelease.status === 'failed') {
+      return 'danger';
+    }
+
+    return 'warning';
+  };
+
   // The doRefresh method is used for a manual reload of the items for the corresponding resource. The
   // event.detail.complete() call is required to finish the animation of the IonRefresher component.
   const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
@@ -157,6 +174,7 @@ const ReleasesPage: React.FunctionComponent = () => {
                             routerLink={`/plugins/helm/${data[key].namespace}/${data[key].secretName}`}
                             routerDirection="forward"
                           >
+                            <ItemStatus status={status(data[key])} />
                             <IonLabel>
                               <h2>{data[key].name}</h2>
                               <p>

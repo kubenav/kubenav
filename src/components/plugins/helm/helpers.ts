@@ -71,6 +71,18 @@ export const getDetails = (release: string): IHelmDetails => {
   const binData = new Uint8Array(charData);
   const data = pako.inflate(binData);
 
-  // Convert gunzipped byteArray back to ascii string:
-  return JSON.parse(String.fromCharCode.apply(null, (new Uint16Array(data) as unknown) as number[]));
+  return JSON.parse(arrayBufferToString(data));
+};
+
+const arrayBufferToString = (buffer) => {
+  const bytes = new Uint8Array(buffer);
+  const len = bytes.byteLength;
+
+  let binary = '';
+
+  for (let i = 0; i < len; i++) {
+    binary = binary + String.fromCharCode(bytes[i]);
+  }
+
+  return binary;
 };
