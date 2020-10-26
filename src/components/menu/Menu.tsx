@@ -107,6 +107,18 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections, history, location
           <Sections sections={sections} isMenu={true} />
 
           <IonListHeader mode="md">
+            <IonLabel>Plugins</IonLabel>
+          </IonListHeader>
+          <IonMenuToggle autoHide={false}>
+            <IonItem routerLink="/plugins/helm" routerDirection="root">
+              <IonAvatar slot="start">
+                <img alt="Helm Releases" src="/assets/icons/misc/bookmarks.png" />
+              </IonAvatar>
+              <IonLabel>Helm Releases</IonLabel>
+            </IonItem>
+          </IonMenuToggle>
+
+          <IonListHeader mode="md">
             <IonLabel>Settings</IonLabel>
           </IonListHeader>
           {IS_INCLUSTER && context.clusters && Object.keys(context.clusters).length <= 1 ? null : (

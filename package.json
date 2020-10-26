@@ -52,6 +52,7 @@
     "fast-json-patch": "^3.0.0-1",
     "ionicons": "^5.2.3",
     "js-yaml": "^3.14.0",
+    "pako": "^1.0.11",
     "react": "^16.14.0",
     "react-ace": "^9.1.4",
     "react-dom": "^16.14.0",
