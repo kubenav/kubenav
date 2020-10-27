@@ -7,6 +7,7 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonRouterLink,
   IonRow,
   isPlatform,
 } from '@ionic/react';
@@ -135,7 +136,14 @@ const History: React.FunctionComponent<IHistoryProps> = ({ name, namespace, helm
                       {data
                         ? Object.keys(data).map((key, index) => (
                             <tr key={index}>
-                              <td>{data[key].revision}</td>
+                              <td>
+                                <IonRouterLink
+                                  routerLink={`/plugins/helm/${data[key].namespace}/${data[key].secretName}`}
+                                  routerDirection="forward"
+                                >
+                                  {data[key].revision}
+                                </IonRouterLink>
+                              </td>
                               <td>{data[key].updated}</td>
                               <td>{data[key].status}</td>
                               <td>
