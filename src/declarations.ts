@@ -49,6 +49,7 @@ export interface IAppSettings {
   prometheusAddress: string;
   proxyEnabled: boolean;
   proxyAddress: string;
+  helmShowAllVersions: boolean;
 }
 
 export interface IAWSCluster {

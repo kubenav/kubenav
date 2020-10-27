@@ -171,6 +171,9 @@ export const readSettings = (): IAppSettings => {
       prometheusAddress: '',
       proxyEnabled: settings.hasOwnProperty('proxyEnabled') ? settings.proxyEnabled : DEFAULT_SETTINGS.proxyEnabled,
       proxyAddress: settings.proxyAddress ? settings.proxyAddress : DEFAULT_SETTINGS.proxyAddress,
+      helmShowAllVersions: settings.hasOwnProperty('helmShowAllVersions')
+        ? settings.helmShowAllVersions
+        : DEFAULT_SETTINGS.helmShowAllVersions,
     };
   }
 

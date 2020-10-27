@@ -31,6 +31,7 @@ export const DEFAULT_SETTINGS: IAppSettings = {
   prometheusAddress: '',
   proxyEnabled: false,
   proxyAddress: '',
+  helmShowAllVersions: false,
 };
 
 export const GOOGLE_OAUTH2_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/auth';
