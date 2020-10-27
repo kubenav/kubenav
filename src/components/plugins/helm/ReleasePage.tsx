@@ -31,6 +31,7 @@ import Configuration from '../../resources/misc/template/Configuration';
 import Row from '../../resources/misc/template/Row';
 import Status from '../../resources/misc/template/Status';
 import Details from './Details';
+import History from './History';
 import { IHelmRelease, getDetails } from './helpers';
 
 interface IMatchParams {
@@ -123,25 +124,39 @@ const ReleasePage: React.FunctionComponent<IReleasePageProps> = ({ match }: IRel
                 <Row obj={data} objKey="details.info.description" title="Description" />
               </Status>
             </IonRow>
-            <IonRow>
-              <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="12">
-                <IonCard>
-                  <IonCardHeader>
-                    <IonCardTitle>Values</IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <Editor value={yaml.safeDump(data.details ? data.details.config : '')} readOnly={true} />
-                  </IonCardContent>
-                </IonCard>
-              </IonCol>
-            </IonRow>
+
+            <History name={data.name} namespace={data.namespace} helmRelease={data} />
+
+            {data.details && (data.details.config || data.details.chart.values) ? (
+              <IonRow>
+                <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="12">
+                  <IonCard>
+                    <IonCardHeader>
+                      <IonCardTitle>Values</IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <Editor
+                        value={yaml.safeDump(
+                          data.details.config
+                            ? data.details.config
+                            : data.details.chart.values
+                            ? data.details.chart.values
+                            : '',
+                        )}
+                        readOnly={true}
+                      />
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
+            ) : null}
           </IonGrid>
         ) : isFetching ? null : (
           <LoadingErrorCard
             cluster={context.cluster}
             clusters={context.clusters}
             error={error}
-            icon="/assets/icons/kubernetes/secret.png"
+            icon="/assets/icons/kubernetes/helm.png"
             text="Could not get Helm Release"
           />
         )}

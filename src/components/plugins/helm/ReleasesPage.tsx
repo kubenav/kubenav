@@ -44,7 +44,12 @@ const ReleasesPage: React.FunctionComponent = () => {
   const [searchText, setSearchText] = useState<string>('');
 
   const { isError, isFetching, data, error, refetch } = useQuery<IHelmReleases, Error>(
-    ['HelmReleasesPage', cluster ? cluster.id : '', cluster ? cluster.namespace : ''],
+    [
+      'HelmReleasesPage',
+      cluster ? cluster.id : '',
+      cluster ? cluster.namespace : '',
+      context.settings.helmShowAllVersions,
+    ],
     async () => {
       try {
         const secrets: V1SecretList = await kubernetesRequest(
@@ -78,11 +83,15 @@ const ReleasesPage: React.FunctionComponent = () => {
               secretName: secret.metadata.name,
             };
 
-            if (
-              !helmReleases.hasOwnProperty(`${helmRelease.name}-${helmRelease.namespace}`) ||
-              helmRelease.revision > helmReleases[`${helmRelease.name}-${helmRelease.namespace}`].revision
-            ) {
-              helmReleases[`${helmRelease.name}-${helmRelease.namespace}`] = helmRelease;
+            if (context.settings.helmShowAllVersions) {
+              helmReleases[`${helmRelease.secretName}-${helmRelease.namespace}`] = helmRelease;
+            } else {
+              if (
+                !helmReleases.hasOwnProperty(`${helmRelease.name}-${helmRelease.namespace}`) ||
+                helmRelease.revision > helmReleases[`${helmRelease.name}-${helmRelease.namespace}`].revision
+              ) {
+                helmReleases[`${helmRelease.name}-${helmRelease.namespace}`] = helmRelease;
+              }
             }
           }
         }
@@ -121,6 +130,10 @@ const ReleasesPage: React.FunctionComponent = () => {
     refetch();
   };
 
+  const setShowAllVersions = (value: boolean) => {
+    context.editSettings({ ...context.settings, helmShowAllVersions: value });
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -131,7 +144,11 @@ const ReleasesPage: React.FunctionComponent = () => {
           <IonTitle>Helm Releases</IonTitle>
           <IonButtons slot="primary">
             <Namespaces />
-            <Details refresh={refetch} />
+            <Details
+              refresh={refetch}
+              showAllVersions={context.settings.helmShowAllVersions}
+              setShowAllVersions={setShowAllVersions}
+            />
           </IonButtons>
         </IonToolbar>
       </IonHeader>
@@ -154,7 +171,7 @@ const ReleasesPage: React.FunctionComponent = () => {
                       const regex = new RegExp(searchText, 'gi');
                       return data[key].name.match(regex);
                     })
-                    .map((key, j) => {
+                    .map((key, index) => {
                       if (data[key].namespace !== namespace) {
                         namespace = data[key].namespace;
                         showNamespace = true;
@@ -163,7 +180,7 @@ const ReleasesPage: React.FunctionComponent = () => {
                       }
 
                       return (
-                        <IonItemGroup key={j}>
+                        <IonItemGroup key={index}>
                           {showNamespace ? (
                             <IonItemDivider>
                               <IonLabel>{namespace}</IonLabel>
@@ -179,7 +196,7 @@ const ReleasesPage: React.FunctionComponent = () => {
                               <h2>{data[key].name}</h2>
                               <p>
                                 Revision: {data[key].revision} | Updated: {data[key].updated} | Status:{' '}
-                                {data[key].status}{' '}
+                                {data[key].status}
                               </p>
                             </IonLabel>
                           </IonItem>
@@ -194,7 +211,7 @@ const ReleasesPage: React.FunctionComponent = () => {
             cluster={context.cluster}
             clusters={context.clusters}
             error={error}
-            icon="/assets/icons/kubernetes/secret.png"
+            icon="/assets/icons/kubernetes/helm.png"
             text="Could not get Helm Releases"
           />
         )}

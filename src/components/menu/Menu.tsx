@@ -112,7 +112,7 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections, history, location
           <IonMenuToggle autoHide={false}>
             <IonItem routerLink="/plugins/helm" routerDirection="root">
               <IonAvatar slot="start">
-                <img alt="Helm Releases" src="/assets/icons/misc/bookmarks.png" />
+                <img alt="Helm Releases" src="/assets/icons/kubernetes/helm.png" />
               </IonAvatar>
               <IonLabel>Helm Releases</IonLabel>
             </IonItem>
