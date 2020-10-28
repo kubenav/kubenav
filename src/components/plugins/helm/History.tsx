@@ -96,7 +96,11 @@ const History: React.FunctionComponent<IHistoryProps> = ({ name, namespace, helm
                     ? Object.keys(data).map((key, index) => (
                         <IonItem
                           key={index}
-                          routerLink={`/plugins/helm/${data[key].namespace}/${data[key].secretName}`}
+                          routerLink={
+                            helmRelease.revision === data[key].revision
+                              ? undefined
+                              : `/plugins/helm/${data[key].namespace}/${data[key].secretName}`
+                          }
                           routerDirection="forward"
                         >
                           <IonLabel>
@@ -138,7 +142,11 @@ const History: React.FunctionComponent<IHistoryProps> = ({ name, namespace, helm
                             <tr key={index}>
                               <td>
                                 <IonRouterLink
-                                  routerLink={`/plugins/helm/${data[key].namespace}/${data[key].secretName}`}
+                                  routerLink={
+                                    helmRelease.revision === data[key].revision
+                                      ? undefined
+                                      : `/plugins/helm/${data[key].namespace}/${data[key].secretName}`
+                                  }
                                   routerDirection="forward"
                                 >
                                   {data[key].revision}
