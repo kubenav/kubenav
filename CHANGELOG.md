@@ -1,5 +1,55 @@
 # Changelog
 
+## [3.1.0](https://github.com/kubenav/kubenav/tree/3.1.0) (2020-10-28)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.0.0...3.1.0)
+
+**Implemented enhancements:**
+
+- Feature Request: list installed helm applications in cluster  [\#238](https://github.com/kubenav/kubenav/issues/238)
+- Feature Request: add shortcut for fullscreen mode [\#227](https://github.com/kubenav/kubenav/issues/227)
+- Feature Request: new overview charts are cool, maybe show on per node too? [\#223](https://github.com/kubenav/kubenav/issues/223)
+- Feature Request: an add option to each of the sections [\#212](https://github.com/kubenav/kubenav/issues/212)
+- Feature Request: Custom Shortcut/Pins for CRD or General [\#160](https://github.com/kubenav/kubenav/issues/160)
+- Create Job from CronJob [\#230](https://github.com/kubenav/kubenav/pull/230) ([ricoberger](https://github.com/ricoberger))
+- Add possibility to disable Pod metrics in list view [\#225](https://github.com/kubenav/kubenav/pull/225) ([ricoberger](https://github.com/ricoberger))
+- Add cluster overview page [\#221](https://github.com/kubenav/kubenav/pull/221) ([ricoberger](https://github.com/ricoberger))
+- Close item options and popovers after selection [\#211](https://github.com/kubenav/kubenav/pull/211) ([ricoberger](https://github.com/ricoberger))
+
+**Fixed bugs:**
+
+- BUG: namespaces arent refreshed in dropdown selector [\#235](https://github.com/kubenav/kubenav/issues/235)
+- Bug: when editing a configmap on iPad, the panel isn’t resized when keyboard closed [\#222](https://github.com/kubenav/kubenav/issues/222)
+- Bug: scale deloyment to 0 doesnt wipe pods panel on refresh [\#218](https://github.com/kubenav/kubenav/issues/218)
+- Bug: long pod name makes terminal/log panel unable to close tab [\#213](https://github.com/kubenav/kubenav/issues/213)
+- Bug: scale a deployment to 0 when already 0 generates an error [\#207](https://github.com/kubenav/kubenav/issues/207)
+- Bug: resize of terminal window on mobile doesn’t resize if open in split view [\#202](https://github.com/kubenav/kubenav/issues/202)
+
+**Closed issues:**
+
+- Bug: bug with selecting revision in helm [\#243](https://github.com/kubenav/kubenav/issues/243)
+- BUG: click deployment and seems to show all pods? [\#237](https://github.com/kubenav/kubenav/issues/237)
+- Feature Request: extra info for pods like restart reason and time [\#232](https://github.com/kubenav/kubenav/issues/232)
+- Bug: its possible cluster doesnt have metrics installed [\#228](https://github.com/kubenav/kubenav/issues/228)
+
+**Merged pull requests:**
+
+- Add Helm Plugin [\#241](https://github.com/kubenav/kubenav/pull/241) ([ricoberger](https://github.com/ricoberger))
+- Refetch namespaces when list is shown [\#236](https://github.com/kubenav/kubenav/pull/236) ([ricoberger](https://github.com/ricoberger))
+- Add support for creating manifests [\#234](https://github.com/kubenav/kubenav/pull/234) ([ricoberger](https://github.com/ricoberger))
+- a few go and npm package updates [\#233](https://github.com/kubenav/kubenav/pull/233) ([si458](https://github.com/si458))
+- Add shortcut to toggle full screen [\#231](https://github.com/kubenav/kubenav/pull/231) ([ricoberger](https://github.com/ricoberger))
+- Disable cluster and node metrics [\#229](https://github.com/kubenav/kubenav/pull/229) ([ricoberger](https://github.com/ricoberger))
+- Parse Kubeconfig containing OIDC Provider [\#226](https://github.com/kubenav/kubenav/pull/226) ([ricoberger](https://github.com/ricoberger))
+- Improve overview page [\#224](https://github.com/kubenav/kubenav/pull/224) ([ricoberger](https://github.com/ricoberger))
+- Refresh list in details view [\#220](https://github.com/kubenav/kubenav/pull/220) ([ricoberger](https://github.com/ricoberger))
+- Add support for bookmarks [\#219](https://github.com/kubenav/kubenav/pull/219) ([ricoberger](https://github.com/ricoberger))
+- Prepare support for bookmarks [\#217](https://github.com/kubenav/kubenav/pull/217) ([ricoberger](https://github.com/ricoberger))
+- Enable code scanning [\#216](https://github.com/kubenav/kubenav/pull/216) ([ricoberger](https://github.com/ricoberger))
+- Fix terminal tabs for long container names [\#215](https://github.com/kubenav/kubenav/pull/215) ([ricoberger](https://github.com/ricoberger))
+- Fix terminal window resizing [\#210](https://github.com/kubenav/kubenav/pull/210) ([ricoberger](https://github.com/ricoberger))
+- Fix error while scale replicas [\#209](https://github.com/kubenav/kubenav/pull/209) ([ricoberger](https://github.com/ricoberger))
+
 ## [3.0.0](https://github.com/kubenav/kubenav/tree/3.0.0) (2020-09-27)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/2.2.0...3.0.0)
@@ -78,6 +128,7 @@
 - Open links from Electron in external browser [\#146](https://github.com/kubenav/kubenav/pull/146) ([ricoberger](https://github.com/ricoberger))
 - Add debugging configuration for VS Code [\#145](https://github.com/kubenav/kubenav/pull/145) ([ricoberger](https://github.com/ricoberger))
 - Add support for Proxy [\#144](https://github.com/kubenav/kubenav/pull/144) ([ricoberger](https://github.com/ricoberger))
+- Minor grammatical changes [\#139](https://github.com/kubenav/kubenav/pull/139) ([obrienrobert](https://github.com/obrienrobert))
 
 ## [2.2.0](https://github.com/kubenav/kubenav/tree/2.2.0) (2020-07-26)
 
@@ -102,7 +153,6 @@
 
 **Merged pull requests:**
 
-- Minor grammatical changes [\#139](https://github.com/kubenav/kubenav/pull/139) ([obrienrobert](https://github.com/obrienrobert))
 - Improve error handling for requests [\#137](https://github.com/kubenav/kubenav/pull/137) ([ricoberger](https://github.com/ricoberger))
 - Add description to cluster page [\#134](https://github.com/kubenav/kubenav/pull/134) ([ricoberger](https://github.com/ricoberger))
 - Fix path on macOS [\#133](https://github.com/kubenav/kubenav/pull/133) ([ricoberger](https://github.com/ricoberger))
@@ -171,6 +221,7 @@
 - Add version check [\#65](https://github.com/kubenav/kubenav/pull/65) ([ricoberger](https://github.com/ricoberger))
 - Update Capacitor to version 2 [\#64](https://github.com/kubenav/kubenav/pull/64) ([ricoberger](https://github.com/ricoberger))
 - Remove kubenav-plugin Dependency [\#63](https://github.com/kubenav/kubenav/pull/63) ([ricoberger](https://github.com/ricoberger))
+- Support insecure-skip-tls-verify and timeout [\#59](https://github.com/kubenav/kubenav/pull/59) ([ricoberger](https://github.com/ricoberger))
 
 **Fixed bugs:**
 
@@ -208,10 +259,6 @@
 ## [1.4.1](https://github.com/kubenav/kubenav/tree/1.4.1) (2020-04-14)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/1.4.0...1.4.1)
-
-**Implemented enhancements:**
-
-- Support insecure-skip-tls-verify and timeout [\#59](https://github.com/kubenav/kubenav/pull/59) ([ricoberger](https://github.com/ricoberger))
 
 **Fixed bugs:**
 
