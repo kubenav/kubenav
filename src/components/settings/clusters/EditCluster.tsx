@@ -341,6 +341,15 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     onInput={handleAuthProviderAWS}
                   />
                 </IonItem>
+                <IonItem>
+                  <IonLabel position="stacked">Session Token (optional)</IonLabel>
+                  <IonInput
+                    type="text"
+                    value={authProviderAWS.sessionToken}
+                    name="sessionToken"
+                    onInput={handleAuthProviderAWS}
+                  />
+                </IonItem>
               </IonItemGroup>
             ) : null}
             {authProvider === 'azure' && authProviderAzure ? (

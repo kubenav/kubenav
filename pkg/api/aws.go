@@ -19,6 +19,7 @@ import (
 type AWSRequest struct {
 	AccessKeyID     string `json:"accessKeyId"`
 	SecretAccessKey string `json:"secretAccessKey"`
+	SessionToken    string `json:"sessionToken"`
 	Region          string `json:"region"`
 	ClusterID       string `json:"clusterID"`
 }
@@ -52,7 +53,7 @@ func (c *Client) awsGetClustersHandler(w http.ResponseWriter, r *http.Request) {
 	var names []*string
 	var nextToken *string
 
-	cred := credentials.NewStaticCredentials(awsRequest.AccessKeyID, awsRequest.SecretAccessKey, "")
+	cred := credentials.NewStaticCredentials(awsRequest.AccessKeyID, awsRequest.SecretAccessKey, awsRequest.SessionToken)
 
 	sess, err := session.NewSession(&aws.Config{Region: aws.String(awsRequest.Region), Credentials: cred})
 	if err != nil {
@@ -113,7 +114,7 @@ func (c *Client) awsGetTokenHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cred := credentials.NewStaticCredentials(awsRequest.AccessKeyID, awsRequest.SecretAccessKey, "")
+	cred := credentials.NewStaticCredentials(awsRequest.AccessKeyID, awsRequest.SecretAccessKey, awsRequest.SessionToken)
 
 	sess, err := session.NewSession(&aws.Config{Region: aws.String(awsRequest.Region), Credentials: cred})
 	if err != nil {

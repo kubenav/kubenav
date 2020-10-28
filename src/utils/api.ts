@@ -62,6 +62,7 @@ export const getAWSClusters = async (credentials: IClusterAuthProviderAWS): Prom
       body: JSON.stringify({
         accessKeyId: credentials.accessKeyID,
         secretAccessKey: credentials.secretKey,
+        sessionToken: credentials.sessionToken ? credentials.sessionToken : '',
         region: credentials.region,
       }),
     });
@@ -94,6 +95,7 @@ export const getAWSToken = async (credentials: IClusterAuthProviderAWS): Promise
       body: JSON.stringify({
         accessKeyId: credentials.accessKeyID,
         secretAccessKey: credentials.secretKey,
+        sessionToken: credentials.sessionToken ? credentials.sessionToken : '',
         region: credentials.region,
         clusterID: credentials.clusterID,
       }),

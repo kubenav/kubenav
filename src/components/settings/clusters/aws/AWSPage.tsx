@@ -66,6 +66,7 @@ const AWSPage: React.FunctionComponent<IAWSPageProps> = ({ history }: IAWSPagePr
                 clusterID: cluster.Name,
                 region: credentials.region,
                 secretKey: credentials.secretKey,
+                sessionToken: credentials.sessionToken,
               },
               namespace: 'default',
             });

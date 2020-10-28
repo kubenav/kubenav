@@ -106,6 +106,7 @@ export interface IClusterAuthProviderAWS {
   clusterID: string;
   region: string;
   secretKey: string;
+  sessionToken?: string;
 }
 
 export interface IClusterAuthProviderAzure {

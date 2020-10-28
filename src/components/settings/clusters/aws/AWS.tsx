@@ -20,6 +20,7 @@ const AWS: React.FunctionComponent = () => {
   const [accessKeyID, setAccessKeyID] = useState<string>('');
   const [region, setRegion] = useState<string>('');
   const [secretKey, setSecretKey] = useState<string>('');
+  const [sessionToken, setSessionToken] = useState<string>('');
   const [error, setError] = useState<string>('');
 
   const handleAccessKeyID = (event) => {
@@ -28,6 +29,10 @@ const AWS: React.FunctionComponent = () => {
 
   const handleSecretKey = (event) => {
     setSecretKey(event.target.value);
+  };
+
+  const handleSessionToken = (event) => {
+    setSessionToken(event.target.value);
   };
 
   const onChange = (event) => {
@@ -43,6 +48,7 @@ const AWS: React.FunctionComponent = () => {
         clusterID: '',
         region: region,
         secretKey: secretKey,
+        sessionToken: sessionToken,
       });
 
       window.location.replace(`/settings/clusters/aws`);
@@ -73,6 +79,10 @@ const AWS: React.FunctionComponent = () => {
           <IonItem>
             <IonLabel position="stacked">Secret Key</IonLabel>
             <IonInput type="text" required={true} value={secretKey} onInput={handleSecretKey} />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="stacked">Session Token (optional)</IonLabel>
+            <IonInput type="text" required={true} value={sessionToken} onInput={handleSessionToken} />
           </IonItem>
           <IonItem>
             <IonLabel>Region</IonLabel>
