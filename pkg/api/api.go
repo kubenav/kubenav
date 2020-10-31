@@ -26,6 +26,8 @@ func (c *Client) Register(router *http.ServeMux) {
 	// The AWS handlers are used to handle the authentication against AWS for the mobile implementation of kubenav.
 	router.HandleFunc("/api/aws/clusters", middleware.Cors(c.awsGetClustersHandler))
 	router.HandleFunc("/api/aws/token", middleware.Cors(c.awsGetTokenHandler))
+	router.HandleFunc("/api/aws/ssoconfig", middleware.Cors(c.awsGetSSOConfigHandler))
+	router.HandleFunc("/api/aws/ssotoken", middleware.Cors(c.awsGetSSOTokenHandler))
 
 	// The Azure handler is used to retrieve all AKS clusters from Azure for the mobile implementation of kubenav.
 	router.HandleFunc("/api/azure/clusters", middleware.Cors(c.azureGetClustersHandler))

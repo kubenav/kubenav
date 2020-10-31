@@ -117,6 +117,9 @@ const AWS: React.FunctionComponent = () => {
         <IonButton expand="block" onClick={() => importClusters()}>
           Import from AWS
         </IonButton>
+        <IonButton expand="block" routerLink="/settings/clusters/awssso" routerDirection="root">
+          Import using AWS SSO
+        </IonButton>
       </IonCardContent>
 
       <IonToast isOpen={error !== ''} onDidDismiss={() => setError('')} message={error} duration={3000} />

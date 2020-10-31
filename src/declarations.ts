@@ -62,6 +62,41 @@ export interface IAWSClusterCertificateAuthority {
   Data: string;
 }
 
+export interface IAWSSSO {
+  client: IAWSSSOClient;
+  device: IAWSSSODevice;
+}
+
+export interface IAWSSSOClient {
+  ClientId: string;
+  ClientIdIssuedAt: number;
+  ClientSecret: string;
+  ClientSecretExpiresAt: number;
+}
+
+export interface IAWSSSOCredentials {
+  accessKeyId: string;
+  secretAccessKey: string;
+  sessionToken: string;
+  expire: number;
+  region: string;
+  startURL: string;
+  accountID: string;
+  roleName: string;
+  accessToken: string;
+  accessTokenExpire: number;
+  clusterID: string;
+}
+
+export interface IAWSSSODevice {
+  DeviceCode: string;
+  ExpiresIn: number;
+  Interval: number;
+  UserCode: string;
+  VerificationUri: string;
+  VerificationUriComplete: string;
+}
+
 export interface IAWSToken {
   accessKeyID: string;
   secretKey: string;
@@ -95,6 +130,7 @@ export interface ICluster {
   insecureSkipTLSVerify: boolean;
   authProvider: TAuthProvider;
   authProviderAWS?: IClusterAuthProviderAWS;
+  authProviderAWSSSO?: IAWSSSOCredentials;
   authProviderAzure?: IClusterAuthProviderAzure;
   authProviderGoogle?: IClusterAuthProviderGoogle;
   authProviderOIDC?: IClusterAuthProviderOIDC;
@@ -377,7 +413,7 @@ export interface ITerminalResponse {
 export type TActivator = 'block-button' | 'button' | 'item' | 'item-option';
 
 // DEPRECATED: The value '' can be removed when the migration is done.
-export type TAuthProvider = '' | 'aws' | 'azure' | 'google' | 'kubeconfig' | 'oidc';
+export type TAuthProvider = '' | 'aws' | 'awssso' | 'azure' | 'google' | 'kubeconfig' | 'oidc';
 
 export type TSyncType = 'context' | 'namespace';
 

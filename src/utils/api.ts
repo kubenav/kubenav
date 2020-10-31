@@ -4,6 +4,8 @@ import { isPlatform } from '@ionic/react';
 import {
   IAppSettings,
   IAWSCluster,
+  IAWSSSO,
+  IAWSSSOCredentials,
   IAzureCluster,
   ICluster,
   IClusterAuthProviderAWS,
@@ -64,6 +66,111 @@ export const getAWSClusters = async (credentials: IClusterAuthProviderAWS): Prom
         secretAccessKey: credentials.secretKey,
         sessionToken: credentials.sessionToken ? credentials.sessionToken : '',
         region: credentials.region,
+      }),
+    });
+
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
+    } else {
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// getAWSSSOConfig initialize the SSO flow, by registering a new client and starting the device authentication.
+export const getAWSSSOConfig = async (startURL: string, region: string): Promise<IAWSSSO> => {
+  try {
+    await checkServer();
+
+    const response = await fetch(`${INCLUSTER_URL}/api/aws/ssoconfig`, {
+      method: 'post',
+      body: JSON.stringify({
+        startURL: startURL,
+        region: region,
+      }),
+    });
+
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
+    } else {
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// getAWSSSOCredentails is used to retrieve creadentials for AWS with the SSO config.
+export const getAWSSSOCredentails = async (credentials: IAWSSSOCredentials): Promise<IAWSSSOCredentials> => {
+  try {
+    if (credentials.expire - 60 > new Date().getTime()) {
+      return credentials;
+    }
+
+    await checkServer();
+
+    const response = await fetch(`${INCLUSTER_URL}/api/aws/ssotoken`, {
+      method: 'post',
+      body: JSON.stringify({
+        startURL: credentials.startURL,
+        region: credentials.region,
+        accountID: credentials.accountID,
+        roleName: credentials.roleName,
+        accessToken: credentials.accessToken,
+        accessTokenExpire: credentials.accessTokenExpire,
+      }),
+    });
+
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json;
+    } else {
+      if (json.error) {
+        throw new Error(json.message);
+      } else {
+        throw new Error('An unknown error occured');
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// getAWSSSOCredentailsWithConfig is used to retrieve creadentials for AWS with the SSO config.
+export const getAWSSSOCredentailsWithConfig = async (
+  config: IAWSSSO,
+  startURL: string,
+  region: string,
+  accountID: string,
+  roleName: string,
+): Promise<IAWSSSOCredentials> => {
+  try {
+    await checkServer();
+
+    const response = await fetch(`${INCLUSTER_URL}/api/aws/ssotoken`, {
+      method: 'post',
+      body: JSON.stringify({
+        client: config.client,
+        device: config.device,
+        startURL: startURL,
+        region: region,
+        accountID: accountID,
+        roleName: roleName,
       }),
     });
 

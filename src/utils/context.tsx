@@ -10,6 +10,7 @@ import {
   getOIDCAccessToken,
   getInclusterSettings,
   syncKubeconfig,
+  getAWSSSOCredentails,
   getAWSToken,
   getGoogleAccessToken,
 } from './api';
@@ -314,6 +315,24 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
         const credentials = clusters[clusterID].authProviderAWS;
         if (credentials) {
           const token = await getAWSToken(credentials);
+          clusters[clusterID].token = token;
+        } else {
+          throw new Error('AWS credentials are missing');
+        }
+      } else if (clusters[clusterID].authProvider === 'awssso') {
+        let credentials = clusters[clusterID].authProviderAWSSSO;
+        if (credentials) {
+          credentials = await getAWSSSOCredentails(credentials);
+          clusters[clusterID].authProviderAWSSSO = credentials;
+
+          const token = await getAWSToken({
+            accessKeyID: credentials.accessKeyId,
+            clusterID: credentials.clusterID,
+            region: credentials.region,
+            secretKey: credentials.secretAccessKey,
+            sessionToken: credentials.sessionToken,
+          });
+
           clusters[clusterID].token = token;
         } else {
           throw new Error('AWS credentials are missing');
