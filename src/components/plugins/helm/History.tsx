@@ -38,7 +38,7 @@ const History: React.FunctionComponent<IHistoryProps> = ({ name, namespace, helm
       try {
         const secrets: V1SecretList = await kubernetesRequest(
           'GET',
-          `/api/v1/namespaces/${namespace}/secrets?limit=100&labelSelector=owner=helm,name=${name}`,
+          `/api/v1/namespaces/${namespace}/secrets?limit=${context.settings.queryLimit}&labelSelector=owner=helm,name=${name}`,
           '',
           context.settings,
           await context.kubernetesAuthWrapper(''),
