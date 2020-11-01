@@ -13,6 +13,7 @@ export const DEFAULT_SETTINGS: IAppSettings = {
   terminalFontSize: 12,
   terminalScrollback: 10000,
   enablePodMetrics: true,
+  queryLimit: 100,
   queryRefetchInterval: 5 * 60 * 1000,
   queryConfig: {
     retry: false,

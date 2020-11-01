@@ -29,18 +29,13 @@ import ItemStatus from '../../resources/misc/template/ItemStatus';
 import Details from './Details';
 import { IHelmRelease, IHelmReleases } from './helpers';
 
-// ReleasesPage shows a list of the selected resource. The list can be filtered by namespace and each item contains a status
-// indicator, to get an overview of problems in the cluster.
 const ReleasesPage: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
 
-  // namespace and showNamespace is used to group all items by namespace and to only show the namespace once via the
-  // IonItemDivider component.
   let namespace = '';
   let showNamespace = false;
 
-  // searchText is used to search and filter the list of items.
   const [searchText, setSearchText] = useState<string>('');
 
   const { isError, isFetching, data, error, refetch } = useQuery<IHelmReleases, Error>(
@@ -56,7 +51,7 @@ const ReleasesPage: React.FunctionComponent = () => {
           'GET',
           `${
             cluster && cluster.namespace ? `/api/v1/namespaces/${cluster.namespace}/secrets` : `/api/v1/secrets`
-          }?limit=100&labelSelector=owner=helm`,
+          }?limit=${context.settings.queryLimit}&labelSelector=owner=helm`,
           '',
           context.settings,
           await context.kubernetesAuthWrapper(''),
@@ -123,8 +118,6 @@ const ReleasesPage: React.FunctionComponent = () => {
     return 'warning';
   };
 
-  // The doRefresh method is used for a manual reload of the items for the corresponding resource. The
-  // event.detail.complete() call is required to finish the animation of the IonRefresher component.
   const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();
     refetch();

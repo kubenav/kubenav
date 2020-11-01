@@ -36,6 +36,7 @@ export interface IAppSettings {
   terminalFontSize: number;
   terminalScrollback: number;
   enablePodMetrics: boolean;
+  queryLimit: number;
   queryRefetchInterval: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   queryConfig: QueryConfig<any, Error>;

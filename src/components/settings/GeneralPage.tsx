@@ -130,6 +130,21 @@ const GeneralPage: React.FunctionComponent = () => {
             </IonItem>
             <IonItem>
               <IonLabel className="label-for-range" position="stacked">
+                Limit
+              </IonLabel>
+              <IonRange
+                min={100}
+                max={1000}
+                step={100}
+                pin={true}
+                color="primary"
+                name="queryLimit"
+                value={context.settings.queryLimit}
+                onIonChange={handleRangeChange}
+              />
+            </IonItem>
+            <IonItem>
+              <IonLabel className="label-for-range" position="stacked">
                 Refresh Interval (in seconds)
               </IonLabel>
               <IonRange

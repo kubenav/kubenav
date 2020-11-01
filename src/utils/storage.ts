@@ -151,6 +151,7 @@ export const readSettings = (): IAppSettings => {
       enablePodMetrics: settings.hasOwnProperty('enablePodMetrics')
         ? settings.enablePodMetrics
         : DEFAULT_SETTINGS.enablePodMetrics,
+      queryLimit: settings.queryLimit ? settings.queryLimit : DEFAULT_SETTINGS.queryLimit,
       queryRefetchInterval: settings.queryRefetchInterval
         ? settings.queryRefetchInterval
         : DEFAULT_SETTINGS.queryRefetchInterval,

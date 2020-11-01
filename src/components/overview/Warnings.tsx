@@ -32,13 +32,13 @@ const Warnings: React.FunctionComponent = () => {
   const cluster = context.currentCluster();
   const width = useWindowWidth();
 
-  const { data } = useQuery<IEvent[], Error>(
+  const { isError, data } = useQuery<IEvent[], Error>(
     ['OverviewWarnings', cluster],
     async () => {
       try {
         const eventList: V1EventList = await kubernetesRequest(
           'GET',
-          '/api/v1/events?limit=100&fieldSelector=type=Warning',
+          `/api/v1/events?limit=${context.settings.queryLimit}&fieldSelector=type=Warning`,
           '',
           context.settings,
           await context.kubernetesAuthWrapper(''),
@@ -93,75 +93,79 @@ const Warnings: React.FunctionComponent = () => {
     { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
   );
 
-  return (
-    <IonRow>
-      <IonCol>
-        <IonCard>
-          <IonCardHeader>
-            <IonCardTitle>Warnings</IonCardTitle>
-          </IonCardHeader>
-          <IonCardContent>
-            {isPlatform('hybrid') || isPlatform('mobile') || width < 992 ? (
-              <IonList>
-                {data && data.length > 0
-                  ? data.map((event, index) => {
-                      return (
-                        <IonItem
-                          key={index}
-                          routerLink={event.routerLink === '' ? undefined : event.routerLink}
-                          routerDirection="forward"
-                        >
-                          <IonLabel class="ion-text-wrap">
-                            <h2>{event.name}</h2>
-                            <p>
-                              {event.reason ? `${event.reason}: ` : ''}
-                              {event.message}
-                            </p>
-                          </IonLabel>
-                        </IonItem>
-                      );
-                    })
-                  : null}
-              </IonList>
-            ) : (
-              <div className="table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Reason</th>
-                      <th>Message</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data && data.length > 0
-                      ? data.map((event, index) => {
-                          return (
-                            <tr key={index}>
-                              <td>
-                                {event.routerLink === '' ? (
-                                  event.name
-                                ) : (
-                                  <IonRouterLink routerLink={event.routerLink} routerDirection="forward">
-                                    {event.name}
-                                  </IonRouterLink>
-                                )}
-                              </td>
-                              <td>{event.reason}</td>
-                              <td>{event.message}</td>
-                            </tr>
-                          );
-                        })
-                      : null}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </IonCardContent>
-        </IonCard>
-      </IonCol>
-    </IonRow>
-  );
+  if (isError || data === undefined) {
+    return null;
+  } else {
+    return (
+      <IonRow>
+        <IonCol>
+          <IonCard>
+            <IonCardHeader>
+              <IonCardTitle>Warnings</IonCardTitle>
+            </IonCardHeader>
+            <IonCardContent>
+              {isPlatform('hybrid') || isPlatform('mobile') || width < 992 ? (
+                <IonList>
+                  {data && data.length > 0
+                    ? data.map((event, index) => {
+                        return (
+                          <IonItem
+                            key={index}
+                            routerLink={event.routerLink === '' ? undefined : event.routerLink}
+                            routerDirection="forward"
+                          >
+                            <IonLabel class="ion-text-wrap">
+                              <h2>{event.name}</h2>
+                              <p>
+                                {event.reason ? `${event.reason}: ` : ''}
+                                {event.message}
+                              </p>
+                            </IonLabel>
+                          </IonItem>
+                        );
+                      })
+                    : null}
+                </IonList>
+              ) : (
+                <div className="table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Reason</th>
+                        <th>Message</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data && data.length > 0
+                        ? data.map((event, index) => {
+                            return (
+                              <tr key={index}>
+                                <td>
+                                  {event.routerLink === '' ? (
+                                    event.name
+                                  ) : (
+                                    <IonRouterLink routerLink={event.routerLink} routerDirection="forward">
+                                      {event.name}
+                                    </IonRouterLink>
+                                  )}
+                                </td>
+                                <td>{event.reason}</td>
+                                <td>{event.message}</td>
+                              </tr>
+                            );
+                          })
+                        : null}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </IonCardContent>
+          </IonCard>
+        </IonCol>
+      </IonRow>
+    );
+  }
 };
 
 export default Warnings;
