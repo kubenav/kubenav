@@ -22,6 +22,7 @@ import { close, create } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 
 import {
+  IAWSSSOCredentials,
   ICluster,
   IClusterAuthProviderAWS,
   IClusterAuthProviderAzure,
@@ -62,6 +63,9 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
   const [namespace, setNamespace] = useState<string>(cluster.namespace);
   const [authProvider] = useState<TAuthProvider>(cluster.authProvider);
   const [authProviderAWS, setAuthProviderAWS] = useState<IClusterAuthProviderAWS | undefined>(cluster.authProviderAWS);
+  const [authProviderAWSSSO, setAuthProviderAWSSSO] = useState<IAWSSSOCredentials | undefined>(
+    cluster.authProviderAWSSSO,
+  );
   const [authProviderAzure, setAuthProviderAzure] = useState<IClusterAuthProviderAzure | undefined>(
     cluster.authProviderAzure,
   );
@@ -114,6 +118,17 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
 
   const handleAuthProviderAWS = (event) => {
     setAuthProviderAWS((prevState) =>
+      prevState
+        ? {
+            ...prevState,
+            [event.target.name]: event.target.value,
+          }
+        : undefined,
+    );
+  };
+
+  const handleAuthProviderAWSSSO = (event) => {
+    setAuthProviderAWSSSO((prevState) =>
       prevState
         ? {
             ...prevState,
@@ -219,6 +234,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
         insecureSkipTLSVerify: insecureSkipTLSVerify,
         authProvider: cluster.authProvider,
         authProviderAWS: authProviderAWS,
+        authProviderAWSSSO: authProviderAWSSSO,
         authProviderAzure: authProviderAzure,
         authProviderGoogle: authProviderGoogle,
         authProviderOIDC: authProviderOIDC,
@@ -348,6 +364,40 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     value={authProviderAWS.sessionToken}
                     name="sessionToken"
                     onInput={handleAuthProviderAWS}
+                  />
+                </IonItem>
+              </IonItemGroup>
+            ) : null}
+            {authProvider === 'awssso' && authProviderAWSSSO ? (
+              <IonItemGroup>
+                <IonItemDivider>
+                  <IonLabel>AWS SSO</IonLabel>
+                </IonItemDivider>
+                <IonItem>
+                  <IonLabel position="stacked">Start URL</IonLabel>
+                  <IonInput
+                    type="text"
+                    value={authProviderAWSSSO.startURL}
+                    name="startURL"
+                    onInput={handleAuthProviderAWSSSO}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="stacked">Account ID</IonLabel>
+                  <IonInput
+                    type="text"
+                    value={authProviderAWSSSO.accountID}
+                    name="accountID"
+                    onInput={handleAuthProviderAWSSSO}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="stacked">Role Name</IonLabel>
+                  <IonInput
+                    type="text"
+                    value={authProviderAWSSSO.roleName}
+                    name="roleName"
+                    onInput={handleAuthProviderAWSSSO}
                   />
                 </IonItem>
               </IonItemGroup>

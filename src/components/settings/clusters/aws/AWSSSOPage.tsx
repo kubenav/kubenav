@@ -45,6 +45,7 @@ const AWSSSOPage: React.FunctionComponent<IAWSSSOPageProps> = ({ history }: IAWS
 
   const [startURL, setStartURL] = useState<string>('');
   const [region, setRegion] = useState<string>('');
+  const [ssoRegion, setSSORegion] = useState<string>('');
   const [accountID, setAccountID] = useState<string>('');
   const [roleName, setRoleName] = useState<string>('');
   const [config, setConfig] = useState<IAWSSSO | undefined>(undefined);
@@ -56,10 +57,6 @@ const AWSSSOPage: React.FunctionComponent<IAWSSSOPageProps> = ({ history }: IAWS
     setStartURL(event.target.value);
   };
 
-  const handleRegion = (event) => {
-    setRegion(event.target.value);
-  };
-
   const handleAccountID = (event) => {
     setAccountID(event.target.value);
   };
@@ -68,9 +65,17 @@ const AWSSSOPage: React.FunctionComponent<IAWSSSOPageProps> = ({ history }: IAWS
     setRoleName(event.target.value);
   };
 
+  const handleSSORegion = (event) => {
+    setSSORegion(event.target.value);
+  };
+
+  const handleRegion = (event) => {
+    setRegion(event.target.value);
+  };
+
   const startSSOFlow = async () => {
     try {
-      const ssoConfig = await getAWSSSOConfig(startURL, region);
+      const ssoConfig = await getAWSSSOConfig(startURL, ssoRegion);
       setConfig(ssoConfig);
     } catch (err) {
       setError(err.message);
@@ -87,7 +92,14 @@ const AWSSSOPage: React.FunctionComponent<IAWSSSOPageProps> = ({ history }: IAWS
 
   const createToken = async (ssoConfig: IAWSSSO) => {
     try {
-      const credentials = await getAWSSSOCredentailsWithConfig(ssoConfig, startURL, region, accountID, roleName);
+      const credentials = await getAWSSSOCredentailsWithConfig(
+        ssoConfig,
+        startURL,
+        ssoRegion,
+        accountID,
+        roleName,
+        region,
+      );
 
       const awsClusters = await getAWSClusters({
         accessKeyID: credentials.accessKeyId,
@@ -203,6 +215,34 @@ const AWSSSOPage: React.FunctionComponent<IAWSSSOPageProps> = ({ history }: IAWS
                 <IonItem>
                   <IonLabel position="stacked">Role Name</IonLabel>
                   <IonInput type="text" required={true} value={roleName} onInput={handleRoleName} />
+                </IonItem>
+                <IonItem>
+                  <IonLabel>SSO Region</IonLabel>
+                  <IonSelect value={ssoRegion} onIonChange={handleSSORegion}>
+                    <IonSelectOption value="us-east-2">USA Ost (Ohio)</IonSelectOption>
+                    <IonSelectOption value="us-east-1">USA Ost (Nord-Virginia)</IonSelectOption>
+                    <IonSelectOption value="us-west-1">USA West (Nordkalifornien)</IonSelectOption>
+                    <IonSelectOption value="us-west-2">USA West (Oregon)</IonSelectOption>
+                    <IonSelectOption value="ap-east-1">Asien-Pazifik (Hongkong)</IonSelectOption>
+                    <IonSelectOption value="ap-south-1">Asien-Pazifik (Mumbai)</IonSelectOption>
+                    <IonSelectOption value="ap-northeast-3">Asien-Pazifik (Osaka-Lokal)</IonSelectOption>
+                    <IonSelectOption value="ap-northeast-2">Asien-Pazifik (Seoul)</IonSelectOption>
+                    <IonSelectOption value="ap-southeast-1">Asien-Pazifik (Singapur)</IonSelectOption>
+                    <IonSelectOption value="ap-southeast-2">Asien-Pazifik (Sydney)</IonSelectOption>
+                    <IonSelectOption value="ap-northeast-1">Asien-Pazifik (Tokio)</IonSelectOption>
+                    <IonSelectOption value="ca-central-1">Kanada (Zentral)</IonSelectOption>
+                    <IonSelectOption value="cn-north-1">China (Peking)</IonSelectOption>
+                    <IonSelectOption value="cn-northwest-1">China (Ningxia)</IonSelectOption>
+                    <IonSelectOption value="eu-central-1">EU (Frankfurt)</IonSelectOption>
+                    <IonSelectOption value="eu-west-1">EU (Irland)</IonSelectOption>
+                    <IonSelectOption value="eu-west-2">EU (London)</IonSelectOption>
+                    <IonSelectOption value="eu-west-3">EU (Paris)</IonSelectOption>
+                    <IonSelectOption value="eu-north-1">EU (Stockholm)</IonSelectOption>
+                    <IonSelectOption value="me-south-1">Naher Osten (Bahrain)</IonSelectOption>
+                    <IonSelectOption value="sa-east-1">Südamerika (São Paulo)</IonSelectOption>
+                    <IonSelectOption value="us-gov-east-1">AWS GovCloud (USA Ost)</IonSelectOption>
+                    <IonSelectOption value="us-gov-west-1">AWS GovCloud (USA)</IonSelectOption>
+                  </IonSelect>
                 </IonItem>
                 <IonItem>
                   <IonLabel>Region</IonLabel>

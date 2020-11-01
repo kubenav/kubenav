@@ -24,7 +24,6 @@ type AWSRequest struct {
 	SecretAccessKey string `json:"secretAccessKey"`
 	SessionToken    string `json:"sessionToken"`
 	Region          string `json:"region"`
-	StartURL        string `json:"startURL"`
 	ClusterID       string `json:"clusterID"`
 }
 
@@ -47,6 +46,7 @@ type AWSSSOCredentials struct {
 	SessionToken      string `json:"sessionToken"`
 	Expire            int64  `json:"expire"`
 	Region            string `json:"region"`
+	SSORegion         string `json:"ssoRegion"`
 	StartURL          string `json:"startURL"`
 	AccountID         string `json:"accountID"`
 	RoleName          string `json:"roleName"`
@@ -174,7 +174,7 @@ func (c *Client) awsGetSSOConfigHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	var awsRequest AWSRequest
+	var awsRequest AWSSSOConfig
 	if r.Body == nil {
 		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
 		return
@@ -185,13 +185,13 @@ func (c *Client) awsGetSSOConfigHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	mySession, err := session.NewSession()
+	sess, err := session.NewSession()
 	if err != nil {
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create new AWS session: %s", err.Error()))
 		return
 	}
 
-	svc := ssooidc.New(mySession, aws.NewConfig().WithRegion(awsRequest.Region))
+	svc := ssooidc.New(sess, aws.NewConfig().WithRegion(awsRequest.SSORegion))
 
 	registeredClient, err := svc.RegisterClient(&ssooidc.RegisterClientInput{
 		ClientName: stringPointer("kubenav"),
@@ -238,7 +238,7 @@ func (c *Client) awsGetSSOTokenHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	mySession, err := session.NewSession()
+	sess, err := session.NewSession()
 	if err != nil {
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create new AWS session: %s", err.Error()))
 		return
@@ -247,15 +247,15 @@ func (c *Client) awsGetSSOTokenHandler(w http.ResponseWriter, r *http.Request) {
 	var accessToken string
 	var accessTokenExpire int64
 	if ssoConfig.AccessToken != "" {
-		if ssoConfig.Expire < (time.Now().Unix()-60)*1000 {
-			middleware.Errorf(w, r, nil, http.StatusBadRequest, "Your AWS access token is expired, you have to reauthenticate.")
+		if ssoConfig.AccessTokenExpire < (time.Now().Unix()-60)*1000 {
+			middleware.Errorf(w, r, nil, http.StatusBadRequest, "aws_sso_access_token_is_expired")
 			return
 		}
 
 		accessToken = ssoConfig.AccessToken
 		accessTokenExpire = ssoConfig.AccessTokenExpire
 	} else {
-		svcssooidc := ssooidc.New(mySession, aws.NewConfig().WithRegion(ssoConfig.Region))
+		svcssooidc := ssooidc.New(sess, aws.NewConfig().WithRegion(ssoConfig.SSORegion))
 
 		token, err := svcssooidc.CreateToken(&ssooidc.CreateTokenInput{
 			ClientId:     ssoConfig.Client.ClientId,
@@ -272,7 +272,7 @@ func (c *Client) awsGetSSOTokenHandler(w http.ResponseWriter, r *http.Request) {
 		accessTokenExpire = (time.Now().Unix() + *token.ExpiresIn) * 1000
 	}
 
-	svcsso := sso.New(mySession, aws.NewConfig().WithRegion(ssoConfig.Region))
+	svcsso := sso.New(sess, aws.NewConfig().WithRegion(ssoConfig.SSORegion))
 
 	creds, err := svcsso.GetRoleCredentials(&sso.GetRoleCredentialsInput{
 		AccessToken: &accessToken,
@@ -290,11 +290,13 @@ func (c *Client) awsGetSSOTokenHandler(w http.ResponseWriter, r *http.Request) {
 		SessionToken:      *creds.RoleCredentials.SessionToken,
 		Expire:            *creds.RoleCredentials.Expiration,
 		Region:            ssoConfig.Region,
+		SSORegion:         ssoConfig.SSORegion,
 		StartURL:          ssoConfig.StartURL,
 		AccountID:         ssoConfig.AccountID,
 		RoleName:          ssoConfig.RoleName,
 		AccessToken:       accessToken,
 		AccessTokenExpire: accessTokenExpire,
+		ClusterID:         ssoConfig.ClusterID,
 	})
 	return
 }

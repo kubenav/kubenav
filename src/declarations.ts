@@ -80,6 +80,7 @@ export interface IAWSSSOCredentials {
   sessionToken: string;
   expire: number;
   region: string;
+  ssoRegion: string;
   startURL: string;
   accountID: string;
   roleName: string;

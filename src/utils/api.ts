@@ -86,7 +86,7 @@ export const getAWSClusters = async (credentials: IClusterAuthProviderAWS): Prom
 };
 
 // getAWSSSOConfig initialize the SSO flow, by registering a new client and starting the device authentication.
-export const getAWSSSOConfig = async (startURL: string, region: string): Promise<IAWSSSO> => {
+export const getAWSSSOConfig = async (startURL: string, ssoRegion: string): Promise<IAWSSSO> => {
   try {
     await checkServer();
 
@@ -94,7 +94,7 @@ export const getAWSSSOConfig = async (startURL: string, region: string): Promise
       method: 'post',
       body: JSON.stringify({
         startURL: startURL,
-        region: region,
+        ssoRegion: ssoRegion,
       }),
     });
 
@@ -117,7 +117,7 @@ export const getAWSSSOConfig = async (startURL: string, region: string): Promise
 // getAWSSSOCredentails is used to retrieve creadentials for AWS with the SSO config.
 export const getAWSSSOCredentails = async (credentials: IAWSSSOCredentials): Promise<IAWSSSOCredentials> => {
   try {
-    if (credentials.expire - 60 > new Date().getTime()) {
+    if (credentials.expire - 60000 > new Date().getTime()) {
       return credentials;
     }
 
@@ -132,6 +132,7 @@ export const getAWSSSOCredentails = async (credentials: IAWSSSOCredentials): Pro
         roleName: credentials.roleName,
         accessToken: credentials.accessToken,
         accessTokenExpire: credentials.accessTokenExpire,
+        clusterID: credentials.clusterID,
       }),
     });
 
@@ -155,9 +156,10 @@ export const getAWSSSOCredentails = async (credentials: IAWSSSOCredentials): Pro
 export const getAWSSSOCredentailsWithConfig = async (
   config: IAWSSSO,
   startURL: string,
-  region: string,
+  ssoRegion: string,
   accountID: string,
   roleName: string,
+  region: string,
 ): Promise<IAWSSSOCredentials> => {
   try {
     await checkServer();
@@ -168,9 +170,10 @@ export const getAWSSSOCredentailsWithConfig = async (
         client: config.client,
         device: config.device,
         startURL: startURL,
-        region: region,
+        ssoRegion: ssoRegion,
         accountID: accountID,
         roleName: roleName,
+        region: region,
       }),
     });
 
