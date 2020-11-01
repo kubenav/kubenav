@@ -70,6 +70,9 @@ const AWS: React.FunctionComponent = () => {
           id, a secret key and a region. The credentials are used to retrieve your EKS clusters from AWS and to generate
           a token for the Kubernetes API requests.
         </p>
+        <p className="paragraph-margin-bottom">
+          If you want to use AWS SSO just click the <b>Import using AWS SSO</b> button.
+        </p>
 
         <IonList className="paragraph-margin-bottom" lines="full">
           <IonItem>
@@ -116,6 +119,9 @@ const AWS: React.FunctionComponent = () => {
 
         <IonButton expand="block" onClick={() => importClusters()}>
           Import from AWS
+        </IonButton>
+        <IonButton expand="block" routerLink="/settings/clusters/awssso" routerDirection="root">
+          Import using AWS SSO
         </IonButton>
       </IonCardContent>
 

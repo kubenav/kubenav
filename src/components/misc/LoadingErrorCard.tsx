@@ -2,6 +2,7 @@ import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle } from 
 import React from 'react';
 
 import { IClusters } from '../../declarations';
+import AWSSSOReAuthenticate from '../settings/clusters/aws/AWSSSOReAuthenticate';
 
 interface ILoadingErrorCard {
   cluster?: string;
@@ -46,11 +47,13 @@ const LoadingErrorCard: React.FunctionComponent<ILoadingErrorCard> = ({
         </IonCardContent>
       ) : null}
 
-      {clusters && cluster ? (
+      {clusters && cluster && error && error.message === 'aws_sso_access_token_is_expired' ? (
+        <AWSSSOReAuthenticate />
+      ) : (
         <IonCardContent>
           <p className="paragraph-margin-bottom">{error ? error.message : 'An unknown error occured.'}</p>
         </IonCardContent>
-      ) : null}
+      )}
     </IonCard>
   );
 };
