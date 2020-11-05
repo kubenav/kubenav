@@ -27,8 +27,14 @@ const EventItem: React.FunctionComponent<IEventItemProps> = ({ item, section, ty
       }`}
       routerDirection="forward"
     >
-      <IonLabel>
-        <h2>{item.metadata ? item.metadata.name : ''}</h2>
+      <IonLabel class="ion-text-wrap">
+        <h2>
+          {item.metadata.name
+            ? item.metadata.name.split('.').length > 0
+              ? item.metadata.name.split('.')[0]
+              : item.metadata.name
+            : ''}
+        </h2>
         <p>
           {item.type ? `Type: ${item.type}` : ''}
           {item.reason ? ` | Reason: ${item.reason}` : ''}

@@ -1,4 +1,13 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonRow } from '@ionic/react';
+import {
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonCol,
+  IonGrid,
+  IonRouterLink,
+  IonRow,
+} from '@ionic/react';
 import { V1Event } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -6,7 +15,7 @@ import { RouteComponentProps } from 'react-router';
 import { timeDifference } from '../../../../utils/helpers';
 import Metadata from '../../misc/template/Metadata';
 import Row from '../../misc/template/Row';
-import { eventSource } from './eventHelper';
+import { eventSource, involvedObjectLink } from './eventHelper';
 
 interface IEventDetailsProps extends RouteComponentProps {
   item: V1Event;
@@ -54,7 +63,20 @@ const EventDetails: React.FunctionComponent<IEventDetailsProps> = ({ item, type 
             <IonCardContent>
               <Row obj={item.involvedObject} objKey="apiVersion" title="API Version" />
               <Row obj={item.involvedObject} objKey="kind" title="Kind" />
-              <Row obj={item.involvedObject} objKey="name" title="Name" />
+              <Row
+                obj={item.involvedObject}
+                objKey="name"
+                title="Name"
+                value={(name: string) =>
+                  involvedObjectLink(item.involvedObject) ? (
+                    <IonRouterLink routerLink={involvedObjectLink(item.involvedObject)} routerDirection="forward">
+                      {name}
+                    </IonRouterLink>
+                  ) : (
+                    name
+                  )
+                }
+              />
               <Row obj={item.involvedObject} objKey="namespace" title="Namespace" />
             </IonCardContent>
           </IonCard>

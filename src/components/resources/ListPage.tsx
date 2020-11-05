@@ -1,5 +1,6 @@
 import { RefresherEventDetail } from '@ionic/core';
 import {
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
@@ -140,7 +141,18 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
                         ? group.items
                             .filter((item) => {
                               const regex = new RegExp(searchText, 'gi');
-                              return item.metadata && item.metadata.name && item.metadata.name.match(regex);
+                              if (match.params.type === 'events') {
+                                return (
+                                  item.metadata &&
+                                  item.metadata.name &&
+                                  (item.metadata.name.match(regex) ||
+                                    item.message.match(regex) ||
+                                    item.reason.match(regex) ||
+                                    item.type.match(regex))
+                                );
+                              } else {
+                                return item.metadata && item.metadata.name && item.metadata.name.match(regex);
+                              }
                             })
                             .map((item, j) => {
                               if (
@@ -183,6 +195,11 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
                 disabled={!canFetchMore || (isFetchingMore as boolean)}
                 onIonInfinite={loadMore}
               >
+                {(!isFetchingMore as boolean) ? (
+                  <IonButton size="small" expand="block" fill="clear" onClick={() => fetchMore()}>
+                    Load more
+                  </IonButton>
+                ) : null}
                 <IonInfiniteScrollContent loadingText={`Loading more ${page.pluralText}...`}></IonInfiniteScrollContent>
               </IonInfiniteScroll>
             </IonList>

@@ -19,9 +19,11 @@ import { IContext } from '../../declarations';
 import { kubernetesRequest } from '../../utils/api';
 import { AppContext } from '../../utils/context';
 import useWindowWidth from '../../utils/useWindowWidth';
+import { involvedObjectLink } from '../resources/cluster/events/eventHelper';
 
 interface IEvent {
   name: string;
+  namespace: string;
   routerLink: string;
   reason: string;
   message: string;
@@ -53,32 +55,10 @@ const Warnings: React.FunctionComponent = () => {
             : '';
 
           if (events.map((e) => e.name).indexOf(name) === -1) {
-            let routerLink = '';
-            if (event.involvedObject.kind === 'CronJob') {
-              routerLink = `/resources/workloads/cronjobs/${event.involvedObject.namespace}/${event.involvedObject.name}`;
-            } else if (event.involvedObject.kind === 'DaemonSet') {
-              routerLink = `/resources/workloads/daemonsets/${event.involvedObject.namespace}/${event.involvedObject.name}`;
-            } else if (event.involvedObject.kind === 'Deployment') {
-              routerLink = `/resources/workloads/deployments/${event.involvedObject.namespace}/${event.involvedObject.name}`;
-            } else if (event.involvedObject.kind === 'Job') {
-              routerLink = `/resources/workloads/jobs/${event.involvedObject.namespace}/${event.involvedObject.name}`;
-            } else if (event.involvedObject.kind === 'Pod') {
-              routerLink = `/resources/workloads/pods/${event.involvedObject.namespace}/${event.involvedObject.name}`;
-            } else if (event.involvedObject.kind === 'ReplicaSet') {
-              routerLink = `/resources/workloads/replicasets/${event.involvedObject.namespace}/${event.involvedObject.name}`;
-            } else if (event.involvedObject.kind === 'ReplicationController') {
-              routerLink = `/resources/workloads/replicationcontrollers/${event.involvedObject.namespace}/${event.involvedObject.name}`;
-            } else if (event.involvedObject.kind === 'StatefulSet') {
-              routerLink = `/resources/workloads/statefulsets/${event.involvedObject.namespace}/${event.involvedObject.name}`;
-            } else if (event.involvedObject.kind === 'Endpoints') {
-              routerLink = `/resources/discovery-and-loadbalancing/endpoints/${event.involvedObject.namespace}/${event.involvedObject.name}`;
-            } else if (event.involvedObject.kind === 'HorizontalPodAutoscaler') {
-              routerLink = `/resources/discovery-and-loadbalancing/horizontalpodautoscalers/${event.involvedObject.namespace}/${event.involvedObject.name}`;
-            }
-
             events.push({
               name: name,
-              routerLink: routerLink,
+              namespace: event.metadata.namespace ? event.metadata.namespace : '',
+              routerLink: involvedObjectLink(event.involvedObject),
               reason: event.reason ? event.reason : '',
               message: event.message ? event.message : '',
             });
@@ -115,7 +95,9 @@ const Warnings: React.FunctionComponent = () => {
                             routerDirection="forward"
                           >
                             <IonLabel class="ion-text-wrap">
-                              <h2>{event.name}</h2>
+                              <h2>
+                                {event.name} ({event.namespace})
+                              </h2>
                               <p>
                                 {event.reason ? `${event.reason}: ` : ''}
                                 {event.message}
@@ -132,6 +114,7 @@ const Warnings: React.FunctionComponent = () => {
                     <thead>
                       <tr>
                         <th>Name</th>
+                        <th>Namespace</th>
                         <th>Reason</th>
                         <th>Message</th>
                       </tr>
@@ -150,6 +133,7 @@ const Warnings: React.FunctionComponent = () => {
                                     </IonRouterLink>
                                   )}
                                 </td>
+                                <td>{event.namespace}</td>
                                 <td>{event.reason}</td>
                                 <td>{event.message}</td>
                               </tr>
