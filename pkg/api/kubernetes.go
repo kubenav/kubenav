@@ -107,6 +107,7 @@ func (c *Client) kubernetesExecHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	go terminal.WaitForTerminal(config, clientset, reqURL, shell, sessionID)
+	time.Sleep(1 * time.Second)
 
 	middleware.Write(w, r, terminal.TerminalResponse{ID: sessionID})
 	return
@@ -182,6 +183,7 @@ func (c *Client) kubernetesSSHHandler(w http.ResponseWriter, r *http.Request) {
 	})
 
 	go terminal.WaitForSSH(request.Key, request.Address, request.User, sessionID)
+	time.Sleep(1 * time.Second)
 
 	middleware.Write(w, r, terminal.TerminalResponse{ID: sessionID})
 	return
