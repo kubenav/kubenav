@@ -38,7 +38,14 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
   const Component = page.detailsComponent;
 
   const { isError, isFetching, data, error, refetch } = useQuery(
-    ['DetailsPage', cluster ? cluster.id : '', match.params.namespace, match.params.name],
+    [
+      'DetailsPage',
+      cluster ? cluster.id : '',
+      match.params.section,
+      match.params.type,
+      match.params.namespace,
+      match.params.name,
+    ],
     async () =>
       await kubernetesRequest(
         'GET',
