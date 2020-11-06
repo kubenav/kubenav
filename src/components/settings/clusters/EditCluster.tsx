@@ -520,7 +520,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                   <IonLabel>DigitalOcean</IonLabel>
                 </IonItemDivider>
                 <IonItem>
-                  <IonLabel position="stacked">Client ID</IonLabel>
+                  <IonLabel position="stacked">Personal Access Token</IonLabel>
                   <IonInput
                     type="text"
                     required={true}

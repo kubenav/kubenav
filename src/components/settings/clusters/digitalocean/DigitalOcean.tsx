@@ -52,7 +52,7 @@ const DigitalOcean: React.FunctionComponent = () => {
 
         <IonList className="paragraph-margin-bottom" lines="full">
           <IonItem>
-            <IonLabel position="stacked">API Token</IonLabel>
+            <IonLabel position="stacked">Personal Access Token</IonLabel>
             <IonInput type="text" required={true} value={token} onInput={handleToken} />
           </IonItem>
         </IonList>
