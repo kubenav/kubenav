@@ -134,6 +134,7 @@ export interface ICluster {
   authProviderAWS?: IClusterAuthProviderAWS;
   authProviderAWSSSO?: IAWSSSOCredentials;
   authProviderAzure?: IClusterAuthProviderAzure;
+  authProviderDigitalOcean?: IClusterAuthProviderDigitalOcean;
   authProviderGoogle?: IClusterAuthProviderGoogle;
   authProviderOIDC?: IClusterAuthProviderOIDC;
   namespace: string;
@@ -154,6 +155,11 @@ export interface IClusterAuthProviderAzure {
   resourceGroupName: string;
   subscriptionID: string;
   tenantID: string;
+}
+
+export interface IClusterAuthProviderDigitalOcean {
+  token: string;
+  clusterID: string;
 }
 
 export interface IClusterAuthProviderGoogle {
@@ -202,6 +208,12 @@ export interface IContext {
   editSettings: (settings: IAppSettings) => void;
   setNamespace: (namespace: string) => void;
   kubernetesAuthWrapper: (clusterID: string) => Promise<ICluster>;
+}
+
+export interface IDigitalOceanCluster {
+  id: string;
+  name: string;
+  region: string;
 }
 
 export interface IGoogleTokensAPIResponse {
@@ -415,7 +427,7 @@ export interface ITerminalResponse {
 export type TActivator = 'block-button' | 'button' | 'item' | 'item-option';
 
 // DEPRECATED: The value '' can be removed when the migration is done.
-export type TAuthProvider = '' | 'aws' | 'awssso' | 'azure' | 'google' | 'kubeconfig' | 'oidc';
+export type TAuthProvider = '' | 'aws' | 'awssso' | 'azure' | 'digitalocean' | 'google' | 'kubeconfig' | 'oidc';
 
 export type TSyncType = 'context' | 'namespace';
 

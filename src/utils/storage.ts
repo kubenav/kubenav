@@ -3,6 +3,7 @@ import {
   IBookmark,
   IClusterAuthProviderAWS,
   IClusterAuthProviderAzure,
+  IClusterAuthProviderDigitalOcean,
   IClusterAuthProviderGoogle,
   IClusterAuthProviderOIDC,
   IClusters,
@@ -188,6 +189,7 @@ export const readTemporaryCredentials = (
   | undefined
   | IClusterAuthProviderAWS
   | IClusterAuthProviderAzure
+  | IClusterAuthProviderDigitalOcean
   | IClusterAuthProviderGoogle
   | IClusterAuthProviderOIDC => {
   const credentials = localStorage.getItem(STORAGE_TEMPORARY_CREDENTIALS);
@@ -198,6 +200,8 @@ export const readTemporaryCredentials = (
     return JSON.parse(credentials) as IClusterAuthProviderAWS;
   } else if (authProvider === 'azure') {
     return JSON.parse(credentials) as IClusterAuthProviderAzure;
+  } else if (authProvider === 'digitalocean') {
+    return JSON.parse(credentials) as IClusterAuthProviderDigitalOcean;
   } else if (authProvider === 'google') {
     return JSON.parse(credentials) as IClusterAuthProviderGoogle;
   } else if (authProvider === 'oidc') {
@@ -247,6 +251,7 @@ export const saveTemporaryCredentials = (
   credentials:
     | IClusterAuthProviderAWS
     | IClusterAuthProviderAzure
+    | IClusterAuthProviderDigitalOcean
     | IClusterAuthProviderGoogle
     | IClusterAuthProviderOIDC,
 ): void => {

@@ -19,6 +19,7 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import { close, create } from 'ionicons/icons';
+import yaml from 'js-yaml';
 import React, { useContext, useState } from 'react';
 
 import {
@@ -26,12 +27,13 @@ import {
   ICluster,
   IClusterAuthProviderAWS,
   IClusterAuthProviderAzure,
+  IClusterAuthProviderDigitalOcean,
   IClusterAuthProviderGoogle,
   IClusterAuthProviderOIDC,
   IContext,
   TAuthProvider,
 } from '../../../declarations';
-import { getOIDCLink } from '../../../utils/api';
+import { getDigitalOceanKubeconfig, getOIDCLink } from '../../../utils/api';
 import {
   GOOGLE_OAUTH2_ENDPOINT,
   GOOGLE_REDIRECT_URI,
@@ -69,6 +71,9 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
   const [authProviderAzure, setAuthProviderAzure] = useState<IClusterAuthProviderAzure | undefined>(
     cluster.authProviderAzure,
   );
+  const [authProviderDigitalOcean, setAuthProviderDigitalOcean] = useState<
+    IClusterAuthProviderDigitalOcean | undefined
+  >(cluster.authProviderDigitalOcean);
   const [authProviderGoogle, setAuthProviderGoogle] = useState<IClusterAuthProviderGoogle | undefined>(
     cluster.authProviderGoogle,
   );
@@ -149,6 +154,17 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
     );
   };
 
+  const handleAuthProviderDigitalOcean = (event) => {
+    setAuthProviderDigitalOcean((prevState) =>
+      prevState
+        ? {
+            ...prevState,
+            [event.target.name]: event.target.value,
+          }
+        : undefined,
+    );
+  };
+
   const handleAuthProviderGoogle = (event) => {
     setAuthProviderGoogle((prevState) =>
       prevState
@@ -169,6 +185,45 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
           }
         : undefined,
     );
+  };
+
+  const updateKubeconfigDigitalOcean = async () => {
+    if (authProviderDigitalOcean) {
+      const kubeconfig = await getDigitalOceanKubeconfig(
+        authProviderDigitalOcean.token,
+        authProviderDigitalOcean.clusterID,
+      );
+      const cluster = yaml.safeLoad(kubeconfig);
+      if (cluster && typeof cluster === 'object') {
+      }
+      setToken(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (cluster as any).users.length > 0 &&
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (cluster as any).users[0].user.hasOwnProperty('token')
+          ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (cluster as any).users[0].user['token']
+          : '',
+      );
+      setClientCertificateData(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (cluster as any).users.length > 0 &&
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (cluster as any).users[0].user.hasOwnProperty('client-certificate-data')
+          ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (cluster as any).users[0].user['client-certificate-data']
+          : '',
+      );
+      setClientKeyData(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (cluster as any).users.length > 0 &&
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (cluster as any).users[0].user.hasOwnProperty('client-key-data')
+          ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (cluster as any).users[0].user['client-key-data']
+          : '',
+      );
+    }
   };
 
   const reAuthenticateOIDC = async () => {
@@ -457,6 +512,26 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     onInput={handleAuthProviderAzure}
                   />
                 </IonItem>
+              </IonItemGroup>
+            ) : null}
+            {authProvider === 'digitalocean' && authProviderDigitalOcean ? (
+              <IonItemGroup>
+                <IonItemDivider>
+                  <IonLabel>DigitalOcean</IonLabel>
+                </IonItemDivider>
+                <IonItem>
+                  <IonLabel position="stacked">Client ID</IonLabel>
+                  <IonInput
+                    type="text"
+                    required={true}
+                    value={authProviderDigitalOcean.token}
+                    name="token"
+                    onInput={handleAuthProviderDigitalOcean}
+                  />
+                </IonItem>
+                <IonButton expand="block" onClick={() => updateKubeconfigDigitalOcean()}>
+                  Update Kubeconfig
+                </IonButton>
               </IonItemGroup>
             ) : null}
             {authProvider === 'google' && authProviderGoogle ? (
