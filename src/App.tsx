@@ -27,6 +27,7 @@ import ListPage from './components/resources/ListPage';
 import ClustersAWSPage from './components/settings/clusters/aws/AWSPage';
 import ClustersAWSSSOPage from './components/settings/clusters/aws/AWSSSOPage';
 import ClustersAzurePage from './components/settings/clusters/azure/AzurePage';
+import ClustersDigitalOceanPage from './components/settings/clusters/digitalocean/DigitalOceanPage';
 import ClustersGooglePage from './components/settings/clusters/google/GooglePage';
 import ClustersKubeconfigPage from './components/settings/clusters/kubeconfig/KubeconfigPage';
 import ClustersManualPage from './components/settings/clusters/manual/ManualPage';
@@ -68,6 +69,7 @@ const App: React.FunctionComponent = () => (
                 <Route path="/settings/clusters/aws" component={ClustersAWSPage} exact={true} />
                 <Route path="/settings/clusters/awssso" component={ClustersAWSSSOPage} exact={true} />
                 <Route path="/settings/clusters/azure" component={ClustersAzurePage} exact={true} />
+                <Route path="/settings/clusters/digitalocean" component={ClustersDigitalOceanPage} exact={true} />
                 <Route path="/settings/clusters/google" component={ClustersGooglePage} exact={true} />
                 <Route path="/settings/clusters/kubeconfig" component={ClustersKubeconfigPage} exact={true} />
                 <Route path="/settings/clusters/manual" component={ClustersManualPage} exact={true} />

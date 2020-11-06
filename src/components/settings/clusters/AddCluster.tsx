@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { TActivator } from '../../../declarations';
 import AWS from './aws/AWS';
 import Azure from './azure/Azure';
+import DigitalOcean from './digitalocean/DigitalOcean';
 import Google from './google/Google';
 import Kubeconfig from './kubeconfig/Kubeconfig';
 import Manual from './manual/Manual';
@@ -34,6 +35,7 @@ const AddCluster: React.FunctionComponent<IAddCluster> = ({ activator }: IAddClu
           <Google />
           <AWS />
           <Azure />
+          <DigitalOcean />
           <OIDC />
           <Kubeconfig />
           <Manual />

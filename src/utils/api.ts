@@ -13,6 +13,7 @@ import {
   IClusterAuthProviderGoogle,
   IClusterAuthProviderOIDC,
   IClusters,
+  IDigitalOceanCluster,
   IGoogleCluster,
   IGoogleProject,
   IGoogleTokensAPIResponse,
@@ -302,6 +303,60 @@ export const getClusters = async (): Promise<IClusters | undefined> => {
     return undefined;
   } catch (err) {
     return undefined;
+  }
+};
+
+// getDigitalOceanClusters returns all clusters from the DigitalOcean API. For that we need a valid API Token for the
+// request. To use the returned clusters we have to retrieve the Kubeconfig for each cluster in the next step.
+export const getDigitalOceanClusters = async (token: string): Promise<IDigitalOceanCluster[]> => {
+  try {
+    const response = await fetch(`https://api.digitalocean.com/v2/kubernetes/clusters`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json.kubernetes_clusters;
+    }
+
+    if (json.message) {
+      throw new Error(json.message);
+    } else {
+      throw new Error('An unknown error occurred.');
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// getDigitalOceanClusters returns all clusters from the DigitalOcean API. For that we need a valid API Token for the
+// request. To use the returned clusters we have to retrieve the Kubeconfig for each cluster in the next step.
+export const getDigitalOceanKubeconfig = async (token: string, clusterID: string): Promise<string> => {
+  try {
+    const response = await fetch(`https://api.digitalocean.com/v2/kubernetes/clusters/${clusterID}/kubeconfig`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status >= 200 && response.status < 300) {
+      return await response.text();
+    }
+
+    const json = await response.json();
+
+    if (json.message) {
+      throw new Error(json.message);
+    } else {
+      throw new Error('An unknown error occurred.');
+    }
+  } catch (err) {
+    throw err;
   }
 };
 
