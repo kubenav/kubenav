@@ -15,7 +15,7 @@ import {
 import * as jsonpatch from 'fast-json-patch';
 import { close, create } from 'ionicons/icons';
 import yaml from 'js-yaml';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { IContext, TActivator } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
@@ -66,7 +66,11 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ show, hide, item, u
   const context = useContext<IContext>(AppContext);
 
   const [error, setError] = useState<string>('');
-  const [value, setValue] = useState<string>(yaml.safeDump(item));
+  const [value, setValue] = useState<string>('');
+
+  useEffect(() => {
+    setValue(yaml.safeDump(item));
+  }, [item]);
 
   const handleSave = async () => {
     try {
