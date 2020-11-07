@@ -32,6 +32,7 @@ export interface IAppSections {
 
 export interface IAppSettings {
   theme: TTheme;
+  authenticationEnabled: boolean;
   timeout: number;
   terminalFontSize: number;
   terminalScrollback: number;
