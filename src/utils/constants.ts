@@ -9,6 +9,7 @@ export const VERSION = process.env.REACT_APP_VERSION;
 
 export const DEFAULT_SETTINGS: IAppSettings = {
   theme: 'system',
+  authenticationEnabled: false,
   timeout: 60,
   terminalFontSize: 12,
   terminalScrollback: 10000,

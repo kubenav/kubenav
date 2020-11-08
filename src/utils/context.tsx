@@ -1,5 +1,6 @@
 import { Plugins } from '@capacitor/core';
 import { isPlatform } from '@ionic/react';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 import React, { useEffect, useState, ReactElement } from 'react';
 import { useQuery } from 'react-query';
 
@@ -84,7 +85,7 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
   // localStorage.
   // For the incluster version of kubenav we are also loading all settings which were configured via command-line flags.
   // This allows us to use the cluster address for plugins instead if port forwarding.
-  const { isFetching } = useQuery(
+  const { isFetching, isError } = useQuery(
     'context',
     async () => {
       try {
@@ -126,6 +127,10 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
         } else {
           setClusters(readClusters());
           setCluster(readCluster());
+
+          if (settings.authenticationEnabled) {
+            await FingerprintAIO.show({});
+          }
         }
 
         await SplashScreen.hide();
@@ -385,7 +390,7 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
         kubernetesAuthWrapper: kubernetesAuthWrapper,
       }}
     >
-      {isFetching ? null : children}
+      {isFetching || isError ? null : children}
     </AppContext.Provider>
   );
 };

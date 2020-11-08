@@ -144,6 +144,9 @@ export const readSettings = (): IAppSettings => {
 
     return {
       theme: settings.theme ? settings.theme : DEFAULT_SETTINGS.theme,
+      authenticationEnabled: settings.hasOwnProperty('authenticationEnabled')
+        ? settings.authenticationEnabled
+        : DEFAULT_SETTINGS.authenticationEnabled,
       timeout: settings.timeout ? settings.timeout : DEFAULT_SETTINGS.timeout,
       terminalFontSize: settings.terminalFontSize ? settings.terminalFontSize : DEFAULT_SETTINGS.terminalFontSize,
       terminalScrollback: settings.terminalScrollback
