@@ -12,10 +12,15 @@ import {
   IonToggle,
 } from '@ionic/react';
 import React, { useState } from 'react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { saveTemporaryCredentials } from '../../../../utils/storage';
 
-const Azure: React.FunctionComponent = () => {
+export interface IAzureProps extends RouteComponentProps {
+  close: () => void;
+}
+
+const Azure: React.FunctionComponent<IAzureProps> = ({ close, history }: IAzureProps) => {
   const [subscriptionID, setSubscriptionID] = useState<string>('');
   const [clientID, setClientID] = useState<string>('');
   const [clientSecret, setClientSecret] = useState<string>('');
@@ -67,7 +72,8 @@ const Azure: React.FunctionComponent = () => {
         admin: admin,
       });
 
-      window.location.replace(`/settings/clusters/azure`);
+      close();
+      history.push('/settings/clusters/azure');
     }
   };
 
@@ -129,4 +135,4 @@ const Azure: React.FunctionComponent = () => {
   );
 };
 
-export default Azure;
+export default withRouter(Azure);

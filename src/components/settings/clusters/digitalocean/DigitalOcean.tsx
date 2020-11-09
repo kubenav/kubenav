@@ -11,10 +11,15 @@ import {
   IonToast,
 } from '@ionic/react';
 import React, { useState } from 'react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { saveTemporaryCredentials } from '../../../../utils/storage';
 
-const DigitalOcean: React.FunctionComponent = () => {
+export interface IDigitalOceanProps extends RouteComponentProps {
+  close: () => void;
+}
+
+const DigitalOcean: React.FunctionComponent<IDigitalOceanProps> = ({ close, history }: IDigitalOceanProps) => {
   const [token, setToken] = useState<string>('');
   const [error, setError] = useState<string>('');
 
@@ -31,7 +36,8 @@ const DigitalOcean: React.FunctionComponent = () => {
         clusterID: '',
       });
 
-      window.location.replace(`/settings/clusters/digitalocean`);
+      close();
+      history.push('/settings/clusters/digitalocean');
     }
   };
 
@@ -67,4 +73,4 @@ const DigitalOcean: React.FunctionComponent = () => {
   );
 };
 
-export default DigitalOcean;
+export default withRouter(DigitalOcean);

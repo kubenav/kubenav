@@ -30,14 +30,6 @@ import Sections from './Sections';
 
 const { App } = Plugins;
 
-App.addListener('appUrlOpen', (data) => {
-  if (data.url.startsWith(GOOGLE_REDIRECT_URI)) {
-    window.location.replace(data.url.replace(`${CUSTOM_URI_SCHEME}:`, ''));
-  } else if (data.url.startsWith(OIDC_REDIRECT_URL)) {
-    window.location.replace(data.url.replace(`${CUSTOM_URI_SCHEME}:`, ''));
-  }
-});
-
 interface IMenuProps extends RouteComponentProps {
   sections: IAppSections;
 }
@@ -45,6 +37,14 @@ interface IMenuProps extends RouteComponentProps {
 const Menu: React.FunctionComponent<IMenuProps> = ({ sections, history, location }: IMenuProps) => {
   const context = useContext<IContext>(AppContext);
   const [eventSourceInitialized, setEventSourceInitialized] = useState<boolean>(false);
+
+  App.addListener('appUrlOpen', (data) => {
+    if (data.url.startsWith(GOOGLE_REDIRECT_URI)) {
+      history.push(data.url.replace(`${CUSTOM_URI_SCHEME}:`, ''));
+    } else if (data.url.startsWith(OIDC_REDIRECT_URL)) {
+      history.push(data.url.replace(`${CUSTOM_URI_SCHEME}:`, ''));
+    }
+  });
 
   if (isPlatform('electron') && !eventSourceInitialized) {
     setEventSourceInitialized(true);

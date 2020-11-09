@@ -32,11 +32,11 @@ const AddCluster: React.FunctionComponent<IAddCluster> = ({ activator }: IAddClu
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <Google />
-          <AWS />
-          <Azure />
-          <DigitalOcean />
-          <OIDC />
+          <Google close={() => setShowModal(false)} />
+          <AWS close={() => setShowModal(false)} />
+          <Azure close={() => setShowModal(false)} />
+          <DigitalOcean close={() => setShowModal(false)} />
+          <OIDC close={() => setShowModal(false)} />
           <Kubeconfig />
           <Manual />
         </IonContent>
