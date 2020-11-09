@@ -1,5 +1,5 @@
 import { Plugins } from '@capacitor/core';
-import { isPlatform } from '@ionic/react';
+import { IonButton, IonCol, IonContent, IonGrid, IonPage, IonRow, isPlatform } from '@ionic/react';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 import React, { useEffect, useState, ReactElement } from 'react';
 import { useQuery } from 'react-query';
@@ -85,7 +85,7 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
   // localStorage.
   // For the incluster version of kubenav we are also loading all settings which were configured via command-line flags.
   // This allows us to use the cluster address for plugins instead if port forwarding.
-  const { isFetching, isError } = useQuery(
+  const { isFetching } = useQuery(
     'context',
     async () => {
       try {
@@ -127,10 +127,6 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
         } else {
           setClusters(readClusters());
           setCluster(readCluster());
-
-          if (settings.authenticationEnabled) {
-            await FingerprintAIO.show({});
-          }
         }
 
         await SplashScreen.hide();
@@ -390,7 +386,59 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
         kubernetesAuthWrapper: kubernetesAuthWrapper,
       }}
     >
-      {isFetching || isError ? null : children}
+      {isFetching ? null : <AuthenticationWrapper settings={settings}>{children}</AuthenticationWrapper>}
     </AppContext.Provider>
   );
+};
+
+interface IAuthenticationWrapperProps {
+  settings: IAppSettings;
+  children: ReactElement;
+}
+
+export const AuthenticationWrapper: React.FunctionComponent<IAuthenticationWrapperProps> = ({
+  settings,
+  children,
+}: IAuthenticationWrapperProps) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+
+  const signIn = async () => {
+    try {
+      await FingerprintAIO.show({});
+      setIsAuthenticated(true);
+    } catch (err) {
+      setError(`Authentication failed: ${err.message}`);
+    }
+  };
+
+  if (settings.authenticationEnabled && isPlatform('hybrid') && !isAuthenticated) {
+    return (
+      <IonPage>
+        <IonContent color="primary">
+          <IonGrid>
+            <IonRow className="ion-justify-content-center">
+              <IonCol className="auth-col">
+                <img className="auth-padding-top auth-img" alt="kubenav" src="/assets/icons/icon.png" />
+              </IonCol>
+            </IonRow>
+            <IonRow className="ion-justify-content-center">
+              <IonCol className="auth-col">
+                <p>{error}</p>
+              </IonCol>
+            </IonRow>
+            <IonRow className="ion-justify-content-center">
+              <IonCol className="auth-col">
+                <IonButton onClick={signIn} fill="outline" expand="block" color="white">
+                  Sign In
+                </IonButton>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonContent>
+      </IonPage>
+    );
+  } else {
+    return children;
+  }
 };
