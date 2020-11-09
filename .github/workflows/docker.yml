@@ -18,21 +18,22 @@ jobs:
           fetch-depth: 0
 
       - name: Set Docker Tag
-        if: ${{ github.event_name == 'push' }}
+        id: tag
         run: |
-          echo ::set-env name=DOCKER_TAG::${GITHUB_SHA::8}
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            DOCKER_TAG="${GITHUB_REF:10}"
+          else
+            DOCKER_TAG="${GITHUB_SHA::8}"
+          fi
 
-      - name: Set Docker Tag
-        if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
-        run: |
-          echo ::set-env name=DOCKER_TAG::${GITHUB_REF/refs\/tags\//}
+          echo ::set-output name=tag::${DOCKER_TAG}
 
       - name: Docker Buildx (prepare)
         id: prepare
         run: |
           DOCKER_IMAGE=kubenav/kubenav
           DOCKER_PLATFORMS=linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
-          echo ::set-output name=buildx_args::--platform ${DOCKER_PLATFORMS} --tag ${DOCKER_IMAGE}:${{ env.DOCKER_TAG  }} --file cmd/server/Dockerfile .
+          echo ::set-output name=buildx_args::--platform ${DOCKER_PLATFORMS} --tag ${DOCKER_IMAGE}:${{ steps.tag.outputs.tag }} --file cmd/server/Dockerfile .
 
       - name: Set up Docker Buildx
         uses: crazy-max/ghaction-docker-buildx@v3
