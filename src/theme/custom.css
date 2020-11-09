@@ -215,3 +215,16 @@ ion-avatar {
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
+
+/* Authentication Wrapper */
+.auth-col {
+  text-align: center;
+}
+
+.auth-img {
+  max-width: 50%;
+}
+
+.auth-padding-top {
+  padding-top: 25vh;
+}

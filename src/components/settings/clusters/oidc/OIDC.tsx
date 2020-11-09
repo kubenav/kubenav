@@ -12,12 +12,17 @@ import {
   IonToast,
 } from '@ionic/react';
 import React, { useState } from 'react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { getOIDCLink } from '../../../../utils/api';
 import { isBase64 } from '../../../../utils/helpers';
 import { saveTemporaryCredentials } from '../../../../utils/storage';
 
-const OIDC: React.FunctionComponent = () => {
+export interface IOIDCProps extends RouteComponentProps {
+  close: () => void;
+}
+
+const OIDC: React.FunctionComponent<IOIDCProps> = ({ close, history }: IOIDCProps) => {
   const [discoveryURL, setDiscoveryURL] = useState<string>('');
   const [clientID, setClientID] = useState<string>('');
   const [clientSecret, setClientSecret] = useState<string>('');
@@ -63,10 +68,12 @@ const OIDC: React.FunctionComponent = () => {
       });
 
       if (refreshToken) {
-        window.location.replace('/settings/clusters/oidc');
+        close();
+        history.push('/settings/clusters/oidc');
       } else {
         try {
           const url = await getOIDCLink(discoveryURL, clientID, clientSecret, ca);
+          close();
           window.location.replace(url);
         } catch (err) {
           setError(err.message);
@@ -127,4 +134,4 @@ const OIDC: React.FunctionComponent = () => {
   );
 };
 
-export default OIDC;
+export default withRouter(OIDC);

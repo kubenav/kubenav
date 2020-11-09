@@ -16,7 +16,7 @@ const Manual: React.FunctionComponent = () => {
           Choose this option to add a cluster manually. You have to provide a name, the server and a certificate. You
           can choose between username and password, token or a client certificate and key for the authentication.
         </p>
-        <IonButton expand="block" href="/settings/clusters/manual">
+        <IonButton expand="block" routerLink="/settings/clusters/manual" routerDirection="root">
           Add a Cluster
         </IonButton>
       </IonCardContent>

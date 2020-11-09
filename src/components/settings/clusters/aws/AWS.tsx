@@ -13,10 +13,15 @@ import {
   IonToast,
 } from '@ionic/react';
 import React, { useState } from 'react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { saveTemporaryCredentials } from '../../../../utils/storage';
 
-const AWS: React.FunctionComponent = () => {
+export interface IAWSProps extends RouteComponentProps {
+  close: () => void;
+}
+
+const AWS: React.FunctionComponent<IAWSProps> = ({ close, history }: IAWSProps) => {
   const [accessKeyID, setAccessKeyID] = useState<string>('');
   const [region, setRegion] = useState<string>('');
   const [secretKey, setSecretKey] = useState<string>('');
@@ -51,7 +56,8 @@ const AWS: React.FunctionComponent = () => {
         sessionToken: sessionToken,
       });
 
-      window.location.replace(`/settings/clusters/aws`);
+      close();
+      history.push('/settings/clusters/aws');
     }
   };
 
@@ -130,4 +136,4 @@ const AWS: React.FunctionComponent = () => {
   );
 };
 
-export default AWS;
+export default withRouter(AWS);

@@ -18,7 +18,7 @@ const Kubeconfig: React.FunctionComponent = () => {
           <code>certificate-authority-data</code> field. If you only have a field <code>certificate-authority</code>
           with the path to the certificate this does not work.
         </p>
-        <IonButton expand="block" href="/settings/clusters/kubeconfig">
+        <IonButton expand="block" routerLink="/settings/clusters/kubeconfig" routerDirection="root">
           Import Kubeconfig
         </IonButton>
       </IonCardContent>

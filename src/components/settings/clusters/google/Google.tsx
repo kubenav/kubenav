@@ -20,7 +20,11 @@ import {
 } from '../../../../utils/constants';
 import { saveTemporaryCredentials } from '../../../../utils/storage';
 
-const Google: React.FunctionComponent = () => {
+export interface IGoogleProps {
+  close: () => void;
+}
+
+const Google: React.FunctionComponent<IGoogleProps> = ({ close }: IGoogleProps) => {
   const [clientID, setClientID] = useState<string>('');
   const [error, setError] = useState<string>('');
 
@@ -41,6 +45,7 @@ const Google: React.FunctionComponent = () => {
         tokenType: '',
       });
 
+      close();
       window.location.replace(
         `${GOOGLE_OAUTH2_ENDPOINT}?client_id=${clientID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=${GOOGLE_RESPONSE_TYPE}&scope=${GOOGLE_SCOPE}`,
       );

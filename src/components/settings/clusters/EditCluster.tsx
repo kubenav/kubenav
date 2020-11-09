@@ -246,6 +246,8 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
         authProviderOIDC.clientSecret,
         authProviderOIDC.certificateAuthority,
       );
+
+      setShowModal(false);
       window.location.replace(url);
     }
   };
@@ -262,6 +264,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
         clusterID: cluster.id,
       });
 
+      setShowModal(false);
       window.location.replace(
         `${GOOGLE_OAUTH2_ENDPOINT}?client_id=${authProviderGoogle.clientID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=${GOOGLE_RESPONSE_TYPE}&scope=${GOOGLE_SCOPE}`,
       );
