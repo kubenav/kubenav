@@ -1,4 +1,5 @@
 {
+  "version_electron": "9.3.4",
   "app_name": "kubenav",
   "icon_path_darwin": "resources/icon.icns",
   "icon_path_linux": "resources/icon.png",
