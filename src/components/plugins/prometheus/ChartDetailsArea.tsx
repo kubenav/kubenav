@@ -1,6 +1,6 @@
-import { IonCol, IonRow } from '@ionic/react';
+import { IonCol, IonRow, isPlatform } from '@ionic/react';
 import React, { useContext, useState } from 'react';
-import { Area, AreaChart, Legend, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { IContext } from '../../../declarations';
 import { AppContext } from '../../../utils/context';
@@ -108,6 +108,22 @@ const ChartDetailsArea: React.FunctionComponent<IChartDetailsAreaProps> = ({
             />
             <YAxis dataKey="value" />
             <Legend onClick={(e) => (selected === e.payload.name ? setSelected('') : setSelected(e.payload.name))} />
+            {!isPlatform('hybrid') ? (
+              <Tooltip
+                cursor={{ stroke: '#949494', strokeWidth: 2 }}
+                contentStyle={
+                  isDarkMode(context.settings.theme)
+                    ? isPlatform('ios')
+                      ? { backgroundColor: '1c1c1c', borderColor: '#949494' }
+                      : { backgroundColor: '#1A1B1E', borderColor: '#949494' }
+                    : { backgroundColor: '#ffffff', borderColor: '#949494' }
+                }
+                formatter={(value) => {
+                  return value.toFixed(2);
+                }}
+                labelFormatter={formatTime}
+              />
+            ) : null}
             {selected === ''
               ? series.map((serie, index) => (
                   <Area
