@@ -13,18 +13,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Go 1.14
+      - name: Setup Go 1.15
         uses: actions/setup-go@v2
         with:
-          go-version: 1.14
+          go-version: 1.15
 
       - name: Generate Bindings (Android)
         # We must build the Android bindings on Ubuntu,
         # because the macOS used for GitHub Actions contains an outdated NDK version.
         if: matrix.os == 'ubuntu-latest'
         run: |
-          go get golang.org/x/mobile/cmd/gomobile
-          go install golang.org/x/mobile/cmd/gomobile
+          go mod download
           gomobile init
           make bindings-android
 
@@ -35,7 +34,6 @@ jobs:
         run: |
           unset ANDROID_HOME
           unset ANDROID_NDK_HOME
-          go get golang.org/x/mobile/cmd/gomobile
-          go install golang.org/x/mobile/cmd/gomobile
+          go mod download
           gomobile init
           make bindings-ios

@@ -6,7 +6,7 @@ RUN npm install
 ENV REACT_APP_INCLUSTER true
 RUN ionic build
 
-FROM golang:1.14.4-alpine3.12 as server
+FROM golang:1.15.5-alpine3.12 as server
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 RUN echo "Building on $BUILDPLATFORM, for $TARGETPLATFORM" > /log
