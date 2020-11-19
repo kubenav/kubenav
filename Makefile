@@ -68,6 +68,10 @@ release-major:
 	sed -i.bak 's/MARKETING_VERSION = .*/MARKETING_VERSION = ${MAJORVERSION};/g' ios/App/App.xcodeproj/project.pbxproj
 	rm -f ios/App/App.xcodeproj/project.pbxproj.bak
 
+	sed -i.bak 's/\"CFBundleVersion\":.*/\"CFBundleVersion\": \"${MAJORVERSION}\",/g' cmd/electron/bundler.json
+	sed -i.bak 's/\"CFBundleShortVersionString\":.*/\"CFBundleShortVersionString\": \"${MAJORVERSION}\",/g' cmd/electron/bundler.json
+	rm -f cmd/electron/bundler.json.bak
+
 	git add .
 	git commit -m 'Prepare release $(MAJORVERSION)'
 	git push
@@ -91,6 +95,10 @@ release-minor:
 	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${IOS_CF_BUNDLE_VERSION}" ios/App/App/Info.plist
 	sed -i.bak 's/MARKETING_VERSION = .*/MARKETING_VERSION = ${MINORVERSION};/g' ios/App/App.xcodeproj/project.pbxproj
 	rm -f ios/App/App.xcodeproj/project.pbxproj.bak
+
+	sed -i.bak 's/\"CFBundleVersion\":.*/\"CFBundleVersion\": \"${MINORVERSION}\",/g' cmd/electron/bundler.json
+	sed -i.bak 's/\"CFBundleShortVersionString\":.*/\"CFBundleShortVersionString\": \"${MINORVERSION}\",/g' cmd/electron/bundler.json
+	rm -f cmd/electron/bundler.json.bak
 
 	git add .
 	git commit -m 'Prepare release $(MINORVERSION)'
@@ -118,6 +126,10 @@ release-patch:
 	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${IOS_CF_BUNDLE_VERSION}" ios/App/App/Info.plist
 	sed -i.bak 's/MARKETING_VERSION = .*/MARKETING_VERSION = ${PATCHVERSION};/g' ios/App/App.xcodeproj/project.pbxproj
 	rm -f ios/App/App.xcodeproj/project.pbxproj.bak
+
+	sed -i.bak 's/\"CFBundleVersion\":.*/\"CFBundleVersion\": \"${PATCHVERSION}\",/g' cmd/electron/bundler.json
+	sed -i.bak 's/\"CFBundleShortVersionString\":.*/\"CFBundleShortVersionString\": \"${PATCHVERSION}\",/g' cmd/electron/bundler.json
+	rm -f cmd/electron/bundler.json.bak
 
 	git add .
 	git commit -m 'Prepare release $(PATCHVERSION)'
