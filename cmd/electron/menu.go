@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os/exec"
 	"runtime"
 	"sort"
@@ -11,7 +10,7 @@ import (
 
 	"github.com/asticode/go-astikit"
 	"github.com/asticode/go-astilectron"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 // openBrowser opens a given URL in the standard browser of the current OS.
@@ -36,7 +35,7 @@ func openBrowser(url string) {
 
 // createClusterMenuItem creates a new menu item for a given context from the Kubeconfig file.
 // When the cluster is selected an "cluster" event will be send to the frontend via SSE.
-func createClusterMenuItem(cluster string, log *logrus.Logger) astilectron.MenuItemOptions {
+func createClusterMenuItem(cluster string) astilectron.MenuItemOptions {
 	return astilectron.MenuItemOptions{
 		Label: astikit.StrPtr(cluster),
 		OnClick: func(e astilectron.Event) (deleteListener bool) {
@@ -49,7 +48,7 @@ func createClusterMenuItem(cluster string, log *logrus.Logger) astilectron.MenuI
 
 // createFileMenu creates the items for the "File" menu. If a new version was found an update item is added. If no new
 // version was found the "Update Available" hint is hidden.
-func createFileMenu(updateAvailable bool, log *logrus.Logger) *astilectron.MenuItemOptions {
+func createFileMenu(updateAvailable bool) *astilectron.MenuItemOptions {
 	if updateAvailable {
 		return &astilectron.MenuItemOptions{
 			Label: astikit.StrPtr("File"),
@@ -127,8 +126,8 @@ func createFileMenu(updateAvailable bool, log *logrus.Logger) *astilectron.MenuI
 }
 
 // getMenuOptions returns the menu for the Electron app.
-func getMenuOptions(updateAvailable bool, client kube.Client, log *logrus.Logger) ([]*astilectron.MenuItemOptions, error) {
-	fileMenu := createFileMenu(updateAvailable, log)
+func getMenuOptions(updateAvailable bool, client kube.Client) ([]*astilectron.MenuItemOptions, error) {
+	fileMenu := createFileMenu(updateAvailable)
 
 	// Load all clusters from the Kubeconfig file and sort the clusters alphabetical. Then iterate over the clusters and
 	// create a menu entry for each cluster.
@@ -145,7 +144,7 @@ func getMenuOptions(updateAvailable bool, client kube.Client, log *logrus.Logger
 
 	var clusterSubMenu []*astilectron.MenuItemOptions
 	for _, context := range contexts {
-		item := createClusterMenuItem(context, log)
+		item := createClusterMenuItem(context)
 		clusterSubMenu = append(clusterSubMenu, &item)
 	}
 

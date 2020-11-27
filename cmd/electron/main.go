@@ -15,7 +15,7 @@ import (
 	"github.com/asticode/go-astilectron"
 	bootstrap "github.com/asticode/go-astilectron-bootstrap"
 	assetfs "github.com/elazarl/go-bindata-assetfs"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
@@ -49,12 +49,9 @@ var rootCmd = &cobra.Command{
 	Long:               "kubenav - the navigator for your Kubernetes clusters right in your pocket.",
 	FParseErrWhitelist: cobra.FParseErrWhitelist{UnknownFlags: true},
 	Run: func(cmd *cobra.Command, args []string) {
-		// Setup the logger and print the version information.
-		log := logrus.StandardLogger()
-
-		logLevel := logrus.InfoLevel
+		logLevel := log.InfoLevel
 		if debugFlag {
-			logLevel = logrus.DebugLevel
+			logLevel = log.DebugLevel
 		}
 
 		log.SetLevel(logLevel)
@@ -133,10 +130,15 @@ var rootCmd = &cobra.Command{
 
 		// Check if a new version is available and create the menu. For the menu we need the result from the version check
 		// and the Kubernetes client and logger.
-		updateAvailable := checkVersion(version.Version, log)
-		menuOptions, err := getMenuOptions(updateAvailable, kubeClient, log)
+		updateAvailable := checkVersion(version.Version)
+		menuOptions, err := getMenuOptions(updateAvailable, kubeClient)
 		if err != nil {
 			log.WithError(err).Fatalf("Could not create menu")
+		}
+
+		logger := log.StandardLogger()
+		if debugFlag {
+			logger.SetLevel(log.DebugLevel)
 		}
 
 		// Run the Electron app via the bootstrapper for astilectron.
@@ -152,7 +154,7 @@ var rootCmd = &cobra.Command{
 				VersionElectron:    VersionElectron,
 			},
 			Debug:         debugFlag,
-			Logger:        log,
+			Logger:        logger,
 			MenuOptions:   menuOptions,
 			RestoreAssets: RestoreAssets,
 			Windows: []*bootstrap.Window{{
@@ -177,7 +179,7 @@ var versionCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		v, err := version.Print("kubenav")
 		if err != nil {
-			logrus.WithError(err).Fatalf("Failed to print version information")
+			log.WithError(err).Fatalf("Failed to print version information")
 		}
 
 		fmt.Fprintln(os.Stdout, v)
@@ -197,6 +199,6 @@ func init() {
 
 func main() {
 	if err := rootCmd.Execute(); err != nil {
-		logrus.WithError(err).Fatal("Failed to initialize kubenav")
+		log.WithError(err).Fatal("Failed to initialize kubenav")
 	}
 }

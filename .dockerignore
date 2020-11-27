@@ -1,0 +1,10 @@
+.github
+.vscode
+android
+bin
+build
+cmd/electron
+cmd/mobile
+ios
+node_modules
+utils
