@@ -6,6 +6,8 @@ import (
 	"net/http"
 
 	"github.com/kubenav/kubenav/pkg/api/middleware"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // Sync is the structure for a sync request and contains the context or namespace as values.
@@ -29,17 +31,20 @@ func (c *Client) syncContextHandler(w http.ResponseWriter, r *http.Request) {
 
 	var sync Sync
 	if r.Body == nil {
+		log.Errorf("Sync body is empty")
 		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Sync body is empty")
 		return
 	}
 	err := json.NewDecoder(r.Body).Decode(&sync)
 	if err != nil {
+		log.WithError(err).Error("Could not decode sync body")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode sync body: %s", err.Error()))
 		return
 	}
 
 	err = c.kubeClient.ChangeContext(sync.Context)
 	if err != nil {
+		log.WithError(err).Error("Could not change context")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not change context: %s", err.Error()))
 		return
 	}
@@ -63,17 +68,20 @@ func (c *Client) syncNamespaceHandler(w http.ResponseWriter, r *http.Request) {
 
 	var sync Sync
 	if r.Body == nil {
+		log.Errorf("Sync body is empty")
 		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Sync body is empty")
 		return
 	}
 	err := json.NewDecoder(r.Body).Decode(&sync)
 	if err != nil {
+		log.WithError(err).Error("Could not decode sync body")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode sync body: %s", err.Error()))
 		return
 	}
 
 	err = c.kubeClient.ChangeNamespace(sync.Context, sync.Namespace)
 	if err != nil {
+		log.WithError(err).Error("Could not change context")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not change context: %s", err.Error()))
 		return
 	}

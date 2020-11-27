@@ -5,6 +5,8 @@ import (
 
 	"github.com/kubenav/kubenav/pkg/api"
 	"github.com/kubenav/kubenav/pkg/kube"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // StartServer starts the server for the mobile implementation of kubenav.
@@ -14,6 +16,8 @@ import (
 // client for mobile can not return an error. When the router and Kubernetes API client is created, we are creating a
 // new API client and register all API routes. Finally we start the server which always listen on port 14122.
 func StartServer() {
+	log.SetLevel(log.FatalLevel)
+
 	router := http.NewServeMux()
 	kubeClient, _ := kube.NewClient(true, false, "", "", "")
 	apiClient := api.NewClient(false, nil, kubeClient)

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 type Release struct {
@@ -17,7 +17,7 @@ type Release struct {
 // returns false.
 // NOTE: This only works for the official releases. If a beta version is used this function always returns true, also
 // when the beta release is newer then the last production release.
-func checkVersion(currentVersion string, log *logrus.Logger) bool {
+func checkVersion(currentVersion string) bool {
 	client := &http.Client{
 		Timeout: 5 * time.Second,
 	}

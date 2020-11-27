@@ -14,6 +14,7 @@ import (
 	"github.com/kubenav/kubenav/pkg/handlers/terminal"
 	"github.com/kubenav/kubenav/pkg/kube"
 
+	log "github.com/sirupsen/logrus"
 	"k8s.io/client-go/tools/remotecommand"
 )
 
@@ -26,17 +27,20 @@ func (c *Client) kubernetesRequestHandler(w http.ResponseWriter, r *http.Request
 
 	var request kube.Request
 	if r.Body == nil {
+		log.Error("Request body is empty")
 		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
 		return
 	}
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
+		log.WithError(err).Errorf("Could not decode request body")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 		return
 	}
 
 	_, clientset, err := c.kubeClient.GetConfigAndClientset(request.Cluster, request.URL, request.CertificateAuthorityData, request.ClientCertificateData, request.ClientKeyData, request.Token, request.Username, request.Password, request.InsecureSkipTLSVerify, time.Duration(request.Timeout)*time.Second, request.Proxy)
 	if err != nil {
+		log.WithError(err).Errorf("Could not create Kubernetes API client")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 		return
 	}
@@ -45,10 +49,12 @@ func (c *Client) kubernetesRequestHandler(w http.ResponseWriter, r *http.Request
 	if err != nil {
 		var apiError kube.Error
 		if err := json.Unmarshal(result, &apiError); err != nil {
+			log.WithError(err).Infof("Kubernetes API request failed")
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Kubernetes API request failed: %s", err.Error()))
 			return
 		}
 
+		log.WithError(err).Infof("Kubernetes API request failed")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Kubernetes API request failed: %s", apiError.Message))
 		return
 	}
@@ -70,23 +76,27 @@ func (c *Client) kubernetesExecHandler(w http.ResponseWriter, r *http.Request) {
 
 	var request kube.Request
 	if r.Body == nil {
+		log.Error("Request body is empty")
 		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
 		return
 	}
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
+		log.WithError(err).Errorf("Could not decode request body")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 		return
 	}
 
 	config, clientset, err := c.kubeClient.GetConfigAndClientset(request.Cluster, request.URL, request.CertificateAuthorityData, request.ClientCertificateData, request.ClientKeyData, request.Token, request.Username, request.Password, request.InsecureSkipTLSVerify, time.Duration(request.Timeout)*time.Second, request.Proxy)
 	if err != nil {
+		log.WithError(err).Errorf("Could not create Kubernetes API client")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 		return
 	}
 
 	sessionID, err := terminal.GenTerminalSessionID()
 	if err != nil {
+		log.WithError(err).Errorf("Could not generate terminal session id")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not generate terminal session id: %s", err.Error()))
 		return
 	}
@@ -122,23 +132,27 @@ func (c *Client) kubernetesLogsHandler(w http.ResponseWriter, r *http.Request) {
 
 	var request kube.Request
 	if r.Body == nil {
+		log.Error("Request body is empty")
 		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
 		return
 	}
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
+		log.WithError(err).Errorf("Could not decode request body")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 		return
 	}
 
 	_, clientset, err := c.kubeClient.GetConfigAndClientset(request.Cluster, request.URL, request.CertificateAuthorityData, request.ClientCertificateData, request.ClientKeyData, request.Token, request.Username, request.Password, request.InsecureSkipTLSVerify, 6*time.Hour, request.Proxy)
 	if err != nil {
+		log.WithError(err).Errorf("Could not create Kubernetes API client")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 		return
 	}
 
 	sessionID, err := terminal.GenTerminalSessionID()
 	if err != nil {
+		log.WithError(err).Errorf("Could not generate terminal session id")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not generate terminal session id: %s", err.Error()))
 		return
 	}
@@ -161,17 +175,20 @@ func (c *Client) kubernetesSSHHandler(w http.ResponseWriter, r *http.Request) {
 
 	var request terminal.SSHRequest
 	if r.Body == nil {
+		log.Error("Request body is empty")
 		middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
 		return
 	}
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
+		log.WithError(err).Errorf("Could not decode request body")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 		return
 	}
 
 	sessionID, err := terminal.GenTerminalSessionID()
 	if err != nil {
+		log.WithError(err).Errorf("Could not generate terminal session id")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not generate terminal session id: %s", err.Error()))
 		return
 	}
@@ -223,23 +240,27 @@ func (c *Client) kubernetesPortForwardingHandler(w http.ResponseWriter, r *http.
 	if r.Method == http.MethodPost {
 		var request portforwarding.Request
 		if r.Body == nil {
+			log.Error("Request body is empty")
 			middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
 			return
 		}
 		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
+			log.WithError(err).Errorf("Could not decode request body")
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 			return
 		}
 
 		config, _, err := c.kubeClient.GetConfigAndClientset(request.Cluster, request.URL, request.CertificateAuthorityData, request.ClientCertificateData, request.ClientKeyData, request.Token, request.Username, request.Password, request.InsecureSkipTLSVerify, time.Duration(request.Timeout)*time.Second, request.Proxy)
 		if err != nil {
+			log.WithError(err).Errorf("Could not create Kubernetes API client")
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 			return
 		}
 
 		pf, err := portforwarding.NewPortForwarding(config, "", request.URL, request.PodName, request.PodNamespace, request.PodPort, request.LocalPort)
 		if err != nil {
+			log.WithError(err).Errorf("Could not initialize port forwarding")
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not initialize port forwarding: %s", err.Error()))
 			return
 		}
@@ -259,11 +280,13 @@ func (c *Client) kubernetesPortForwardingHandler(w http.ResponseWriter, r *http.
 	if r.Method == http.MethodDelete {
 		var request portforwarding.Response
 		if r.Body == nil {
+			log.Error("Request body is empty")
 			middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
 			return
 		}
 		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
+			log.WithError(err).Errorf("Could not decode request body")
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 			return
 		}
@@ -297,11 +320,13 @@ func (c *Client) kubernetesPluginHandler(w http.ResponseWriter, r *http.Request)
 	if r.Method == http.MethodPost {
 		var request plugins.Request
 		if r.Body == nil {
+			log.Error("Request body is empty")
 			middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
 			return
 		}
 		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
+			log.WithError(err).Errorf("Could not decode request body")
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 			return
 		}
@@ -309,12 +334,14 @@ func (c *Client) kubernetesPluginHandler(w http.ResponseWriter, r *http.Request)
 		requestTimeout := time.Duration(request.Timeout) * time.Second
 		config, clientset, err := c.kubeClient.GetConfigAndClientset(request.Cluster, request.URL, request.CertificateAuthorityData, request.ClientCertificateData, request.ClientKeyData, request.Token, request.Username, request.Password, request.InsecureSkipTLSVerify, requestTimeout, request.Proxy)
 		if err != nil {
+			log.WithError(err).Errorf("Could not create Kubernetes API client")
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 			return
 		}
 
 		data, err := plugins.Run(config, clientset, request.Name, request.URL, request.Port, request.Address, requestTimeout, request.Data)
 		if err != nil {
+			log.WithError(err).Errorf("An error occured while running the plugin")
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("An error occured: %s", err.Error()))
 			return
 		}

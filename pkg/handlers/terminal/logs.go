@@ -7,6 +7,7 @@ import (
 	"strings"
 	"sync"
 
+	log "github.com/sirupsen/logrus"
 	"k8s.io/client-go/kubernetes"
 )
 
@@ -61,6 +62,7 @@ func StreamLogsHandler(w http.ResponseWriter, r *http.Request) {
 	sessionID := params[len(params)-1]
 	logSession, ok := LogSessions.Get(sessionID)
 	if !ok {
+		log.Error("Log session not found")
 		LogSessions.Delete(sessionID)
 		return
 	}
@@ -76,6 +78,7 @@ func StreamLogsHandler(w http.ResponseWriter, r *http.Request) {
 		select {
 		case <-r.Context().Done():
 			LogSessions.Delete(sessionID)
+			log.WithError(err).Debugf("Log session was closed")
 			return
 		default:
 			p := make([]byte, 2048)
@@ -84,9 +87,11 @@ func StreamLogsHandler(w http.ResponseWriter, r *http.Request) {
 				LogSessions.Delete(sessionID)
 
 				if err == io.EOF {
+					log.WithError(err).Debugf("Log session was closed")
 					return
 				}
 
+				log.WithError(err).Errorf("Log session was closed")
 				return
 			}
 

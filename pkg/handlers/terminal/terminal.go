@@ -10,11 +10,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"sync"
 
+	log "github.com/sirupsen/logrus"
 	"gopkg.in/igm/sockjs-go.v2/sockjs"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -145,7 +145,7 @@ func (sm *SessionMap) Close(sessionID string, status uint32, reason string) {
 	defer sm.Lock.Unlock()
 	err := sm.Sessions[sessionID].SockJSSession.Close(status, reason)
 	if err != nil {
-		log.Println(err)
+		log.WithError(err).Errorf("SockJS connection was closed")
 	}
 
 	delete(sm.Sessions, sessionID)
@@ -259,6 +259,7 @@ func WaitForTerminal(config *rest.Config, clientset *kubernetes.Clientset, reqUR
 		}
 
 		if err != nil {
+			log.WithError(err).Errorf("Terminal session was closed")
 			TerminalSessions.Close(sessionID, 2, err.Error())
 			return
 		}

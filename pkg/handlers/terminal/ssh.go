@@ -3,6 +3,7 @@ package terminal
 import (
 	"net/http"
 
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh"
 	"gopkg.in/igm/sockjs-go.v2/sockjs"
 )
@@ -91,6 +92,7 @@ func WaitForSSH(key, addr, user string, sessionID string) {
 
 		err := startSSHProcess(key, addr, user, TerminalSessions.Get(sessionID))
 		if err != nil {
+			log.WithError(err).Errorf("SSH session was closed")
 			TerminalSessions.Close(sessionID, 2, err.Error())
 			return
 		}
