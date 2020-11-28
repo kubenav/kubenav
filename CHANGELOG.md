@@ -1,5 +1,39 @@
 # Changelog
 
+## [3.2.0](https://github.com/kubenav/kubenav/tree/3.2.0) (2020-11-28)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.1.0...3.2.0)
+
+**Implemented enhancements:**
+
+- Bug: new authentication plugin has no fallover/retry option [\#255](https://github.com/kubenav/kubenav/issues/255)
+- Feature Request: filter events [\#248](https://github.com/kubenav/kubenav/issues/248)
+- AWS SSO authentication [\#239](https://github.com/kubenav/kubenav/issues/239)
+- Add tooltip for charts [\#259](https://github.com/kubenav/kubenav/pull/259) ([ricoberger](https://github.com/ricoberger))
+- Add authentication support for mobile app [\#253](https://github.com/kubenav/kubenav/pull/253) ([ricoberger](https://github.com/ricoberger))
+- Add support for DigitalOcean [\#252](https://github.com/kubenav/kubenav/pull/252) ([ricoberger](https://github.com/ricoberger))
+
+**Fixed bugs:**
+
+- kubenav does not have version numbers on macOS [\#260](https://github.com/kubenav/kubenav/issues/260)
+- Bug: edit option showing wrong yaml? [\#250](https://github.com/kubenav/kubenav/issues/250)
+- kubenav doesn’t show all helm releases [\#245](https://github.com/kubenav/kubenav/issues/245)
+- Bug: click open on port foward opens in app on mobile [\#242](https://github.com/kubenav/kubenav/issues/242)
+
+**Closed issues:**
+
+- Bug: blank white screen after selecting service, deployment then service again [\#251](https://github.com/kubenav/kubenav/issues/251)
+- BUG: big charts on large tablet [\#244](https://github.com/kubenav/kubenav/issues/244)
+
+**Merged pull requests:**
+
+- Improve Docker image and add logging [\#262](https://github.com/kubenav/kubenav/pull/262) ([ricoberger](https://github.com/ricoberger))
+- Add version for macOS implementation [\#261](https://github.com/kubenav/kubenav/pull/261) ([ricoberger](https://github.com/ricoberger))
+- Improve authentication [\#256](https://github.com/kubenav/kubenav/pull/256) ([ricoberger](https://github.com/ricoberger))
+- Improve event handling [\#249](https://github.com/kubenav/kubenav/pull/249) ([ricoberger](https://github.com/ricoberger))
+- Add setting for the query limit [\#247](https://github.com/kubenav/kubenav/pull/247) ([ricoberger](https://github.com/ricoberger))
+- Add support for AWS SSO [\#246](https://github.com/kubenav/kubenav/pull/246) ([ricoberger](https://github.com/ricoberger))
+
 ## [3.1.0](https://github.com/kubenav/kubenav/tree/3.1.0) (2020-10-28)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/3.0.0...3.1.0)
