@@ -48,7 +48,7 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
   }, [activeTerminal, showModal]);
 
   return (
-    <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
+    <IonModal backdropDismiss={false} isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
