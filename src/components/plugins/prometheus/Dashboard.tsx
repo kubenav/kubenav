@@ -76,7 +76,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ title, variables,
             url = `/api/v1/namespaces/${podList.items[0].metadata.namespace}/pods/${podList.items[0].metadata.name}/portforward`;
           } else {
             throw new Error(
-              `Could not found Pod in Namespace "${context.settings.prometheusNamespace}" with selector "${context.settings.prometheusSelector}".`,
+              `Could not find Pod in Namespace "${context.settings.prometheusNamespace}" with selector "${context.settings.prometheusSelector}".`,
             );
           }
         }
