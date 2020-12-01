@@ -405,6 +405,12 @@ export const AuthenticationWrapper: React.FunctionComponent<IAuthenticationWrapp
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
+  useEffect(() => {
+    if (settings.authenticationEnabled && isPlatform('hybrid') && !isAuthenticated) {
+      signIn();
+    }
+  }, [isAuthenticated, settings.authenticationEnabled]);
+
   const signIn = async () => {
     try {
       await FingerprintAIO.show({});
