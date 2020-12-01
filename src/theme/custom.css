@@ -222,9 +222,14 @@ ion-avatar {
 }
 
 .auth-img {
-  max-width: 50%;
+  max-width: 256px;
 }
 
 .auth-padding-top {
-  padding-top: 25vh;
+  padding-top: 100px;
+}
+
+.auth-unlock-button {
+  max-width: 512px;
+  margin: auto;
 }
