@@ -29,6 +29,7 @@ import {
   saveClusters,
   saveSettings,
 } from './storage';
+import useWindowHeight from './useWindowHeight';
 
 const { SplashScreen } = Plugins;
 
@@ -400,8 +401,15 @@ export const AuthenticationWrapper: React.FunctionComponent<IAuthenticationWrapp
   settings,
   children,
 }: IAuthenticationWrapperProps) => {
+  const height = useWindowHeight();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    if (settings.authenticationEnabled && isPlatform('hybrid') && !isAuthenticated) {
+      signIn();
+    }
+  }, [isAuthenticated, settings.authenticationEnabled]);
 
   const signIn = async () => {
     try {
@@ -418,8 +426,8 @@ export const AuthenticationWrapper: React.FunctionComponent<IAuthenticationWrapp
         <IonContent color="primary">
           <IonGrid>
             <IonRow className="ion-justify-content-center">
-              <IonCol className="auth-col">
-                <img className="auth-padding-top auth-img" alt="kubenav" src="/assets/icons/icon.png" />
+              <IonCol className="auth-col auth-padding-top">
+                {height > 512 ? <img className="auth-img" alt="kubenav" src="/assets/icons/icon.png" /> : null}
               </IonCol>
             </IonRow>
             <IonRow className="ion-justify-content-center">
@@ -429,8 +437,8 @@ export const AuthenticationWrapper: React.FunctionComponent<IAuthenticationWrapp
             </IonRow>
             <IonRow className="ion-justify-content-center">
               <IonCol className="auth-col">
-                <IonButton onClick={signIn} fill="outline" expand="block" color="white">
-                  Sign In
+                <IonButton className="auth-unlock-button" onClick={signIn} fill="outline" expand="block" color="white">
+                  Unlock
                 </IonButton>
               </IonCol>
             </IonRow>
