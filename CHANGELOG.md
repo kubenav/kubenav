@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.2.1](https://github.com/kubenav/kubenav/tree/3.2.1) (2020-12-02)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.2.0...3.2.1)
+
+**Fixed bugs:**
+
+- Unexpected JSON error when logging in with GKE on Android [\#267](https://github.com/kubenav/kubenav/issues/267)
+- "Esc" not work with shell [\#265](https://github.com/kubenav/kubenav/issues/265)
+- Bug: authentication enabled still requires clicking sign in to open prompt [\#264](https://github.com/kubenav/kubenav/issues/264)
+- Bug: android in landscape mode hides login button [\#263](https://github.com/kubenav/kubenav/issues/263)
+
+**Merged pull requests:**
+
+- Fix bugs regarding authentication [\#269](https://github.com/kubenav/kubenav/pull/269) ([ricoberger](https://github.com/ricoberger))
+- Fix rederict for Google and OIDC [\#268](https://github.com/kubenav/kubenav/pull/268) ([ricoberger](https://github.com/ricoberger))
+- typo fix [\#266](https://github.com/kubenav/kubenav/pull/266) ([dbaker-rh](https://github.com/dbaker-rh))
+
 ## [3.2.0](https://github.com/kubenav/kubenav/tree/3.2.0) (2020-11-28)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/3.1.0...3.2.0)
