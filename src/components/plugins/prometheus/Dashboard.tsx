@@ -61,7 +61,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ title, variables,
     ['Dashboard', title, variables, charts],
     async () => {
       try {
-        let url = '';
+        let portforwardingPath = '';
 
         if (!IS_INCLUSTER) {
           const podList: V1PodList = await kubernetesRequest(
@@ -73,7 +73,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ title, variables,
           );
 
           if (podList.items.length > 0 && podList.items[0].metadata) {
-            url = `/api/v1/namespaces/${podList.items[0].metadata.namespace}/pods/${podList.items[0].metadata.name}/portforward`;
+            portforwardingPath = `/api/v1/namespaces/${podList.items[0].metadata.namespace}/pods/${podList.items[0].metadata.name}/portforward`;
           } else {
             throw new Error(
               `Could not find Pod in Namespace "${context.settings.prometheusNamespace}" with selector "${context.settings.prometheusSelector}".`,
@@ -91,7 +91,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ title, variables,
             start: Math.floor(Date.now() / 1000) - timeDiff,
             end: Math.floor(Date.now() / 1000),
           },
-          url,
+          portforwardingPath,
           context.settings,
           await context.kubernetesAuthWrapper(''),
         );
