@@ -34,12 +34,12 @@ jobs:
         # otherwise gomobile tries to generate the bindings for Android.
         #
         # The following is needed to fix the GitHub Action
-        # rm -rf /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/gomobile-work
+        # rm -rf /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T
         run: |
           unset ANDROID_HOME
           unset ANDROID_NDK_HOME
+          rm -rf /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T
           go get golang.org/x/mobile/cmd/gomobile
           go install golang.org/x/mobile/cmd/gomobile
-          rm -rf /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/gomobile-work*
           gomobile init
           make bindings-ios
