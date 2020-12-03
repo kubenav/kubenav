@@ -9,11 +9,11 @@ VERSION     ?= $(shell git describe --abbrev=0 --tags)
 
 bindings-android:
 	mkdir -p android/app/src/libs
-	gomobile bind -o android/app/src/libs/mobile.aar -target=android github.com/kubenav/kubenav/cmd/mobile
+	gomobile bind -v -o android/app/src/libs/mobile.aar -target=android github.com/kubenav/kubenav/cmd/mobile
 
 bindings-ios:
 	mkdir -p ios/App/App/libs
-	gomobile bind -o ios/App/App/libs/Mobile.framework -target=ios github.com/kubenav/kubenav/cmd/mobile
+	gomobile bind -v -o ios/App/App/libs/Mobile.framework -target=ios github.com/kubenav/kubenav/cmd/mobile
 
 build-server:
 	go build -ldflags "-X ${REPO}/pkg/version.Version=${VERSION} \

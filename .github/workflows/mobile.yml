@@ -24,7 +24,6 @@ jobs:
         if: matrix.os == 'ubuntu-20.04'
         run: |
           go get golang.org/x/mobile/cmd/gomobile
-          go install golang.org/x/mobile/cmd/gomobile
           gomobile init
           make bindings-android
 
@@ -36,6 +35,5 @@ jobs:
           unset ANDROID_HOME
           unset ANDROID_NDK_HOME
           go get golang.org/x/mobile/cmd/gomobile
-          go install golang.org/x/mobile/cmd/gomobile
           gomobile init
           make bindings-ios
