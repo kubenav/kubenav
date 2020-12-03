@@ -12,6 +12,7 @@ import (
 	"github.com/kubenav/kubenav/pkg/handlers/portforwarding"
 	"github.com/kubenav/kubenav/pkg/kube"
 
+	log "github.com/sirupsen/logrus"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 )
@@ -27,10 +28,11 @@ type Config struct {
 // Request is the structure of a request for a plugin.
 type Request struct {
 	kube.Request
-	Name    string                 `json:"name"`
-	Port    int64                  `json:"port"`
-	Address string                 `json:"address"`
-	Data    map[string]interface{} `json:"data"`
+	PortforwardingPath string                 `json:"portforwardingPath"`
+	Name               string                 `json:"name"`
+	Port               int64                  `json:"port"`
+	Address            string                 `json:"address"`
+	Data               map[string]interface{} `json:"data"`
 }
 
 // Run execute the specified plugin. For each request a new port forwarding session to the Pod for the plugin is opened.
@@ -39,31 +41,42 @@ type Request struct {
 // use.
 // When the address value isn't empty we asume that kubenav is running inside a Kubernetes cluster and using this
 // address instead of port forwarding.
-func Run(config *rest.Config, clientset *kubernetes.Clientset, name, podURL string, port int64, address string, timeout time.Duration, data map[string]interface{}) (interface{}, error) {
+func Run(request Request, config *rest.Config, clientset *kubernetes.Clientset, timeout time.Duration) (interface{}, error) {
 	var err error
 	var result interface{}
 
-	if address == "" {
-		pf, err := portforwarding.NewPortForwarding(config, "plugins_", podURL, "Unknow", "Unknow", port, 0)
+	if request.Address == "" {
+		pf, err := portforwarding.CreateSession("plugins_", "Unknow", "Unknow", request.Port, 0, config)
 		if err != nil {
 			return nil, err
 		}
 
 		defer func(sessionID string) {
 			if session, ok := portforwarding.Sessions.Get(sessionID); ok {
-				session.Stop()
+				close(session.StopCh)
+				portforwarding.Sessions.Delete(session.ID)
 			}
 		}(pf.ID)
 
-		go pf.Start()
-		time.Sleep(5 * time.Second)
+		go func() {
+			err := pf.Start(request.PortforwardingPath)
+			if err != nil {
+				log.WithError(err).Errorf("Port forwarding was stopped")
+			}
+		}()
 
-		address = fmt.Sprintf("http://localhost:%d", pf.LocalPort)
+		select {
+		case <-pf.ReadyCh:
+			log.Debug("Port forwarding is ready")
+			break
+		}
+
+		request.Address = fmt.Sprintf("http://localhost:%d", pf.LocalPort)
 	}
 
-	switch name {
+	switch request.Name {
 	case "prometheus":
-		result, err = prometheus.RunQueries(address, timeout, data)
+		result, err = prometheus.RunQueries(request.Address, timeout, request.Data)
 	}
 
 	return result, err

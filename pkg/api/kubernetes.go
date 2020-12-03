@@ -214,14 +214,14 @@ func (c *Client) kubernetesPortForwardingHandler(w http.ResponseWriter, r *http.
 	// GET returns all active port forwarding sessions. We filter the active sessions to exclude the sessions needed for
 	// plugins.
 	if r.Method == http.MethodGet {
-		var sessions []portforwarding.Response
+		var sessions []portforwarding.PortForwarding
 
 		portforwarding.Sessions.Lock.RLock()
 		defer portforwarding.Sessions.Lock.RUnlock()
 
 		for _, session := range portforwarding.Sessions.Sessions {
 			if !strings.HasPrefix(session.ID, "plugins_") {
-				sessions = append(sessions, portforwarding.Response{
+				sessions = append(sessions, portforwarding.PortForwarding{
 					ID:           session.ID,
 					PodName:      session.PodName,
 					PodNamespace: session.PodNamespace,
@@ -258,15 +258,29 @@ func (c *Client) kubernetesPortForwardingHandler(w http.ResponseWriter, r *http.
 			return
 		}
 
-		pf, err := portforwarding.NewPortForwarding(config, "", request.URL, request.PodName, request.PodNamespace, request.PodPort, request.LocalPort)
+		// Create a new session for port forwarding and start the portforwarding request. Then we wait until the
+		// connection is ready, befor we return the request to the user.
+		pf, err := portforwarding.CreateSession("", request.PodName, request.PodNamespace, request.PodPort, request.LocalPort, config)
 		if err != nil {
 			log.WithError(err).Errorf("Could not initialize port forwarding")
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not initialize port forwarding: %s", err.Error()))
 			return
 		}
-		go pf.Start()
 
-		middleware.Write(w, r, portforwarding.Response{
+		go func() {
+			err := pf.Start("")
+			if err != nil {
+				log.WithError(err).Errorf("Port forwarding was stopped")
+			}
+		}()
+
+		select {
+		case <-pf.ReadyCh:
+			log.Debug("Port forwarding is ready")
+			break
+		}
+
+		middleware.Write(w, r, portforwarding.PortForwarding{
 			ID:           pf.ID,
 			PodName:      request.PodName,
 			PodNamespace: request.PodNamespace,
@@ -278,7 +292,7 @@ func (c *Client) kubernetesPortForwardingHandler(w http.ResponseWriter, r *http.
 
 	// DELETE closes a port forwarding session by the specified session id.
 	if r.Method == http.MethodDelete {
-		var request portforwarding.Response
+		var request portforwarding.PortForwarding
 		if r.Body == nil {
 			log.Error("Request body is empty")
 			middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
@@ -292,7 +306,8 @@ func (c *Client) kubernetesPortForwardingHandler(w http.ResponseWriter, r *http.
 		}
 
 		if session, ok := portforwarding.Sessions.Get(request.ID); ok {
-			session.Stop()
+			close(session.StopCh)
+			portforwarding.Sessions.Delete(session.ID)
 		}
 
 		middleware.Write(w, r, nil)
@@ -339,7 +354,7 @@ func (c *Client) kubernetesPluginHandler(w http.ResponseWriter, r *http.Request)
 			return
 		}
 
-		data, err := plugins.Run(config, clientset, request.Name, request.URL, request.Port, request.Address, requestTimeout, request.Data)
+		data, err := plugins.Run(request, config, clientset, requestTimeout)
 		if err != nil {
 			log.WithError(err).Errorf("An error occured while running the plugin")
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("An error occured: %s", err.Error()))

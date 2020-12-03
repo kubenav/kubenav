@@ -1,7 +1,6 @@
 package portforwarding
 
 import (
-	"bytes"
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
@@ -14,20 +13,22 @@ import (
 
 	"github.com/kubenav/kubenav/pkg/kube"
 
+	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/portforward"
 	"k8s.io/client-go/transport/spdy"
 )
 
-// Request is the structure of a request to initalize the port forwarding.
+// Request is the structure of a request to initalize the port forwarding. It contains the standard fields for each
+// request against the Kubernets API, plus some additional which are needed to establish the port forwarding.
 type Request struct {
 	kube.Request
-	Response
+	PortForwarding
 }
 
-// Response is the structure of an initialized port forwarding request. It contains the session id which can be used to
-// close the opened port and the port number.
-type Response struct {
+// PortForwarding contains all additional fields required for the port forwarding. It contains the session id which can
+// be used to close the opened port and the port number.
+type PortForwarding struct {
 	ID           string `json:"id"`
 	PodName      string `json:"podName"`
 	PodNamespace string `json:"podNamespace"`
@@ -35,29 +36,25 @@ type Response struct {
 	LocalPort    int64  `json:"localPort"`
 }
 
-// PortForwardSession is the structure with all needed data for a port forwarding.
-type PortForwardSession struct {
-	ID           string
-	PodName      string
-	PodNamespace string
-	PodPort      int64
-	LocalPort    int64
-
-	forwarder *portforward.PortForwarder
-	readyChan chan struct{}
-	stopChan  chan struct{}
-	out       *bytes.Buffer
-	errOut    *bytes.Buffer
+// Session is the structure for an establish port forwading session. Additionally to the required fields for a port
+// forwarding request it contains the rest config for the Kubernetes API, a channel to close the connection, a channel
+// which can be used to check if the connection is ready and the IO streams.
+type Session struct {
+	PortForwarding
+	RestConfig *rest.Config
+	StopCh     chan struct{}
+	ReadyCh    chan struct{}
+	Streams    genericclioptions.IOStreams
 }
 
 // SessionMap stores a map of all PortForwardSession objects and a lock to avoid concurrent conflict.
 type SessionMap struct {
-	Sessions map[string]*PortForwardSession
+	Sessions map[string]*Session
 	Lock     sync.RWMutex
 }
 
 // Get return a given portForwardSession by sessionID.
-func (sm *SessionMap) Get(sessionID string) (*PortForwardSession, bool) {
+func (sm *SessionMap) Get(sessionID string) (*Session, bool) {
 	sm.Lock.RLock()
 	defer sm.Lock.RUnlock()
 
@@ -66,7 +63,7 @@ func (sm *SessionMap) Get(sessionID string) (*PortForwardSession, bool) {
 }
 
 // Set store a PortForwardSession to SessionMap.
-func (sm *SessionMap) Set(sessionID string, session *PortForwardSession) {
+func (sm *SessionMap) Set(sessionID string, session *Session) {
 	sm.Lock.Lock()
 	defer sm.Lock.Unlock()
 	sm.Sessions[sessionID] = session
@@ -83,14 +80,25 @@ func (sm *SessionMap) Delete(sessionID string) {
 }
 
 // Sessions holds all active port forwarding sessions.
-var Sessions = SessionMap{Sessions: make(map[string]*PortForwardSession)}
+var Sessions = SessionMap{Sessions: make(map[string]*Session)}
 
-// NewPortForwarding returns a new PortForward struct with all details needed to start the port forwarding. It also adds
-// it to the map of port forwarding sessions.
-// The sessionPrefix is used to filter the returned port forwarding sessions in our API, so that sessions for plugins
-// are not included in the returned list.
-// When the local port is 0 a random port is picked.
-func NewPortForwarding(config *rest.Config, sessionPrefix, podURL, podName, podNamespace string, podPort, localPort int64) (*PortForwardSession, error) {
+// genSessionID generates a random session ID string. The format is not really interesting.
+// This ID is used to identify the session when the client wants to closes a port forwarding session.
+func genSessionID() (string, error) {
+	bytes := make([]byte, 16)
+	if _, err := rand.Read(bytes); err != nil {
+		return "", err
+	}
+	id := make([]byte, hex.EncodedLen(len(bytes)))
+	hex.Encode(id, bytes)
+	return string(id), nil
+}
+
+// CreateSession creates the session. For that we need the config for the Kubernetes cluster and the fields for the
+// PortForwarding struct. For the session ID we pass in a prefix, which can be used to filter the sessions, so that we
+// do not show sessions for plugins to the user.
+// If the user do not specify a local port we randomly generate a port for the portforwarding request.
+func CreateSession(sessionPrefix, podName, podNamespace string, podPort, localPort int64, restConfig *rest.Config) (*Session, error) {
 	if localPort == 0 {
 		listener, err := net.Listen("tcp", "127.0.0.1:0")
 		if err != nil {
@@ -102,43 +110,28 @@ func NewPortForwarding(config *rest.Config, sessionPrefix, podURL, podName, podN
 		}
 	}
 
-	roundTripper, upgrader, err := spdy.RoundTripperFor(config)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(podURL)
-	if err != nil {
-		return nil, err
-	}
-	dialer := spdy.NewDialer(upgrader, &http.Client{Transport: roundTripper}, http.MethodPost, serverURL)
-
-	stopChan, readyChan := make(chan struct{}, 1), make(chan struct{}, 1)
-	out, errOut := new(bytes.Buffer), new(bytes.Buffer)
-
-	forwarder, err := portforward.New(dialer, []string{fmt.Sprintf("%d:%d", localPort, podPort)}, stopChan, readyChan, out, errOut)
-	if err != nil {
-		return nil, err
-	}
-
-	sessionID, err := GenSessionID()
+	sessionID, err := genSessionID()
 	if err != nil {
 		return nil, err
 	}
 	sessionID = sessionPrefix + sessionID
 
-	pf := &PortForwardSession{
-		ID:           sessionID,
-		PodName:      podName,
-		PodNamespace: podNamespace,
-		PodPort:      podPort,
-		LocalPort:    localPort,
+	stopCh := make(chan struct{}, 1)
+	readyCh := make(chan struct{})
+	streams := genericclioptions.IOStreams{}
 
-		forwarder: forwarder,
-		readyChan: readyChan,
-		stopChan:  stopChan,
-		errOut:    errOut,
-		out:       out,
+	pf := &Session{
+		PortForwarding{
+			ID:           sessionID,
+			PodName:      podName,
+			PodNamespace: podNamespace,
+			PodPort:      podPort,
+			LocalPort:    localPort,
+		},
+		restConfig,
+		stopCh,
+		readyCh,
+		streams,
 	}
 
 	Sessions.Set(sessionID, pf)
@@ -146,40 +139,23 @@ func NewPortForwarding(config *rest.Config, sessionPrefix, podURL, podName, podN
 	return pf, nil
 }
 
-// Start starts the port forwarding.
-func (pf *PortForwardSession) Start() {
-	go func() {
-		for range pf.readyChan {
-			if len(pf.errOut.String()) != 0 {
-				fmt.Println(pf.errOut.String())
-				pf.Stop()
-				return
-			} else if len(pf.out.String()) != 0 {
-				fmt.Println(pf.out.String())
-			}
-		}
-	}()
-
-	if err := pf.forwarder.ForwardPorts(); err != nil {
-		Sessions.Delete(pf.ID)
-		return
+// Start starts the port forwarding request, with the data saved in the session.
+func (s *Session) Start(path string) error {
+	if path == "" {
+		path = fmt.Sprintf("/api/v1/namespaces/%s/pods/%s/portforward", s.PodNamespace, s.PodName)
 	}
-}
+	hostIP := strings.TrimLeft(s.RestConfig.Host, "htps:/")
 
-// Stop stops the port forwarding.
-func (pf *PortForwardSession) Stop() {
-	pf.stopChan <- struct{}{}
-	Sessions.Delete(pf.ID)
-}
-
-// GenSessionID generates a random session ID string. The format is not really interesting.
-// This ID is used to identify the session when the client wants to closes a port forwarding session.
-func GenSessionID() (string, error) {
-	bytes := make([]byte, 16)
-	if _, err := rand.Read(bytes); err != nil {
-		return "", err
+	transport, upgrader, err := spdy.RoundTripperFor(s.RestConfig)
+	if err != nil {
+		return err
 	}
-	id := make([]byte, hex.EncodedLen(len(bytes)))
-	hex.Encode(id, bytes)
-	return string(id), nil
+
+	dialer := spdy.NewDialer(upgrader, &http.Client{Transport: transport}, http.MethodPost, &url.URL{Scheme: "https", Path: path, Host: hostIP})
+	fw, err := portforward.New(dialer, []string{fmt.Sprintf("%d:%d", s.LocalPort, s.PodPort)}, s.StopCh, s.ReadyCh, s.Streams.Out, s.Streams.ErrOut)
+	if err != nil {
+		return err
+	}
+
+	return fw.ForwardPorts()
 }
