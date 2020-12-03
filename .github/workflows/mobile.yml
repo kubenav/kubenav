@@ -32,9 +32,13 @@ jobs:
         if: matrix.os == 'macos-latest'
         # We must unset the ANDROID_HOME and ANDROID_NDK_HOME environment variables,
         # otherwise gomobile tries to generate the bindings for Android.
+        #
+        # The following is needed to fix the GitHub Action
+        # rm -rf /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/gomobile-work
         run: |
           unset ANDROID_HOME
           unset ANDROID_NDK_HOME
+          rm -rf /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/gomobile-work*
           go get golang.org/x/mobile/cmd/gomobile
           go install golang.org/x/mobile/cmd/gomobile
           gomobile init
