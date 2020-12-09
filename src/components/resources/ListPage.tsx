@@ -25,7 +25,7 @@ import { RouteComponentProps } from 'react-router';
 import { IContext } from '../../declarations';
 import { kubernetesRequest } from '../../utils/api';
 import { AppContext } from '../../utils/context';
-import { isNamespaced } from '../../utils/helpers';
+import { getProperty, isNamespaced } from '../../utils/helpers';
 import { resources } from '../../utils/resources';
 import LoadingErrorCard from '../misc/LoadingErrorCard';
 import Details from './misc/list/Details';
@@ -140,18 +140,31 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
                       {group && group.items
                         ? group.items
                             .filter((item) => {
-                              const regex = new RegExp(searchText, 'gi');
-                              if (match.params.type === 'events') {
-                                return (
-                                  item.metadata &&
-                                  item.metadata.name &&
-                                  (item.metadata.name.match(regex) ||
-                                    item.message.match(regex) ||
-                                    item.reason.match(regex) ||
-                                    item.type.match(regex))
-                                );
+                              if (searchText.startsWith('$')) {
+                                const parts = searchText.split(':');
+                                if (
+                                  parts.length !== 2 ||
+                                  (parts.length === 2 && parts[1] === '') ||
+                                  getProperty(item, parts[0].substring(2)) === undefined
+                                ) {
+                                  return false;
+                                }
+
+                                const regex = new RegExp(parts[1].trim(), 'gi');
+                                return getProperty(item, parts[0].substring(2).trim()).toString().match(regex);
                               } else {
-                                return item.metadata && item.metadata.name && item.metadata.name.match(regex);
+                                const regex = new RegExp(searchText, 'gi');
+                                if (match.params.type === 'events') {
+                                  return (
+                                    item.metadata &&
+                                    item.metadata.name &&
+                                    (item.metadata.name.match(regex) ||
+                                      item.message.match(regex) ||
+                                      item.reason.match(regex))
+                                  );
+                                } else {
+                                  return item.metadata && item.metadata.name && item.metadata.name.match(regex);
+                                }
                               }
                             })
                             .map((item, j) => {
