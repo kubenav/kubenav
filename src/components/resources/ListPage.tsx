@@ -151,7 +151,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
                                 }
 
                                 const regex = new RegExp(parts[1].trim(), 'gi');
-                                return getProperty(item, parts[0].substring(2).trim()).match(regex);
+                                return getProperty(item, parts[0].substring(2).trim()).toString().match(regex);
                               } else {
                                 const regex = new RegExp(searchText, 'gi');
                                 if (match.params.type === 'events') {
