@@ -22,7 +22,7 @@ import { IS_INCLUSTER } from '../../../utils/constants';
 import { AppContext } from '../../../utils/context';
 import Chart, { IChart, IChartResult } from './Chart';
 
-interface IVariable {
+export interface IVariable {
   name: string;
   label: string;
   query: string;

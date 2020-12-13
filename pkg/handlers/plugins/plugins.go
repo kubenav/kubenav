@@ -21,8 +21,9 @@ import (
 // example we do not want to use port forwarding for the Prometheus plugin, instead we want to use the cluster URL of
 // Prometheus.
 type Config struct {
-	PrometheusEnabled bool   `json:"prometheusEnabled"`
-	PrometheusAddress string `json:"prometheusAddress"`
+	PrometheusEnabled             bool   `json:"prometheusEnabled"`
+	PrometheusAddress             string `json:"prometheusAddress"`
+	PrometheusDashboardsNamespace string `json:"prometheusDashboardsNamespace"`
 }
 
 // Request is the structure of a request for a plugin.

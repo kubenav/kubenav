@@ -1,8 +1,11 @@
 import { IonGrid } from '@ionic/react';
 import { V1beta1PodSecurityPolicy } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import Metadata from '../../misc/template/Metadata';
 
 interface IPodSecurityPolicyDetailsProps extends RouteComponentProps {
@@ -15,7 +18,14 @@ const PodSecurityPolicyDetails: React.FunctionComponent<IPodSecurityPolicyDetail
   item,
   type,
 }: IPodSecurityPolicyDetailsProps) => {
-  return <IonGrid>{item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}</IonGrid>;
+  const context = useContext<IContext>(AppContext);
+
+  return (
+    <IonGrid>
+      {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
+    </IonGrid>
+  );
 };
 
 export default PodSecurityPolicyDetails;

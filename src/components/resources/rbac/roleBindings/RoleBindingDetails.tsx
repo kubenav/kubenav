@@ -11,10 +11,13 @@ import {
   IonRow,
 } from '@ionic/react';
 import { V1RoleBinding } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
 import { subjectLink } from '../../../../utils/helpers';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
@@ -30,6 +33,8 @@ const RoleBindingDetails: React.FunctionComponent<IRoleBindingDetailsProps> = ({
   item,
   type,
 }: IRoleBindingDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       <IonRow>
@@ -80,6 +85,8 @@ const RoleBindingDetails: React.FunctionComponent<IRoleBindingDetailsProps> = ({
           />
         </IonRow>
       ) : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

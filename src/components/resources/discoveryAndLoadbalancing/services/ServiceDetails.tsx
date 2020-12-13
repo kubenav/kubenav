@@ -1,10 +1,13 @@
 import { IonChip, IonGrid, IonLabel, IonRow } from '@ionic/react';
 import { V1LoadBalancerIngress, V1Service, V1ServicePort } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { IS_INCLUSTER } from '../../../../utils/constants';
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
 import { matchLabels } from '../../../../utils/helpers';
+import { IS_INCLUSTER } from '../../../../utils/constants';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
@@ -19,6 +22,8 @@ interface IServiceDetailsProps extends RouteComponentProps {
 }
 
 const ServiceDetails: React.FunctionComponent<IServiceDetailsProps> = ({ item, type }: IServiceDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       <IonRow>
@@ -149,6 +154,8 @@ const ServiceDetails: React.FunctionComponent<IServiceDetailsProps> = ({ item, t
           />
         </IonRow>
       ) : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

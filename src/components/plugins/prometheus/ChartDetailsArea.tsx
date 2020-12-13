@@ -52,11 +52,13 @@ export interface IPrometheusResult {
 }
 
 interface IChartDetailsAreaProps {
+  unit: string;
   timeDiff: number;
   results: IPrometheusResult[];
 }
 
 const ChartDetailsArea: React.FunctionComponent<IChartDetailsAreaProps> = ({
+  unit,
   timeDiff,
   results,
 }: IChartDetailsAreaProps) => {
@@ -106,7 +108,7 @@ const ChartDetailsArea: React.FunctionComponent<IChartDetailsAreaProps> = ({
               domain={['dataMin', 'dataMax']}
               tickFormatter={formatTime}
             />
-            <YAxis dataKey="value" />
+            <YAxis dataKey="value" unit={unit} />
             <Legend onClick={(e) => (selected === e.payload.name ? setSelected('') : setSelected(e.payload.name))} />
             {!isPlatform('hybrid') ? (
               <Tooltip
@@ -119,7 +121,7 @@ const ChartDetailsArea: React.FunctionComponent<IChartDetailsAreaProps> = ({
                     : { backgroundColor: '#ffffff', borderColor: '#949494' }
                 }
                 formatter={(value) => {
-                  return value.toFixed(2);
+                  return `${value.toFixed(5)} ${unit ? unit : ''}`;
                 }}
                 labelFormatter={formatTime}
               />

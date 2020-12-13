@@ -102,6 +102,7 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
                 ...settings,
                 prometheusEnabled: inclusterSettings.prometheusEnabled,
                 prometheusAddress: inclusterSettings.prometheusAddress,
+                prometheusDashboardsNamespace: inclusterSettings.prometheusDashboardsNamespace,
               });
             }
           }

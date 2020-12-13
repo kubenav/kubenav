@@ -174,6 +174,9 @@ export const readSettings = (): IAppSettings => {
         : DEFAULT_SETTINGS.prometheusSelector,
       prometheusPort: settings.prometheusPort ? settings.prometheusPort : DEFAULT_SETTINGS.prometheusPort,
       prometheusAddress: '',
+      prometheusDashboardsNamespace: settings.prometheusDashboardsNamespace
+        ? settings.prometheusDashboardsNamespace
+        : DEFAULT_SETTINGS.prometheusDashboardsNamespace,
       proxyEnabled: settings.hasOwnProperty('proxyEnabled') ? settings.proxyEnabled : DEFAULT_SETTINGS.proxyEnabled,
       proxyAddress: settings.proxyAddress ? settings.proxyAddress : DEFAULT_SETTINGS.proxyAddress,
       helmShowAllVersions: settings.hasOwnProperty('helmShowAllVersions')

@@ -20,6 +20,8 @@ import Menu from './components/menu/Menu';
 import OverviewPage from './components/overview/OverviewPage';
 import HelmReleasesPage from './components/plugins/helm/ReleasesPage';
 import HelmReleasePage from './components/plugins/helm/ReleasePage';
+import PrometheusDashboardsPage from './components/plugins/prometheus/DashboardsPage';
+import PrometheusDashboardPage from './components/plugins/prometheus/DashboardPage';
 import CustomResourcesDetailsPage from './components/resources/cluster/customResourceDefinitions/CustomResourcesDetailsPage';
 import CustomResourcesListPage from './components/resources/cluster/customResourceDefinitions/CustomResourcesListPage';
 import DetailsPage from './components/resources/DetailsPage';
@@ -65,6 +67,8 @@ const App: React.FunctionComponent = () => (
                 />
                 <Route path="/plugins/helm" component={HelmReleasesPage} exact={true} />
                 <Route path="/plugins/helm/:namespace/:name" component={HelmReleasePage} exact={true} />
+                <Route path="/plugins/prometheus" component={PrometheusDashboardsPage} exact={true} />
+                <Route path="/plugins/prometheus/:namespace/:name" component={PrometheusDashboardPage} exact={true} />
                 <Route path="/settings/clusters" component={ClustersPage} exact={true} />
                 <Route path="/settings/clusters/aws" component={ClustersAWSPage} exact={true} />
                 <Route path="/settings/clusters/awssso" component={ClustersAWSSSOPage} exact={true} />

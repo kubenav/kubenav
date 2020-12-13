@@ -1,9 +1,12 @@
 import { IonGrid, IonRow } from '@ionic/react';
 import { V1Job } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
 import { labelSelector, timeDifference } from '../../../../utils/helpers';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
 import Conditions from '../../misc/template/Conditions';
 import Configuration from '../../misc/template/Configuration';
@@ -18,6 +21,8 @@ interface IJobDetailsProps extends RouteComponentProps {
 }
 
 const JobDetails: React.FunctionComponent<IJobDetailsProps> = ({ item, type }: IJobDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       <IonRow>
@@ -81,6 +86,8 @@ const JobDetails: React.FunctionComponent<IJobDetailsProps> = ({ item, type }: I
           />
         </IonRow>
       ) : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

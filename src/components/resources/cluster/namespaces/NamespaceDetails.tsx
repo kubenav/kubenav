@@ -6,6 +6,7 @@ import { RouteComponentProps } from 'react-router';
 import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import Dashboard from '../../../plugins/prometheus/Dashboard';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
 import Row from '../../misc/template/Row';
@@ -46,6 +47,7 @@ const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ ite
           charts={[
             {
               title: 'CPU Usage',
+              unit: 'Cores',
               size: {
                 xs: '12',
                 sm: '12',
@@ -76,7 +78,8 @@ const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ ite
               ],
             },
             {
-              title: 'Memory Usage (in MiB)',
+              title: 'Memory Usage',
+              unit: 'MiB',
               size: {
                 xs: '12',
                 sm: '12',
@@ -115,6 +118,8 @@ const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ ite
           ]}
         />
       ) : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

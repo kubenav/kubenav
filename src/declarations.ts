@@ -49,6 +49,7 @@ export interface IAppSettings {
   prometheusSelector: string;
   prometheusPort: number;
   prometheusAddress: string;
+  prometheusDashboardsNamespace: string;
   proxyEnabled: boolean;
   proxyAddress: string;
   helmShowAllVersions: boolean;
@@ -257,6 +258,7 @@ export interface IGoogleClusterMasterAuth {
 export interface IInclusterSettings {
   prometheusEnabled: boolean;
   prometheusAddress: string;
+  prometheusDashboardsNamespace: string;
 }
 
 export interface IJsonData {

@@ -1,9 +1,12 @@
 import { IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonRow } from '@ionic/react';
 import { V1StorageClass } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
 import { capitalize } from '../../../../utils/helpers';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
@@ -19,6 +22,8 @@ const StorageClassDetails: React.FunctionComponent<IStorageClassDetailsProps> = 
   item,
   type,
 }: IStorageClassDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       <IonRow>
@@ -63,6 +68,8 @@ const StorageClassDetails: React.FunctionComponent<IStorageClassDetailsProps> = 
       </IonRow>
 
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

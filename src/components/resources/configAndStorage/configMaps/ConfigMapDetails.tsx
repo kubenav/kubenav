@@ -1,8 +1,11 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonList, IonRow } from '@ionic/react';
 import { V1ConfigMap } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
 import Data from '../../misc/template/Data';
 import Metadata from '../../misc/template/Metadata';
@@ -17,6 +20,8 @@ const ConfigMapDetailsDetails: React.FunctionComponent<IConfigMapDetailsDetailsP
   item,
   type,
 }: IConfigMapDetailsDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
@@ -71,6 +76,8 @@ const ConfigMapDetailsDetails: React.FunctionComponent<IConfigMapDetailsDetailsP
           </IonCol>
         </IonRow>
       ) : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

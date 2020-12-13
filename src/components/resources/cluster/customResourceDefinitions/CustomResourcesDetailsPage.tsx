@@ -20,6 +20,7 @@ import { IContext } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import LoadingErrorCard from '../../../misc/LoadingErrorCard';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
 import Details from '../../misc/details/Details';
 import Conditions from '../../misc/template/Conditions';
@@ -136,6 +137,8 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
                 />
               </IonRow>
             ) : null}
+
+            {context.settings.prometheusEnabled ? <DashboardList item={data} /> : null}
           </IonGrid>
         ) : isFetching ? null : (
           <LoadingErrorCard

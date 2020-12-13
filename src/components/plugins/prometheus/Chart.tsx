@@ -3,6 +3,7 @@ import React from 'react';
 
 import IonCardEqualHeight from '../../misc/IonCardEqualHeight';
 import ChartDetailsArea, { IPrometheusResult } from './ChartDetailsArea';
+import ChartDetailsSinglestat from './ChartDetailsSinglestat';
 
 export interface IPrometheusQuery {
   label: string;
@@ -19,6 +20,7 @@ export interface IChartSize {
 
 export interface IChartMetaData {
   title: string;
+  unit: string;
   size: IChartSize;
   type: string;
 }
@@ -51,7 +53,9 @@ const Chart: React.FunctionComponent<IChartProps> = ({ timeDiff, chart }: IChart
         </IonCardHeader>
         <IonCardContent>
           {chart.type === 'area' && chart.results ? (
-            <ChartDetailsArea timeDiff={timeDiff} results={chart.results} />
+            <ChartDetailsArea unit={chart.unit} timeDiff={timeDiff} results={chart.results} />
+          ) : chart.type === 'singlestat' && chart.results ? (
+            <ChartDetailsSinglestat unit={chart.unit} results={chart.results} />
           ) : null}
         </IonCardContent>
       </IonCardEqualHeight>

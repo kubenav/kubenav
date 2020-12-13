@@ -1,9 +1,12 @@
 import { IonChip, IonGrid, IonLabel, IonRow } from '@ionic/react';
 import { V1ReplicationController } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
 import { labelSelector } from '../../../../utils/helpers';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
 import Conditions from '../../misc/template/Conditions';
 import Configuration from '../../misc/template/Configuration';
@@ -21,6 +24,8 @@ const ReplicationControllerDetails: React.FunctionComponent<IReplicationControll
   item,
   type,
 }: IReplicationControllerDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       <IonRow>
@@ -87,6 +92,8 @@ const ReplicationControllerDetails: React.FunctionComponent<IReplicationControll
           />
         </IonRow>
       ) : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };
