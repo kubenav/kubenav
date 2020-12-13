@@ -9,10 +9,13 @@ import {
   IonRow,
 } from '@ionic/react';
 import { V1Event } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
 import { timeDifference } from '../../../../utils/helpers';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import Metadata from '../../misc/template/Metadata';
 import Row from '../../misc/template/Row';
 import { eventSource, involvedObjectLink } from './eventHelper';
@@ -24,6 +27,8 @@ interface IEventDetailsProps extends RouteComponentProps {
 }
 
 const EventDetails: React.FunctionComponent<IEventDetailsProps> = ({ item, type }: IEventDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       <IonRow>
@@ -84,6 +89,8 @@ const EventDetails: React.FunctionComponent<IEventDetailsProps> = ({ item, type 
       </IonRow>
 
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

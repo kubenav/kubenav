@@ -9,6 +9,7 @@ import { kubernetesRequest } from '../../../../utils/api';
 import { IS_INCLUSTER } from '../../../../utils/constants';
 import { AppContext } from '../../../../utils/context';
 import Dashboard from '../../../plugins/prometheus/Dashboard';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
 import Containers from './containers/Containers';
 import Conditions from '../../misc/template/Conditions';
@@ -201,6 +202,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
           charts={[
             {
               title: 'CPU Usage',
+              unit: 'Cores',
               size: {
                 xs: '12',
                 sm: '12',
@@ -237,7 +239,8 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
               ],
             },
             {
-              title: 'Memory Usage (in MiB)',
+              title: 'Memory Usage',
+              unit: 'MiB',
               size: {
                 xs: '12',
                 sm: '12',
@@ -282,7 +285,8 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
               ],
             },
             {
-              title: 'Network I/O (in MiB)',
+              title: 'Network I/O',
+              unit: 'MiB',
               size: {
                 xs: '12',
                 sm: '12',
@@ -308,6 +312,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
             },
             {
               title: 'Total Restarts',
+              unit: '',
               size: {
                 xs: '12',
                 sm: '12',
@@ -328,6 +333,8 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
           ]}
         />
       ) : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

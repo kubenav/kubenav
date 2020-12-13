@@ -1,8 +1,11 @@
 import { IonGrid, IonRow } from '@ionic/react';
 import { V1ServiceAccount } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
 import Metadata from '../../misc/template/Metadata';
 import Permissions from './Permissions';
@@ -17,6 +20,8 @@ const ServiceAccountDetails: React.FunctionComponent<IServiceAccountDetailsProps
   item,
   type,
 }: IServiceAccountDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
@@ -37,6 +42,8 @@ const ServiceAccountDetails: React.FunctionComponent<IServiceAccountDetailsProps
           />
         </IonRow>
       ) : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

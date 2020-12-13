@@ -10,10 +10,13 @@ import {
   IonRow,
 } from '@ionic/react';
 import { NetworkingV1beta1Ingress } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
@@ -26,6 +29,8 @@ interface IIngressDetailsProps extends RouteComponentProps {
 }
 
 const IngressDetails: React.FunctionComponent<IIngressDetailsProps> = ({ item, type }: IIngressDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       <IonRow>
@@ -111,6 +116,8 @@ const IngressDetails: React.FunctionComponent<IIngressDetailsProps> = ({ item, t
           />
         </IonRow>
       ) : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

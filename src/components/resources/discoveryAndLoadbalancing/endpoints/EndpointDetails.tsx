@@ -25,6 +25,7 @@ import { RouteComponentProps } from 'react-router';
 import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import Dashboard from '../../../plugins/prometheus/Dashboard';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import Metadata from '../../misc/template/Metadata';
 
 interface IEndpointDetailsProps extends RouteComponentProps {
@@ -110,6 +111,7 @@ const EndpointDetails: React.FunctionComponent<IEndpointDetailsProps> = ({ item,
           charts={[
             {
               title: 'Addresses',
+              unit: '',
               size: {
                 xs: '12',
                 sm: '12',
@@ -136,6 +138,8 @@ const EndpointDetails: React.FunctionComponent<IEndpointDetailsProps> = ({ item,
           ]}
         />
       ) : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

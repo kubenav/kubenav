@@ -7,6 +7,7 @@ import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import { labelSelector } from '../../../../utils/helpers';
 import Dashboard from '../../../plugins/prometheus/Dashboard';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
 import Conditions from '../../misc/template/Conditions';
 import Configuration from '../../misc/template/Configuration';
@@ -99,6 +100,7 @@ const ReplicaSetDetails: React.FunctionComponent<IReplicaSetDetailsProps> = ({
           charts={[
             {
               title: 'Pods',
+              unit: '',
               size: {
                 xs: '12',
                 sm: '12',
@@ -131,6 +133,8 @@ const ReplicaSetDetails: React.FunctionComponent<IReplicaSetDetailsProps> = ({
           ]}
         />
       ) : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

@@ -31,6 +31,7 @@ export const DEFAULT_SETTINGS: IAppSettings = {
   prometheusSelector: 'app=prometheus',
   prometheusPort: 9090,
   prometheusAddress: '',
+  prometheusDashboardsNamespace: 'kubenav',
   proxyEnabled: false,
   proxyAddress: '',
   helmShowAllVersions: false,

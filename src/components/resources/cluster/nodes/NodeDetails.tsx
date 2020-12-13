@@ -9,7 +9,6 @@ import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import { formatResourceValue } from '../../../../utils/helpers';
 import Dashboard from '../../../plugins/prometheus/Dashboard';
-import DashboardItem from '../../../plugins/prometheus/DashboardItem';
 import DashboardList from '../../../plugins/prometheus/DashboardList';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
 import List from '../../misc/list/List';
@@ -184,6 +183,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
           charts={[
             {
               title: 'CPU Usage',
+              unit: 'Cores',
               size: {
                 xs: '12',
                 sm: '12',
@@ -220,7 +220,8 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
               ],
             },
             {
-              title: 'Memory Usage (in GiB)',
+              title: 'Memory Usage',
+              unit: 'GiB',
               size: {
                 xs: '12',
                 sm: '12',
@@ -264,6 +265,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
             },
             {
               title: 'Pods',
+              unit: '',
               size: {
                 xs: '12',
                 sm: '12',
@@ -291,219 +293,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
         />
       ) : null}
 
-      {context.settings.prometheusEnabled ? (
-        <DashboardList>
-          <DashboardItem
-            title="Node Details"
-            charts={[
-              {
-                title: 'System Load',
-                size: {
-                  xs: '12',
-                  sm: '12',
-                  md: '12',
-                  lg: '12',
-                  xl: '6',
-                },
-                type: 'area',
-                queries: [
-                  {
-                    label: 'Load 1m',
-                    query: `max(node_load1{job="node-exporter", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"})`,
-                  },
-                  {
-                    label: 'Load 5m',
-                    query: `max(node_load5{job="node-exporter", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"})`,
-                  },
-                  {
-                    label: 'Load 15m',
-                    query: `max(node_load15{job="node-exporter", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"})`,
-                  },
-                  {
-                    label: 'Cores',
-                    query: `count(count(node_cpu_seconds_total{job="node-exporter", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"}) by (cpu))`,
-                  },
-                ],
-              },
-              {
-                title: 'Usage per Core',
-                size: {
-                  xs: '12',
-                  sm: '12',
-                  md: '12',
-                  lg: '12',
-                  xl: '6',
-                },
-                type: 'area',
-                queries: [
-                  {
-                    label: '{{ .cpu }}',
-                    query: `sum by (cpu) (irate(node_cpu_seconds_total{job="node-exporter", mode!="idle", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"}[5m]))`,
-                  },
-                ],
-              },
-              {
-                title: 'CPU Usage (in Percent)',
-                size: {
-                  xs: '12',
-                  sm: '12',
-                  md: '12',
-                  lg: '12',
-                  xl: '6',
-                },
-                type: 'area',
-                queries: [
-                  {
-                    label: 'Usage',
-                    query: `max (sum by (cpu) (irate(node_cpu_seconds_total{job="node-exporter", mode!="idle", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"}[2m])) ) * 100`,
-                  },
-                ],
-              },
-              {
-                title: 'Memory Usage (in GiB)',
-                size: {
-                  xs: '12',
-                  sm: '12',
-                  md: '12',
-                  lg: '12',
-                  xl: '6',
-                },
-                type: 'area',
-                queries: [
-                  {
-                    label: 'Used',
-                    query: `max(node_memory_MemTotal_bytes{job="node-exporter", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"} - node_memory_MemFree_bytes{job="node-exporter", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"} - node_memory_Buffers_bytes{job="node-exporter", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"} - node_memory_Cached_bytes{job="node-exporter", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"}) / 1024 / 1024 / 1024`,
-                  },
-                  {
-                    label: 'Buffers',
-                    query: `max(node_memory_Buffers_bytes{job="node-exporter", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"}) / 1024 / 1024 / 1024`,
-                  },
-                  {
-                    label: 'Cached',
-                    query: `max(node_memory_Cached_bytes{job="node-exporter", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"}) / 1024 / 1024 / 1024`,
-                  },
-                  {
-                    label: 'Free',
-                    query: `max(node_memory_MemFree_bytes{job="node-exporter", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"}) / 1024 / 1024 / 1024`,
-                  },
-                ],
-              },
-              {
-                title: 'Network Received (in MiB)',
-                size: {
-                  xs: '12',
-                  sm: '12',
-                  md: '12',
-                  lg: '12',
-                  xl: '6',
-                },
-                type: 'area',
-                queries: [
-                  {
-                    label: '{{ .device }}',
-                    query: `rate(node_network_receive_bytes_total{job="node-exporter", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }", device!~"lo"}[5m]) / 1024 / 1024`,
-                  },
-                ],
-              },
-              {
-                title: 'Network Transmitted (in MiB)',
-                size: {
-                  xs: '12',
-                  sm: '12',
-                  md: '12',
-                  lg: '12',
-                  xl: '6',
-                },
-                type: 'area',
-                queries: [
-                  {
-                    label: '{{ .device }}',
-                    query: `rate(node_network_transmit_bytes_total{job="node-exporter", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }", device!~"lo"}[5m]) / 1024 / 1024`,
-                  },
-                ],
-              },
-              {
-                title: 'Disk I/O (in MiB)',
-                size: {
-                  xs: '12',
-                  sm: '12',
-                  md: '12',
-                  lg: '12',
-                  xl: '6',
-                },
-                type: 'area',
-                queries: [
-                  {
-                    label: 'Read',
-                    query: `max(rate(node_disk_read_bytes_total{job="node-exporter", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"}[2m])) / 1024 / 1024`,
-                  },
-                  {
-                    label: 'Write',
-                    query: `max(rate(node_disk_written_bytes_total{job="node-exporter", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"}[2m])) / 1024 / 1024`,
-                  },
-                ],
-              },
-              {
-                title: 'Disk Space Usage (in Percent)',
-                size: {
-                  xs: '12',
-                  sm: '12',
-                  md: '12',
-                  lg: '12',
-                  xl: '6',
-                },
-                type: 'area',
-                queries: [
-                  {
-                    label: '{{ .device }}',
-                    query: `max by (instance, namespace, pod, device) ((node_filesystem_size_bytes{fstype=~"ext[234]|btrfs|xfs|zfs", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"} - node_filesystem_avail_bytes{fstype=~"ext[234]|btrfs|xfs|zfs", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"}) / node_filesystem_size_bytes{fstype=~"ext[234]|btrfs|xfs|zfs", instance="${
-                      item.metadata ? item.metadata.name : ''
-                    }"}) * 100`,
-                  },
-                ],
-              },
-            ]}
-          />
-        </DashboardList>
-      ) : null}
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

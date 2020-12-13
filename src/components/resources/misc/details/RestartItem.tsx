@@ -59,9 +59,9 @@ const RestartItem: React.FunctionComponent<IRestartItemProps> = ({ show, hide, i
 
       if (copy.spec && copy.spec.template.metadata) {
         if (copy.spec.template.metadata.annotations) {
-          copy.spec.template.metadata.annotations['kubenav.kubernetes.io/restartedAt'] = now.toJSON();
+          copy.spec.template.metadata.annotations['kubenav.io/restartedAt'] = now.toJSON();
         } else {
-          copy.spec.template.metadata.annotations = { 'kubenav.kubernetes.io/restartedAt': now.toJSON() };
+          copy.spec.template.metadata.annotations = { 'kubenav.io/restartedAt': now.toJSON() };
         }
       }
 

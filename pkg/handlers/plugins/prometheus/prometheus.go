@@ -12,6 +12,7 @@ import (
 	"github.com/prometheus/client_golang/api"
 	v1 "github.com/prometheus/client_golang/api/prometheus/v1"
 	"github.com/prometheus/common/model"
+	log "github.com/sirupsen/logrus"
 )
 
 // Query is the structure of a single Prometheus query.
@@ -34,6 +35,7 @@ type ChartSize struct {
 type Chart struct {
 	Index   int       `json:"-"`
 	Title   string    `json:"title"`
+	Unit    string    `json:"unit"`
 	Size    ChartSize `json:"size"`
 	Type    string    `json:"type"`
 	Queries []Query   `json:"queries"`
@@ -68,6 +70,7 @@ type Result struct {
 type ChartsResult struct {
 	Index   int       `json:"-"`
 	Title   string    `json:"title"`
+	Unit    string    `json:"unit"`
 	Size    ChartSize `json:"size"`
 	Type    string    `json:"type"`
 	Results []Result  `json:"results"`
@@ -115,6 +118,8 @@ func RunQueries(address string, timeout time.Duration, requestData map[string]in
 			return nil, err
 		}
 
+		log.WithFields(log.Fields{"query": query}).Debugf("Query variables")
+
 		labelSets, err := v1api.Series(ctx, []string{query}, r.Start, r.End)
 		if err != nil {
 			return nil, err
@@ -160,7 +165,9 @@ func RunQueries(address string, timeout time.Duration, requestData map[string]in
 				interpolatedQuery, err := queryInterpolation(query.Query, variables)
 				if err != nil {
 					chartsResult = append(chartsResult, ChartsResult{
+						Index:   chart.Index,
 						Title:   chart.Title,
+						Unit:    chart.Unit,
 						Size:    chart.Size,
 						Type:    chart.Type,
 						Results: nil,
@@ -172,7 +179,9 @@ func RunQueries(address string, timeout time.Duration, requestData map[string]in
 				result, err := v1api.QueryRange(ctx, interpolatedQuery, r)
 				if err != nil {
 					chartsResult = append(chartsResult, ChartsResult{
+						Index:   chart.Index,
 						Title:   chart.Title,
+						Unit:    chart.Unit,
 						Size:    chart.Size,
 						Type:    chart.Type,
 						Results: nil,
@@ -184,7 +193,9 @@ func RunQueries(address string, timeout time.Duration, requestData map[string]in
 				data, ok := result.(model.Matrix)
 				if !ok {
 					chartsResult = append(chartsResult, ChartsResult{
+						Index:   chart.Index,
 						Title:   chart.Title,
+						Unit:    chart.Unit,
 						Size:    chart.Size,
 						Type:    chart.Type,
 						Results: nil,
@@ -219,6 +230,7 @@ func RunQueries(address string, timeout time.Duration, requestData map[string]in
 			chartsResult = append(chartsResult, ChartsResult{
 				Index:   chart.Index,
 				Title:   chart.Title,
+				Unit:    chart.Unit,
 				Size:    chart.Size,
 				Type:    chart.Type,
 				Results: results,

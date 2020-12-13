@@ -264,6 +264,17 @@ const GeneralPage: React.FunctionComponent = () => {
                   onInput={handleNumberValueChange}
                 />
               </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Dashboards Namespace</IonLabel>
+                <IonInput
+                  type="text"
+                  required={true}
+                  placeholder="kubenav"
+                  name="prometheusDashboardsNamespace"
+                  value={context.settings.prometheusDashboardsNamespace}
+                  onInput={handleValueChange}
+                />
+              </IonItem>
             </IonItemGroup>
           )}
 

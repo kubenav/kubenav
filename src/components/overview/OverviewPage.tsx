@@ -47,6 +47,7 @@ const OverviewPage: React.FunctionComponent = () => {
                 charts={[
                   {
                     title: 'CPU Usage',
+                    unit: 'Cores',
                     size: {
                       xs: '12',
                       sm: '12',
@@ -75,7 +76,8 @@ const OverviewPage: React.FunctionComponent = () => {
                     ],
                   },
                   {
-                    title: 'Memory Usage (in GiB)',
+                    title: 'Memory Usage',
+                    unit: 'GiB',
                     size: {
                       xs: '12',
                       sm: '12',
@@ -109,6 +111,7 @@ const OverviewPage: React.FunctionComponent = () => {
                   },
                   {
                     title: 'Pods',
+                    unit: '',
                     size: {
                       xs: '12',
                       sm: '12',

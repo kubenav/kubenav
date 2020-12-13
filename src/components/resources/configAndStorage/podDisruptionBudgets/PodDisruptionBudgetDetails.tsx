@@ -7,6 +7,7 @@ import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import { labelSelector } from '../../../../utils/helpers';
 import Dashboard from '../../../plugins/prometheus/Dashboard';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
@@ -108,6 +109,7 @@ const PodDisruptionBudgetDetails: React.FunctionComponent<IPodDisruptionBudgetDe
           charts={[
             {
               title: 'Pods',
+              unit: '',
               size: {
                 xs: '12',
                 sm: '12',
@@ -148,6 +150,8 @@ const PodDisruptionBudgetDetails: React.FunctionComponent<IPodDisruptionBudgetDe
           ]}
         />
       ) : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

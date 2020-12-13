@@ -11,9 +11,12 @@ import {
   IonRow,
 } from '@ionic/react';
 import { V1ComponentStatus } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import Metadata from '../../misc/template/Metadata';
 
 interface IComponentStatusDetailsProps extends RouteComponentProps {
@@ -26,6 +29,8 @@ const ComponentStatusDetails: React.FunctionComponent<IComponentStatusDetailsPro
   item,
   type,
 }: IComponentStatusDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
@@ -58,6 +63,8 @@ const ComponentStatusDetails: React.FunctionComponent<IComponentStatusDetailsPro
           </IonCol>
         </IonRow>
       ) : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

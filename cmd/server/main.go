@@ -19,12 +19,13 @@ import (
 )
 
 var (
-	debugFlag                   bool
-	debugIonicFlag              string
-	inclusterFlag               bool
-	kubeconfigFlag              string
-	pluginPrometheusAddressFlag string
-	pluginPrometheusEnabledFlag bool
+	debugFlag                           bool
+	debugIonicFlag                      string
+	inclusterFlag                       bool
+	kubeconfigFlag                      string
+	pluginPrometheusAddressFlag         string
+	pluginPrometheusDashboardsNamespace string
+	pluginPrometheusEnabledFlag         bool
 )
 
 var rootCmd = &cobra.Command{
@@ -50,8 +51,9 @@ var rootCmd = &cobra.Command{
 
 		router := http.NewServeMux()
 		apiClient := api.NewClient(false, &plugins.Config{
-			PrometheusEnabled: pluginPrometheusEnabledFlag,
-			PrometheusAddress: pluginPrometheusAddressFlag,
+			PrometheusEnabled:             pluginPrometheusEnabledFlag,
+			PrometheusAddress:             pluginPrometheusAddressFlag,
+			PrometheusDashboardsNamespace: pluginPrometheusDashboardsNamespace,
 		}, kubeClient)
 		apiClient.Register(router)
 
@@ -100,6 +102,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolVar(&inclusterFlag, "incluster", false, "Use the in cluster configuration.")
 	rootCmd.PersistentFlags().StringVar(&kubeconfigFlag, "kubeconfig", "", "Optional Kubeconfig file.")
 	rootCmd.PersistentFlags().StringVar(&pluginPrometheusAddressFlag, "plugin.prometheus.address", "", "The address for Prometheus.")
+	rootCmd.PersistentFlags().StringVar(&pluginPrometheusDashboardsNamespace, "plugin.prometheus.dashboards-namespace", "kubenav", "The namespace, where kubenav should look for dashboards.")
 	rootCmd.PersistentFlags().BoolVar(&pluginPrometheusEnabledFlag, "plugin.prometheus.enabled", false, "Enable the Prometheus plugin.")
 }
 

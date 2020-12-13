@@ -1,9 +1,12 @@
 import { IonGrid, IonRow } from '@ionic/react';
 import { V1beta1CronJob, V1Job } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
 import { timeDifference } from '../../../../utils/helpers';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
 import Configuration from '../../misc/template/Configuration';
 import Metadata from '../../misc/template/Metadata';
@@ -16,6 +19,8 @@ interface ICronJobDetailsProps extends RouteComponentProps {
 }
 
 const CronJobDetails: React.FunctionComponent<ICronJobDetailsProps> = ({ item, type }: ICronJobDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       <IonRow>
@@ -66,6 +71,8 @@ const CronJobDetails: React.FunctionComponent<ICronJobDetailsProps> = ({ item, t
           />
         </IonRow>
       ) : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

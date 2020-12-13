@@ -1,8 +1,11 @@
 import { IonChip, IonGrid, IonLabel, IonRow } from '@ionic/react';
 import { V1NetworkPolicy, V1NetworkPolicyEgressRule, V1NetworkPolicyIngressRule } from '@kubernetes/client-node';
-import React from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
+import { IContext } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import Configuration from '../../misc/template/Configuration';
 import Status from '../../misc/template/Status';
 import Metadata from '../../misc/template/Metadata';
@@ -18,6 +21,8 @@ const NetworkPolicyDetails: React.FunctionComponent<INetworkPolicyDetailsProps> 
   item,
   type,
 }: INetworkPolicyDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   return (
     <IonGrid>
       <IonRow>
@@ -66,6 +71,8 @@ const NetworkPolicyDetails: React.FunctionComponent<INetworkPolicyDetailsProps> 
       </IonRow>
 
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };

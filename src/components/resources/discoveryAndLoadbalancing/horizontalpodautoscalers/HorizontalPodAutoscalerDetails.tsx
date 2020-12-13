@@ -26,6 +26,7 @@ import { RouteComponentProps } from 'react-router';
 import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import Dashboard from '../../../plugins/prometheus/Dashboard';
+import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
 import Conditions from '../../misc/template/Conditions';
 import Configuration from '../../misc/template/Configuration';
@@ -243,6 +244,7 @@ const HorizontalPodAutoscalerDetails: React.FunctionComponent<IHorizontalPodAuto
           charts={[
             {
               title: 'Pods',
+              unit: '',
               size: {
                 xs: '12',
                 sm: '12',
@@ -281,6 +283,8 @@ const HorizontalPodAutoscalerDetails: React.FunctionComponent<IHorizontalPodAuto
           ]}
         />
       ) : null}
+
+      {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
     </IonGrid>
   );
 };
