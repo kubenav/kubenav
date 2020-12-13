@@ -15,15 +15,47 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import React, { memo, useContext } from 'react';
+import { useQuery } from 'react-query';
 
 import { IContext } from '../../declarations';
+import { kubernetesRequest } from '../../utils/api';
 import { AppContext } from '../../utils/context';
+import LoadingErrorCard from '../misc/LoadingErrorCard';
 import Dashboard from '../plugins/prometheus/Dashboard';
 import Warnings from './Warnings';
 import ClusterMetrics from './ClusterMetrics';
 
 const OverviewPage: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);
+  const cluster = context.currentCluster();
+
+  const { isError, data, error } = useQuery<boolean, Error>(
+    ['OverviewPage', cluster],
+    async () => {
+      try {
+        if (!cluster) {
+          return false;
+        }
+
+        const data = await kubernetesRequest(
+          'GET',
+          '',
+          '',
+          context.settings,
+          await context.kubernetesAuthWrapper(cluster.id),
+        );
+
+        if (data && data.paths) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (err) {
+        return false;
+      }
+    },
+    context.settings.queryConfig,
+  );
 
   return (
     <IonPage>
@@ -38,7 +70,18 @@ const OverviewPage: React.FunctionComponent = () => {
       <IonContent>
         {context.clusters && context.cluster ? (
           <IonGrid>
+            {isError || !data ? (
+              <LoadingErrorCard
+                cluster={context.cluster}
+                clusters={context.clusters}
+                error={error}
+                icon="/assets/icons/kubernetes/kubernetes.png"
+                text="Could not get connect to Cluster"
+              />
+            ) : null}
+
             {context.settings.enablePodMetrics ? <ClusterMetrics /> : null}
+
             <Warnings />
 
             {context.settings.prometheusEnabled ? (
