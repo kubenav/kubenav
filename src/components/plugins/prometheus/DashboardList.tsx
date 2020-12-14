@@ -9,34 +9,18 @@ import {
   IonList,
   IonRow,
 } from '@ionic/react';
-import { V1ConfigMap } from '@kubernetes/client-node';
 import React, { useContext } from 'react';
 import { useQuery } from 'react-query';
 
 import { IContext } from '../../../declarations';
 import { kubernetesRequest } from '../../../utils/api';
 import { AppContext } from '../../../utils/context';
-import { getProperty } from '../../../utils/helpers';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getLink = (item: any, link: string): string => {
-  if (link) {
-    const linkParts: string[] = [];
-
-    for (const parameter of link.split('&')) {
-      const parts = parameter.split('=');
-      if (parts.length !== 2 || parts[1].length < 2) {
-        return '';
-      }
-
-      linkParts.push(`${parts[0]}=${getProperty(item, parts[1].substring(2))}`);
-    }
-
-    return `?${linkParts.join('&')}`;
-  }
-
-  return '';
-};
+interface IDashboardItem {
+  link: string;
+  title: string;
+  description: string;
+}
 
 interface IDashboardListProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,27 +31,33 @@ const DashboardList: React.FunctionComponent<IDashboardListProps> = ({ item }: I
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
 
-  const { isError, data, error } = useQuery<V1ConfigMap[], Error>(
+  const { isError, data, error } = useQuery<IDashboardItem[], Error>(
     ['PrometheusDashboardList', cluster ? cluster.id : '', item],
     async () => {
       try {
         if (item && item.metadata && item.metadata.annotations && item.metadata.annotations['kubenav.io/dashboards']) {
           const dashboards = item.metadata.annotations['kubenav.io/dashboards'].split(',');
-          const cms: V1ConfigMap[] = [];
+          const dashboardItems: IDashboardItem[] = [];
 
           for (const dashboard of dashboards) {
+            const name = dashboard.trim().split('?')[0];
+
             const cm = await kubernetesRequest(
               'GET',
-              `/api/v1/namespaces/${context.settings.prometheusDashboardsNamespace}/configmaps/${dashboard}`,
+              `/api/v1/namespaces/${context.settings.prometheusDashboardsNamespace}/configmaps/${name}`,
               '',
               context.settings,
               await context.kubernetesAuthWrapper(''),
             );
 
-            cms.push(cm);
+            dashboardItems.push({
+              link: `/plugins/prometheus/${cm.metadata.namespace}/${dashboard.trim()}`,
+              title: cm.data['title'] ? cm.data['title'] : '',
+              description: cm.data['description'] ? cm.data['description'] : '',
+            });
           }
 
-          return cms;
+          return dashboardItems;
         }
 
         return [];
@@ -92,18 +82,12 @@ const DashboardList: React.FunctionComponent<IDashboardListProps> = ({ item }: I
               ) : (
                 <IonList>
                   {data
-                    ? data.map((cm: V1ConfigMap, index) => {
+                    ? data.map((dashboard: IDashboardItem, index) => {
                         return (
-                          <IonItem
-                            key={index}
-                            routerLink={`/plugins/prometheus/${cm.metadata ? cm.metadata.namespace : ''}/${
-                              cm.metadata ? cm.metadata.name : ''
-                            }${getLink(item, cm.data && cm.data['link'] ? cm.data['link'] : '')}`}
-                            routerDirection="forward"
-                          >
+                          <IonItem key={index} routerLink={dashboard.link} routerDirection="forward">
                             <IonLabel>
-                              <h2>{cm.data && cm.data['title'] ? cm.data['title'] : ''}</h2>
-                              <p>{cm.data && cm.data['description'] ? cm.data['description'] : ''}</p>
+                              <h2>{dashboard.title}</h2>
+                              <p>{dashboard.description}</p>
                             </IonLabel>
                           </IonItem>
                         );
