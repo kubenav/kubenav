@@ -29,7 +29,7 @@ const OverviewPage: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
 
-  const { isError, data, error } = useQuery<boolean, Error>(
+  const { isError, isFetching, data, error } = useQuery<boolean, Error>(
     ['OverviewPage', cluster],
     async () => {
       try {
@@ -70,7 +70,7 @@ const OverviewPage: React.FunctionComponent = () => {
       <IonContent>
         {context.clusters && context.cluster ? (
           <IonGrid>
-            {isError || !data ? (
+            {(isError || !data) && !isFetching ? (
               <LoadingErrorCard
                 cluster={context.cluster}
                 clusters={context.clusters}

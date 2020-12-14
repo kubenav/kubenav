@@ -19,6 +19,7 @@ export const eventSource = (value: V1EventSource): string => {
 
 // involvedObjectLink returns the link to the involved object for an event.
 export const involvedObjectLink = (involvedObject: V1ObjectReference): string => {
+  console.log(involvedObject.kind);
   if (involvedObject.kind === 'CronJob') {
     return `/resources/workloads/cronjobs/${involvedObject.namespace}/${involvedObject.name}`;
   } else if (involvedObject.kind === 'DaemonSet') {
@@ -39,6 +40,14 @@ export const involvedObjectLink = (involvedObject: V1ObjectReference): string =>
     return `/resources/discovery-and-loadbalancing/endpoints/${involvedObject.namespace}/${involvedObject.name}`;
   } else if (involvedObject.kind === 'HorizontalPodAutoscaler') {
     return `/resources/discovery-and-loadbalancing/horizontalpodautoscalers/${involvedObject.namespace}/${involvedObject.name}`;
+  } else if (involvedObject.kind === 'Ingress') {
+    return `/resources/discovery-and-loadbalancing/ingresses/${involvedObject.namespace}/${involvedObject.name}`;
+  } else if (involvedObject.kind === 'NetworkPolicy') {
+    return `/resources/discovery-and-loadbalancing/networkpolicies/${involvedObject.namespace}/${involvedObject.name}`;
+  } else if (involvedObject.kind === 'Service') {
+    return `/resources/discovery-and-loadbalancing/services/${involvedObject.namespace}/${involvedObject.name}`;
+  } else if (involvedObject.kind === 'PersistentVolumeClaim') {
+    return `/resources/config-and-storage/persistentvolumeclaims/${involvedObject.namespace}/${involvedObject.name}`;
   } else {
     return '';
   }
