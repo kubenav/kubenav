@@ -19,7 +19,6 @@ export const eventSource = (value: V1EventSource): string => {
 
 // involvedObjectLink returns the link to the involved object for an event.
 export const involvedObjectLink = (involvedObject: V1ObjectReference): string => {
-  console.log(involvedObject.kind);
   if (involvedObject.kind === 'CronJob') {
     return `/resources/workloads/cronjobs/${involvedObject.namespace}/${involvedObject.name}`;
   } else if (involvedObject.kind === 'DaemonSet') {

@@ -15,6 +15,31 @@ import { useQuery } from 'react-query';
 import { IContext } from '../../../declarations';
 import { kubernetesRequest } from '../../../utils/api';
 import { AppContext } from '../../../utils/context';
+import { getProperty } from '../../../utils/helpers';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getQueryParams = (item: any, params: string): string => {
+  if (params) {
+    const linkParts: string[] = [];
+
+    for (const param of params.split('&')) {
+      const parts = param.split('=');
+      if (parts.length !== 2) {
+        return '';
+      }
+
+      if (parts[1].startsWith('$.')) {
+        linkParts.push(`${parts[0]}=${getProperty(item, parts[1].substring(2))}`);
+      } else {
+        linkParts.push(`${parts[0]}=${parts[1]}`);
+      }
+    }
+
+    return `?${linkParts.join('&')}`;
+  }
+
+  return '';
+};
 
 interface IDashboardItem {
   link: string;
@@ -40,7 +65,9 @@ const DashboardList: React.FunctionComponent<IDashboardListProps> = ({ item }: I
           const dashboardItems: IDashboardItem[] = [];
 
           for (const dashboard of dashboards) {
-            const name = dashboard.trim().split('?')[0];
+            const parts = dashboard.trim().split('?');
+            const name = parts[0];
+            const params = parts.length === 2 ? parts[1] : '';
 
             const cm = await kubernetesRequest(
               'GET',
@@ -51,7 +78,7 @@ const DashboardList: React.FunctionComponent<IDashboardListProps> = ({ item }: I
             );
 
             dashboardItems.push({
-              link: `/plugins/prometheus/${cm.metadata.namespace}/${dashboard.trim()}`,
+              link: `/plugins/prometheus/${cm.metadata.namespace}/${name}${getQueryParams(item, params)}`,
               title: cm.data['title'] ? cm.data['title'] : '',
               description: cm.data['description'] ? cm.data['description'] : '',
             });
