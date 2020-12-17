@@ -281,6 +281,77 @@ const GeneralPage: React.FunctionComponent = () => {
           {IS_INCLUSTER ? null : (
             <IonItemGroup>
               <IonItemDivider>
+                <IonLabel>Elasticsearch</IonLabel>
+              </IonItemDivider>
+              <IonItem>
+                <IonLabel>Enabled</IonLabel>
+                <IonToggle
+                  name="elasticsearchEnabled"
+                  checked={context.settings.elasticsearchEnabled}
+                  onIonChange={handleToggleChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Namespace</IonLabel>
+                <IonInput
+                  type="text"
+                  required={true}
+                  placeholder="logging"
+                  name="elasticsearchNamespace"
+                  value={context.settings.elasticsearchNamespace}
+                  onInput={handleValueChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Selector</IonLabel>
+                <IonInput
+                  type="text"
+                  required={true}
+                  placeholder="app=elasticsearch"
+                  name="elasticsearchSelector"
+                  value={context.settings.elasticsearchSelector}
+                  onInput={handleValueChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Port</IonLabel>
+                <IonInput
+                  type="number"
+                  required={true}
+                  placeholder="9200"
+                  name="elasticsearchPort"
+                  value={context.settings.elasticsearchPort}
+                  onInput={handleNumberValueChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Username</IonLabel>
+                <IonInput
+                  type="text"
+                  required={true}
+                  placeholder=""
+                  name="elasticsearchUsername"
+                  value={context.settings.elasticsearchUsername}
+                  onInput={handleValueChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Password</IonLabel>
+                <IonInput
+                  type="password"
+                  required={true}
+                  placeholder=""
+                  name="elasticsearchPassword"
+                  value={context.settings.elasticsearchPassword}
+                  onInput={handleValueChange}
+                />
+              </IonItem>
+            </IonItemGroup>
+          )}
+
+          {IS_INCLUSTER ? null : (
+            <IonItemGroup>
+              <IonItemDivider>
                 <IonLabel>Proxy</IonLabel>
               </IonItemDivider>
               <IonItem>

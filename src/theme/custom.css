@@ -78,6 +78,16 @@ td {
   overflow-x: auto;
 }
 
+.table-multi-line {
+  padding: 5px;
+}
+
+.table-multi-line td {
+  vertical-align: top;
+  white-space:pre-line;
+  word-break: break-all;
+}
+
 .container-details-link {
   cursor: pointer;
   background: transparent;

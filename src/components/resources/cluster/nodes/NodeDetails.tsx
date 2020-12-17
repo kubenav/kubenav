@@ -8,6 +8,7 @@ import { IContext, INodeMetrics } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import { formatResourceValue } from '../../../../utils/helpers';
+import QueryList from '../../../plugins/elasticsearch/QueryList';
 import Dashboard from '../../../plugins/prometheus/Dashboard';
 import DashboardList from '../../../plugins/prometheus/DashboardList';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
@@ -294,6 +295,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
       ) : null}
 
       {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
+      {context.settings.elasticsearchEnabled ? <QueryList item={item} /> : null}
     </IonGrid>
   );
 };

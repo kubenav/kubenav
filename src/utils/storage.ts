@@ -177,6 +177,23 @@ export const readSettings = (): IAppSettings => {
       prometheusDashboardsNamespace: settings.prometheusDashboardsNamespace
         ? settings.prometheusDashboardsNamespace
         : DEFAULT_SETTINGS.prometheusDashboardsNamespace,
+      elasticsearchEnabled: settings.hasOwnProperty('elasticsearchEnabled')
+        ? settings.elasticsearchEnabled
+        : DEFAULT_SETTINGS.elasticsearchEnabled,
+      elasticsearchNamespace: settings.elasticsearchNamespace
+        ? settings.elasticsearchNamespace
+        : DEFAULT_SETTINGS.elasticsearchNamespace,
+      elasticsearchSelector: settings.elasticsearchSelector
+        ? settings.elasticsearchSelector
+        : DEFAULT_SETTINGS.elasticsearchSelector,
+      elasticsearchPort: settings.elasticsearchPort ? settings.elasticsearchPort : DEFAULT_SETTINGS.elasticsearchPort,
+      elasticsearchUsername: settings.elasticsearchUsername
+        ? settings.elasticsearchUsername
+        : DEFAULT_SETTINGS.elasticsearchUsername,
+      elasticsearchPassword: settings.elasticsearchPassword
+        ? settings.elasticsearchPassword
+        : DEFAULT_SETTINGS.elasticsearchPassword,
+      elasticsearchAddress: '',
       proxyEnabled: settings.hasOwnProperty('proxyEnabled') ? settings.proxyEnabled : DEFAULT_SETTINGS.proxyEnabled,
       proxyAddress: settings.proxyAddress ? settings.proxyAddress : DEFAULT_SETTINGS.proxyAddress,
       helmShowAllVersions: settings.hasOwnProperty('helmShowAllVersions')

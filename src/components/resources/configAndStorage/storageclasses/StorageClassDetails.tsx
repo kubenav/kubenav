@@ -6,6 +6,7 @@ import { RouteComponentProps } from 'react-router';
 import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import { capitalize } from '../../../../utils/helpers';
+import QueryList from '../../../plugins/elasticsearch/QueryList';
 import DashboardList from '../../../plugins/prometheus/DashboardList';
 import IonCardEqualHeight from '../../../misc/IonCardEqualHeight';
 import Configuration from '../../misc/template/Configuration';
@@ -70,6 +71,7 @@ const StorageClassDetails: React.FunctionComponent<IStorageClassDetailsProps> = 
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
+      {context.settings.elasticsearchEnabled ? <QueryList item={item} /> : null}
     </IonGrid>
   );
 };

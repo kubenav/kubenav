@@ -103,6 +103,10 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
                 prometheusEnabled: inclusterSettings.prometheusEnabled,
                 prometheusAddress: inclusterSettings.prometheusAddress,
                 prometheusDashboardsNamespace: inclusterSettings.prometheusDashboardsNamespace,
+                elasticsearchEnabled: inclusterSettings.elasticsearchEnabled,
+                elasticsearchAddress: inclusterSettings.elasticsearchAddress,
+                elasticsearchUsername: inclusterSettings.elasticsearchUsername,
+                elasticsearchPassword: inclusterSettings.elasticsearchPassword,
               });
             }
           }

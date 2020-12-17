@@ -50,6 +50,13 @@ export interface IAppSettings {
   prometheusPort: number;
   prometheusAddress: string;
   prometheusDashboardsNamespace: string;
+  elasticsearchEnabled: boolean;
+  elasticsearchNamespace: string;
+  elasticsearchSelector: string;
+  elasticsearchPort: number;
+  elasticsearchUsername: string;
+  elasticsearchPassword: string;
+  elasticsearchAddress: string;
   proxyEnabled: boolean;
   proxyAddress: string;
   helmShowAllVersions: boolean;
@@ -259,6 +266,10 @@ export interface IInclusterSettings {
   prometheusEnabled: boolean;
   prometheusAddress: string;
   prometheusDashboardsNamespace: string;
+  elasticsearchEnabled: boolean;
+  elasticsearchAddress: string;
+  elasticsearchUsername: string;
+  elasticsearchPassword: string;
 }
 
 export interface IJsonData {
