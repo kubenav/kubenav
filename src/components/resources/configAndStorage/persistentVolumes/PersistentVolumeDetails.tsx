@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
+import QueryList from '../../../plugins/elasticsearch/QueryList';
 import Dashboard from '../../../plugins/prometheus/Dashboard';
 import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
@@ -102,6 +103,7 @@ const PersistentVolumeDetails: React.FunctionComponent<IPersistentVolumeDetailsP
       ) : null}
 
       {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
+      {context.settings.elasticsearchEnabled ? <QueryList item={item} /> : null}
     </IonGrid>
   );
 };

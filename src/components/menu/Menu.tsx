@@ -110,6 +110,14 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections, history, location
             <IonLabel>Plugins</IonLabel>
           </IonListHeader>
           <IonMenuToggle autoHide={false}>
+            <IonItem routerLink="/plugins/helm" routerDirection="root">
+              <IonAvatar slot="start">
+                <img alt="Helm Releases" src="/assets/icons/kubernetes/helm.png" />
+              </IonAvatar>
+              <IonLabel>Helm Releases</IonLabel>
+            </IonItem>
+          </IonMenuToggle>
+          <IonMenuToggle autoHide={false}>
             <IonItem routerLink="/plugins/prometheus" routerDirection="root">
               <IonAvatar slot="start">
                 <img alt="Prometheus Dashboards" src="/assets/icons/kubernetes/prometheus.png" />
@@ -118,11 +126,11 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections, history, location
             </IonItem>
           </IonMenuToggle>
           <IonMenuToggle autoHide={false}>
-            <IonItem routerLink="/plugins/helm" routerDirection="root">
+            <IonItem routerLink="/plugins/elasticsearch" routerDirection="root">
               <IonAvatar slot="start">
-                <img alt="Helm Releases" src="/assets/icons/kubernetes/helm.png" />
+                <img alt="Elasticsearch" src="/assets/icons/kubernetes/elasticsearch.png" />
               </IonAvatar>
-              <IonLabel>Helm Releases</IonLabel>
+              <IonLabel>Elasticsearch</IonLabel>
             </IonItem>
           </IonMenuToggle>
 

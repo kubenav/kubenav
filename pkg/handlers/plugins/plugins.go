@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/kubenav/kubenav/pkg/handlers/plugins/elasticsearch"
 	"github.com/kubenav/kubenav/pkg/handlers/plugins/prometheus"
 	"github.com/kubenav/kubenav/pkg/handlers/portforwarding"
 	"github.com/kubenav/kubenav/pkg/kube"
@@ -24,6 +25,10 @@ type Config struct {
 	PrometheusEnabled             bool   `json:"prometheusEnabled"`
 	PrometheusAddress             string `json:"prometheusAddress"`
 	PrometheusDashboardsNamespace string `json:"prometheusDashboardsNamespace"`
+	ElasticsearchEnabled          bool   `json:"elasticsearchEnabled"`
+	ElasticsearchAddress          string `json:"elasticsearchAddress"`
+	ElasticsearchUsername         string `json:"elasticsearchUsername"`
+	ElasticsearchPassword         string `json:"elasticsearchPassword"`
 }
 
 // Request is the structure of a request for a plugin.
@@ -78,6 +83,8 @@ func Run(request Request, config *rest.Config, clientset *kubernetes.Clientset, 
 	switch request.Name {
 	case "prometheus":
 		result, err = prometheus.RunQueries(request.Address, timeout, request.Data)
+	case "elasticsearch":
+		result, err = elasticsearch.RunQuery(request.Address, timeout, request.Data)
 	}
 
 	return result, err

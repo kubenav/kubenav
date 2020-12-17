@@ -20,6 +20,7 @@ import { IContext } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 import LoadingErrorCard from '../../../misc/LoadingErrorCard';
+import QueryList from '../../../plugins/elasticsearch/QueryList';
 import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
 import Details from '../../misc/details/Details';
@@ -139,6 +140,7 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
             ) : null}
 
             {context.settings.prometheusEnabled ? <DashboardList item={data} /> : null}
+            {context.settings.elasticsearchEnabled ? <QueryList item={data} /> : null}
           </IonGrid>
         ) : isFetching ? null : (
           <LoadingErrorCard

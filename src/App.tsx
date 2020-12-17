@@ -18,6 +18,7 @@ import '@ionic/react/css/typography.css';
 import BookmarksPage from './components/bookmarks/BookmarksPage';
 import Menu from './components/menu/Menu';
 import OverviewPage from './components/overview/OverviewPage';
+import ElasticsearchQueryPage from './components/plugins/elasticsearch/QueryPage';
 import HelmReleasesPage from './components/plugins/helm/ReleasesPage';
 import HelmReleasePage from './components/plugins/helm/ReleasePage';
 import PrometheusDashboardsPage from './components/plugins/prometheus/DashboardsPage';
@@ -65,6 +66,7 @@ const App: React.FunctionComponent = () => (
                   component={CustomResourcesDetailsPage}
                   exact={true}
                 />
+                <Route path="/plugins/elasticsearch" component={ElasticsearchQueryPage} exact={true} />
                 <Route path="/plugins/helm" component={HelmReleasesPage} exact={true} />
                 <Route path="/plugins/helm/:namespace/:name" component={HelmReleasePage} exact={true} />
                 <Route path="/plugins/prometheus" component={PrometheusDashboardsPage} exact={true} />

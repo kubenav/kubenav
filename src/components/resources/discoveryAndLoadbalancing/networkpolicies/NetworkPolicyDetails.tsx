@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
+import QueryList from '../../../plugins/elasticsearch/QueryList';
 import DashboardList from '../../../plugins/prometheus/DashboardList';
 import Configuration from '../../misc/template/Configuration';
 import Status from '../../misc/template/Status';
@@ -73,6 +74,7 @@ const NetworkPolicyDetails: React.FunctionComponent<INetworkPolicyDetailsProps> 
       {item.metadata ? <Metadata metadata={item.metadata} type={type} /> : null}
 
       {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
+      {context.settings.elasticsearchEnabled ? <QueryList item={item} /> : null}
     </IonGrid>
   );
 };
