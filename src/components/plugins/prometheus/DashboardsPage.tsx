@@ -2,6 +2,8 @@ import { RefresherEventDetail } from '@ionic/core';
 import {
   IonButton,
   IonButtons,
+  IonCard,
+  IonCardContent,
   IonContent,
   IonHeader,
   IonInfiniteScroll,
@@ -39,7 +41,7 @@ const DashboardsPage: React.FunctionComponent = () => {
         context.settings.prometheusDashboardsNamespace
           ? `/api/v1/namespaces/${context.settings.prometheusDashboardsNamespace}/configmaps`
           : `/api/v1/configmaps`
-      }?labelSelector=kubenav.io/dashboard=true&limit=50${cursor ? `&continue=${cursor}` : ''}`,
+      }?labelSelector=kubenav.io/dashboard=false&limit=50${cursor ? `&continue=${cursor}` : ''}`,
       '',
       context.settings,
       await context.kubernetesAuthWrapper(''),
@@ -87,52 +89,65 @@ const DashboardsPage: React.FunctionComponent = () => {
               value={searchText}
               onIonChange={(e) => setSearchText(e.detail.value ? e.detail.value : '')}
             />
-
-            <IonList>
-              {data
-                ? data.map((group, i) => (
-                    <React.Fragment key={i}>
-                      {group && group.items
-                        ? group.items
-                            .filter((item) => {
-                              const regex = new RegExp(searchText, 'gi');
-                              return item.metadata && item.metadata.name && item.metadata.name.match(regex);
-                            })
-                            .map((item: V1ConfigMap, j) => {
-                              return (
-                                <IonItem
-                                  key={`${i}_${j}`}
-                                  routerLink={`/plugins/prometheus/${item.metadata ? item.metadata.namespace : ''}/${
-                                    item.metadata ? item.metadata.name : ''
-                                  }`}
-                                  routerDirection="forward"
-                                >
-                                  <IonLabel>
-                                    <h2>{item.data && item.data['title'] ? item.data['title'] : ''}</h2>
-                                    <p>{item.data && item.data['description'] ? item.data['description'] : ''}</p>
-                                  </IonLabel>
-                                </IonItem>
-                              );
-                            })
-                        : null}
-                    </React.Fragment>
-                  ))
-                : null}
-              <IonInfiniteScroll
-                threshold="25%"
-                disabled={!canFetchMore || (isFetchingMore as boolean)}
-                onIonInfinite={loadMore}
-              >
-                {(!isFetchingMore as boolean) ? (
-                  <IonButton size="small" expand="block" fill="clear" onClick={() => fetchMore()}>
-                    Load more
-                  </IonButton>
-                ) : null}
-                <IonInfiniteScrollContent
-                  loadingText={`Loading more Prometheus Dashboards...`}
-                ></IonInfiniteScrollContent>
-              </IonInfiniteScroll>
-            </IonList>
+            {data && data.length > 0 && data[0].items > 0 ? (
+              <IonList>
+                {data.map((group, i) => (
+                  <React.Fragment key={i}>
+                    {group && group.items
+                      ? group.items
+                          .filter((item) => {
+                            const regex = new RegExp(searchText, 'gi');
+                            return item.metadata && item.metadata.name && item.metadata.name.match(regex);
+                          })
+                          .map((item: V1ConfigMap, j) => {
+                            return (
+                              <IonItem
+                                key={`${i}_${j}`}
+                                routerLink={`/plugins/prometheus/${item.metadata ? item.metadata.namespace : ''}/${
+                                  item.metadata ? item.metadata.name : ''
+                                }`}
+                                routerDirection="forward"
+                              >
+                                <IonLabel>
+                                  <h2>{item.data && item.data['title'] ? item.data['title'] : ''}</h2>
+                                  <p>{item.data && item.data['description'] ? item.data['description'] : ''}</p>
+                                </IonLabel>
+                              </IonItem>
+                            );
+                          })
+                      : null}
+                  </React.Fragment>
+                ))}
+                <IonInfiniteScroll
+                  threshold="25%"
+                  disabled={!canFetchMore || (isFetchingMore as boolean)}
+                  onIonInfinite={loadMore}
+                >
+                  {(!isFetchingMore as boolean) ? (
+                    <IonButton size="small" expand="block" fill="clear" onClick={() => fetchMore()}>
+                      Load more
+                    </IonButton>
+                  ) : null}
+                  <IonInfiniteScrollContent
+                    loadingText={`Loading more Prometheus Dashboards...`}
+                  ></IonInfiniteScrollContent>
+                </IonInfiniteScroll>
+              </IonList>
+            ) : (
+              <IonCard>
+                <IonCardContent>
+                  <p>
+                    The Prometheus plugin allows you to create dashboards for Prometheus within kubenav. To use the
+                    Prometheus plugin you have to enable it in the <b>Settings</b>. The documentation for the Prometheus
+                    plugin can be found at{' '}
+                    <a href="https://docs.kubenav.io/plugins/prometheus/" target="_blank" rel="noopener noreferrer">
+                      https://docs.kubenav.io/plugins/prometheus/
+                    </a>
+                    .
+                  </p>
+                </IonCardContent>
+              </IonCard>
+            )}
           </React.Fragment>
         ) : isFetching ? null : (
           <LoadingErrorCard

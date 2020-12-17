@@ -1,7 +1,10 @@
 import { IonCol, IonRow, isPlatform } from '@ionic/react';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Area, AreaChart, ResponsiveContainer } from 'recharts';
 
+import { IContext } from '../../../declarations';
+import { AppContext } from '../../../utils/context';
+import { isDarkMode } from '../../../utils/helpers';
 import { IPrometheusResult } from './ChartDetailsArea';
 
 interface IChartDetailsSinglestatProps {
@@ -13,6 +16,8 @@ const ChartDetailsSinglestat: React.FunctionComponent<IChartDetailsSinglestatPro
   unit,
   results,
 }: IChartDetailsSinglestatProps) => {
+  const context = useContext<IContext>(AppContext);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const series: any = [];
 
@@ -33,7 +38,13 @@ const ChartDetailsSinglestat: React.FunctionComponent<IChartDetailsSinglestatPro
       style={{
         fontSize: '20px',
         fontWeight: 500,
-        color: isPlatform('ios') ? '#ffffff' : '#dbdbdb',
+        color: isDarkMode(context.settings.theme)
+          ? isPlatform('ios')
+            ? '#ffffff'
+            : '#dbdbdb'
+          : isPlatform('ios')
+          ? '#000000'
+          : '#262626',
         height: '100px',
         width: '100%',
       }}

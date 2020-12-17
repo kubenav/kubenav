@@ -98,7 +98,7 @@ const DashboardList: React.FunctionComponent<IDashboardListProps> = ({ item }: I
   if ((data && data.length > 0) || isError) {
     return (
       <IonRow>
-        <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="12">
+        <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="12">
           <IonCard>
             <IonCardHeader>
               <IonCardTitle>Dashboards</IonCardTitle>
