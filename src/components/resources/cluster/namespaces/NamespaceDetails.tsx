@@ -60,19 +60,19 @@ const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ ite
               queries: [
                 {
                   label: 'Current',
-                  query: `sum(irate(container_cpu_usage_seconds_total{job="kubelet", namespace="${
+                  query: `sum(irate(container_cpu_usage_seconds_total{namespace="${
                     item.metadata ? item.metadata.name : ''
                   }", image!="", container!="", container!="POD"}[4m]))`,
                 },
                 {
                   label: 'Requested',
-                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${
+                  query: `sum(kube_pod_container_resource_requests{namespace="${
                     item.metadata ? item.metadata.name : ''
                   }", resource="cpu", container!=""})`,
                 },
                 {
                   label: 'Limit',
-                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${
+                  query: `sum(kube_pod_container_resource_limits{namespace="${
                     item.metadata ? item.metadata.name : ''
                   }", resource="cpu", container!=""})`,
                 },
@@ -92,25 +92,25 @@ const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ ite
               queries: [
                 {
                   label: 'Current',
-                  query: `sum(container_memory_usage_bytes{job="kubelet", namespace="${
+                  query: `sum(container_memory_usage_bytes{namespace="${
                     item.metadata ? item.metadata.name : ''
                   }", container!="", container!="POD"}) / 1024 / 1024`,
                 },
                 {
                   label: 'Requested',
-                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${
+                  query: `sum(kube_pod_container_resource_requests{namespace="${
                     item.metadata ? item.metadata.name : ''
                   }", resource="memory", container!=""}) / 1024 / 1024`,
                 },
                 {
                   label: 'Limit',
-                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${
+                  query: `sum(kube_pod_container_resource_limits{namespace="${
                     item.metadata ? item.metadata.name : ''
                   }", resource="memory", container!=""}) / 1024 / 1024`,
                 },
                 {
                   label: 'Cache',
-                  query: `sum(container_memory_cache{job="kubelet", namespace="${
+                  query: `sum(container_memory_cache{namespace="${
                     item.metadata ? item.metadata.name : ''
                   }", container!="", container!="POD"}) / 1024 / 1024`,
                 },
