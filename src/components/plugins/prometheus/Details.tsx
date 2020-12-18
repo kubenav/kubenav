@@ -1,27 +1,14 @@
 import { IonButton, IonIcon, IonItem, IonLabel, IonList, IonPopover } from '@ionic/react';
-import {
-  ellipsisHorizontal,
-  ellipsisVertical,
-  help,
-  layers,
-  layersOutline,
-  refresh as refreshIcon,
-} from 'ionicons/icons';
+import { ellipsisHorizontal, ellipsisVertical, help, refresh as refreshIcon } from 'ionicons/icons';
 import React, { useState } from 'react';
 
 import { openURL } from '../../../utils/helpers';
 
 interface IDetailsProps {
   refresh: () => void;
-  showAllVersions?: boolean;
-  setShowAllVersions?: (value: boolean) => void;
 }
 
-const Details: React.FunctionComponent<IDetailsProps> = ({
-  refresh,
-  showAllVersions,
-  setShowAllVersions,
-}: IDetailsProps) => {
+const Details: React.FunctionComponent<IDetailsProps> = ({ refresh }: IDetailsProps) => {
   const [showPopover, setShowPopover] = useState<boolean>(false);
   const [popoverEvent, setPopoverEvent] = useState();
 
@@ -40,24 +27,11 @@ const Details: React.FunctionComponent<IDetailsProps> = ({
             <IonIcon slot="end" color="primary" icon={refreshIcon} />
             <IonLabel>Refresh</IonLabel>
           </IonItem>
-          {showAllVersions !== undefined && setShowAllVersions ? (
-            <IonItem
-              button={true}
-              detail={false}
-              onClick={() => {
-                setShowAllVersions(!showAllVersions);
-                setShowPopover(false);
-              }}
-            >
-              <IonIcon slot="end" color="primary" icon={showAllVersions ? layers : layersOutline} />
-              <IonLabel>All Versions</IonLabel>
-            </IonItem>
-          ) : null}
           <IonItem
             button={true}
             detail={false}
             onClick={() => {
-              openURL('https://docs.kubenav.io/plugins/helm/');
+              openURL('https://docs.kubenav.io/plugins/prometheus/');
               setShowPopover(false);
             }}
           >

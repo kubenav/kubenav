@@ -20,6 +20,7 @@ import { kubernetesRequest } from '../../../utils/api';
 import { AppContext } from '../../../utils/context';
 import LoadingErrorCard from '../../misc/LoadingErrorCard';
 import Dashboard, { IDashboardProps, IVariable } from './Dashboard';
+import Details from './Details';
 
 interface IMatchParams {
   namespace: string;
@@ -83,6 +84,9 @@ const DashboardPage: React.FunctionComponent<IDashboardPageProps> = ({ match, lo
             <IonBackButton defaultHref="/plugins/prometheus" />
           </IonButtons>
           <IonTitle>{data ? data.title : ''}</IonTitle>
+          <IonButtons slot="primary">
+            <Details refresh={refetch} />
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>

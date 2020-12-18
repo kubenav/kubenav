@@ -134,7 +134,7 @@ const ReleasesPage: React.FunctionComponent = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Helm Releases</IonTitle>
+          <IonTitle>Helm</IonTitle>
           <IonButtons slot="primary">
             <Namespaces />
             <Details

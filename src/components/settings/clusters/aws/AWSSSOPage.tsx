@@ -1,4 +1,3 @@
-import { Plugins } from '@capacitor/core';
 import {
   IonButton,
   IonButtons,
@@ -17,7 +16,6 @@ import {
   IonSelectOption,
   IonTitle,
   IonToolbar,
-  isPlatform,
 } from '@ionic/react';
 import React, { memo, useContext, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -25,8 +23,7 @@ import { RouteComponentProps } from 'react-router';
 import { IAWSSSO, ICluster, IContext } from '../../../../declarations';
 import { getAWSClusters, getAWSSSOConfig, getAWSSSOCredentailsWithConfig } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
-
-const { App } = Plugins;
+import { openURL } from '../../../../utils/helpers';
 
 const isChecked = (id: string, clusters: ICluster[]): boolean => {
   for (const cluster of clusters) {
@@ -79,14 +76,6 @@ const AWSSSOPage: React.FunctionComponent<IAWSSSOPageProps> = ({ history }: IAWS
       setConfig(ssoConfig);
     } catch (err) {
       setError(err.message);
-    }
-  };
-
-  const openURL = async (url: string) => {
-    if (isPlatform('hybrid')) {
-      await App.openUrl({ url: url });
-    } else {
-      window.open(url, '_system', 'location=yes');
     }
   };
 

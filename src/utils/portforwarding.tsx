@@ -11,8 +11,9 @@ import {
 } from './api';
 import { IS_INCLUSTER } from './constants';
 import { AppContext } from './context';
+import { openURL } from './helpers';
 
-const { App, Clipboard } = Plugins;
+const { Clipboard } = Plugins;
 
 // Creates a Context object. When React renders a component that subscribes to this Context object it will read the
 // current context value from the closest matching Provider above it in the tree.
@@ -125,10 +126,6 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
     }
   };
 
-  const openURL = async (url: string) => {
-    await App.openUrl({ url: url });
-  };
-
   const generateButtons = (): ActionSheetButton[] => {
     const buttons: ActionSheetButton[] = [];
 
@@ -186,16 +183,7 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
           {
             side: 'end',
             text: 'Open',
-            handler: () => {
-              if (isPlatform('electron')) {
-                // eslint-disable-next-line @typescript-eslint/no-var-requires
-                window.require('electron').shell.openExternal(`http://localhost:${messagePort}`);
-              } else if (isPlatform('hybrid')) {
-                openURL(`http://localhost:${messagePort}`);
-              } else {
-                window.open(`http://localhost:${messagePort}`, '_system', 'location=yes');
-              }
-            },
+            handler: () => openURL(`http://localhost:${messagePort}`),
           },
         ]}
       />

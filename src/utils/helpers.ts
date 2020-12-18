@@ -1,6 +1,10 @@
+import { Plugins } from '@capacitor/core';
+import { isPlatform } from '@ionic/react';
 import { V1LabelSelector, V1Subject } from '@kubernetes/client-node';
 
 import { TTheme } from '../declarations';
+
+const { App } = Plugins;
 
 // capitalize uppercase the first letter of a string
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
@@ -148,6 +152,19 @@ export const matchLabels = (labels: { [key: string]: string }): string => {
   }
 
   return selectors.join(',');
+};
+
+// openURL opens the given URL in the users default browser.
+export const openURL = async (url: string): Promise<void> => {
+  if (isPlatform('hybrid')) {
+    await App.openUrl({ url: url });
+  } else if (isPlatform('electron')) {
+    window.require('electron').shell.openExternal(url);
+  } else {
+    window.open(url, '_system', 'location=yes');
+  }
+
+  return;
 };
 
 // randomString generates a random string of the given length.

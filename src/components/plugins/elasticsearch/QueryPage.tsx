@@ -34,6 +34,7 @@ import { IS_INCLUSTER } from '../../../utils/constants';
 import { AppContext } from '../../../utils/context';
 import useWindowWidth from '../../../utils/useWindowWidth';
 import Document, { IElasticsearchDocument, IElasticsearchDocumentSource } from './Document';
+import Details from './Details';
 
 const getFieldsRecursively = (prefix: string, document: IElasticsearchDocumentSource): string[] => {
   const fields: string[] = [];
@@ -205,6 +206,9 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
             <IonMenuButton />
           </IonButtons>
           <IonTitle>Elasticsearch</IonTitle>
+          <IonButtons slot="primary">
+            <Details />
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
