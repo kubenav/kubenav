@@ -102,19 +102,19 @@ const OverviewPage: React.FunctionComponent = () => {
                     queries: [
                       {
                         label: 'Current',
-                        query: `sum(irate(container_cpu_usage_seconds_total{job="kubelet", image!="", container!="", container!="POD"}[4m]))`,
+                        query: `sum(irate(container_cpu_usage_seconds_total{image!="", container!="", container!="POD"}[4m]))`,
                       },
                       {
                         label: 'Requested',
-                        query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", resource="cpu", container!=""})`,
+                        query: `sum(kube_pod_container_resource_requests{resource="cpu", container!=""})`,
                       },
                       {
                         label: 'Limit',
-                        query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", resource="cpu", container!=""})`,
+                        query: `sum(kube_pod_container_resource_limits{resource="cpu", container!=""})`,
                       },
                       {
                         label: 'Allocatable',
-                        query: `sum(kube_node_status_allocatable_cpu_cores{job="kube-state-metrics"})`,
+                        query: `sum(kube_node_status_allocatable_cpu_cores)`,
                       },
                     ],
                   },
@@ -132,23 +132,23 @@ const OverviewPage: React.FunctionComponent = () => {
                     queries: [
                       {
                         label: 'Current',
-                        query: `sum(container_memory_usage_bytes{job="kubelet", container!="", container!="POD"}) / 1024 / 1024 / 1024`,
+                        query: `sum(container_memory_usage_bytes{container!="", container!="POD"}) / 1024 / 1024 / 1024`,
                       },
                       {
                         label: 'Requested',
-                        query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", resource="memory", container!=""}) / 1024 / 1024 / 1024`,
+                        query: `sum(kube_pod_container_resource_requests{resource="memory", container!=""}) / 1024 / 1024 / 1024`,
                       },
                       {
                         label: 'Limit',
-                        query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", resource="memory", container!=""}) / 1024 / 1024 / 1024`,
+                        query: `sum(kube_pod_container_resource_limits{resource="memory", container!=""}) / 1024 / 1024 / 1024`,
                       },
                       {
                         label: 'Cache',
-                        query: `sum(container_memory_cache{job="kubelet", container!="", container!="POD"}) / 1024 / 1024 / 1024`,
+                        query: `sum(container_memory_cache{container!="", container!="POD"}) / 1024 / 1024 / 1024`,
                       },
                       {
                         label: 'Allocatable',
-                        query: `sum(kube_node_status_allocatable_memory_bytes{job="kube-state-metrics"}) / 1024 / 1024 / 1024`,
+                        query: `sum(kube_node_status_allocatable_memory_bytes) / 1024 / 1024 / 1024`,
                       },
                     ],
                   },
@@ -166,11 +166,11 @@ const OverviewPage: React.FunctionComponent = () => {
                     queries: [
                       {
                         label: 'Current',
-                        query: `count(kube_pod_info{job="kube-state-metrics"})`,
+                        query: `count(kube_pod_info)`,
                       },
                       {
                         label: 'Allocatable',
-                        query: `sum(kube_node_status_allocatable_pods{job="kube-state-metrics"})`,
+                        query: `sum(kube_node_status_allocatable_pods)`,
                       },
                     ],
                   },

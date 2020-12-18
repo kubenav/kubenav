@@ -215,7 +215,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
               queries: [
                 {
                   label: 'Current',
-                  query: `sum(irate(container_cpu_usage_seconds_total{job="kubelet", namespace="${
+                  query: `sum(irate(container_cpu_usage_seconds_total{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", image!="", pod="${
                     item.metadata ? item.metadata.name : ''
@@ -223,7 +223,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                 },
                 {
                   label: 'Requested',
-                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${
+                  query: `sum(kube_pod_container_resource_requests{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", resource="cpu", pod="${
                     item.metadata ? item.metadata.name : ''
@@ -231,7 +231,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                 },
                 {
                   label: 'Limit',
-                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${
+                  query: `sum(kube_pod_container_resource_limits{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", resource="cpu", pod="${
                     item.metadata ? item.metadata.name : ''
@@ -253,7 +253,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
               queries: [
                 {
                   label: 'Current',
-                  query: `sum(container_memory_usage_bytes{job="kubelet", namespace="${
+                  query: `sum(container_memory_usage_bytes{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", pod="${
                     item.metadata ? item.metadata.name : ''
@@ -261,7 +261,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                 },
                 {
                   label: 'Requested',
-                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", namespace="${
+                  query: `sum(kube_pod_container_resource_requests{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", resource="memory", pod="${
                     item.metadata ? item.metadata.name : ''
@@ -269,7 +269,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                 },
                 {
                   label: 'Limit',
-                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", namespace="${
+                  query: `sum(kube_pod_container_resource_limits{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", resource="memory", pod="${
                     item.metadata ? item.metadata.name : ''
@@ -277,7 +277,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                 },
                 {
                   label: 'Cache',
-                  query: `sum(container_memory_cache{job="kubelet", namespace="${
+                  query: `sum(container_memory_cache{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", pod="${
                     item.metadata ? item.metadata.name : ''
@@ -299,13 +299,13 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
               queries: [
                 {
                   label: 'RX',
-                  query: `sort_desc(sum by (pod) (irate(container_network_receive_bytes_total{job="kubelet", namespace="${
+                  query: `sort_desc(sum by (pod) (irate(container_network_receive_bytes_total{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", pod="${item.metadata ? item.metadata.name : ''}"}[4m]))) / 1024 / 1024`,
                 },
                 {
                   label: 'TX',
-                  query: `sort_desc(sum by (pod) (irate(container_network_transmit_bytes_total{job="kubelet", namespace="${
+                  query: `sort_desc(sum by (pod) (irate(container_network_transmit_bytes_total{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", pod="${item.metadata ? item.metadata.name : ''}"}[4m]))) / 1024 / 1024`,
                 },
@@ -325,7 +325,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
               queries: [
                 {
                   label: 'Restarts',
-                  query: `max(kube_pod_container_status_restarts_total{job="kube-state-metrics", namespace="${
+                  query: `max(kube_pod_container_status_restarts_total{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", pod="${item.metadata ? item.metadata.name : ''}", container=~"{{ .Container }}"})`,
                 },

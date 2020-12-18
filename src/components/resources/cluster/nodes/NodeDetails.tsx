@@ -196,25 +196,25 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
               queries: [
                 {
                   label: 'Current',
-                  query: `sum(irate(container_cpu_usage_seconds_total{job="kubelet", node="${
+                  query: `sum(irate(container_cpu_usage_seconds_total{node="${
                     item.metadata ? item.metadata.name : ''
                   }", image!="", container!="", container!="POD"}[4m]))`,
                 },
                 {
                   label: 'Requested',
-                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", node="${
+                  query: `sum(kube_pod_container_resource_requests{node="${
                     item.metadata ? item.metadata.name : ''
                   }", resource="cpu", container!=""})`,
                 },
                 {
                   label: 'Limit',
-                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", node="${
+                  query: `sum(kube_pod_container_resource_limits{node="${
                     item.metadata ? item.metadata.name : ''
                   }", resource="cpu", container!=""})`,
                 },
                 {
                   label: 'Allocatable',
-                  query: `sum(kube_node_status_allocatable_cpu_cores{job="kube-state-metrics", node="${
+                  query: `sum(kube_node_status_allocatable_cpu_cores{node="${
                     item.metadata ? item.metadata.name : ''
                   }"})`,
                 },
@@ -234,31 +234,31 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
               queries: [
                 {
                   label: 'Current',
-                  query: `sum(container_memory_usage_bytes{job="kubelet", node="${
+                  query: `sum(container_memory_usage_bytes{node="${
                     item.metadata ? item.metadata.name : ''
                   }", container!="", container!="POD"}) / 1024 / 1024 / 1024`,
                 },
                 {
                   label: 'Requested',
-                  query: `sum(kube_pod_container_resource_requests{job="kube-state-metrics", node="${
+                  query: `sum(kube_pod_container_resource_requests{node="${
                     item.metadata ? item.metadata.name : ''
                   }", resource="memory", container!=""}) / 1024 / 1024 / 1024`,
                 },
                 {
                   label: 'Limit',
-                  query: `sum(kube_pod_container_resource_limits{job="kube-state-metrics", node="${
+                  query: `sum(kube_pod_container_resource_limits{node="${
                     item.metadata ? item.metadata.name : ''
                   }", resource="memory", container!=""}) / 1024 / 1024 / 1024`,
                 },
                 {
                   label: 'Cache',
-                  query: `sum(container_memory_cache{job="kubelet", node="${
+                  query: `sum(container_memory_cache{node="${
                     item.metadata ? item.metadata.name : ''
                   }", container!="", container!="POD"}) / 1024 / 1024 / 1024`,
                 },
                 {
                   label: 'Allocatable',
-                  query: `sum(kube_node_status_allocatable_memory_bytes{job="kube-state-metrics", node="${
+                  query: `sum(kube_node_status_allocatable_memory_bytes{node="${
                     item.metadata ? item.metadata.name : ''
                   }"}) / 1024 / 1024 / 1024`,
                 },
@@ -278,15 +278,11 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
               queries: [
                 {
                   label: 'Current',
-                  query: `count(kube_pod_info{job="kube-state-metrics", node="${
-                    item.metadata ? item.metadata.name : ''
-                  }"})`,
+                  query: `count(kube_pod_info{node="${item.metadata ? item.metadata.name : ''}"})`,
                 },
                 {
                   label: 'Allocatable',
-                  query: `sum(kube_node_status_allocatable_pods{job="kube-state-metrics", node="${
-                    item.metadata ? item.metadata.name : ''
-                  }"})`,
+                  query: `sum(kube_node_status_allocatable_pods{node="${item.metadata ? item.metadata.name : ''}"})`,
                 },
               ],
             },
