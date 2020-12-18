@@ -1,13 +1,11 @@
-import { Plugins } from '@capacitor/core';
-import { IonButton, IonCardContent, isPlatform } from '@ionic/react';
+import { IonButton, IonCardContent } from '@ionic/react';
 import React, { useContext, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { IAWSSSO, IContext } from '../../../../declarations';
 import { getAWSSSOConfig, getAWSSSOCredentailsWithConfig } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
-
-const { App } = Plugins;
+import { openURL } from '../../../../utils/helpers';
 
 type IAWSSSOReAuthenticateProps = RouteComponentProps;
 
@@ -28,14 +26,6 @@ const AWSSSOReAuthenticate: React.FunctionComponent<IAWSSSOReAuthenticateProps> 
       }
     } catch (err) {
       setError(err.message);
-    }
-  };
-
-  const openURL = async (url: string) => {
-    if (isPlatform('hybrid')) {
-      await App.openUrl({ url: url });
-    } else {
-      window.open(url, '_system', 'location=yes');
     }
   };
 

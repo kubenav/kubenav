@@ -32,7 +32,6 @@ interface IQuery {
   query: string;
   from: string;
   to: string;
-  size: string;
   selectedFields: string;
 }
 
@@ -62,7 +61,6 @@ const QueryList: React.FunctionComponent<IQueryListProps> = ({ item }: IQueryLis
           query: q,
           from: query.from ? query.from : 'now-15m',
           to: query.to ? query.to : 'now',
-          size: query.size ? query.size : '100',
           selectedFields: query.selectedFields ? query.selectedFields : '',
         });
       }
@@ -83,7 +81,7 @@ const QueryList: React.FunctionComponent<IQueryListProps> = ({ item }: IQueryLis
                   return (
                     <IonItem
                       key={index}
-                      routerLink={`/plugins/elasticsearch?query=${query.query}&from=${query.from}&to=${query.to}&size=${query.size}&selectedFields=${query.selectedFields}`}
+                      routerLink={`/plugins/elasticsearch?query=${query.query}&from=${query.from}&to=${query.to}&selectedFields=${query.selectedFields}`}
                       routerDirection="forward"
                     >
                       <IonLabel>

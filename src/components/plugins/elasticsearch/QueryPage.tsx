@@ -7,6 +7,8 @@ import {
   IonContent,
   IonGrid,
   IonHeader,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonInput,
   IonItem,
   IonLabel,
@@ -31,10 +33,10 @@ import { kubernetesRequest, pluginRequest } from '../../../utils/api';
 import { IS_INCLUSTER } from '../../../utils/constants';
 import { AppContext } from '../../../utils/context';
 import useWindowWidth from '../../../utils/useWindowWidth';
-import Document from './Document';
+import Document, { IElasticsearchDocument, IElasticsearchDocumentSource } from './Document';
+import Details from './Details';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getFieldsRecursively = (prefix: string, document: any): string[] => {
+const getFieldsRecursively = (prefix: string, document: IElasticsearchDocumentSource): string[] => {
   const fields: string[] = [];
   for (const field in document) {
     if (typeof document[field] === 'object') {
@@ -47,8 +49,7 @@ const getFieldsRecursively = (prefix: string, document: any): string[] => {
   return fields;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getFields = (documents: any[]): string[] => {
+const getFields = (documents: IElasticsearchDocument[]): string[] => {
   const fields: string[] = [];
   for (const document of documents) {
     fields.push(...getFieldsRecursively('', document['_source']));
@@ -64,6 +65,16 @@ const getFields = (documents: any[]): string[] => {
   return uniqueFields;
 };
 
+interface IElasticsearchHits {
+  hits: IElasticsearchDocument[];
+}
+
+interface IElasticsearchResult {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  _scroll_id: string;
+  hits: IElasticsearchHits;
+}
+
 type IQueryPageProps = RouteComponentProps;
 
 const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQueryPageProps) => {
@@ -76,9 +87,8 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
   const [query, setQuery] = useState<string>(url.get('query') ? (url.get('query') as string) : '');
   const [from, setFrom] = useState<string>(url.get('from') ? (url.get('from') as string) : 'now-15m');
   const [to, setTo] = useState<string>(url.get('to') ? (url.get('to') as string) : 'now');
-  const [size, setSize] = useState<string>(url.get('size') ? (url.get('size') as string) : '100');
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [documents, setDocuments] = useState<any>(undefined);
+  const [scrollID, setScrollID] = useState<string>('');
+  const [documents, setDocuments] = useState<IElasticsearchDocument[]>([]);
   const [fields, setFields] = useState<string[]>([]);
   const [selectedFields, setSelectedFields] = useState<string[]>(
     url.get('selectedFields') ? (url.get('selectedFields') as string).split(',') : [],
@@ -98,10 +108,6 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
     setTo(event.target.value);
   };
 
-  const handleSize = (event) => {
-    setSize(event.target.value);
-  };
-
   const addField = (field: string) => {
     setSelectedFields((fields) => [...fields, field]);
   };
@@ -110,7 +116,10 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
     setSelectedFields(selectedFields.filter((item) => item !== field));
   };
 
-  const runQuery = async () => {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  let result: IElasticsearchResult = { _scroll_id: '', hits: { hits: [] } };
+
+  const runQuery = async (useScrollID: boolean) => {
     try {
       setError('');
       setIsFetching(true);
@@ -134,12 +143,14 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
         }
       }
 
-      const docs = await pluginRequest(
+      result = await pluginRequest(
         'elasticsearch',
         context.settings.elasticsearchPort,
         context.settings.elasticsearchAddress,
         {
           query: {
+            size: 100,
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             sort: [{ '@timestamp': { order: 'desc' } }],
             query: {
               bool: {
@@ -162,7 +173,7 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
               },
             },
           },
-          size: '100',
+          scrollID: useScrollID ? scrollID : '',
           username: context.settings.elasticsearchUsername,
           password: context.settings.elasticsearchPassword,
         },
@@ -171,13 +182,18 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
         await context.kubernetesAuthWrapper(''),
       );
 
-      setFields(getFields(docs.slice(docs.lenght > 10 ? 10 : docs.lenght)));
+      if (scrollID === '') {
+        setScrollID(result._scroll_id);
+        setFields(getFields(result.hits.hits.slice(result.hits.hits.length > 10 ? 10 : result.hits.hits.length)));
+        setDocuments(result.hits.hits);
+      } else {
+        setDocuments((docs) => [...docs, ...result.hits.hits]);
+      }
 
       setIsFetching(false);
-      setDocuments(docs);
     } catch (err) {
       setIsFetching(false);
-      setDocuments(undefined);
+      setDocuments([]);
       setError(err.message);
     }
   };
@@ -190,6 +206,9 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
             <IonMenuButton />
           </IonButtons>
           <IonTitle>Elasticsearch</IonTitle>
+          <IonButtons slot="primary">
+            <Details />
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -228,7 +247,7 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
                           </IonItem>
                         </IonCol>
                         <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="2" sizeXl="2">
-                          <IonButton expand="block" onClick={() => runQuery()}>
+                          <IonButton expand="block" onClick={() => runQuery(false)}>
                             Search
                           </IonButton>
                         </IonCol>
@@ -239,7 +258,7 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
                   {activeSegment === 'options' ? (
                     <IonGrid>
                       <IonRow>
-                        <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
+                        <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
                           <IonItem>
                             <IonLabel position="stacked">From</IonLabel>
                             <IonInput
@@ -251,22 +270,10 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
                             />
                           </IonItem>
                         </IonCol>
-                        <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
+                        <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="6" sizeXl="6">
                           <IonItem>
                             <IonLabel position="stacked">To</IonLabel>
                             <IonInput type="text" required={true} placeholder="To" value={to} onInput={handleTo} />
-                          </IonItem>
-                        </IonCol>
-                        <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="4" sizeXl="4">
-                          <IonItem>
-                            <IonLabel position="stacked">Size</IonLabel>
-                            <IonInput
-                              type="text"
-                              required={true}
-                              placeholder="Size"
-                              value={size}
-                              onInput={handleSize}
-                            />
                           </IonItem>
                         </IonCol>
                       </IonRow>
@@ -299,7 +306,7 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
             </IonCol>
           </IonRow>
 
-          {error || documents ? (
+          {error || documents.length > 0 ? (
             <IonRow>
               <IonCol>
                 <IonCard>
@@ -335,6 +342,13 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
                             </table>
                           </div>
                         )}
+                        <IonInfiniteScroll
+                          threshold="25%"
+                          disabled={isFetching || documents.length > 5000}
+                          onIonInfinite={() => runQuery(true)}
+                        >
+                          <IonInfiniteScrollContent loadingText="Loading more Documents..."></IonInfiniteScrollContent>
+                        </IonInfiniteScroll>
                       </React.Fragment>
                     )}
                   </IonCardContent>

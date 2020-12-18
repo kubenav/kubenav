@@ -53,6 +53,14 @@ var rootCmd = &cobra.Command{
 			log.WithError(err).Fatalf("Could not create Kubernetes client")
 		}
 
+		if pluginElasticsearchUsernameFlag == "" {
+			pluginElasticsearchUsernameFlag = os.Getenv("KUBENAV_ELASTICSEARCH_USERNAME")
+		}
+
+		if pluginElasticsearchPasswordFlag == "" {
+			pluginElasticsearchPasswordFlag = os.Getenv("KUBENAV_ELASTICSEARCH_PASSWORD")
+		}
+
 		router := http.NewServeMux()
 		apiClient := api.NewClient(false, &plugins.Config{
 			PrometheusEnabled:             pluginPrometheusEnabledFlag,

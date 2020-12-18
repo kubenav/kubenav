@@ -2,8 +2,6 @@ import { RefresherEventDetail } from '@ionic/core';
 import {
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
   IonContent,
   IonHeader,
   IonInfiniteScroll,
@@ -27,6 +25,7 @@ import { IContext } from '../../../declarations';
 import { kubernetesRequest } from '../../../utils/api';
 import { AppContext } from '../../../utils/context';
 import LoadingErrorCard from '../../misc/LoadingErrorCard';
+import Details from './Details';
 
 const DashboardsPage: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);
@@ -41,7 +40,7 @@ const DashboardsPage: React.FunctionComponent = () => {
         context.settings.prometheusDashboardsNamespace
           ? `/api/v1/namespaces/${context.settings.prometheusDashboardsNamespace}/configmaps`
           : `/api/v1/configmaps`
-      }?labelSelector=kubenav.io/dashboard=false&limit=50${cursor ? `&continue=${cursor}` : ''}`,
+      }?labelSelector=kubenav.io/dashboard=true&limit=50${cursor ? `&continue=${cursor}` : ''}`,
       '',
       context.settings,
       await context.kubernetesAuthWrapper(''),
@@ -75,7 +74,10 @@ const DashboardsPage: React.FunctionComponent = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Prometheus Dashboards</IonTitle>
+          <IonTitle>Prometheus</IonTitle>
+          <IonButtons slot="primary">
+            <Details refresh={refetch} />
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -89,7 +91,7 @@ const DashboardsPage: React.FunctionComponent = () => {
               value={searchText}
               onIonChange={(e) => setSearchText(e.detail.value ? e.detail.value : '')}
             />
-            {data && data.length > 0 && data[0].items > 0 ? (
+            {data && data.length > 0 && data[0].items.length > 0 ? (
               <IonList>
                 {data.map((group, i) => (
                   <React.Fragment key={i}>
@@ -133,21 +135,7 @@ const DashboardsPage: React.FunctionComponent = () => {
                   ></IonInfiniteScrollContent>
                 </IonInfiniteScroll>
               </IonList>
-            ) : (
-              <IonCard>
-                <IonCardContent>
-                  <p>
-                    The Prometheus plugin allows you to create dashboards for Prometheus within kubenav. To use the
-                    Prometheus plugin you have to enable it in the <b>Settings</b>. The documentation for the Prometheus
-                    plugin can be found at{' '}
-                    <a href="https://docs.kubenav.io/plugins/prometheus/" target="_blank" rel="noopener noreferrer">
-                      https://docs.kubenav.io/plugins/prometheus/
-                    </a>
-                    .
-                  </p>
-                </IonCardContent>
-              </IonCard>
-            )}
+            ) : null}
           </React.Fragment>
         ) : isFetching ? null : (
           <LoadingErrorCard

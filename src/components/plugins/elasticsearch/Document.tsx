@@ -16,10 +16,19 @@ import React, { useState } from 'react';
 import { getProperty } from '../../../utils/helpers';
 import Editor from '../../misc/Editor';
 
+export interface IElasticsearchDocumentSource {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+}
+
+export interface IElasticsearchDocument {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  _source: IElasticsearchDocumentSource;
+}
+
 interface IResultProps {
   layout: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  document: any;
+  document: IElasticsearchDocument;
   fields: string[];
 }
 
@@ -85,7 +94,7 @@ const Document: React.FunctionComponent<IResultProps> = ({ layout, document, fie
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <Editor readOnly={true} mode="json" value={JSON.stringify(document, null, 2)} fullHeight={true} />
+          <Editor readOnly={true} mode="json" value={JSON.stringify(document['_source'], null, 2)} fullHeight={true} />
         </IonContent>
       </IonModal>
     </React.Fragment>

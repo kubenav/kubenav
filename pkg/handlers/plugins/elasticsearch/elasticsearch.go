@@ -13,8 +13,9 @@ import (
 
 // Response ...
 type Response struct {
-	Took     int64 `json:"took"`
-	TimedOut bool  `json:"timed_out"`
+	ScrollID string `json:"_scroll_id"`
+	Took     int64  `json:"took"`
+	TimedOut bool   `json:"timed_out"`
 	Shards   struct {
 		Total      int64 `json:"total"`
 		Successful int64 `json:"successful"`
@@ -53,19 +54,29 @@ func RunQuery(address string, timeout time.Duration, requestData map[string]inte
 		Timeout: timeout,
 	}
 
-	size := requestData["size"].(string)
 	query := requestData["query"].(map[string]interface{})
 	username := requestData["username"].(string)
 	password := requestData["password"].(string)
+	scrollID := requestData["scrollID"].(string)
 
-	log.WithFields(log.Fields{"query": query}).Debugf("Received query")
+	var err error
+	var body []byte
+	var url string
 
-	queryBody, err := json.Marshal(query)
-	if err != nil {
-		return nil, err
+	if scrollID == "" {
+		url = fmt.Sprintf("%s/_search?scroll=5m", address)
+		body, err = json.Marshal(query)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		url = fmt.Sprintf("%s/_search/scroll", address)
+		body = []byte(`{"scroll" : "5m", "scroll_id" : "` + scrollID + `"}`)
 	}
 
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/_search?size=%s", address, size), bytes.NewBuffer(queryBody))
+	log.WithFields(log.Fields{"body": string(body), "url": url}).Debugf("Received Elasticsearch request")
+
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +102,7 @@ func RunQuery(address string, timeout time.Duration, requestData map[string]inte
 
 		log.WithFields(log.Fields{"took": res.Took, "hits": res.Hits.Total.Value}).Debugf("Run query")
 
-		return res.Hits.Hits, nil
+		return res, nil
 	}
 
 	var res ResponseError

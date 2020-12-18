@@ -112,27 +112,31 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections, history, location
           <IonMenuToggle autoHide={false}>
             <IonItem routerLink="/plugins/helm" routerDirection="root">
               <IonAvatar slot="start">
-                <img alt="Helm Releases" src="/assets/icons/kubernetes/helm.png" />
+                <img alt="Helm" src="/assets/icons/kubernetes/helm.png" />
               </IonAvatar>
-              <IonLabel>Helm Releases</IonLabel>
+              <IonLabel>Helm</IonLabel>
             </IonItem>
           </IonMenuToggle>
-          <IonMenuToggle autoHide={false}>
-            <IonItem routerLink="/plugins/prometheus" routerDirection="root">
-              <IonAvatar slot="start">
-                <img alt="Prometheus Dashboards" src="/assets/icons/kubernetes/prometheus.png" />
-              </IonAvatar>
-              <IonLabel>Prometheus Dashboards</IonLabel>
-            </IonItem>
-          </IonMenuToggle>
-          <IonMenuToggle autoHide={false}>
-            <IonItem routerLink="/plugins/elasticsearch" routerDirection="root">
-              <IonAvatar slot="start">
-                <img alt="Elasticsearch" src="/assets/icons/kubernetes/elasticsearch.png" />
-              </IonAvatar>
-              <IonLabel>Elasticsearch</IonLabel>
-            </IonItem>
-          </IonMenuToggle>
+          {context.settings.prometheusEnabled ? (
+            <IonMenuToggle autoHide={false}>
+              <IonItem routerLink="/plugins/prometheus" routerDirection="root">
+                <IonAvatar slot="start">
+                  <img alt="Prometheus" src="/assets/icons/kubernetes/prometheus.png" />
+                </IonAvatar>
+                <IonLabel>Prometheus</IonLabel>
+              </IonItem>
+            </IonMenuToggle>
+          ) : null}
+          {context.settings.elasticsearchEnabled ? (
+            <IonMenuToggle autoHide={false}>
+              <IonItem routerLink="/plugins/elasticsearch" routerDirection="root">
+                <IonAvatar slot="start">
+                  <img alt="Elasticsearch" src="/assets/icons/kubernetes/elasticsearch.png" />
+                </IonAvatar>
+                <IonLabel>Elasticsearch</IonLabel>
+              </IonItem>
+            </IonMenuToggle>
+          ) : null}
 
           <IonListHeader mode="md">
             <IonLabel>Settings</IonLabel>
