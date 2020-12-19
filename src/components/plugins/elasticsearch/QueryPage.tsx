@@ -33,6 +33,7 @@ import { kubernetesRequest, pluginRequest } from '../../../utils/api';
 import { IS_INCLUSTER } from '../../../utils/constants';
 import { AppContext } from '../../../utils/context';
 import useWindowWidth from '../../../utils/useWindowWidth';
+import Chart, { IAggregations } from './Chart';
 import Document, { IElasticsearchDocument, IElasticsearchDocumentSource } from './Document';
 import Details from './Details';
 
@@ -73,6 +74,7 @@ interface IElasticsearchResult {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   _scroll_id: string;
   hits: IElasticsearchHits;
+  aggregations: IAggregations;
 }
 
 type IQueryPageProps = RouteComponentProps;
@@ -89,6 +91,7 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
   const [to, setTo] = useState<string>(url.get('to') ? (url.get('to') as string) : 'now');
   const [scrollID, setScrollID] = useState<string>('');
   const [documents, setDocuments] = useState<IElasticsearchDocument[]>([]);
+  const [aggregations, setAggregations] = useState<IAggregations | undefined>(undefined);
   const [fields, setFields] = useState<string[]>([]);
   const [selectedFields, setSelectedFields] = useState<string[]>(
     url.get('selectedFields') ? (url.get('selectedFields') as string).split(',') : [],
@@ -116,8 +119,12 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
     setSelectedFields(selectedFields.filter((item) => item !== field));
   };
 
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  let result: IElasticsearchResult = { _scroll_id: '', hits: { hits: [] } };
+  let result: IElasticsearchResult = {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    _scroll_id: '',
+    hits: { hits: [] },
+    aggregations: { logcount: { buckets: [], interval: '' } },
+  };
 
   const runQuery = async (useScrollID: boolean) => {
     try {
@@ -172,6 +179,15 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
                 ],
               },
             },
+            aggs: {
+              logcount: {
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                auto_date_histogram: {
+                  field: '@timestamp',
+                  buckets: 30,
+                },
+              },
+            },
           },
           scrollID: useScrollID ? scrollID : '',
           username: context.settings.elasticsearchUsername,
@@ -185,6 +201,7 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
       if (!useScrollID) {
         setScrollID(result._scroll_id);
         setFields(getFields(result.hits.hits.slice(result.hits.hits.length > 10 ? 10 : result.hits.hits.length)));
+        setAggregations(result.aggregations);
         setDocuments(result.hits.hits);
       } else {
         setDocuments((docs) => [...docs, ...result.hits.hits]);
@@ -301,6 +318,18 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
               </IonCard>
             </IonCol>
           </IonRow>
+
+          {aggregations ? (
+            <IonRow>
+              <IonCol>
+                <IonCard>
+                  <IonCardContent>
+                    <Chart aggregations={aggregations} />
+                  </IonCardContent>
+                </IonCard>
+              </IonCol>
+            </IonRow>
+          ) : null}
 
           {error || documents.length > 0 ? (
             <IonRow>

@@ -1,5 +1,5 @@
 import { Plugins } from '@capacitor/core';
-import { ActionSheetButton, IonActionSheet, IonFab, IonFabButton, IonIcon, IonToast, isPlatform } from '@ionic/react';
+import { ActionSheetButton, IonActionSheet, IonFab, IonFabButton, IonIcon, IonToast } from '@ionic/react';
 import { repeatOutline } from 'ionicons/icons';
 import React, { useContext, useEffect, useState, ReactElement } from 'react';
 
@@ -213,22 +213,7 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
           },
           {
             text: 'Open',
-            handler: () => {
-              if (isPlatform('electron')) {
-                // eslint-disable-next-line @typescript-eslint/no-var-requires
-                window
-                  .require('electron')
-                  .shell.openExternal(`http://localhost:${portForwardings[selectedPortForwarding].localPort}`);
-              } else if (isPlatform('hybrid')) {
-                openURL(`http://localhost:${portForwardings[selectedPortForwarding].localPort}`);
-              } else {
-                window.open(
-                  `http://localhost:${portForwardings[selectedPortForwarding].localPort}`,
-                  '_system',
-                  'location=yes',
-                );
-              }
-            },
+            handler: () => openURL(`http://localhost:${portForwardings[selectedPortForwarding].localPort}`),
           },
         ]}
       />

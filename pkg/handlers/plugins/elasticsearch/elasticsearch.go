@@ -29,6 +29,15 @@ type Response struct {
 		} `json:"total"`
 		Hits []map[string]interface{} `json:"hits"`
 	} `json:"hits"`
+	Aggregations struct {
+		LogCount struct {
+			Buckets []struct {
+				KeyAsString string `json:"key_as_string"`
+				Key         int64  `json:"key"`
+				DocCount    int64  `json:"doc_count"`
+			} `json:"buckets"`
+		} `json:"logcount"`
+	} `json:"aggregations"`
 }
 
 // ResponseError ...
