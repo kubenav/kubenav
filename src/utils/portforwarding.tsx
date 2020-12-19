@@ -1,5 +1,5 @@
 import { Plugins } from '@capacitor/core';
-import { ActionSheetButton, IonActionSheet, IonFab, IonFabButton, IonIcon, IonToast, isPlatform } from '@ionic/react';
+import { ActionSheetButton, IonActionSheet, IonFab, IonFabButton, IonIcon, IonToast } from '@ionic/react';
 import { repeatOutline } from 'ionicons/icons';
 import React, { useContext, useEffect, useState, ReactElement } from 'react';
 
