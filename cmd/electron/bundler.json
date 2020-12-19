@@ -3,6 +3,7 @@
   "icon_path_darwin": "resources/icon.icns",
   "icon_path_linux": "resources/icon.png",
   "icon_path_windows": "resources/icon.ico",
+  "version_electron": "11.1.0",
   "environments": [
     {"arch": "amd64", "os": "darwin"},
     {"arch": "amd64", "os": "linux"},
