@@ -1,6 +1,6 @@
 import { IonCol, IonRow, isPlatform } from '@ionic/react';
 import React, { useContext } from 'react';
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 
 import { IContext } from '../../../declarations';
 import { AppContext } from '../../../utils/context';
