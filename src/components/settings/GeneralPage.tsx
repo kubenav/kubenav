@@ -265,6 +265,28 @@ const GeneralPage: React.FunctionComponent = () => {
                 />
               </IonItem>
               <IonItem>
+                <IonLabel position="stacked">Username</IonLabel>
+                <IonInput
+                  type="text"
+                  required={true}
+                  placeholder=""
+                  name="prometheusUsername"
+                  value={context.settings.prometheusUsername}
+                  onInput={handleValueChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Password</IonLabel>
+                <IonInput
+                  type="password"
+                  required={true}
+                  placeholder=""
+                  name="prometheusPassword"
+                  value={context.settings.prometheusPassword}
+                  onInput={handleValueChange}
+                />
+              </IonItem>
+              <IonItem>
                 <IonLabel position="stacked">Dashboards Namespace</IonLabel>
                 <IonInput
                   type="text"

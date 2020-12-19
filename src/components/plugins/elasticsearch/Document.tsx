@@ -64,8 +64,8 @@ const Document: React.FunctionComponent<IResultProps> = ({ layout, document, fie
 
       {layout === 'table' ? (
         <tr>
-          <td onClick={() => setShow(true)}>
-            {document['_source'] && document['_source']['@timestamp'] ? document['_source']['@timestamp'] : ''}
+          <td className="nowrap link" onClick={() => setShow(true)}>
+            <b>{document['_source'] && document['_source']['@timestamp'] ? document['_source']['@timestamp'] : ''}</b>
           </td>
           {fields.length === 0 ? (
             <td>

@@ -173,6 +173,12 @@ export const readSettings = (): IAppSettings => {
         ? settings.prometheusSelector
         : DEFAULT_SETTINGS.prometheusSelector,
       prometheusPort: settings.prometheusPort ? settings.prometheusPort : DEFAULT_SETTINGS.prometheusPort,
+      prometheusUsername: settings.prometheusUsername
+        ? settings.prometheusUsername
+        : DEFAULT_SETTINGS.prometheusUsername,
+      prometheusPassword: settings.prometheusPassword
+        ? settings.prometheusPassword
+        : DEFAULT_SETTINGS.prometheusPassword,
       prometheusAddress: '',
       prometheusDashboardsNamespace: settings.prometheusDashboardsNamespace
         ? settings.prometheusDashboardsNamespace

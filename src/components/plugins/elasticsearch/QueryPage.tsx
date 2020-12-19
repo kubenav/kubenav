@@ -182,7 +182,7 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
         await context.kubernetesAuthWrapper(''),
       );
 
-      if (scrollID === '') {
+      if (!useScrollID) {
         setScrollID(result._scroll_id);
         setFields(getFields(result.hits.hits.slice(result.hits.hits.length > 10 ? 10 : result.hits.hits.length)));
         setDocuments(result.hits.hits);
@@ -219,11 +219,7 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
             <IonCol>
               <IonCard>
                 <IonCardContent>
-                  <IonSegment
-                    scrollable={true}
-                    value={activeSegment}
-                    onIonChange={(e) => setActiveSegment(e.detail.value as string)}
-                  >
+                  <IonSegment value={activeSegment} onIonChange={(e) => setActiveSegment(e.detail.value as string)}>
                     <IonSegmentButton value="query">
                       <IonLabel>Query</IonLabel>
                     </IonSegmentButton>

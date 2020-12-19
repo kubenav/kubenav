@@ -49,14 +49,12 @@ type ResponseError struct {
 }
 
 // RunQuery executes a given query for Elasticsearch.
-func RunQuery(address string, timeout time.Duration, requestData map[string]interface{}) (interface{}, error) {
+func RunQuery(address string, timeout time.Duration, requestData map[string]interface{}, username, password string) (interface{}, error) {
 	client := &http.Client{
 		Timeout: timeout,
 	}
 
 	query := requestData["query"].(map[string]interface{})
-	username := requestData["username"].(string)
-	password := requestData["password"].(string)
 	scrollID := requestData["scrollID"].(string)
 
 	var err error

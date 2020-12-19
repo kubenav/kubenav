@@ -354,7 +354,7 @@ func (c *Client) kubernetesPluginHandler(w http.ResponseWriter, r *http.Request)
 			return
 		}
 
-		data, err := plugins.Run(request, config, clientset, requestTimeout)
+		data, err := plugins.Run(request, config, clientset, requestTimeout, c.pluginConfig)
 		if err != nil {
 			log.WithError(err).Errorf("An error occured while running the plugin")
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("An error occured: %s", err.Error()))

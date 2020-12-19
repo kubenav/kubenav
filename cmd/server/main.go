@@ -30,6 +30,8 @@ var (
 	pluginPrometheusAddressFlag         string
 	pluginPrometheusDashboardsNamespace string
 	pluginPrometheusEnabledFlag         bool
+	pluginPrometheusPasswordFlag        string
+	pluginPrometheusUsernameFlag        string
 )
 
 var rootCmd = &cobra.Command{
@@ -53,6 +55,14 @@ var rootCmd = &cobra.Command{
 			log.WithError(err).Fatalf("Could not create Kubernetes client")
 		}
 
+		if pluginPrometheusUsernameFlag == "" {
+			pluginPrometheusUsernameFlag = os.Getenv("KUBENAV_PROMETHEUS_USERNAME")
+		}
+
+		if pluginPrometheusPasswordFlag == "" {
+			pluginPrometheusPasswordFlag = os.Getenv("KUBENAV_PROMETHEUS_PASSWORD")
+		}
+
 		if pluginElasticsearchUsernameFlag == "" {
 			pluginElasticsearchUsernameFlag = os.Getenv("KUBENAV_ELASTICSEARCH_USERNAME")
 		}
@@ -65,6 +75,8 @@ var rootCmd = &cobra.Command{
 		apiClient := api.NewClient(false, &plugins.Config{
 			PrometheusEnabled:             pluginPrometheusEnabledFlag,
 			PrometheusAddress:             pluginPrometheusAddressFlag,
+			PrometheusUsername:            pluginPrometheusUsernameFlag,
+			PrometheusPassword:            pluginPrometheusPasswordFlag,
 			PrometheusDashboardsNamespace: pluginPrometheusDashboardsNamespace,
 			ElasticsearchEnabled:          pluginElasticsearchEnabledFlag,
 			ElasticsearchAddress:          pluginElasticsearchAddressFlag,
@@ -124,6 +136,8 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&pluginPrometheusAddressFlag, "plugin.prometheus.address", "", "The address for Prometheus.")
 	rootCmd.PersistentFlags().StringVar(&pluginPrometheusDashboardsNamespace, "plugin.prometheus.dashboards-namespace", "kubenav", "The namespace, where kubenav should look for dashboards.")
 	rootCmd.PersistentFlags().BoolVar(&pluginPrometheusEnabledFlag, "plugin.prometheus.enabled", false, "Enable the Prometheus plugin.")
+	rootCmd.PersistentFlags().StringVar(&pluginPrometheusPasswordFlag, "plugin.prometheus.password", "", "The password for Prometheus.")
+	rootCmd.PersistentFlags().StringVar(&pluginPrometheusUsernameFlag, "plugin.prometheus.username", "", "The username for Prometheus.")
 }
 
 func main() {

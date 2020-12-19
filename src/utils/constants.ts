@@ -30,6 +30,8 @@ export const DEFAULT_SETTINGS: IAppSettings = {
   prometheusNamespace: 'monitoring',
   prometheusSelector: 'app=prometheus',
   prometheusPort: 9090,
+  prometheusUsername: '',
+  prometheusPassword: '',
   prometheusAddress: '',
   prometheusDashboardsNamespace: 'kubenav',
   elasticsearchEnabled: false,

@@ -24,11 +24,13 @@ import (
 type Config struct {
 	PrometheusEnabled             bool   `json:"prometheusEnabled"`
 	PrometheusAddress             string `json:"prometheusAddress"`
+	PrometheusUsername            string `json:"-"`
+	PrometheusPassword            string `json:"-"`
 	PrometheusDashboardsNamespace string `json:"prometheusDashboardsNamespace"`
 	ElasticsearchEnabled          bool   `json:"elasticsearchEnabled"`
 	ElasticsearchAddress          string `json:"elasticsearchAddress"`
-	ElasticsearchUsername         string `json:"elasticsearchUsername"`
-	ElasticsearchPassword         string `json:"elasticsearchPassword"`
+	ElasticsearchUsername         string `json:"-"`
+	ElasticsearchPassword         string `json:"-"`
 }
 
 // Request is the structure of a request for a plugin.
@@ -47,7 +49,7 @@ type Request struct {
 // use.
 // When the address value isn't empty we asume that kubenav is running inside a Kubernetes cluster and using this
 // address instead of port forwarding.
-func Run(request Request, config *rest.Config, clientset *kubernetes.Clientset, timeout time.Duration) (interface{}, error) {
+func Run(request Request, config *rest.Config, clientset *kubernetes.Clientset, timeout time.Duration, pluginConfig *Config) (interface{}, error) {
 	var err error
 	var result interface{}
 
@@ -82,9 +84,29 @@ func Run(request Request, config *rest.Config, clientset *kubernetes.Clientset, 
 
 	switch request.Name {
 	case "prometheus":
-		result, err = prometheus.RunQueries(request.Address, timeout, request.Data)
+		username := request.Data["username"].(string)
+		if pluginConfig != nil {
+			username = pluginConfig.PrometheusUsername
+		}
+
+		password := request.Data["password"].(string)
+		if pluginConfig != nil {
+			password = pluginConfig.PrometheusPassword
+		}
+
+		result, err = prometheus.RunQueries(request.Address, timeout, request.Data, username, password)
 	case "elasticsearch":
-		result, err = elasticsearch.RunQuery(request.Address, timeout, request.Data)
+		username := request.Data["username"].(string)
+		if pluginConfig != nil {
+			username = pluginConfig.ElasticsearchUsername
+		}
+
+		password := request.Data["password"].(string)
+		if pluginConfig != nil {
+			password = pluginConfig.ElasticsearchPassword
+		}
+
+		result, err = elasticsearch.RunQuery(request.Address, timeout, request.Data, username, password)
 	}
 
 	return result, err

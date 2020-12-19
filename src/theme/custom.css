@@ -84,8 +84,17 @@ td {
 
 .table-multi-line td {
   vertical-align: top;
-  white-space:pre-line;
+  white-space: pre-line;
   word-break: break-all;
+}
+
+.table-multi-line td.nowrap {
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+td.link {
+  cursor: pointer;
 }
 
 .container-details-link {

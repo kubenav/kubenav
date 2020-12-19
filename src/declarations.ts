@@ -48,6 +48,8 @@ export interface IAppSettings {
   prometheusNamespace: string;
   prometheusSelector: string;
   prometheusPort: number;
+  prometheusUsername: string;
+  prometheusPassword: string;
   prometheusAddress: string;
   prometheusDashboardsNamespace: string;
   elasticsearchEnabled: boolean;
@@ -268,8 +270,6 @@ export interface IInclusterSettings {
   prometheusDashboardsNamespace: string;
   elasticsearchEnabled: boolean;
   elasticsearchAddress: string;
-  elasticsearchUsername: string;
-  elasticsearchPassword: string;
 }
 
 export interface IJsonData {

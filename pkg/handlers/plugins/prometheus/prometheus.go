@@ -2,6 +2,7 @@ package prometheus
 
 import (
 	"context"
+	"net/http"
 	"sort"
 	"strings"
 	"sync"
@@ -14,6 +15,19 @@ import (
 	"github.com/prometheus/common/model"
 	log "github.com/sirupsen/logrus"
 )
+
+type basicAuthTransport struct {
+	Transport http.RoundTripper
+
+	username string
+	password string
+}
+
+type tokenAuthTransporter struct {
+	Transport http.RoundTripper
+
+	token string
+}
 
 // Query is the structure of a single Prometheus query.
 type Query struct {
@@ -82,19 +96,35 @@ type DashboardResult struct {
 	ChartsResult []ChartsResult `json:"chartsResult"`
 }
 
+func (bat basicAuthTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	req.SetBasicAuth(bat.username, bat.password)
+	return bat.Transport.RoundTrip(req)
+}
+
 // RunQueries runs queries against Prometheus and returns the timeseries data.
 // As first we are converting the additional plugin data to the needed data for Prometheus. The we are initializing a
 // new client for the Prometheus API. Last but not least we are sending each query to the Prometheus API and collecting
 // the results in a slice of Results.
-func RunQueries(address string, timeout time.Duration, requestData map[string]interface{}) (interface{}, error) {
+func RunQueries(address string, timeout time.Duration, requestData map[string]interface{}, username, password string) (interface{}, error) {
 	var promData Data
 	err := helpers.MapToStruct(requestData, &promData)
 	if err != nil {
 		return nil, err
 	}
 
+	roundTripper := api.DefaultRoundTripper
+
+	if username != "" && password != "" {
+		roundTripper = basicAuthTransport{
+			Transport: roundTripper,
+			username:  username,
+			password:  password,
+		}
+	}
+
 	client, err := api.NewClient(api.Config{
-		Address: address,
+		Address:      address,
+		RoundTripper: roundTripper,
 	})
 	if err != nil {
 		return nil, err
