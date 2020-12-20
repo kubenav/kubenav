@@ -265,11 +265,19 @@ export interface IGoogleClusterMasterAuth {
 // IInclusterSettings must have the same structure as the Config struct from the plugins package.
 // See: pkg/handlers/plugins/plugins.go
 export interface IInclusterSettings {
-  prometheusEnabled: boolean;
-  prometheusAddress: string;
-  prometheusDashboardsNamespace: string;
-  elasticsearchEnabled: boolean;
-  elasticsearchAddress: string;
+  prometheus: IInclusterSettingsPrometheus;
+  elasticsearch: IInclusterSettingsElasticsearch;
+}
+
+export interface IInclusterSettingsElasticsearch {
+  enabled: boolean;
+  address: string;
+}
+
+export interface IInclusterSettingsPrometheus {
+  enabled: boolean;
+  address: string;
+  dashboardsNamespace: string;
 }
 
 export interface IJsonData {

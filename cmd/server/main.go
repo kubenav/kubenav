@@ -10,6 +10,8 @@ import (
 
 	"github.com/kubenav/kubenav/pkg/api"
 	"github.com/kubenav/kubenav/pkg/handlers/plugins"
+	"github.com/kubenav/kubenav/pkg/handlers/plugins/elasticsearch"
+	"github.com/kubenav/kubenav/pkg/handlers/plugins/prometheus"
 	"github.com/kubenav/kubenav/pkg/kube"
 	"github.com/kubenav/kubenav/pkg/version"
 
@@ -73,15 +75,19 @@ var rootCmd = &cobra.Command{
 
 		router := http.NewServeMux()
 		apiClient := api.NewClient(false, &plugins.Config{
-			PrometheusEnabled:             pluginPrometheusEnabledFlag,
-			PrometheusAddress:             pluginPrometheusAddressFlag,
-			PrometheusUsername:            pluginPrometheusUsernameFlag,
-			PrometheusPassword:            pluginPrometheusPasswordFlag,
-			PrometheusDashboardsNamespace: pluginPrometheusDashboardsNamespace,
-			ElasticsearchEnabled:          pluginElasticsearchEnabledFlag,
-			ElasticsearchAddress:          pluginElasticsearchAddressFlag,
-			ElasticsearchUsername:         pluginElasticsearchUsernameFlag,
-			ElasticsearchPassword:         pluginElasticsearchPasswordFlag,
+			Prometheus: &prometheus.Config{
+				Enabled:             pluginPrometheusEnabledFlag,
+				Address:             pluginPrometheusAddressFlag,
+				Username:            pluginPrometheusUsernameFlag,
+				Password:            pluginPrometheusPasswordFlag,
+				DashboardsNamespace: pluginPrometheusDashboardsNamespace,
+			},
+			Elasticsearch: &elasticsearch.Config{
+				Enabled:  pluginElasticsearchEnabledFlag,
+				Address:  pluginElasticsearchAddressFlag,
+				Username: pluginElasticsearchUsernameFlag,
+				Password: pluginElasticsearchPasswordFlag,
+			},
 		}, kubeClient)
 		apiClient.Register(router)
 

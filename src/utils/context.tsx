@@ -100,11 +100,11 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
             if (inclusterSettings) {
               setSettings({
                 ...settings,
-                prometheusEnabled: inclusterSettings.prometheusEnabled,
-                prometheusAddress: inclusterSettings.prometheusAddress,
-                prometheusDashboardsNamespace: inclusterSettings.prometheusDashboardsNamespace,
-                elasticsearchEnabled: inclusterSettings.elasticsearchEnabled,
-                elasticsearchAddress: inclusterSettings.elasticsearchAddress,
+                prometheusEnabled: inclusterSettings.prometheus.enabled,
+                prometheusAddress: inclusterSettings.prometheus.address,
+                prometheusDashboardsNamespace: inclusterSettings.prometheus.dashboardsNamespace,
+                elasticsearchEnabled: inclusterSettings.elasticsearch.enabled,
+                elasticsearchAddress: inclusterSettings.elasticsearch.address,
               });
             }
           }
