@@ -66,14 +66,19 @@ func Run(request Request, config *rest.Config, clientset *kubernetes.Clientset, 
 			}
 		}(pf.ID)
 
+		errCh := make(chan error, 1)
+
 		go func() {
 			err := pf.Start(request.PortforwardingPath)
 			if err != nil {
-				log.WithError(err).Errorf("Port forwarding was stopped")
+				errCh <- err
 			}
 		}()
 
 		select {
+		case err := <-errCh:
+			log.WithError(err).Error("Could not establish port forwarding connection")
+			return nil, fmt.Errorf("Could not establish port forwarding connection: %s", err.Error())
 		case <-pf.ReadyCh:
 			log.Debug("Port forwarding is ready")
 			break
