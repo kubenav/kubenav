@@ -24,8 +24,14 @@ build-server:
 		-o ./bin/server ./cmd/server;
 
 build-electron:
-	rm -rf cmd/electron/resources/app
+	rm -rf cmd/electron/bind_darwin_amd64.go
+	rm -rf cmd/electron/bind_linux_amd64.go
+	rm -rf cmd/electron/bind_linux_arm.go
+	rm -rf cmd/electron/bind_linux_arm64.go
+	rm -rf cmd/electron/bind_windows_amd64.go
 	rm -rf cmd/electron/output
+	rm -rf cmd/electron/resources/app
+	rm -rf cmd/electron/windows.syso
 	cp -r build cmd/electron/resources/app
 	cd cmd/electron && astilectron-bundler -ldflags -X:${REPO}/pkg/version.Version=${VERSION},${REPO}/pkg/version.Revision=${REVISION},${REPO}/pkg/version.Branch=${BRANCH},${REPO}/pkg/version.BuildUser=${BUILDUSER},${REPO}/pkg/version.BuildDate=${BUILDTIME}
 
