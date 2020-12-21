@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-20.04, macos-11.0]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -21,7 +21,7 @@ jobs:
       - name: Generate Bindings (Android)
         # We must build the Android bindings on Ubuntu,
         # because the macOS used for GitHub Actions contains an outdated NDK version.
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-20.04'
         run: |
           go get golang.org/x/mobile/cmd/gomobile
           go install golang.org/x/mobile/cmd/gomobile
@@ -29,7 +29,7 @@ jobs:
           make bindings-android
 
       - name: Generate Bindings (iOS)
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-11.0'
         # We must unset the ANDROID_HOME and ANDROID_NDK_HOME environment variables,
         # otherwise gomobile tries to generate the bindings for Android.
         run: |
