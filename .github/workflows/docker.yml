@@ -1,13 +1,11 @@
 name: Docker
 
-# on:
-#   push:
-#     branches:
-#       - master
-#   release:
-#     types: [created]
-
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  release:
+    types: [created]
 
 jobs:
   docker:
