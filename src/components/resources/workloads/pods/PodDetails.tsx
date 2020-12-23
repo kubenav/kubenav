@@ -9,6 +9,7 @@ import { kubernetesRequest } from '../../../../utils/api';
 import { IS_INCLUSTER } from '../../../../utils/constants';
 import { AppContext } from '../../../../utils/context';
 import QueryList from '../../../plugins/elasticsearch/QueryList';
+import TraceList from '../../../plugins/jaeger/TraceList';
 import Dashboard from '../../../plugins/prometheus/Dashboard';
 import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
@@ -337,6 +338,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
 
       {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
       {context.settings.elasticsearchEnabled ? <QueryList item={item} /> : null}
+      {context.settings.jaegerEnabled ? <TraceList item={item} /> : null}
     </IonGrid>
   );
 };

@@ -137,6 +137,16 @@ const Menu: React.FunctionComponent<IMenuProps> = ({ sections, history, location
               </IonItem>
             </IonMenuToggle>
           ) : null}
+          {context.settings.jaegerEnabled ? (
+            <IonMenuToggle autoHide={false}>
+              <IonItem routerLink="/plugins/jaeger" routerDirection="root">
+                <IonAvatar slot="start">
+                  <img alt="Jaeger" src="/assets/icons/kubernetes/jaeger.png" />
+                </IonAvatar>
+                <IonLabel>Jaeger</IonLabel>
+              </IonItem>
+            </IonMenuToggle>
+          ) : null}
 
           <IonListHeader mode="md">
             <IonLabel>Settings</IonLabel>

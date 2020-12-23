@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/kubenav/kubenav/pkg/handlers/plugins/elasticsearch"
+	"github.com/kubenav/kubenav/pkg/handlers/plugins/jaeger"
 	"github.com/kubenav/kubenav/pkg/handlers/plugins/prometheus"
 	"github.com/kubenav/kubenav/pkg/handlers/portforwarding"
 	"github.com/kubenav/kubenav/pkg/kube"
@@ -24,6 +25,7 @@ import (
 type Config struct {
 	Prometheus    *prometheus.Config    `json:"prometheus"`
 	Elasticsearch *elasticsearch.Config `json:"elasticsearch"`
+	Jaeger        *jaeger.Config        `json:"jaeger"`
 }
 
 // Request is the structure of a request for a plugin.
@@ -92,6 +94,12 @@ func Run(request Request, config *rest.Config, clientset *kubernetes.Clientset, 
 			result, err = elasticsearch.RunQuery(nil, request.Address, timeout, request.Data)
 		} else {
 			result, err = elasticsearch.RunQuery(pluginConfig.Elasticsearch, request.Address, timeout, request.Data)
+		}
+	case "jaeger":
+		if pluginConfig == nil {
+			result, err = jaeger.RunQuery(nil, request.Address, timeout, request.Data)
+		} else {
+			result, err = jaeger.RunQuery(pluginConfig.Jaeger, request.Address, timeout, request.Data)
 		}
 	}
 

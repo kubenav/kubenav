@@ -6,6 +6,7 @@ import { RouteComponentProps } from 'react-router';
 import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import QueryList from '../../../plugins/elasticsearch/QueryList';
+import TraceList from '../../../plugins/jaeger/TraceList';
 import DashboardList from '../../../plugins/prometheus/DashboardList';
 import Configuration from '../../misc/template/Configuration';
 import Data from '../../misc/template/Data';
@@ -71,6 +72,7 @@ const SecretDetails: React.FunctionComponent<ISecretDetailsProps> = ({ item, typ
 
       {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
       {context.settings.elasticsearchEnabled ? <QueryList item={item} /> : null}
+      {context.settings.jaegerEnabled ? <TraceList item={item} /> : null}
     </IonGrid>
   );
 };

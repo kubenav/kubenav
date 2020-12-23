@@ -18,6 +18,7 @@ import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import { subjectLink } from '../../../../utils/helpers';
 import QueryList from '../../../plugins/elasticsearch/QueryList';
+import TraceList from '../../../plugins/jaeger/TraceList';
 import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
 import Configuration from '../../misc/template/Configuration';
@@ -89,6 +90,7 @@ const RoleBindingDetails: React.FunctionComponent<IRoleBindingDetailsProps> = ({
 
       {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
       {context.settings.elasticsearchEnabled ? <QueryList item={item} /> : null}
+      {context.settings.jaegerEnabled ? <TraceList item={item} /> : null}
     </IonGrid>
   );
 };

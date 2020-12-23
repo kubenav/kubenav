@@ -21,6 +21,8 @@ import OverviewPage from './components/overview/OverviewPage';
 import ElasticsearchQueryPage from './components/plugins/elasticsearch/QueryPage';
 import HelmReleasesPage from './components/plugins/helm/ReleasesPage';
 import HelmReleasePage from './components/plugins/helm/ReleasePage';
+import JaegerTracesPage from './components/plugins/jaeger/TracesPage';
+import JaegerTracePage from './components/plugins/jaeger/TracePage';
 import PrometheusDashboardsPage from './components/plugins/prometheus/DashboardsPage';
 import PrometheusDashboardPage from './components/plugins/prometheus/DashboardPage';
 import CustomResourcesDetailsPage from './components/resources/cluster/customResourceDefinitions/CustomResourcesDetailsPage';
@@ -69,6 +71,8 @@ const App: React.FunctionComponent = () => (
                 <Route path="/plugins/elasticsearch" component={ElasticsearchQueryPage} exact={true} />
                 <Route path="/plugins/helm" component={HelmReleasesPage} exact={true} />
                 <Route path="/plugins/helm/:namespace/:name" component={HelmReleasePage} exact={true} />
+                <Route path="/plugins/jaeger" component={JaegerTracesPage} exact={true} />
+                <Route path="/plugins/jaeger/trace/:trace" component={JaegerTracePage} exact={true} />
                 <Route path="/plugins/prometheus" component={PrometheusDashboardsPage} exact={true} />
                 <Route path="/plugins/prometheus/:namespace/:name" component={PrometheusDashboardPage} exact={true} />
                 <Route path="/settings/clusters" component={ClustersPage} exact={true} />

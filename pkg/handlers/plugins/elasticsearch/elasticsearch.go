@@ -117,6 +117,8 @@ func RunQuery(config *Config, address string, timeout time.Duration, requestData
 		return nil, err
 	}
 
+	defer resp.Body.Close()
+
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		var res Response
 
