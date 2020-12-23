@@ -59,6 +59,14 @@ export interface IAppSettings {
   elasticsearchUsername: string;
   elasticsearchPassword: string;
   elasticsearchAddress: string;
+  jaegerEnabled: boolean;
+  jaegerNamespace: string;
+  jaegerSelector: string;
+  jaegerPort: number;
+  jaegerUsername: string;
+  jaegerPassword: string;
+  jaegerAddressPostfix: string;
+  jaegerAddress: string;
   proxyEnabled: boolean;
   proxyAddress: string;
   helmShowAllVersions: boolean;
@@ -267,9 +275,15 @@ export interface IGoogleClusterMasterAuth {
 export interface IInclusterSettings {
   prometheus: IInclusterSettingsPrometheus;
   elasticsearch: IInclusterSettingsElasticsearch;
+  jaeger: IInclusterSettingsJaeger;
 }
 
 export interface IInclusterSettingsElasticsearch {
+  enabled: boolean;
+  address: string;
+}
+
+export interface IInclusterSettingsJaeger {
   enabled: boolean;
   address: string;
 }
