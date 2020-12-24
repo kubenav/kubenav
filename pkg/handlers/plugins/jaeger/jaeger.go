@@ -36,9 +36,9 @@ type Request struct {
 
 	Trace string `json:"trace"`
 
-	Username       string `json:"username"`
-	Password       string `json:"password"`
-	AddressPostfix string `json:"addressPostfix"`
+	Username      string `json:"username"`
+	Password      string `json:"password"`
+	QueryBasePath string `json:"queryBasePath"`
 }
 
 // ResponseError ...
@@ -71,7 +71,7 @@ func RunQuery(config *Config, address string, timeout time.Duration, requestData
 		request.Password = config.Password
 	}
 
-	address = address + request.AddressPostfix
+	address = address + request.QueryBasePath
 
 	if request.Type == "traces" {
 		if request.Lookback != "custom" {

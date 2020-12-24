@@ -47,7 +47,7 @@ export const DEFAULT_SETTINGS: IAppSettings = {
   jaegerPort: 16686,
   jaegerUsername: '',
   jaegerPassword: '',
-  jaegerAddressPostfix: '',
+  jaegerQueryBasePath: '',
   jaegerAddress: '',
   proxyEnabled: false,
   proxyAddress: '',

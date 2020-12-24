@@ -206,9 +206,9 @@ export const readSettings = (): IAppSettings => {
       jaegerPort: settings.jaegerPort ? settings.jaegerPort : DEFAULT_SETTINGS.jaegerPort,
       jaegerUsername: settings.jaegerUsername ? settings.jaegerUsername : DEFAULT_SETTINGS.jaegerUsername,
       jaegerPassword: settings.jaegerPassword ? settings.jaegerPassword : DEFAULT_SETTINGS.jaegerPassword,
-      jaegerAddressPostfix: settings.jaegerAddressPostfix
-        ? settings.jaegerAddressPostfix
-        : DEFAULT_SETTINGS.jaegerAddressPostfix,
+      jaegerQueryBasePath: settings.jaegerQueryBasePath
+        ? settings.jaegerQueryBasePath
+        : DEFAULT_SETTINGS.jaegerQueryBasePath,
       jaegerAddress: '',
       proxyEnabled: settings.hasOwnProperty('proxyEnabled') ? settings.proxyEnabled : DEFAULT_SETTINGS.proxyEnabled,
       proxyAddress: settings.proxyAddress ? settings.proxyAddress : DEFAULT_SETTINGS.proxyAddress,

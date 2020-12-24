@@ -440,13 +440,13 @@ const GeneralPage: React.FunctionComponent = () => {
                 />
               </IonItem>
               <IonItem>
-                <IonLabel position="stacked">Address Postfix</IonLabel>
+                <IonLabel position="stacked">Query Base Path</IonLabel>
                 <IonInput
                   type="text"
                   required={true}
                   placeholder=""
-                  name="jaegerAddressPostfix"
-                  value={context.settings.jaegerAddressPostfix}
+                  name="jaegerQueryBasePath"
+                  value={context.settings.jaegerQueryBasePath}
                   onInput={handleValueChange}
                 />
               </IonItem>

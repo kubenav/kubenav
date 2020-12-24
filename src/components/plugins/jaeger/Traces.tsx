@@ -116,7 +116,7 @@ const Traces: React.FunctionComponent<ITracesProps> = ({
           tags: request.tags,
           username: context.settings.jaegerUsername,
           password: context.settings.jaegerPassword,
-          addressPostfix: context.settings.jaegerAddressPostfix,
+          queryBasePath: context.settings.jaegerQueryBasePath,
         },
         portforwardingPath,
         context.settings,

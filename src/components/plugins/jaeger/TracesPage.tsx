@@ -86,7 +86,7 @@ const TracesPage: React.FunctionComponent<ITracesPageProps> = ({ location }: ITr
             service: request.service,
             username: context.settings.jaegerUsername,
             password: context.settings.jaegerPassword,
-            addressPostfix: context.settings.jaegerAddressPostfix,
+            queryBasePath: context.settings.jaegerQueryBasePath,
           },
           portforwardingPath,
           context.settings,

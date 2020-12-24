@@ -65,7 +65,7 @@ export interface IAppSettings {
   jaegerPort: number;
   jaegerUsername: string;
   jaegerPassword: string;
-  jaegerAddressPostfix: string;
+  jaegerQueryBasePath: string;
   jaegerAddress: string;
   proxyEnabled: boolean;
   proxyAddress: string;
