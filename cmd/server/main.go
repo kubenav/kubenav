@@ -10,6 +10,9 @@ import (
 
 	"github.com/kubenav/kubenav/pkg/api"
 	"github.com/kubenav/kubenav/pkg/handlers/plugins"
+	"github.com/kubenav/kubenav/pkg/handlers/plugins/elasticsearch"
+	"github.com/kubenav/kubenav/pkg/handlers/plugins/jaeger"
+	"github.com/kubenav/kubenav/pkg/handlers/plugins/prometheus"
 	"github.com/kubenav/kubenav/pkg/kube"
 	"github.com/kubenav/kubenav/pkg/version"
 
@@ -21,12 +24,16 @@ import (
 var (
 	debugFlag                           bool
 	debugIonicFlag                      string
+	inclusterFlag                       bool
+	kubeconfigFlag                      string
 	pluginElasticsearchAddressFlag      string
 	pluginElasticsearchEnabledFlag      bool
 	pluginElasticsearchPasswordFlag     string
 	pluginElasticsearchUsernameFlag     string
-	inclusterFlag                       bool
-	kubeconfigFlag                      string
+	pluginJaegerAddressFlag             string
+	pluginJaegerEnabledFlag             bool
+	pluginJaegerPasswordFlag            string
+	pluginJaegerUsernameFlag            string
 	pluginPrometheusAddressFlag         string
 	pluginPrometheusDashboardsNamespace string
 	pluginPrometheusEnabledFlag         bool
@@ -71,17 +78,35 @@ var rootCmd = &cobra.Command{
 			pluginElasticsearchPasswordFlag = os.Getenv("KUBENAV_ELASTICSEARCH_PASSWORD")
 		}
 
+		if pluginJaegerUsernameFlag == "" {
+			pluginJaegerUsernameFlag = os.Getenv("KUBENAV_JAEGER_USERNAME")
+		}
+
+		if pluginJaegerPasswordFlag == "" {
+			pluginJaegerPasswordFlag = os.Getenv("KUBENAV_JAEGER_PASSWORD")
+		}
+
 		router := http.NewServeMux()
 		apiClient := api.NewClient(false, &plugins.Config{
-			PrometheusEnabled:             pluginPrometheusEnabledFlag,
-			PrometheusAddress:             pluginPrometheusAddressFlag,
-			PrometheusUsername:            pluginPrometheusUsernameFlag,
-			PrometheusPassword:            pluginPrometheusPasswordFlag,
-			PrometheusDashboardsNamespace: pluginPrometheusDashboardsNamespace,
-			ElasticsearchEnabled:          pluginElasticsearchEnabledFlag,
-			ElasticsearchAddress:          pluginElasticsearchAddressFlag,
-			ElasticsearchUsername:         pluginElasticsearchUsernameFlag,
-			ElasticsearchPassword:         pluginElasticsearchPasswordFlag,
+			Prometheus: &prometheus.Config{
+				Enabled:             pluginPrometheusEnabledFlag,
+				Address:             pluginPrometheusAddressFlag,
+				Username:            pluginPrometheusUsernameFlag,
+				Password:            pluginPrometheusPasswordFlag,
+				DashboardsNamespace: pluginPrometheusDashboardsNamespace,
+			},
+			Elasticsearch: &elasticsearch.Config{
+				Enabled:  pluginElasticsearchEnabledFlag,
+				Address:  pluginElasticsearchAddressFlag,
+				Username: pluginElasticsearchUsernameFlag,
+				Password: pluginElasticsearchPasswordFlag,
+			},
+			Jaeger: &jaeger.Config{
+				Enabled:  pluginJaegerEnabledFlag,
+				Address:  pluginJaegerAddressFlag,
+				Username: pluginJaegerUsernameFlag,
+				Password: pluginJaegerPasswordFlag,
+			},
 		}, kubeClient)
 		apiClient.Register(router)
 
@@ -133,6 +158,10 @@ func init() {
 	rootCmd.PersistentFlags().BoolVar(&pluginElasticsearchEnabledFlag, "plugin.elasticsearch.enabled", false, "Enable the Elasticsearch plugin.")
 	rootCmd.PersistentFlags().StringVar(&pluginElasticsearchPasswordFlag, "plugin.elasticsearch.password", "", "The password for Elasticsearch.")
 	rootCmd.PersistentFlags().StringVar(&pluginElasticsearchUsernameFlag, "plugin.elasticsearch.username", "", "The username for Elasticsearch.")
+	rootCmd.PersistentFlags().StringVar(&pluginJaegerAddressFlag, "plugin.jaeger.address", "", "The address for Jaeger.")
+	rootCmd.PersistentFlags().BoolVar(&pluginJaegerEnabledFlag, "plugin.jaeger.enabled", false, "Enable the Jaeger plugin.")
+	rootCmd.PersistentFlags().StringVar(&pluginJaegerPasswordFlag, "plugin.jaeger.password", "", "The password for Jaeger.")
+	rootCmd.PersistentFlags().StringVar(&pluginJaegerUsernameFlag, "plugin.jaeger.username", "", "The username for Jaeger.")
 	rootCmd.PersistentFlags().StringVar(&pluginPrometheusAddressFlag, "plugin.prometheus.address", "", "The address for Prometheus.")
 	rootCmd.PersistentFlags().StringVar(&pluginPrometheusDashboardsNamespace, "plugin.prometheus.dashboards-namespace", "kubenav", "The namespace, where kubenav should look for dashboards.")
 	rootCmd.PersistentFlags().BoolVar(&pluginPrometheusEnabledFlag, "plugin.prometheus.enabled", false, "Enable the Prometheus plugin.")

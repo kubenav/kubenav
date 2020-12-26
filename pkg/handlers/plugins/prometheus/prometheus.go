@@ -16,6 +16,15 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Config contains the required Prometheus configuration for the web version of kubenav.
+type Config struct {
+	Enabled             bool   `json:"enabled"`
+	Address             string `json:"address"`
+	Username            string `json:"-"`
+	Password            string `json:"-"`
+	DashboardsNamespace string `json:"dashboardsNamespace"`
+}
+
 type basicAuthTransport struct {
 	Transport http.RoundTripper
 
@@ -105,7 +114,7 @@ func (bat basicAuthTransport) RoundTrip(req *http.Request) (*http.Response, erro
 // As first we are converting the additional plugin data to the needed data for Prometheus. The we are initializing a
 // new client for the Prometheus API. Last but not least we are sending each query to the Prometheus API and collecting
 // the results in a slice of Results.
-func RunQueries(address string, timeout time.Duration, requestData map[string]interface{}, username, password string) (interface{}, error) {
+func RunQueries(config *Config, address string, timeout time.Duration, requestData map[string]interface{}) (interface{}, error) {
 	var promData Data
 	err := helpers.MapToStruct(requestData, &promData)
 	if err != nil {
@@ -113,6 +122,16 @@ func RunQueries(address string, timeout time.Duration, requestData map[string]in
 	}
 
 	roundTripper := api.DefaultRoundTripper
+
+	username := requestData["username"].(string)
+	if config != nil {
+		username = config.Username
+	}
+
+	password := requestData["password"].(string)
+	if config != nil {
+		password = config.Password
+	}
 
 	if username != "" && password != "" {
 		roundTripper = basicAuthTransport{

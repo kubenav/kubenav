@@ -87,7 +87,6 @@ export const PortForwardingContextProvider: React.FunctionComponent<IPortForward
   const add = async (portForwarding: IPortForwarding) => {
     try {
       const pf = await kubernetesPortForwardingRequest(
-        `/api/v1/namespaces/${portForwarding.podNamespace}/pods/${portForwarding.podName}/portforward`,
         portForwarding.podName,
         portForwarding.podNamespace,
         portForwarding.podPort,

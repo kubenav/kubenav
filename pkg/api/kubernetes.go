@@ -267,14 +267,20 @@ func (c *Client) kubernetesPortForwardingHandler(w http.ResponseWriter, r *http.
 			return
 		}
 
+		errCh := make(chan error, 1)
+
 		go func() {
 			err := pf.Start("")
 			if err != nil {
-				log.WithError(err).Errorf("Port forwarding was stopped")
+				errCh <- err
 			}
 		}()
 
 		select {
+		case err := <-errCh:
+			log.WithError(err).Error("Could not establish port forwarding connection")
+			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not establish port forwarding connection: %s", err.Error()))
+			return
 		case <-pf.ReadyCh:
 			log.Debug("Port forwarding is ready")
 			break

@@ -374,6 +374,88 @@ const GeneralPage: React.FunctionComponent = () => {
           {IS_INCLUSTER ? null : (
             <IonItemGroup>
               <IonItemDivider>
+                <IonLabel>Jaeger</IonLabel>
+              </IonItemDivider>
+              <IonItem>
+                <IonLabel>Enabled</IonLabel>
+                <IonToggle
+                  name="jaegerEnabled"
+                  checked={context.settings.jaegerEnabled}
+                  onIonChange={handleToggleChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Namespace</IonLabel>
+                <IonInput
+                  type="text"
+                  required={true}
+                  placeholder="jaeger"
+                  name="jaegerNamespace"
+                  value={context.settings.jaegerNamespace}
+                  onInput={handleValueChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Selector</IonLabel>
+                <IonInput
+                  type="text"
+                  required={true}
+                  placeholder="app=jaeger,app.kubernetes.io/component=query"
+                  name="jaegerSelector"
+                  value={context.settings.jaegerSelector}
+                  onInput={handleValueChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Port</IonLabel>
+                <IonInput
+                  type="number"
+                  required={true}
+                  placeholder="16686"
+                  name="jaegerPort"
+                  value={context.settings.jaegerPort}
+                  onInput={handleNumberValueChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Username</IonLabel>
+                <IonInput
+                  type="text"
+                  required={true}
+                  placeholder=""
+                  name="jaegerUsername"
+                  value={context.settings.jaegerUsername}
+                  onInput={handleValueChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Password</IonLabel>
+                <IonInput
+                  type="password"
+                  required={true}
+                  placeholder=""
+                  name="jaegerPassword"
+                  value={context.settings.jaegerPassword}
+                  onInput={handleValueChange}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Query Base Path</IonLabel>
+                <IonInput
+                  type="text"
+                  required={true}
+                  placeholder=""
+                  name="jaegerQueryBasePath"
+                  value={context.settings.jaegerQueryBasePath}
+                  onInput={handleValueChange}
+                />
+              </IonItem>
+            </IonItemGroup>
+          )}
+
+          {IS_INCLUSTER ? null : (
+            <IonItemGroup>
+              <IonItemDivider>
                 <IonLabel>Proxy</IonLabel>
               </IonItemDivider>
               <IonItem>

@@ -1,4 +1,5 @@
 import {
+  IonBackButton,
   IonButton,
   IonButtons,
   IonCard,
@@ -221,6 +222,7 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
         <IonToolbar>
           <IonButtons slot="start">
             <IonMenuButton />
+            <IonBackButton />
           </IonButtons>
           <IonTitle>Elasticsearch</IonTitle>
           <IonButtons slot="primary">

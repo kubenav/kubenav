@@ -59,6 +59,14 @@ export interface IAppSettings {
   elasticsearchUsername: string;
   elasticsearchPassword: string;
   elasticsearchAddress: string;
+  jaegerEnabled: boolean;
+  jaegerNamespace: string;
+  jaegerSelector: string;
+  jaegerPort: number;
+  jaegerUsername: string;
+  jaegerPassword: string;
+  jaegerQueryBasePath: string;
+  jaegerAddress: string;
   proxyEnabled: boolean;
   proxyAddress: string;
   helmShowAllVersions: boolean;
@@ -265,11 +273,25 @@ export interface IGoogleClusterMasterAuth {
 // IInclusterSettings must have the same structure as the Config struct from the plugins package.
 // See: pkg/handlers/plugins/plugins.go
 export interface IInclusterSettings {
-  prometheusEnabled: boolean;
-  prometheusAddress: string;
-  prometheusDashboardsNamespace: string;
-  elasticsearchEnabled: boolean;
-  elasticsearchAddress: string;
+  prometheus: IInclusterSettingsPrometheus;
+  elasticsearch: IInclusterSettingsElasticsearch;
+  jaeger: IInclusterSettingsJaeger;
+}
+
+export interface IInclusterSettingsElasticsearch {
+  enabled: boolean;
+  address: string;
+}
+
+export interface IInclusterSettingsJaeger {
+  enabled: boolean;
+  address: string;
+}
+
+export interface IInclusterSettingsPrometheus {
+  enabled: boolean;
+  address: string;
+  dashboardsNamespace: string;
 }
 
 export interface IJsonData {

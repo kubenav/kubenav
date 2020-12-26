@@ -3,12 +3,20 @@
   "icon_path_darwin": "resources/icon.icns",
   "icon_path_linux": "resources/icon.png",
   "icon_path_windows": "resources/icon.ico",
-  "version_electron": "11.1.0",
+  "version_electron": "11.1.1",
   "environments": [
-    {"arch": "amd64", "os": "darwin"},
+    {
+      "arch": "amd64",
+      "os": "darwin",
+      "env": {
+        "CGO_ENABLED": "1",
+        "CGO_CFLAGS": "-mmacosx-version-min=10.11",
+        "CGO_LDFLAGS": "-mmacosx-version-min=10.11"
+      }
+    },
+    {"arch": "amd64", "os": "linux"},
     {"arch": "amd64", "os": "linux"},
     {"arch": "arm", "os": "linux", "env": {"GOARM": "7"}},
-    {"arch": "arm64", "os": "linux"},
     {"arch": "amd64", "os": "windows"}
   ],
   "info_plist": {

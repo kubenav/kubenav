@@ -6,6 +6,7 @@ import { RouteComponentProps } from 'react-router';
 import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import QueryList from '../../../plugins/elasticsearch/QueryList';
+import TraceList from '../../../plugins/jaeger/TraceList';
 import Dashboard from '../../../plugins/prometheus/Dashboard';
 import DashboardList from '../../../plugins/prometheus/DashboardList';
 import Configuration from '../../misc/template/Configuration';
@@ -122,6 +123,7 @@ const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ ite
 
       {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
       {context.settings.elasticsearchEnabled ? <QueryList item={item} /> : null}
+      {context.settings.jaegerEnabled ? <TraceList item={item} /> : null}
     </IonGrid>
   );
 };

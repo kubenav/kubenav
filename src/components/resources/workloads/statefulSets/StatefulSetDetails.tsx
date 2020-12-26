@@ -7,6 +7,7 @@ import { IContext } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import { labelSelector } from '../../../../utils/helpers';
 import QueryList from '../../../plugins/elasticsearch/QueryList';
+import TraceList from '../../../plugins/jaeger/TraceList';
 import Dashboard from '../../../plugins/prometheus/Dashboard';
 import DashboardList from '../../../plugins/prometheus/DashboardList';
 import List from '../../misc/list/List';
@@ -156,6 +157,7 @@ const StatefulSetDetails: React.FunctionComponent<IStatefulSetDetailsProps> = ({
 
       {context.settings.prometheusEnabled ? <DashboardList item={item} /> : null}
       {context.settings.elasticsearchEnabled ? <QueryList item={item} /> : null}
+      {context.settings.jaegerEnabled ? <TraceList item={item} /> : null}
     </IonGrid>
   );
 };

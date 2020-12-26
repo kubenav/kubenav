@@ -200,6 +200,16 @@ export const readSettings = (): IAppSettings => {
         ? settings.elasticsearchPassword
         : DEFAULT_SETTINGS.elasticsearchPassword,
       elasticsearchAddress: '',
+      jaegerEnabled: settings.hasOwnProperty('jaegerEnabled') ? settings.jaegerEnabled : DEFAULT_SETTINGS.jaegerEnabled,
+      jaegerNamespace: settings.jaegerNamespace ? settings.jaegerNamespace : DEFAULT_SETTINGS.jaegerNamespace,
+      jaegerSelector: settings.jaegerSelector ? settings.jaegerSelector : DEFAULT_SETTINGS.jaegerSelector,
+      jaegerPort: settings.jaegerPort ? settings.jaegerPort : DEFAULT_SETTINGS.jaegerPort,
+      jaegerUsername: settings.jaegerUsername ? settings.jaegerUsername : DEFAULT_SETTINGS.jaegerUsername,
+      jaegerPassword: settings.jaegerPassword ? settings.jaegerPassword : DEFAULT_SETTINGS.jaegerPassword,
+      jaegerQueryBasePath: settings.jaegerQueryBasePath
+        ? settings.jaegerQueryBasePath
+        : DEFAULT_SETTINGS.jaegerQueryBasePath,
+      jaegerAddress: '',
       proxyEnabled: settings.hasOwnProperty('proxyEnabled') ? settings.proxyEnabled : DEFAULT_SETTINGS.proxyEnabled,
       proxyAddress: settings.proxyAddress ? settings.proxyAddress : DEFAULT_SETTINGS.proxyAddress,
       helmShowAllVersions: settings.hasOwnProperty('helmShowAllVersions')

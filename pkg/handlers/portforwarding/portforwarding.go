@@ -104,6 +104,9 @@ func CreateSession(sessionPrefix, podName, podNamespace string, podPort, localPo
 		if err != nil {
 			return nil, err
 		}
+
+		defer listener.Close()
+
 		localPort, err = strconv.ParseInt(strings.TrimLeft(listener.Addr().String(), "127.0.0.1:"), 10, 64)
 		if err != nil {
 			return nil, err

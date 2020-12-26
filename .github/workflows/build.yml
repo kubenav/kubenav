@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: macos-latest
+    runs-on: macos-11.0
     steps:
       - name: Get Version
         id: get_version
@@ -24,7 +24,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '13.x'
+          node-version: '14.x'
 
       - name: Setup Go
         uses: actions/setup-go@v2
@@ -33,7 +33,7 @@ jobs:
 
       - name: Install Ionic
         run: |
-          npm install -g @ionic/cli@6.9.1
+          npm install -g @ionic/cli
 
       - name: Install Dependencies
         run: |

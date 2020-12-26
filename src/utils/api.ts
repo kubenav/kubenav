@@ -636,7 +636,6 @@ export const kubernetesPortForwardingActiveSessions = async (): Promise<IPortFor
 // kubernetesPortForwardingRequest initialize the port forwarding to a pod. The generated session id which is returned
 // can be used to close the port forwarding.
 export const kubernetesPortForwardingRequest = async (
-  url: string,
   podName: string,
   podNamespace: string,
   podPort: number,
@@ -656,7 +655,7 @@ export const kubernetesPortForwardingRequest = async (
         localPort: localPort,
         server: INCLUSTER_URL,
         cluster: cluster ? cluster.id : '',
-        url: cluster ? cluster.url + url : '',
+        url: cluster ? cluster.url : '',
         certificateAuthorityData: cluster ? cluster.certificateAuthorityData : '',
         clientCertificateData: cluster ? cluster.clientCertificateData : '',
         clientKeyData: cluster ? cluster.clientKeyData : '',

@@ -11,6 +11,14 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Config contains the required Elasticsearch configuration for the web version of kubenav.
+type Config struct {
+	Enabled  bool   `json:"enabled"`
+	Address  string `json:"address"`
+	Username string `json:"-"`
+	Password string `json:"-"`
+}
+
 // Response ...
 type Response struct {
 	ScrollID string `json:"_scroll_id"`
@@ -58,7 +66,7 @@ type ResponseError struct {
 }
 
 // RunQuery executes a given query for Elasticsearch.
-func RunQuery(address string, timeout time.Duration, requestData map[string]interface{}, username, password string) (interface{}, error) {
+func RunQuery(config *Config, address string, timeout time.Duration, requestData map[string]interface{}) (interface{}, error) {
 	client := &http.Client{
 		Timeout: timeout,
 	}
@@ -90,6 +98,16 @@ func RunQuery(address string, timeout time.Duration, requestData map[string]inte
 
 	req.Header.Add("Content-Type", "application/json")
 
+	username := requestData["username"].(string)
+	if config != nil {
+		username = config.Username
+	}
+
+	password := requestData["password"].(string)
+	if config != nil {
+		password = config.Password
+	}
+
 	if username != "" && password != "" {
 		req.Header.Add("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(username+":"+password)))
 	}
@@ -98,6 +116,8 @@ func RunQuery(address string, timeout time.Duration, requestData map[string]inte
 	if err != nil {
 		return nil, err
 	}
+
+	defer resp.Body.Close()
 
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		var res Response
