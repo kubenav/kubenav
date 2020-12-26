@@ -15,7 +15,7 @@
       }
     },
     {"arch": "amd64", "os": "linux"},
-    {"arch": "amd64", "os": "linux"},
+    {"arch": "arm64", "os": "linux"},
     {"arch": "arm", "os": "linux", "env": {"GOARM": "7"}},
     {"arch": "amd64", "os": "windows"}
   ],
