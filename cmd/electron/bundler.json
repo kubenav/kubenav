@@ -14,8 +14,10 @@
         "CGO_LDFLAGS": "-mmacosx-version-min=10.11"
       }
     },
-    { "arch": "amd64", "os": "linux" },
-    { "arch": "amd64", "os": "windows" }
+    {"arch": "amd64", "os": "linux"},
+    {"arch": "arm64", "os": "linux"},
+    {"arch": "arm", "os": "linux", "env": {"GOARM": "7"}},
+    {"arch": "amd64", "os": "windows"}
   ],
   "info_plist": {
     "CFBundleIconFile": "kubenav.icns",

@@ -74,6 +74,8 @@ jobs:
         run: |
           cd cmd/electron/output/darwin-amd64 && zip -r -X kubenav-darwin-amd64.zip kubenav.app
           cd ../linux-amd64 && zip -r -X kubenav-linux-amd64.zip kubenav
+          cd ../linux-arm && zip -r -X kubenav-linux-arm.zip kubenav
+          cd ../linux-arm64 && zip -r -X kubenav-linux-arm64.zip kubenav
           cd ../windows-amd64 && zip -r -X kubenav-windows-amd64.zip kubenav.exe
 
       - name: Upload macOS App to the Notarization Service
@@ -94,21 +96,35 @@ jobs:
         env:
           AC_API_KEY: ${{ secrets.AC_API_KEY }}
 
-      - name: Upload Artifact (macOS)
+      - name: Upload Artifact (darwin-amd64)
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
         uses: actions/upload-artifact@v2
         with:
           name: kubenav-darwin-amd64.zip
           path: cmd/electron/output/darwin-amd64/kubenav-darwin-amd64.zip
 
-      - name: Upload Artifact (Linux)
+      - name: Upload Artifact (linux-amd64)
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
         uses: actions/upload-artifact@v2
         with:
           name: kubenav-linux-amd64.zip
           path: cmd/electron/output/linux-amd64/kubenav-linux-amd64.zip
 
-      - name: Upload Artifact (Windows)
+      - name: Upload Artifact (linux-arm)
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: kubenav-linux-arm.zip
+          path: cmd/electron/output/linux-arm/kubenav-linux-arm.zip
+
+      - name: Upload Artifact (linux-arm64)
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: kubenav-linux-arm64.zip
+          path: cmd/electron/output/linux-arm64/kubenav-linux-arm64.zip
+
+      - name: Upload Artifact (windows-amd64)
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
         uses: actions/upload-artifact@v2
         with:
