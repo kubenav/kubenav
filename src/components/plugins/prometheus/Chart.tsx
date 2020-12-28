@@ -41,11 +41,11 @@ interface IChartProps {
 const Chart: React.FunctionComponent<IChartProps> = ({ timeDiff, chart }: IChartProps) => {
   return (
     <IonCol
-      sizeXs={chart.size.xs}
-      sizeSm={chart.size.xs}
-      sizeMd={chart.size.md}
-      sizeLg={chart.size.lg}
-      sizeXl={chart.size.xl}
+      sizeXs={chart.size.xs ? chart.size.xs : '12'}
+      sizeSm={chart.size.xs ? chart.size.xs : '12'}
+      sizeMd={chart.size.md ? chart.size.md : '12'}
+      sizeLg={chart.size.lg ? chart.size.lg : '12'}
+      sizeXl={chart.size.xl ? chart.size.xl : '12'}
     >
       <IonCardEqualHeight>
         <IonCardHeader>

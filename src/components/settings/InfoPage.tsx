@@ -3,8 +3,6 @@ import {
   IonButtons,
   IonCard,
   IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
   IonContent,
   IonHeader,
   IonItem,
@@ -16,17 +14,21 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  isPlatform,
 } from '@ionic/react';
 import { useGetInfo } from '@ionic/react-hooks/device';
 import React, { memo, useEffect, useState } from 'react';
 
 import { VERSION } from '../../utils/constants';
 import { openURL } from '../../utils/helpers';
+import useWindowWidth from '../../utils/useWindowWidth';
 import License from './info/License';
 
 const InfoPage: React.FunctionComponent = () => {
-  const { info } = useGetInfo();
+  const width = useWindowWidth();
   const [version, setVersion] = useState<string>(VERSION ? VERSION : '');
+
+  const { info } = useGetInfo();
 
   useEffect(() => {
     if (info && info.appVersion) {
@@ -46,23 +48,10 @@ const InfoPage: React.FunctionComponent = () => {
       </IonHeader>
       <IonContent>
         <IonCard>
-          <img alt="kubenav" src="/assets/card-header.png" />
-          <IonCardHeader>
-            <IonCardTitle>kubenav</IonCardTitle>
-          </IonCardHeader>
+          {isPlatform('hybrid') || isPlatform('mobile') || width < 992 ? (
+            <img alt="kubenav" src="/assets/card-header.png" />
+          ) : null}
           <IonCardContent>
-            <p>
-              kubenav is a mobile and desktop app to manage Kubernetes clusters. The app provides an overview of all
-              resources in a Kubernetes clusters, including current status information for workloads. The details view
-              for resources provides additional information. It is possible to view logs and events or to get a shell
-              into a container. You can also edit and delete resources or scale your workloads within the app.
-            </p>
-            <p className="paragraph-margin-bottom">
-              The app is developed using Ionic Framework and Capacitor. The frontend part of the app is implemented
-              using TypeScript and React functional components. The backend part uses Go mobile for communication with
-              the Kubernetes API server and Cloud Providers. So it is possible to achieve nearly 100% code sharing
-              between the mobile and desktop implementation of kubenav.
-            </p>
             <IonList>
               <IonListHeader mode="md">
                 <IonLabel>General</IonLabel>
