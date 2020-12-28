@@ -67,8 +67,13 @@ const getFields = (documents: IElasticsearchDocument[]): string[] => {
   return uniqueFields;
 };
 
+interface IElasticsearchHitsTotal {
+  value: number;
+}
+
 interface IElasticsearchHits {
   hits: IElasticsearchDocument[];
+  total: IElasticsearchHitsTotal;
 }
 
 interface IElasticsearchResult {
@@ -92,6 +97,7 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
   const [to, setTo] = useState<string>(url.get('to') ? (url.get('to') as string) : 'now');
   const [scrollID, setScrollID] = useState<string>('');
   const [documents, setDocuments] = useState<IElasticsearchDocument[]>([]);
+  const [hits, setHits] = useState<number>(0);
   const [aggregations, setAggregations] = useState<IAggregations | undefined>(undefined);
   const [fields, setFields] = useState<string[]>([]);
   const [selectedFields, setSelectedFields] = useState<string[]>(
@@ -123,7 +129,7 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
   let result: IElasticsearchResult = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     _scroll_id: '',
-    hits: { hits: [] },
+    hits: { hits: [], total: { value: 0 } },
     aggregations: { logcount: { buckets: [], interval: '' } },
   };
 
@@ -204,6 +210,7 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
         setFields(getFields(result.hits.hits.slice(result.hits.hits.length > 10 ? 10 : result.hits.hits.length)));
         setAggregations(result.aggregations);
         setDocuments(result.hits.hits);
+        setHits(result.hits.total.value);
       } else {
         setDocuments((docs) => [...docs, ...result.hits.hits]);
       }
@@ -321,11 +328,16 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
             </IonCol>
           </IonRow>
 
-          {aggregations ? (
+          {aggregations && aggregations.logcount.buckets.length > 0 ? (
             <IonRow>
               <IonCol>
                 <IonCard>
                   <IonCardContent>
+                    {hits ? (
+                      <div style={{ textAlign: 'center' }}>
+                        <b>{hits}</b> hits
+                      </div>
+                    ) : null}
                     <Chart aggregations={aggregations} />
                   </IonCardContent>
                 </IonCard>

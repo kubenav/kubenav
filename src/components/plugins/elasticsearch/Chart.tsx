@@ -38,7 +38,9 @@ const Chart: React.FunctionComponent<IChartProps> = ({ aggregations }: IChartPro
 
   const formatTime = (time: number): string => {
     const d = new Date(time);
-    return `${('0' + d.getHours()).slice(-2)}:${('0' + d.getMinutes()).slice(-2)}:${('0' + d.getSeconds()).slice(-2)}`;
+    return `${('0' + (d.getMonth() + 1)).slice(-2)}/${('0' + d.getDate()).slice(-2)} ${('0' + d.getHours()).slice(
+      -2,
+    )}:${('0' + d.getMinutes()).slice(-2)}`;
   };
 
   return (
