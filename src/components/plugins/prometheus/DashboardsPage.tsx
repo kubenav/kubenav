@@ -40,7 +40,7 @@ const DashboardsPage: React.FunctionComponent = () => {
         context.settings.prometheusDashboardsNamespace
           ? `/api/v1/namespaces/${context.settings.prometheusDashboardsNamespace}/configmaps`
           : `/api/v1/configmaps`
-      }?labelSelector=kubenav.io/dashboard=true&limit=50${cursor ? `&continue=${cursor}` : ''}`,
+      }?labelSelector=kubenav.io/prometheus-dashboard=true&limit=50${cursor ? `&continue=${cursor}` : ''}`,
       '',
       context.settings,
       await context.kubernetesAuthWrapper(''),

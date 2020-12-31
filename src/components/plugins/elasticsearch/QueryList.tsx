@@ -28,7 +28,6 @@ const parseQuery = (item: any, query: string): string => {
 
 interface IQuery {
   title: string;
-  description: string;
   query: string;
   from: string;
   to: string;
@@ -42,32 +41,36 @@ interface IQueryListProps {
 
 const QueryList: React.FunctionComponent<IQueryListProps> = ({ item }: IQueryListProps) => {
   const queries: IQuery[] = [];
+  let error = '';
 
-  if (
-    item &&
-    item.metadata &&
-    item.metadata.annotations &&
-    item.metadata.annotations['kubenav.io/elasticsearch-queries']
-  ) {
-    const parsedQueries: IQuery[] = JSON.parse(item.metadata.annotations['kubenav.io/elasticsearch-queries']);
+  try {
+    if (
+      item &&
+      item.metadata &&
+      item.metadata.annotations &&
+      item.metadata.annotations['kubenav.io/elasticsearch-queries']
+    ) {
+      const parsedQueries: IQuery[] = JSON.parse(item.metadata.annotations['kubenav.io/elasticsearch-queries']);
 
-    for (const query of parsedQueries) {
-      if (query.title && query.query) {
-        const q = parseQuery(item, query.query);
+      for (const query of parsedQueries) {
+        if (query.title && query.query) {
+          const q = parseQuery(item, query.query);
 
-        queries.push({
-          title: query.title,
-          description: query.description ? query.description : '',
-          query: q,
-          from: query.from ? query.from : 'now-15m',
-          to: query.to ? query.to : 'now',
-          selectedFields: query.selectedFields ? query.selectedFields : '',
-        });
+          queries.push({
+            title: query.title,
+            query: q,
+            from: query.from ? query.from : 'now-15m',
+            to: query.to ? query.to : 'now',
+            selectedFields: query.selectedFields ? query.selectedFields : '',
+          });
+        }
       }
     }
+  } catch (err) {
+    error = err.message;
   }
 
-  if (queries.length > 0) {
+  if (queries.length > 0 || error) {
     return (
       <IonRow>
         <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="12">
@@ -76,22 +79,34 @@ const QueryList: React.FunctionComponent<IQueryListProps> = ({ item }: IQueryLis
               <IonCardTitle>Elasticsearch Queries</IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
-              <IonList>
-                {queries.map((query: IQuery, index) => {
-                  return (
-                    <IonItem
-                      key={index}
-                      routerLink={`/plugins/elasticsearch?query=${query.query}&from=${query.from}&to=${query.to}&selectedFields=${query.selectedFields}`}
-                      routerDirection="forward"
-                    >
-                      <IonLabel>
-                        <h2>{query.title}</h2>
-                        <p>{query.description}</p>
-                      </IonLabel>
-                    </IonItem>
-                  );
-                })}
-              </IonList>
+              {error ? (
+                `Could not load queries: ${error}`
+              ) : (
+                <IonList>
+                  {queries.map((query: IQuery, index) => {
+                    return (
+                      <IonItem
+                        key={index}
+                        routerLink={`/plugins/elasticsearch?query=${query.query}&from=${query.from}&to=${query.to}&selectedFields=${query.selectedFields}`}
+                        routerDirection="forward"
+                      >
+                        <IonLabel class="ion-text-wrap">
+                          <h2>{query.title}</h2>
+                          <p>
+                            <b>Query:</b> {query.query} <b>From:</b> {query.from} <b>To:</b> {query.to}
+                            {query.selectedFields ? (
+                              <span>
+                                {' '}
+                                <b>Fields:</b> {query.selectedFields}
+                              </span>
+                            ) : null}
+                          </p>
+                        </IonLabel>
+                      </IonItem>
+                    );
+                  })}
+                </IonList>
+              )}
             </IonCardContent>
           </IonCard>
         </IonCol>

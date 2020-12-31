@@ -60,8 +60,13 @@ const DashboardList: React.FunctionComponent<IDashboardListProps> = ({ item }: I
     ['PrometheusDashboardList', cluster ? cluster.id : '', item],
     async () => {
       try {
-        if (item && item.metadata && item.metadata.annotations && item.metadata.annotations['kubenav.io/dashboards']) {
-          const dashboards = item.metadata.annotations['kubenav.io/dashboards'].split(',');
+        if (
+          item &&
+          item.metadata &&
+          item.metadata.annotations &&
+          item.metadata.annotations['kubenav.io/prometheus-dashboards']
+        ) {
+          const dashboards = item.metadata.annotations['kubenav.io/prometheus-dashboards'].split(',');
           const dashboardItems: IDashboardItem[] = [];
 
           for (const dashboard of dashboards) {
@@ -101,7 +106,7 @@ const DashboardList: React.FunctionComponent<IDashboardListProps> = ({ item }: I
         <IonCol sizeXs="12" sizeSm="12" sizeMd="12" sizeLg="12" sizeXl="12">
           <IonCard>
             <IonCardHeader>
-              <IonCardTitle>Dashboards</IonCardTitle>
+              <IonCardTitle>Prometheus Dashboards</IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
               {isError ? (
