@@ -109,7 +109,11 @@ const ChartDetailsArea: React.FunctionComponent<IChartDetailsAreaProps> = ({
               tickFormatter={formatTime}
             />
             <YAxis dataKey="value" unit={unit} />
-            <Legend onClick={(e) => (selected === e.payload.name ? setSelected('') : setSelected(e.payload.name))} />
+            <Legend
+              height={40}
+              wrapperStyle={{ overflowY: 'auto' }}
+              onClick={(e) => (selected === e.payload.name ? setSelected('') : setSelected(e.payload.name))}
+            />
             {!isPlatform('hybrid') ? (
               <Tooltip
                 cursor={{ stroke: '#949494', strokeWidth: 2 }}

@@ -269,7 +269,6 @@ const GeneralPage: React.FunctionComponent = () => {
                 <IonInput
                   type="text"
                   required={true}
-                  placeholder=""
                   name="prometheusUsername"
                   value={context.settings.prometheusUsername}
                   onInput={handleValueChange}
@@ -280,7 +279,6 @@ const GeneralPage: React.FunctionComponent = () => {
                 <IonInput
                   type="password"
                   required={true}
-                  placeholder=""
                   name="prometheusPassword"
                   value={context.settings.prometheusPassword}
                   onInput={handleValueChange}
@@ -351,7 +349,6 @@ const GeneralPage: React.FunctionComponent = () => {
                 <IonInput
                   type="text"
                   required={true}
-                  placeholder=""
                   name="elasticsearchUsername"
                   value={context.settings.elasticsearchUsername}
                   onInput={handleValueChange}
@@ -362,7 +359,6 @@ const GeneralPage: React.FunctionComponent = () => {
                 <IonInput
                   type="password"
                   required={true}
-                  placeholder=""
                   name="elasticsearchPassword"
                   value={context.settings.elasticsearchPassword}
                   onInput={handleValueChange}
@@ -389,7 +385,7 @@ const GeneralPage: React.FunctionComponent = () => {
                 <IonInput
                   type="text"
                   required={true}
-                  placeholder="jaeger"
+                  placeholder="tracing"
                   name="jaegerNamespace"
                   value={context.settings.jaegerNamespace}
                   onInput={handleValueChange}
@@ -422,7 +418,6 @@ const GeneralPage: React.FunctionComponent = () => {
                 <IonInput
                   type="text"
                   required={true}
-                  placeholder=""
                   name="jaegerUsername"
                   value={context.settings.jaegerUsername}
                   onInput={handleValueChange}
@@ -433,7 +428,6 @@ const GeneralPage: React.FunctionComponent = () => {
                 <IonInput
                   type="password"
                   required={true}
-                  placeholder=""
                   name="jaegerPassword"
                   value={context.settings.jaegerPassword}
                   onInput={handleValueChange}
@@ -444,7 +438,6 @@ const GeneralPage: React.FunctionComponent = () => {
                 <IonInput
                   type="text"
                   required={true}
-                  placeholder=""
                   name="jaegerQueryBasePath"
                   value={context.settings.jaegerQueryBasePath}
                   onInput={handleValueChange}

@@ -42,7 +42,7 @@ export const DEFAULT_SETTINGS: IAppSettings = {
   elasticsearchPassword: '',
   elasticsearchAddress: '',
   jaegerEnabled: false,
-  jaegerNamespace: 'jaeger',
+  jaegerNamespace: 'tracing',
   jaegerSelector: 'app=jaeger,app.kubernetes.io/component=query',
   jaegerPort: 16686,
   jaegerUsername: '',
