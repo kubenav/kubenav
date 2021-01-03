@@ -15,12 +15,12 @@ export interface IBucket {
 }
 
 export interface ILogCount {
-  buckets: IBucket[];
-  interval: string;
+  buckets?: IBucket[];
+  interval?: string;
 }
 
 export interface IAggregations {
-  logcount: ILogCount;
+  logcount?: ILogCount;
 }
 
 export interface IPrometheusResult {
@@ -47,7 +47,7 @@ const Chart: React.FunctionComponent<IChartProps> = ({ aggregations }: IChartPro
     <IonRow style={{ height: '200px', width: '100%' }}>
       <IonCol style={{ padding: '0px' }}>
         <ResponsiveContainer>
-          <BarChart data={aggregations.logcount.buckets}>
+          <BarChart data={aggregations?.logcount?.buckets}>
             <XAxis
               dataKey="key"
               scale="time"

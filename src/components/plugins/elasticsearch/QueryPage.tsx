@@ -80,7 +80,7 @@ interface IElasticsearchResult {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   _scroll_id: string;
   hits: IElasticsearchHits;
-  aggregations: IAggregations;
+  aggregations?: IAggregations;
 }
 
 type IQueryPageProps = RouteComponentProps;
@@ -328,7 +328,10 @@ const QueryPage: React.FunctionComponent<IQueryPageProps> = ({ location }: IQuer
             </IonCol>
           </IonRow>
 
-          {aggregations && aggregations.logcount.buckets.length > 0 ? (
+          {aggregations &&
+          aggregations.logcount &&
+          aggregations.logcount.buckets &&
+          aggregations.logcount.buckets.length > 0 ? (
             <IonRow>
               <IonCol>
                 <IonCard>
