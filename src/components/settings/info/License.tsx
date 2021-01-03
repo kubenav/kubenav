@@ -46,7 +46,7 @@ const License: React.FunctionComponent = () => {
           <IonGrid>
             <IonRow>
               <IonCol>
-                <p>Copyright (c) 2020 Rico Berger</p>
+                <p>Copyright (c) 2021 Rico Berger</p>
 
                 <p>
                   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
