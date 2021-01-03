@@ -1,5 +1,45 @@
 # Changelog
 
+## [3.3.0](https://github.com/kubenav/kubenav/tree/3.3.0) (2021-01-03)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.2.1...3.3.0)
+
+**Implemented enhancements:**
+
+- Feature: create arm and arm64 builds [\#282](https://github.com/kubenav/kubenav/issues/282)
+- Feature: filter services \(loadbalancer, clusterip, etc\) [\#272](https://github.com/kubenav/kubenav/issues/272)
+- Add Jaeger Plugin [\#289](https://github.com/kubenav/kubenav/pull/289) ([ricoberger](https://github.com/ricoberger))
+- Visualize log count in Elasticsearch plugin [\#285](https://github.com/kubenav/kubenav/pull/285) ([ricoberger](https://github.com/ricoberger))
+- Improve Plugins [\#280](https://github.com/kubenav/kubenav/pull/280) ([ricoberger](https://github.com/ricoberger))
+- Add Elasticsearch plugin [\#279](https://github.com/kubenav/kubenav/pull/279) ([ricoberger](https://github.com/ricoberger))
+- Add support for dashboards [\#276](https://github.com/kubenav/kubenav/pull/276) ([ricoberger](https://github.com/ricoberger))
+
+**Fixed bugs:**
+
+- BUG: can’t scroll info panel on iOS [\#293](https://github.com/kubenav/kubenav/issues/293)
+- BUG: unable to run latest schedule builds as REQUIRES Mac 11 [\#291](https://github.com/kubenav/kubenav/issues/291)
+- bug: weird port forward delay with firefox [\#284](https://github.com/kubenav/kubenav/issues/284)
+- Issue with prometheus configuration [\#278](https://github.com/kubenav/kubenav/issues/278)
+- Bug: overview page blank if no cluster connection [\#274](https://github.com/kubenav/kubenav/issues/274)
+
+**Closed issues:**
+
+- Unable to connect to node \(failed to find pem in certificate input\) [\#290](https://github.com/kubenav/kubenav/issues/290)
+- unexpected end of json input  [\#275](https://github.com/kubenav/kubenav/issues/275)
+
+**Merged pull requests:**
+
+- Fix scrolling for info page [\#294](https://github.com/kubenav/kubenav/pull/294) ([ricoberger](https://github.com/ricoberger))
+- fix-mac-10.15-build [\#292](https://github.com/kubenav/kubenav/pull/292) ([si458](https://github.com/si458))
+- Update GitHub Actions [\#288](https://github.com/kubenav/kubenav/pull/288) ([ricoberger](https://github.com/ricoberger))
+- Fix port forwarding [\#287](https://github.com/kubenav/kubenav/pull/287) ([ricoberger](https://github.com/ricoberger))
+- Add support for linux-arm and linux-arm64 [\#286](https://github.com/kubenav/kubenav/pull/286) ([ricoberger](https://github.com/ricoberger))
+- update electron to latest version [\#283](https://github.com/kubenav/kubenav/pull/283) ([si458](https://github.com/si458))
+- Remove job label from Prometheus metrics [\#281](https://github.com/kubenav/kubenav/pull/281) ([ricoberger](https://github.com/ricoberger))
+- Show error message on overview page [\#277](https://github.com/kubenav/kubenav/pull/277) ([ricoberger](https://github.com/ricoberger))
+- Add advanced search functions [\#273](https://github.com/kubenav/kubenav/pull/273) ([ricoberger](https://github.com/ricoberger))
+- Improve port forwarding [\#270](https://github.com/kubenav/kubenav/pull/270) ([ricoberger](https://github.com/ricoberger))
+
 ## [3.2.1](https://github.com/kubenav/kubenav/tree/3.2.1) (2020-12-02)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/3.2.0...3.2.1)
@@ -314,7 +354,6 @@
 **Fixed bugs:**
 
 - Fix OIDC support for desktop [\#56](https://github.com/kubenav/kubenav/pull/56) ([ricoberger](https://github.com/ricoberger))
-- Check if authProvider property exists on cluster [\#55](https://github.com/kubenav/kubenav/pull/55) ([ricoberger](https://github.com/ricoberger))
 - Fix Kubeconfig validation [\#54](https://github.com/kubenav/kubenav/pull/54) ([ricoberger](https://github.com/ricoberger))
 
 ## [1.4.0](https://github.com/kubenav/kubenav/tree/1.4.0) (2020-04-13)
@@ -352,6 +391,7 @@
 
 - Importing AWS EKS cluster returns just one cluster [\#35](https://github.com/kubenav/kubenav/issues/35)
 - Using kubeconfig from Rancher does not work [\#32](https://github.com/kubenav/kubenav/issues/32)
+- Check if authProvider property exists on cluster [\#55](https://github.com/kubenav/kubenav/pull/55) ([ricoberger](https://github.com/ricoberger))
 - Improve required data checks [\#47](https://github.com/kubenav/kubenav/pull/47) ([ricoberger](https://github.com/ricoberger))
 - Multiple UI Fixes [\#45](https://github.com/kubenav/kubenav/pull/45) ([ricoberger](https://github.com/ricoberger))
 - Fix logs modal for valid json [\#44](https://github.com/kubenav/kubenav/pull/44) ([ricoberger](https://github.com/ricoberger))
