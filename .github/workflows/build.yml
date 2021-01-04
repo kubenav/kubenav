@@ -137,5 +137,7 @@ jobs:
           utils/scripts/upload.sh cmd/electron/output/darwin-amd64/kubenav-darwin-amd64.zip application/zip
           utils/scripts/upload.sh cmd/electron/output/linux-amd64/kubenav-linux-amd64.zip application/zip
           utils/scripts/upload.sh cmd/electron/output/windows-amd64/kubenav-windows-amd64.zip application/zip
+          utils/scripts/upload.sh cmd/electron/output/linux-arm64/kubenav-linux-arm64.zip application/zip
+          utils/scripts/upload.sh cmd/electron/output/linux-arm/kubenav-linux-arm.zip application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
