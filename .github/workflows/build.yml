@@ -74,7 +74,7 @@ jobs:
       - name: Compress Electron App
         run: |
           cd cmd/electron/output/darwin-amd64 && zip -r -X kubenav-darwin-amd64.zip kubenav.app
-          cd ../darwin-arm64 && zip -r -X kubenav-darwin-arm64.zip kubenav
+          cd ../darwin-arm64 && zip -r -X kubenav-darwin-arm64.zip kubenav.app
           cd ../linux-amd64 && zip -r -X kubenav-linux-amd64.zip kubenav
           cd ../linux-arm && zip -r -X kubenav-linux-arm.zip kubenav
           cd ../linux-arm64 && zip -r -X kubenav-linux-arm64.zip kubenav
