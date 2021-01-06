@@ -216,11 +216,11 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
               queries: [
                 {
                   label: 'Current',
-                  query: `sum(irate(container_cpu_usage_seconds_total{namespace="${
+                  query: `sum(max(rate(container_cpu_usage_seconds_total{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", image!="", pod="${
                     item.metadata ? item.metadata.name : ''
-                  }", container=~"{{ .Container }}", container!="POD"}[4m]))`,
+                  }", container=~"{{ .Container }}", container!="POD", container!=""}[2m])) by (container))`,
                 },
                 {
                   label: 'Requested',
@@ -254,11 +254,11 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
               queries: [
                 {
                   label: 'Current',
-                  query: `sum(container_memory_usage_bytes{namespace="${
+                  query: `sum(max(container_memory_working_set_bytes{namespace="${
                     item.metadata ? item.metadata.namespace : ''
                   }", pod="${
                     item.metadata ? item.metadata.name : ''
-                  }", container=~"{{ .Container }}", container!="POD"}) / 1024 / 1024`,
+                  }", container=~"{{ .Container }}", container!="POD", container!=""}) by (container)) / 1024 / 1024`,
                 },
                 {
                   label: 'Requested',
@@ -276,14 +276,6 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
                     item.metadata ? item.metadata.name : ''
                   }", container=~"{{ .Container }}"}) / 1024 / 1024`,
                 },
-                {
-                  label: 'Cache',
-                  query: `sum(container_memory_cache{namespace="${
-                    item.metadata ? item.metadata.namespace : ''
-                  }", pod="${
-                    item.metadata ? item.metadata.name : ''
-                  }", container=~"{{ .Container }}", container!="POD"}) / 1024 / 1024`,
-                },
               ],
             },
             {
@@ -299,16 +291,16 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
               type: 'area',
               queries: [
                 {
-                  label: 'RX',
-                  query: `sort_desc(sum by (pod) (irate(container_network_receive_bytes_total{namespace="${
+                  label: 'Receive',
+                  query: `sum(rate(container_network_receive_bytes_total{namespace="${
                     item.metadata ? item.metadata.namespace : ''
-                  }", pod="${item.metadata ? item.metadata.name : ''}"}[4m]))) / 1024 / 1024`,
+                  }", pod="${item.metadata ? item.metadata.name : ''}"}[2m])) by (pod) / 1024 / 1024`,
                 },
                 {
-                  label: 'TX',
-                  query: `sort_desc(sum by (pod) (irate(container_network_transmit_bytes_total{namespace="${
+                  label: 'Transmit',
+                  query: `-sum(rate(container_network_transmit_bytes_total{namespace="${
                     item.metadata ? item.metadata.namespace : ''
-                  }", pod="${item.metadata ? item.metadata.name : ''}"}[4m]))) / 1024 / 1024`,
+                  }", pod="${item.metadata ? item.metadata.name : ''}"}[2m])) by (pod) / 1024 / 1024`,
                 },
               ],
             },

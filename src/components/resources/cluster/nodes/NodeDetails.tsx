@@ -197,9 +197,9 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
               queries: [
                 {
                   label: 'Current',
-                  query: `sum(irate(container_cpu_usage_seconds_total{node="${
+                  query: `sum(max(rate(container_cpu_usage_seconds_total{id="/", node="${
                     item.metadata ? item.metadata.name : ''
-                  }", image!="", container!="", container!="POD"}[4m]))`,
+                  }"}[2m])))`,
                 },
                 {
                   label: 'Requested',
@@ -235,9 +235,9 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
               queries: [
                 {
                   label: 'Current',
-                  query: `sum(container_memory_usage_bytes{node="${
+                  query: `sum(max(container_memory_working_set_bytes{id="/", node="${
                     item.metadata ? item.metadata.name : ''
-                  }", container!="", container!="POD"}) / 1024 / 1024 / 1024`,
+                  }"})) / 1024 / 1024 / 1024`,
                 },
                 {
                   label: 'Requested',
@@ -250,12 +250,6 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
                   query: `sum(kube_pod_container_resource_limits{node="${
                     item.metadata ? item.metadata.name : ''
                   }", resource="memory", container!=""}) / 1024 / 1024 / 1024`,
-                },
-                {
-                  label: 'Cache',
-                  query: `sum(container_memory_cache{node="${
-                    item.metadata ? item.metadata.name : ''
-                  }", container!="", container!="POD"}) / 1024 / 1024 / 1024`,
                 },
                 {
                   label: 'Allocatable',
