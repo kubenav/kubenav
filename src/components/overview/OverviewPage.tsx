@@ -102,7 +102,7 @@ const OverviewPage: React.FunctionComponent = () => {
                     queries: [
                       {
                         label: 'Current',
-                        query: `sum(irate(container_cpu_usage_seconds_total{image!="", container!="", container!="POD"}[4m]))`,
+                        query: `sum(max(rate(container_cpu_usage_seconds_total{id="/"}[2m])) by (node))`,
                       },
                       {
                         label: 'Requested',
@@ -132,7 +132,7 @@ const OverviewPage: React.FunctionComponent = () => {
                     queries: [
                       {
                         label: 'Current',
-                        query: `sum(container_memory_usage_bytes{container!="", container!="POD"}) / 1024 / 1024 / 1024`,
+                        query: `sum(max(container_memory_working_set_bytes{id="/"}) by (node)) / 1024 / 1024 / 1024`,
                       },
                       {
                         label: 'Requested',
@@ -141,10 +141,6 @@ const OverviewPage: React.FunctionComponent = () => {
                       {
                         label: 'Limit',
                         query: `sum(kube_pod_container_resource_limits{resource="memory", container!=""}) / 1024 / 1024 / 1024`,
-                      },
-                      {
-                        label: 'Cache',
-                        query: `sum(container_memory_cache{container!="", container!="POD"}) / 1024 / 1024 / 1024`,
                       },
                       {
                         label: 'Allocatable',

@@ -61,9 +61,9 @@ const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ ite
               queries: [
                 {
                   label: 'Current',
-                  query: `sum(irate(container_cpu_usage_seconds_total{namespace="${
+                  query: `sum(max(rate(container_cpu_usage_seconds_total{namespace="${
                     item.metadata ? item.metadata.name : ''
-                  }", image!="", container!="", container!="POD"}[4m]))`,
+                  }", image!="", container!="POD", container!=""}[2m])) by (pod, container))`,
                 },
                 {
                   label: 'Requested',
@@ -93,9 +93,9 @@ const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ ite
               queries: [
                 {
                   label: 'Current',
-                  query: `sum(container_memory_usage_bytes{namespace="${
+                  query: `sum(max(container_memory_working_set_bytes{namespace="${
                     item.metadata ? item.metadata.name : ''
-                  }", container!="", container!="POD"}) / 1024 / 1024`,
+                  }", container!="POD", container!=""}) by (pod, container)) / 1024 / 1024`,
                 },
                 {
                   label: 'Requested',
@@ -108,12 +108,6 @@ const NamespaceDetails: React.FunctionComponent<INamespaceDetailsProps> = ({ ite
                   query: `sum(kube_pod_container_resource_limits{namespace="${
                     item.metadata ? item.metadata.name : ''
                   }", resource="memory", container!=""}) / 1024 / 1024`,
-                },
-                {
-                  label: 'Cache',
-                  query: `sum(container_memory_cache{namespace="${
-                    item.metadata ? item.metadata.name : ''
-                  }", container!="", container!="POD"}) / 1024 / 1024`,
                 },
               ],
             },
