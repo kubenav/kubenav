@@ -29,7 +29,8 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.15
+          stable: false
+          go-version: 1.16.0-beta1
 
       - name: Install Ionic
         run: |
@@ -73,6 +74,7 @@ jobs:
       - name: Compress Electron App
         run: |
           cd cmd/electron/output/darwin-amd64 && zip -r -X kubenav-darwin-amd64.zip kubenav.app
+          cd ../darwin-arm64 && zip -r -X kubenav-darwin-arm64.zip kubenav
           cd ../linux-amd64 && zip -r -X kubenav-linux-amd64.zip kubenav
           cd ../linux-arm && zip -r -X kubenav-linux-arm.zip kubenav
           cd ../linux-arm64 && zip -r -X kubenav-linux-arm64.zip kubenav
@@ -102,6 +104,13 @@ jobs:
         with:
           name: kubenav-darwin-amd64.zip
           path: cmd/electron/output/darwin-amd64/kubenav-darwin-amd64.zip
+
+      - name: Upload Artifact (darwin-arm64)
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: kubenav-darwin-arm64.zip
+          path: cmd/electron/output/darwin-arm64/kubenav-darwin-arm64.zip
 
       - name: Upload Artifact (linux-amd64)
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule' }}
@@ -135,9 +144,10 @@ jobs:
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
         run: |
           utils/scripts/upload.sh cmd/electron/output/darwin-amd64/kubenav-darwin-amd64.zip application/zip
+          utils/scripts/upload.sh cmd/electron/output/darwin-amd64/kubenav-darwin-arm64.zip application/zip
           utils/scripts/upload.sh cmd/electron/output/linux-amd64/kubenav-linux-amd64.zip application/zip
-          utils/scripts/upload.sh cmd/electron/output/windows-amd64/kubenav-windows-amd64.zip application/zip
           utils/scripts/upload.sh cmd/electron/output/linux-arm64/kubenav-linux-arm64.zip application/zip
           utils/scripts/upload.sh cmd/electron/output/linux-arm/kubenav-linux-arm.zip application/zip
+          utils/scripts/upload.sh cmd/electron/output/windows-amd64/kubenav-windows-amd64.zip application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
