@@ -73,10 +73,14 @@ github.com/asticode/go-astilectron v0.18.0 h1:4Hc069d3/8La+nWt5o/WWYmNiYfzfGGzC1
 github.com/asticode/go-astilectron v0.18.0/go.mod h1:bF7zkk11IwP8lBPhEl3cCtkKIwsRRR6264OFM1v3Yso=
 github.com/asticode/go-astilectron v0.20.0 h1:HUPl8BPxuRDiOnK4JSpTzJweSNpR85HZUQFopf7MVcM=
 github.com/asticode/go-astilectron v0.20.0/go.mod h1:bF7zkk11IwP8lBPhEl3cCtkKIwsRRR6264OFM1v3Yso=
+github.com/asticode/go-astilectron v0.22.0 h1:YT9LzDroGf2YlIAc8JBgWsvggOfeL4yj/0WXL9Qf918=
+github.com/asticode/go-astilectron v0.22.0/go.mod h1:bF7zkk11IwP8lBPhEl3cCtkKIwsRRR6264OFM1v3Yso=
 github.com/asticode/go-astilectron-bootstrap v0.4.0 h1:iHUJSIWtwq2wELHd5hbKMzsE1dMzIlHlfyakOIZcUFI=
 github.com/asticode/go-astilectron-bootstrap v0.4.0/go.mod h1:zySr3PUhZTjs+WTzyuHJMNAeEeUvgOr2yH7WTIqdY1o=
 github.com/asticode/go-astilectron-bootstrap v0.4.4 h1:AebHl8ooixuqOgvRz01++l2ki1mSlKeId7OWYjS5Z5M=
 github.com/asticode/go-astilectron-bootstrap v0.4.4/go.mod h1:+BSfTf4V8vW27vo4xEwUr4lXTryWL3awdALRSZfy1mM=
+github.com/asticode/go-astilectron-bootstrap v0.4.6 h1:4P6By2wb5bXBB6slARBbQwEjTEd2zz/NtZ7FWPtsE6s=
+github.com/asticode/go-astilectron-bootstrap v0.4.6/go.mod h1:ok9CtLkAr7i16/wBCV4tUt9bV+cgxgsxa/Mfr9gq4uk=
 github.com/asticode/go-astilectron-bundler v0.5.2 h1:JC4UBDr28vVY8gk4A/wag8BW0gvAd6z4MGUM/D7NXw4=
 github.com/asticode/go-astilectron-bundler v0.5.2/go.mod h1:V1VInmdndq/Kd+45cOh4fa9fARNZSCpXqxDznbh+lO0=
 github.com/asticode/go-astilectron-bundler v0.7.0 h1:P5Ot4loRUMSgHMEkH+DIQ0adKvEuJQaVDEcUuxnGFRs=
@@ -85,6 +89,8 @@ github.com/asticode/go-astilectron-bundler v0.7.2 h1:0/h8rbZyTlywjnG3XGeENe4Pv0/
 github.com/asticode/go-astilectron-bundler v0.7.2/go.mod h1:pOhXErxB5yqWhIxWXrXi5GWblxLVUIhZI+wo0xa64CY=
 github.com/asticode/go-astilectron-bundler v0.7.3 h1:CXQVmSNZ4uE7gkURKqyTtnzKn6nfGGwQrwWeexqeDnw=
 github.com/asticode/go-astilectron-bundler v0.7.3/go.mod h1:ZCUI3iEtXQg47aEGKMsVXVQddKF5hOM86GAm3DjiDho=
+github.com/asticode/go-astilectron-bundler v0.7.5 h1:IVpqnHSIqnTOpLxYSBdKrdC4OtPFFtU7QwKvS5nn/+c=
+github.com/asticode/go-astilectron-bundler v0.7.5/go.mod h1:aRBf+nju88VYVcnQdWzNDF71jf8KA46spqNG0nvftzE=
 github.com/asticode/go-bindata v1.0.0 h1:5whO0unjdx2kbAbzoBMS3307jKAEf3oQ1lJcx5RdgA8=
 github.com/asticode/go-bindata v1.0.0/go.mod h1:t/Y+/iCLrvaYkv8Y6PscRnyUeYzy9y9+8JC9CMcKdHY=
 github.com/aws/aws-sdk-go v1.30.20 h1:ktsy2vodSZxz/arYqo7DlpkIeNohHL+4Rmjdo7YGtrE=
