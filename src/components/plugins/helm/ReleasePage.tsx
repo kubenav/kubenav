@@ -136,7 +136,7 @@ const ReleasePage: React.FunctionComponent<IReleasePageProps> = ({ match }: IRel
                     </IonCardHeader>
                     <IonCardContent>
                       <Editor
-                        value={yaml.safeDump(
+                        value={yaml.dump(
                           data.details.config
                             ? data.details.config
                             : data.details.chart.values

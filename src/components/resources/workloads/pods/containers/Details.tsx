@@ -244,7 +244,7 @@ const Details: React.FunctionComponent<IDetailsProps> = ({
                     <IonCardTitle>Liveness Probe</IonCardTitle>
                   </IonCardHeader>
                   <IonCardContent>
-                    <Editor readOnly={true} value={yaml.safeDump(container.livenessProbe)} />
+                    <Editor readOnly={true} value={yaml.dump(container.livenessProbe)} />
                   </IonCardContent>
                 </IonCardEqualHeight>
               </IonCol>
@@ -257,7 +257,7 @@ const Details: React.FunctionComponent<IDetailsProps> = ({
                     <IonCardTitle>Readiness Probe</IonCardTitle>
                   </IonCardHeader>
                   <IonCardContent>
-                    <Editor readOnly={true} value={yaml.safeDump(container.readinessProbe)} />
+                    <Editor readOnly={true} value={yaml.dump(container.readinessProbe)} />
                   </IonCardContent>
                 </IonCardEqualHeight>
               </IonCol>
@@ -270,7 +270,7 @@ const Details: React.FunctionComponent<IDetailsProps> = ({
                     <IonCardTitle>Startup Probe</IonCardTitle>
                   </IonCardHeader>
                   <IonCardContent>
-                    <Editor readOnly={true} value={yaml.safeDump(container.startupProbe)} />
+                    <Editor readOnly={true} value={yaml.dump(container.startupProbe)} />
                   </IonCardContent>
                 </IonCardEqualHeight>
               </IonCol>
@@ -283,7 +283,7 @@ const Details: React.FunctionComponent<IDetailsProps> = ({
                     <IonCardTitle>Security Context</IonCardTitle>
                   </IonCardHeader>
                   <IonCardContent>
-                    <Editor readOnly={true} value={yaml.safeDump(container.securityContext)} />
+                    <Editor readOnly={true} value={yaml.dump(container.securityContext)} />
                   </IonCardContent>
                 </IonCardEqualHeight>
               </IonCol>
