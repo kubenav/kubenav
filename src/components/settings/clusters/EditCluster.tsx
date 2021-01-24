@@ -403,7 +403,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     type="text"
                     value={authProviderAWS.accessKeyID}
                     name="accessKeyID"
-                    onInput={handleAuthProviderAWS}
+                    onIonChange={handleAuthProviderAWS}
                   />
                 </IonItem>
                 <IonItem>
@@ -412,7 +412,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     type="text"
                     value={authProviderAWS.secretKey}
                     name="secretKey"
-                    onInput={handleAuthProviderAWS}
+                    onIonChange={handleAuthProviderAWS}
                   />
                 </IonItem>
                 <IonItem>
@@ -421,7 +421,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     type="text"
                     value={authProviderAWS.sessionToken}
                     name="sessionToken"
-                    onInput={handleAuthProviderAWS}
+                    onIonChange={handleAuthProviderAWS}
                   />
                 </IonItem>
               </IonItemGroup>
@@ -437,7 +437,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     type="text"
                     value={authProviderAWSSSO.startURL}
                     name="startURL"
-                    onInput={handleAuthProviderAWSSSO}
+                    onIonChange={handleAuthProviderAWSSSO}
                   />
                 </IonItem>
                 <IonItem>
@@ -446,7 +446,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     type="text"
                     value={authProviderAWSSSO.accountID}
                     name="accountID"
-                    onInput={handleAuthProviderAWSSSO}
+                    onIonChange={handleAuthProviderAWSSSO}
                   />
                 </IonItem>
                 <IonItem>
@@ -455,7 +455,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     type="text"
                     value={authProviderAWSSSO.roleName}
                     name="roleName"
-                    onInput={handleAuthProviderAWSSSO}
+                    onIonChange={handleAuthProviderAWSSSO}
                   />
                 </IonItem>
               </IonItemGroup>
@@ -472,7 +472,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     required={true}
                     value={authProviderAzure.subscriptionID}
                     name="subscriptionID"
-                    onInput={handleAuthProviderAzure}
+                    onIonChange={handleAuthProviderAzure}
                   />
                 </IonItem>
                 <IonItem>
@@ -482,7 +482,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     required={true}
                     value={authProviderAzure.clientID}
                     name="clientID"
-                    onInput={handleAuthProviderAzure}
+                    onIonChange={handleAuthProviderAzure}
                   />
                 </IonItem>
                 <IonItem>
@@ -492,7 +492,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     required={true}
                     value={authProviderAzure.clientSecret}
                     name="clientSecret"
-                    onInput={handleAuthProviderAzure}
+                    onIonChange={handleAuthProviderAzure}
                   />
                 </IonItem>
                 <IonItem>
@@ -502,7 +502,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     required={true}
                     value={authProviderAzure.tenantID}
                     name="tenantID"
-                    onInput={handleAuthProviderAzure}
+                    onIonChange={handleAuthProviderAzure}
                   />
                 </IonItem>
                 <IonItem>
@@ -512,7 +512,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     required={true}
                     value={authProviderAzure.resourceGroupName}
                     name="resourceGroupName"
-                    onInput={handleAuthProviderAzure}
+                    onIonChange={handleAuthProviderAzure}
                   />
                 </IonItem>
               </IonItemGroup>
@@ -529,7 +529,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     required={true}
                     value={authProviderDigitalOcean.token}
                     name="token"
-                    onInput={handleAuthProviderDigitalOcean}
+                    onIonChange={handleAuthProviderDigitalOcean}
                   />
                 </IonItem>
                 <IonButton expand="block" onClick={() => updateKubeconfigDigitalOcean()}>
@@ -549,7 +549,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     required={true}
                     value={authProviderGoogle.clientID}
                     name="clientID"
-                    onInput={handleAuthProviderGoogle}
+                    onIonChange={handleAuthProviderGoogle}
                   />
                 </IonItem>
                 <IonItem>
@@ -559,7 +559,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     required={true}
                     value={authProviderGoogle.refreshToken}
                     name="refreshToken"
-                    onInput={handleAuthProviderGoogle}
+                    onIonChange={handleAuthProviderGoogle}
                   />
                 </IonItem>
                 <IonButton expand="block" onClick={() => reAuthenticateGoogle()}>
@@ -579,7 +579,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     required={true}
                     value={authProviderOIDC.idpIssuerURL}
                     name="idpIssuerURL"
-                    onInput={handleAuthProviderOIDC}
+                    onIonChange={handleAuthProviderOIDC}
                   />
                 </IonItem>
                 <IonItem>
@@ -589,7 +589,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     required={true}
                     value={authProviderOIDC.clientID}
                     name="clientID"
-                    onInput={handleAuthProviderOIDC}
+                    onIonChange={handleAuthProviderOIDC}
                   />
                 </IonItem>
                 <IonItem>
@@ -599,7 +599,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     required={true}
                     value={authProviderOIDC.clientSecret}
                     name="clientSecret"
-                    onInput={handleAuthProviderOIDC}
+                    onIonChange={handleAuthProviderOIDC}
                   />
                 </IonItem>
                 <IonItem>
@@ -608,12 +608,16 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     autoGrow={true}
                     value={authProviderOIDC.certificateAuthority}
                     name="certificateAuthority"
-                    onInput={handleAuthProviderOIDC}
+                    onIonChange={handleAuthProviderOIDC}
                   />
                 </IonItem>
                 <IonItem>
                   <IonLabel position="stacked">Refresh Token (optional)</IonLabel>
-                  <IonTextarea autoGrow={true} value={authProviderOIDC.refreshToken} onInput={handleAuthProviderOIDC} />
+                  <IonTextarea
+                    autoGrow={true}
+                    value={authProviderOIDC.refreshToken}
+                    onIonChange={handleAuthProviderOIDC}
+                  />
                 </IonItem>
 
                 <IonButton expand="block" onClick={() => reAuthenticateOIDC()}>
