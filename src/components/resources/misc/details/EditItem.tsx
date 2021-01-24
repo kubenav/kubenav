@@ -69,7 +69,7 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ show, hide, item, u
   const [value, setValue] = useState<string>('');
 
   useEffect(() => {
-    setValue(yaml.safeDump(item));
+    setValue(yaml.dump(item));
   }, [item]);
 
   const handleSave = async () => {

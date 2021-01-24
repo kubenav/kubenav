@@ -67,14 +67,14 @@ const ViewItem: React.FunctionComponent<IViewItemProps> = ({ show, hide, item }:
       try {
         await Filesystem.writeFile({
           path: `${item.metadata ? item.metadata.name : 'export'}.yaml`,
-          data: yaml.safeDump(item),
+          data: yaml.dump(item),
           directory: FilesystemDirectory.Documents,
           encoding: FilesystemEncoding.UTF8,
         });
       } catch (err) {}
     } else {
       const element = document.createElement('a');
-      const file = new Blob([yaml.safeDump(item)], { type: 'text/yaml' });
+      const file = new Blob([yaml.dump(item)], { type: 'text/yaml' });
       element.href = URL.createObjectURL(file);
       element.download = `${item.metadata ? item.metadata.name : 'export'}.yaml`;
       document.body.appendChild(element);
@@ -99,7 +99,7 @@ const ViewItem: React.FunctionComponent<IViewItemProps> = ({ show, hide, item }:
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <Editor readOnly={true} value={yaml.safeDump(item)} fullHeight={true} />
+          <Editor readOnly={true} value={yaml.dump(item)} fullHeight={true} />
         </IonContent>
       </IonModal>
     </React.Fragment>
