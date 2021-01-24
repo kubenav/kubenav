@@ -305,9 +305,9 @@ export const resources: IAppSections = {
         singleText: 'Persistent Volume',
         pluralText: 'Persistent Volumes',
         icon: '/assets/icons/kubernetes/pv.png',
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         kind: 'PersistentVolume',
         apiVersion: 'v1',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string): string => {
           return `/api/v1/persistentvolumes`;
         },
@@ -385,9 +385,9 @@ export const resources: IAppSections = {
         singleText: 'Storage Class',
         pluralText: 'Storage Classes',
         icon: '/assets/icons/kubernetes/sc.png',
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         kind: 'StorageClass',
         apiVersion: 'storage.k8s.io/v1',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string): string => {
           return `/apis/storage.k8s.io/v1/storageclasses`;
         },
@@ -406,9 +406,9 @@ export const resources: IAppSections = {
         singleText: 'Cluster Role',
         pluralText: 'Cluster Roles',
         icon: '/assets/icons/kubernetes/c-role.png',
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         kind: 'ClusterRole',
         apiVersion: 'rbac.authorization.k8s.io/v1',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string): string => {
           return `/apis/rbac.authorization.k8s.io/v1/clusterroles`;
         },
@@ -422,9 +422,9 @@ export const resources: IAppSections = {
         singleText: 'Cluster Role Binding',
         pluralText: 'Cluster Role Bindings',
         icon: '/assets/icons/kubernetes/c-rb.png',
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         kind: 'ClusterRoleBinding',
         apiVersion: 'rbac.authorization.k8s.io/v1',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string): string => {
           return `/apis/rbac.authorization.k8s.io/v1/clusterrolebindings`;
         },
@@ -477,9 +477,9 @@ export const resources: IAppSections = {
         singleText: 'Component Status',
         pluralText: 'Component Statuses',
         icon: '/assets/icons/kubernetes/master.png',
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         kind: 'ComponentStatus',
         apiVersion: 'v1',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string): string => {
           return `/api/v1/componentstatuses`;
         },
@@ -494,9 +494,9 @@ export const resources: IAppSections = {
         singleText: 'Custom Resource Definition',
         pluralText: 'Custom Resource Definitions',
         icon: '/assets/icons/kubernetes/crd.png',
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         kind: '',
         apiVersion: '',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string): string => {
           return `/apis/apiextensions.k8s.io/v1beta1/customresourcedefinitions`;
         },
@@ -526,9 +526,9 @@ export const resources: IAppSections = {
         singleText: 'Namespace',
         pluralText: 'Namespaces',
         icon: '/assets/icons/kubernetes/ns.png',
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         kind: 'Namespace',
         apiVersion: 'v1',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string): string => {
           return `/api/v1/namespaces`;
         },
@@ -542,9 +542,9 @@ export const resources: IAppSections = {
         singleText: 'Node',
         pluralText: 'Nodes',
         icon: '/assets/icons/kubernetes/node.png',
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         kind: 'Node',
         apiVersion: 'v1',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string): string => {
           return `/api/v1/nodes`;
         },
@@ -558,9 +558,9 @@ export const resources: IAppSections = {
         singleText: 'Pod Security Policy',
         pluralText: 'Pod Security Policies',
         icon: '/assets/icons/kubernetes/psp.png',
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         kind: 'PodSecurityPolicy',
         apiVersion: 'policy/v1beta1',
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string): string => {
           return `/apis/policy/v1beta1/podsecuritypolicies`;
         },
