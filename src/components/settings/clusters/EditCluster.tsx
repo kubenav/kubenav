@@ -193,7 +193,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
         authProviderDigitalOcean.token,
         authProviderDigitalOcean.clusterID,
       );
-      const cluster = yaml.safeLoad(kubeconfig);
+      const cluster = yaml.load(kubeconfig);
       if (cluster && typeof cluster === 'object') {
       }
       setToken(

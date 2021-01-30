@@ -74,7 +74,7 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ show, hide, item, u
 
   const handleSave = async () => {
     try {
-      const yamlObj = yaml.safeLoad(value);
+      const yamlObj = yaml.load(value);
       if (yamlObj) {
         const diff = jsonpatch.compare(item, yamlObj);
         await kubernetesRequest(

@@ -50,7 +50,7 @@ const DigitalOceanPage: React.FunctionComponent<IDigitalOceanPageProps> = ({ his
 
           for (let index = 0; index < doClusters.length; index++) {
             const kubeconfig = await getDigitalOceanKubeconfig(credentials.token, doClusters[index].id);
-            const cluster = yaml.safeLoad(kubeconfig);
+            const cluster = yaml.load(kubeconfig);
             if (cluster && typeof cluster === 'object') {
               tmpClusters.push({
                 id: `do_${doClusters[index].id}`,

@@ -193,7 +193,7 @@ const CreateItem: React.FunctionComponent<ICreateItemProps> = ({
 
   const handleCreate = async () => {
     try {
-      const yamlObj = yaml.safeLoad(value);
+      const yamlObj = yaml.load(value);
       if (yamlObj && typeof yamlObj === 'object') {
         await kubernetesRequest(
           'POST',
