@@ -857,6 +857,7 @@ export const getOIDCAccessToken = async (credentials: IClusterAuthProviderOIDC):
         certificateAuthority: credentials.certificateAuthority ? credentials.certificateAuthority : '',
         redirectURL: OIDC_REDIRECT_URL_WEB,
         refreshToken: credentials.refreshToken,
+        scopes: credentials.scopes ? credentials.scopes : '',
       }),
     });
 
@@ -887,6 +888,7 @@ export const getOIDCLink = async (
   clientID: string,
   clientSecret: string,
   certificateAuthority: string,
+  scopes?: string,
 ): Promise<string> => {
   try {
     await checkServer();
@@ -899,6 +901,7 @@ export const getOIDCLink = async (
         clientSecret: clientSecret,
         certificateAuthority: certificateAuthority,
         redirectURL: OIDC_REDIRECT_URL_WEB,
+        scopes: scopes ? scopes : '',
       }),
     });
 
@@ -936,6 +939,7 @@ export const getOIDCRefreshToken = async (
         certificateAuthority: credentials.certificateAuthority,
         redirectURL: OIDC_REDIRECT_URL_WEB,
         code: code,
+        scopes: credentials.scopes ? credentials.scopes : '',
       }),
     });
 

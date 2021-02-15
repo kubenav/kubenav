@@ -194,6 +194,7 @@ export interface IClusterAuthProviderGoogle {
 export interface IClusterAuthProviderOIDC {
   clientID: string;
   clientSecret: string;
+  scopes?: string;
   idToken: string;
   idpIssuerURL: string;
   refreshToken: string;
