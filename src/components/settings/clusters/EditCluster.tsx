@@ -245,6 +245,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
         authProviderOIDC.clientID,
         authProviderOIDC.clientSecret,
         authProviderOIDC.certificateAuthority,
+        authProviderOIDC.scopes,
       );
 
       setShowModal(false);
@@ -599,6 +600,16 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     required={true}
                     value={authProviderOIDC.clientSecret}
                     name="clientSecret"
+                    onIonChange={handleAuthProviderOIDC}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="stacked">Scopes (optional)</IonLabel>
+                  <IonInput
+                    type="text"
+                    required={true}
+                    value={authProviderOIDC.scopes}
+                    name="scopes"
                     onIonChange={handleAuthProviderOIDC}
                   />
                 </IonItem>

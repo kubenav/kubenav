@@ -26,6 +26,7 @@ const OIDC: React.FunctionComponent<IOIDCProps> = ({ close, history }: IOIDCProp
   const [discoveryURL, setDiscoveryURL] = useState<string>('');
   const [clientID, setClientID] = useState<string>('');
   const [clientSecret, setClientSecret] = useState<string>('');
+  const [scopes, setScopes] = useState<string>('');
   const [certificateAuthority, setCertificateAuthority] = useState<string>('');
   const [refreshToken, setRefreshToken] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -40,6 +41,10 @@ const OIDC: React.FunctionComponent<IOIDCProps> = ({ close, history }: IOIDCProp
 
   const handleClientSecret = (event) => {
     setClientSecret(event.target.value);
+  };
+
+  const handleScopes = (event) => {
+    setScopes(event.target.value);
   };
 
   const handleCertificateAuthority = (event) => {
@@ -59,6 +64,7 @@ const OIDC: React.FunctionComponent<IOIDCProps> = ({ close, history }: IOIDCProp
       saveTemporaryCredentials({
         clientID: clientID,
         clientSecret: clientSecret,
+        scopes: scopes,
         idpIssuerURL: discoveryURL,
         refreshToken: refreshToken,
         certificateAuthority: ca,
@@ -72,7 +78,7 @@ const OIDC: React.FunctionComponent<IOIDCProps> = ({ close, history }: IOIDCProp
         history.push('/settings/clusters/oidc');
       } else {
         try {
-          const url = await getOIDCLink(discoveryURL, clientID, clientSecret, ca);
+          const url = await getOIDCLink(discoveryURL, clientID, clientSecret, ca, scopes);
           close();
           window.location.replace(url);
         } catch (err) {
@@ -113,6 +119,10 @@ const OIDC: React.FunctionComponent<IOIDCProps> = ({ close, history }: IOIDCProp
           <IonItem>
             <IonLabel position="stacked">Client Secret</IonLabel>
             <IonInput type="text" required={true} value={clientSecret} onInput={handleClientSecret} />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="stacked">Scopes (optional)</IonLabel>
+            <IonInput type="text" required={true} value={scopes} onInput={handleScopes} />
           </IonItem>
           <IonItem>
             <IonLabel position="stacked">Certificate Authority (optional)</IonLabel>

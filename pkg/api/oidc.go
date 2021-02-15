@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/kubenav/kubenav/pkg/api/middleware"
 
@@ -23,6 +24,7 @@ type OIDCRequest struct {
 	RedirectURL          string `json:"redirectURL"`
 	RefreshToken         string `json:"refreshToken"`
 	Code                 string `json:"code"`
+	Scopes               string `json:"scopes"`
 }
 
 // OIDCResponse is the structure of a response for one of the OIDC methods.
@@ -64,12 +66,16 @@ func (c *Client) oidcGetLinkHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	oidcRequest.Scopes = strings.ReplaceAll(oidcRequest.Scopes, " ", "")
+	scopes := strings.Split(oidcRequest.Scopes, ",")
+	scopes = append(scopes, oidc.ScopeOpenID)
+
 	oauth2Config := oauth2.Config{
 		ClientID:     oidcRequest.ClientID,
 		ClientSecret: oidcRequest.ClientSecret,
 		RedirectURL:  oidcRequest.RedirectURL,
 		Endpoint:     provider.Endpoint(),
-		Scopes:       []string{oidc.ScopeOpenID},
+		Scopes:       scopes,
 	}
 
 	oidcResponse := OIDCResponse{
@@ -111,12 +117,16 @@ func (c *Client) oidcGetRefreshTokenHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	oidcRequest.Scopes = strings.ReplaceAll(oidcRequest.Scopes, " ", "")
+	scopes := strings.Split(oidcRequest.Scopes, ",")
+	scopes = append(scopes, oidc.ScopeOpenID)
+
 	oauth2Config := oauth2.Config{
 		ClientID:     oidcRequest.ClientID,
 		ClientSecret: oidcRequest.ClientSecret,
 		RedirectURL:  oidcRequest.RedirectURL,
 		Endpoint:     provider.Endpoint(),
-		Scopes:       []string{oidc.ScopeOpenID},
+		Scopes:       scopes,
 	}
 
 	oauth2Token, err := oauth2Config.Exchange(ctx, oidcRequest.Code)
@@ -172,12 +182,16 @@ func (c *Client) oidcGetAccessTokenHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	oidcRequest.Scopes = strings.ReplaceAll(oidcRequest.Scopes, " ", "")
+	scopes := strings.Split(oidcRequest.Scopes, ",")
+	scopes = append(scopes, oidc.ScopeOpenID)
+
 	oauth2Config := oauth2.Config{
 		ClientID:     oidcRequest.ClientID,
 		ClientSecret: oidcRequest.ClientSecret,
 		RedirectURL:  oidcRequest.RedirectURL,
 		Endpoint:     provider.Endpoint(),
-		Scopes:       []string{oidc.ScopeOpenID},
+		Scopes:       scopes,
 	}
 
 	ts := oauth2Config.TokenSource(ctx, &oauth2.Token{RefreshToken: oidcRequest.RefreshToken})
