@@ -1,5 +1,30 @@
 # Changelog
 
+## [3.4.0](https://github.com/kubenav/kubenav/tree/3.4.0) (2021-03-01)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.3.0...3.4.0)
+
+**Implemented enhancements:**
+
+- Ability to specify extra scopes for OIDC [\#303](https://github.com/kubenav/kubenav/issues/303)
+
+**Fixed bugs:**
+
+- BUG: js-yaml edit error in latest builds [\#301](https://github.com/kubenav/kubenav/issues/301)
+- Fix edit cluster modal for cloud providers [\#299](https://github.com/kubenav/kubenav/pull/299) ([ricoberger](https://github.com/ricoberger))
+- Update build.yml [\#295](https://github.com/kubenav/kubenav/pull/295) ([si458](https://github.com/si458))
+
+**Closed issues:**
+
+- README Language updates [\#305](https://github.com/kubenav/kubenav/issues/305)
+
+**Merged pull requests:**
+
+- Fix typos in the Readme [\#306](https://github.com/kubenav/kubenav/pull/306) ([ricoberger](https://github.com/ricoberger))
+- Allow additional OIDC scopes [\#304](https://github.com/kubenav/kubenav/pull/304) ([ricoberger](https://github.com/ricoberger))
+- Update dependencies [\#300](https://github.com/kubenav/kubenav/pull/300) ([ricoberger](https://github.com/ricoberger))
+- Improve default metrics [\#296](https://github.com/kubenav/kubenav/pull/296) ([ricoberger](https://github.com/ricoberger))
+
 ## [3.3.0](https://github.com/kubenav/kubenav/tree/3.3.0) (2021-01-03)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/3.2.1...3.3.0)
@@ -354,6 +379,7 @@
 **Fixed bugs:**
 
 - Fix OIDC support for desktop [\#56](https://github.com/kubenav/kubenav/pull/56) ([ricoberger](https://github.com/ricoberger))
+- Check if authProvider property exists on cluster [\#55](https://github.com/kubenav/kubenav/pull/55) ([ricoberger](https://github.com/ricoberger))
 - Fix Kubeconfig validation [\#54](https://github.com/kubenav/kubenav/pull/54) ([ricoberger](https://github.com/ricoberger))
 
 ## [1.4.0](https://github.com/kubenav/kubenav/tree/1.4.0) (2020-04-13)
@@ -391,7 +417,6 @@
 
 - Importing AWS EKS cluster returns just one cluster [\#35](https://github.com/kubenav/kubenav/issues/35)
 - Using kubeconfig from Rancher does not work [\#32](https://github.com/kubenav/kubenav/issues/32)
-- Check if authProvider property exists on cluster [\#55](https://github.com/kubenav/kubenav/pull/55) ([ricoberger](https://github.com/ricoberger))
 - Improve required data checks [\#47](https://github.com/kubenav/kubenav/pull/47) ([ricoberger](https://github.com/ricoberger))
 - Multiple UI Fixes [\#45](https://github.com/kubenav/kubenav/pull/45) ([ricoberger](https://github.com/ricoberger))
 - Fix logs modal for valid json [\#44](https://github.com/kubenav/kubenav/pull/44) ([ricoberger](https://github.com/ricoberger))
