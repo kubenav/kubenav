@@ -54,7 +54,7 @@ export const involvedObjectLink = (involvedObject: V1ObjectReference): string =>
 
 export const readableDate = (date: Date | undefined): string => {
   if (!date) {
-    return '';
+    return 'N/A';
   }
   const jsonDate = date.toJSON();
   return new Date(jsonDate).toUTCString().toString();
