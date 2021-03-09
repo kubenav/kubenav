@@ -20,6 +20,7 @@ import { kubernetesRequest } from '../../utils/api';
 import { AppContext } from '../../utils/context';
 import useWindowWidth from '../../utils/useWindowWidth';
 import { involvedObjectLink } from '../resources/cluster/events/eventHelper';
+import { timeDifference } from '../../utils/helpers';
 
 interface IEvent {
   name: string;
@@ -27,6 +28,7 @@ interface IEvent {
   routerLink: string;
   reason: string;
   message: string;
+  lastTimestamp: string;
 }
 
 const Warnings: React.FunctionComponent = () => {
@@ -61,6 +63,9 @@ const Warnings: React.FunctionComponent = () => {
               routerLink: involvedObjectLink(event.involvedObject),
               reason: event.reason ? event.reason : '',
               message: event.message ? event.message : '',
+              lastTimestamp: event.lastTimestamp
+                ? timeDifference(new Date().getTime(), event.lastTimestamp.getTime())
+                : 'N/A',
             });
           }
         }
@@ -115,6 +120,7 @@ const Warnings: React.FunctionComponent = () => {
                       <tr>
                         <th>Name</th>
                         <th>Namespace</th>
+                        <th>Last Seen</th>
                         <th>Reason</th>
                         <th>Message</th>
                       </tr>
@@ -134,6 +140,7 @@ const Warnings: React.FunctionComponent = () => {
                                   )}
                                 </td>
                                 <td>{event.namespace}</td>
+                                <td>{event.lastTimestamp}</td>
                                 <td>{event.reason}</td>
                                 <td>{event.message}</td>
                               </tr>
