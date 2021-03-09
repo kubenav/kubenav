@@ -20,7 +20,7 @@ import { kubernetesRequest } from '../../utils/api';
 import { AppContext } from '../../utils/context';
 import useWindowWidth from '../../utils/useWindowWidth';
 import { involvedObjectLink } from '../resources/cluster/events/eventHelper';
-import { readableDate } from '../resources/cluster/events/eventHelper';
+import { timeDifference } from '../../utils/helpers';
 
 interface IEvent {
   name: string;
@@ -28,7 +28,6 @@ interface IEvent {
   routerLink: string;
   reason: string;
   message: string;
-  firstTimestamp: string;
   lastTimestamp: string;
 }
 
@@ -64,8 +63,9 @@ const Warnings: React.FunctionComponent = () => {
               routerLink: involvedObjectLink(event.involvedObject),
               reason: event.reason ? event.reason : '',
               message: event.message ? event.message : '',
-              firstTimestamp: readableDate(event.firstTimestamp),
-              lastTimestamp: readableDate(event.lastTimestamp),
+              lastTimestamp: event.lastTimestamp
+                ? timeDifference(new Date().getTime(), event.lastTimestamp.getTime())
+                : 'N/A',
             });
           }
         }
@@ -118,10 +118,9 @@ const Warnings: React.FunctionComponent = () => {
                   <table>
                     <thead>
                       <tr>
-                        <th>First Event</th>
-                        <th>Last Event</th>
                         <th>Name</th>
                         <th>Namespace</th>
+                        <th>Last Seen</th>
                         <th>Reason</th>
                         <th>Message</th>
                       </tr>
@@ -131,8 +130,6 @@ const Warnings: React.FunctionComponent = () => {
                         ? data.map((event, index) => {
                             return (
                               <tr key={index}>
-                                <td>{event.firstTimestamp}</td>
-                                <td>{event.lastTimestamp}</td>
                                 <td>
                                   {event.routerLink === '' ? (
                                     event.name
@@ -143,6 +140,7 @@ const Warnings: React.FunctionComponent = () => {
                                   )}
                                 </td>
                                 <td>{event.namespace}</td>
+                                <td>{event.lastTimestamp}</td>
                                 <td>{event.reason}</td>
                                 <td>{event.message}</td>
                               </tr>
