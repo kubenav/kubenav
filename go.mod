@@ -1,6 +1,6 @@
 module github.com/kubenav/kubenav
 
-go 1.14
+go 1.16
 
 require (
 	github.com/Azure/azure-sdk-for-go v42.0.0+incompatible
@@ -9,10 +9,10 @@ require (
 	github.com/Azure/go-autorest/autorest/to v0.3.0 // indirect
 	github.com/Azure/go-autorest/autorest/validation v0.2.0 // indirect
 	github.com/akavel/rsrc v0.9.0 // indirect
-	github.com/asticode/go-astikit v0.13.0
-	github.com/asticode/go-astilectron v0.20.0
-	github.com/asticode/go-astilectron-bootstrap v0.4.4
-	github.com/asticode/go-astilectron-bundler v0.7.3
+	github.com/asticode/go-astikit v0.15.0
+	github.com/asticode/go-astilectron v0.22.4
+	github.com/asticode/go-astilectron-bootstrap v0.4.10
+	github.com/asticode/go-astilectron-bundler v0.7.8
 	github.com/aws/aws-sdk-go v1.30.20
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/elazarl/go-bindata-assetfs v1.0.0

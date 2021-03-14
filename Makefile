@@ -25,6 +25,7 @@ build-server:
 
 build-electron:
 	rm -rf cmd/electron/bind_darwin_amd64.go
+	rm -rf cmd/electron/bind_darwin_arm64.go
 	rm -rf cmd/electron/bind_linux_amd64.go
 	rm -rf cmd/electron/bind_linux_arm.go
 	rm -rf cmd/electron/bind_linux_arm64.go
