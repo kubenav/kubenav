@@ -17,7 +17,7 @@ import (
 	"github.com/kubenav/kubenav/pkg/version"
 
 	log "github.com/sirupsen/logrus"
-	"github.com/spf13/cobra"
+	flag "github.com/spf13/pflag"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
@@ -39,104 +39,65 @@ var (
 	pluginPrometheusEnabledFlag         bool
 	pluginPrometheusPasswordFlag        string
 	pluginPrometheusUsernameFlag        string
+	showVersion                         bool
 )
 
-var rootCmd = &cobra.Command{
-	Use:                "kubenav",
-	Short:              "kubenav - the navigator for your Kubernetes clusters right in your pocket.",
-	Long:               "kubenav - the navigator for your Kubernetes clusters right in your pocket.",
-	FParseErrWhitelist: cobra.FParseErrWhitelist{UnknownFlags: true},
-	Run: func(cmd *cobra.Command, args []string) {
-		logLevel := log.InfoLevel
-		if debugFlag {
-			logLevel = log.DebugLevel
-			log.SetReportCaller(true)
-		}
+func init() {
+	var defaultPluginPrometheusUsernameFlag string
+	if os.Getenv("KUBENAV_PROMETHEUS_USERNAME") == "" {
+		defaultPluginPrometheusUsernameFlag = os.Getenv("KUBENAV_PROMETHEUS_USERNAME")
+	}
 
-		log.SetLevel(logLevel)
-		log.Infof(version.Info())
-		log.Infof(version.BuildContext())
+	var defaultPluginPrometheusPasswordFlag string
+	if os.Getenv("KUBENAV_PROMETHEUS_PASSWORD") == "" {
+		defaultPluginPrometheusPasswordFlag = os.Getenv("KUBENAV_PROMETHEUS_PASSWORD")
+	}
 
-		kubeClient, err := kube.NewClient(false, inclusterFlag, kubeconfigFlag, "", "")
-		if err != nil {
-			log.WithError(err).Fatalf("Could not create Kubernetes client")
-		}
+	var defaultPluginElasticsearchUsernameFlag string
+	if os.Getenv("KUBENAV_ELASTICSEARCH_USERNAME") == "" {
+		defaultPluginElasticsearchUsernameFlag = os.Getenv("KUBENAV_ELASTICSEARCH_USERNAME")
+	}
 
-		if pluginPrometheusUsernameFlag == "" {
-			pluginPrometheusUsernameFlag = os.Getenv("KUBENAV_PROMETHEUS_USERNAME")
-		}
+	var defaultPluginElasticsearchPasswordFlag string
+	if os.Getenv("KUBENAV_ELASTICSEARCH_PASSWORD") == "" {
+		defaultPluginElasticsearchPasswordFlag = os.Getenv("KUBENAV_ELASTICSEARCH_PASSWORD")
+	}
 
-		if pluginPrometheusPasswordFlag == "" {
-			pluginPrometheusPasswordFlag = os.Getenv("KUBENAV_PROMETHEUS_PASSWORD")
-		}
+	var defaultPluginJaegerUsernameFlag string
+	if os.Getenv("KUBENAV_JAEGER_USERNAME") == "" {
+		defaultPluginJaegerUsernameFlag = os.Getenv("KUBENAV_JAEGER_USERNAME")
+	}
 
-		if pluginElasticsearchUsernameFlag == "" {
-			pluginElasticsearchUsernameFlag = os.Getenv("KUBENAV_ELASTICSEARCH_USERNAME")
-		}
+	var defaultPluginJaegerPasswordFlag string
+	if os.Getenv("KUBENAV_JAEGER_PASSWORD") == "" {
+		defaultPluginJaegerPasswordFlag = os.Getenv("KUBENAV_JAEGER_PASSWORD")
+	}
 
-		if pluginElasticsearchPasswordFlag == "" {
-			pluginElasticsearchPasswordFlag = os.Getenv("KUBENAV_ELASTICSEARCH_PASSWORD")
-		}
-
-		if pluginJaegerUsernameFlag == "" {
-			pluginJaegerUsernameFlag = os.Getenv("KUBENAV_JAEGER_USERNAME")
-		}
-
-		if pluginJaegerPasswordFlag == "" {
-			pluginJaegerPasswordFlag = os.Getenv("KUBENAV_JAEGER_PASSWORD")
-		}
-
-		router := http.NewServeMux()
-		apiClient := api.NewClient(false, &plugins.Config{
-			Prometheus: &prometheus.Config{
-				Enabled:             pluginPrometheusEnabledFlag,
-				Address:             pluginPrometheusAddressFlag,
-				Username:            pluginPrometheusUsernameFlag,
-				Password:            pluginPrometheusPasswordFlag,
-				DashboardsNamespace: pluginPrometheusDashboardsNamespace,
-			},
-			Elasticsearch: &elasticsearch.Config{
-				Enabled:  pluginElasticsearchEnabledFlag,
-				Address:  pluginElasticsearchAddressFlag,
-				Username: pluginElasticsearchUsernameFlag,
-				Password: pluginElasticsearchPasswordFlag,
-			},
-			Jaeger: &jaeger.Config{
-				Enabled:  pluginJaegerEnabledFlag,
-				Address:  pluginJaegerAddressFlag,
-				Username: pluginJaegerUsernameFlag,
-				Password: pluginJaegerPasswordFlag,
-			},
-		}, kubeClient)
-		apiClient.Register(router)
-
-		index, err := ioutil.ReadFile(path.Join(debugIonicFlag, "index.html"))
-		if err != nil {
-			log.WithError(err).Fatalf("Could not load index.html file")
-		}
-
-		staticHandler := http.StripPrefix("/", http.FileServer(http.Dir(debugIonicFlag)))
-		router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-			if strings.Contains(r.URL.Path, ".") {
-				staticHandler.ServeHTTP(w, r)
-				return
-			}
-
-			fmt.Fprintf(w, string(index))
-		})
-
-		if err := http.ListenAndServe(":14122", router); err != nil {
-			log.WithError(err).Fatalf("kubenav server died")
-		}
-	},
+	flag.BoolVar(&debugFlag, "debug", false, "Enable debug mode.")
+	flag.StringVar(&debugIonicFlag, "debug.ionic", "build", "Path to the Ionic app.")
+	flag.BoolVar(&inclusterFlag, "incluster", false, "Use the in cluster configuration.")
+	flag.StringVar(&kubeconfigFlag, "kubeconfig", "", "Optional Kubeconfig file.")
+	flag.StringVar(&pluginElasticsearchAddressFlag, "plugin.elasticsearch.address", "", "The address for Elasticsearch.")
+	flag.BoolVar(&pluginElasticsearchEnabledFlag, "plugin.elasticsearch.enabled", false, "Enable the Elasticsearch plugin.")
+	flag.StringVar(&pluginElasticsearchPasswordFlag, "plugin.elasticsearch.password", defaultPluginElasticsearchPasswordFlag, "The password for Elasticsearch.")
+	flag.StringVar(&pluginElasticsearchUsernameFlag, "plugin.elasticsearch.username", defaultPluginElasticsearchUsernameFlag, "The username for Elasticsearch.")
+	flag.StringVar(&pluginJaegerAddressFlag, "plugin.jaeger.address", "", "The address for Jaeger.")
+	flag.BoolVar(&pluginJaegerEnabledFlag, "plugin.jaeger.enabled", false, "Enable the Jaeger plugin.")
+	flag.StringVar(&pluginJaegerPasswordFlag, "plugin.jaeger.password", defaultPluginJaegerPasswordFlag, "The password for Jaeger.")
+	flag.StringVar(&pluginJaegerUsernameFlag, "plugin.jaeger.username", defaultPluginJaegerUsernameFlag, "The username for Jaeger.")
+	flag.StringVar(&pluginPrometheusAddressFlag, "plugin.prometheus.address", "", "The address for Prometheus.")
+	flag.StringVar(&pluginPrometheusDashboardsNamespace, "plugin.prometheus.dashboards-namespace", "kubenav", "The namespace, where kubenav should look for dashboards.")
+	flag.BoolVar(&pluginPrometheusEnabledFlag, "plugin.prometheus.enabled", false, "Enable the Prometheus plugin.")
+	flag.StringVar(&pluginPrometheusPasswordFlag, "plugin.prometheus.password", defaultPluginPrometheusPasswordFlag, "The password for Prometheus.")
+	flag.StringVar(&pluginPrometheusUsernameFlag, "plugin.prometheus.username", defaultPluginPrometheusUsernameFlag, "The username for Prometheus.")
+	flag.BoolVar(&showVersion, "version", false, "Print version information.")
 }
 
-var versionCmd = &cobra.Command{
-	Use:                "version",
-	Short:              "Print version information for kubenav.",
-	Long:               "Print version information for kubenav.",
-	FParseErrWhitelist: cobra.FParseErrWhitelist{UnknownFlags: true},
-	Run: func(cmd *cobra.Command, args []string) {
+func main() {
+	flag.Parse()
+
+	// If the version flag is true, we just print the version information for kubenav and then we exit kubenav.
+	if showVersion {
 		v, err := version.Print("kubenav")
 		if err != nil {
 			log.WithError(err).Fatalf("Failed to print version information")
@@ -144,33 +105,65 @@ var versionCmd = &cobra.Command{
 
 		fmt.Fprintln(os.Stdout, v)
 		return
-	},
-}
+	}
 
-func init() {
-	rootCmd.AddCommand(versionCmd)
+	// When the debug flag is set, we have to change the log level to debug. If the flag isn't present we use the info
+	// log level.
+	logLevel := log.InfoLevel
+	if debugFlag {
+		logLevel = log.DebugLevel
+		log.SetReportCaller(true)
+	}
 
-	rootCmd.PersistentFlags().BoolVar(&debugFlag, "debug", false, "Enable debug mode.")
-	rootCmd.PersistentFlags().StringVar(&debugIonicFlag, "debug.ionic", "build", "Path to the Ionic app.")
-	rootCmd.PersistentFlags().BoolVar(&inclusterFlag, "incluster", false, "Use the in cluster configuration.")
-	rootCmd.PersistentFlags().StringVar(&kubeconfigFlag, "kubeconfig", "", "Optional Kubeconfig file.")
-	rootCmd.PersistentFlags().StringVar(&pluginElasticsearchAddressFlag, "plugin.elasticsearch.address", "", "The address for Elasticsearch.")
-	rootCmd.PersistentFlags().BoolVar(&pluginElasticsearchEnabledFlag, "plugin.elasticsearch.enabled", false, "Enable the Elasticsearch plugin.")
-	rootCmd.PersistentFlags().StringVar(&pluginElasticsearchPasswordFlag, "plugin.elasticsearch.password", "", "The password for Elasticsearch.")
-	rootCmd.PersistentFlags().StringVar(&pluginElasticsearchUsernameFlag, "plugin.elasticsearch.username", "", "The username for Elasticsearch.")
-	rootCmd.PersistentFlags().StringVar(&pluginJaegerAddressFlag, "plugin.jaeger.address", "", "The address for Jaeger.")
-	rootCmd.PersistentFlags().BoolVar(&pluginJaegerEnabledFlag, "plugin.jaeger.enabled", false, "Enable the Jaeger plugin.")
-	rootCmd.PersistentFlags().StringVar(&pluginJaegerPasswordFlag, "plugin.jaeger.password", "", "The password for Jaeger.")
-	rootCmd.PersistentFlags().StringVar(&pluginJaegerUsernameFlag, "plugin.jaeger.username", "", "The username for Jaeger.")
-	rootCmd.PersistentFlags().StringVar(&pluginPrometheusAddressFlag, "plugin.prometheus.address", "", "The address for Prometheus.")
-	rootCmd.PersistentFlags().StringVar(&pluginPrometheusDashboardsNamespace, "plugin.prometheus.dashboards-namespace", "kubenav", "The namespace, where kubenav should look for dashboards.")
-	rootCmd.PersistentFlags().BoolVar(&pluginPrometheusEnabledFlag, "plugin.prometheus.enabled", false, "Enable the Prometheus plugin.")
-	rootCmd.PersistentFlags().StringVar(&pluginPrometheusPasswordFlag, "plugin.prometheus.password", "", "The password for Prometheus.")
-	rootCmd.PersistentFlags().StringVar(&pluginPrometheusUsernameFlag, "plugin.prometheus.username", "", "The username for Prometheus.")
-}
+	log.SetLevel(logLevel)
+	log.WithFields(version.Info()).Infof("Version information")
+	log.WithFields(version.BuildContext()).Infof("Build context")
 
-func main() {
-	if err := rootCmd.Execute(); err != nil {
-		log.WithError(err).Fatal("Failed to initialize kubenav")
+	kubeClient, err := kube.NewClient(false, inclusterFlag, kubeconfigFlag, "", "")
+	if err != nil {
+		log.WithError(err).Fatalf("Could not create Kubernetes client")
+	}
+
+	router := http.NewServeMux()
+	apiClient := api.NewClient(false, &plugins.Config{
+		Prometheus: &prometheus.Config{
+			Enabled:             pluginPrometheusEnabledFlag,
+			Address:             pluginPrometheusAddressFlag,
+			Username:            pluginPrometheusUsernameFlag,
+			Password:            pluginPrometheusPasswordFlag,
+			DashboardsNamespace: pluginPrometheusDashboardsNamespace,
+		},
+		Elasticsearch: &elasticsearch.Config{
+			Enabled:  pluginElasticsearchEnabledFlag,
+			Address:  pluginElasticsearchAddressFlag,
+			Username: pluginElasticsearchUsernameFlag,
+			Password: pluginElasticsearchPasswordFlag,
+		},
+		Jaeger: &jaeger.Config{
+			Enabled:  pluginJaegerEnabledFlag,
+			Address:  pluginJaegerAddressFlag,
+			Username: pluginJaegerUsernameFlag,
+			Password: pluginJaegerPasswordFlag,
+		},
+	}, kubeClient)
+	apiClient.Register(router)
+
+	index, err := ioutil.ReadFile(path.Join(debugIonicFlag, "index.html"))
+	if err != nil {
+		log.WithError(err).Fatalf("Could not load index.html file")
+	}
+
+	staticHandler := http.StripPrefix("/", http.FileServer(http.Dir(debugIonicFlag)))
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if strings.Contains(r.URL.Path, ".") {
+			staticHandler.ServeHTTP(w, r)
+			return
+		}
+
+		fmt.Fprintf(w, string(index))
+	})
+
+	if err := http.ListenAndServe(":14122", router); err != nil {
+		log.WithError(err).Fatalf("kubenav server died")
 	}
 }
