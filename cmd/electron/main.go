@@ -16,7 +16,7 @@ import (
 	bootstrap "github.com/asticode/go-astilectron-bootstrap"
 	assetfs "github.com/elazarl/go-bindata-assetfs"
 	log "github.com/sirupsen/logrus"
-	"github.com/spf13/cobra"
+	flag "github.com/spf13/pflag"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
@@ -32,6 +32,7 @@ var (
 	kubeconfigIncludeFlag string
 	kubeconfigExcludeFlag string
 	syncFlag              bool
+	showVersion           bool
 )
 
 // Message is the structure of a Server Sent Event, which contains the Event and Data. Server Sent Events are used to
@@ -43,140 +44,20 @@ type Message struct {
 
 var messageChannel = make(chan Message)
 
-var rootCmd = &cobra.Command{
-	Use:                "kubenav",
-	Short:              "kubenav - the navigator for your Kubernetes clusters right in your pocket.",
-	Long:               "kubenav - the navigator for your Kubernetes clusters right in your pocket.",
-	FParseErrWhitelist: cobra.FParseErrWhitelist{UnknownFlags: true},
-	Run: func(cmd *cobra.Command, args []string) {
-		logLevel := log.InfoLevel
-		if debugFlag {
-			logLevel = log.DebugLevel
-		}
-
-		log.SetLevel(logLevel)
-		log.Infof(version.Info())
-		log.Infof(version.BuildContext())
-
-		// Create the client for the interaction with the Kubernetes API.
-		kubeClient, err := kube.NewClient(false, false, kubeconfigFlag, kubeconfigIncludeFlag, kubeconfigExcludeFlag)
-		if err != nil {
-			log.WithError(err).Fatalf("Could not create Kubernetes client")
-		}
-
-		// Register the API routes for the Electron app. Additional to the devserver we need another rout to handle the
-		// communication between the Electron menu and the frontend via Server Sent Events. We also have to serve the
-		// frontend from the embedded assets.
-		go func() {
-			router := http.NewServeMux()
-			apiClient := api.NewClient(syncFlag, nil, kubeClient)
-			apiClient.Register(router)
-
-			// Add route for Server Sent Events. The events are handled via the message channel. Possible events are
-			// "navigation" and "cluster". These events are handled by the frontend to navigate to another page or to modify
-			// the cluster context.
-			router.HandleFunc("/api/electron", func(w http.ResponseWriter, r *http.Request) {
-				w.Header().Set("Connection", "keep-alive")
-				w.Header().Set("Content-Type", "text/event-stream")
-				w.Header().Set("Access-Control-Allow-Origin", "*")
-
-				for {
-					select {
-					case msg := <-messageChannel:
-						log.Debugf("Received message: %#v", msg)
-						w.Write([]byte(fmt.Sprintf("event: %s\ndata: %s\n\n", msg.Event, msg.Data)))
-						w.(http.Flusher).Flush()
-					case <-r.Context().Done():
-						return
-					}
-				}
-			})
-
-			// Load the embedded assets and serve all static files. To serve the index.html file we need to read the content
-			// of the file first, so we can handle reloads in the frontend for each route.
-			afs := &assetfs.AssetFS{
-				Asset:     Asset,
-				AssetDir:  AssetDir,
-				AssetInfo: AssetInfo,
-				Prefix:    "/resources/app",
-			}
-
-			staticHandler := http.FileServer(afs)
-
-			indexFile, err := afs.Open("index.html")
-			if err != nil {
-				log.WithError(err).Fatalf("Could not find index.html file")
-			}
-
-			reader := bufio.NewReader(indexFile)
-			index, _, err := reader.ReadLine()
-			if err != nil {
-				log.WithError(err).Fatalf("Could not read index.html file")
-			}
-
-			router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-				if strings.Contains(r.URL.Path, ".") {
-					staticHandler.ServeHTTP(w, r)
-					return
-				}
-
-				fmt.Fprintf(w, string(index))
-			})
-
-			if err := http.ListenAndServe(":14122", router); err != nil {
-				log.WithError(err).Fatalf("kubenav server died")
-			}
-		}()
-
-		// Check if a new version is available and create the menu. For the menu we need the result from the version check
-		// and the Kubernetes client and logger.
-		updateAvailable := checkVersion(version.Version)
-		menuOptions, err := getMenuOptions(updateAvailable, kubeClient)
-		if err != nil {
-			log.WithError(err).Fatalf("Could not create menu")
-		}
-
-		logger := log.StandardLogger()
-		if debugFlag {
-			logger.SetLevel(log.DebugLevel)
-		}
-
-		// Run the Electron app via the bootstrapper for astilectron.
-		if err := bootstrap.Run(bootstrap.Options{
-			Asset:    Asset,
-			AssetDir: AssetDir,
-			AstilectronOptions: astilectron.Options{
-				AppName:            AppName,
-				AppIconDarwinPath:  "resources/icon.icns",
-				AppIconDefaultPath: "resources/icon.png",
-				SingleInstance:     true,
-				VersionAstilectron: VersionAstilectron,
-				VersionElectron:    VersionElectron,
-			},
-			Debug:         debugFlag,
-			Logger:        logger,
-			MenuOptions:   menuOptions,
-			RestoreAssets: RestoreAssets,
-			Windows: []*bootstrap.Window{{
-				Homepage: "http://localhost:14122/",
-				Options: &astilectron.WindowOptions{
-					Center: astikit.BoolPtr(true),
-					Height: astikit.IntPtr(920),
-					Width:  astikit.IntPtr(1600),
-				},
-			}},
-		}); err != nil {
-			log.WithError(err).Fatalf("Running kubenav failed")
-		}
-	},
+func init() {
+	flag.BoolVar(&debugFlag, "debug", false, "Enable debug mode.")
+	flag.StringVar(&kubeconfigFlag, "kubeconfig", "", "Optional Kubeconfig file.")
+	flag.StringVar(&kubeconfigIncludeFlag, "kubeconfig.include", "", "Comma separated list of globs to include in the Kubeconfig.")
+	flag.StringVar(&kubeconfigExcludeFlag, "kubeconfig.exclude", "", "Comma separated list of globs to exclude from the Kubeconfig. This flag must be used in combination with the '--kubeconfig.include' flag.")
+	flag.BoolVar(&syncFlag, "kubeconfig.sync", false, "Sync the changes from kubenav with the used Kubeconfig file.")
+	flag.BoolVar(&showVersion, "version", false, "Print version information.")
 }
 
-var versionCmd = &cobra.Command{
-	Use:                "version",
-	Short:              "Print version information for kubenav.",
-	Long:               "Print version information for kubenav.",
-	FParseErrWhitelist: cobra.FParseErrWhitelist{UnknownFlags: true},
-	Run: func(cmd *cobra.Command, args []string) {
+func main() {
+	flag.Parse()
+
+	// If the version flag is true, we just print the version information for kubenav and then we exit kubenav.
+	if showVersion {
 		v, err := version.Print("kubenav")
 		if err != nil {
 			log.WithError(err).Fatalf("Failed to print version information")
@@ -184,21 +65,127 @@ var versionCmd = &cobra.Command{
 
 		fmt.Fprintln(os.Stdout, v)
 		return
-	},
-}
+	}
 
-func init() {
-	rootCmd.AddCommand(versionCmd)
+	// When the debug flag is set, we have to change the log level to debug. If the flag isn't present we use the info
+	// log level.
+	logLevel := log.InfoLevel
+	if debugFlag {
+		logLevel = log.DebugLevel
+	}
 
-	rootCmd.PersistentFlags().BoolVar(&debugFlag, "debug", false, "Enable debug mode.")
-	rootCmd.PersistentFlags().StringVar(&kubeconfigFlag, "kubeconfig", "", "Optional Kubeconfig file.")
-	rootCmd.PersistentFlags().StringVar(&kubeconfigIncludeFlag, "kubeconfig.include", "", "Comma separated list of globs to include in the Kubeconfig.")
-	rootCmd.PersistentFlags().StringVar(&kubeconfigExcludeFlag, "kubeconfig.exclude", "", "Comma separated list of globs to exclude from the Kubeconfig. This flag must be used in combination with the '--kubeconfig.include' flag.")
-	rootCmd.PersistentFlags().BoolVar(&syncFlag, "kubeconfig.sync", false, "Sync the changes from kubenav with the used Kubeconfig file.")
-}
+	log.SetLevel(logLevel)
+	log.WithFields(version.Info()).Infof("Version information")
+	log.WithFields(version.BuildContext()).Infof("Build context")
 
-func main() {
-	if err := rootCmd.Execute(); err != nil {
-		log.WithError(err).Fatal("Failed to initialize kubenav")
+	// Create the client for the interaction with the Kubernetes API.
+	kubeClient, err := kube.NewClient(false, false, kubeconfigFlag, kubeconfigIncludeFlag, kubeconfigExcludeFlag)
+	if err != nil {
+		log.WithError(err).Fatalf("Could not create Kubernetes client")
+	}
+
+	// Register the API routes for the Electron app. Additional to the devserver we need another rout to handle the
+	// communication between the Electron menu and the frontend via Server Sent Events. We also have to serve the
+	// frontend from the embedded assets.
+	go func() {
+		router := http.NewServeMux()
+		apiClient := api.NewClient(syncFlag, nil, kubeClient)
+		apiClient.Register(router)
+
+		// Add route for Server Sent Events. The events are handled via the message channel. Possible events are
+		// "navigation" and "cluster". These events are handled by the frontend to navigate to another page or to modify
+		// the cluster context.
+		router.HandleFunc("/api/electron", func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Connection", "keep-alive")
+			w.Header().Set("Content-Type", "text/event-stream")
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+
+			for {
+				select {
+				case msg := <-messageChannel:
+					log.Debugf("Received message: %#v", msg)
+					w.Write([]byte(fmt.Sprintf("event: %s\ndata: %s\n\n", msg.Event, msg.Data)))
+					w.(http.Flusher).Flush()
+				case <-r.Context().Done():
+					return
+				}
+			}
+		})
+
+		// Load the embedded assets and serve all static files. To serve the index.html file we need to read the content
+		// of the file first, so we can handle reloads in the frontend for each route.
+		afs := &assetfs.AssetFS{
+			Asset:     Asset,
+			AssetDir:  AssetDir,
+			AssetInfo: AssetInfo,
+			Prefix:    "/resources/app",
+		}
+
+		staticHandler := http.FileServer(afs)
+
+		indexFile, err := afs.Open("index.html")
+		if err != nil {
+			log.WithError(err).Fatalf("Could not find index.html file")
+		}
+
+		reader := bufio.NewReader(indexFile)
+		index, _, err := reader.ReadLine()
+		if err != nil {
+			log.WithError(err).Fatalf("Could not read index.html file")
+		}
+
+		router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			if strings.Contains(r.URL.Path, ".") {
+				staticHandler.ServeHTTP(w, r)
+				return
+			}
+
+			fmt.Fprintf(w, string(index))
+		})
+
+		if err := http.ListenAndServe(":14122", router); err != nil {
+			log.WithError(err).Fatalf("kubenav server died")
+		}
+	}()
+
+	// Check if a new version is available and create the menu. For the menu we need the result from the version check
+	// and the Kubernetes client and logger.
+	updateAvailable := checkVersion(version.Version)
+	menuOptions, err := getMenuOptions(updateAvailable, kubeClient)
+	if err != nil {
+		log.WithError(err).Fatalf("Could not create menu")
+	}
+
+	logger := log.StandardLogger()
+	if debugFlag {
+		logger.SetLevel(log.DebugLevel)
+	}
+
+	// Run the Electron app via the bootstrapper for astilectron.
+	if err := bootstrap.Run(bootstrap.Options{
+		Asset:    Asset,
+		AssetDir: AssetDir,
+		AstilectronOptions: astilectron.Options{
+			AppName:            AppName,
+			AppIconDarwinPath:  "resources/icon.icns",
+			AppIconDefaultPath: "resources/icon.png",
+			SingleInstance:     true,
+			VersionAstilectron: VersionAstilectron,
+			VersionElectron:    VersionElectron,
+		},
+		Debug:         debugFlag,
+		Logger:        logger,
+		MenuOptions:   menuOptions,
+		RestoreAssets: RestoreAssets,
+		Windows: []*bootstrap.Window{{
+			Homepage: "http://localhost:14122/",
+			Options: &astilectron.WindowOptions{
+				Center: astikit.BoolPtr(true),
+				Height: astikit.IntPtr(920),
+				Width:  astikit.IntPtr(1600),
+			},
+		}},
+	}); err != nil {
+		log.WithError(err).Fatalf("Running kubenav failed")
 	}
 }
