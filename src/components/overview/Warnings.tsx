@@ -64,8 +64,8 @@ const Warnings: React.FunctionComponent = () => {
               reason: event.reason ? event.reason : '',
               message: event.message ? event.message : '',
               lastTimestamp: event.lastTimestamp
-                ? timeDifference(new Date().getTime(), event.lastTimestamp.getTime())
-                : 'N/A',
+                ? timeDifference(new Date().getTime(), new Date(event.lastTimestamp.toString()).getTime())
+                : '',
             });
           }
         }
