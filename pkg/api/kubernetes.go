@@ -87,7 +87,7 @@ func (c *Client) kubernetesExecHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	config, clientset, err := c.kubeClient.GetConfigAndClientset(request.Cluster, request.URL, request.CertificateAuthorityData, request.ClientCertificateData, request.ClientKeyData, request.Token, request.Username, request.Password, request.InsecureSkipTLSVerify, time.Duration(request.Timeout)*time.Second, request.Proxy)
+	config, clientset, err := c.kubeClient.GetConfigAndClientset(request.Cluster, request.URL, request.CertificateAuthorityData, request.ClientCertificateData, request.ClientKeyData, request.Token, request.Username, request.Password, request.InsecureSkipTLSVerify, 6*time.Hour, request.Proxy)
 	if err != nil {
 		log.WithError(err).Errorf("Could not create Kubernetes API client")
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))

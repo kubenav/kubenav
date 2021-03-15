@@ -164,18 +164,22 @@ func handleTerminalSession(session sockjs.Session) {
 	)
 
 	if buf, err = session.Recv(); err != nil {
+		log.WithError(err).Errorf("handleTerminalSession: can't Recv")
 		return
 	}
 
 	if err = json.Unmarshal([]byte(buf), &msg); err != nil {
+		log.WithError(err).Errorf("handleTerminalSession: can't UnMarshal")
 		return
 	}
 
 	if msg.Op != "bind" {
+		log.WithFields(log.Fields{"message": buf}).Errorf("handleTerminalSession: expected 'bind' message")
 		return
 	}
 
 	if terminalSession = TerminalSessions.Get(msg.SessionID); terminalSession.ID == "" {
+		log.WithFields(log.Fields{"session": msg.SessionID}).Errorf("handleTerminalSession: can't find session")
 		return
 	}
 
