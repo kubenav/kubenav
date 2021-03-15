@@ -21,9 +21,9 @@ android {
 }
 
 repositories {
-    maven {
-        url  "https://dl.bintray.com/ionic-team/capacitor"
-    }
+    // maven {
+    //     url  "https://dl.bintray.com/ionic-team/capacitor"
+    // }
     flatDir{
         dirs './src/libs'
     }
