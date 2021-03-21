@@ -384,14 +384,6 @@ func getMenuOptions(updateAvailable bool, client kube.Client) ([]*astilectron.Me
 					Label: astikit.StrPtr("Cluster"),
 					SubMenu: []*astilectron.MenuItemOptions{
 						{
-							Label: astikit.StrPtr("Component Statuses"),
-							OnClick: func(e astilectron.Event) (deleteListener bool) {
-								log.Debugf("Menu item 'Component Statuses' has been clicked")
-								messageChannel <- Message{Event: "navigation", Data: "/resources/cluster/componentstatuses"}
-								return
-							},
-						},
-						{
 							Label: astikit.StrPtr("Custom Resource Definitions"),
 							OnClick: func(e astilectron.Event) (deleteListener bool) {
 								log.Debugf("Menu item 'Custom Resource Definitions' has been clicked")
