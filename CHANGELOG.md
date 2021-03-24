@@ -1,5 +1,29 @@
 # Changelog
 
+## [3.4.1](https://github.com/kubenav/kubenav/tree/3.4.1) (2021-03-24)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.4.0...3.4.1)
+
+**Implemented enhancements:**
+
+- Add new AWS regions [\#307](https://github.com/kubenav/kubenav/pull/307) ([ricoberger](https://github.com/ricoberger))
+
+**Fixed bugs:**
+
+- Windows release doesn't start on Win 10 Pro 19043 [\#310](https://github.com/kubenav/kubenav/issues/310)
+
+**Closed issues:**
+
+- componentstatus is deprecated  [\#302](https://github.com/kubenav/kubenav/issues/302)
+
+**Merged pull requests:**
+
+- Remove Component Status [\#318](https://github.com/kubenav/kubenav/pull/318) ([ricoberger](https://github.com/ricoberger))
+- Update Go version to 1.16 [\#314](https://github.com/kubenav/kubenav/pull/314) ([ricoberger](https://github.com/ricoberger))
+- Rework flag handling [\#313](https://github.com/kubenav/kubenav/pull/313) ([ricoberger](https://github.com/ricoberger))
+- Preparation for F-Droid [\#312](https://github.com/kubenav/kubenav/pull/312) ([ricoberger](https://github.com/ricoberger))
+- Add events timestamp [\#309](https://github.com/kubenav/kubenav/pull/309) ([matthiastz](https://github.com/matthiastz))
+
 ## [3.4.0](https://github.com/kubenav/kubenav/tree/3.4.0) (2021-03-01)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/3.3.0...3.4.0)
