@@ -99,7 +99,7 @@ const DashboardPage: React.FunctionComponent<IDashboardPageProps> = ({ match, lo
           <LoadingErrorCard
             cluster={context.cluster}
             clusters={context.clusters}
-            error={error}
+            error={error as Error}
             icon="/assets/icons/kubernetes/prometheus.png"
             text="Could not get Prometheus Dashboard"
           />

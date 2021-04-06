@@ -203,7 +203,7 @@ const ReleasesPage: React.FunctionComponent = () => {
           <LoadingErrorCard
             cluster={context.cluster}
             clusters={context.clusters}
-            error={error}
+            error={error as Error}
             icon="/assets/icons/kubernetes/helm.png"
             text="Could not get Helm Releases"
           />

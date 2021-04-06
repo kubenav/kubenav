@@ -74,7 +74,7 @@ const OverviewPage: React.FunctionComponent = () => {
               <LoadingErrorCard
                 cluster={context.cluster}
                 clusters={context.clusters}
-                error={error}
+                error={error as Error}
                 icon="/assets/icons/kubernetes/kubernetes.png"
                 text="Could not get connect to Cluster"
               />

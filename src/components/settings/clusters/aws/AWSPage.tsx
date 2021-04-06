@@ -117,7 +117,11 @@ const AWSPage: React.FunctionComponent<IAWSPageProps> = ({ history }: IAWSPagePr
         {isFetching ? (
           <IonProgressBar slot="fixed" type="indeterminate" color="primary" />
         ) : isError || !data ? (
-          <ErrorCard error={error} text="Could not load AWS clusters" icon="/assets/icons/kubernetes/kubernetes.png" />
+          <ErrorCard
+            error={error as Error}
+            text="Could not load AWS clusters"
+            icon="/assets/icons/kubernetes/kubernetes.png"
+          />
         ) : (
           data.map((cluster, index) => {
             return (

@@ -155,7 +155,7 @@ const ReleasePage: React.FunctionComponent<IReleasePageProps> = ({ match }: IRel
           <LoadingErrorCard
             cluster={context.cluster}
             clusters={context.clusters}
-            error={error}
+            error={error as Error}
             icon="/assets/icons/kubernetes/helm.png"
             text="Could not get Helm Release"
           />

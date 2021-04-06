@@ -58,16 +58,27 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
   // searchText is used to search and filter the list of items.
   const [searchText, setSearchText] = useState<string>('');
 
-  const fetchItems = async (key, cursor) =>
+  const fetchItems = async (cursor) =>
     await kubernetesRequest(
       'GET',
-      `${page.listURL(cluster ? cluster.namespace : '')}?limit=50${cursor ? `&continue=${cursor}` : ''}`,
+      `${page.listURL(cluster ? cluster.namespace : '')}?limit=50${
+        cursor.pageParam ? `&continue=${cursor.pageParam}` : ''
+      }`,
       '',
       context.settings,
       await context.kubernetesAuthWrapper(''),
     );
 
-  const { isError, isFetching, isFetchingMore, canFetchMore, data, error, fetchMore, refetch } = useInfiniteQuery(
+  const {
+    isError,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    data,
+    error,
+    fetchNextPage,
+    refetch,
+  } = useInfiniteQuery(
     // NOTE: Array keys (https://react-query.tanstack.com/docs/guides/queries#array-keys) do not work with
     // useInfiniteQuery, therefore we are creating a string only query key with the values, which normaly are used as
     // query key.
@@ -79,8 +90,8 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
     {
       ...context.settings.queryConfig,
       refetchInterval: context.settings.queryRefetchInterval,
-      getFetchMore: (lastGroup) =>
-        lastGroup.metadata && lastGroup.metadata.continue ? lastGroup.metadata.continue : '',
+      getNextPageParam: (lastGroup) =>
+        lastGroup.metadata && lastGroup.metadata.continue ? lastGroup.metadata.continue : false,
     },
   );
 
@@ -91,10 +102,10 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
     refetch();
   };
 
-  // allGroups is used to fetch additional items from the Kubernetes API. When the fetchMore funtion is finished we have
-  // to call the complete() method on the infinite scroll instance.
+  // allGroups is used to fetch additional items from the Kubernetes API. When the fetchNextPage funtion is finished we
+  // have to call the complete() method on the infinite scroll instance.
   const loadMore = async (event: CustomEvent<void>) => {
-    await fetchMore();
+    await fetchNextPage();
     (event.target as HTMLIonInfiniteScrollElement).complete();
   };
 
@@ -134,8 +145,8 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
             />
 
             <IonList>
-              {data
-                ? data.map((group, i) => (
+              {data && data.pages
+                ? data.pages.map((group, i) => (
                     <React.Fragment key={i}>
                       {group && group.items
                         ? group.items
@@ -205,11 +216,11 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
                 : null}
               <IonInfiniteScroll
                 threshold="25%"
-                disabled={!canFetchMore || (isFetchingMore as boolean)}
+                disabled={!hasNextPage || (isFetchingNextPage as boolean)}
                 onIonInfinite={loadMore}
               >
-                {(!isFetchingMore as boolean) ? (
-                  <IonButton size="small" expand="block" fill="clear" onClick={() => fetchMore()}>
+                {(!isFetchingNextPage as boolean) ? (
+                  <IonButton size="small" expand="block" fill="clear" onClick={() => fetchNextPage()}>
                     Load more
                   </IonButton>
                 ) : null}
@@ -221,7 +232,7 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
           <LoadingErrorCard
             cluster={context.cluster}
             clusters={context.clusters}
-            error={error}
+            error={error as Error}
             icon={page.icon}
             text={`Could not get ${page.pluralText}`}
           />
