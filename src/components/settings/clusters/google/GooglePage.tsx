@@ -137,7 +137,11 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
         {isFetching ? (
           <IonProgressBar slot="fixed" type="indeterminate" color="primary" />
         ) : isError || !data ? (
-          <ErrorCard error={error} text="Could not load GKE clusters" icon="/assets/icons/kubernetes/kubernetes.png" />
+          <ErrorCard
+            error={error as Error}
+            text="Could not load GKE clusters"
+            icon="/assets/icons/kubernetes/kubernetes.png"
+          />
         ) : (
           data.map((cluster, index) => {
             return (

@@ -8,7 +8,7 @@ import {
   IonRouterLink,
   IonRow,
 } from '@ionic/react';
-import { V1Event } from '@kubernetes/client-node';
+import { CoreV1Event } from '@kubernetes/client-node';
 import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -23,7 +23,7 @@ import Row from '../../misc/template/Row';
 import { eventSource, involvedObjectLink } from './eventHelper';
 
 interface IEventDetailsProps extends RouteComponentProps {
-  item: V1Event;
+  item: CoreV1Event;
   section: string;
   type: string;
 }

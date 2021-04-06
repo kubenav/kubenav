@@ -72,6 +72,9 @@ const ChartDetailsSinglestat: React.FunctionComponent<IChartDetailsSinglestatPro
               <Area
                 key={index}
                 dataKey="value"
+                // NOTE: https://github.com/recharts/recharts/issues/2487
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 data={serie.data}
                 name={serie.name}
                 stroke="#326ce5"

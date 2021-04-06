@@ -1,6 +1,6 @@
 import { V1ListMeta, V1ObjectMeta } from '@kubernetes/client-node';
 import React from 'react';
-import { QueryConfig } from 'react-query';
+import { QueryObserverOptions } from 'react-query';
 import { Terminal } from 'xterm';
 
 export interface IAppPage {
@@ -40,7 +40,7 @@ export interface IAppSettings {
   queryLimit: number;
   queryRefetchInterval: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  queryConfig: QueryConfig<any, Error>;
+  queryConfig: QueryObserverOptions<any, Error>;
   sshKey: string;
   sshPort: string;
   sshUser: string;

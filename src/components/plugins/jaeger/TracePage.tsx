@@ -117,7 +117,7 @@ const TracePage: React.FunctionComponent<ITracePageProps> = ({ match }: ITracePa
           <LoadingErrorCard
             cluster={context.cluster}
             clusters={context.clusters}
-            error={error}
+            error={error as Error}
             icon="/assets/icons/kubernetes/jaeger.png"
             text="Could not get Trace"
           />

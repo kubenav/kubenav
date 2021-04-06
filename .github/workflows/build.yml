@@ -145,7 +145,7 @@ jobs:
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
         run: |
           utils/scripts/upload.sh cmd/electron/output/darwin-amd64/kubenav-darwin-amd64.zip application/zip
-          utils/scripts/upload.sh cmd/electron/output/darwin-amd64/kubenav-darwin-arm64.zip application/zip
+          utils/scripts/upload.sh cmd/electron/output/darwin-arm64/kubenav-darwin-arm64.zip application/zip
           utils/scripts/upload.sh cmd/electron/output/linux-amd64/kubenav-linux-amd64.zip application/zip
           utils/scripts/upload.sh cmd/electron/output/linux-arm/kubenav-linux-arm.zip application/zip
           utils/scripts/upload.sh cmd/electron/output/linux-arm64/kubenav-linux-arm64.zip application/zip

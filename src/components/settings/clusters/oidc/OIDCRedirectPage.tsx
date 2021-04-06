@@ -187,7 +187,7 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
         {isFetching ? (
           <IonProgressBar slot="fixed" type="indeterminate" color="primary" />
         ) : isError ? (
-          <ErrorCard error={error} text="OIDC Error" icon="/assets/icons/kubernetes/kubernetes.png" />
+          <ErrorCard error={error as Error} text="OIDC Error" icon="/assets/icons/kubernetes/kubernetes.png" />
         ) : (
           <IonList lines="full">
             <IonItem>
