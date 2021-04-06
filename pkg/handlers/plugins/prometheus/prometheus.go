@@ -169,7 +169,7 @@ func RunQueries(config *Config, address string, timeout time.Duration, requestDa
 
 		log.WithFields(log.Fields{"query": query}).Debugf("Query variables")
 
-		labelSets, err := v1api.Series(ctx, []string{query}, r.Start, r.End)
+		labelSets, _, err := v1api.Series(ctx, []string{query}, r.Start, r.End)
 		if err != nil {
 			return nil, err
 		}
@@ -225,7 +225,7 @@ func RunQueries(config *Config, address string, timeout time.Duration, requestDa
 					return
 				}
 
-				result, err := v1api.QueryRange(ctx, interpolatedQuery, r)
+				result, _, err := v1api.QueryRange(ctx, interpolatedQuery, r)
 				if err != nil {
 					chartsResult = append(chartsResult, ChartsResult{
 						Index:   chart.Index,
