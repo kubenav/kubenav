@@ -29,6 +29,10 @@ func (c *Client) Register(router *http.ServeMux) {
 	router.HandleFunc("/api/aws/ssoconfig", middleware.Cors(c.awsGetSSOConfigHandler))
 	router.HandleFunc("/api/aws/ssotoken", middleware.Cors(c.awsGetSSOTokenHandler))
 
+	router.HandleFunc("/api/rancher/listclusters", middleware.Cors(c.rancherListClustersHandler))
+	router.HandleFunc("/api/rancher/kubeconfig", middleware.Cors(c.rancherKubeconfigHandler))
+	router.HandleFunc("/api/rancher/generateapitoken", middleware.Cors(c.rancherGenerateApiTokenHandler))
+
 	// The Azure handler is used to retrieve all AKS clusters from Azure for the mobile implementation of kubenav.
 	router.HandleFunc("/api/azure/clusters", middleware.Cors(c.azureGetClustersHandler))
 

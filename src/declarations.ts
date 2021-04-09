@@ -155,6 +155,7 @@ export interface ICluster {
   authProviderAzure?: IClusterAuthProviderAzure;
   authProviderDigitalOcean?: IClusterAuthProviderDigitalOcean;
   authProviderGoogle?: IClusterAuthProviderGoogle;
+  authProviderRancher?: IClusterAuthProviderRancher;
   authProviderOIDC?: IClusterAuthProviderOIDC;
   namespace: string;
 }
@@ -189,6 +190,30 @@ export interface IClusterAuthProviderGoogle {
   refreshToken: string;
   tokenType: string;
   clusterID?: string;
+}
+
+export interface IClusterAuthProviderRancher {
+  rancherHost: string;
+  rancherPort: number;
+  username: string;
+  password: string;
+  bearerToken: string;
+  expires: number;
+  secure: boolean;
+}
+
+export interface IRancherClusters {
+  data: IRancherCluster[];
+}
+
+export interface IRancherCluster {
+  id: string;
+  name: string;
+}
+
+export interface IRancherTokenResponse {
+  id: string;
+  token: string;
 }
 
 export interface IClusterAuthProviderOIDC {
@@ -250,6 +275,30 @@ export interface IGoogleTokensAPIResponse {
   refresh_token: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   token_type: string;
+}
+
+export interface IRancherLoginRequest extends IMinimalRancherLoginRequest {
+  description?: string;
+  responseType?: string;
+}
+
+export interface IRancherKubeconfigRequest extends IMinimalRancherLoginRequest {
+  clusterId: string;
+}
+
+export interface IMinimalRancherLoginRequest {
+  rancherHost: string;
+  rancherPort: number;
+  username?: string;
+  password?: string;
+  bearerToken?: string;
+  secure: boolean;
+}
+
+export interface IRancherGeneratedKubeconfig {
+  baseType: string;
+  config: string;
+  type: string;
 }
 
 export interface IGoogleProject {
@@ -464,7 +513,16 @@ export interface ITerminalResponse {
 export type TActivator = 'block-button' | 'button' | 'item' | 'item-option';
 
 // DEPRECATED: The value '' can be removed when the migration is done.
-export type TAuthProvider = '' | 'aws' | 'awssso' | 'azure' | 'digitalocean' | 'google' | 'kubeconfig' | 'oidc';
+export type TAuthProvider =
+  | ''
+  | 'aws'
+  | 'awssso'
+  | 'azure'
+  | 'digitalocean'
+  | 'google'
+  | 'rancher'
+  | 'kubeconfig'
+  | 'oidc';
 
 export type TSyncType = 'context' | 'namespace';
 

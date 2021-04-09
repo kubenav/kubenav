@@ -10,6 +10,7 @@ import Google from './google/Google';
 import Kubeconfig from './kubeconfig/Kubeconfig';
 import Manual from './manual/Manual';
 import OIDC from './oidc/OIDC';
+import Rancher from './rancher/Rancher';
 
 interface IAddCluster {
   activator: TActivator;
@@ -36,6 +37,7 @@ const AddCluster: React.FunctionComponent<IAddCluster> = ({ activator }: IAddClu
           <AWS close={() => setShowModal(false)} />
           <Azure close={() => setShowModal(false)} />
           <DigitalOcean close={() => setShowModal(false)} />
+          <Rancher close={() => setShowModal(false)} />
           <OIDC close={() => setShowModal(false)} />
           <Kubeconfig />
           <Manual />
