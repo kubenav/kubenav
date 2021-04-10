@@ -22,6 +22,7 @@ import (
 )
 
 var (
+	fs                                  = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
 	debugFlag                           bool
 	debugIonicFlag                      string
 	inclusterFlag                       bool
@@ -73,28 +74,28 @@ func init() {
 		defaultPluginJaegerPasswordFlag = os.Getenv("KUBENAV_JAEGER_PASSWORD")
 	}
 
-	flag.BoolVar(&debugFlag, "debug", false, "Enable debug mode.")
-	flag.StringVar(&debugIonicFlag, "debug.ionic", "build", "Path to the Ionic app.")
-	flag.BoolVar(&inclusterFlag, "incluster", false, "Use the in cluster configuration.")
-	flag.StringVar(&kubeconfigFlag, "kubeconfig", "", "Optional Kubeconfig file.")
-	flag.StringVar(&pluginElasticsearchAddressFlag, "plugin.elasticsearch.address", "", "The address for Elasticsearch.")
-	flag.BoolVar(&pluginElasticsearchEnabledFlag, "plugin.elasticsearch.enabled", false, "Enable the Elasticsearch plugin.")
-	flag.StringVar(&pluginElasticsearchPasswordFlag, "plugin.elasticsearch.password", defaultPluginElasticsearchPasswordFlag, "The password for Elasticsearch.")
-	flag.StringVar(&pluginElasticsearchUsernameFlag, "plugin.elasticsearch.username", defaultPluginElasticsearchUsernameFlag, "The username for Elasticsearch.")
-	flag.StringVar(&pluginJaegerAddressFlag, "plugin.jaeger.address", "", "The address for Jaeger.")
-	flag.BoolVar(&pluginJaegerEnabledFlag, "plugin.jaeger.enabled", false, "Enable the Jaeger plugin.")
-	flag.StringVar(&pluginJaegerPasswordFlag, "plugin.jaeger.password", defaultPluginJaegerPasswordFlag, "The password for Jaeger.")
-	flag.StringVar(&pluginJaegerUsernameFlag, "plugin.jaeger.username", defaultPluginJaegerUsernameFlag, "The username for Jaeger.")
-	flag.StringVar(&pluginPrometheusAddressFlag, "plugin.prometheus.address", "", "The address for Prometheus.")
-	flag.StringVar(&pluginPrometheusDashboardsNamespace, "plugin.prometheus.dashboards-namespace", "kubenav", "The namespace, where kubenav should look for dashboards.")
-	flag.BoolVar(&pluginPrometheusEnabledFlag, "plugin.prometheus.enabled", false, "Enable the Prometheus plugin.")
-	flag.StringVar(&pluginPrometheusPasswordFlag, "plugin.prometheus.password", defaultPluginPrometheusPasswordFlag, "The password for Prometheus.")
-	flag.StringVar(&pluginPrometheusUsernameFlag, "plugin.prometheus.username", defaultPluginPrometheusUsernameFlag, "The username for Prometheus.")
-	flag.BoolVar(&showVersion, "version", false, "Print version information.")
+	fs.BoolVar(&debugFlag, "debug", false, "Enable debug mode.")
+	fs.StringVar(&debugIonicFlag, "debug.ionic", "build", "Path to the Ionic app.")
+	fs.BoolVar(&inclusterFlag, "incluster", false, "Use the in cluster configuration.")
+	fs.StringVar(&kubeconfigFlag, "kubeconfig", "", "Optional Kubeconfig file.")
+	fs.StringVar(&pluginElasticsearchAddressFlag, "plugin.elasticsearch.address", "", "The address for Elasticsearch.")
+	fs.BoolVar(&pluginElasticsearchEnabledFlag, "plugin.elasticsearch.enabled", false, "Enable the Elasticsearch plugin.")
+	fs.StringVar(&pluginElasticsearchPasswordFlag, "plugin.elasticsearch.password", defaultPluginElasticsearchPasswordFlag, "The password for Elasticsearch.")
+	fs.StringVar(&pluginElasticsearchUsernameFlag, "plugin.elasticsearch.username", defaultPluginElasticsearchUsernameFlag, "The username for Elasticsearch.")
+	fs.StringVar(&pluginJaegerAddressFlag, "plugin.jaeger.address", "", "The address for Jaeger.")
+	fs.BoolVar(&pluginJaegerEnabledFlag, "plugin.jaeger.enabled", false, "Enable the Jaeger plugin.")
+	fs.StringVar(&pluginJaegerPasswordFlag, "plugin.jaeger.password", defaultPluginJaegerPasswordFlag, "The password for Jaeger.")
+	fs.StringVar(&pluginJaegerUsernameFlag, "plugin.jaeger.username", defaultPluginJaegerUsernameFlag, "The username for Jaeger.")
+	fs.StringVar(&pluginPrometheusAddressFlag, "plugin.prometheus.address", "", "The address for Prometheus.")
+	fs.StringVar(&pluginPrometheusDashboardsNamespace, "plugin.prometheus.dashboards-namespace", "kubenav", "The namespace, where kubenav should look for dashboards.")
+	fs.BoolVar(&pluginPrometheusEnabledFlag, "plugin.prometheus.enabled", false, "Enable the Prometheus plugin.")
+	fs.StringVar(&pluginPrometheusPasswordFlag, "plugin.prometheus.password", defaultPluginPrometheusPasswordFlag, "The password for Prometheus.")
+	fs.StringVar(&pluginPrometheusUsernameFlag, "plugin.prometheus.username", defaultPluginPrometheusUsernameFlag, "The username for Prometheus.")
+	fs.BoolVar(&showVersion, "version", false, "Print version information.")
 }
 
 func main() {
-	flag.Parse()
+	fs.Parse(os.Args[1:])
 
 	// If the version flag is true, we just print the version information for kubenav and then we exit kubenav.
 	if showVersion {

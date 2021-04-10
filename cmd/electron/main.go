@@ -27,6 +27,7 @@ var (
 )
 
 var (
+	fs                    = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
 	debugFlag             bool
 	kubeconfigFlag        string
 	kubeconfigIncludeFlag string
@@ -45,16 +46,16 @@ type Message struct {
 var messageChannel = make(chan Message)
 
 func init() {
-	flag.BoolVar(&debugFlag, "debug", false, "Enable debug mode.")
-	flag.StringVar(&kubeconfigFlag, "kubeconfig", "", "Optional Kubeconfig file.")
-	flag.StringVar(&kubeconfigIncludeFlag, "kubeconfig.include", "", "Comma separated list of globs to include in the Kubeconfig.")
-	flag.StringVar(&kubeconfigExcludeFlag, "kubeconfig.exclude", "", "Comma separated list of globs to exclude from the Kubeconfig. This flag must be used in combination with the '--kubeconfig.include' flag.")
-	flag.BoolVar(&syncFlag, "kubeconfig.sync", false, "Sync the changes from kubenav with the used Kubeconfig file.")
-	flag.BoolVar(&showVersion, "version", false, "Print version information.")
+	fs.BoolVar(&debugFlag, "debug", false, "Enable debug mode.")
+	fs.StringVar(&kubeconfigFlag, "kubeconfig", "", "Optional Kubeconfig file.")
+	fs.StringVar(&kubeconfigIncludeFlag, "kubeconfig.include", "", "Comma separated list of globs to include in the Kubeconfig.")
+	fs.StringVar(&kubeconfigExcludeFlag, "kubeconfig.exclude", "", "Comma separated list of globs to exclude from the Kubeconfig. This flag must be used in combination with the '--kubeconfig.include' flag.")
+	fs.BoolVar(&syncFlag, "kubeconfig.sync", false, "Sync the changes from kubenav with the used Kubeconfig file.")
+	fs.BoolVar(&showVersion, "version", false, "Print version information.")
 }
 
 func main() {
-	flag.Parse()
+	fs.Parse(os.Args[1:])
 
 	// If the version flag is true, we just print the version information for kubenav and then we exit kubenav.
 	if showVersion {
