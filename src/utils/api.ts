@@ -23,6 +23,12 @@ import {
   IPortForwardingResponse,
   ITerminalResponse,
   TSyncType,
+  IRancherLoginRequest,
+  IMinimalRancherLoginRequest,
+  IRancherClusters,
+  IRancherGeneratedKubeconfig,
+  IRancherKubeconfigRequest,
+  IRancherTokenResponse,
 } from '../declarations';
 import { GOOGLE_REDIRECT_URI, INCLUSTER_URL, OIDC_REDIRECT_URL_WEB } from './constants';
 import { isJSON } from './helpers';
@@ -480,6 +486,122 @@ export const getGoogleTokens = async (clientID: string, code: string): Promise<I
 
     if (json.error && json.error_description) {
       throw new Error(`${json.error}: ${json.error_description}`);
+    } else {
+      throw new Error('An unknown error occurred.');
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// getRancherToken creates and adds api token in rancher
+export const getRancherToken = async (
+  rancherHost: string,
+  rancherPort: number,
+  username: string,
+  password: string,
+  bearerToken: string,
+  secure: boolean,
+): Promise<IRancherTokenResponse> => {
+  try {
+    const data: IRancherLoginRequest = {
+      rancherHost: rancherHost,
+      rancherPort: rancherPort,
+      username: username,
+      password: password,
+      bearerToken: bearerToken,
+      secure: secure,
+    };
+
+    const response = await fetch(`${INCLUSTER_URL}/api/rancher/generateapitoken`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+
+    if (response.status >= 200 && response.status < 300) {
+      const json = await response.json();
+
+      return json;
+    } else if (response.status == 401) {
+      throw new Error('Unauthorized - Login failed.');
+    } else {
+      throw new Error('An unknown error occurred.');
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// getRancherClusters returns a list of available clusters from rancher for provided in user
+export const getRancherClusters = async (
+  rancherHost: string,
+  rancherPort: number,
+  username: string,
+  password: string,
+  secure: boolean,
+  bearerToken: string,
+): Promise<IRancherClusters> => {
+  try {
+    const data: IMinimalRancherLoginRequest = {
+      rancherHost: rancherHost,
+      rancherPort: rancherPort,
+      username: username,
+      password: password,
+      bearerToken: bearerToken,
+      secure: secure,
+    };
+
+    const response = await fetch(`${INCLUSTER_URL}/api/rancher/listclusters`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+
+    if (response.status >= 200 && response.status < 300) {
+      const json = await response.json();
+
+      return json;
+    } else if (response.status == 401) {
+      throw new Error('Unauthorized - Login failed.');
+    } else {
+      throw new Error('An unknown error occurred.');
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// getRancherKubeconfig returns generated kubeconfig from rancher
+export const getRancherKubeconfig = async (
+  rancherHost: string,
+  rancherPort: number,
+  username: string,
+  password: string,
+  secure: boolean,
+  bearerToken: string,
+  clusterId: string,
+): Promise<IRancherGeneratedKubeconfig> => {
+  try {
+    const data: IRancherKubeconfigRequest = {
+      rancherHost: rancherHost,
+      rancherPort: rancherPort,
+      username: username,
+      password: password,
+      bearerToken: bearerToken,
+      secure: secure,
+      clusterId: clusterId,
+    };
+
+    const response = await fetch(`${INCLUSTER_URL}/api/rancher/kubeconfig`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+
+    if (response.status >= 200 && response.status < 300) {
+      const rancherGeneratedKubeconfig: IRancherGeneratedKubeconfig = await response.json();
+
+      return rancherGeneratedKubeconfig;
+    } else if (response.status == 401) {
+      throw new Error('Unauthorized - Login failed.');
     } else {
       throw new Error('An unknown error occurred.');
     }
