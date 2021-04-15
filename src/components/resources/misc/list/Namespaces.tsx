@@ -58,44 +58,56 @@ const Namespaces: React.FunctionComponent = () => {
   const [filterText, setFilterText] = useState('');
   const filterRegex = new RegExp(filterText, 'gi');
 
+  function renderItems(items: V1Namespace[]) {
+    return (
+      <IonContent>
+        <IonSearchbar placeholder="Filter" onIonChange={(event) => setFilterText(event.detail.value ?? '')} />
+        <IonList>
+          <IonItem button={true} detail={false} onClick={() => setAllNamespaces()}>
+            {cluster && cluster.namespace === '' ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
+            <IonLabel>All Namespaces</IonLabel>
+          </IonItem>
+
+          {items
+            .filter((item) => {
+              return item.metadata?.name?.match(filterRegex);
+            })
+            .map((namespace, index) => {
+              return (
+                <IonItem key={index} button={true} detail={false} onClick={() => setNamespace(namespace)}>
+                  {namespace.metadata && cluster && cluster.namespace === namespace.metadata.name ? (
+                    <IonIcon slot="end" color="primary" icon={checkmark} />
+                  ) : null}
+                  <IonLabel>{namespace.metadata ? namespace.metadata.name : ''}</IonLabel>
+                </IonItem>
+              );
+            })}
+        </IonList>
+      </IonContent>
+    );
+  }
+
+  function renderError() {
+    return (
+      <IonList>
+        <IonItem>{error ? error.message : 'Could not get Namespaces'}</IonItem>
+      </IonList>
+    );
+  }
+
+  function renderLoading() {
+    return (
+      <IonItem>
+        <IonLabel>Loading ...</IonLabel>
+        <IonSpinner />
+      </IonItem>
+    );
+  }
+
   return (
     <React.Fragment>
       <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
-        {isError ? (
-          <IonList>
-            <IonItem>{error ? error.message : 'Could not get Namespaces'}</IonItem>
-          </IonList>
-        ) : data ? (
-          <IonContent>
-            <IonSearchbar placeholder="Filter" onIonChange={(event) => setFilterText(event.detail.value ?? '')} />
-            <IonList>
-              <IonItem button={true} detail={false} onClick={() => setAllNamespaces()}>
-                {cluster && cluster.namespace === '' ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
-                <IonLabel>All Namespaces</IonLabel>
-              </IonItem>
-
-              {data.items
-                .filter((item) => {
-                  return item.metadata?.name?.match(filterRegex);
-                })
-                .map((namespace, index) => {
-                  return (
-                    <IonItem key={index} button={true} detail={false} onClick={() => setNamespace(namespace)}>
-                      {namespace.metadata && cluster && cluster.namespace === namespace.metadata.name ? (
-                        <IonIcon slot="end" color="primary" icon={checkmark} />
-                      ) : null}
-                      <IonLabel>{namespace.metadata ? namespace.metadata.name : ''}</IonLabel>
-                    </IonItem>
-                  );
-                })}
-            </IonList>
-          </IonContent>
-        ) : isLoading ? (
-          <IonItem>
-            <IonLabel>Loading ...</IonLabel>
-            <IonSpinner />
-          </IonItem>
-        ) : null}
+        {isError ? renderError() : data ? renderItems(data.items) : isLoading ? renderLoading() : null}
       </IonPopover>
 
       <IonButton
