@@ -1,4 +1,14 @@
-import { IonButton, IonIcon, IonItem, IonLabel, IonList, IonPopover, IonSpinner } from '@ionic/react';
+import {
+  IonButton,
+  IonContent,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonPopover,
+  IonSearchbar,
+  IonSpinner,
+} from '@ionic/react';
 import { V1Namespace, V1NamespaceList } from '@kubernetes/client-node';
 import { checkmark, options } from 'ionicons/icons';
 import React, { useContext, useEffect, useState } from 'react';
@@ -45,6 +55,9 @@ const Namespaces: React.FunctionComponent = () => {
     }
   }, [showPopover, refetch]);
 
+  const [filterText, setFilterText] = useState('');
+  const filterRegex = new RegExp(filterText, 'gi');
+
   return (
     <React.Fragment>
       <IonPopover isOpen={showPopover} event={popoverEvent} onDidDismiss={() => setShowPopover(false)}>
@@ -53,23 +66,30 @@ const Namespaces: React.FunctionComponent = () => {
             <IonItem>{error ? error.message : 'Could not get Namespaces'}</IonItem>
           </IonList>
         ) : data ? (
-          <IonList>
-            <IonItem button={true} detail={false} onClick={() => setAllNamespaces()}>
-              {cluster && cluster.namespace === '' ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
-              <IonLabel>All Namespaces</IonLabel>
-            </IonItem>
+          <IonContent>
+            <IonSearchbar placeholder="Filter" onIonChange={(event) => setFilterText(event.detail.value ?? '')} />
+            <IonList>
+              <IonItem button={true} detail={false} onClick={() => setAllNamespaces()}>
+                {cluster && cluster.namespace === '' ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
+                <IonLabel>All Namespaces</IonLabel>
+              </IonItem>
 
-            {data.items.map((namespace, index) => {
-              return (
-                <IonItem key={index} button={true} detail={false} onClick={() => setNamespace(namespace)}>
-                  {namespace.metadata && cluster && cluster.namespace === namespace.metadata.name ? (
-                    <IonIcon slot="end" color="primary" icon={checkmark} />
-                  ) : null}
-                  <IonLabel>{namespace.metadata ? namespace.metadata.name : ''}</IonLabel>
-                </IonItem>
-              );
-            })}
-          </IonList>
+              {data.items
+                .filter((item) => {
+                  return item.metadata?.name?.match(filterRegex);
+                })
+                .map((namespace, index) => {
+                  return (
+                    <IonItem key={index} button={true} detail={false} onClick={() => setNamespace(namespace)}>
+                      {namespace.metadata && cluster && cluster.namespace === namespace.metadata.name ? (
+                        <IonIcon slot="end" color="primary" icon={checkmark} />
+                      ) : null}
+                      <IonLabel>{namespace.metadata ? namespace.metadata.name : ''}</IonLabel>
+                    </IonItem>
+                  );
+                })}
+            </IonList>
+          </IonContent>
         ) : isLoading ? (
           <IonItem>
             <IonLabel>Loading ...</IonLabel>
