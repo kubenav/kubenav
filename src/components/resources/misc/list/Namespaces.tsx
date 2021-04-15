@@ -59,9 +59,12 @@ const Namespaces: React.FunctionComponent = () => {
   const filterRegex = new RegExp(filterText, 'gi');
 
   function renderItems(items: V1Namespace[]) {
+    const showFilterbar = filterText || items.length > 5;
     return (
       <IonContent>
-        <IonSearchbar placeholder="Filter" onIonChange={(event) => setFilterText(event.detail.value ?? '')} />
+        {showFilterbar && (
+          <IonSearchbar placeholder="Filter" onIonChange={(event) => setFilterText(event.detail.value ?? '')} />
+        )}
         <IonList>
           <IonItem button={true} detail={false} onClick={() => setAllNamespaces()}>
             {cluster && cluster.namespace === '' ? <IonIcon slot="end" color="primary" icon={checkmark} /> : null}
