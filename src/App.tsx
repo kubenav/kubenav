@@ -65,7 +65,7 @@ const App: React.FunctionComponent = () => (
                 <IonRouterOutlet id="main">
                   <Route path="/" component={OverviewPage} exact={true} />
                   <Route path="/bookmarks" component={BookmarksPage} exact={true} />
-                  <Route path="/resources/:section/:type" component={ListPage} exact={true} />
+                  <Route path="/resources/:section/:type/:namespace?" component={ListPage} exact={true} />
                   <Route path="/resources/:section/:type/:namespace/:name" component={DetailsPage} exact={true} />
                   <Route
                     path="/customresources/:group/:version/:name"

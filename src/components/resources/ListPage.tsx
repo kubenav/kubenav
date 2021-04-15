@@ -35,6 +35,7 @@ import ItemOptions from './misc/details/ItemOptions';
 interface IMatchParams {
   section: string;
   type: string;
+  namespace?: string;
 }
 
 type IListPageProps = RouteComponentProps<IMatchParams>;
@@ -44,6 +45,10 @@ type IListPageProps = RouteComponentProps<IMatchParams>;
 const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageProps) => {
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
+
+  if (cluster && match.params.namespace !== undefined) {
+    cluster.namespace = match.params.namespace;
+  }
 
   // Determine one which page we are currently (which items for a resource do we want to show) by the section and type
   // parameter. Get the component 'ResourceItem' we want to render.
