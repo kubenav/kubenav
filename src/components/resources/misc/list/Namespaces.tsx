@@ -1,4 +1,4 @@
-import { IonButton, IonIcon, IonItem, IonLabel, IonList, IonPopover, IonSpinner } from '@ionic/react';
+import { IonButton, IonIcon, IonItem, IonLabel, IonList, IonPopover, IonSpinner, useIonRouter } from '@ionic/react';
 import { V1Namespace, V1NamespaceList } from '@kubernetes/client-node';
 import { checkmark, options } from 'ionicons/icons';
 import React, { useContext, useEffect, useState } from 'react';
@@ -8,9 +8,14 @@ import { IContext } from '../../../../declarations';
 import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 
-const Namespaces: React.FunctionComponent = () => {
+interface INamespaceProps {
+  baseUrl?: string;
+}
+
+const Namespaces: React.FunctionComponent<INamespaceProps> = (props: INamespaceProps) => {
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
+  const router = useIonRouter();
 
   const [showPopover, setShowPopover] = useState<boolean>(false);
   const [popoverEvent, setPopoverEvent] = useState();
@@ -29,14 +34,22 @@ const Namespaces: React.FunctionComponent = () => {
   );
 
   const setNamespace = (ns: V1Namespace) => {
-    const namespace: string = ns.metadata !== undefined ? (ns.metadata.name ? ns.metadata.name : '') : '';
-    context.setNamespace(namespace);
-    setShowPopover(false);
+    if (props.baseUrl) {
+      router.push(`/${props.baseUrl}/${ns.metadata?.name || ''}`);
+    } else {
+      const namespace: string = ns.metadata !== undefined ? (ns.metadata.name ? ns.metadata.name : '') : '';
+      context.setNamespace(namespace);
+      setShowPopover(false);
+    }
   };
 
   const setAllNamespaces = () => {
-    context.setNamespace('');
-    setShowPopover(false);
+    if (props.baseUrl) {
+      router.push(`/${props.baseUrl}`);
+    } else {
+      context.setNamespace('');
+      setShowPopover(false);
+    }
   };
 
   useEffect(() => {

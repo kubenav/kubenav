@@ -46,8 +46,12 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
 
-  if (cluster && match.params.namespace !== undefined) {
-    cluster.namespace = match.params.namespace;
+  if (cluster) {
+    if (match.params.namespace !== undefined) {
+      cluster.namespace = match.params.namespace;
+    } else {
+      cluster.namespace = '';
+    }
   }
 
   // Determine one which page we are currently (which items for a resource do we want to show) by the section and type
@@ -123,7 +127,9 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
           </IonButtons>
           <IonTitle>{page.pluralText}</IonTitle>
           <IonButtons slot="primary">
-            {isNamespaced(match.params.type) ? <Namespaces /> : null}
+            {isNamespaced(match.params.type) ? (
+              <Namespaces baseUrl={`resources/${match.params.section}/${match.params.type}`} />
+            ) : null}
             <Details
               refresh={refetch}
               bookmark={{
