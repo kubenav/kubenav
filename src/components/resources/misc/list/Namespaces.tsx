@@ -58,7 +58,7 @@ const Namespaces: React.FunctionComponent = () => {
   const [filterText, setFilterText] = useState('');
   const filterRegex = new RegExp(filterText, 'gi');
 
-  function renderItems(items: V1Namespace[]) {
+  const renderItems = (items: V1Namespace[]) => {
     const showFilterbar = filterText || items.length > 5;
     return (
       <IonContent>
@@ -88,24 +88,20 @@ const Namespaces: React.FunctionComponent = () => {
         </IonList>
       </IonContent>
     );
-  }
+  };
 
-  function renderError() {
-    return (
-      <IonList>
-        <IonItem>{error ? error.message : 'Could not get Namespaces'}</IonItem>
-      </IonList>
-    );
-  }
+  const renderError = () => (
+    <IonList>
+      <IonItem>{error ? error.message : 'Could not get Namespaces'}</IonItem>
+    </IonList>
+  );
 
-  function renderLoading() {
-    return (
-      <IonItem>
-        <IonLabel>Loading ...</IonLabel>
-        <IonSpinner />
-      </IonItem>
-    );
-  }
+  const renderLoading = () => (
+    <IonItem>
+      <IonLabel>Loading ...</IonLabel>
+      <IonSpinner />
+    </IonItem>
+  );
 
   return (
     <React.Fragment>
