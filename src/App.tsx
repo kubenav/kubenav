@@ -68,7 +68,7 @@ const App: React.FunctionComponent = () => (
                   <Route path="/resources/:section/:type/:namespace?" component={ListPage} exact={true} />
                   <Route path="/resources/:section/:type/:namespace/:name" component={DetailsPage} exact={true} />
                   <Route
-                    path="/customresources/:group/:version/:name"
+                    path="/customresources/:group/:version/:name/:crnamespace?"
                     component={CustomResourcesListPage}
                     exact={true}
                   />
