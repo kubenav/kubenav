@@ -28,10 +28,27 @@ import Namespaces from '../../resources/misc/list/Namespaces';
 import ItemStatus from '../../resources/misc/template/ItemStatus';
 import Details from './Details';
 import { IHelmRelease, IHelmReleases } from './helpers';
+import { RouteComponentProps } from 'react-router';
 
-const ReleasesPage: React.FunctionComponent = () => {
+interface IMatchParams {
+  section: string;
+  type: string;
+  namespace?: string;
+}
+
+type IReleasesPageProps = RouteComponentProps<IMatchParams>;
+
+const ReleasesPage: React.FunctionComponent<IReleasesPageProps> = ({ match }: IReleasesPageProps) => {
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
+
+  if (cluster) {
+    if (match.params.namespace !== undefined) {
+      cluster.namespace = match.params.namespace;
+    } else {
+      cluster.namespace = '';
+    }
+  }
 
   let namespace = '';
   let showNamespace = false;
@@ -136,7 +153,7 @@ const ReleasesPage: React.FunctionComponent = () => {
           </IonButtons>
           <IonTitle>Helm</IonTitle>
           <IonButtons slot="primary">
-            <Namespaces />
+            <Namespaces baseUrl={`plugins/helm`} />
             <Details
               refresh={refetch}
               showAllVersions={context.settings.helmShowAllVersions}

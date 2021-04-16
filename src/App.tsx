@@ -78,7 +78,7 @@ const App: React.FunctionComponent = () => (
                     exact={true}
                   />
                   <Route path="/plugins/elasticsearch" component={ElasticsearchQueryPage} exact={true} />
-                  <Route path="/plugins/helm" component={HelmReleasesPage} exact={true} />
+                  <Route path="/plugins/helm/:namespace?" component={HelmReleasesPage} exact={true} />
                   <Route path="/plugins/helm/:namespace/:name" component={HelmReleasePage} exact={true} />
                   <Route path="/plugins/jaeger" component={JaegerTracesPage} exact={true} />
                   <Route path="/plugins/jaeger/trace/:trace" component={JaegerTracePage} exact={true} />
