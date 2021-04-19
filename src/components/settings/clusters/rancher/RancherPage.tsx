@@ -136,6 +136,8 @@ const RancherPage: React.FunctionComponent<IRancherPageProps> = ({ history }: IR
         );
 
         addClusterViaKubeconfig(kubeconfig.config);
+      } else {
+        throw 'Please enter credentials first.';
       }
     });
 

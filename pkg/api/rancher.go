@@ -16,6 +16,9 @@ import (
 // Default rest client retries
 const restyRetry int = 3
 
+// Session token TTL
+const sessionTokenTTL int = 57600000
+
 // Default tokenname in rancher
 const tokenDescription string = "io.kubenav.kubenav"
 
@@ -198,7 +201,7 @@ func loginToRancher(url string, username string, password string) (sessionToken 
 		Username:    username,
 		Password:    password,
 		Description: "kubenav Session",
-		TTL:         57600000,
+		TTL:         sessionTokenTTL,
 	}
 
 	resp, err := getDefaultRestClient().
@@ -345,6 +348,12 @@ func (c *Client) rancherGenerateApiTokenHandler(w http.ResponseWriter, r *http.R
 	if err != nil {
 		middleware.Errorf(w, r, nil, statusCode, err.Error())
 		return
+	}
+
+	_, err = logoutFromRancher(rancherUrl, sessionTokenObject)
+
+	if err != nil {
+		fmt.Println("Error occured while logout - API token was still created successfully. Session token will be removed automatically by Rancher after TTL "+strconv.Itoa(sessionTokenTTL), err)
 	}
 
 	middleware.Write(w, r, apiTokenObject)
