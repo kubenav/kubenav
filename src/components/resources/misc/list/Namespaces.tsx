@@ -20,7 +20,7 @@ import { kubernetesRequest } from '../../../../utils/api';
 import { AppContext } from '../../../../utils/context';
 
 interface INamespaceProps {
-  baseUrl?: string;
+  baseUrl: string;
 }
 
 const Namespaces: React.FunctionComponent<INamespaceProps> = (props: INamespaceProps) => {
@@ -45,22 +45,11 @@ const Namespaces: React.FunctionComponent<INamespaceProps> = (props: INamespaceP
   );
 
   const setNamespace = (ns: V1Namespace) => {
-    if (props.baseUrl) {
-      router.push(`/${props.baseUrl}/${ns.metadata?.name || ''}`);
-    } else {
-      const namespace: string = ns.metadata !== undefined ? (ns.metadata.name ? ns.metadata.name : '') : '';
-      context.setNamespace(namespace);
-      setShowPopover(false);
-    }
+    router.push(`/${props.baseUrl}/${ns.metadata?.name || ''}`);
   };
 
   const setAllNamespaces = () => {
-    if (props.baseUrl) {
-      router.push(`/${props.baseUrl}`);
-    } else {
-      context.setNamespace('');
-      setShowPopover(false);
-    }
+    router.push(`/${props.baseUrl}`);
   };
 
   useEffect(() => {
