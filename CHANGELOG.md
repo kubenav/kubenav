@@ -1,5 +1,31 @@
 # Changelog
 
+## [3.5.0](https://github.com/kubenav/kubenav/tree/3.5.0) (2021-05-09)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.4.1...3.5.0)
+
+**Implemented enhancements:**
+
+- kubeconfig import from Rancher [\#311](https://github.com/kubenav/kubenav/issues/311)
+- F-Droid [\#298](https://github.com/kubenav/kubenav/issues/298)
+
+**Fixed bugs:**
+
+- MacOS amd64 does not start [\#321](https://github.com/kubenav/kubenav/issues/321)
+
+**Closed issues:**
+
+- Feature Request: Filter in namespace dropdown [\#327](https://github.com/kubenav/kubenav/issues/327)
+- Kubernetes API request failed error="unexpected end of JSON input" in Ubuntu and Android [\#319](https://github.com/kubenav/kubenav/issues/319)
+
+**Merged pull requests:**
+
+- Rancher import improvements [\#330](https://github.com/kubenav/kubenav/pull/330) ([jbravo94](https://github.com/jbravo94))
+- Namespaces: Add filter bar [\#328](https://github.com/kubenav/kubenav/pull/328) ([scthi](https://github.com/scthi))
+- Adds kubeconfig import from Rancher [\#323](https://github.com/kubenav/kubenav/pull/323) ([jbravo94](https://github.com/jbravo94))
+- Fix flag parsing for macOS [\#322](https://github.com/kubenav/kubenav/pull/322) ([ricoberger](https://github.com/ricoberger))
+- Update Go and React dependencies [\#320](https://github.com/kubenav/kubenav/pull/320) ([ricoberger](https://github.com/ricoberger))
+
 ## [3.4.1](https://github.com/kubenav/kubenav/tree/3.4.1) (2021-03-24)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/3.4.0...3.4.1)
