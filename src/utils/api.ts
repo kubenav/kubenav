@@ -29,6 +29,7 @@ import {
   IRancherGeneratedKubeconfig,
   IRancherKubeconfigRequest,
   IRancherTokenResponse,
+  IOIDCLinkResponse,
 } from '../declarations';
 import { GOOGLE_REDIRECT_URI, INCLUSTER_URL, OIDC_REDIRECT_URL_WEB } from './constants';
 import { isJSON } from './helpers';
@@ -1011,7 +1012,8 @@ export const getOIDCLink = async (
   clientSecret: string,
   certificateAuthority: string,
   scopes?: string,
-): Promise<string> => {
+  pkceMethod?: 'S256',
+): Promise<IOIDCLinkResponse> => {
   try {
     await checkServer();
 
@@ -1024,13 +1026,14 @@ export const getOIDCLink = async (
         certificateAuthority: certificateAuthority,
         redirectURL: OIDC_REDIRECT_URL_WEB,
         scopes: scopes ? scopes : '',
+        pkceMethod: pkceMethod,
       }),
     });
 
     const json = await response.json();
 
     if (response.status >= 200 && response.status < 300) {
-      return json.url;
+      return json;
     } else {
       if (json.error) {
         throw new Error(json.message);
@@ -1062,6 +1065,7 @@ export const getOIDCRefreshToken = async (
         redirectURL: OIDC_REDIRECT_URL_WEB,
         code: code,
         scopes: credentials.scopes ? credentials.scopes : '',
+        verifier: credentials.verifier,
       }),
     });
 
