@@ -216,9 +216,20 @@ export interface IRancherTokenResponse {
   token: string;
 }
 
+export interface IOIDCLinkResponse {
+  url: string;
+  idToken: string;
+  refreshToken: string;
+  accessToken: string;
+  expiry: string;
+  verifier?: string;
+}
+
 export interface IClusterAuthProviderOIDC {
   clientID: string;
   clientSecret: string;
+  pkceMethod?: 'S256';
+  verifier?: string;
   scopes?: string;
   idToken: string;
   idpIssuerURL: string;
