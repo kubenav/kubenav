@@ -24,9 +24,11 @@ import {
 } from '@kubernetes/client-node';
 import { close } from 'ionicons/icons';
 import yaml from 'js-yaml';
-import React from 'react';
+import React, { useContext } from 'react';
 
+import { IContext } from '../../../../../declarations';
 import { IS_INCLUSTER } from '../../../../../utils/constants';
+import { AppContext } from '../../../../../utils/context';
 import Editor from '../../../../misc/Editor';
 import IonCardEqualHeight from '../../../../misc/IonCardEqualHeight';
 import Row from '../../../misc/template/Row';
@@ -49,6 +51,8 @@ const Details: React.FunctionComponent<IDetailsProps> = ({
   showModal,
   setShowModal,
 }: IDetailsProps) => {
+  const context = useContext<IContext>(AppContext);
+
   const containerState = (state: V1ContainerState): string => {
     if (state.running) {
       return `Started at ${state.running.startedAt}`;
@@ -244,7 +248,15 @@ const Details: React.FunctionComponent<IDetailsProps> = ({
                     <IonCardTitle>Liveness Probe</IonCardTitle>
                   </IonCardHeader>
                   <IonCardContent>
-                    <Editor readOnly={true} value={yaml.dump(container.livenessProbe)} />
+                    <Editor
+                      readOnly={true}
+                      mode={context.settings.editorFormat === 'json' ? 'json' : 'yaml'}
+                      value={
+                        context.settings.editorFormat === 'json'
+                          ? JSON.stringify(container.livenessProbe, null, 2)
+                          : yaml.dump(container.livenessProbe)
+                      }
+                    />
                   </IonCardContent>
                 </IonCardEqualHeight>
               </IonCol>
@@ -257,7 +269,15 @@ const Details: React.FunctionComponent<IDetailsProps> = ({
                     <IonCardTitle>Readiness Probe</IonCardTitle>
                   </IonCardHeader>
                   <IonCardContent>
-                    <Editor readOnly={true} value={yaml.dump(container.readinessProbe)} />
+                    <Editor
+                      readOnly={true}
+                      mode={context.settings.editorFormat === 'json' ? 'json' : 'yaml'}
+                      value={
+                        context.settings.editorFormat === 'json'
+                          ? JSON.stringify(container.readinessProbe, null, 2)
+                          : yaml.dump(container.readinessProbe)
+                      }
+                    />
                   </IonCardContent>
                 </IonCardEqualHeight>
               </IonCol>
@@ -270,7 +290,15 @@ const Details: React.FunctionComponent<IDetailsProps> = ({
                     <IonCardTitle>Startup Probe</IonCardTitle>
                   </IonCardHeader>
                   <IonCardContent>
-                    <Editor readOnly={true} value={yaml.dump(container.startupProbe)} />
+                    <Editor
+                      readOnly={true}
+                      mode={context.settings.editorFormat === 'json' ? 'json' : 'yaml'}
+                      value={
+                        context.settings.editorFormat === 'json'
+                          ? JSON.stringify(container.startupProbe, null, 2)
+                          : yaml.dump(container.startupProbe)
+                      }
+                    />
                   </IonCardContent>
                 </IonCardEqualHeight>
               </IonCol>
@@ -283,7 +311,15 @@ const Details: React.FunctionComponent<IDetailsProps> = ({
                     <IonCardTitle>Security Context</IonCardTitle>
                   </IonCardHeader>
                   <IonCardContent>
-                    <Editor readOnly={true} value={yaml.dump(container.securityContext)} />
+                    <Editor
+                      readOnly={true}
+                      mode={context.settings.editorFormat === 'json' ? 'json' : 'yaml'}
+                      value={
+                        context.settings.editorFormat === 'json'
+                          ? JSON.stringify(container.securityContext, null, 2)
+                          : yaml.dump(container.securityContext)
+                      }
+                    />
                   </IonCardContent>
                 </IonCardEqualHeight>
               </IonCol>
