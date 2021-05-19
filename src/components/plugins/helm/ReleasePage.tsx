@@ -136,13 +136,26 @@ const ReleasePage: React.FunctionComponent<IReleasePageProps> = ({ match }: IRel
                     </IonCardHeader>
                     <IonCardContent>
                       <Editor
-                        value={yaml.dump(
-                          data.details.config
-                            ? data.details.config
-                            : data.details.chart.values
-                            ? data.details.chart.values
-                            : '',
-                        )}
+                        mode={context.settings.editorFormat === 'json' ? 'json' : 'yaml'}
+                        value={
+                          context.settings.editorFormat === 'json'
+                            ? JSON.stringify(
+                                data.details.config
+                                  ? data.details.config
+                                  : data.details.chart.values
+                                  ? data.details.chart.values
+                                  : '',
+                                null,
+                                2,
+                              )
+                            : yaml.dump(
+                                data.details.config
+                                  ? data.details.config
+                                  : data.details.chart.values
+                                  ? data.details.chart.values
+                                  : '',
+                              )
+                        }
                         readOnly={true}
                       />
                     </IonCardContent>

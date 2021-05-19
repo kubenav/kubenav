@@ -169,6 +169,7 @@ export const readSettings = (): IAppSettings => {
       terminalScrollback: settings.terminalScrollback
         ? settings.terminalScrollback
         : DEFAULT_SETTINGS.terminalScrollback,
+      editorFormat: settings.editorFormat ? settings.editorFormat : DEFAULT_SETTINGS.editorFormat,
       enablePodMetrics: settings.hasOwnProperty('enablePodMetrics')
         ? settings.enablePodMetrics
         : DEFAULT_SETTINGS.enablePodMetrics,

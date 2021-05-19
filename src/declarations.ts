@@ -36,6 +36,7 @@ export interface IAppSettings {
   timeout: number;
   terminalFontSize: number;
   terminalScrollback: number;
+  editorFormat: string;
   enablePodMetrics: boolean;
   queryLimit: number;
   queryRefetchInterval: number;

@@ -14,6 +14,7 @@ export const DEFAULT_SETTINGS: IAppSettings = {
   timeout: 60,
   terminalFontSize: 12,
   terminalScrollback: 10000,
+  editorFormat: 'yaml',
   enablePodMetrics: true,
   queryLimit: 100,
   queryRefetchInterval: 5 * 60 * 1000,
