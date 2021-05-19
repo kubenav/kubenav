@@ -228,6 +228,15 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
 
   const reAuthenticateOIDC = async () => {
     if (authProviderOIDC) {
+      const { url, verifier } = await getOIDCLink(
+        authProviderOIDC.idpIssuerURL,
+        authProviderOIDC.clientID,
+        authProviderOIDC.clientSecret,
+        authProviderOIDC.certificateAuthority,
+        authProviderOIDC.scopes,
+        authProviderOIDC.pkceMethod,
+      );
+
       saveTemporaryCredentials({
         clientID: authProviderOIDC.clientID,
         clientSecret: authProviderOIDC.clientSecret,
@@ -238,15 +247,9 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
         accessToken: '',
         expiry: 0,
         clusterID: cluster.id,
+        pkceMethod: authProviderOIDC.pkceMethod,
+        verifier,
       });
-
-      const url = await getOIDCLink(
-        authProviderOIDC.idpIssuerURL,
-        authProviderOIDC.clientID,
-        authProviderOIDC.clientSecret,
-        authProviderOIDC.certificateAuthority,
-        authProviderOIDC.scopes,
-      );
 
       setShowModal(false);
       window.location.replace(url);
