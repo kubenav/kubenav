@@ -93,8 +93,10 @@ const OIDC: React.FunctionComponent<IOIDCProps> = ({ close, history }: IOIDCProp
             scopes,
             pkceMethod !== 'disabled' ? pkceMethod : undefined,
           );
-          if (verifier !== '') {
+          if (pkceMethod !== 'disabled') {
             saveTemporaryCredentials({ ...temporaryCredentials, verifier });
+          } else {
+            saveTemporaryCredentials(temporaryCredentials);
           }
           close();
           window.location.replace(url);
