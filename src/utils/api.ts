@@ -1065,6 +1065,7 @@ export const getOIDCRefreshToken = async (
         redirectURL: OIDC_REDIRECT_URL_WEB,
         code: code,
         scopes: credentials.scopes ? credentials.scopes : '',
+        pkceMethod: credentials.pkceMethod,
         verifier: credentials.verifier,
       }),
     });
