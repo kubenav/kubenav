@@ -67,6 +67,7 @@ const OIDC: React.FunctionComponent<IOIDCProps> = ({ close, history }: IOIDCProp
       setError('Discovery URL, Client ID and Client Secret are required.');
     } else {
       const ca = isBase64(certificateAuthority) ? atob(certificateAuthority) : certificateAuthority;
+      const clientPkceMethod = pkceMethod !== 'disabled' ? pkceMethod : undefined;
 
       const temporaryCredentials = {
         clientID: clientID,
@@ -78,9 +79,11 @@ const OIDC: React.FunctionComponent<IOIDCProps> = ({ close, history }: IOIDCProp
         idToken: '',
         accessToken: '',
         expiry: 0,
+        pkceMethod: clientPkceMethod,
       };
 
       if (refreshToken) {
+        saveTemporaryCredentials(temporaryCredentials);
         close();
         history.push('/settings/clusters/oidc');
       } else {
@@ -91,10 +94,12 @@ const OIDC: React.FunctionComponent<IOIDCProps> = ({ close, history }: IOIDCProp
             clientSecret,
             ca,
             scopes,
-            pkceMethod !== 'disabled' ? pkceMethod : undefined,
+            clientPkceMethod,
           );
-          if (verifier !== '') {
-            saveTemporaryCredentials({ ...temporaryCredentials, verifier });
+          if (pkceMethod !== 'disabled') {
+            saveTemporaryCredentials({ ...temporaryCredentials, verifier, pkceMethod: clientPkceMethod });
+          } else {
+            saveTemporaryCredentials(temporaryCredentials);
           }
           close();
           window.location.replace(url);
