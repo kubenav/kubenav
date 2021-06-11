@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.6.0](https://github.com/kubenav/kubenav/tree/3.6.0) (2021-06-11)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.5.0...3.6.0)
+
+**Implemented enhancements:**
+
+- JSON editor [\#333](https://github.com/kubenav/kubenav/issues/333)
+- Add support for OAuth2 PKCE [\#331](https://github.com/kubenav/kubenav/pull/331) ([lukasmoellerch](https://github.com/lukasmoellerch))
+
+**Closed issues:**
+
+- Can't run on macOS [\#335](https://github.com/kubenav/kubenav/issues/335)
+
+**Merged pull requests:**
+
+- Fix OIDC PKCE [\#336](https://github.com/kubenav/kubenav/pull/336) ([lukasmoellerch](https://github.com/lukasmoellerch))
+- Add json editor [\#334](https://github.com/kubenav/kubenav/pull/334) ([ricoberger](https://github.com/ricoberger))
+
 ## [3.5.0](https://github.com/kubenav/kubenav/tree/3.5.0) (2021-05-09)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/3.4.1...3.5.0)
