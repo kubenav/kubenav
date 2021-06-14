@@ -34,6 +34,7 @@ interface IMatchParams {
   group: string;
   version: string;
   name: string;
+  crnamespace?: string;
 }
 
 type ICustomResourcesListPageProps = RouteComponentProps<IMatchParams>;
@@ -48,6 +49,14 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
 }: ICustomResourcesListPageProps) => {
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
+
+  if (cluster) {
+    if (match.params.crnamespace !== undefined) {
+      cluster.namespace = match.params.crnamespace;
+    } else {
+      cluster.namespace = '';
+    }
+  }
 
   // scope can be "Cluster" or "Namespaced", for a cluster scoped CRD we have to set the namespace to "" to retrive all
   // CRs.
@@ -124,7 +133,9 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
           </IonButtons>
           <IonTitle>{match.params.name}</IonTitle>
           <IonButtons slot="primary">
-            <Namespaces />
+            <Namespaces
+              baseUrl={`customresources/${match.params.group}/${match.params.version}/${match.params.name}`}
+            />
             <Details
               refresh={refetch}
               bookmark={{

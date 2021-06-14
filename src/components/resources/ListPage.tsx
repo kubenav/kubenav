@@ -35,6 +35,7 @@ import ItemOptions from './misc/details/ItemOptions';
 interface IMatchParams {
   section: string;
   type: string;
+  namespace?: string;
 }
 
 type IListPageProps = RouteComponentProps<IMatchParams>;
@@ -44,6 +45,14 @@ type IListPageProps = RouteComponentProps<IMatchParams>;
 const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageProps) => {
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
+
+  if (cluster) {
+    if (match.params.namespace !== undefined) {
+      cluster.namespace = match.params.namespace;
+    } else {
+      cluster.namespace = '';
+    }
+  }
 
   // Determine one which page we are currently (which items for a resource do we want to show) by the section and type
   // parameter. Get the component 'ResourceItem' we want to render.
@@ -118,7 +127,9 @@ const ListPage: React.FunctionComponent<IListPageProps> = ({ match }: IListPageP
           </IonButtons>
           <IonTitle>{page.pluralText}</IonTitle>
           <IonButtons slot="primary">
-            {isNamespaced(match.params.type) ? <Namespaces /> : null}
+            {isNamespaced(match.params.type) ? (
+              <Namespaces baseUrl={`resources/${match.params.section}/${match.params.type}`} />
+            ) : null}
             <Details
               refresh={refetch}
               bookmark={{
