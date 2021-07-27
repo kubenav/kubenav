@@ -52,9 +52,11 @@ const DeleteItem: React.FunctionComponent<IDeleteItemProps> = ({ show, hide, ite
 
   const [error, setError] = useState<string>('');
 
-  const handleDelete = async () => {
+  const handleDelete = async (force: boolean) => {
+    const body = force ? '{"gracePeriodSeconds": 0}' : '';
+
     try {
-      await kubernetesRequest('DELETE', url, '', context.settings, await context.kubernetesAuthWrapper(''));
+      await kubernetesRequest('DELETE', url, body, context.settings, await context.kubernetesAuthWrapper(''));
     } catch (err) {
       setError(err);
     }
@@ -79,9 +81,22 @@ const DeleteItem: React.FunctionComponent<IDeleteItemProps> = ({ show, hide, ite
         message={`Do you really want to delete ${
           item.metadata && item.metadata.namespace ? `${item.metadata.namespace}/` : ''
         }${item.metadata ? item.metadata.name : ''}?`}
+        inputs={[
+          {
+            name: 'force',
+            type: 'checkbox',
+            label: 'Force',
+            value: 'force',
+            checked: false,
+          },
+        ]}
         buttons={[
           { text: 'Cancel', role: 'cancel', handler: hide },
-          { text: 'Delete', cssClass: 'delete-button', handler: () => handleDelete() },
+          {
+            text: 'Delete',
+            cssClass: 'delete-button',
+            handler: (data) => handleDelete(data && data.includes('force')),
+          },
         ]}
       />
     </React.Fragment>
