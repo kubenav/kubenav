@@ -187,19 +187,22 @@ ion-avatar {
 .terminal-tab-close-button {
   --padding-start: 0px;
   --padding-end: 0px;
+  padding-top: 10px;
+  margin-left: -30px;
+  color: rgba(var(--ion-color-light-contrast-rgb), 0.6);
 }
 
 .terminal-tab-label {
-  max-width: inherit;
+  max-width: calc(100% - 35px);
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.segment-button-layout-icon-end.segment-button-checked .terminal-tab-close-button-color {
+.terminal-tab-close-button-color.active {
   color: var(--ion-color-primary);
 }
 
-.segment-button-layout-icon-end .terminal-tab-close-button-color {
+.terminal-tab-close-button-color {
   color: rgba(var(--ion-color-light-contrast-rgb), 0.6);
 }
 

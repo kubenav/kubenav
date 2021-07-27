@@ -75,31 +75,23 @@ const CustomResourcesListPage: React.FunctionComponent<ICustomResourcesListPageP
       await context.kubernetesAuthWrapper(''),
     );
 
-  const {
-    isError,
-    isFetching,
-    isFetchingNextPage,
-    hasNextPage,
-    data,
-    error,
-    fetchNextPage,
-    refetch,
-  } = useInfiniteQuery(
-    // NOTE: Array keys (https://react-query.tanstack.com/docs/guides/queries#array-keys) do not work with
-    // useInfiniteQuery, therefore we are creating a string only query key with the values, which normaly are used as
-    // query key.
-    // ['CustomResourcesListPage', cluster ? cluster.id : '', cluster ? cluster.namespace : '', match.params.group, match.params.version, match.params.name],
-    `CustomResourcesListPage_${cluster ? cluster.id : ''}_${cluster ? cluster.namespace : ''}_${match.params.group}_${
-      match.params.version
-    }_${match.params.name}`,
-    fetchItems,
-    {
-      ...context.settings.queryConfig,
-      refetchInterval: context.settings.queryRefetchInterval,
-      getNextPageParam: (lastGroup) =>
-        lastGroup.metadata && lastGroup.metadata.continue ? lastGroup.metadata.continue : false,
-    },
-  );
+  const { isError, isFetching, isFetchingNextPage, hasNextPage, data, error, fetchNextPage, refetch } =
+    useInfiniteQuery(
+      // NOTE: Array keys (https://react-query.tanstack.com/docs/guides/queries#array-keys) do not work with
+      // useInfiniteQuery, therefore we are creating a string only query key with the values, which normaly are used as
+      // query key.
+      // ['CustomResourcesListPage', cluster ? cluster.id : '', cluster ? cluster.namespace : '', match.params.group, match.params.version, match.params.name],
+      `CustomResourcesListPage_${cluster ? cluster.id : ''}_${cluster ? cluster.namespace : ''}_${match.params.group}_${
+        match.params.version
+      }_${match.params.name}`,
+      fetchItems,
+      {
+        ...context.settings.queryConfig,
+        refetchInterval: context.settings.queryRefetchInterval,
+        getNextPageParam: (lastGroup) =>
+          lastGroup.metadata && lastGroup.metadata.continue ? lastGroup.metadata.continue : false,
+      },
+    );
 
   // The doRefresh method is used for a manual reload of the items for the corresponding resource. The
   // event.detail.complete() call is required to finish the animation of the IonRefresher component.

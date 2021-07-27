@@ -48,25 +48,17 @@ const DashboardsPage: React.FunctionComponent = () => {
       await context.kubernetesAuthWrapper(''),
     );
 
-  const {
-    isError,
-    isFetching,
-    isFetchingNextPage,
-    hasNextPage,
-    data,
-    error,
-    fetchNextPage,
-    refetch,
-  } = useInfiniteQuery(
-    `PrometheusDashboardsPage_${cluster ? cluster.id : ''}_${cluster ? cluster.namespace : ''}`,
-    fetchItems,
-    {
-      ...context.settings.queryConfig,
-      refetchInterval: context.settings.queryRefetchInterval,
-      getNextPageParam: (lastGroup) =>
-        lastGroup.metadata && lastGroup.metadata.continue ? lastGroup.metadata.continue : false,
-    },
-  );
+  const { isError, isFetching, isFetchingNextPage, hasNextPage, data, error, fetchNextPage, refetch } =
+    useInfiniteQuery(
+      `PrometheusDashboardsPage_${cluster ? cluster.id : ''}_${cluster ? cluster.namespace : ''}`,
+      fetchItems,
+      {
+        ...context.settings.queryConfig,
+        refetchInterval: context.settings.queryRefetchInterval,
+        getNextPageParam: (lastGroup) =>
+          lastGroup.metadata && lastGroup.metadata.continue ? lastGroup.metadata.continue : false,
+      },
+    );
 
   const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();
