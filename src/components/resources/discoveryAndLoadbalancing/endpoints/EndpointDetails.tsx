@@ -14,7 +14,7 @@ import {
 } from '@ionic/react';
 import {
   V1EndpointAddress,
-  V1EndpointPort,
+  CoreV1EndpointPort,
   V1Endpoints,
   V1EndpointSubset,
   V1ObjectReference,
@@ -68,7 +68,7 @@ const EndpointDetails: React.FunctionComponent<IEndpointDetailsProps> = ({ item,
                   </IonCardHeader>
                   <IonCardContent>
                     {subset.ports
-                      ? subset.ports.map((port: V1EndpointPort, index: number) => {
+                      ? subset.ports.map((port: CoreV1EndpointPort, index: number) => {
                           return (
                             <IonChip key={index} className="unset-chip-height">
                               <IonLabel>

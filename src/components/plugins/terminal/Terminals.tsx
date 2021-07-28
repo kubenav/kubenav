@@ -115,7 +115,11 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
           >
             {terminals.map((terminal, index) => {
               return (
-                <IonSegmentButton key={index} mode="md" value={`term_${index}`} layout="icon-end">
+                <React.Fragment key={index}>
+                  <IonSegmentButton mode="md" value={`term_${index}`}>
+                    <IonLabel className="terminal-tab-label">{terminal.name}</IonLabel>
+                  </IonSegmentButton>
+
                   <IonButton
                     fill="clear"
                     className="terminal-tab-close-button"
@@ -125,10 +129,17 @@ const Terminals: React.FunctionComponent<ITerminalsProps> = ({
                       removeTerminal(index);
                     }}
                   >
-                    <IonIcon slot="icon-only" icon={close} className="terminal-tab-close-button-color" />
+                    <IonIcon
+                      slot="icon-only"
+                      icon={close}
+                      className={
+                        activeTerminal === `term_${index}`
+                          ? 'terminal-tab-close-button-color active'
+                          : 'terminal-tab-close-button-color'
+                      }
+                    />
                   </IonButton>
-                  <IonLabel className="terminal-tab-label">{terminal.name}</IonLabel>
-                </IonSegmentButton>
+                </React.Fragment>
               );
             })}
           </IonSegment>
