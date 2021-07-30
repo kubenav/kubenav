@@ -248,7 +248,6 @@ export const getAzureClusters = async (credentials: IClusterAuthProviderAzure): 
         clientID: credentials.clientID,
         clientSecret: credentials.clientSecret,
         tenantID: credentials.tenantID,
-        resourceGroupName: credentials.resourceGroupName,
         admin: credentials.admin,
       }),
     });
