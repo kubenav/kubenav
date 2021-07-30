@@ -58,7 +58,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ title, variables,
   // If kubenav is running inside a Kubernetes cluster (incluster mode), we are not using port forwarding. Instead we
   // are using the configured cluster url.
   const { isError, isFetching, data, error, refetch } = useQuery<IDashboardResult, Error>(
-    ['Dashboard', title, variables, charts],
+    ['Dashboard', title, variables, charts, timeDiff],
     async () => {
       try {
         let portforwardingPath = '';
@@ -103,7 +103,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ title, variables,
         throw err;
       }
     },
-    context.settings.queryConfig,
+    { ...context.settings.queryConfig, keepPreviousData: true },
   );
 
   return (
