@@ -173,7 +173,6 @@ export interface IClusterAuthProviderAzure {
   admin: boolean;
   clientID: string;
   clientSecret: string;
-  resourceGroupName: string;
   subscriptionID: string;
   tenantID: string;
 }

@@ -509,16 +509,6 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
                     onIonChange={handleAuthProviderAzure}
                   />
                 </IonItem>
-                <IonItem>
-                  <IonLabel position="stacked">Resource Group Name</IonLabel>
-                  <IonInput
-                    type="text"
-                    required={true}
-                    value={authProviderAzure.resourceGroupName}
-                    name="resourceGroupName"
-                    onIonChange={handleAuthProviderAzure}
-                  />
-                </IonItem>
               </IonItemGroup>
             ) : null}
             {authProvider === 'digitalocean' && authProviderDigitalOcean ? (

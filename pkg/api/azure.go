@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/kubenav/kubenav/pkg/api/middleware"
 
@@ -16,12 +17,11 @@ import (
 
 // AzureRequest is the structure of a request for one of the Azure methods.
 type AzureRequest struct {
-	SubscriptionID    string `json:"subscriptionID"`
-	ClientID          string `json:"clientID"`
-	ClientSecret      string `json:"clientSecret"`
-	TenantID          string `json:"tenantID"`
-	ResourceGroupName string `json:"resourceGroupName"`
-	Admin             bool   `json:"admin"`
+	SubscriptionID string `json:"subscriptionID"`
+	ClientID       string `json:"clientID"`
+	ClientSecret   string `json:"clientSecret"`
+	TenantID       string `json:"tenantID"`
+	Admin          bool   `json:"admin"`
 }
 
 // AzureCluster is the structure of the response for loading all AKS clusters from Microsoft Azure.
@@ -69,16 +69,18 @@ func (c *Client) azureGetClustersHandler(w http.ResponseWriter, r *http.Request)
 		}
 
 		var res containerservice.CredentialResults
+		id := *list.Value().ID
 		name := *list.Value().Name
+		resourceGroupName := strings.Split(id, "/")[4]
 
 		if azureRequest.Admin {
-			res, err = client.ListClusterAdminCredentials(ctx, azureRequest.ResourceGroupName, name)
+			res, err = client.ListClusterAdminCredentials(ctx, resourceGroupName, name)
 			if err != nil {
 				middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not list cluster credentials: %s", err.Error()))
 				return
 			}
 		} else {
-			res, err = client.ListClusterUserCredentials(ctx, azureRequest.ResourceGroupName, name)
+			res, err = client.ListClusterUserCredentials(ctx, resourceGroupName, name)
 			if err != nil {
 				middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not list cluster credentials: %s", err.Error()))
 				return
@@ -94,7 +96,7 @@ func (c *Client) azureGetClustersHandler(w http.ResponseWriter, r *http.Request)
 			}
 
 			clusters = append(clusters, AzureCluster{
-				Name:       fmt.Sprintf("%s_%s_%s", *kubeconfig.Name, azureRequest.ResourceGroupName, name),
+				Name:       fmt.Sprintf("%s_%s_%s", *kubeconfig.Name, resourceGroupName, name),
 				Kubeconfig: convert(kubeconfigJSON),
 			})
 		}

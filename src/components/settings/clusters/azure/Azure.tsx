@@ -25,7 +25,6 @@ const Azure: React.FunctionComponent<IAzureProps> = ({ close, history }: IAzureP
   const [clientID, setClientID] = useState<string>('');
   const [clientSecret, setClientSecret] = useState<string>('');
   const [tenantID, setTenantID] = useState<string>('');
-  const [resourceGroupName, setResourceGroupName] = useState<string>('');
   const [admin, setAdmin] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
@@ -45,22 +44,12 @@ const Azure: React.FunctionComponent<IAzureProps> = ({ close, history }: IAzureP
     setTenantID(event.target.value);
   };
 
-  const handleResourceGroupName = (event) => {
-    setResourceGroupName(event.target.value);
-  };
-
   const toggleAdmin = (event) => {
     setAdmin(event.detail.checked);
   };
 
   const importClusters = () => {
-    if (
-      subscriptionID === '' ||
-      clientID === '' ||
-      clientSecret === '' ||
-      tenantID === '' ||
-      resourceGroupName === ''
-    ) {
+    if (subscriptionID === '' || clientID === '' || clientSecret === '' || tenantID === '') {
       setError('Subscription ID, Client ID, Client Secret, Tenant ID and Resource Group Name are required.');
     } else {
       saveTemporaryCredentials({
@@ -68,7 +57,6 @@ const Azure: React.FunctionComponent<IAzureProps> = ({ close, history }: IAzureP
         clientID: clientID,
         clientSecret: clientSecret,
         tenantID: tenantID,
-        resourceGroupName: resourceGroupName,
         admin: admin,
       });
 
@@ -114,10 +102,6 @@ const Azure: React.FunctionComponent<IAzureProps> = ({ close, history }: IAzureP
           <IonItem>
             <IonLabel position="stacked">Tenant ID</IonLabel>
             <IonInput type="text" required={true} value={tenantID} onInput={handleTenantID} />
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Resource Group Name</IonLabel>
-            <IonInput type="text" required={true} value={resourceGroupName} onInput={handleResourceGroupName} />
           </IonItem>
           <IonItem>
             <IonLabel>Admin Credentials</IonLabel>
