@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.7.0](https://github.com/kubenav/kubenav/tree/3.7.0) (2021-08-03)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.6.0...3.7.0)
+
+**Implemented enhancements:**
+
+- Add force delete option [\#337](https://github.com/kubenav/kubenav/pull/337) ([ricoberger](https://github.com/ricoberger))
+
+**Fixed bugs:**
+
+- Unable to add multiple Azure AKS clusters [\#324](https://github.com/kubenav/kubenav/issues/324)
+- Fix time range selection in Prometheus charts [\#340](https://github.com/kubenav/kubenav/pull/340) ([ricoberger](https://github.com/ricoberger))
+
+**Merged pull requests:**
+
+- Remove resource group for Azure [\#339](https://github.com/kubenav/kubenav/pull/339) ([ricoberger](https://github.com/ricoberger))
+- Update Go and JaveScript dependencies [\#338](https://github.com/kubenav/kubenav/pull/338) ([ricoberger](https://github.com/ricoberger))
+
 ## [3.6.0](https://github.com/kubenav/kubenav/tree/3.6.0) (2021-06-11)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/3.5.0...3.6.0)
