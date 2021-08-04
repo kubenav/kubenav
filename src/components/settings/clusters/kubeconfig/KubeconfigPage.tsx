@@ -196,8 +196,18 @@ const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history
       <IonContent>
         <IonList lines="full">
           <div className="select-kubeconfig-wrapper">
+            <p>
+              <b>Attention:</b> To select a Kubeconfig it must have one of the following extensions: <code>.yaml</code>,{' '}
+              <code>.yml</code>, <code>.txt</code>, <code>.conf</code>.
+            </p>
             <IonButton expand="block">
-              <input id="file" hidden type="file" onChange={handleKubeconfigFile} />
+              <input
+                id="file"
+                hidden={true}
+                type="file"
+                accept=".yaml,.yml,.txt,.conf"
+                onChange={handleKubeconfigFile}
+              />
               <label htmlFor="file" className="select-kubeconfig">
                 Select Kubeconfig
               </label>
