@@ -18,8 +18,8 @@
     "CFBundleExecutable": "kubenav",
     "CFBundleName": "kubenav",
     "CFBundleIdentifier": "io.kubenav.kubenav",
-    "CFBundleVersion": "3.7.0",
-    "CFBundleShortVersionString": "3.7.0",
+    "CFBundleVersion": "3.7.1",
+    "CFBundleShortVersionString": "3.7.1",
     "LSUIElement": "NO",
     "CFBundlePackageType": "APPL",
     "LSEnvironment": {
