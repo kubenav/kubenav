@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.7.1](https://github.com/kubenav/kubenav/tree/3.7.1) (2021-08-25)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.7.0...3.7.1)
+
+**Breaking changes:**
+
+- Remove camera and photo library access on iOS [\#341](https://github.com/kubenav/kubenav/pull/341) ([ricoberger](https://github.com/ricoberger))
+
+**Closed issues:**
+
+- Not able to load kubeconfig on iOS [\#343](https://github.com/kubenav/kubenav/issues/343)
+
 ## [3.7.0](https://github.com/kubenav/kubenav/tree/3.7.0) (2021-08-03)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/3.6.0...3.7.0)
