@@ -9,7 +9,7 @@ import {
   IonList,
   IonRow,
 } from '@ionic/react';
-import { NetworkingV1beta1Ingress } from '@kubernetes/client-node';
+import { V1Ingress } from '@kubernetes/client-node';
 import React, { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -25,7 +25,7 @@ import Metadata from '../../misc/template/Metadata';
 import Row from '../../misc/template/Row';
 
 interface IIngressDetailsProps extends RouteComponentProps {
-  item: NetworkingV1beta1Ingress;
+  item: V1Ingress;
   section: string;
   type: string;
 }
@@ -66,8 +66,9 @@ const IngressDetails: React.FunctionComponent<IIngressDetailsProps> = ({ item, t
                             rule.http.paths.map((path, index) => {
                               return (
                                 <p key={index}>
-                                  Path: {path.path} | Service Name: {path.backend.serviceName} | Service Port:{' '}
-                                  {path.backend.servicePort}
+                                  Path: {path.path} | Service Name: {path.backend.service?.name || '-'} | Service Port:{' '}
+                                  {path.backend.service?.port?.name || '-'} ({path.backend.service?.port?.number || '-'}
+                                  )
                                 </p>
                               );
                             })}

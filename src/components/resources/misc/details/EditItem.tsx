@@ -78,7 +78,8 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ show, hide, item, u
 
   const handleSave = async () => {
     try {
-      let parsedObj = null;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let parsedObj: any = null;
       if (context.settings.editorFormat === 'json') {
         parsedObj = JSON.parse(value);
       } else {
