@@ -235,15 +235,15 @@ export const resources: IAppSections = {
         pluralText: 'Ingresses',
         icon: '/assets/icons/kubernetes/ing.png',
         kind: 'Ingresse',
-        apiVersion: 'networking.k8s.io/v1beta1',
+        apiVersion: 'networking.k8s.io/v1',
         listURL: (namespace: string): string => {
           return namespace
-            ? `/apis/networking.k8s.io/v1beta1/namespaces/${namespace}/ingresses`
-            : `/apis/networking.k8s.io/v1beta1/ingresses`;
+            ? `/apis/networking.k8s.io/v1/namespaces/${namespace}/ingresses`
+            : `/apis/networking.k8s.io/v1/ingresses`;
         },
         listItemComponent: IngressItem,
         detailsURL: (namespace: string, name: string): string => {
-          return `/apis/networking.k8s.io/v1beta1/namespaces/${namespace}/ingresses/${name}`;
+          return `/apis/networking.k8s.io/v1/namespaces/${namespace}/ingresses/${name}`;
         },
         detailsComponent: IngressDetails,
       },
@@ -479,12 +479,12 @@ export const resources: IAppSections = {
         apiVersion: '',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string): string => {
-          return `/apis/apiextensions.k8s.io/v1beta1/customresourcedefinitions`;
+          return `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
         },
         listItemComponent: CustomResourceDefinitionItem,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         detailsURL: (namespace: string, name: string): string => {
-          return `/apis/apiextensions.k8s.io/v1beta1/customresourcedefinitions`;
+          return `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
         },
         detailsComponent: CustomResourceDefinitionItem,
       },
