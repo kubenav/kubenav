@@ -23,7 +23,7 @@ jobs:
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             DOCKER_TAG="${GITHUB_REF:10}"
           else
-            DOCKER_TAG="${GITHUB_SHA::8}"
+            DOCKER_TAG="master"
           fi
 
           echo ::set-output name=tag::${DOCKER_TAG}

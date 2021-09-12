@@ -9,11 +9,10 @@ COPY src /kubenav/src
 COPY .eslintrc.json .prettierrc.json capacitor.config.json ionic.config.json tsconfig.json /kubenav/
 RUN ionic build
 
-FROM golang:1.17.0-alpine3.14 as server
+FROM golang:1.17 as server
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 RUN echo "Building on $BUILDPLATFORM, for $TARGETPLATFORM" > /log
-RUN apk update && apk add git make
 WORKDIR /kubenav
 COPY go.mod go.sum /kubenav/
 RUN go mod download
