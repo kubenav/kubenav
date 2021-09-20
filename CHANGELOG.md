@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.7.2](https://github.com/kubenav/kubenav/tree/3.7.2) (2021-09-20)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.7.1...3.7.2)
+
+**Implemented enhancements:**
+
+- Add support for Kubernetes 1.22 [\#346](https://github.com/kubenav/kubenav/pull/346) ([ricoberger](https://github.com/ricoberger))
+
+**Closed issues:**
+
+- k8s 1.22 support [\#345](https://github.com/kubenav/kubenav/issues/345)
+
 ## [3.7.1](https://github.com/kubenav/kubenav/tree/3.7.1) (2021-08-25)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/3.7.0...3.7.1)
