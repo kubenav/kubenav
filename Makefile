@@ -13,7 +13,7 @@ bindings-android:
 
 bindings-ios:
 	mkdir -p ios/App/App/libs
-	gomobile bind -o ios/App/App/libs/Mobile.framework -target=ios github.com/kubenav/kubenav/cmd/mobile
+	gomobile bind -o ios/App/App/libs/Mobile.xcframework -target=ios github.com/kubenav/kubenav/cmd/mobile
 
 build-server:
 	go build -ldflags "-X ${REPO}/pkg/version.Version=${VERSION} \

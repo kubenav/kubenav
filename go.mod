@@ -24,8 +24,8 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.7.0 // indirect
-	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
-	golang.org/x/mobile v0.0.0-20210902104108-5d9a33257ab5
+	golang.org/x/crypto v0.0.0-20210920023735-84f357641f63
+	golang.org/x/mobile v0.0.0-20210917185523-6d8ad35e4603
 	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f
 	golang.org/x/tools v0.1.2 // indirect
 	gopkg.in/igm/sockjs-go.v2 v2.1.0
