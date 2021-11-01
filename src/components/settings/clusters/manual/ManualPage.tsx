@@ -78,7 +78,7 @@ const ManualPage: React.FunctionComponent<IManualPageProps> = ({ history }: IMan
       setError('Name is required');
     } else if (url === '') {
       setError('Server is required');
-    } else if (!url.startsWith('https://')) {
+    } else if (!url.startsWith('https://') && !url.startsWith('http://')) {
       setError('Invalid URL');
     } else if (
       clientCertificateData === '' &&

@@ -280,7 +280,7 @@ const EditCluster: React.FunctionComponent<IEditClusterProps> = ({ cluster, clos
       setError('Name is required');
     } else if (url === '') {
       setError('URL is required');
-    } else if (!url.startsWith('https://')) {
+    } else if (!url.startsWith('https://') && !url.startsWith('http://')) {
       setError('Invalid URL');
     } else {
       context.editCluster({
