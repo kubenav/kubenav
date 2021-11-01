@@ -47,5 +47,5 @@ jobs:
           push: true
           context: .
           file: ./cmd/server/Dockerfile
-          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/s390x
           tags: kubenav/kubenav:${{ steps.tag.outputs.tag }}
