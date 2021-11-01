@@ -11,7 +11,7 @@ import {
   IonRow,
   isPlatform,
 } from '@ionic/react';
-import { V1EventList } from '@kubernetes/client-node';
+import { CoreV1EventList } from '@kubernetes/client-node';
 import React, { useContext } from 'react';
 import { useQuery } from 'react-query';
 
@@ -40,7 +40,7 @@ const Warnings: React.FunctionComponent = () => {
     ['OverviewWarnings', cluster],
     async () => {
       try {
-        const eventList: V1EventList = await kubernetesRequest(
+        const eventList: CoreV1EventList = await kubernetesRequest(
           'GET',
           `/api/v1/events?limit=${context.settings.queryLimit}&fieldSelector=type=Warning`,
           '',

@@ -1,5 +1,115 @@
 # Changelog
 
+## [3.7.2](https://github.com/kubenav/kubenav/tree/3.7.2) (2021-09-20)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.7.1...3.7.2)
+
+**Implemented enhancements:**
+
+- Add support for Kubernetes 1.22 [\#346](https://github.com/kubenav/kubenav/pull/346) ([ricoberger](https://github.com/ricoberger))
+
+**Closed issues:**
+
+- k8s 1.22 support [\#345](https://github.com/kubenav/kubenav/issues/345)
+
+## [3.7.1](https://github.com/kubenav/kubenav/tree/3.7.1) (2021-08-25)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.7.0...3.7.1)
+
+**Breaking changes:**
+
+- Remove camera and photo library access on iOS [\#341](https://github.com/kubenav/kubenav/pull/341) ([ricoberger](https://github.com/ricoberger))
+
+**Closed issues:**
+
+- Not able to load kubeconfig on iOS [\#343](https://github.com/kubenav/kubenav/issues/343)
+
+## [3.7.0](https://github.com/kubenav/kubenav/tree/3.7.0) (2021-08-03)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.6.0...3.7.0)
+
+**Implemented enhancements:**
+
+- Add force delete option [\#337](https://github.com/kubenav/kubenav/pull/337) ([ricoberger](https://github.com/ricoberger))
+
+**Fixed bugs:**
+
+- Unable to add multiple Azure AKS clusters [\#324](https://github.com/kubenav/kubenav/issues/324)
+- Fix time range selection in Prometheus charts [\#340](https://github.com/kubenav/kubenav/pull/340) ([ricoberger](https://github.com/ricoberger))
+
+**Merged pull requests:**
+
+- Remove resource group for Azure [\#339](https://github.com/kubenav/kubenav/pull/339) ([ricoberger](https://github.com/ricoberger))
+- Update Go and JaveScript dependencies [\#338](https://github.com/kubenav/kubenav/pull/338) ([ricoberger](https://github.com/ricoberger))
+
+## [3.6.0](https://github.com/kubenav/kubenav/tree/3.6.0) (2021-06-11)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.5.0...3.6.0)
+
+**Implemented enhancements:**
+
+- JSON editor [\#333](https://github.com/kubenav/kubenav/issues/333)
+- Add support for OAuth2 PKCE [\#331](https://github.com/kubenav/kubenav/pull/331) ([lukasmoellerch](https://github.com/lukasmoellerch))
+
+**Closed issues:**
+
+- Can't run on macOS [\#335](https://github.com/kubenav/kubenav/issues/335)
+
+**Merged pull requests:**
+
+- Fix OIDC PKCE [\#336](https://github.com/kubenav/kubenav/pull/336) ([lukasmoellerch](https://github.com/lukasmoellerch))
+- Add json editor [\#334](https://github.com/kubenav/kubenav/pull/334) ([ricoberger](https://github.com/ricoberger))
+
+## [3.5.0](https://github.com/kubenav/kubenav/tree/3.5.0) (2021-05-09)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.4.1...3.5.0)
+
+**Implemented enhancements:**
+
+- kubeconfig import from Rancher [\#311](https://github.com/kubenav/kubenav/issues/311)
+- F-Droid [\#298](https://github.com/kubenav/kubenav/issues/298)
+
+**Fixed bugs:**
+
+- MacOS amd64 does not start [\#321](https://github.com/kubenav/kubenav/issues/321)
+
+**Closed issues:**
+
+- Feature Request: Filter in namespace dropdown [\#327](https://github.com/kubenav/kubenav/issues/327)
+- Kubernetes API request failed error="unexpected end of JSON input" in Ubuntu and Android [\#319](https://github.com/kubenav/kubenav/issues/319)
+
+**Merged pull requests:**
+
+- Rancher import improvements [\#330](https://github.com/kubenav/kubenav/pull/330) ([jbravo94](https://github.com/jbravo94))
+- Namespaces: Add filter bar [\#328](https://github.com/kubenav/kubenav/pull/328) ([scthi](https://github.com/scthi))
+- Adds kubeconfig import from Rancher [\#323](https://github.com/kubenav/kubenav/pull/323) ([jbravo94](https://github.com/jbravo94))
+- Fix flag parsing for macOS [\#322](https://github.com/kubenav/kubenav/pull/322) ([ricoberger](https://github.com/ricoberger))
+- Update Go and React dependencies [\#320](https://github.com/kubenav/kubenav/pull/320) ([ricoberger](https://github.com/ricoberger))
+
+## [3.4.1](https://github.com/kubenav/kubenav/tree/3.4.1) (2021-03-24)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.4.0...3.4.1)
+
+**Implemented enhancements:**
+
+- Add new AWS regions [\#307](https://github.com/kubenav/kubenav/pull/307) ([ricoberger](https://github.com/ricoberger))
+
+**Fixed bugs:**
+
+- Windows release doesn't start on Win 10 Pro 19043 [\#310](https://github.com/kubenav/kubenav/issues/310)
+
+**Closed issues:**
+
+- componentstatus is deprecated  [\#302](https://github.com/kubenav/kubenav/issues/302)
+
+**Merged pull requests:**
+
+- Remove Component Status [\#318](https://github.com/kubenav/kubenav/pull/318) ([ricoberger](https://github.com/ricoberger))
+- Update Go version to 1.16 [\#314](https://github.com/kubenav/kubenav/pull/314) ([ricoberger](https://github.com/ricoberger))
+- Rework flag handling [\#313](https://github.com/kubenav/kubenav/pull/313) ([ricoberger](https://github.com/ricoberger))
+- Preparation for F-Droid [\#312](https://github.com/kubenav/kubenav/pull/312) ([ricoberger](https://github.com/ricoberger))
+- Add events timestamp [\#309](https://github.com/kubenav/kubenav/pull/309) ([matthiastz](https://github.com/matthiastz))
+
 ## [3.4.0](https://github.com/kubenav/kubenav/tree/3.4.0) (2021-03-01)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/3.3.0...3.4.0)

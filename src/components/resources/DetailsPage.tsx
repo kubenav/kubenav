@@ -102,7 +102,7 @@ const DetailsPage: React.FunctionComponent<IDetailsPageProps> = ({ match }: IDet
           <LoadingErrorCard
             cluster={context.cluster}
             clusters={context.clusters}
-            error={error}
+            error={error as Error}
             icon={page.icon}
             text={`Could not get ${page.singleText}`}
           />

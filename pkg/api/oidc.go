@@ -2,8 +2,11 @@ package api
 
 import (
 	"context"
+	"crypto/rand"
+	"crypto/sha256"
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -25,6 +28,8 @@ type OIDCRequest struct {
 	RefreshToken         string `json:"refreshToken"`
 	Code                 string `json:"code"`
 	Scopes               string `json:"scopes"`
+	PKCEMethod           string `json:"pkceMethod"`
+	Verifier             string `json:"verifier"`
 }
 
 // OIDCResponse is the structure of a response for one of the OIDC methods.
@@ -34,6 +39,33 @@ type OIDCResponse struct {
 	RefreshToken string `json:"refresh_token"`
 	AccessToken  string `json:"access_token"`
 	Expiry       int64  `json:"expiry"`
+	Verifier     string `json:"verifier"`
+}
+
+// Creates a high-entropy cryptographic random string as per RFC 7636 4.1. Internally it uses a
+// 32-octet sequence from the `crypto/rand` PRNG
+func createVerifier() (string, error) {
+	r := make([]byte, 32)
+	_, err := rand.Read(r)
+	if err != nil {
+		return "", err
+	}
+	return base64URLEncode(r), nil
+}
+
+// Creates a code challenge derived from the code verifier using the "S256" code challenge method.
+// 	code_challenge = BASE64URL-ENCODE(SHA256(ASCII(code_verifier)))
+func createS256Challenge(verifier string) string {
+	h := sha256.New()
+	h.Write([]byte(verifier))
+	sum := h.Sum(nil)
+	return base64URLEncode(sum)
+}
+
+// Implements a base64urlencode function as defined in RFC 7636 Appendix A.
+func base64URLEncode(data []byte) string {
+	encoding := base64.URLEncoding.WithPadding(base64.NoPadding)
+	return encoding.EncodeToString(data)
 }
 
 // oidcGetLinkHandler returns the link for the configured OIDC provider. The Link can then be used by the user to login.
@@ -78,8 +110,30 @@ func (c *Client) oidcGetLinkHandler(w http.ResponseWriter, r *http.Request) {
 		Scopes:       scopes,
 	}
 
-	oidcResponse := OIDCResponse{
-		URL: oauth2Config.AuthCodeURL("", oauth2.AccessTypeOffline, oauth2.ApprovalForce),
+	var oidcResponse OIDCResponse
+
+	if oidcRequest.PKCEMethod == "S256" {
+		verifier, err := createVerifier()
+		if err != nil {
+			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create OIDC PKCE verifier: %s", err.Error()))
+			return
+		}
+
+		challenge := createS256Challenge(verifier)
+
+		oidcResponse = OIDCResponse{
+			URL: oauth2Config.AuthCodeURL("",
+				oauth2.AccessTypeOffline,
+				oauth2.ApprovalForce,
+				oauth2.SetAuthURLParam("code_challenge", challenge),
+				oauth2.SetAuthURLParam("code_challenge_method", "S256"),
+			),
+			Verifier: verifier,
+		}
+	} else {
+		oidcResponse = OIDCResponse{
+			URL: oauth2Config.AuthCodeURL("", oauth2.AccessTypeOffline, oauth2.ApprovalForce),
+		}
 	}
 
 	middleware.Write(w, r, oidcResponse)
@@ -129,7 +183,12 @@ func (c *Client) oidcGetRefreshTokenHandler(w http.ResponseWriter, r *http.Reque
 		Scopes:       scopes,
 	}
 
-	oauth2Token, err := oauth2Config.Exchange(ctx, oidcRequest.Code)
+	opts := []oauth2.AuthCodeOption{}
+	if oidcRequest.PKCEMethod != "" {
+		opts = append(opts, oauth2.SetAuthURLParam("code_verifier", oidcRequest.Verifier))
+	}
+
+	oauth2Token, err := oauth2Config.Exchange(ctx, oidcRequest.Code, opts...)
 	if err != nil {
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not get oauth token: %s", err.Error()))
 		return

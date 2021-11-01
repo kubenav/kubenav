@@ -8,6 +8,8 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonSelect,
+  IonSelectOption,
   IonTextarea,
   IonToast,
 } from '@ionic/react';
@@ -25,6 +27,7 @@ export interface IOIDCProps extends RouteComponentProps {
 const OIDC: React.FunctionComponent<IOIDCProps> = ({ close, history }: IOIDCProps) => {
   const [discoveryURL, setDiscoveryURL] = useState<string>('');
   const [clientID, setClientID] = useState<string>('');
+  const [pkceMethod, setPkceMethod] = useState<'S256' | 'disabled'>('disabled');
   const [clientSecret, setClientSecret] = useState<string>('');
   const [scopes, setScopes] = useState<string>('');
   const [certificateAuthority, setCertificateAuthority] = useState<string>('');
@@ -37,6 +40,10 @@ const OIDC: React.FunctionComponent<IOIDCProps> = ({ close, history }: IOIDCProp
 
   const handleClientID = (event) => {
     setClientID(event.target.value);
+  };
+
+  const handlePkceMethod = (event) => {
+    setPkceMethod(event.target.value);
   };
 
   const handleClientSecret = (event) => {
@@ -56,12 +63,13 @@ const OIDC: React.FunctionComponent<IOIDCProps> = ({ close, history }: IOIDCProp
   };
 
   const addOIDCProvider = async () => {
-    if (discoveryURL === '' || clientID === '' || clientSecret === '') {
+    if (discoveryURL === '' || clientID === '') {
       setError('Discovery URL, Client ID and Client Secret are required.');
     } else {
       const ca = isBase64(certificateAuthority) ? atob(certificateAuthority) : certificateAuthority;
+      const clientPkceMethod = pkceMethod !== 'disabled' ? pkceMethod : undefined;
 
-      saveTemporaryCredentials({
+      const temporaryCredentials = {
         clientID: clientID,
         clientSecret: clientSecret,
         scopes: scopes,
@@ -71,14 +79,28 @@ const OIDC: React.FunctionComponent<IOIDCProps> = ({ close, history }: IOIDCProp
         idToken: '',
         accessToken: '',
         expiry: 0,
-      });
+        pkceMethod: clientPkceMethod,
+      };
 
       if (refreshToken) {
+        saveTemporaryCredentials(temporaryCredentials);
         close();
         history.push('/settings/clusters/oidc');
       } else {
         try {
-          const url = await getOIDCLink(discoveryURL, clientID, clientSecret, ca, scopes);
+          const { url, verifier } = await getOIDCLink(
+            discoveryURL,
+            clientID,
+            clientSecret,
+            ca,
+            scopes,
+            clientPkceMethod,
+          );
+          if (pkceMethod !== 'disabled') {
+            saveTemporaryCredentials({ ...temporaryCredentials, verifier, pkceMethod: clientPkceMethod });
+          } else {
+            saveTemporaryCredentials(temporaryCredentials);
+          }
           close();
           window.location.replace(url);
         } catch (err) {
@@ -117,9 +139,18 @@ const OIDC: React.FunctionComponent<IOIDCProps> = ({ close, history }: IOIDCProp
             <IonInput type="text" required={true} value={clientID} onInput={handleClientID} />
           </IonItem>
           <IonItem>
-            <IonLabel position="stacked">Client Secret</IonLabel>
-            <IonInput type="text" required={true} value={clientSecret} onInput={handleClientSecret} />
+            <IonLabel position="stacked">PKCE Method</IonLabel>
+            <IonSelect value={pkceMethod} onIonChange={handlePkceMethod}>
+              <IonSelectOption value="disabled">Disabled</IonSelectOption>
+              <IonSelectOption value="S256">S256</IonSelectOption>
+            </IonSelect>
           </IonItem>
+          {pkceMethod === 'disabled' && (
+            <IonItem>
+              <IonLabel position="stacked">Client Secret</IonLabel>
+              <IonInput type="text" required={true} value={clientSecret} onInput={handleClientSecret} />
+            </IonItem>
+          )}
           <IonItem>
             <IonLabel position="stacked">Scopes (optional)</IonLabel>
             <IonInput type="text" required={true} value={scopes} onInput={handleScopes} />

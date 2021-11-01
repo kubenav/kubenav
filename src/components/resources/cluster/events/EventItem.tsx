@@ -1,5 +1,5 @@
 import { IonItem, IonLabel } from '@ionic/react';
-import { V1Event } from '@kubernetes/client-node';
+import { CoreV1Event } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -7,7 +7,7 @@ import { timeDifference } from '../../../../utils/helpers';
 import { eventSource } from './eventHelper';
 
 interface IEventItemProps extends RouteComponentProps {
-  item: V1Event;
+  item: CoreV1Event;
   section: string;
   type: string;
 }

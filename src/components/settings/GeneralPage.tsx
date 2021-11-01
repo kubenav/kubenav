@@ -149,6 +149,18 @@ const GeneralPage: React.FunctionComponent = () => {
               />
             </IonItem>
             <IonItem>
+              <IonLabel>Editor Format</IonLabel>
+              <IonSelect
+                value={context.settings.editorFormat}
+                name="editorFormat"
+                onIonChange={handleSelect}
+                interface="popover"
+              >
+                <IonSelectOption value="yaml">Yaml</IonSelectOption>
+                <IonSelectOption value="json">Json</IonSelectOption>
+              </IonSelect>
+            </IonItem>
+            <IonItem>
               <IonLabel>Enable Pod Metrics</IonLabel>
               <IonToggle
                 name="enablePodMetrics"

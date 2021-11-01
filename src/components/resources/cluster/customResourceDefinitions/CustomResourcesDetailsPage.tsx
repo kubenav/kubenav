@@ -148,7 +148,7 @@ const CustomResourcesDetailsPage: React.FunctionComponent<ICustomResourcesDetail
           <LoadingErrorCard
             cluster={context.cluster}
             clusters={context.clusters}
-            error={error}
+            error={error as Error}
             icon="/assets/icons/kubernetes/crd.png"
             text={`Could not get Custom Resource "${match.params.crname}"`}
           />

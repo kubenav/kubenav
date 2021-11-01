@@ -1,6 +1,6 @@
 import { V1ListMeta, V1ObjectMeta } from '@kubernetes/client-node';
 import React from 'react';
-import { QueryConfig } from 'react-query';
+import { QueryObserverOptions } from 'react-query';
 import { Terminal } from 'xterm';
 
 export interface IAppPage {
@@ -36,11 +36,12 @@ export interface IAppSettings {
   timeout: number;
   terminalFontSize: number;
   terminalScrollback: number;
+  editorFormat: string;
   enablePodMetrics: boolean;
   queryLimit: number;
   queryRefetchInterval: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  queryConfig: QueryConfig<any, Error>;
+  queryConfig: QueryObserverOptions<any, Error>;
   sshKey: string;
   sshPort: string;
   sshUser: string;
@@ -155,6 +156,7 @@ export interface ICluster {
   authProviderAzure?: IClusterAuthProviderAzure;
   authProviderDigitalOcean?: IClusterAuthProviderDigitalOcean;
   authProviderGoogle?: IClusterAuthProviderGoogle;
+  authProviderRancher?: IClusterAuthProviderRancher;
   authProviderOIDC?: IClusterAuthProviderOIDC;
   namespace: string;
 }
@@ -171,7 +173,6 @@ export interface IClusterAuthProviderAzure {
   admin: boolean;
   clientID: string;
   clientSecret: string;
-  resourceGroupName: string;
   subscriptionID: string;
   tenantID: string;
 }
@@ -191,9 +192,44 @@ export interface IClusterAuthProviderGoogle {
   clusterID?: string;
 }
 
+export interface IClusterAuthProviderRancher {
+  rancherHost: string;
+  rancherPort: number;
+  username: string;
+  password: string;
+  bearerToken: string;
+  expires: number;
+  secure: boolean;
+}
+
+export interface IRancherClusters {
+  data: IRancherCluster[];
+}
+
+export interface IRancherCluster {
+  id: string;
+  name: string;
+}
+
+export interface IRancherTokenResponse {
+  id: string;
+  token: string;
+}
+
+export interface IOIDCLinkResponse {
+  url: string;
+  idToken: string;
+  refreshToken: string;
+  accessToken: string;
+  expiry: string;
+  verifier?: string;
+}
+
 export interface IClusterAuthProviderOIDC {
   clientID: string;
   clientSecret: string;
+  pkceMethod?: 'S256';
+  verifier?: string;
   scopes?: string;
   idToken: string;
   idpIssuerURL: string;
@@ -250,6 +286,30 @@ export interface IGoogleTokensAPIResponse {
   refresh_token: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   token_type: string;
+}
+
+export interface IRancherLoginRequest extends IMinimalRancherLoginRequest {
+  description?: string;
+  responseType?: string;
+}
+
+export interface IRancherKubeconfigRequest extends IMinimalRancherLoginRequest {
+  clusterId: string;
+}
+
+export interface IMinimalRancherLoginRequest {
+  rancherHost: string;
+  rancherPort: number;
+  username?: string;
+  password?: string;
+  bearerToken?: string;
+  secure: boolean;
+}
+
+export interface IRancherGeneratedKubeconfig {
+  baseType: string;
+  config: string;
+  type: string;
 }
 
 export interface IGoogleProject {
@@ -464,7 +524,16 @@ export interface ITerminalResponse {
 export type TActivator = 'block-button' | 'button' | 'item' | 'item-option';
 
 // DEPRECATED: The value '' can be removed when the migration is done.
-export type TAuthProvider = '' | 'aws' | 'awssso' | 'azure' | 'digitalocean' | 'google' | 'kubeconfig' | 'oidc';
+export type TAuthProvider =
+  | ''
+  | 'aws'
+  | 'awssso'
+  | 'azure'
+  | 'digitalocean'
+  | 'google'
+  | 'rancher'
+  | 'kubeconfig'
+  | 'oidc';
 
 export type TSyncType = 'context' | 'namespace';
 

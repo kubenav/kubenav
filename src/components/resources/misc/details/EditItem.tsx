@@ -69,14 +69,25 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ show, hide, item, u
   const [value, setValue] = useState<string>('');
 
   useEffect(() => {
-    setValue(yaml.dump(item));
-  }, [item]);
+    if (context.settings.editorFormat === 'json') {
+      setValue(JSON.stringify(item, null, 2));
+    } else {
+      setValue(yaml.dump(item));
+    }
+  }, [item, context.settings.editorFormat]);
 
   const handleSave = async () => {
     try {
-      const yamlObj = yaml.load(value);
-      if (yamlObj) {
-        const diff = jsonpatch.compare(item, yamlObj);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let parsedObj: any = null;
+      if (context.settings.editorFormat === 'json') {
+        parsedObj = JSON.parse(value);
+      } else {
+        parsedObj = yaml.load(value);
+      }
+
+      if (parsedObj) {
+        const diff = jsonpatch.compare(item, parsedObj);
         await kubernetesRequest(
           'PATCH',
           url,
@@ -118,7 +129,13 @@ const EditItem: React.FunctionComponent<IEditItemProps> = ({ show, hide, item, u
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <Editor readOnly={false} value={value} onChange={(newValue) => setValue(newValue)} fullHeight={true} />
+          <Editor
+            readOnly={false}
+            mode={context.settings.editorFormat === 'json' ? 'json' : 'yaml'}
+            value={value}
+            onChange={(newValue) => setValue(newValue)}
+            fullHeight={true}
+          />
         </IonContent>
       </IonModal>
     </React.Fragment>

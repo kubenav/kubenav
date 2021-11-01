@@ -1,11 +1,11 @@
 import { IonItem, IonLabel } from '@ionic/react';
-import { NetworkingV1beta1Ingress, NetworkingV1beta1IngressRule } from '@kubernetes/client-node';
+import { V1Ingress, V1IngressRule } from '@kubernetes/client-node';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { timeDifference } from '../../../../utils/helpers';
 
-const getHosts = (rules: NetworkingV1beta1IngressRule[]): string[] => {
+const getHosts = (rules: V1IngressRule[]): string[] => {
   const hosts: string[] = [];
 
   for (const rule of rules) {
@@ -18,7 +18,7 @@ const getHosts = (rules: NetworkingV1beta1IngressRule[]): string[] => {
 };
 
 interface IIngressItemProps extends RouteComponentProps {
-  item: NetworkingV1beta1Ingress;
+  item: V1Ingress;
   section: string;
   type: string;
 }

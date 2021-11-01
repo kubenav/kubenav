@@ -8,8 +8,8 @@ android {
         applicationId "io.kubenav.kubenav"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 32
-        versionName "3.4.0"
+        versionCode 48
+        versionName "3.7.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -21,9 +21,9 @@ android {
 }
 
 repositories {
-    maven {
-        url  "https://dl.bintray.com/ionic-team/capacitor"
-    }
+    // maven {
+    //     url  "https://dl.bintray.com/ionic-team/capacitor"
+    // }
     flatDir{
         dirs './src/libs'
     }
@@ -41,12 +41,3 @@ dependencies {
 }
 
 apply from: 'capacitor.build.gradle'
-
-try {
-    def servicesJSON = file('google-services.json')
-    if (servicesJSON.text) {
-        apply plugin: 'com.google.gms.google-services'
-    }
-} catch(Exception e) {
-    logger.warn("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
-}

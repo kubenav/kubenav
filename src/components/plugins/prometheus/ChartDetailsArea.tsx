@@ -100,7 +100,7 @@ const ChartDetailsArea: React.FunctionComponent<IChartDetailsAreaProps> = ({
     <IonRow style={{ height: '300px', width: '100%' }}>
       <IonCol style={{ padding: '0px' }}>
         <ResponsiveContainer>
-          <AreaChart>
+          <AreaChart data={series[0].data}>
             <XAxis
               dataKey="time"
               scale="time"
@@ -135,6 +135,9 @@ const ChartDetailsArea: React.FunctionComponent<IChartDetailsAreaProps> = ({
                   <Area
                     key={index}
                     dataKey="value"
+                    // NOTE: https://github.com/recharts/recharts/issues/2487
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     data={serie.data}
                     name={serie.name}
                     stroke={getColor(index, isDarkMode(context.settings.theme))}
@@ -148,6 +151,9 @@ const ChartDetailsArea: React.FunctionComponent<IChartDetailsAreaProps> = ({
                     <Area
                       key={index}
                       dataKey="value"
+                      // NOTE: https://github.com/recharts/recharts/issues/2487
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      // @ts-ignore
                       data={serie.data}
                       name={serie.name}
                       stroke={getColor(

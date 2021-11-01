@@ -33,29 +33,32 @@ const DashboardsPage: React.FunctionComponent = () => {
 
   const [searchText, setSearchText] = useState<string>('');
 
-  const fetchItems = async (key, cursor) =>
+  const fetchItems = async (cursor) =>
     await kubernetesRequest(
       'GET',
       `${
         context.settings.prometheusDashboardsNamespace
           ? `/api/v1/namespaces/${context.settings.prometheusDashboardsNamespace}/configmaps`
           : `/api/v1/configmaps`
-      }?labelSelector=kubenav.io/prometheus-dashboard=true&limit=50${cursor ? `&continue=${cursor}` : ''}`,
+      }?labelSelector=kubenav.io/prometheus-dashboard=true&limit=50${
+        cursor.pageParam ? `&continue=${cursor.pageParam}` : ''
+      }`,
       '',
       context.settings,
       await context.kubernetesAuthWrapper(''),
     );
 
-  const { isError, isFetching, isFetchingMore, canFetchMore, data, error, fetchMore, refetch } = useInfiniteQuery(
-    `PrometheusDashboardsPage_${cluster ? cluster.id : ''}_${cluster ? cluster.namespace : ''}`,
-    fetchItems,
-    {
-      ...context.settings.queryConfig,
-      refetchInterval: context.settings.queryRefetchInterval,
-      getFetchMore: (lastGroup) =>
-        lastGroup.metadata && lastGroup.metadata.continue ? lastGroup.metadata.continue : '',
-    },
-  );
+  const { isError, isFetching, isFetchingNextPage, hasNextPage, data, error, fetchNextPage, refetch } =
+    useInfiniteQuery(
+      `PrometheusDashboardsPage_${cluster ? cluster.id : ''}_${cluster ? cluster.namespace : ''}`,
+      fetchItems,
+      {
+        ...context.settings.queryConfig,
+        refetchInterval: context.settings.queryRefetchInterval,
+        getNextPageParam: (lastGroup) =>
+          lastGroup.metadata && lastGroup.metadata.continue ? lastGroup.metadata.continue : false,
+      },
+    );
 
   const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     event.detail.complete();
@@ -63,7 +66,7 @@ const DashboardsPage: React.FunctionComponent = () => {
   };
 
   const loadMore = async (event: CustomEvent<void>) => {
-    await fetchMore();
+    await fetchNextPage();
     (event.target as HTMLIonInfiniteScrollElement).complete();
   };
 
@@ -91,9 +94,9 @@ const DashboardsPage: React.FunctionComponent = () => {
               value={searchText}
               onIonChange={(e) => setSearchText(e.detail.value ? e.detail.value : '')}
             />
-            {data && data.length > 0 && data[0].items.length > 0 ? (
+            {data && data.pages && data.pages.length > 0 && data[0].items.length > 0 ? (
               <IonList>
-                {data.map((group, i) => (
+                {data.pages.map((group, i) => (
                   <React.Fragment key={i}>
                     {group && group.items
                       ? group.items
@@ -122,11 +125,11 @@ const DashboardsPage: React.FunctionComponent = () => {
                 ))}
                 <IonInfiniteScroll
                   threshold="25%"
-                  disabled={!canFetchMore || (isFetchingMore as boolean)}
+                  disabled={!hasNextPage || (isFetchingNextPage as boolean)}
                   onIonInfinite={loadMore}
                 >
-                  {(!isFetchingMore as boolean) ? (
-                    <IonButton size="small" expand="block" fill="clear" onClick={() => fetchMore()}>
+                  {(!isFetchingNextPage as boolean) ? (
+                    <IonButton size="small" expand="block" fill="clear" onClick={() => fetchNextPage()}>
                       Load more
                     </IonButton>
                   ) : null}
@@ -141,7 +144,7 @@ const DashboardsPage: React.FunctionComponent = () => {
           <LoadingErrorCard
             cluster={context.cluster}
             clusters={context.clusters}
-            error={error}
+            error={error as Error}
             icon="/assets/icons/kubernetes/prometheus.png"
             text="Could not get Prometheus Dashboards"
           />

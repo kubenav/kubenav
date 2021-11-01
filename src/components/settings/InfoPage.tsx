@@ -94,21 +94,25 @@ const InfoPage: React.FunctionComponent = () => {
                 <IonLabel>Twitter</IonLabel>
               </IonItem>
 
-              <IonListHeader mode="md">
-                <IonLabel>Donation</IonLabel>
-              </IonListHeader>
-              <IonItem onClick={() => openURL('https://github.com/sponsors/ricoberger')} button={true}>
-                <IonAvatar slot="start">
-                  <img alt="GitHub Sponsors" src="/assets/icons/misc/github.png" />
-                </IonAvatar>
-                <IonLabel>GitHub Sponsors</IonLabel>
-              </IonItem>
-              <IonItem onClick={() => openURL('https://www.paypal.me/ricoberger')} button={true}>
-                <IonAvatar slot="start">
-                  <img alt="PayPal" src="/assets/icons/misc/paypal.png" />
-                </IonAvatar>
-                <IonLabel>PayPal</IonLabel>
-              </IonItem>
+              {!isPlatform('ios') ? (
+                <React.Fragment>
+                  <IonListHeader mode="md">
+                    <IonLabel>Donation</IonLabel>
+                  </IonListHeader>
+                  <IonItem onClick={() => openURL('https://github.com/sponsors/ricoberger')} button={true}>
+                    <IonAvatar slot="start">
+                      <img alt="GitHub Sponsors" src="/assets/icons/misc/github.png" />
+                    </IonAvatar>
+                    <IonLabel>GitHub Sponsors</IonLabel>
+                  </IonItem>
+                  <IonItem onClick={() => openURL('https://www.paypal.me/ricoberger')} button={true}>
+                    <IonAvatar slot="start">
+                      <img alt="PayPal" src="/assets/icons/misc/paypal.png" />
+                    </IonAvatar>
+                    <IonLabel>PayPal</IonLabel>
+                  </IonItem>
+                </React.Fragment>
+              ) : null}
             </IonList>
           </IonCardContent>
         </IonCard>

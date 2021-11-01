@@ -13,7 +13,7 @@ bindings-android:
 
 bindings-ios:
 	mkdir -p ios/App/App/libs
-	gomobile bind -o ios/App/App/libs/Mobile.framework -target=ios github.com/kubenav/kubenav/cmd/mobile
+	gomobile bind -o ios/App/App/libs/Mobile.xcframework -target=ios github.com/kubenav/kubenav/cmd/mobile
 
 build-server:
 	go build -ldflags "-X ${REPO}/pkg/version.Version=${VERSION} \
@@ -22,6 +22,24 @@ build-server:
 		-X ${REPO}/pkg/version.BuildUser=${BUILDUSER} \
 		-X ${REPO}/pkg/version.BuildDate=${BUILDTIME}" \
 		-o ./bin/server ./cmd/server;
+
+build-mobile-server:
+	go build -ldflags "-X ${REPO}/pkg/version.Version=${VERSION} \
+		-X ${REPO}/pkg/version.Revision=${REVISION} \
+		-X ${REPO}/pkg/version.Branch=${BRANCH} \
+		-X ${REPO}/pkg/version.BuildUser=${BUILDUSER} \
+		-X ${REPO}/pkg/version.BuildDate=${BUILDTIME}" \
+		-o ./bin/mobile ./cmd/mobile/debug
+
+build-ionic:
+	ionic build
+	npx cap sync
+
+build-android: bindings-android build-ionic
+
+build-ios: bindings-ios build-ionic
+
+build-mobile: bindings-android bindings-ios build-ionic
 
 build-electron:
 	rm -rf cmd/electron/bind_darwin_amd64.go

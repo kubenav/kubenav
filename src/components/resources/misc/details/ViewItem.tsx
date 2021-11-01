@@ -15,9 +15,10 @@ import {
 } from '@ionic/react';
 import { close, documentText } from 'ionicons/icons';
 import yaml from 'js-yaml';
-import React from 'react';
+import React, { useContext } from 'react';
 
-import { TActivator } from '../../../../declarations';
+import { IContext, TActivator } from '../../../../declarations';
+import { AppContext } from '../../../../utils/context';
 import Editor from '../../../misc/Editor';
 
 const { Filesystem } = Plugins;
@@ -62,6 +63,8 @@ interface IViewItemProps {
 }
 
 const ViewItem: React.FunctionComponent<IViewItemProps> = ({ show, hide, item }: IViewItemProps) => {
+  const context = useContext<IContext>(AppContext);
+
   const handleExport = async () => {
     if (isPlatform('hybrid')) {
       try {
@@ -99,7 +102,12 @@ const ViewItem: React.FunctionComponent<IViewItemProps> = ({ show, hide, item }:
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <Editor readOnly={true} value={yaml.dump(item)} fullHeight={true} />
+          <Editor
+            readOnly={true}
+            mode={context.settings.editorFormat === 'json' ? 'json' : 'yaml'}
+            value={context.settings.editorFormat === 'json' ? JSON.stringify(item, null, 2) : yaml.dump(item)}
+            fullHeight={true}
+          />
         </IonContent>
       </IonModal>
     </React.Fragment>

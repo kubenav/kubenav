@@ -49,7 +49,7 @@ func KubernetesRequest(ctx context.Context, method, url, body string, clientset 
 	if method == "GET" {
 		return clientset.RESTClient().Get().RequestURI(url).DoRaw(ctx)
 	} else if method == "DELETE" {
-		return clientset.RESTClient().Delete().RequestURI(url).DoRaw(ctx)
+		return clientset.RESTClient().Delete().RequestURI(url).Body([]byte(body)).DoRaw(ctx)
 	} else if method == "PATCH" {
 		return clientset.RESTClient().Patch(types.JSONPatchType).RequestURI(url).Body([]byte(body)).DoRaw(ctx)
 	} else if method == "POST" {

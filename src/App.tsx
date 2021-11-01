@@ -2,6 +2,7 @@ import { IonApp, IonRouterOutlet, IonSplitPane, isPlatform } from '@ionic/react'
 import { IonReactRouter } from '@ionic/react-router';
 import React from 'react';
 import { Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import '@ionic/react/css/normalize.css';
 
@@ -34,6 +35,7 @@ import ClustersAWSSSOPage from './components/settings/clusters/aws/AWSSSOPage';
 import ClustersAzurePage from './components/settings/clusters/azure/AzurePage';
 import ClustersDigitalOceanPage from './components/settings/clusters/digitalocean/DigitalOceanPage';
 import ClustersGooglePage from './components/settings/clusters/google/GooglePage';
+import ClustersRancherPage from './components/settings/clusters/rancher/RancherPage';
 import ClustersKubeconfigPage from './components/settings/clusters/kubeconfig/KubeconfigPage';
 import ClustersManualPage from './components/settings/clusters/manual/ManualPage';
 import ClustersOIDCPage from './components/settings/clusters/oidc/OIDCPage';
@@ -49,50 +51,59 @@ import { TerminalContextProvider } from './utils/terminal';
 import './theme/custom.css';
 import './theme/variables.css';
 
+const queryClient = new QueryClient();
+
 const App: React.FunctionComponent = () => (
   <IonApp>
-    <AppContextProvider>
-      <TerminalContextProvider>
-        <PortForwardingContextProvider>
-          <IonReactRouter>
-            <IonSplitPane contentId="main" className={isPlatform('hybrid') ? '' : 'menu-width'}>
-              <Menu sections={resources} />
-              <IonRouterOutlet id="main">
-                <Route path="/" component={OverviewPage} exact={true} />
-                <Route path="/bookmarks" component={BookmarksPage} exact={true} />
-                <Route path="/resources/:section/:type" component={ListPage} exact={true} />
-                <Route path="/resources/:section/:type/:namespace/:name" component={DetailsPage} exact={true} />
-                <Route path="/customresources/:group/:version/:name" component={CustomResourcesListPage} exact={true} />
-                <Route
-                  path="/customresources/:group/:version/:name/:crnamespace/:crname"
-                  component={CustomResourcesDetailsPage}
-                  exact={true}
-                />
-                <Route path="/plugins/elasticsearch" component={ElasticsearchQueryPage} exact={true} />
-                <Route path="/plugins/helm" component={HelmReleasesPage} exact={true} />
-                <Route path="/plugins/helm/:namespace/:name" component={HelmReleasePage} exact={true} />
-                <Route path="/plugins/jaeger" component={JaegerTracesPage} exact={true} />
-                <Route path="/plugins/jaeger/trace/:trace" component={JaegerTracePage} exact={true} />
-                <Route path="/plugins/prometheus" component={PrometheusDashboardsPage} exact={true} />
-                <Route path="/plugins/prometheus/:namespace/:name" component={PrometheusDashboardPage} exact={true} />
-                <Route path="/settings/clusters" component={ClustersPage} exact={true} />
-                <Route path="/settings/clusters/aws" component={ClustersAWSPage} exact={true} />
-                <Route path="/settings/clusters/awssso" component={ClustersAWSSSOPage} exact={true} />
-                <Route path="/settings/clusters/azure" component={ClustersAzurePage} exact={true} />
-                <Route path="/settings/clusters/digitalocean" component={ClustersDigitalOceanPage} exact={true} />
-                <Route path="/settings/clusters/google" component={ClustersGooglePage} exact={true} />
-                <Route path="/settings/clusters/kubeconfig" component={ClustersKubeconfigPage} exact={true} />
-                <Route path="/settings/clusters/manual" component={ClustersManualPage} exact={true} />
-                <Route path="/settings/clusters/oidc" component={ClustersOIDCPage} exact={true} />
-                <Route path="/settings/clusters/oidc/redirect" component={ClustersOIDCRedirectPage} exact={true} />
-                <Route path="/settings/general" component={GeneralPage} exact={true} />
-                <Route path="/settings/info" component={InfoPage} exact={true} />
-              </IonRouterOutlet>
-            </IonSplitPane>
-          </IonReactRouter>
-        </PortForwardingContextProvider>
-      </TerminalContextProvider>
-    </AppContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <AppContextProvider>
+        <TerminalContextProvider>
+          <PortForwardingContextProvider>
+            <IonReactRouter>
+              <IonSplitPane contentId="main" className={isPlatform('hybrid') ? '' : 'menu-width'}>
+                <Menu sections={resources} />
+                <IonRouterOutlet id="main">
+                  <Route path="/" component={OverviewPage} exact={true} />
+                  <Route path="/bookmarks" component={BookmarksPage} exact={true} />
+                  <Route path="/resources/:section/:type" component={ListPage} exact={true} />
+                  <Route path="/resources/:section/:type/:namespace/:name" component={DetailsPage} exact={true} />
+                  <Route
+                    path="/customresources/:group/:version/:name"
+                    component={CustomResourcesListPage}
+                    exact={true}
+                  />
+                  <Route
+                    path="/customresources/:group/:version/:name/:crnamespace/:crname"
+                    component={CustomResourcesDetailsPage}
+                    exact={true}
+                  />
+                  <Route path="/plugins/elasticsearch" component={ElasticsearchQueryPage} exact={true} />
+                  <Route path="/plugins/helm" component={HelmReleasesPage} exact={true} />
+                  <Route path="/plugins/helm/:namespace/:name" component={HelmReleasePage} exact={true} />
+                  <Route path="/plugins/jaeger" component={JaegerTracesPage} exact={true} />
+                  <Route path="/plugins/jaeger/trace/:trace" component={JaegerTracePage} exact={true} />
+                  <Route path="/plugins/prometheus" component={PrometheusDashboardsPage} exact={true} />
+                  <Route path="/plugins/prometheus/:namespace/:name" component={PrometheusDashboardPage} exact={true} />
+                  <Route path="/settings/clusters" component={ClustersPage} exact={true} />
+                  <Route path="/settings/clusters/aws" component={ClustersAWSPage} exact={true} />
+                  <Route path="/settings/clusters/awssso" component={ClustersAWSSSOPage} exact={true} />
+                  <Route path="/settings/clusters/azure" component={ClustersAzurePage} exact={true} />
+                  <Route path="/settings/clusters/digitalocean" component={ClustersDigitalOceanPage} exact={true} />
+                  <Route path="/settings/clusters/google" component={ClustersGooglePage} exact={true} />
+                  <Route path="/settings/clusters/rancher" component={ClustersRancherPage} exact={true} />
+                  <Route path="/settings/clusters/kubeconfig" component={ClustersKubeconfigPage} exact={true} />
+                  <Route path="/settings/clusters/manual" component={ClustersManualPage} exact={true} />
+                  <Route path="/settings/clusters/oidc" component={ClustersOIDCPage} exact={true} />
+                  <Route path="/settings/clusters/oidc/redirect" component={ClustersOIDCRedirectPage} exact={true} />
+                  <Route path="/settings/general" component={GeneralPage} exact={true} />
+                  <Route path="/settings/info" component={InfoPage} exact={true} />
+                </IonRouterOutlet>
+              </IonSplitPane>
+            </IonReactRouter>
+          </PortForwardingContextProvider>
+        </TerminalContextProvider>
+      </AppContextProvider>
+    </QueryClientProvider>
   </IonApp>
 );
 

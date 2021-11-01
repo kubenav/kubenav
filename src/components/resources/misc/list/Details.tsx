@@ -41,11 +41,7 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ refresh, bookmark, ty
             <IonLabel>Refresh</IonLabel>
           </IonItem>
           <Bookmark bookmark={bookmark} hide={() => showType('')} />
-          {page !== undefined &&
-          type !== 'componentstatuses' &&
-          type !== 'customresourcedefinitions' &&
-          type !== 'events' &&
-          type !== 'nodes' ? (
+          {page !== undefined && type !== 'customresourcedefinitions' && type !== 'events' && type !== 'nodes' ? (
             <CreateItemActivator activator="item" onClick={() => showType('create')} />
           ) : null}
         </IonList>

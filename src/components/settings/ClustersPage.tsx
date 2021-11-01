@@ -13,6 +13,7 @@ import {
 import React, { memo, useContext } from 'react';
 
 import { IContext } from '../../declarations';
+import { DEBUG_MOBILE_FRONTEND } from '../../utils/constants';
 import { AppContext } from '../../utils/context';
 import AddCluster from './clusters/AddCluster';
 import ClusterItem from './clusters/ClusterItem';
@@ -28,7 +29,7 @@ const ClustersPage: React.FunctionComponent = () => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle>Clusters</IonTitle>
-          {isPlatform('hybrid') ? <AddCluster activator="button" /> : null}
+          {isPlatform('hybrid') || DEBUG_MOBILE_FRONTEND ? <AddCluster activator="button" /> : null}
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -36,14 +37,14 @@ const ClustersPage: React.FunctionComponent = () => {
           Object.keys(context.clusters).map((key) => {
             return context.clusters ? <ClusterItem key={key} cluster={context.clusters[key]} /> : null;
           })
-        ) : isPlatform('hybrid') ? (
+        ) : isPlatform('hybrid') || DEBUG_MOBILE_FRONTEND ? (
           <IonCard>
             <IonCardContent>
               <p className="paragraph-margin-bottom">
                 It looks like you have not added a cluster yet. Click the button below to add your first cluster. You
                 can choose between different options when adding a cluster. You can import your cluster directly from
                 your cloud providers like Google, AWS or Azure. You can also import your clusters from an existing
-                Kubeconfig file or you can choose the OIDC option.
+                Kubeconfig file or you can choose the OIDC or Rancher option.
               </p>
               <AddCluster activator="block-button" />
             </IonCardContent>

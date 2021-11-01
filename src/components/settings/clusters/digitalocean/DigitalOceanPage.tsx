@@ -150,7 +150,7 @@ const DigitalOceanPage: React.FunctionComponent<IDigitalOceanPageProps> = ({ his
           <IonProgressBar slot="fixed" type="indeterminate" color="primary" />
         ) : isError || !data ? (
           <ErrorCard
-            error={error}
+            error={error as Error}
             text="Could not load DigitalOcean clusters"
             icon="/assets/icons/kubernetes/kubernetes.png"
           />

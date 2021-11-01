@@ -26,7 +26,6 @@ import ClusterRoleDetails from '../components/resources/rbac/clusterRoles/Cluste
 import RoleBindingDetails from '../components/resources/rbac/roleBindings/RoleBindingDetails';
 import RoleDetails from '../components/resources/rbac/roles/RoleDetails';
 
-import ComponentStatusDetails from '../components/resources/cluster/componentstatuses/ComponentStatusDetails';
 import EventDetails from '../components/resources/cluster/events/EventDetails';
 import NamespaceDetails from '../components/resources/cluster/namespaces/NamespaceDetails';
 import NodeDetails from '../components/resources/cluster/nodes/NodeDetails';
@@ -60,7 +59,6 @@ import ClusterRoleItem from '../components/resources/rbac/clusterRoles/ClusterRo
 import RoleBindingItem from '../components/resources/rbac/roleBindings/RoleBindingItem';
 import RoleItem from '../components/resources/rbac/roles/RoleItem';
 
-import ComponentStatusItem from '../components/resources/cluster/componentstatuses/ComponentStatusItem';
 import CustomResourceDefinitionItem from '../components/resources/cluster/customResourceDefinitions/CustomResourceDefinitionItem';
 import EventItem from '../components/resources/cluster/events/EventItem';
 import NamespaceItem from '../components/resources/cluster/namespaces/NamespaceItem';
@@ -237,15 +235,15 @@ export const resources: IAppSections = {
         pluralText: 'Ingresses',
         icon: '/assets/icons/kubernetes/ing.png',
         kind: 'Ingresse',
-        apiVersion: 'networking.k8s.io/v1beta1',
+        apiVersion: 'networking.k8s.io/v1',
         listURL: (namespace: string): string => {
           return namespace
-            ? `/apis/networking.k8s.io/v1beta1/namespaces/${namespace}/ingresses`
-            : `/apis/networking.k8s.io/v1beta1/ingresses`;
+            ? `/apis/networking.k8s.io/v1/namespaces/${namespace}/ingresses`
+            : `/apis/networking.k8s.io/v1/ingresses`;
         },
         listItemComponent: IngressItem,
         detailsURL: (namespace: string, name: string): string => {
-          return `/apis/networking.k8s.io/v1beta1/namespaces/${namespace}/ingresses/${name}`;
+          return `/apis/networking.k8s.io/v1/namespaces/${namespace}/ingresses/${name}`;
         },
         detailsComponent: IngressDetails,
       },
@@ -473,23 +471,6 @@ export const resources: IAppSections = {
   cluster: {
     title: 'Cluster',
     pages: {
-      componentstatuses: {
-        singleText: 'Component Status',
-        pluralText: 'Component Statuses',
-        icon: '/assets/icons/kubernetes/master.png',
-        kind: 'ComponentStatus',
-        apiVersion: 'v1',
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        listURL: (namespace: string): string => {
-          return `/api/v1/componentstatuses`;
-        },
-        listItemComponent: ComponentStatusItem,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        detailsURL: (namespace: string, name: string): string => {
-          return `/api/v1/componentstatuses/${name}`;
-        },
-        detailsComponent: ComponentStatusDetails,
-      },
       customresourcedefinitions: {
         singleText: 'Custom Resource Definition',
         pluralText: 'Custom Resource Definitions',
@@ -498,12 +479,12 @@ export const resources: IAppSections = {
         apiVersion: '',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         listURL: (namespace: string): string => {
-          return `/apis/apiextensions.k8s.io/v1beta1/customresourcedefinitions`;
+          return `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
         },
         listItemComponent: CustomResourceDefinitionItem,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         detailsURL: (namespace: string, name: string): string => {
-          return `/apis/apiextensions.k8s.io/v1beta1/customresourcedefinitions`;
+          return `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
         },
         detailsComponent: CustomResourceDefinitionItem,
       },

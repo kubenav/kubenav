@@ -14,14 +14,14 @@ import { PortForwardingContext } from '../../../../utils/portforwarding';
 // If we couldn't found the correct port we are returning 0, which isn't a valid port for the port forwarding.
 // eslint-disable-next-line @typescript-eslint/ban-types
 const getPortFromTargetPort = (targetPort: object, containers: V1Container[]): number => {
-  if (!isNaN((targetPort as unknown) as number)) {
-    return (targetPort as unknown) as number;
+  if (!isNaN(targetPort as unknown as number)) {
+    return targetPort as unknown as number;
   }
 
   for (const container of containers) {
     if (container.ports) {
       for (const port of container.ports) {
-        if (port.name === ((targetPort as unknown) as string)) {
+        if (port.name === (targetPort as unknown as string)) {
           return port.containerPort;
         }
       }

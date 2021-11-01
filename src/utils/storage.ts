@@ -6,6 +6,7 @@ import {
   IClusterAuthProviderDigitalOcean,
   IClusterAuthProviderGoogle,
   IClusterAuthProviderOIDC,
+  IClusterAuthProviderRancher,
   IClusters,
   TAuthProvider,
 } from '../declarations';
@@ -59,6 +60,7 @@ export const readClusters = (): IClusters | undefined => {
   const azureCredentials = localStorage.getItem('azure');
   const awsCredentials = localStorage.getItem('aws');
   const googleCredentials = localStorage.getItem('google');
+  const rancherCredentials = localStorage.getItem('rancher');
   const googleClientID = localStorage.getItem('google_clientid');
   const oidcCredentials = localStorage.getItem('oidc');
 
@@ -94,6 +96,20 @@ export const readClusters = (): IClusters | undefined => {
           tokenType: parsed.token_type,
         };
       }
+    } else if (clusters[id].authProvider === 'rancher') {
+      if (rancherCredentials !== null) {
+        const parsed = JSON.parse(rancherCredentials);
+
+        clusters[id].authProviderRancher = {
+          rancherHost: parsed.rancherHost,
+          rancherPort: parsed.rancherPort,
+          secure: parsed.secure,
+          username: parsed.username,
+          password: parsed.password,
+          bearerToken: parsed.bearerToken,
+          expires: parsed.expires,
+        };
+      }
     } else if (clusters[id].authProvider === 'azure') {
       if (azureCredentials !== null) {
         clusters[id].authProviderAzure = JSON.parse(azureCredentials) as IClusterAuthProviderAzure;
@@ -127,6 +143,7 @@ export const readClusters = (): IClusters | undefined => {
   localStorage.removeItem('azure');
   localStorage.removeItem('google_clientid');
   localStorage.removeItem('google');
+  localStorage.removeItem('rancher');
   localStorage.removeItem('oidc');
   localStorage.removeItem('oidc_last');
 
@@ -152,6 +169,7 @@ export const readSettings = (): IAppSettings => {
       terminalScrollback: settings.terminalScrollback
         ? settings.terminalScrollback
         : DEFAULT_SETTINGS.terminalScrollback,
+      editorFormat: settings.editorFormat ? settings.editorFormat : DEFAULT_SETTINGS.editorFormat,
       enablePodMetrics: settings.hasOwnProperty('enablePodMetrics')
         ? settings.enablePodMetrics
         : DEFAULT_SETTINGS.enablePodMetrics,
@@ -230,6 +248,7 @@ export const readTemporaryCredentials = (
   | IClusterAuthProviderAzure
   | IClusterAuthProviderDigitalOcean
   | IClusterAuthProviderGoogle
+  | IClusterAuthProviderRancher
   | IClusterAuthProviderOIDC => {
   const credentials = localStorage.getItem(STORAGE_TEMPORARY_CREDENTIALS);
 
@@ -243,6 +262,8 @@ export const readTemporaryCredentials = (
     return JSON.parse(credentials) as IClusterAuthProviderDigitalOcean;
   } else if (authProvider === 'google') {
     return JSON.parse(credentials) as IClusterAuthProviderGoogle;
+  } else if (authProvider === 'rancher') {
+    return JSON.parse(credentials) as IClusterAuthProviderRancher;
   } else if (authProvider === 'oidc') {
     return JSON.parse(credentials) as IClusterAuthProviderOIDC;
   } else {
@@ -292,6 +313,7 @@ export const saveTemporaryCredentials = (
     | IClusterAuthProviderAzure
     | IClusterAuthProviderDigitalOcean
     | IClusterAuthProviderGoogle
+    | IClusterAuthProviderRancher
     | IClusterAuthProviderOIDC,
 ): void => {
   localStorage.setItem(STORAGE_TEMPORARY_CREDENTIALS, JSON.stringify(credentials));

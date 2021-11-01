@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:13 as build
+FROM --platform=linux/amd64 node:14 as build
 WORKDIR /kubenav
 RUN npm install -g @ionic/cli
 COPY package.json package-lock.json /kubenav/
@@ -9,11 +9,10 @@ COPY src /kubenav/src
 COPY .eslintrc.json .prettierrc.json capacitor.config.json ionic.config.json tsconfig.json /kubenav/
 RUN ionic build
 
-FROM golang:1.15.5-alpine3.12 as server
+FROM golang:1.17 as server
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 RUN echo "Building on $BUILDPLATFORM, for $TARGETPLATFORM" > /log
-RUN apk update && apk add git make
 WORKDIR /kubenav
 COPY go.mod go.sum /kubenav/
 RUN go mod download
@@ -23,7 +22,7 @@ COPY pkg /kubenav/pkg
 COPY Makefile /kubenav
 RUN make build-server
 
-FROM alpine:3.12.0
+FROM alpine:3.14
 RUN apk update && apk add --no-cache ca-certificates
 RUN mkdir /kubenav
 COPY --from=build /kubenav/build /kubenav/build
