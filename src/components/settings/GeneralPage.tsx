@@ -17,8 +17,10 @@ import {
   IonTitle,
   IonToggle,
   IonToolbar,
+  isPlatform,
 } from '@ionic/react';
-import React, { memo, useContext } from 'react';
+import { NativeBiometric } from 'capacitor-native-biometric';
+import React, { memo, useContext, useEffect, useState } from 'react';
 
 import { IContext } from '../../declarations';
 import { IS_INCLUSTER } from '../../utils/constants';
@@ -26,6 +28,7 @@ import { AppContext } from '../../utils/context';
 
 const GeneralPage: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);
+  const [isFingerprintAvailable, setIsFingerprintAvailable] = useState<boolean>(false);
 
   const handleValueChange = (event) => {
     context.editSettings({ ...context.settings, [event.target.name]: event.target.value });
@@ -51,6 +54,25 @@ const GeneralPage: React.FunctionComponent = () => {
     context.editSettings({ ...context.settings, [event.target.name]: event.detail.value });
   };
 
+  useEffect(() => {
+    const checkFingerprintAvailable = async () => {
+      try {
+        const nativeBiometric = await NativeBiometric.isAvailable();
+        if (nativeBiometric.isAvailable) {
+          setIsFingerprintAvailable(true);
+        } else {
+          setIsFingerprintAvailable(false);
+        }
+      } catch (err) {
+        setIsFingerprintAvailable(false);
+      }
+    };
+
+    if (isPlatform('hybrid')) {
+      checkFingerprintAvailable();
+    }
+  }, []);
+
   return (
     <IonPage>
       <IonHeader>
@@ -75,6 +97,16 @@ const GeneralPage: React.FunctionComponent = () => {
                 <IonSelectOption value="light">Light</IonSelectOption>
               </IonSelect>
             </IonItem>
+            {isFingerprintAvailable ? (
+              <IonItem>
+                <IonLabel>Authentication</IonLabel>
+                <IonToggle
+                  name="authenticationEnabled"
+                  checked={context.settings.authenticationEnabled}
+                  onIonChange={handleToggleChange}
+                />
+              </IonItem>
+            ) : null}
             <IonItem>
               <IonLabel className="label-for-range" position="stacked">
                 Request Timeout (in seconds)
