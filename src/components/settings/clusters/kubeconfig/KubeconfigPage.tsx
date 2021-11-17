@@ -59,6 +59,7 @@ export const getClustersFromKubeconfig = (kubeconfig: string): ICluster[] => {
       for (const ctx of config.contexts) {
         const cluster = getKubeconfigCluster(ctx.context.cluster, config.clusters);
         const user = getKubeconfigUser(ctx.context.user, config.users);
+        const namespace = ctx.context.namespace ? ctx.context.namespace : 'default';
 
         if (ctx.name === '' || cluster === null || user === null || !cluster.server) {
           throw new Error('Invalid kubeconfig');
@@ -110,7 +111,7 @@ export const getClustersFromKubeconfig = (kubeconfig: string): ICluster[] => {
               accessToken: '',
               expiry: Math.floor(Date.now() / 1000),
             },
-            namespace: 'default',
+            namespace: namespace,
           });
         } else {
           clusters.push({
@@ -127,7 +128,7 @@ export const getClustersFromKubeconfig = (kubeconfig: string): ICluster[] => {
             password: user.password ? user.password : '',
             insecureSkipTLSVerify: cluster['insecure-skip-tls-verify'] ? cluster['insecure-skip-tls-verify'] : false,
             authProvider: 'kubeconfig',
-            namespace: 'default',
+            namespace: namespace,
           });
         }
       }

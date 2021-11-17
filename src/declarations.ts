@@ -384,6 +384,7 @@ export interface IKubeconfigContextRef {
 
 export interface IKubeconfigContext {
   cluster: string;
+  namespace?: string;
   user: string;
 }
 
