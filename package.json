@@ -37,6 +37,7 @@
   "dependencies": {
     "@capacitor/android": "^3.3.2",
     "@capacitor/app": "^1.0.6",
+    "@capacitor/browser": "^1.0.6",
     "@capacitor/clipboard": "^1.0.6",
     "@capacitor/core": "^3.3.2",
     "@capacitor/filesystem": "^1.0.6",
