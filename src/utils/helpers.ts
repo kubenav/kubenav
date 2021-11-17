@@ -1,3 +1,4 @@
+import { Browser } from '@capacitor/browser';
 import { isPlatform } from '@ionic/react';
 import { V1LabelSelector, V1Subject } from '@kubernetes/client-node';
 
@@ -153,7 +154,9 @@ export const matchLabels = (labels: { [key: string]: string }): string => {
 
 // openURL opens the given URL in the users default browser.
 export const openURL = async (url: string): Promise<void> => {
-  if (isPlatform('electron')) {
+  if (isPlatform('hybrid')) {
+    await Browser.open({ url: url });
+  } else if (isPlatform('electron')) {
     window.require('electron').shell.openExternal(url);
   } else {
     window.open(url, '_system', 'location=yes');
