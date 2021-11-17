@@ -19,7 +19,7 @@ import {
   IonToolbar,
   isPlatform,
 } from '@ionic/react';
-import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
+import { NativeBiometric } from 'capacitor-native-biometric';
 import React, { memo, useContext, useEffect, useState } from 'react';
 
 import { IContext } from '../../declarations';
@@ -57,8 +57,12 @@ const GeneralPage: React.FunctionComponent = () => {
   useEffect(() => {
     const checkFingerprintAvailable = async () => {
       try {
-        await FingerprintAIO.isAvailable();
-        setIsFingerprintAvailable(true);
+        const nativeBiometric = await NativeBiometric.isAvailable();
+        if (nativeBiometric.isAvailable) {
+          setIsFingerprintAvailable(true);
+        } else {
+          setIsFingerprintAvailable(false);
+        }
       } catch (err) {
         setIsFingerprintAvailable(false);
       }

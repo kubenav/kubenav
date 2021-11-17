@@ -76,7 +76,6 @@ const History: React.FunctionComponent<IHistoryProps> = ({ name, namespace, helm
       }
     },
     {
-      ...context.settings.queryConfig,
       refetchInterval: context.settings.queryRefetchInterval,
     },
   );

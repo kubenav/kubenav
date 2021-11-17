@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core';
+import { Keyboard } from '@capacitor/keyboard';
 import { isPlatform } from '@ionic/react';
 import React, { useContext, useRef } from 'react';
 import AceEditor from 'react-ace';
@@ -12,8 +12,6 @@ import 'ace-builds/src-noconflict/theme-nord_dark';
 import { IContext } from '../../declarations';
 import { AppContext } from '../../utils/context';
 import { isDarkMode } from '../../utils/helpers';
-
-const { Keyboard } = Plugins;
 
 interface IEditorProps {
   onChange?: (newValue: string) => void;

@@ -46,39 +46,35 @@ const OIDCRedirectPage: React.FunctionComponent<IOIDCRedirectPageProps> = ({ his
   const [insecureSkipTLSVerify, setInsecureSkipTLSVerify] = useState<boolean>(false);
   const [namespace, setNamespace] = useState<string>('default');
 
-  const { isError, isFetching, error } = useQuery(
-    'OIDCRedirectPage',
-    async () => {
-      try {
-        let credentials = readTemporaryCredentials('oidc') as undefined | IClusterAuthProviderOIDC;
+  const { isError, isFetching, error } = useQuery('OIDCRedirectPage', async () => {
+    try {
+      let credentials = readTemporaryCredentials('oidc') as undefined | IClusterAuthProviderOIDC;
 
-        if (credentials) {
-          if (query.get('error')) {
-            throw new Error(query.get('error') as string);
-          }
-
-          if (query.get('code')) {
-            credentials = await getOIDCRefreshToken(credentials, query.get('code') as string);
-            setProvider(credentials);
-          }
-
-          if (context.clusters && credentials.clusterID) {
-            setClusterID(credentials.clusterID);
-            setName(context.clusters[credentials.clusterID].name);
-            setURL(context.clusters[credentials.clusterID].url);
-            setCertificateAuthorityData(context.clusters[credentials.clusterID].certificateAuthorityData);
-            setInsecureSkipTLSVerify(context.clusters[credentials.clusterID].insecureSkipTLSVerify);
-            setNamespace(context.clusters[credentials.clusterID].namespace);
-          }
-        } else {
-          throw new Error('Could not read credentials for OIDC');
+      if (credentials) {
+        if (query.get('error')) {
+          throw new Error(query.get('error') as string);
         }
-      } catch (err) {
-        throw err;
+
+        if (query.get('code')) {
+          credentials = await getOIDCRefreshToken(credentials, query.get('code') as string);
+          setProvider(credentials);
+        }
+
+        if (context.clusters && credentials.clusterID) {
+          setClusterID(credentials.clusterID);
+          setName(context.clusters[credentials.clusterID].name);
+          setURL(context.clusters[credentials.clusterID].url);
+          setCertificateAuthorityData(context.clusters[credentials.clusterID].certificateAuthorityData);
+          setInsecureSkipTLSVerify(context.clusters[credentials.clusterID].insecureSkipTLSVerify);
+          setNamespace(context.clusters[credentials.clusterID].namespace);
+        }
+      } else {
+        throw new Error('Could not read credentials for OIDC');
       }
-    },
-    context.settings.queryConfig,
-  );
+    } catch (err) {
+      throw err;
+    }
+  });
 
   const handleName = (event) => {
     setName(event.target.value);

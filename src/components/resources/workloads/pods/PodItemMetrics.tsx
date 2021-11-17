@@ -28,7 +28,7 @@ const PodItemMetrics: React.FunctionComponent<IPodItemMetricsProps> = ({ item, t
         context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
-    { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
+    { refetchInterval: context.settings.queryRefetchInterval },
   );
 
   return (

@@ -43,7 +43,7 @@ const NodeDetails: React.FunctionComponent<INodeDetailsProps> = ({ item, type }:
         context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
-    { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
+    { refetchInterval: context.settings.queryRefetchInterval },
   );
 
   return (

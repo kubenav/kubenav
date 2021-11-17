@@ -65,60 +65,56 @@ type IAzurePageProps = RouteComponentProps;
 const AzurePage: React.FunctionComponent<IAzurePageProps> = ({ history }: IAzurePageProps) => {
   const context = useContext<IContext>(AppContext);
 
-  const { isError, isFetching, data, error } = useQuery<ICluster[] | undefined, Error>(
-    'AzurePage',
-    async () => {
-      try {
-        const credentials = readTemporaryCredentials('azure') as undefined | IClusterAuthProviderAzure;
+  const { isError, isFetching, data, error } = useQuery<ICluster[] | undefined, Error>('AzurePage', async () => {
+    try {
+      const credentials = readTemporaryCredentials('azure') as undefined | IClusterAuthProviderAzure;
 
-        if (credentials) {
-          const aksClusters = await getAzureClusters(credentials);
-          const tmpClusters: ICluster[] = [];
+      if (credentials) {
+        const aksClusters = await getAzureClusters(credentials);
+        const tmpClusters: ICluster[] = [];
 
-          // eslint-disable-next-line array-callback-return
-          aksClusters.map((cluster) => {
-            if (cluster.kubeconfig.contexts.length === 1) {
-              const kubeconfigCluster = getKubeconfigCluster(
-                cluster.kubeconfig.contexts[0].context.cluster,
-                cluster.kubeconfig.clusters,
-              );
-              const kubeconfigUser = getKubeconfigUser(
-                cluster.kubeconfig.contexts[0].context.user,
-                cluster.kubeconfig.users,
-              );
+        // eslint-disable-next-line array-callback-return
+        aksClusters.map((cluster) => {
+          if (cluster.kubeconfig.contexts.length === 1) {
+            const kubeconfigCluster = getKubeconfigCluster(
+              cluster.kubeconfig.contexts[0].context.cluster,
+              cluster.kubeconfig.clusters,
+            );
+            const kubeconfigUser = getKubeconfigUser(
+              cluster.kubeconfig.contexts[0].context.user,
+              cluster.kubeconfig.users,
+            );
 
-              tmpClusters.push({
-                id: cluster.name,
-                name: cluster.name,
-                url: kubeconfigCluster ? kubeconfigCluster.server : '',
-                certificateAuthorityData: kubeconfigCluster ? kubeconfigCluster['certificate-authority-data'] : '',
-                clientCertificateData:
-                  kubeconfigUser && kubeconfigUser['client-certificate-data']
-                    ? kubeconfigUser['client-certificate-data']
-                    : '',
-                clientKeyData:
-                  kubeconfigUser && kubeconfigUser['client-key-data'] ? kubeconfigUser['client-key-data'] : '',
-                token: kubeconfigUser && kubeconfigUser.token ? kubeconfigUser.token : '',
-                username: kubeconfigUser && kubeconfigUser.username ? kubeconfigUser.username : '',
-                password: kubeconfigUser && kubeconfigUser.password ? kubeconfigUser.password : '',
-                insecureSkipTLSVerify: false,
-                authProvider: 'azure',
-                authProviderAzure: credentials,
-                namespace: 'default',
-              });
-            }
-          });
+            tmpClusters.push({
+              id: cluster.name,
+              name: cluster.name,
+              url: kubeconfigCluster ? kubeconfigCluster.server : '',
+              certificateAuthorityData: kubeconfigCluster ? kubeconfigCluster['certificate-authority-data'] : '',
+              clientCertificateData:
+                kubeconfigUser && kubeconfigUser['client-certificate-data']
+                  ? kubeconfigUser['client-certificate-data']
+                  : '',
+              clientKeyData:
+                kubeconfigUser && kubeconfigUser['client-key-data'] ? kubeconfigUser['client-key-data'] : '',
+              token: kubeconfigUser && kubeconfigUser.token ? kubeconfigUser.token : '',
+              username: kubeconfigUser && kubeconfigUser.username ? kubeconfigUser.username : '',
+              password: kubeconfigUser && kubeconfigUser.password ? kubeconfigUser.password : '',
+              insecureSkipTLSVerify: false,
+              authProvider: 'azure',
+              authProviderAzure: credentials,
+              namespace: 'default',
+            });
+          }
+        });
 
-          return tmpClusters;
-        } else {
-          throw new Error('Could not read credentials for Azure');
-        }
-      } catch (err) {
-        throw err;
+        return tmpClusters;
+      } else {
+        throw new Error('Could not read credentials for Azure');
       }
-    },
-    context.settings.queryConfig,
-  );
+    } catch (err) {
+      throw err;
+    }
+  });
 
   const [selectedClusters, setSelectedClusters] = useState<ICluster[]>([]);
 

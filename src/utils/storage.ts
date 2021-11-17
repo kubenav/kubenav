@@ -177,7 +177,6 @@ export const readSettings = (): IAppSettings => {
       queryRefetchInterval: settings.queryRefetchInterval
         ? settings.queryRefetchInterval
         : DEFAULT_SETTINGS.queryRefetchInterval,
-      queryConfig: DEFAULT_SETTINGS.queryConfig,
       sshKey: settings.sshKey ? settings.sshKey : DEFAULT_SETTINGS.sshKey,
       sshPort: settings.sshPort ? settings.sshPort : DEFAULT_SETTINGS.sshPort,
       sshUser: settings.sshUser ? settings.sshUser : DEFAULT_SETTINGS.sshUser,

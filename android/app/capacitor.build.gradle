@@ -9,10 +9,17 @@ android {
 
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
-
+    implementation project(':capacitor-app')
+    implementation project(':capacitor-clipboard')
+    implementation project(':capacitor-filesystem')
+    implementation project(':capacitor-haptics')
+    implementation project(':capacitor-keyboard')
+    implementation project(':capacitor-splash-screen')
+    implementation project(':capacitor-status-bar')
+    implementation project(':capacitor-native-biometric')
 
 }
-apply from: "../../node_modules/cordova-plugin-fingerprint-aio/src/android/build.gradle"
+
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()

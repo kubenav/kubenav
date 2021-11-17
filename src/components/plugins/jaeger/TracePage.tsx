@@ -86,7 +86,6 @@ const TracePage: React.FunctionComponent<ITracePageProps> = ({ match }: ITracePa
         throw err;
       }
     },
-    context.settings.queryConfig,
   );
 
   const doRefresh = async (event: CustomEvent<RefresherEventDetail>) => {

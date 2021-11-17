@@ -18,13 +18,6 @@ export const DEFAULT_SETTINGS: IAppSettings = {
   enablePodMetrics: true,
   queryLimit: 100,
   queryRefetchInterval: 5 * 60 * 1000,
-  queryConfig: {
-    retry: false,
-    refetchInterval: false,
-    refetchIntervalInBackground: true,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-  },
   sshKey: '',
   sshPort: '22',
   sshUser: '',
