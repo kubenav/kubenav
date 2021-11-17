@@ -18,7 +18,7 @@ dependencies {
     implementation project(':capacitor-status-bar')
 
 }
-apply from: "../../node_modules/cordova-plugin-fingerprint-aio/src/android/build.gradle"
+
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()

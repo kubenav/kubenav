@@ -1,6 +1,5 @@
 import { SplashScreen } from '@capacitor/splash-screen';
 import { IonButton, IonCol, IonContent, IonGrid, IonPage, IonRow, isPlatform } from '@ionic/react';
-import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 import React, { useEffect, useState, ReactElement } from 'react';
 import { useQuery } from 'react-query';
 
@@ -412,7 +411,6 @@ export const AuthenticationWrapper: React.FunctionComponent<IAuthenticationWrapp
 
   const signIn = async () => {
     try {
-      await FingerprintAIO.show({});
       setIsAuthenticated(true);
     } catch (err) {
       setError(`Authentication failed: ${err.message}`);
