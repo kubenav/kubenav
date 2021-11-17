@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core';
+import { Clipboard } from '@capacitor/clipboard';
 import { ActionSheetButton, IonActionSheet, IonFab, IonFabButton, IonIcon, IonToast } from '@ionic/react';
 import { repeatOutline } from 'ionicons/icons';
 import React, { useContext, useEffect, useState, ReactElement } from 'react';
@@ -12,8 +12,6 @@ import {
 import { IS_INCLUSTER } from './constants';
 import { AppContext } from './context';
 import { openURL } from './helpers';
-
-const { Clipboard } = Plugins;
 
 // Creates a Context object. When React renders a component that subscribes to this Context object it will read the
 // current context value from the closest matching Provider above it in the tree.

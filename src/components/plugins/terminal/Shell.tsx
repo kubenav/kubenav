@@ -1,4 +1,5 @@
-import { Plugins } from '@capacitor/core';
+import { Keyboard } from '@capacitor/keyboard';
+import { Clipboard } from '@capacitor/clipboard';
 import { IonButton, IonButtons, IonIcon, IonRange, IonSearchbar, IonToolbar, isPlatform } from '@ionic/react';
 import { arrowBack, arrowForward, copy } from 'ionicons/icons';
 import React, { useRef, useEffect, useState } from 'react';
@@ -9,8 +10,6 @@ import { SearchAddon } from 'xterm-addon-search';
 import 'xterm/css/xterm.css';
 
 import { ITerminal } from '../../../declarations';
-
-const { Clipboard, Keyboard } = Plugins;
 
 interface IShellProps {
   showSearch: boolean;

@@ -1,4 +1,4 @@
-import { Plugins, FilesystemDirectory, FilesystemEncoding } from '@capacitor/core';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import {
   IonButton,
   IonButtons,
@@ -20,8 +20,6 @@ import React, { useContext } from 'react';
 import { IContext, TActivator } from '../../../../declarations';
 import { AppContext } from '../../../../utils/context';
 import Editor from '../../../misc/Editor';
-
-const { Filesystem } = Plugins;
 
 interface IViewItemActivatorProps {
   activator: TActivator;
@@ -71,8 +69,8 @@ const ViewItem: React.FunctionComponent<IViewItemProps> = ({ show, hide, item }:
         await Filesystem.writeFile({
           path: `${item.metadata ? item.metadata.name : 'export'}.yaml`,
           data: yaml.dump(item),
-          directory: FilesystemDirectory.Documents,
-          encoding: FilesystemEncoding.UTF8,
+          directory: Directory.Documents,
+          encoding: Encoding.UTF8,
         });
       } catch (err) {}
     } else {

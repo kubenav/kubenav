@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core';
+import { App } from '@capacitor/app';
 import {
   IonAvatar,
   IonContent,
@@ -27,8 +27,6 @@ import {
 import { AppContext } from '../../utils/context';
 import Clusters from './Clusters';
 import Sections from './Sections';
-
-const { App } = Plugins;
 
 App.addListener('appUrlOpen', (data) => {
   if (data.url.startsWith(GOOGLE_REDIRECT_URI)) {

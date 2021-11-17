@@ -1,13 +1,13 @@
 {
-  "appId": "io.kubenav.kubenav",
-  "appName": "kubenav",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "build",
-  "cordova": {},
-  "plugins": {
-    "SplashScreen": {
-      "launchAutoHide": false
-    }
-  }
+	"appId": "io.kubenav.kubenav",
+	"appName": "kubenav",
+	"bundledWebRuntime": false,
+	"npmClient": "npm",
+	"webDir": "build",
+	"cordova": {},
+	"plugins": {
+		"SplashScreen": {
+			"launchAutoHide": false
+		}
+	}
 }

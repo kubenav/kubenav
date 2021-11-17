@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core';
+import { SplashScreen } from '@capacitor/splash-screen';
 import { IonButton, IonCol, IonContent, IonGrid, IonPage, IonRow, isPlatform } from '@ionic/react';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 import React, { useEffect, useState, ReactElement } from 'react';
@@ -30,8 +30,6 @@ import {
   saveSettings,
 } from './storage';
 import useWindowHeight from './useWindowHeight';
-
-const { SplashScreen } = Plugins;
 
 // Creates a Context object. When React renders a component that subscribes to this Context object it will read the
 // current context value from the closest matching Provider above it in the tree.
