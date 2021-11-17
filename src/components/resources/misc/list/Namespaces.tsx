@@ -35,7 +35,6 @@ const Namespaces: React.FunctionComponent = () => {
         context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
-    context.settings.queryConfig,
   );
 
   const setNamespace = (ns: V1Namespace) => {

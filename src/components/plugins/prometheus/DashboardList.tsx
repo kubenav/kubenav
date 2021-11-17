@@ -97,7 +97,7 @@ const DashboardList: React.FunctionComponent<IDashboardListProps> = ({ item }: I
         throw err;
       }
     },
-    { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
+    { refetchInterval: context.settings.queryRefetchInterval },
   );
 
   if ((data && data.length > 0) || isError) {

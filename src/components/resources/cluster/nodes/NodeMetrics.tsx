@@ -131,7 +131,7 @@ const NodeMetrics: React.FunctionComponent<INodeMetricsProps> = ({ item, metrics
         throw err;
       }
     },
-    { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
+    { refetchInterval: context.settings.queryRefetchInterval },
   );
 
   if (isError || data === undefined) {

@@ -37,71 +37,67 @@ type IGooglePageProps = RouteComponentProps;
 const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, history }: IGooglePageProps) => {
   const context = useContext<IContext>(AppContext);
 
-  const { isError, isFetching, data, error } = useQuery<ICluster[] | undefined, Error>(
-    `GooglePage`,
-    async () => {
-      try {
-        const params = JSON.parse('{"' + location.search.substr(1).replace(/&/g, '", "').replace(/=/g, '": "') + '"}');
+  const { isError, isFetching, data, error } = useQuery<ICluster[] | undefined, Error>(`GooglePage`, async () => {
+    try {
+      const params = JSON.parse('{"' + location.search.substr(1).replace(/&/g, '", "').replace(/=/g, '": "') + '"}');
 
-        if (params.error) {
-          throw new Error(params.error);
-        }
+      if (params.error) {
+        throw new Error(params.error);
+      }
 
-        if (params.code) {
-          let credentials = readTemporaryCredentials('google') as undefined | IClusterAuthProviderGoogle;
+      if (params.code) {
+        let credentials = readTemporaryCredentials('google') as undefined | IClusterAuthProviderGoogle;
 
-          if (credentials && credentials.clientID) {
-            if (credentials.clusterID && context.clusters) {
-              const cluster = context.clusters[credentials.clusterID];
-              credentials = await getGoogleTokens(credentials.clientID, params.code);
-              cluster.authProviderGoogle = credentials;
-              context.editCluster(cluster);
-              history.push('/settings/clusters');
-            } else {
-              credentials = await getGoogleTokens(credentials.clientID, params.code);
-              const projects = await getGoogleProjects(credentials.accessToken);
+        if (credentials && credentials.clientID) {
+          if (credentials.clusterID && context.clusters) {
+            const cluster = context.clusters[credentials.clusterID];
+            credentials = await getGoogleTokens(credentials.clientID, params.code);
+            cluster.authProviderGoogle = credentials;
+            context.editCluster(cluster);
+            history.push('/settings/clusters');
+          } else {
+            credentials = await getGoogleTokens(credentials.clientID, params.code);
+            const projects = await getGoogleProjects(credentials.accessToken);
 
-              for (const project of projects) {
-                const projectClusters = await getGoogleClusters(credentials.accessToken, project.projectId);
+            for (const project of projects) {
+              const projectClusters = await getGoogleClusters(credentials.accessToken, project.projectId);
 
-                const tmpClusters: ICluster[] = [];
+              const tmpClusters: ICluster[] = [];
 
-                if (projectClusters) {
-                  // eslint-disable-next-line
+              if (projectClusters) {
+                // eslint-disable-next-line
                 projectClusters.map((cluster) => {
-                    tmpClusters.push({
-                      id: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
-                      name: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
-                      url: `https://${cluster.endpoint}`,
-                      certificateAuthorityData: cluster.masterAuth.clusterCaCertificate,
-                      clientCertificateData: cluster.masterAuth.clientCertificate
-                        ? cluster.masterAuth.clientCertificate
-                        : '',
-                      clientKeyData: cluster.masterAuth.clientKey ? cluster.masterAuth.clientKey : '',
-                      token: '',
-                      username: cluster.masterAuth.username ? cluster.masterAuth.username : '',
-                      password: cluster.masterAuth.password ? cluster.masterAuth.password : '',
-                      insecureSkipTLSVerify: false,
-                      authProvider: 'google',
-                      authProviderGoogle: credentials,
-                      namespace: 'default',
-                    });
+                  tmpClusters.push({
+                    id: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
+                    name: `gke_${project.projectId}_${cluster.location}_${cluster.name}`,
+                    url: `https://${cluster.endpoint}`,
+                    certificateAuthorityData: cluster.masterAuth.clusterCaCertificate,
+                    clientCertificateData: cluster.masterAuth.clientCertificate
+                      ? cluster.masterAuth.clientCertificate
+                      : '',
+                    clientKeyData: cluster.masterAuth.clientKey ? cluster.masterAuth.clientKey : '',
+                    token: '',
+                    username: cluster.masterAuth.username ? cluster.masterAuth.username : '',
+                    password: cluster.masterAuth.password ? cluster.masterAuth.password : '',
+                    insecureSkipTLSVerify: false,
+                    authProvider: 'google',
+                    authProviderGoogle: credentials,
+                    namespace: 'default',
                   });
+                });
 
-                  return tmpClusters;
-                }
+                return tmpClusters;
               }
             }
-          } else {
-            throw new Error('Could not read credentials for Google');
           }
+        } else {
+          throw new Error('Could not read credentials for Google');
         }
-      } catch (err) {
-        throw err;
       }
-    },
-    context.settings.queryConfig,
-  );
+    } catch (err) {
+      throw err;
+    }
+  });
 
   const [selectedClusters, setSelectedClusters] = useState<ICluster[]>([]);
 

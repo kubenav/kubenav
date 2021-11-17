@@ -43,55 +43,51 @@ type IRancherPageProps = RouteComponentProps;
 const RancherPage: React.FunctionComponent<IRancherPageProps> = ({ history }: IRancherPageProps) => {
   const context = useContext<IContext>(AppContext);
 
-  const { isError, isFetching, data, error } = useQuery<ICluster[] | undefined, Error>(
-    `RancherPage`,
-    async () => {
-      try {
-        const credentials = readTemporaryCredentials('rancher') as undefined | IClusterAuthProviderRancher;
+  const { isError, isFetching, data, error } = useQuery<ICluster[] | undefined, Error>(`RancherPage`, async () => {
+    try {
+      const credentials = readTemporaryCredentials('rancher') as undefined | IClusterAuthProviderRancher;
 
-        if (
-          credentials &&
-          credentials.rancherHost &&
-          credentials.rancherPort &&
-          ((credentials.username && credentials.password) || credentials.bearerToken)
-        ) {
-          const rancherClusters = await getRancherClusters(
-            credentials.rancherHost,
-            credentials.rancherPort,
-            credentials.username,
-            credentials.password,
-            credentials.secure,
-            credentials.bearerToken,
-          );
+      if (
+        credentials &&
+        credentials.rancherHost &&
+        credentials.rancherPort &&
+        ((credentials.username && credentials.password) || credentials.bearerToken)
+      ) {
+        const rancherClusters = await getRancherClusters(
+          credentials.rancherHost,
+          credentials.rancherPort,
+          credentials.username,
+          credentials.password,
+          credentials.secure,
+          credentials.bearerToken,
+        );
 
-          const tmpClusters: ICluster[] = [];
+        const tmpClusters: ICluster[] = [];
 
-          rancherClusters.data.forEach((cluster) => {
-            // Because later the cluster is generated from the fetched full kubeconfig, just a dummy object is needed to show available clusters in app
-            tmpClusters.push({
-              id: cluster.id,
-              name: cluster.name,
-              url: '',
-              certificateAuthorityData: '',
-              clientCertificateData: '',
-              clientKeyData: '',
-              token: '',
-              username: '',
-              password: '',
-              insecureSkipTLSVerify: false,
-              authProvider: 'rancher',
-              namespace: '',
-            });
+        rancherClusters.data.forEach((cluster) => {
+          // Because later the cluster is generated from the fetched full kubeconfig, just a dummy object is needed to show available clusters in app
+          tmpClusters.push({
+            id: cluster.id,
+            name: cluster.name,
+            url: '',
+            certificateAuthorityData: '',
+            clientCertificateData: '',
+            clientKeyData: '',
+            token: '',
+            username: '',
+            password: '',
+            insecureSkipTLSVerify: false,
+            authProvider: 'rancher',
+            namespace: '',
           });
+        });
 
-          return tmpClusters;
-        }
-      } catch (err) {
-        throw err;
+        return tmpClusters;
       }
-    },
-    context.settings.queryConfig,
-  );
+    } catch (err) {
+      throw err;
+    }
+  });
 
   const [selectedClusters, setSelectedClusters] = useState<ICluster[]>([]);
 

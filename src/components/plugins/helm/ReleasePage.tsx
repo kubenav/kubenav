@@ -73,7 +73,7 @@ const ReleasePage: React.FunctionComponent<IReleasePageProps> = ({ match }: IRel
         throw err;
       }
     },
-    { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
+    { refetchInterval: context.settings.queryRefetchInterval },
   );
 
   // The doRefresh method is used for a manual reload of the items for the corresponding resource. The

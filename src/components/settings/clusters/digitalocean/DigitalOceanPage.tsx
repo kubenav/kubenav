@@ -38,82 +38,78 @@ type IDigitalOceanPageProps = RouteComponentProps;
 const DigitalOceanPage: React.FunctionComponent<IDigitalOceanPageProps> = ({ history }: IDigitalOceanPageProps) => {
   const context = useContext<IContext>(AppContext);
 
-  const { isError, isFetching, data, error } = useQuery<ICluster[] | undefined, Error>(
-    'DigitalOceanPage',
-    async () => {
-      try {
-        const credentials = readTemporaryCredentials('digitalocean') as undefined | IClusterAuthProviderDigitalOcean;
+  const { isError, isFetching, data, error } = useQuery<ICluster[] | undefined, Error>('DigitalOceanPage', async () => {
+    try {
+      const credentials = readTemporaryCredentials('digitalocean') as undefined | IClusterAuthProviderDigitalOcean;
 
-        if (credentials) {
-          const doClusters = await getDigitalOceanClusters(credentials.token);
-          const tmpClusters: ICluster[] = [];
+      if (credentials) {
+        const doClusters = await getDigitalOceanClusters(credentials.token);
+        const tmpClusters: ICluster[] = [];
 
-          for (let index = 0; index < doClusters.length; index++) {
-            const kubeconfig = await getDigitalOceanKubeconfig(credentials.token, doClusters[index].id);
-            const cluster = yaml.load(kubeconfig);
-            if (cluster && typeof cluster === 'object') {
-              tmpClusters.push({
-                id: `do_${doClusters[index].id}`,
+        for (let index = 0; index < doClusters.length; index++) {
+          const kubeconfig = await getDigitalOceanKubeconfig(credentials.token, doClusters[index].id);
+          const cluster = yaml.load(kubeconfig);
+          if (cluster && typeof cluster === 'object') {
+            tmpClusters.push({
+              id: `do_${doClusters[index].id}`,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              name: (cluster as any).clusters.length > 0 ? (cluster as any).clusters[0].name : '',
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              url: (cluster as any).clusters.length > 0 ? (cluster as any).clusters[0].cluster.server : '',
+              certificateAuthorityData:
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                name: (cluster as any).clusters.length > 0 ? (cluster as any).clusters[0].name : '',
+                (cluster as any).clusters.length > 0
+                  ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    (cluster as any).clusters[0].cluster['certificate-authority-data']
+                  : '',
+              clientCertificateData:
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                url: (cluster as any).clusters.length > 0 ? (cluster as any).clusters[0].cluster.server : '',
-                certificateAuthorityData:
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  (cluster as any).clusters.length > 0
-                    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      (cluster as any).clusters[0].cluster['certificate-authority-data']
-                    : '',
-                clientCertificateData:
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  (cluster as any).users.length > 0 &&
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  (cluster as any).users[0].user.hasOwnProperty('client-certificate-data')
-                    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      (cluster as any).users[0].user['client-certificate-data']
-                    : '',
-                clientKeyData:
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  (cluster as any).users.length > 0 &&
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  (cluster as any).users[0].user.hasOwnProperty('client-key-data')
-                    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      (cluster as any).users[0].user['client-key-data']
-                    : '',
+                (cluster as any).users.length > 0 &&
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                token:
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  (cluster as any).users.length > 0 &&
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  (cluster as any).users[0].user.hasOwnProperty('token')
-                    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      (cluster as any).users[0].user['token']
-                    : '',
-                username: '',
-                password: '',
-                insecureSkipTLSVerify: false,
-                authProvider: 'digitalocean',
-                authProviderDigitalOcean: {
-                  token: credentials.token,
-                  clusterID: doClusters[index].id,
-                },
-                namespace: 'default',
-              });
-            } else {
-              throw new Error('Could not parse Kubeconfig');
-            }
+                (cluster as any).users[0].user.hasOwnProperty('client-certificate-data')
+                  ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    (cluster as any).users[0].user['client-certificate-data']
+                  : '',
+              clientKeyData:
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (cluster as any).users.length > 0 &&
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (cluster as any).users[0].user.hasOwnProperty('client-key-data')
+                  ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    (cluster as any).users[0].user['client-key-data']
+                  : '',
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              token:
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (cluster as any).users.length > 0 &&
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (cluster as any).users[0].user.hasOwnProperty('token')
+                  ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    (cluster as any).users[0].user['token']
+                  : '',
+              username: '',
+              password: '',
+              insecureSkipTLSVerify: false,
+              authProvider: 'digitalocean',
+              authProviderDigitalOcean: {
+                token: credentials.token,
+                clusterID: doClusters[index].id,
+              },
+              namespace: 'default',
+            });
+          } else {
+            throw new Error('Could not parse Kubeconfig');
           }
-
-          return tmpClusters;
-        } else {
-          throw new Error('Could not read credentials for DigitalOcean');
         }
-      } catch (err) {
-        throw err;
+
+        return tmpClusters;
+      } else {
+        throw new Error('Could not read credentials for DigitalOcean');
       }
-    },
-    context.settings.queryConfig,
-  );
+    } catch (err) {
+      throw err;
+    }
+  });
 
   const [selectedClusters, setSelectedClusters] = useState<ICluster[]>([]);
 

@@ -97,7 +97,6 @@ const ReleasesPage: React.FunctionComponent = () => {
       }
     },
     {
-      ...context.settings.queryConfig,
       refetchInterval: context.settings.queryRefetchInterval,
     },
   );

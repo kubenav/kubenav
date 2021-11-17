@@ -23,28 +23,24 @@ const ClusterItem: React.FunctionComponent<IClusterItemProps> = ({ cluster }: IC
     }
   };
 
-  const { data } = useQuery<boolean, Error>(
-    ['ClusterItem', cluster],
-    async () => {
-      try {
-        const data = await kubernetesRequest(
-          'GET',
-          '',
-          '',
-          context.settings,
-          await context.kubernetesAuthWrapper(cluster.id),
-        );
-        if (data && data.paths) {
-          return true;
-        } else {
-          return false;
-        }
-      } catch (err) {
+  const { data } = useQuery<boolean, Error>(['ClusterItem', cluster], async () => {
+    try {
+      const data = await kubernetesRequest(
+        'GET',
+        '',
+        '',
+        context.settings,
+        await context.kubernetesAuthWrapper(cluster.id),
+      );
+      if (data && data.paths) {
+        return true;
+      } else {
         return false;
       }
-    },
-    context.settings.queryConfig,
-  );
+    } catch (err) {
+      return false;
+    }
+  });
 
   const changeCluster = async (id: string) => {
     await context.changeCluster(id);

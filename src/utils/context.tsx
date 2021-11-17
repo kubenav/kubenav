@@ -86,64 +86,60 @@ export const AppContextProvider: React.FunctionComponent<IAppContextProvider> = 
   // localStorage.
   // For the incluster version of kubenav we are also loading all settings which were configured via command-line flags.
   // This allows us to use the cluster address for plugins instead if port forwarding.
-  const { isFetching } = useQuery(
-    'context',
-    async () => {
-      try {
-        // Apply the initial dark mode setting, how it was saved in the localStorage.
-        document.body.classList.toggle('dark', isDarkMode(settings.theme));
+  const { isFetching } = useQuery('context', async () => {
+    try {
+      // Apply the initial dark mode setting, how it was saved in the localStorage.
+      document.body.classList.toggle('dark', isDarkMode(settings.theme));
 
-        if (!isPlatform('hybrid')) {
-          if (IS_INCLUSTER) {
-            const inclusterSettings = await getInclusterSettings();
+      if (!isPlatform('hybrid')) {
+        if (IS_INCLUSTER) {
+          const inclusterSettings = await getInclusterSettings();
 
-            if (inclusterSettings) {
-              setSettings({
-                ...settings,
-                prometheusEnabled: inclusterSettings.prometheus.enabled,
-                prometheusAddress: inclusterSettings.prometheus.address,
-                prometheusDashboardsNamespace: inclusterSettings.prometheus.dashboardsNamespace,
-                elasticsearchEnabled: inclusterSettings.elasticsearch.enabled,
-                elasticsearchAddress: inclusterSettings.elasticsearch.address,
-                jaegerEnabled: inclusterSettings.jaeger.enabled,
-                jaegerAddress: inclusterSettings.jaeger.address,
-              });
-            }
+          if (inclusterSettings) {
+            setSettings({
+              ...settings,
+              prometheusEnabled: inclusterSettings.prometheus.enabled,
+              prometheusAddress: inclusterSettings.prometheus.address,
+              prometheusDashboardsNamespace: inclusterSettings.prometheus.dashboardsNamespace,
+              elasticsearchEnabled: inclusterSettings.elasticsearch.enabled,
+              elasticsearchAddress: inclusterSettings.elasticsearch.address,
+              jaegerEnabled: inclusterSettings.jaeger.enabled,
+              jaegerAddress: inclusterSettings.jaeger.address,
+            });
           }
-
-          const receivedClusters = await getClusters();
-          const activeCluster = await getCluster();
-
-          // When kubenav is running with the incluster mode, we are using the users last viewed namespaces as initial
-          // namespace.
-          if (IS_INCLUSTER && receivedClusters) {
-            const tmpClusters = readClusters();
-
-            if (tmpClusters) {
-              Object.keys(receivedClusters).forEach((key) => {
-                if (tmpClusters.hasOwnProperty(key)) {
-                  receivedClusters[key].namespace = tmpClusters[key].namespace;
-                }
-              });
-            }
-          }
-
-          setClusters(receivedClusters);
-          setCluster(activeCluster);
-        } else {
-          setClusters(readClusters());
-          setCluster(readCluster());
         }
 
-        await SplashScreen.hide();
+        const receivedClusters = await getClusters();
+        const activeCluster = await getCluster();
 
-        return true;
-      } catch (err) {
-        throw err;
+        // When kubenav is running with the incluster mode, we are using the users last viewed namespaces as initial
+        // namespace.
+        if (IS_INCLUSTER && receivedClusters) {
+          const tmpClusters = readClusters();
+
+          if (tmpClusters) {
+            Object.keys(receivedClusters).forEach((key) => {
+              if (tmpClusters.hasOwnProperty(key)) {
+                receivedClusters[key].namespace = tmpClusters[key].namespace;
+              }
+            });
+          }
+        }
+
+        setClusters(receivedClusters);
+        setCluster(activeCluster);
+      } else {
+        setClusters(readClusters());
+        setCluster(readCluster());
       }
-    },
-    settings.queryConfig,
-  );
+
+      await SplashScreen.hide();
+
+      return true;
+    } catch (err) {
+      throw err;
+    }
+  });
 
   // Listen for changes of the system theme by checking if the document matches the media query using matchMedia(). We
   // only change the theme when the user uses "system" for the theme determination.

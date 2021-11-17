@@ -31,7 +31,7 @@ const NodeItem: React.FunctionComponent<INodeItemProps> = ({ item, section, type
         context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
-    { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
+    { refetchInterval: context.settings.queryRefetchInterval },
   );
 
   // Get the node status. Only when the node status is ready we will set our status to success. For ever other node

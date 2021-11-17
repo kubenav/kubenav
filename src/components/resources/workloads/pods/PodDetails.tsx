@@ -44,7 +44,7 @@ const PodDetails: React.FunctionComponent<IPodDetailsProps> = ({ item, type }: I
         context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
-    { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
+    { refetchInterval: context.settings.queryRefetchInterval },
   );
 
   const status = getStatus(item);

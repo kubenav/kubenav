@@ -102,7 +102,6 @@ const TracesPage: React.FunctionComponent<ITracesPageProps> = ({ location }: ITr
         throw err;
       }
     },
-    context.settings.queryConfig,
   );
 
   const handleRequest = (event) => {

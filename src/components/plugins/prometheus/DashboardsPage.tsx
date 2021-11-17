@@ -53,7 +53,6 @@ const DashboardsPage: React.FunctionComponent = () => {
       `PrometheusDashboardsPage_${cluster ? cluster.id : ''}_${cluster ? cluster.namespace : ''}`,
       fetchItems,
       {
-        ...context.settings.queryConfig,
         refetchInterval: context.settings.queryRefetchInterval,
         getNextPageParam: (lastGroup) =>
           lastGroup.metadata && lastGroup.metadata.continue ? lastGroup.metadata.continue : false,

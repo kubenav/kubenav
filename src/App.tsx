@@ -51,7 +51,17 @@ import { TerminalContextProvider } from './utils/terminal';
 import './theme/custom.css';
 import './theme/variables.css';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchInterval: false,
+      refetchIntervalInBackground: true,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    },
+  },
+});
 
 const App: React.FunctionComponent = () => (
   <IonApp>

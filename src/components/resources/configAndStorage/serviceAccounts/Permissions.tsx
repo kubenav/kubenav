@@ -40,107 +40,103 @@ const Permissions: React.FunctionComponent<IPermissionsProps> = ({
 }: IPermissionsProps) => {
   const context = useContext<IContext>(AppContext);
 
-  const { isError, isFetching, data } = useQuery(
-    ['Permissions', namespace, serviceAccountName],
-    async () => {
-      try {
-        const roles: V1ClusterRole[] = [];
-        const clusterRoles: V1Role[] = [];
+  const { isError, isFetching, data } = useQuery(['Permissions', namespace, serviceAccountName], async () => {
+    try {
+      const roles: V1ClusterRole[] = [];
+      const clusterRoles: V1Role[] = [];
 
-        const clusterRoleBindings: V1ClusterRoleBindingList = await kubernetesRequest(
-          'GET',
-          resources['rbac'].pages['clusterrolebindings'].listURL(''),
-          '',
-          context.settings,
-          await context.kubernetesAuthWrapper(''),
-        );
+      const clusterRoleBindings: V1ClusterRoleBindingList = await kubernetesRequest(
+        'GET',
+        resources['rbac'].pages['clusterrolebindings'].listURL(''),
+        '',
+        context.settings,
+        await context.kubernetesAuthWrapper(''),
+      );
 
-        const roleBindings: V1RoleBindingList = await kubernetesRequest(
-          'GET',
-          resources['rbac'].pages['rolebindings'].listURL(namespace),
-          '',
-          context.settings,
-          await context.kubernetesAuthWrapper(''),
-        );
+      const roleBindings: V1RoleBindingList = await kubernetesRequest(
+        'GET',
+        resources['rbac'].pages['rolebindings'].listURL(namespace),
+        '',
+        context.settings,
+        await context.kubernetesAuthWrapper(''),
+      );
 
-        if (clusterRoleBindings && clusterRoleBindings.items) {
-          for (const item of clusterRoleBindings.items) {
-            if (
-              item.roleRef.kind.toLowerCase() === 'clusterrole' &&
-              item.subjects &&
-              subjectsContainServiceAccount(namespace, serviceAccountName, item.subjects)
-            ) {
-              const clusterRole: V1ClusterRole = await kubernetesRequest(
-                'GET',
-                resources['rbac'].pages['clusterroles'].detailsURL(namespace, item.roleRef.name),
-                '',
-                context.settings,
-                await context.kubernetesAuthWrapper(''),
-              );
+      if (clusterRoleBindings && clusterRoleBindings.items) {
+        for (const item of clusterRoleBindings.items) {
+          if (
+            item.roleRef.kind.toLowerCase() === 'clusterrole' &&
+            item.subjects &&
+            subjectsContainServiceAccount(namespace, serviceAccountName, item.subjects)
+          ) {
+            const clusterRole: V1ClusterRole = await kubernetesRequest(
+              'GET',
+              resources['rbac'].pages['clusterroles'].detailsURL(namespace, item.roleRef.name),
+              '',
+              context.settings,
+              await context.kubernetesAuthWrapper(''),
+            );
 
-              clusterRoles.push(clusterRole);
-            } else if (
-              item.roleRef.kind.toLowerCase() === 'role' &&
-              item.subjects &&
-              subjectsContainServiceAccount(namespace, serviceAccountName, item.subjects)
-            ) {
-              const role: V1Role = await kubernetesRequest(
-                'GET',
-                resources['rbac'].pages['roles'].detailsURL(namespace, item.roleRef.name),
-                '',
-                context.settings,
-                await context.kubernetesAuthWrapper(''),
-              );
+            clusterRoles.push(clusterRole);
+          } else if (
+            item.roleRef.kind.toLowerCase() === 'role' &&
+            item.subjects &&
+            subjectsContainServiceAccount(namespace, serviceAccountName, item.subjects)
+          ) {
+            const role: V1Role = await kubernetesRequest(
+              'GET',
+              resources['rbac'].pages['roles'].detailsURL(namespace, item.roleRef.name),
+              '',
+              context.settings,
+              await context.kubernetesAuthWrapper(''),
+            );
 
-              roles.push(role);
-            }
+            roles.push(role);
           }
         }
-
-        if (roleBindings && roleBindings.items) {
-          for (const item of roleBindings.items) {
-            if (
-              item.roleRef.kind.toLowerCase() === 'clusterrole' &&
-              item.subjects &&
-              subjectsContainServiceAccount(namespace, serviceAccountName, item.subjects)
-            ) {
-              const clusterRole: V1ClusterRole = await kubernetesRequest(
-                'GET',
-                resources['rbac'].pages['clusterroles'].detailsURL(namespace, item.roleRef.name),
-                '',
-                context.settings,
-                await context.kubernetesAuthWrapper(''),
-              );
-
-              clusterRoles.push(clusterRole);
-            } else if (
-              item.roleRef.kind.toLowerCase() === 'role' &&
-              item.subjects &&
-              subjectsContainServiceAccount(namespace, serviceAccountName, item.subjects)
-            ) {
-              const role: V1Role = await kubernetesRequest(
-                'GET',
-                resources['rbac'].pages['roles'].detailsURL(namespace, item.roleRef.name),
-                '',
-                context.settings,
-                await context.kubernetesAuthWrapper(''),
-              );
-
-              roles.push(role);
-            }
-          }
-        }
-
-        return {
-          clusterRoles: clusterRoles,
-          roles: roles,
-        };
-      } catch (err) {
-        throw err;
       }
-    },
-    context.settings.queryConfig,
-  );
+
+      if (roleBindings && roleBindings.items) {
+        for (const item of roleBindings.items) {
+          if (
+            item.roleRef.kind.toLowerCase() === 'clusterrole' &&
+            item.subjects &&
+            subjectsContainServiceAccount(namespace, serviceAccountName, item.subjects)
+          ) {
+            const clusterRole: V1ClusterRole = await kubernetesRequest(
+              'GET',
+              resources['rbac'].pages['clusterroles'].detailsURL(namespace, item.roleRef.name),
+              '',
+              context.settings,
+              await context.kubernetesAuthWrapper(''),
+            );
+
+            clusterRoles.push(clusterRole);
+          } else if (
+            item.roleRef.kind.toLowerCase() === 'role' &&
+            item.subjects &&
+            subjectsContainServiceAccount(namespace, serviceAccountName, item.subjects)
+          ) {
+            const role: V1Role = await kubernetesRequest(
+              'GET',
+              resources['rbac'].pages['roles'].detailsURL(namespace, item.roleRef.name),
+              '',
+              context.settings,
+              await context.kubernetesAuthWrapper(''),
+            );
+
+            roles.push(role);
+          }
+        }
+      }
+
+      return {
+        clusterRoles: clusterRoles,
+        roles: roles,
+      };
+    } catch (err) {
+      throw err;
+    }
+  });
 
   if (data && data.clusterRoles.length === 0 && data.roles.length === 0) {
     return null;

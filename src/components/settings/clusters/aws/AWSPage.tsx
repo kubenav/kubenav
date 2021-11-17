@@ -37,51 +37,47 @@ type IAWSPageProps = RouteComponentProps;
 const AWSPage: React.FunctionComponent<IAWSPageProps> = ({ history }: IAWSPageProps) => {
   const context = useContext<IContext>(AppContext);
 
-  const { isError, isFetching, data, error } = useQuery<ICluster[] | undefined, Error>(
-    'AWSPage',
-    async () => {
-      try {
-        const credentials = readTemporaryCredentials('aws') as undefined | IClusterAuthProviderAWS;
+  const { isError, isFetching, data, error } = useQuery<ICluster[] | undefined, Error>('AWSPage', async () => {
+    try {
+      const credentials = readTemporaryCredentials('aws') as undefined | IClusterAuthProviderAWS;
 
-        if (credentials) {
-          const awsClusters = await getAWSClusters(credentials);
-          const tmpClusters: ICluster[] = [];
+      if (credentials) {
+        const awsClusters = await getAWSClusters(credentials);
+        const tmpClusters: ICluster[] = [];
 
-          // eslint-disable-next-line
+        // eslint-disable-next-line
           awsClusters.map((cluster) => {
-            tmpClusters.push({
-              id: `aws_${credentials.region}_${cluster.Name}`,
-              name: `aws_${credentials.region}_${cluster.Name}`,
-              url: `${cluster.Endpoint}`,
-              certificateAuthorityData: cluster.CertificateAuthority.Data,
-              clientCertificateData: '',
-              clientKeyData: '',
-              token: '',
-              username: '',
-              password: '',
-              insecureSkipTLSVerify: false,
-              authProvider: 'aws',
-              authProviderAWS: {
-                accessKeyID: credentials.accessKeyID,
-                clusterID: cluster.Name,
-                region: credentials.region,
-                secretKey: credentials.secretKey,
-                sessionToken: credentials.sessionToken,
-              },
-              namespace: 'default',
-            });
+          tmpClusters.push({
+            id: `aws_${credentials.region}_${cluster.Name}`,
+            name: `aws_${credentials.region}_${cluster.Name}`,
+            url: `${cluster.Endpoint}`,
+            certificateAuthorityData: cluster.CertificateAuthority.Data,
+            clientCertificateData: '',
+            clientKeyData: '',
+            token: '',
+            username: '',
+            password: '',
+            insecureSkipTLSVerify: false,
+            authProvider: 'aws',
+            authProviderAWS: {
+              accessKeyID: credentials.accessKeyID,
+              clusterID: cluster.Name,
+              region: credentials.region,
+              secretKey: credentials.secretKey,
+              sessionToken: credentials.sessionToken,
+            },
+            namespace: 'default',
           });
+        });
 
-          return tmpClusters;
-        } else {
-          throw new Error('Could not read credentials for AWS');
-        }
-      } catch (err) {
-        throw err;
+        return tmpClusters;
+      } else {
+        throw new Error('Could not read credentials for AWS');
       }
-    },
-    context.settings.queryConfig,
-  );
+    } catch (err) {
+      throw err;
+    }
+  });
 
   const [selectedClusters, setSelectedClusters] = useState<ICluster[]>([]);
 

@@ -103,7 +103,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ title, variables,
         throw err;
       }
     },
-    { ...context.settings.queryConfig, keepPreviousData: true },
+    { keepPreviousData: true },
   );
 
   return (

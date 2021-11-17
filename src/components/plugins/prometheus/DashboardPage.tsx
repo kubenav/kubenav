@@ -66,7 +66,6 @@ const DashboardPage: React.FunctionComponent<IDashboardPageProps> = ({ match, lo
         throw err;
       }
     },
-    context.settings.queryConfig,
   );
 
   // The doRefresh method is used for a manual reload of the items for the corresponding resource. The

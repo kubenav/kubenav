@@ -29,33 +29,29 @@ const OverviewPage: React.FunctionComponent = () => {
   const context = useContext<IContext>(AppContext);
   const cluster = context.currentCluster();
 
-  const { isError, isFetching, data, error } = useQuery<boolean, Error>(
-    ['OverviewPage', cluster],
-    async () => {
-      try {
-        if (!cluster) {
-          return false;
-        }
-
-        const data = await kubernetesRequest(
-          'GET',
-          '',
-          '',
-          context.settings,
-          await context.kubernetesAuthWrapper(cluster.id),
-        );
-
-        if (data && data.paths) {
-          return true;
-        } else {
-          return false;
-        }
-      } catch (err) {
+  const { isError, isFetching, data, error } = useQuery<boolean, Error>(['OverviewPage', cluster], async () => {
+    try {
+      if (!cluster) {
         return false;
       }
-    },
-    context.settings.queryConfig,
-  );
+
+      const data = await kubernetesRequest(
+        'GET',
+        '',
+        '',
+        context.settings,
+        await context.kubernetesAuthWrapper(cluster.id),
+      );
+
+      if (data && data.paths) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      return false;
+    }
+  });
 
   return (
     <IonPage>

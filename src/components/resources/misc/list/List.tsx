@@ -43,7 +43,7 @@ const List: React.FunctionComponent<IListProps> = ({
         context.settings,
         await context.kubernetesAuthWrapper(''),
       ),
-    { ...context.settings.queryConfig, refetchInterval: context.settings.queryRefetchInterval },
+    { refetchInterval: context.settings.queryRefetchInterval },
   );
 
   if (data && data.items && data.items.filter(filter ? filter : () => true).length > 0) {
