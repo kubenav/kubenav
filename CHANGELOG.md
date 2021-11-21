@@ -1,5 +1,34 @@
 # Changelog
 
+## [3.8.0](https://github.com/kubenav/kubenav/tree/3.8.0) (2021-11-21)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.7.2...3.8.0)
+
+**Implemented enhancements:**
+
+- Feature request - More insight into nodes in desktop client [\#348](https://github.com/kubenav/kubenav/issues/348)
+- Building image on s390x plataform [\#316](https://github.com/kubenav/kubenav/issues/316)
+- Use namespace from kubeconfig during import [\#354](https://github.com/kubenav/kubenav/pull/354) ([ricoberger](https://github.com/ricoberger))
+
+**Fixed bugs:**
+
+- not able to open the file picker on Android 12 to import a kubeconfig [\#353](https://github.com/kubenav/kubenav/issues/353)
+- Fix iOS build for Go 1.17 [\#347](https://github.com/kubenav/kubenav/pull/347) ([ricoberger](https://github.com/ricoberger))
+
+**Closed issues:**
+
+- Android client not importing kube config file [\#360](https://github.com/kubenav/kubenav/issues/360)
+- Add support for crd [\#349](https://github.com/kubenav/kubenav/issues/349)
+- Cannot get Port forwarding  to work [\#342](https://github.com/kubenav/kubenav/issues/342)
+
+**Merged pull requests:**
+
+- Use in-app browser to open links [\#359](https://github.com/kubenav/kubenav/pull/359) ([ricoberger](https://github.com/ricoberger))
+- Update to Capacitor 3 [\#355](https://github.com/kubenav/kubenav/pull/355) ([ricoberger](https://github.com/ricoberger))
+- Show node metrics in overview [\#352](https://github.com/kubenav/kubenav/pull/352) ([ricoberger](https://github.com/ricoberger))
+- Allow use HTTP in URL with manual cluster [\#351](https://github.com/kubenav/kubenav/pull/351) ([PtilopsisLeucotis](https://github.com/PtilopsisLeucotis))
+- Add support for linux/s390x [\#317](https://github.com/kubenav/kubenav/pull/317) ([ricoberger](https://github.com/ricoberger))
+
 ## [3.7.2](https://github.com/kubenav/kubenav/tree/3.7.2) (2021-09-20)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/3.7.1...3.7.2)
