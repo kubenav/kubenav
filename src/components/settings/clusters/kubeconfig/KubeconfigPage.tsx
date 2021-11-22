@@ -12,6 +12,7 @@ import {
   IonTextarea,
   IonTitle,
   IonToolbar,
+  isPlatform,
 } from '@ionic/react';
 import yaml from 'js-yaml';
 import React, { memo, useContext, useState } from 'react';
@@ -197,16 +198,18 @@ const KubeconfigPage: React.FunctionComponent<IKubeconfigPageProps> = ({ history
       <IonContent>
         <IonList lines="full">
           <div className="select-kubeconfig-wrapper">
-            <p>
-              <b>Attention:</b> To select a Kubeconfig it must have one of the following extensions: <code>.yaml</code>,{' '}
-              <code>.yml</code>, <code>.txt</code>, <code>.conf</code>.
-            </p>
+            {isPlatform('ios') ? (
+              <p>
+                <b>Attention:</b> To select a Kubeconfig it must have one of the following extensions:{' '}
+                <code>.yaml</code>, <code>.yml</code>, <code>.txt</code>, <code>.conf</code>.
+              </p>
+            ) : null}
             <IonButton expand="block">
               <input
                 id="file"
                 hidden={true}
                 type="file"
-                accept=".yaml,.yml,.txt,.conf"
+                accept={isPlatform('ios') ? '.yaml,.yml,.txt,.conf' : undefined}
                 onChange={handleKubeconfigFile}
               />
               <label htmlFor="file" className="select-kubeconfig">
