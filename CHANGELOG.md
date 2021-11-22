@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.8.1](https://github.com/kubenav/kubenav/tree/3.8.1) (2021-11-22)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.8.0...3.8.1)
+
+**Merged pull requests:**
+
+- Fix kubeconfig selection for some Android devices [\#361](https://github.com/kubenav/kubenav/pull/361) ([ricoberger](https://github.com/ricoberger))
+
 ## [3.8.0](https://github.com/kubenav/kubenav/tree/3.8.0) (2021-11-21)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/3.7.2...3.8.0)
