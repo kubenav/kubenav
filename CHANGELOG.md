@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.8.2](https://github.com/kubenav/kubenav/tree/3.8.2) (2021-12-04)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.8.1...3.8.2)
+
+**Fixed bugs:**
+
+- v3.8.1 - standard\_init\_linux.go:228: exec user process caused: no such file or directory [\#364](https://github.com/kubenav/kubenav/issues/364)
+
+**Closed issues:**
+
+- invalid kubeconfig \(minikube\) [\#362](https://github.com/kubenav/kubenav/issues/362)
+
+**Merged pull requests:**
+
+- Fix Docker Image [\#369](https://github.com/kubenav/kubenav/pull/369) ([ricoberger](https://github.com/ricoberger))
+- Fix typo [\#366](https://github.com/kubenav/kubenav/pull/366) ([fabfianda](https://github.com/fabfianda))
+
 ## [3.8.1](https://github.com/kubenav/kubenav/tree/3.8.1) (2021-11-22)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/3.8.0...3.8.1)
