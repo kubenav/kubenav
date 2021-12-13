@@ -9,7 +9,7 @@ COPY src /kubenav/src
 COPY .eslintrc.json .prettierrc.json capacitor.config.json ionic.config.json tsconfig.json /kubenav/
 RUN ionic build
 
-FROM golang:1.17.3-alpine3.14 as server
+FROM golang:1.17.3-alpine3.15 as server
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 RUN echo "Building on $BUILDPLATFORM, for $TARGETPLATFORM" > /log
@@ -23,7 +23,7 @@ COPY pkg /kubenav/pkg
 COPY Makefile /kubenav
 RUN export CGO_ENABLED=0 && make build-server
 
-FROM alpine:3.14.2
+FROM alpine:3.15
 RUN apk update && apk add --no-cache ca-certificates
 RUN mkdir /kubenav
 COPY --from=build /kubenav/build /kubenav/build
