@@ -1,3 +1,4 @@
+import { App } from '@capacitor/app';
 import {
   IonAvatar,
   IonButtons,
@@ -16,7 +17,6 @@ import {
   IonToolbar,
   isPlatform,
 } from '@ionic/react';
-import { useGetInfo } from '@ionic/react-hooks/device';
 import React, { memo, useEffect, useState } from 'react';
 
 import { VERSION } from '../../utils/constants';
@@ -28,13 +28,19 @@ const InfoPage: React.FunctionComponent = () => {
   const width = useWindowWidth();
   const [version, setVersion] = useState<string>(VERSION ? VERSION : '');
 
-  const { info } = useGetInfo();
-
   useEffect(() => {
-    if (info && info.appVersion) {
-      setVersion(info.appVersion);
+    const getInfo = async () => {
+      const info = await App.getInfo();
+      if (info && info.version) {
+        setVersion(version);
+      }
+    };
+
+    if (isPlatform('hybrid')) {
+      getInfo();
     }
-  }, [info]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <IonPage>

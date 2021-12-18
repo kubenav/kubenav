@@ -1,5 +1,5 @@
 import { IonAlert, IonChip, IonToast } from '@ionic/react';
-import { V1Container, V1PodList } from '@kubernetes/client-node';
+import { IntOrString, V1Container, V1PodList } from '@kubernetes/client-node';
 import React, { useContext, useState, ReactElement } from 'react';
 
 import { IContext, IPortForwardingContext } from '../../../../declarations';
@@ -12,8 +12,7 @@ import { PortForwardingContext } from '../../../../utils/portforwarding';
 // Therefor we have to iterate over each container and port in a pod. If the port was found we return the container port
 // number.
 // If we couldn't found the correct port we are returning 0, which isn't a valid port for the port forwarding.
-// eslint-disable-next-line @typescript-eslint/ban-types
-const getPortFromTargetPort = (targetPort: object, containers: V1Container[]): number => {
+const getPortFromTargetPort = (targetPort: IntOrString, containers: V1Container[]): number => {
   if (!isNaN(targetPort as unknown as number)) {
     return targetPort as unknown as number;
   }
@@ -37,8 +36,7 @@ interface IPortProps {
   namespace: string;
   selector: string;
   port: number;
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  targetPort?: object;
+  targetPort?: IntOrString;
   children: ReactElement;
 }
 

@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:14 as build
+FROM --platform=linux/amd64 node:16 as build
 WORKDIR /kubenav
 RUN npm install -g @ionic/cli
 COPY package.json package-lock.json /kubenav/
