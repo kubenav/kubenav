@@ -93,7 +93,7 @@ const DashboardsPage: React.FunctionComponent = () => {
               value={searchText}
               onIonChange={(e) => setSearchText(e.detail.value ? e.detail.value : '')}
             />
-            {data && data.pages && data.pages.length > 0 && data[0].items.length > 0 ? (
+            {data && data.pages ? (
               <IonList>
                 {data.pages.map((group, i) => (
                   <React.Fragment key={i}>
