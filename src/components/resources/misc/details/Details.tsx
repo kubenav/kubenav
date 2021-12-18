@@ -8,6 +8,7 @@ import Bookmark from '../shared/Bookmark';
 import CreateJobItem, { CreateJobItemActivator } from './CreateJobItem';
 import DeleteItem, { DeleteItemActivator } from './DeleteItem';
 import EditItem, { EditItemActivator } from './EditItem';
+import LiveMetricsItem, { LiveMetricsItemActivator } from './LiveMetricsItem';
 import LogsItem, { LogsItemActivator } from './LogsItem';
 import RestartItem, { RestartItemActivator } from './RestartItem';
 import ScaleItem, { ScaleItemActivator } from './ScaleItem';
@@ -15,7 +16,18 @@ import ShellItem, { ShellItemActivator } from './ShellItem';
 import SSHItem, { SSHItemActivator } from './SSHItem';
 import ViewItem, { ViewItemActivator } from './ViewItem';
 
-type TShow = '' | 'createjob' | 'delete' | 'edit' | 'logs' | 'restart' | 'scale' | 'shell' | 'ssh' | 'view';
+type TShow =
+  | ''
+  | 'createjob'
+  | 'delete'
+  | 'edit'
+  | 'livemetrics'
+  | 'logs'
+  | 'restart'
+  | 'scale'
+  | 'shell'
+  | 'ssh'
+  | 'view';
 
 interface IDetailsProps {
   refresh: () => void;
@@ -74,6 +86,9 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ refresh, type, item, 
           {(isPlatform('hybrid') || isPlatform('mobile') || width < 992) && type === 'nodes' ? (
             <SSHItemActivator activator="item" onClick={() => showType('ssh')} item={item} />
           ) : null}
+          {type === 'pods' ? (
+            <LiveMetricsItemActivator activator="item" onClick={() => showType('livemetrics')} />
+          ) : null}
           <ViewItemActivator activator="item" onClick={() => showType('view')} />
           <EditItemActivator activator="item" onClick={() => showType('edit')} />
           <DeleteItemActivator activator="item" onClick={() => showType('delete')} />
@@ -86,6 +101,7 @@ const Details: React.FunctionComponent<IDetailsProps> = ({ refresh, type, item, 
       <LogsItem show={show === 'logs'} hide={() => setShow('')} item={item} url={url} />
       <ShellItem show={show === 'shell'} hide={() => setShow('')} item={item} url={url} />
       <SSHItem show={show === 'ssh'} hide={() => setShow('')} item={item} />
+      <LiveMetricsItem show={show === 'livemetrics'} hide={() => setShow('')} item={item} />
       <ViewItem show={show === 'view'} hide={() => setShow('')} item={item} />
       <EditItem show={show === 'edit'} hide={() => setShow('')} item={item} url={url} />
       <DeleteItem show={show === 'delete'} hide={() => setShow('')} item={item} url={url} />
