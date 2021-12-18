@@ -1,6 +1,5 @@
 import { V1ListMeta, V1ObjectMeta } from '@kubernetes/client-node';
 import React from 'react';
-import { QueryOptions } from 'react-query';
 import { Terminal } from 'xterm';
 
 export interface IAppPage {
