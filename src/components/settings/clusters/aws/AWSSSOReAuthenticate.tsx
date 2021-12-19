@@ -42,7 +42,7 @@ const AWSSSOReAuthenticate: React.FunctionComponent<IAWSSSOReAuthenticateProps> 
         );
 
         const tmpCluster = cluster;
-        tmpCluster.authProviderAWSSSO = credentials;
+        tmpCluster.authProviderAWSSSO = { ...credentials, clusterID: tmpCluster.authProviderAWSSSO?.clusterID || '' };
 
         context.editCluster(tmpCluster);
         history.go(0);
