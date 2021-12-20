@@ -1,5 +1,99 @@
 # Changelog
 
+## [3.9.0](https://github.com/kubenav/kubenav/tree/3.9.0) (2021-12-20)
+
+[Full Changelog](https://github.com/kubenav/kubenav/compare/3.8.2...3.9.0)
+
+This issue contains the roadmap for kubenav. This issue should be used for disscussions around the roadmap. If you have a feature request please open a new issue, where the new feature is described. You can also refere to one of the main topics of the roadmap which relates to your feature request.
+
+## Security
+
+Security is very important for kubenav. To increase the security for the mobile version we should allow the user to use one of the available platform specific authentication methods. The web version of kubenav doesn't support a user with any protection mechanisms. This means that the user has to restrict the access to the dashboard by himself, for example via annotations for authentication at the Ingress.
+
+- [x] Biometric Authentication: To protect the configured cluster data, the iOS and Android version should support biometric authentication (Face ID, Touch ID, Passcode, etc.).
+- [ ] Token based authentication for the web version.
+- [ ] OIDC based authentication for the web version.
+
+## Documentation
+
+Currently the documentation is nearly not existent for kubenav. We have to provide a documentation to make the usage of kubenav as easy as possible. This would also reduce the issues, with requests where a user couldn't found a feature, because of the lack of documentation.
+
+- [ ] Document the features of the mobile, desktop and web version of kubenav.
+  - [x] Manually switching of the namespace.
+  - [x] Delete / edit clusters.
+  - [ ] etc.
+- [x] Move the documentation form the [kubenav.io](https://kubenav.io) website to the [kubenav/docs](https://github.com/kubenav/docs) repository:
+  - [x] https://kubenav.io/help/microsoft-azure-creating-app-credentials.html
+  - [x] https://kubenav.io/help/google-oauth2-configuration.html
+  - [x] Delete the `help` folder from the [kubenav/kubenav.io](https://github.com/kubenav/kubenav.io) repository.
+- [ ] Make it easier for developers to contribute to kubenav, by providing a developers documentation.
+  - [x] Move the content from the [README.md](https://github.com/kubenav/kubenav/blob/master/README.md) to the [kubenav/docs](https://github.com/kubenav/docs) repository.
+
+## Plugins
+
+In the latest version of kubenav we introduced a new "plugin system", which is currently only used by the Prometheus plugin. This can be extend, by providing new plugins and extending the Prometheus support.
+
+- [x] Improve / extend usage of the Prometheus plugin.
+- [x] Provide more Prometheus dashboards for various services.
+- [x] Allow custom dashboards for the Prometheus plugin.
+- [ ] Support Prometheus compatible APIs (Thanos, Cortex, etc.) where the data from various clusters is collected. This is useful when kubenav is deployed in this cluster and configured to access all other cluster.
+- [ ] Decide which services/applications should be supported in upcoming versions of kubenav.
+
+## Cluster Configuration and Cloud Providers
+
+kubenav currently supports GKE (Google Cloud), EKS (AWS), AKS (Azure) as ckoud providers. This support can be extended to other cloud providers. Next to the configuration of clusters via a Cloud Provider kubenav can be configured with a Kubeconfig file or OIDC.
+
+- [x] Support DigitalOcean as Cloud Provider.
+- [x] If a Kubeconfig file contains a configured OIDC provider, the Kubeconfig file should also parse the OIDC credentials.
+- [ ] Use expiry token for AWS
+
+## Usability
+
+The usability of kubenav is another major topic for us and can be improved in various ways.
+
+- [x] Support shortcuts / favorites, where a user can "pin" his most used resources (#160).
+- [x] Add a cluster overview page.
+- [ ] Improve the way, how metrics (from the metrics API) are shown.
+- [x] IonItemOptions and IonPopovers should be closed automatically after a user selects the action.
+- [ ] Native UI for the desktop version. kubenav was developed with a mobile first approach, which can also be seen in the UI for the desktop version:
+  - [ ] Metrics section for Horizontal Pod Autoscaler
+  - [ ] List page and list view
+- [ ] Disable / remove UI elements, when the user hasn't the needed rights to execute the action (e.g. user only has a "viewer" role).
+- [ ] Support internationalization of kubenav (i18n).
+
+## Technology
+
+The last two major versions of kubenav, contained a lot of rewriting of the underlying structure of kubenav. For the future this effort should only be made, when we indicate some parts which doesn't scale with new requirements.
+
+- [ ] At the moment there is only one API version supported for all resources. In the future we should support multiple version for each resource. For the supported version we should check which Kubernetes versions are supported by the large Cloud Providers or use the [1 year support](https://kubernetes.io/docs/setup/release/version-skew-policy/) which is guaranteed by Kubernetes.
+- [ ] kubenav depends on `localStorage`, we should check if we can move to [capacitor-community/react-hooks](https://github.com/capacitor-community/react-hooks). For now this is blocked by [https://github.com/capacitor-community/react-hooks/issues/4](https://github.com/capacitor-community/react-hooks/issues/4).
+- [ ] Automate the CI/CD pipeline for the mobile version. New (beta) releases for iOS and Android should be build and uploaded via GitHub Actions.
+
+**Implemented enhancements:**
+
+- Show live resource usage per pod [\#368](https://github.com/kubenav/kubenav/issues/368)
+
+**Fixed bugs:**
+
+- Error with re-auth using AWS SSO [\#373](https://github.com/kubenav/kubenav/issues/373)
+- prometheus 3.8.2 [\#370](https://github.com/kubenav/kubenav/issues/370)
+
+**Security fixes:**
+
+- \[Security\] Update alpine image [\#371](https://github.com/kubenav/kubenav/pull/371) ([AlexanderBabel](https://github.com/AlexanderBabel))
+
+**Closed issues:**
+
+- Namespace filter [\#363](https://github.com/kubenav/kubenav/issues/363)
+- Cannot get metrics working [\#308](https://github.com/kubenav/kubenav/issues/308)
+
+**Merged pull requests:**
+
+- Fix re-authentication for AWS SSO [\#377](https://github.com/kubenav/kubenav/pull/377) ([ricoberger](https://github.com/ricoberger))
+- Add live resource usage metrics [\#376](https://github.com/kubenav/kubenav/pull/376) ([ricoberger](https://github.com/ricoberger))
+- Update dependencies [\#375](https://github.com/kubenav/kubenav/pull/375) ([ricoberger](https://github.com/ricoberger))
+- Fix dashboards page for Prometheus plugin [\#374](https://github.com/kubenav/kubenav/pull/374) ([ricoberger](https://github.com/ricoberger))
+
 ## [3.8.2](https://github.com/kubenav/kubenav/tree/3.8.2) (2021-12-04)
 
 [Full Changelog](https://github.com/kubenav/kubenav/compare/3.8.1...3.8.2)
