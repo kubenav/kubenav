@@ -8,8 +8,8 @@ android {
         applicationId "io.kubenav.kubenav"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 51
-        versionName "3.8.2"
+        versionCode 52
+        versionName "3.9.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
