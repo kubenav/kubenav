@@ -208,61 +208,57 @@ const AWSSSOPage: React.FunctionComponent<IAWSSSOPageProps> = ({ history }: IAWS
                 <IonItem>
                   <IonLabel>SSO Region</IonLabel>
                   <IonSelect value={ssoRegion} onIonChange={handleSSORegion}>
-                    <IonSelectOption value="us-east-2">USA Ost (Ohio)</IonSelectOption>
-                    <IonSelectOption value="us-east-1">USA Ost (Nord-Virginia)</IonSelectOption>
-                    <IonSelectOption value="us-west-1">USA West (Nordkalifornien)</IonSelectOption>
-                    <IonSelectOption value="us-west-2">USA West (Oregon)</IonSelectOption>
+                    <IonSelectOption value="us-east-2">US East (Ohio)</IonSelectOption>
+                    <IonSelectOption value="us-east-1">US East (N. Virginia)</IonSelectOption>
+                    <IonSelectOption value="us-west-1">US West (N. California)</IonSelectOption>
+                    <IonSelectOption value="us-west-2">US West (Oregon)</IonSelectOption>
                     <IonSelectOption value="af-south-1">Africa (Cape Town)</IonSelectOption>
-                    <IonSelectOption value="ap-east-1">Asien-Pazifik (Hongkong)</IonSelectOption>
-                    <IonSelectOption value="ap-south-1">Asien-Pazifik (Mumbai)</IonSelectOption>
-                    <IonSelectOption value="ap-northeast-3">Asien-Pazifik (Osaka-Lokal)</IonSelectOption>
-                    <IonSelectOption value="ap-northeast-2">Asien-Pazifik (Seoul)</IonSelectOption>
-                    <IonSelectOption value="ap-southeast-1">Asien-Pazifik (Singapur)</IonSelectOption>
-                    <IonSelectOption value="ap-southeast-2">Asien-Pazifik (Sydney)</IonSelectOption>
-                    <IonSelectOption value="ap-northeast-1">Asien-Pazifik (Tokio)</IonSelectOption>
-                    <IonSelectOption value="ca-central-1">Kanada (Zentral)</IonSelectOption>
+                    <IonSelectOption value="ap-east-1">Asia Pacific (Hong Kong)</IonSelectOption>
+                    <IonSelectOption value="ap-south-1">Asia Pacific (Mumbai)</IonSelectOption>
+                    <IonSelectOption value="ap-northeast-3">Asia Pacific (Osaka)</IonSelectOption>
+                    <IonSelectOption value="ap-northeast-2">Asia Pacific (Seoul)</IonSelectOption>
+                    <IonSelectOption value="ap-southeast-1">Asia Pacific (Singapore)</IonSelectOption>
+                    <IonSelectOption value="ap-southeast-2">Asia Pacific (Sydney)</IonSelectOption>
+                    <IonSelectOption value="ap-northeast-1">Asia Pacific (Tokyo)</IonSelectOption>
+                    <IonSelectOption value="ca-central-1">Canada (Central)</IonSelectOption>
                     <IonSelectOption value="cn-north-1">China (Peking)</IonSelectOption>
                     <IonSelectOption value="cn-northwest-1">China (Ningxia)</IonSelectOption>
-                    <IonSelectOption value="eu-central-1">EU (Frankfurt)</IonSelectOption>
-                    <IonSelectOption value="eu-west-1">EU (Irland)</IonSelectOption>
-                    <IonSelectOption value="eu-west-2">EU (London)</IonSelectOption>
-                    <IonSelectOption value="eu-west-3">EU (Paris)</IonSelectOption>
-                    <IonSelectOption value="eu-south-1">EU (Mailand)</IonSelectOption>
-                    <IonSelectOption value="eu-north-1">EU (Stockholm)</IonSelectOption>
-                    <IonSelectOption value="me-south-1">Naher Osten (Bahrain)</IonSelectOption>
-                    <IonSelectOption value="sa-east-1">Südamerika (São Paulo)</IonSelectOption>
-                    <IonSelectOption value="us-gov-east-1">AWS GovCloud (USA Ost)</IonSelectOption>
-                    <IonSelectOption value="us-gov-west-1">AWS GovCloud (USA)</IonSelectOption>
+                    <IonSelectOption value="eu-central-1">Europe (Frankfurt)</IonSelectOption>
+                    <IonSelectOption value="eu-west-1">Europe (Ireland)</IonSelectOption>
+                    <IonSelectOption value="eu-west-2">Europe (London)</IonSelectOption>
+                    <IonSelectOption value="eu-west-3">Europe (Paris)</IonSelectOption>
+                    <IonSelectOption value="eu-south-1">Europe (Milan)</IonSelectOption>
+                    <IonSelectOption value="eu-north-1">Europe (Stockholm)</IonSelectOption>
+                    <IonSelectOption value="me-south-1">Middle East (Bahrain)</IonSelectOption>
+                    <IonSelectOption value="sa-east-1">South America (São Paulo)</IonSelectOption>
                   </IonSelect>
                 </IonItem>
                 <IonItem>
                   <IonLabel>Region</IonLabel>
                   <IonSelect value={region} onIonChange={handleRegion}>
-                    <IonSelectOption value="us-east-2">USA Ost (Ohio)</IonSelectOption>
-                    <IonSelectOption value="us-east-1">USA Ost (Nord-Virginia)</IonSelectOption>
-                    <IonSelectOption value="us-west-1">USA West (Nordkalifornien)</IonSelectOption>
-                    <IonSelectOption value="us-west-2">USA West (Oregon)</IonSelectOption>
+                    <IonSelectOption value="us-east-2">US East (Ohio)</IonSelectOption>
+                    <IonSelectOption value="us-east-1">US East (N. Virginia)</IonSelectOption>
+                    <IonSelectOption value="us-west-1">US West (N. California)</IonSelectOption>
+                    <IonSelectOption value="us-west-2">US West (Oregon)</IonSelectOption>
                     <IonSelectOption value="af-south-1">Africa (Cape Town)</IonSelectOption>
-                    <IonSelectOption value="ap-east-1">Asien-Pazifik (Hongkong)</IonSelectOption>
-                    <IonSelectOption value="ap-south-1">Asien-Pazifik (Mumbai)</IonSelectOption>
-                    <IonSelectOption value="ap-northeast-3">Asien-Pazifik (Osaka-Lokal)</IonSelectOption>
-                    <IonSelectOption value="ap-northeast-2">Asien-Pazifik (Seoul)</IonSelectOption>
-                    <IonSelectOption value="ap-southeast-1">Asien-Pazifik (Singapur)</IonSelectOption>
-                    <IonSelectOption value="ap-southeast-2">Asien-Pazifik (Sydney)</IonSelectOption>
-                    <IonSelectOption value="ap-northeast-1">Asien-Pazifik (Tokio)</IonSelectOption>
-                    <IonSelectOption value="ca-central-1">Kanada (Zentral)</IonSelectOption>
+                    <IonSelectOption value="ap-east-1">Asia Pacific (Hong Kong)</IonSelectOption>
+                    <IonSelectOption value="ap-south-1">Asia Pacific (Mumbai)</IonSelectOption>
+                    <IonSelectOption value="ap-northeast-3">Asia Pacific (Osaka)</IonSelectOption>
+                    <IonSelectOption value="ap-northeast-2">Asia Pacific (Seoul)</IonSelectOption>
+                    <IonSelectOption value="ap-southeast-1">Asia Pacific (Singapore)</IonSelectOption>
+                    <IonSelectOption value="ap-southeast-2">Asia Pacific (Sydney)</IonSelectOption>
+                    <IonSelectOption value="ap-northeast-1">Asia Pacific (Tokyo)</IonSelectOption>
+                    <IonSelectOption value="ca-central-1">Canada (Central)</IonSelectOption>
                     <IonSelectOption value="cn-north-1">China (Peking)</IonSelectOption>
                     <IonSelectOption value="cn-northwest-1">China (Ningxia)</IonSelectOption>
-                    <IonSelectOption value="eu-central-1">EU (Frankfurt)</IonSelectOption>
-                    <IonSelectOption value="eu-west-1">EU (Irland)</IonSelectOption>
-                    <IonSelectOption value="eu-west-2">EU (London)</IonSelectOption>
-                    <IonSelectOption value="eu-west-3">EU (Paris)</IonSelectOption>
-                    <IonSelectOption value="eu-south-1">EU (Mailand)</IonSelectOption>
-                    <IonSelectOption value="eu-north-1">EU (Stockholm)</IonSelectOption>
-                    <IonSelectOption value="me-south-1">Naher Osten (Bahrain)</IonSelectOption>
-                    <IonSelectOption value="sa-east-1">Südamerika (São Paulo)</IonSelectOption>
-                    <IonSelectOption value="us-gov-east-1">AWS GovCloud (USA Ost)</IonSelectOption>
-                    <IonSelectOption value="us-gov-west-1">AWS GovCloud (USA)</IonSelectOption>
+                    <IonSelectOption value="eu-central-1">Europe (Frankfurt)</IonSelectOption>
+                    <IonSelectOption value="eu-west-1">Europe (Ireland)</IonSelectOption>
+                    <IonSelectOption value="eu-west-2">Europe (London)</IonSelectOption>
+                    <IonSelectOption value="eu-west-3">Europe (Paris)</IonSelectOption>
+                    <IonSelectOption value="eu-south-1">Europe (Milan)</IonSelectOption>
+                    <IonSelectOption value="eu-north-1">Europe (Stockholm)</IonSelectOption>
+                    <IonSelectOption value="me-south-1">Middle East (Bahrain)</IonSelectOption>
+                    <IonSelectOption value="sa-east-1">South America (São Paulo)</IonSelectOption>
                   </IonSelect>
                 </IonItem>
               </IonList>
