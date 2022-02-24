@@ -1,0 +1,134 @@
+//
+// AUTO-GENERATED FILE, DO NOT MODIFY!
+//
+// @dart=2.12
+
+// ignore_for_file: unused_element, unused_import
+// ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: lines_longer_than_80_chars
+
+part of openapi.api;
+
+class IoK8sApiCoreV1NodeSelectorTerm {
+  /// Returns a new [IoK8sApiCoreV1NodeSelectorTerm] instance.
+  IoK8sApiCoreV1NodeSelectorTerm({
+    this.matchExpressions = const [],
+    this.matchFields = const [],
+  });
+
+  /// A list of node selector requirements by node's labels.
+  List<IoK8sApiCoreV1NodeSelectorRequirement> matchExpressions;
+
+  /// A list of node selector requirements by node's fields.
+  List<IoK8sApiCoreV1NodeSelectorRequirement> matchFields;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is IoK8sApiCoreV1NodeSelectorTerm &&
+          other.matchExpressions == matchExpressions &&
+          other.matchFields == matchFields;
+
+  @override
+  int get hashCode =>
+      // ignore: unnecessary_parenthesis
+      (matchExpressions.hashCode) + (matchFields.hashCode);
+
+  @override
+  String toString() =>
+      'IoK8sApiCoreV1NodeSelectorTerm[matchExpressions=$matchExpressions, matchFields=$matchFields]';
+
+  Map<String, dynamic> toJson() {
+    final json = <String, dynamic>{};
+    json[r'matchExpressions'] = matchExpressions;
+    json[r'matchFields'] = matchFields;
+    return json;
+  }
+
+  /// Returns a new [IoK8sApiCoreV1NodeSelectorTerm] instance and imports its values from
+  /// [value] if it's a [Map], null otherwise.
+  // ignore: prefer_constructors_over_static_methods
+  static IoK8sApiCoreV1NodeSelectorTerm? fromJson(dynamic value) {
+    if (value is Map) {
+      final json = value.cast<String, dynamic>();
+
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key),
+              'Required key "IoK8sApiCoreV1NodeSelectorTerm[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "IoK8sApiCoreV1NodeSelectorTerm[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
+
+      return IoK8sApiCoreV1NodeSelectorTerm(
+        matchExpressions: IoK8sApiCoreV1NodeSelectorRequirement.listFromJson(
+                json[r'matchExpressions']) ??
+            const [],
+        matchFields: IoK8sApiCoreV1NodeSelectorRequirement.listFromJson(
+                json[r'matchFields']) ??
+            const [],
+      );
+    }
+    return null;
+  }
+
+  static List<IoK8sApiCoreV1NodeSelectorTerm>? listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
+    final result = <IoK8sApiCoreV1NodeSelectorTerm>[];
+    if (json is List && json.isNotEmpty) {
+      for (final row in json) {
+        final value = IoK8sApiCoreV1NodeSelectorTerm.fromJson(row);
+        if (value != null) {
+          result.add(value);
+        }
+      }
+    }
+    return result.toList(growable: growable);
+  }
+
+  static Map<String, IoK8sApiCoreV1NodeSelectorTerm> mapFromJson(dynamic json) {
+    final map = <String, IoK8sApiCoreV1NodeSelectorTerm>{};
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = IoK8sApiCoreV1NodeSelectorTerm.fromJson(entry.value);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
+    }
+    return map;
+  }
+
+  // maps a json object with a list of IoK8sApiCoreV1NodeSelectorTerm-objects as value to a dart map
+  static Map<String, List<IoK8sApiCoreV1NodeSelectorTerm>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
+    final map = <String, List<IoK8sApiCoreV1NodeSelectorTerm>>{};
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = IoK8sApiCoreV1NodeSelectorTerm.listFromJson(
+          entry.value,
+          growable: growable,
+        );
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
+    }
+    return map;
+  }
+
+  /// The list of required keys that must be present in a JSON.
+  static const requiredKeys = <String>{};
+}
