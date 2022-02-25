@@ -6,8 +6,9 @@ import 'package:flutter_highlight/themes/nord.dart';
 import 'package:get/get.dart';
 import 'package:highlight/languages/yaml.dart';
 
+import 'package:kubenav/services/helpers_service.dart';
 import 'package:kubenav/utils/helpers.dart';
-import 'package:kubenav/utils/yaml_writer.dart';
+// import 'package:kubenav/utils/yaml_writer.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 
 class ShowYamlController extends GetxController {
@@ -19,10 +20,11 @@ class ShowYamlController extends GetxController {
   @override
   void onInit() {
     codeController = CodeController(
-      text: YAMLWriter(identSize: 2).write(item),
+      text: '',
       language: yaml,
       theme: nordTheme,
     );
+    prettifyYAML();
 
     super.onInit();
   }
@@ -35,6 +37,15 @@ class ShowYamlController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  void prettifyYAML() async {
+    try {
+      final data = await HelpersService().prettifyYAML(item);
+      codeController?.text = data;
+    } catch (err) {
+      debugPrint('prettifyYAML error: $err');
+    }
   }
 }
 
@@ -77,8 +88,9 @@ class ShowYamlWidget extends StatelessWidget {
                 controller: controller.codeController!,
                 enabled: false,
                 textStyle: TextStyle(
-                    fontSize: 14,
-                    fontFamily: Platform.isIOS ? 'Courier' : 'monospace'),
+                  fontSize: 14,
+                  fontFamily: Platform.isIOS ? 'Courier' : 'monospace',
+                ),
               ),
             ),
           ],

@@ -40,6 +40,14 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       } else {
         kubernetesRequest(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, requestMethod, requestURL, requestBody, result)
       }
+    } else if (call.method == "prettifyYAML") {
+      val jsonStr = call.argument("jsonStr") as String?
+
+      if (jsonStr == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        prettifyYAML(jsonStr, result)
+      }
     } else {
       result.notImplemented()
     }
@@ -51,6 +59,15 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       result.success(data)
     } catch (e: Exception) {
       result.error("KUBERNETES_REQUEST_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun prettifyYAML(jsonStr: String, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.prettifyYAML(jsonStr)
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("PRETTIFY_YAML_FAILED", e.localizedMessage, null)
     }
   }
 }

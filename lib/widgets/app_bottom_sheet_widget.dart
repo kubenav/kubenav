@@ -86,48 +86,49 @@ class AppBottomSheetWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Padding(
+            Container(
               padding: const EdgeInsets.only(
                 top: Constants.spacingMiddle,
                 bottom: Constants.spacingMiddle,
               ),
-              child: Stack(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                  Flexible(
+                    child: Row(
+                      children: [
+                        buildIcon(icon),
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              buildIcon(icon),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    title,
-                                    style: primaryTextStyle(
-                                      size: 18,
-                                    ),
-                                  ),
-                                  Text(
-                                    subtitle,
-                                    style: secondaryTextStyle(),
-                                  ),
-                                ],
+                              Text(
+                                title,
+                                overflow: TextOverflow.ellipsis,
+                                style: primaryTextStyle(
+                                  size: 18,
+                                ),
+                              ),
+                              Text(
+                                Characters(subtitle)
+                                    .replaceAll(
+                                        Characters(''), Characters('\u{200B}'))
+                                    .toString(),
+                                overflow: TextOverflow.ellipsis,
+                                style: secondaryTextStyle(),
                               ),
                             ],
                           ),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.close_outlined,
-                            ), // Your desired icon
-                            onPressed: onClosePressed,
-                          ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.close_outlined,
+                    ), // Your desired icon
+                    onPressed: onClosePressed,
                   ),
                 ],
               ),

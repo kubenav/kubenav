@@ -3,47 +3,66 @@ import Flutter
 import Kubenav
 
 public class KubenavPlugin: NSObject, FlutterPlugin {
-    public static func register(with registrar: FlutterPluginRegistrar) {
-        // Note: In release 2.10, the Task Queue API is only available on the master channel for iOS.
-        // let taskQueue = registrar.messenger.makeBackgroundTaskQueue()
-        // let channel = FlutterMethodChannel(name: "kubenav.io", binaryMessenger: registrar.messenger(), codec: FlutterStandardMethodCodec.sharedInstance, taskQueue: taskQueue)
-        let channel = FlutterMethodChannel(name: "kubenav.io", binaryMessenger: registrar.messenger())
-        let instance = KubenavPlugin()
-        registrar.addMethodCallDelegate(instance, channel: channel)
+  public static func register(with registrar: FlutterPluginRegistrar) {
+    // Note: In release 2.10, the Task Queue API is only available on the master channel for iOS.
+    // let taskQueue = registrar.messenger.makeBackgroundTaskQueue()
+    // let channel = FlutterMethodChannel(name: "kubenav.io", binaryMessenger: registrar.messenger(), codec: FlutterStandardMethodCodec.sharedInstance, taskQueue: taskQueue)
+    let channel = FlutterMethodChannel(name: "kubenav.io", binaryMessenger: registrar.messenger())
+    let instance = KubenavPlugin()
+    registrar.addMethodCallDelegate(instance, channel: channel)
+  }
+
+  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    if call.method == "kubernetesRequest" {
+      if let args = call.arguments as? Dictionary<String, Any>,
+        let clusterServer = args["clusterServer"] as? String,
+        let clusterCertificateAuthorityData = args["clusterCertificateAuthorityData"] as? String,
+        let clusterInsecureSkipTLSVerify = args["clusterInsecureSkipTLSVerify"] as? Bool,
+        let userClientCertificateData = args["userClientCertificateData"] as? String,
+        let userClientKeyData = args["userClientKeyData"] as? String,
+        let userToken = args["userToken"] as? String,
+        let userUsername = args["userUsername"] as? String,
+        let userPassword = args["userPassword"] as? String,
+        let requestMethod = args["requestMethod"] as? String,
+        let requestURL = args["requestURL"] as? String,
+        let requestBody = args["requestBody"] as? String
+      {
+        kubernetesRequest(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, requestMethod: requestMethod, requestURL: requestURL, requestBody: requestBody, result: result)
+      } else {
+        result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
+      }
+    } else if call.method == "prettifyYAML" {
+      if let args = call.arguments as? Dictionary<String, Any>,
+        let jsonStr = args["jsonStr"] as? String
+      {
+        prettifyYAML(jsonStr: jsonStr, result: result)
+      } else {
+        result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
+      }
+    } else {
+      result(FlutterMethodNotImplemented)
     }
-    
-    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if call.method == "kubernetesRequest" {
-            if let args = call.arguments as? Dictionary<String, Any>,
-               let clusterServer = args["clusterServer"] as? String,
-               let clusterCertificateAuthorityData = args["clusterCertificateAuthorityData"] as? String,
-               let clusterInsecureSkipTLSVerify = args["clusterInsecureSkipTLSVerify"] as? Bool,
-               let userClientCertificateData = args["userClientCertificateData"] as? String,
-               let userClientKeyData = args["userClientKeyData"] as? String,
-               let userToken = args["userToken"] as? String,
-               let userUsername = args["userUsername"] as? String,
-               let userPassword = args["userPassword"] as? String,
-               let requestMethod = args["requestMethod"] as? String,
-               let requestURL = args["requestURL"] as? String,
-               let requestBody = args["requestBody"] as? String
-            {
-                kubernetesRequest(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, requestMethod: requestMethod, requestURL: requestURL, requestBody: requestBody, result: result)
-            } else {
-                result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
-            }
-        } else {
-            result(FlutterMethodNotImplemented)
-        }
+  }
+
+  private func kubernetesRequest(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, requestMethod: String, requestURL: String, requestBody: String, result: FlutterResult) {
+    var error: NSError?
+
+    let data = KubenavKubernetesRequest(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, requestMethod, requestURL, requestBody, &error)
+    if error != nil {
+      result(FlutterError(code: "KUBERNETES_REQUEST_FAILED", message: error?.localizedDescription ?? "", details: nil))
+    } else {
+      result(data)
     }
-    
-    private func kubernetesRequest(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, requestMethod: String, requestURL: String, requestBody: String, result: FlutterResult) {
-        var error: NSError?
-    
-        let data = KubenavKubernetesRequest(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, requestMethod, requestURL, requestBody, &error)
-        if error != nil {
-            result(FlutterError(code: "KUBERNETES_REQUEST_FAILED", message: error?.localizedDescription ?? "", details: nil))
-        } else {
-            result(data)
-        }
+  }
+
+  private func prettifyYAML(jsonStr: String, result: FlutterResult) {
+    var error: NSError?
+
+    let data = KubenavPrettifyYAML(jsonStr, &error)
+    if error != nil {
+      result(FlutterError(code: "PRETTIFY_YAML_FAILED", message: error?.localizedDescription ?? "", details: nil))
+    } else {
+      result(data)
     }
+  }
 }
