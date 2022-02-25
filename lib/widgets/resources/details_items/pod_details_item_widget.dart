@@ -36,7 +36,7 @@ class PodDetailsItemController extends GetxController {
       final url =
           '/api/v1/namespaces/$namespace/pods/$name/portforward?ports=$port';
 
-      await ClusterService(cluster: cluster).portForward(url);
+      // await ClusterService(cluster: cluster).portForward(url);
     } catch (err) {
       debugPrint('portForward error: $err');
     }

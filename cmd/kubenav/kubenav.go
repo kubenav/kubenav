@@ -2,6 +2,7 @@ package kubenav
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/kubenav/kubenav/pkg/kube"
@@ -16,10 +17,10 @@ import (
 // server the "user*" arguments can be used.
 // The "requestMethod", "requestURL" and "requestBody" arguments are then used for the actually request. E.g. to get all
 // Pods from the Kubernetes API the method "GET" and the URL "/api/v1/pods" can be used.
-func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, requestMethod, requestURL, requestBody string) (string, int, error) {
+func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, requestMethod, requestURL, requestBody string) (string, error) {
 	_, clientset, err := kube.GetClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword)
 	if err != nil {
-		return "", 0, err
+		return "", err
 	}
 
 	var responseResult rest.Result
@@ -37,15 +38,22 @@ func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, cl
 	}
 
 	if responseResult.Error() != nil {
-		return "", 0, responseResult.Error()
+		return "", responseResult.Error()
 	}
 
 	responseResult = responseResult.StatusCode(&statusCode)
+	if statusCode == http.StatusUnauthorized {
+		return "", fmt.Errorf(http.StatusText(http.StatusUnauthorized))
+	}
 
 	responseBody, err := responseResult.Raw()
 	if err != nil {
-		return "", statusCode, err
+		return "", err
 	}
 
-	return string(responseBody), statusCode, nil
+	if statusCode < 200 || statusCode >= 300 {
+		return "", fmt.Errorf(string(responseBody))
+	}
+
+	return string(responseBody), nil
 }
