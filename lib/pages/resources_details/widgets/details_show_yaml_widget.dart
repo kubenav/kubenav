@@ -11,11 +11,11 @@ import 'package:kubenav/utils/helpers.dart';
 // import 'package:kubenav/utils/yaml_writer.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 
-class ShowYamlController extends GetxController {
+class DetailsShowYamlController extends GetxController {
   dynamic item;
   CodeController? codeController;
 
-  ShowYamlController({required this.item});
+  DetailsShowYamlController({required this.item});
 
   @override
   void onInit() {
@@ -49,8 +49,8 @@ class ShowYamlController extends GetxController {
   }
 }
 
-class ShowYamlWidget extends StatelessWidget {
-  const ShowYamlWidget({
+class DetailsShowYamlWidget extends StatelessWidget {
+  const DetailsShowYamlWidget({
     Key? key,
     required this.item,
   }) : super(key: key);
@@ -59,8 +59,8 @@ class ShowYamlWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ShowYamlController controller = Get.put(
-      ShowYamlController(item: item),
+    DetailsShowYamlController controller = Get.put(
+      DetailsShowYamlController(item: item),
     );
 
     return AppBottomSheetWidget(

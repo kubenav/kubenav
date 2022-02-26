@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
-import 'package:kubenav/services/cluster_service.dart';
+import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 
-class DeleteResourceController extends GetxController {
+class DetailsDeleteResourceController extends GetxController {
   final String resource;
   final String path;
   final String name;
@@ -16,7 +16,7 @@ class DeleteResourceController extends GetxController {
   RxBool force = false.obs;
   ClusterController clusterController = Get.find();
 
-  DeleteResourceController({
+  DetailsDeleteResourceController({
     required this.resource,
     required this.path,
     required this.name,
@@ -54,7 +54,7 @@ class DeleteResourceController extends GetxController {
           ? '$path/$resource/$name'
           : '$path/namespaces/$namespace/$resource/$name';
 
-      await ClusterService(cluster: cluster).deleteRequest(url, body);
+      await KubernetesService(cluster: cluster).deleteRequest(url, body);
       snackbar(
           'Resource is deleted',
           namespace == null
@@ -69,8 +69,8 @@ class DeleteResourceController extends GetxController {
   }
 }
 
-class DeleteResourceWidget extends StatelessWidget {
-  const DeleteResourceWidget({
+class DetailsDeleteResourceWidget extends StatelessWidget {
+  const DetailsDeleteResourceWidget({
     Key? key,
     required this.resource,
     required this.path,
@@ -85,8 +85,8 @@ class DeleteResourceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DeleteResourceController controller = Get.put(
-      DeleteResourceController(
+    DetailsDeleteResourceController controller = Get.put(
+      DetailsDeleteResourceController(
         resource: resource,
         path: path,
         name: name,

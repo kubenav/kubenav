@@ -1,3 +1,6 @@
+// Bookmark represents a single bookmark. Bookmarks can be used to proivde easier access to the users most used
+// resources. Bookmarks must have a name, which can be customized by a user, as well as the active, namespace and route
+// the bookmark is bounded to.
 class Bookmark {
   String name;
   String cluster;

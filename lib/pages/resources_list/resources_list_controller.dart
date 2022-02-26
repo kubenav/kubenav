@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/resource_model.dart';
-import 'package:kubenav/services/cluster_service.dart';
+import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/widgets/app_namespaces_widget.dart';
 
@@ -71,7 +71,7 @@ class ResourcesListController extends GetxController {
 
         try {
           final resourcesList =
-              await ClusterService(cluster: cluster).getRequest(url);
+              await KubernetesService(cluster: cluster).getRequest(url);
 
           debugPrint(
               'getResources success: ${resourcesList['items'].length} $resource were returned');

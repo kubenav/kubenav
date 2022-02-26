@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// Constants contains the most important values for our app. For example it contains the primary color which should be
+// used or the values for the spacing (padding/margin) between components.
 class Constants {
   static const colorPrimary = Color(0xff326ce5);
   static const colorCanvas = Colors.white;

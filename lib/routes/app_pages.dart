@@ -17,6 +17,8 @@ import 'package:kubenav/pages/resources_list/resources_list_screen.dart';
 import 'package:kubenav/pages/settings/settings_binding.dart';
 import 'package:kubenav/pages/settings/settings_screen.dart';
 
+// AppPages represents all pages, which are available in our app. For example the home, resources, plugins and settings
+// page. In the 'GetPage' function we also bind the corresponding page controller to the page screen.
 abstract class AppPages {
   static final pages = [
     GetPage(

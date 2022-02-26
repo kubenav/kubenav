@@ -6,7 +6,7 @@ import 'package:kubenav/models/provider_model.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_kubeconfig_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_manual_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/cluster_actions_widget.dart';
-import 'package:kubenav/services/cluster_service.dart';
+import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 
 class ClustersController extends GetxController {
@@ -78,7 +78,7 @@ class ClustersController extends GetxController {
 
   Future<bool> getClusterStatus(int index) async {
     try {
-      await ClusterService(cluster: clusterController.clusters[index].value)
+      await KubernetesService(cluster: clusterController.clusters[index].value)
           .getRequest('/');
       return true;
     } catch (err) {

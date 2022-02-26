@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/kubernetes/api.dart'
     show IoK8sApiCoreV1Namespace, IoK8sApiCoreV1NamespaceList;
-import 'package:kubenav/services/cluster_service.dart';
+import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 import 'package:kubenav/widgets/app_error_widget.dart';
 
+// AppNamespacesController is the controller for the AppNamespacesWidget widget. It is responsible to load the
+// namespaces of the currently active cluster.
 class AppNamespacesController extends GetxController {
   ClusterController clusterController = Get.find();
   RxList<IoK8sApiCoreV1Namespace> namespaces = <IoK8sApiCoreV1Namespace>[].obs;
@@ -33,11 +35,14 @@ class AppNamespacesController extends GetxController {
     super.onClose();
   }
 
+  // getNamespaces can be used to get a list of the namespaces of an cluster. While the request is executed it sets the
+  // 'loading' variable to true. If an error occures it will be set via the 'error' variable. If the requests completes
+  // successfully the 'namespaces' variable will contain the list of namespaces.
   void getNamespaces() async {
     loading.value = true;
 
     try {
-      final data = await ClusterService(
+      final data = await KubernetesService(
               cluster: clusterController
                   .clusters[clusterController.activeClusterIndex.value].value)
           .getRequest('/api/v1/namespaces');
@@ -56,6 +61,22 @@ class AppNamespacesController extends GetxController {
   }
 }
 
+// AppNamespacesWidget is a widget which can be used to switch the namespace of the currently active cluster. It should
+// be used within a bottom sheet as follows:
+//
+// Get.bottomSheet(
+//   BottomSheet(
+//     shape: RoundedRectangleBorder(
+//       borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
+//     ),
+//     onClosing: () {},
+//     enableDrag: false,
+//     builder: (builder) {
+//       return const AppNamespacesWidget();
+//     },
+//   ),
+//   isScrollControlled: true,
+// );
 class AppNamespacesWidget extends StatelessWidget {
   const AppNamespacesWidget({Key? key}) : super(key: key);
 

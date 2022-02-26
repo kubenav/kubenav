@@ -1,3 +1,6 @@
+// Cluster represents a single Kubernetes cluster, which can be used within kubenav. Each cluster contains all the
+// values which are required to interact with the Kubernetes API server of the cluster and for some providers also the
+// credentials to refresh the access credentials for the Kubernetes cluster.
 class Cluster {
   String name;
   String provider;

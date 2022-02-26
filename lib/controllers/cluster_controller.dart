@@ -126,6 +126,8 @@ class ClusterController extends GetxController {
     GetStorage().write('clusters', clusters.toList());
   }
 
+  // getActiveClusterName returns the name of the active cluster. If there is no active cluster it returns a the message
+  // 'No active cluster'.
   String getActiveClusterName() {
     if (clusters.isEmpty || activeClusterIndex.value == -1) {
       return 'No active cluster';
@@ -134,6 +136,8 @@ class ClusterController extends GetxController {
     return clusters[activeClusterIndex.value].value.name;
   }
 
+  // getActiveClusterNamespace returns the name of the current namespace of the active cluster. If there is no active
+  // cluster it returns an empty string.
   String getActiveClusterNamespace() {
     if (clusters.isEmpty || activeClusterIndex.value == -1) {
       return '';
@@ -142,6 +146,7 @@ class ClusterController extends GetxController {
     return clusters[activeClusterIndex.value].value.namespace;
   }
 
+  // getActiveCluster returns the active cluster or 'null' when there is no active cluster.
   Cluster? getActiveCluster() {
     if (clusters.isEmpty || activeClusterIndex.value == -1) {
       return null;

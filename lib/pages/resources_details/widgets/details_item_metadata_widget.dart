@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/api.dart'
     show IoK8sApimachineryPkgApisMetaV1ObjectMeta;
-import 'package:kubenav/widgets/resources/details_item_widget.dart';
-import 'package:kubenav/widgets/resources/helpers/general.dart';
+import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
+import 'package:kubenav/utils/resources/general.dart';
 
 class DetailsItemMetadataWidget extends StatelessWidget {
   const DetailsItemMetadataWidget({

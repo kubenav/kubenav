@@ -6,8 +6,8 @@ import 'package:kubenav/pages/resources_details/resources_details_controller.dar
 import 'package:kubenav/widgets/app_actions_header_widget.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/app_error_widget.dart';
-import 'package:kubenav/widgets/resources/details_item_conditions_widget.dart';
-import 'package:kubenav/widgets/resources/details_item_metadata_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/details_item_conditions_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/details_item_metadata_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 
 class ResourcesDetails extends GetView<ResourcesDetailsController> {

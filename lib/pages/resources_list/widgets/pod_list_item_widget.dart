@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiCoreV1Pod;
-import 'package:kubenav/widgets/resources/helpers/pods.dart';
-import 'package:kubenav/widgets/resources/helpers/general.dart';
-import 'package:kubenav/widgets/resources/list_item_widget.dart';
+import 'package:kubenav/utils/resources/pods.dart';
+import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/pages/resources_list/widgets/list_item_widget.dart';
 
 class PodListItemWidget extends StatelessWidget implements IListItemWidget {
   const PodListItemWidget({

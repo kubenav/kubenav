@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
-import 'package:kubenav/widgets/resources/helpers/general.dart';
+import 'package:kubenav/utils/resources/general.dart';
 
 class DetailsItemConditionsWidget extends StatelessWidget {
   const DetailsItemConditionsWidget({

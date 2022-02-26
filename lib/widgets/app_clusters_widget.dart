@@ -26,6 +26,22 @@ class AppClustersController extends GetxController {
   }
 }
 
+// AppClustersWidget is a widget which can be used to switch the active Kubernetes cluster. It should be used within a
+// bootom sheet as follows:
+//
+// Get.bottomSheet(
+//   BottomSheet(
+//     shape: RoundedRectangleBorder(
+//       borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
+//     ),
+//     onClosing: () {},
+//     enableDrag: false,
+//     builder: (builder) {
+//       return const AppClustersWidget();
+//     },
+//   ),
+//   isScrollControlled: true,
+// );
 class AppClustersWidget extends StatelessWidget {
   const AppClustersWidget({Key? key}) : super(key: key);
 

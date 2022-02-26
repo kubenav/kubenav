@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/resource_model.dart';
-import 'package:kubenav/services/cluster_service.dart';
-import 'package:kubenav/widgets/resources/delete_resource_widget.dart';
-import 'package:kubenav/widgets/resources/show_yaml_widget.dart';
+import 'package:kubenav/services/kubernetes_service.dart';
+import 'package:kubenav/pages/resources_details/widgets/details_delete_resource_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/details_show_yaml_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 
 class ResourcesDetailsController extends GetxController {
@@ -60,7 +60,8 @@ class ResourcesDetailsController extends GetxController {
           : '$path/namespaces/$namespace/$resource/$name';
 
       try {
-        final resource = await ClusterService(cluster: cluster).getRequest(url);
+        final resource =
+            await KubernetesService(cluster: cluster).getRequest(url);
 
         debugPrint('getResource success: ${resource.toString()}');
         item.value = resource;
@@ -82,7 +83,7 @@ class ResourcesDetailsController extends GetxController {
         onClosing: () {},
         enableDrag: false,
         builder: (builder) {
-          return ShowYamlWidget(item: item);
+          return DetailsShowYamlWidget(item: item);
         },
       ),
       isScrollControlled: true,
@@ -99,7 +100,7 @@ class ResourcesDetailsController extends GetxController {
           onClosing: () {},
           enableDrag: false,
           builder: (builder) {
-            return DeleteResourceWidget(
+            return DetailsDeleteResourceWidget(
               resource: resource!,
               path: path!,
               name: name!,

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiCoreV1Pod;
-import 'package:kubenav/services/cluster_service.dart';
-import 'package:kubenav/widgets/resources/helpers/pods.dart';
-import 'package:kubenav/widgets/resources/helpers/general.dart';
-import 'package:kubenav/widgets/resources/details_item_widget.dart';
+import 'package:kubenav/services/kubernetes_service.dart';
+import 'package:kubenav/utils/resources/pods.dart';
+import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 
 class PodDetailsItemController extends GetxController {
@@ -36,7 +36,7 @@ class PodDetailsItemController extends GetxController {
       final url =
           '/api/v1/namespaces/$namespace/pods/$name/portforward?ports=$port';
 
-      // await ClusterService(cluster: cluster).portForward(url);
+      // await KubernetesService(cluster: cluster).portForward(url);
     } catch (err) {
       debugPrint('portForward error: $err');
     }
