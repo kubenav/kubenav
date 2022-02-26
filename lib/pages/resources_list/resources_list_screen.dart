@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_list/resources_list_controller.dart';
+import 'package:kubenav/pages/resources_list/widgets/default_list_item_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -182,10 +183,14 @@ class ResourcesList extends GetView<ResourcesListController> {
                         itemCount: controller.items.length,
                         itemBuilder: (context, index) {
                           return controller.resource != null &&
-                                  Resources.map[controller.resource] != null
+                                  Resources.map[controller.resource] != null &&
+                                  Resources.map[controller.resource]!
+                                          .buildListItem !=
+                                      null
                               ? Resources.map[controller.resource]!
-                                  .buildListItem(controller.items[index])
-                              : Text('data');
+                                  .buildListItem!(controller.items[index])
+                              : DefaultListItemWidget(
+                                  item: controller.items[index]);
                         },
                       ),
                     ),

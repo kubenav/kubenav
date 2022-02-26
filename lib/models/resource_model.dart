@@ -1,7 +1,30 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/pages/resources_list/widgets/pod_list_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/pod_details_item_widget.dart';
+
+import 'package:kubenav/pages/resources_list/widgets/configmap_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/cronjob_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/daemonset_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/deployment_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/endpoints_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/events_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/horizontalpodautoscaler_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/ingress_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/job_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/namespace_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/networkpolicy_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/node_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/persistentvolume_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/persistentvolumeclaim_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/pod_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/poddisruptionbudget_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/podsecuritypolicy_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/replicaset_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/secret_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/service_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/serviceaccount_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/statefulset_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/storageclass_list_item_widget.dart';
 
 // ResourceType is a enum, which can be used to categorize all the Kubernetes resources within a cluster. Besides the
 // categorization of resources, no functions of kubenav should depend on it. This means in the current state of kubenav
@@ -53,8 +76,7 @@ class Resource {
   String path;
   ResourceScope scope;
   bool isCRD;
-  List<String> columns;
-  Widget Function(dynamic item) buildListItem;
+  Widget Function(dynamic item)? buildListItem;
   Widget Function(dynamic item) buildDetailsItem;
 
   Resource({
@@ -65,8 +87,7 @@ class Resource {
     required this.path,
     required this.scope,
     required this.isCRD,
-    required this.columns,
-    required this.buildListItem,
+    this.buildListItem,
     required this.buildDetailsItem,
   });
 }
@@ -84,16 +105,7 @@ abstract class Resources {
       path: '/apis/batch/v1beta1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Schedule',
-        'Suspend',
-        'Active',
-        'Last Schedule',
-        'Age'
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => CronJobListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'daemonsets': Resource(
@@ -105,18 +117,7 @@ abstract class Resources {
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Desired',
-        'Current',
-        'Ready',
-        'Up to date',
-        'Available',
-        'Node Selector',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => DaemonSetListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'deployments': Resource(
@@ -128,15 +129,7 @@ abstract class Resources {
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Ready',
-        'Up to date',
-        'Available',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => DeploymentListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'jobs': Resource(
@@ -148,14 +141,7 @@ abstract class Resources {
       path: '/apis/batch/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Completions',
-        'Duration',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => JobListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'pods': Resource(
@@ -167,14 +153,6 @@ abstract class Resources {
       path: '/api/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Ready',
-        'Status',
-        'Restarts',
-        'Age',
-      ],
       buildListItem: (dynamic item) => PodListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => PodDetailsItemWidget(item: item),
     ),
@@ -187,15 +165,7 @@ abstract class Resources {
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Desired',
-        'Current',
-        'Ready',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => ReplicaSetListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'statefulsets': Resource(
@@ -207,14 +177,7 @@ abstract class Resources {
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Ready',
-        'Up to date',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => StatefulSetListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'endpoints': Resource(
@@ -226,13 +189,7 @@ abstract class Resources {
       path: '/api/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Endpoints',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => EndpoinstListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'horizontalpodautoscalers': Resource(
@@ -244,16 +201,8 @@ abstract class Resources {
       path: '/apis/autoscaling/v2beta1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Reference',
-        'Min. Pods',
-        'Max. Pods',
-        'Replicas',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) =>
+          HorizontalPodAutoscalerListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'ingresses': Resource(
@@ -265,14 +214,7 @@ abstract class Resources {
       path: '/apis/extensions/v1beta1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Hosts',
-        'Adress',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => IngressListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'networkpolicies': Resource(
@@ -284,13 +226,7 @@ abstract class Resources {
       path: '/apis/networking.k8s.io/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Pod Selector',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => NetworkPolicyListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'services': Resource(
@@ -302,16 +238,7 @@ abstract class Resources {
       path: '/api/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Type',
-        'Cluster IP',
-        'External IP',
-        'Port(s)',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => ServiceListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'configmaps': Resource(
@@ -323,13 +250,7 @@ abstract class Resources {
       path: '/api/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Data',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => ConfigMapListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'persistentvolumeclaims': Resource(
@@ -337,21 +258,12 @@ abstract class Resources {
       title: 'PersistentVolumeClaims',
       description:
           'A PersistentVolumeClaim (PVC) is a request for storage by a user.',
-      resource: 'Persistent Volume Claims',
+      resource: 'persistentvolumeclaims',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Status',
-        'Volume',
-        'Capacity',
-        'Access Modes',
-        'Storage Class',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) =>
+          PersistentVolumeClaimListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'persistentvolumes': Resource(
@@ -363,18 +275,8 @@ abstract class Resources {
       path: '/api/v1',
       scope: ResourceScope.cluster,
       isCRD: false,
-      columns: [
-        'Name',
-        'Capacity',
-        'Access Modes',
-        'Reclaim Policy',
-        'Status',
-        'Claim',
-        'Storage Class',
-        'Reason',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) =>
+          PersistentVolumeListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'poddisruptionbudgets': Resource(
@@ -386,15 +288,8 @@ abstract class Resources {
       path: '/apis/policy/v1beta1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Min. Available',
-        'Max. Unavailable',
-        'Allowed Disruptions',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) =>
+          PodDisruptionBudgetListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'secrets': Resource(
@@ -406,14 +301,7 @@ abstract class Resources {
       path: '/api/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Type',
-        'Data',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => SecretListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'serviceaccounts': Resource(
@@ -425,13 +313,7 @@ abstract class Resources {
       path: '/api/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Secrets',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => ServiceAccountListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'storageclasses': Resource(
@@ -443,15 +325,7 @@ abstract class Resources {
       path: '/apis/storage.k8s.io/v1',
       scope: ResourceScope.cluster,
       isCRD: false,
-      columns: [
-        'Name',
-        'Provisioner',
-        'Reclaim Policy',
-        'Volume Binding Mode',
-        'Allow Volume Expansion',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => StorageClassListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'clusterrolebindings': Resource(
@@ -463,11 +337,6 @@ abstract class Resources {
       path: '/apis/rbac.authorization.k8s.io/v1',
       scope: ResourceScope.cluster,
       isCRD: false,
-      columns: [
-        'Name',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'clusterroles': Resource(
@@ -479,11 +348,6 @@ abstract class Resources {
       path: '/apis/rbac.authorization.k8s.io/v1',
       scope: ResourceScope.cluster,
       isCRD: false,
-      columns: [
-        'Name',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'rolebindings': Resource(
@@ -495,12 +359,6 @@ abstract class Resources {
       path: '/apis/rbac.authorization.k8s.io/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'roles': Resource(
@@ -512,12 +370,6 @@ abstract class Resources {
       path: '/apis/rbac.authorization.k8s.io/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'events': Resource(
@@ -529,16 +381,7 @@ abstract class Resources {
       path: '/api/v1',
       scope: ResourceScope.namespaced,
       isCRD: false,
-      columns: [
-        'Name',
-        'Namespace',
-        'Last Seen',
-        'Type',
-        'Reason',
-        'Object',
-        'Message',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => EventListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'customresourcedefinitions': Resource(
@@ -549,7 +392,6 @@ abstract class Resources {
       path: '/apis/apiextensions.k8s.io/v1',
       scope: ResourceScope.cluster,
       isCRD: false,
-      columns: [],
       buildListItem: (dynamic item) => const Text('test'),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
@@ -562,12 +404,7 @@ abstract class Resources {
       path: '/api/v1',
       scope: ResourceScope.cluster,
       isCRD: false,
-      columns: [
-        'Name',
-        'Status',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => NamespaceListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'nodes': Resource(
@@ -579,13 +416,7 @@ abstract class Resources {
       path: '/api/v1',
       scope: ResourceScope.cluster,
       isCRD: false,
-      columns: [
-        'Name',
-        'Status',
-        'Version',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) => NodeListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'podsecuritypolicies': Resource(
@@ -597,19 +428,8 @@ abstract class Resources {
       path: '/apis/policy/v1beta1',
       scope: ResourceScope.cluster,
       isCRD: false,
-      columns: [
-        'Name',
-        'Privileged',
-        'Capabilities',
-        'SELinux',
-        'Run As User',
-        'FS Group',
-        'Supplemental Groups',
-        'Read Only Root FS',
-        'Volumes',
-        'Age',
-      ],
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (dynamic item) =>
+          PodSecurityPolicyListItemWidget(item: item),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
   };

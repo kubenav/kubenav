@@ -6,7 +6,15 @@ String getAge(DateTime? timestamp) {
     return '-';
   }
 
-  final age = DateTime.now().difference(timestamp);
+  return timeDiff(timestamp, DateTime.now());
+}
+
+String timeDiff(DateTime? start, DateTime? end) {
+  if (start == null || end == null) {
+    return '-';
+  }
+
+  final age = end.difference(start);
 
   if (age.inDays > 3) {
     return '${age.inDays}d';
@@ -16,5 +24,9 @@ String getAge(DateTime? timestamp) {
     return '${age.inHours}h';
   }
 
-  return '${age.inMinutes}m';
+  if (age.inMinutes > 3) {
+    return '${age.inMinutes}m';
+  }
+
+  return '${age.inSeconds}s';
 }

@@ -26,7 +26,7 @@ class IoK8sApiAppsV1StatefulSetStatus {
   });
 
   /// Total number of available pods (ready for at least minReadySeconds) targeted by this statefulset. This is a beta field and enabled/disabled by StatefulSetMinReadySeconds feature gate.
-  int availableReplicas;
+  int? availableReplicas;
 
   /// collisionCount is the count of hash collisions for the StatefulSet. The StatefulSet controller uses this field as a collision avoidance mechanism when it needs to create the name for the newest ControllerRevision.
   ///
@@ -115,7 +115,7 @@ class IoK8sApiAppsV1StatefulSetStatus {
   @override
   int get hashCode =>
       // ignore: unnecessary_parenthesis
-      (availableReplicas.hashCode) +
+      (availableReplicas == null ? 0 : availableReplicas!.hashCode) +
       (collisionCount == null ? 0 : collisionCount!.hashCode) +
       (conditions.hashCode) +
       (currentReplicas == null ? 0 : currentReplicas!.hashCode) +
@@ -132,7 +132,9 @@ class IoK8sApiAppsV1StatefulSetStatus {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'availableReplicas'] = availableReplicas;
+    if (availableReplicas != null) {
+      json[r'availableReplicas'] = availableReplicas;
+    }
     if (collisionCount != null) {
       json[r'collisionCount'] = collisionCount;
     }
@@ -180,7 +182,7 @@ class IoK8sApiAppsV1StatefulSetStatus {
       }());
 
       return IoK8sApiAppsV1StatefulSetStatus(
-        availableReplicas: mapValueOfType<int>(json, r'availableReplicas')!,
+        availableReplicas: mapValueOfType<int>(json, r'availableReplicas'),
         collisionCount: mapValueOfType<int>(json, r'collisionCount'),
         conditions: IoK8sApiAppsV1StatefulSetCondition.listFromJson(
                 json[r'conditions']) ??
@@ -251,7 +253,6 @@ class IoK8sApiAppsV1StatefulSetStatus {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
-    'availableReplicas',
     'replicas',
   };
 }
