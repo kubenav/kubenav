@@ -182,7 +182,9 @@ class ResourcesList extends GetView<ResourcesListController> {
                         ),
                         itemCount: controller.items.length,
                         itemBuilder: (context, index) {
-                          return controller.resource != null &&
+                          return controller.isCRD != null &&
+                                  controller.isCRD == false &&
+                                  controller.resource != null &&
                                   Resources.map[controller.resource] != null &&
                                   Resources.map[controller.resource]!
                                           .buildListItem !=

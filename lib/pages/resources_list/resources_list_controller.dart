@@ -14,6 +14,7 @@ class ResourcesListController extends GetxController {
   String? resource = Get.parameters['resource'];
   String? path = Get.parameters['path'];
   ResourceScope? scope = resourceScopeFromString(Get.parameters['scope']);
+  bool? isCRD = Get.parameters['isCRD'] == 'true';
 
   RxList<dynamic> items = <dynamic>[].obs;
   RxString error = ''.obs;

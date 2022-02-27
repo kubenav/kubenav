@@ -115,7 +115,7 @@ class ResourcesListCRDs extends GetView<ResourcesListCRDsController> {
                             child: InkWell(
                               onTap: () {
                                 Get.toNamed(
-                                    '/resources/list?title=${controller.items[index].title}&resource=${controller.items[index].resource}&path=${controller.items[index].path}&scope=${controller.items[index].scope.name}');
+                                    '/resources/list?title=${controller.items[index].title}&resource=${controller.items[index].resource}&path=${controller.items[index].path}&scope=${controller.items[index].scope.name}&isCRD=true');
                               },
                               child: Row(
                                 children: [

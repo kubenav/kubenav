@@ -28,7 +28,7 @@ class Resources extends GetView<ResourcesController> {
                   );
                 } else {
                   Get.toNamed(
-                    '/resources/list?title=${value.title}&resource=${value.resource}&path=${value.path}&scope=${value.scope.name}',
+                    '/resources/list?title=${value.title}&resource=${value.resource}&path=${value.path}&scope=${value.scope.name}&isCRD=false',
                   );
                 }
               },
