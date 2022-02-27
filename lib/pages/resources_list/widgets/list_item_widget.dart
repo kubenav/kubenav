@@ -78,39 +78,40 @@ class ListItemWidget extends StatelessWidget {
         ),
       ),
       child: InkWell(
-          onTap: () {
-            Get.toNamed(
-                '/resources/details?title=${Get.parameters['title']}&resource=${Get.parameters['resource']}&path=${Get.parameters['path']}&scope=${Get.parameters['scope']}&name=$name&${namespace != null ? 'namespace=$namespace' : ''}');
-          },
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      Characters(name)
-                          .replaceAll(Characters(''), Characters('\u{200B}'))
-                          .toString(),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: primaryTextStyle(),
-                    ),
-                    Text(
-                      Characters(info)
-                          .replaceAll(Characters(''), Characters('\u{200B}'))
-                          .toString(),
-                      overflow: TextOverflow.fade,
-                      softWrap: false,
-                      style: secondaryTextStyle(),
-                    ),
-                  ],
-                ),
+        onTap: () {
+          Get.toNamed(
+              '/resources/details?title=${Get.parameters['title']}&resource=${Get.parameters['resource']}&path=${Get.parameters['path']}&scope=${Get.parameters['scope']}&name=$name&${namespace != null ? 'namespace=$namespace' : ''}');
+        },
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    Characters(name)
+                        .replaceAll(Characters(''), Characters('\u{200B}'))
+                        .toString(),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: primaryTextStyle(),
+                  ),
+                  Text(
+                    Characters(info)
+                        .replaceAll(Characters(''), Characters('\u{200B}'))
+                        .toString(),
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    style: secondaryTextStyle(),
+                  ),
+                ],
               ),
-              buildStatus(context),
-            ],
-          )),
+            ),
+            buildStatus(context),
+          ],
+        ),
+      ),
     );
   }
 }

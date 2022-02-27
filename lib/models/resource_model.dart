@@ -49,11 +49,15 @@ enum ResourceScope {
 // provided scope string is 'namespaced' it will be 'ResourceScope.namespaced', if it is 'cluster' it will be
 // 'ResourceScope.cluster'. If the provided scope string doesn't match one of these values we return 'null'.
 ResourceScope? resourceScopeFromString(String? scope) {
-  if (scope == 'namespaced') {
+  if (scope == null) {
+    return null;
+  }
+
+  if (scope.toLowerCase() == 'namespaced') {
     return ResourceScope.namespaced;
   }
 
-  if (scope == 'cluster') {
+  if (scope.toLowerCase() == 'cluster') {
     return ResourceScope.cluster;
   }
 

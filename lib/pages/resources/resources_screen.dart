@@ -22,9 +22,15 @@ class Resources extends GetView<ResourcesController> {
           items.add(
             AppVertialListSimpleModel(
               onTap: () {
-                Get.toNamed(
-                  '/resources/list?title=${value.title}&resource=${value.resource}&path=${value.path}&scope=${value.scope.name}',
-                );
+                if (value.resource == 'customresourcedefinitions') {
+                  Get.toNamed(
+                    '/resources/list/crds',
+                  );
+                } else {
+                  Get.toNamed(
+                    '/resources/list?title=${value.title}&resource=${value.resource}&path=${value.path}&scope=${value.scope.name}',
+                  );
+                }
               },
               children: [
                 Container(
