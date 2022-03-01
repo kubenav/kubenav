@@ -8,12 +8,14 @@ class AppHorizontalListCardsModel {
   String title;
   String subtitle;
   String image;
+  BoxFit imageFit;
   void Function() onTap;
 
   AppHorizontalListCardsModel({
     required this.title,
     required this.subtitle,
     required this.image,
+    this.imageFit = BoxFit.fill,
     required this.onTap,
   });
 }
@@ -119,6 +121,7 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
             children: List.generate(
               cards.length,
               (index) => Container(
+                width: 250,
                 margin: const EdgeInsets.only(
                   top: Constants.spacingSmall,
                   bottom: Constants.spacingSmall,
@@ -143,18 +146,31 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(Constants.sizeBorderRadius),
-                          topRight: Radius.circular(Constants.sizeBorderRadius),
+                      Container(
+                        decoration: const BoxDecoration(
+                          color: Constants.colorPrimary,
+                          borderRadius: BorderRadius.only(
+                            topLeft:
+                                Radius.circular(Constants.sizeBorderRadius),
+                            topRight:
+                                Radius.circular(Constants.sizeBorderRadius),
+                          ),
                         ),
-                        child: Image.asset(
-                          cards[index].image,
-                          height: 140,
-                          width: 250,
-                          fit: BoxFit.fill,
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft:
+                                Radius.circular(Constants.sizeBorderRadius),
+                            topRight:
+                                Radius.circular(Constants.sizeBorderRadius),
+                          ),
+                          child: Image.asset(
+                            cards[index].image,
+                            height: 140,
+                            width: 250,
+                            fit: cards[index].imageFit,
+                          ),
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
                         ),
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
                       ),
                       const SizedBox(height: Constants.spacingSmall),
                       Padding(
@@ -162,7 +178,11 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                           left: Constants.spacingSmall,
                         ),
                         child: Text(
-                          cards[index].title,
+                          Characters(cards[index].title)
+                              .replaceAll(
+                                  Characters(''), Characters('\u{200B}'))
+                              .toString(),
+                          overflow: TextOverflow.ellipsis,
                           style: primaryTextStyle(),
                         ),
                       ),
@@ -172,7 +192,11 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                           left: Constants.spacingSmall,
                         ),
                         child: Text(
-                          cards[index].subtitle,
+                          Characters(cards[index].subtitle)
+                              .replaceAll(
+                                  Characters(''), Characters('\u{200B}'))
+                              .toString(),
+                          overflow: TextOverflow.ellipsis,
                           style: secondaryTextStyle(),
                         ),
                       ),

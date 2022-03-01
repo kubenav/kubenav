@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/kubernetes/api.dart'
@@ -52,6 +53,11 @@ class AppNamespacesController extends GetxController {
           'getNamespaces success: ${namespaceList!.items.length} namespaces were returned');
 
       namespaces.value = namespaceList.items;
+      loading.value = false;
+    } on PlatformException catch (err) {
+      debugPrint('getNamespaces error: $err');
+      error.value =
+          'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}';
       loading.value = false;
     } catch (err) {
       debugPrint('getNamespaces error: $err');
@@ -122,7 +128,11 @@ class AppNamespacesWidget extends StatelessWidget {
                 Expanded(
                   child: Wrap(
                     children: [
-                      AppErrorWidget(error: controller.error.value),
+                      AppErrorWidget(
+                        message: 'Could not load Namespaces',
+                        details: controller.error.value,
+                        icon: CustomIcons.namespaces,
+                      ),
                     ],
                   ),
                 ),

@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -60,6 +61,12 @@ class DetailsDeleteResourceController extends GetxController {
           namespace == null
               ? 'The resource $name is deleted'
               : 'The resource $name in namespace $namespace is deleted');
+    } on PlatformException catch (err) {
+      debugPrint('deleteResource error: $err');
+      snackbar(
+        'Could not delete resource',
+        'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+      );
     } catch (err) {
       debugPrint('deleteResource error: $err');
       snackbar('Could not delete resource', err.toString());

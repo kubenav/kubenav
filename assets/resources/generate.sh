@@ -20,6 +20,17 @@ mkdir -p image54x54/8.0x
 mkdir -p image54x54/9.0x
 mkdir -p image54x54/10.0x
 
+mkdir -p image108x108
+mkdir -p image108x108/2.0x
+mkdir -p image108x108/3.0x
+mkdir -p image108x108/4.0x
+mkdir -p image108x108/5.0x
+mkdir -p image108x108/6.0x
+mkdir -p image108x108/7.0x
+mkdir -p image108x108/8.0x
+mkdir -p image108x108/9.0x
+mkdir -p image108x108/10.0x
+
 for file in *.svg; do
   image="${file%.*}"
   echo "Processing $image..."
@@ -45,4 +56,15 @@ for file in *.svg; do
   /Applications/Inkscape.app/Contents/MacOS/inkscape -w 432 -h 432 $image.svg -o image54x54/8.0x/$image.png
   /Applications/Inkscape.app/Contents/MacOS/inkscape -w 486 -h 486 $image.svg -o image54x54/9.0x/$image.png
   /Applications/Inkscape.app/Contents/MacOS/inkscape -w 540 -h 540 $image.svg -o image54x54/10.0x/$image.png
+
+  /Applications/Inkscape.app/Contents/MacOS/inkscape -w 108 -h 108 $image.svg -o image108x108/$image.png
+  /Applications/Inkscape.app/Contents/MacOS/inkscape -w 216 -h 216 $image.svg -o image108x108/2.0x/$image.png
+  /Applications/Inkscape.app/Contents/MacOS/inkscape -w 324 -h 324 $image.svg -o image108x108/3.0x/$image.png
+  /Applications/Inkscape.app/Contents/MacOS/inkscape -w 432 -h 432 $image.svg -o image108x108/4.0x/$image.png
+  /Applications/Inkscape.app/Contents/MacOS/inkscape -w 540 -h 540 $image.svg -o image108x108/5.0x/$image.png
+  /Applications/Inkscape.app/Contents/MacOS/inkscape -w 648 -h 648 $image.svg -o image108x108/6.0x/$image.png
+  /Applications/Inkscape.app/Contents/MacOS/inkscape -w 756 -h 756 $image.svg -o image108x108/7.0x/$image.png
+  /Applications/Inkscape.app/Contents/MacOS/inkscape -w 864 -h 864 $image.svg -o image108x108/8.0x/$image.png
+  /Applications/Inkscape.app/Contents/MacOS/inkscape -w 972 -h 972 $image.svg -o image108x108/9.0x/$image.png
+  /Applications/Inkscape.app/Contents/MacOS/inkscape -w 1080 -h 1080 $image.svg -o image108x108/10.0x/$image.png
 done

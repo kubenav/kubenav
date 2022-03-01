@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 
@@ -13,15 +14,27 @@ enum Status {
 
 abstract class IListItemWidget {
   const IListItemWidget({
+    required this.title,
+    required this.resource,
+    required this.path,
+    required this.scope,
     required this.item,
   });
 
+  final String? title;
+  final String? resource;
+  final String? path;
+  final ResourceScope? scope;
   final dynamic item;
 }
 
 class ListItemWidget extends StatelessWidget {
   const ListItemWidget({
     Key? key,
+    required this.title,
+    required this.resource,
+    required this.path,
+    required this.scope,
     required this.name,
     required this.namespace,
     required this.info,
@@ -29,6 +42,10 @@ class ListItemWidget extends StatelessWidget {
     this.onTap,
   }) : super(key: key);
 
+  final String? title;
+  final String? resource;
+  final String? path;
+  final ResourceScope? scope;
   final String name;
   final String? namespace;
   final String info;
@@ -80,7 +97,8 @@ class ListItemWidget extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Get.toNamed(
-              '/resources/details?title=${Get.parameters['title']}&resource=${Get.parameters['resource']}&path=${Get.parameters['path']}&scope=${Get.parameters['scope']}&name=$name&${namespace != null ? 'namespace=$namespace' : ''}');
+            '/resources/details?title=$title&resource=$resource&path=$path&scope=${scope?.name}&name=$name&${namespace != null ? 'namespace=$namespace' : ''}',
+          );
         },
         child: Row(
           children: [

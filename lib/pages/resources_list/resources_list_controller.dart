@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/resource_model.dart';
@@ -10,11 +11,21 @@ import 'package:kubenav/widgets/app_namespaces_widget.dart';
 class ResourcesListController extends GetxController {
   ClusterController clusterController = Get.find();
 
-  String? title = Get.parameters['title'];
-  String? resource = Get.parameters['resource'];
-  String? path = Get.parameters['path'];
-  ResourceScope? scope = resourceScopeFromString(Get.parameters['scope']);
-  bool? isCRD = Get.parameters['isCRD'] == 'true';
+  String? title;
+  String? resource;
+  String? path;
+  ResourceScope? scope;
+  String? namespace;
+  String? selector;
+
+  ResourcesListController({
+    required this.title,
+    required this.resource,
+    required this.path,
+    required this.scope,
+    required this.namespace,
+    required this.selector,
+  });
 
   RxList<dynamic> items = <dynamic>[].obs;
   RxString error = ''.obs;
@@ -29,7 +40,8 @@ class ResourcesListController extends GetxController {
     // Whenever the active cluster changes, e.g. the user selects a new namespace, we reload the list of resource items.
     // To not get the resources when the user changed the resource, we have to call 'worker.dispose()' in the 'onClose'
     // method of the controller.
-    if (clusterController.clusters.isNotEmpty ||
+    if (namespace == null &&
+        clusterController.clusters.isNotEmpty &&
         clusterController.activeClusterIndex.value != -1) {
       worker = ever(
           clusterController
@@ -67,8 +79,10 @@ class ResourcesListController extends GetxController {
         error.value = 'No active cluster';
       } else {
         final url = scope == ResourceScope.cluster
-            ? '$path/$resource'
-            : '$path${cluster.namespace != '' ? '/namespaces/${cluster.namespace}' : ''}/$resource';
+            ? '$path/$resource?${selector ?? ''}'
+            : namespace != null
+                ? '$path/namespaces/$namespace/$resource?${selector ?? ''}'
+                : '$path${cluster.namespace != '' ? '/namespaces/${cluster.namespace}' : ''}/$resource?${selector ?? ''}';
 
         try {
           final resourcesList =
@@ -77,6 +91,11 @@ class ResourcesListController extends GetxController {
           debugPrint(
               'getResources success: ${resourcesList['items'].length} $resource were returned');
           items.value = resourcesList['items'];
+          loading.value = false;
+        } on PlatformException catch (err) {
+          debugPrint('getResources error: $err');
+          error.value =
+              'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}';
           loading.value = false;
         } catch (err) {
           debugPrint('getResources error: $err');

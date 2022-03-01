@@ -9,12 +9,34 @@ import 'package:kubenav/utils/helpers.dart';
 class AppErrorWidget extends StatelessWidget {
   const AppErrorWidget({
     Key? key,
-    this.title = 'Error',
-    required this.error,
+    required this.message,
+    required this.details,
+    this.icon,
   }) : super(key: key);
 
-  final String title;
-  final String error;
+  final String message;
+  final String details;
+  final dynamic icon;
+
+  // buildIcon creates the icon for the error widget. The icon parameter for the widget could be of type 'String' or
+  //'IconData' to also allow images from the assets folder as icons. If the icon is null, we use a default one.
+  Widget buildIcon(dynamic icon) {
+    if (icon is String) {
+      return Image.asset(icon);
+    } else if (icon is IconData) {
+      return Icon(
+        icon,
+        color: Colors.white,
+        size: 108,
+      );
+    }
+
+    return const Icon(
+      CustomIcons.kubenav,
+      color: Colors.white,
+      size: 108,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +72,7 @@ class AppErrorWidget extends StatelessWidget {
             ),
             height: 140,
             width: MediaQuery.of(context).size.width,
-            child: const Icon(
-              CustomIcons.kubernetes,
-              color: Colors.white,
-              size: 108,
-            ),
+            child: buildIcon(icon),
           ),
           const SizedBox(height: Constants.spacingSmall),
           Padding(
@@ -62,7 +80,7 @@ class AppErrorWidget extends StatelessWidget {
               left: Constants.spacingSmall,
             ),
             child: Text(
-              title,
+              message,
               style: primaryTextStyle(),
             ),
           ),
@@ -72,7 +90,7 @@ class AppErrorWidget extends StatelessWidget {
               left: Constants.spacingSmall,
             ),
             child: Text(
-              error,
+              details,
               style: secondaryTextStyle(),
             ),
           ),

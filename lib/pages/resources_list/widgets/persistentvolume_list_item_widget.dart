@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/models/kubernetes/api.dart'
     show IoK8sApiCoreV1PersistentVolume;
 import 'package:kubenav/pages/resources_list/widgets/list_item_widget.dart';
@@ -9,9 +10,21 @@ class PersistentVolumeListItemWidget extends StatelessWidget
     implements IListItemWidget {
   const PersistentVolumeListItemWidget({
     Key? key,
+    required this.title,
+    required this.resource,
+    required this.path,
+    required this.scope,
     required this.item,
   }) : super(key: key);
 
+  @override
+  final String? title;
+  @override
+  final String? resource;
+  @override
+  final String? path;
+  @override
+  final ResourceScope? scope;
   @override
   final dynamic item;
 
@@ -29,6 +42,10 @@ class PersistentVolumeListItemWidget extends StatelessWidget
     final reason = pv?.status?.reason ?? '-';
 
     return ListItemWidget(
+      title: title,
+      resource: resource,
+      path: path,
+      scope: scope,
       name: pv?.metadata?.name ?? '',
       namespace: null,
       info:

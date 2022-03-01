@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/resource_model.dart';
@@ -11,12 +12,21 @@ import 'package:kubenav/utils/constants.dart';
 class ResourcesDetailsController extends GetxController {
   ClusterController clusterController = Get.find();
 
-  String? title = Get.parameters['title'];
-  String? resource = Get.parameters['resource'];
-  String? path = Get.parameters['path'];
-  ResourceScope? scope = resourceScopeFromString(Get.parameters['scope']);
-  String? name = Get.parameters['name'];
-  String? namespace = Get.parameters['namespace'];
+  String? title;
+  String? resource;
+  String? path;
+  ResourceScope? scope;
+  String? name;
+  String? namespace;
+
+  ResourcesDetailsController({
+    required this.title,
+    required this.resource,
+    required this.path,
+    required this.scope,
+    required this.name,
+    required this.namespace,
+  });
 
   RxMap<String, dynamic> item = <String, dynamic>{}.obs;
   RxString error = ''.obs;
@@ -65,6 +75,11 @@ class ResourcesDetailsController extends GetxController {
 
         debugPrint('getResource success: ${resource.toString()}');
         item.value = resource;
+        loading.value = false;
+      } on PlatformException catch (err) {
+        debugPrint('getResources error: $err');
+        error.value =
+            'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}';
         loading.value = false;
       } catch (err) {
         debugPrint('getResources error: $err');

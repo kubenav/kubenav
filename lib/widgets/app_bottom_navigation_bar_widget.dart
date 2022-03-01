@@ -43,23 +43,23 @@ class AppBottomNavigationBarWidget extends StatelessWidget {
         switch (value) {
           case 0:
             Get.back();
-            Get.offNamed(Routes.home);
+            Get.offAllNamed(Routes.home);
             break;
           case 1:
             Get.back();
-            Get.offNamed(Routes.resources);
+            Get.offAllNamed(Routes.resources);
             break;
           case 2:
             Get.back();
-            Get.offNamed(Routes.plugins);
+            Get.offAllNamed(Routes.plugins);
             break;
           case 3:
             Get.back();
-            Get.offNamed(Routes.settings);
+            Get.offAllNamed(Routes.settings);
             break;
           default:
             Get.back();
-            Get.offNamed(Routes.home);
+            Get.offAllNamed(Routes.home);
             break;
         }
       },

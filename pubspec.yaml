@@ -74,6 +74,7 @@ flutter:
     - assets/provider/image250x140/
     - assets/resources/image42x42/
     - assets/resources/image54x54/
+    - assets/resources/image108x108/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

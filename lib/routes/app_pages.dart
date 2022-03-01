@@ -10,9 +10,7 @@ import 'package:kubenav/pages/plugins/plugins_binding.dart';
 import 'package:kubenav/pages/plugins/plugins_screen.dart';
 import 'package:kubenav/pages/resources/resources_binding.dart';
 import 'package:kubenav/pages/resources/resources_screen.dart';
-import 'package:kubenav/pages/resources_details/resources_details_binding.dart';
 import 'package:kubenav/pages/resources_details/resources_details_screen.dart';
-import 'package:kubenav/pages/resources_list/resources_list_binding.dart';
 import 'package:kubenav/pages/resources_list/resources_list_screen.dart';
 import 'package:kubenav/pages/resources_list_crds/resources_list_crds_binding.dart';
 import 'package:kubenav/pages/resources_list_crds/resources_list_crds_screen.dart';
@@ -36,12 +34,10 @@ abstract class AppPages {
     GetPage(
       name: Routes.resourcesDetails,
       page: () => const ResourcesDetails(),
-      binding: ResourcesDetailsBinding(),
     ),
     GetPage(
       name: Routes.resourcesList,
       page: () => const ResourcesList(),
-      binding: ResourcesListBinding(),
     ),
     GetPage(
       name: Routes.resourcesListCRDs,

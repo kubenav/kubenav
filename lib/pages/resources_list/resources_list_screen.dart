@@ -11,7 +11,7 @@ import 'package:kubenav/widgets/app_actions_header_widget.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/app_error_widget.dart';
 
-class ResourcesList extends GetView<ResourcesListController> {
+class ResourcesList extends GetView {
   const ResourcesList({Key? key}) : super(key: key);
 
   Widget buildAction(
@@ -51,8 +51,52 @@ class ResourcesList extends GetView<ResourcesListController> {
     );
   }
 
+  Widget buildListItem(
+    String? title,
+    String? resource,
+    String? path,
+    ResourceScope? scope,
+    dynamic item,
+  ) {
+    if (resource != null &&
+        path != null &&
+        Resources.map.containsKey(resource) &&
+        Resources.map[resource]!.resource == resource &&
+        Resources.map[resource]!.path == path &&
+        Resources.map[resource]!.buildListItem != null) {
+      return Resources.map[resource]!.buildListItem!(
+        title,
+        resource,
+        path,
+        scope,
+        item,
+      );
+    }
+
+    return DefaultListItemWidget(
+      title: title,
+      resource: resource,
+      path: path,
+      scope: scope,
+      item: item,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    ResourcesListController controller = Get.put(
+      ResourcesListController(
+        title: Get.parameters['title'],
+        resource: Get.parameters['resource'],
+        path: Get.parameters['path'],
+        scope: resourceScopeFromString(Get.parameters['scope']),
+        namespace: Get.parameters['namespace'],
+        selector: Get.parameters['selector'],
+      ),
+      tag:
+          '${Get.parameters['title']} ${Get.parameters['resource']} ${Get.parameters['path']} ${Get.parameters['scope']} ${Get.parameters['namespace']} ${Get.parameters['selector']}',
+    );
+
     return Scaffold(
       appBar: AppBar(
         actions: controller.scope == ResourceScope.namespaced
@@ -138,7 +182,16 @@ class ResourcesList extends GetView<ResourcesListController> {
                         child: Padding(
                           padding:
                               const EdgeInsets.all(Constants.spacingMiddle),
-                          child: AppErrorWidget(error: controller.error.value),
+                          child: AppErrorWidget(
+                            message: 'Could not load ${controller.title}',
+                            details: controller.error.value,
+                            icon: Resources.map
+                                        .containsKey(controller.resource) &&
+                                    Resources.map[controller.resource]!.path ==
+                                        controller.path
+                                ? 'assets/resources/image108x108/${controller.resource}.png'
+                                : null,
+                          ),
                         ),
                       ),
                     ],
@@ -182,17 +235,13 @@ class ResourcesList extends GetView<ResourcesListController> {
                         ),
                         itemCount: controller.items.length,
                         itemBuilder: (context, index) {
-                          return controller.isCRD != null &&
-                                  controller.isCRD == false &&
-                                  controller.resource != null &&
-                                  Resources.map[controller.resource] != null &&
-                                  Resources.map[controller.resource]!
-                                          .buildListItem !=
-                                      null
-                              ? Resources.map[controller.resource]!
-                                  .buildListItem!(controller.items[index])
-                              : DefaultListItemWidget(
-                                  item: controller.items[index]);
+                          return buildListItem(
+                            controller.title,
+                            controller.resource,
+                            controller.path,
+                            controller.scope,
+                            controller.items[index],
+                          );
                         },
                       ),
                     ),

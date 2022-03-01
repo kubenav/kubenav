@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:kubenav/pages/resources_details/widgets/deployment_details_item_widget.dart';
 
+import 'package:kubenav/pages/resources_details/widgets/namespace_details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/pod_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/podsecuritypolicy_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/storageclass_details_item_widget.dart';
 
 import 'package:kubenav/pages/resources_list/widgets/configmap_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/cronjob_list_item_widget.dart';
@@ -79,8 +83,14 @@ class Resource {
   String resource;
   String path;
   ResourceScope scope;
-  Widget Function(dynamic item)? buildListItem;
-  Widget Function(dynamic item) buildDetailsItem;
+  Widget Function(
+    String? title,
+    String? resource,
+    String? path,
+    ResourceScope? scope,
+    dynamic item,
+  )? buildListItem;
+  Widget Function(dynamic item)? buildDetailsItem;
 
   Resource({
     required this.resourceType,
@@ -106,7 +116,20 @@ abstract class Resources {
       resource: 'cronjobs',
       path: '/apis/batch/v1beta1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) => CronJobListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          CronJobListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'daemonsets': Resource(
@@ -117,7 +140,20 @@ abstract class Resources {
       resource: 'daemonsets',
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) => DaemonSetListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          DaemonSetListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'deployments': Resource(
@@ -128,8 +164,22 @@ abstract class Resources {
       resource: 'deployments',
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) => DeploymentListItemWidget(item: item),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          DeploymentListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
+      buildDetailsItem: (dynamic item) =>
+          DeploymentDetailsItemWidget(item: item),
     ),
     'jobs': Resource(
       resourceType: ResourceType.workload,
@@ -139,7 +189,20 @@ abstract class Resources {
       resource: 'jobs',
       path: '/apis/batch/v1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) => JobListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          JobListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'pods': Resource(
@@ -150,7 +213,20 @@ abstract class Resources {
       resource: 'pods',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) => PodListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          PodListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => PodDetailsItemWidget(item: item),
     ),
     'replicasets': Resource(
@@ -161,7 +237,20 @@ abstract class Resources {
       resource: 'replicasets',
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) => ReplicaSetListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          ReplicaSetListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'statefulsets': Resource(
@@ -172,7 +261,20 @@ abstract class Resources {
       resource: 'statefulsets',
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) => StatefulSetListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          StatefulSetListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'endpoints': Resource(
@@ -183,7 +285,20 @@ abstract class Resources {
       resource: 'endpoints',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) => EndpoinstListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          EndpoinstListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'horizontalpodautoscalers': Resource(
@@ -194,8 +309,20 @@ abstract class Resources {
       resource: 'horizontalpodautoscalers',
       path: '/apis/autoscaling/v2beta1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) =>
-          HorizontalPodAutoscalerListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          HorizontalPodAutoscalerListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'ingresses': Resource(
@@ -206,7 +333,20 @@ abstract class Resources {
       resource: 'ingresses',
       path: '/apis/extensions/v1beta1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) => IngressListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          IngressListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'networkpolicies': Resource(
@@ -217,7 +357,20 @@ abstract class Resources {
       resource: 'networkpolicies',
       path: '/apis/networking.k8s.io/v1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) => NetworkPolicyListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          NetworkPolicyListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'services': Resource(
@@ -228,7 +381,20 @@ abstract class Resources {
       resource: 'services',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) => ServiceListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          ServiceListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'configmaps': Resource(
@@ -239,7 +405,20 @@ abstract class Resources {
       resource: 'configmaps',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) => ConfigMapListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          ConfigMapListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'persistentvolumeclaims': Resource(
@@ -250,8 +429,20 @@ abstract class Resources {
       resource: 'persistentvolumeclaims',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) =>
-          PersistentVolumeClaimListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          PersistentVolumeClaimListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'persistentvolumes': Resource(
@@ -262,8 +453,20 @@ abstract class Resources {
       resource: 'persistentvolumes',
       path: '/api/v1',
       scope: ResourceScope.cluster,
-      buildListItem: (dynamic item) =>
-          PersistentVolumeListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          PersistentVolumeListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'poddisruptionbudgets': Resource(
@@ -274,8 +477,20 @@ abstract class Resources {
       resource: 'poddisruptionbudgets',
       path: '/apis/policy/v1beta1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) =>
-          PodDisruptionBudgetListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          PodDisruptionBudgetListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'secrets': Resource(
@@ -286,7 +501,20 @@ abstract class Resources {
       resource: 'secrets',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) => SecretListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          SecretListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'serviceaccounts': Resource(
@@ -297,7 +525,20 @@ abstract class Resources {
       resource: 'serviceaccounts',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) => ServiceAccountListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          ServiceAccountListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'storageclasses': Resource(
@@ -308,8 +549,22 @@ abstract class Resources {
       resource: 'storageclasses',
       path: '/apis/storage.k8s.io/v1',
       scope: ResourceScope.cluster,
-      buildListItem: (dynamic item) => StorageClassListItemWidget(item: item),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          StorageClassListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
+      buildDetailsItem: (dynamic item) =>
+          StorageClassDetailsItemWidget(item: item),
     ),
     'clusterrolebindings': Resource(
       resourceType: ResourceType.rbac,
@@ -359,7 +614,20 @@ abstract class Resources {
       resource: 'events',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
-      buildListItem: (dynamic item) => EventListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          EventListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'customresourcedefinitions': Resource(
@@ -369,7 +637,14 @@ abstract class Resources {
       resource: 'customresourcedefinitions',
       path: '/apis/apiextensions.k8s.io/v1',
       scope: ResourceScope.cluster,
-      buildListItem: (dynamic item) => const Text('test'),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          const Text('test'),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'namespaces': Resource(
@@ -380,8 +655,22 @@ abstract class Resources {
       resource: 'namespaces',
       path: '/api/v1',
       scope: ResourceScope.cluster,
-      buildListItem: (dynamic item) => NamespaceListItemWidget(item: item),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          NamespaceListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
+      buildDetailsItem: (dynamic item) =>
+          NamespaceDetailsItemWidget(item: item),
     ),
     'nodes': Resource(
       resourceType: ResourceType.cluster,
@@ -391,7 +680,20 @@ abstract class Resources {
       resource: 'nodes',
       path: '/api/v1',
       scope: ResourceScope.cluster,
-      buildListItem: (dynamic item) => NodeListItemWidget(item: item),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          NodeListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
       buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'podsecuritypolicies': Resource(
@@ -402,9 +704,22 @@ abstract class Resources {
       resource: 'podsecuritypolicies',
       path: '/apis/policy/v1beta1',
       scope: ResourceScope.cluster,
-      buildListItem: (dynamic item) =>
-          PodSecurityPolicyListItemWidget(item: item),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          PodSecurityPolicyListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
+      buildDetailsItem: (dynamic item) =>
+          PodSecurityPolicyDetailsItemWidget(item: item),
     ),
   };
 }

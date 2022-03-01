@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/kubenav/kubenav/pkg/kube"
 
@@ -27,14 +28,16 @@ func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, cl
 	var statusCode int
 	ctx := context.Background()
 
+	requestURL = strings.TrimRight(clusterServer, "/") + requestURL
+
 	if requestMethod == http.MethodGet {
-		responseResult = clientset.RESTClient().Get().AbsPath(requestURL).Do(ctx)
+		responseResult = clientset.RESTClient().Get().RequestURI(requestURL).Do(ctx)
 	} else if requestMethod == http.MethodDelete {
-		responseResult = clientset.RESTClient().Delete().AbsPath(requestURL).Body([]byte(requestBody)).Do(ctx)
+		responseResult = clientset.RESTClient().Delete().RequestURI(requestURL).Body([]byte(requestBody)).Do(ctx)
 	} else if requestMethod == http.MethodPatch {
-		responseResult = clientset.RESTClient().Patch(types.JSONPatchType).AbsPath(requestURL).Body([]byte(requestBody)).Do(ctx)
+		responseResult = clientset.RESTClient().Patch(types.JSONPatchType).RequestURI(requestURL).Body([]byte(requestBody)).Do(ctx)
 	} else if requestMethod == http.MethodPost {
-		responseResult = clientset.RESTClient().Post().AbsPath(requestURL).Body([]byte(requestBody)).Do(ctx)
+		responseResult = clientset.RESTClient().Post().RequestURI(requestURL).Body([]byte(requestBody)).Do(ctx)
 	}
 
 	if responseResult.Error() != nil {

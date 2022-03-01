@@ -69,7 +69,12 @@ class ResourcesListCRDs extends GetView<ResourcesListCRDsController> {
                         child: Padding(
                           padding:
                               const EdgeInsets.all(Constants.spacingMiddle),
-                          child: AppErrorWidget(error: controller.error.value),
+                          child: AppErrorWidget(
+                            message: 'Could not load CustomResourceDefinitions',
+                            details: controller.error.value,
+                            icon:
+                                'assets/resources/image108x108/customresourcedefinitions.png',
+                          ),
                         ),
                       ),
                     ],
@@ -115,7 +120,7 @@ class ResourcesListCRDs extends GetView<ResourcesListCRDsController> {
                             child: InkWell(
                               onTap: () {
                                 Get.toNamed(
-                                    '/resources/list?title=${controller.items[index].title}&resource=${controller.items[index].resource}&path=${controller.items[index].path}&scope=${controller.items[index].scope.name}&isCRD=true');
+                                    '/resources/list?title=${controller.items[index].title}&resource=${controller.items[index].resource}&path=${controller.items[index].path}&scope=${controller.items[index].scope.name}');
                               },
                               child: Row(
                                 children: [

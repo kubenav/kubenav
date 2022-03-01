@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/resource_model.dart';
@@ -74,6 +75,11 @@ class ResourcesListCRDsController extends GetxController {
           items.value = resources;
         }
 
+        loading.value = false;
+      } on PlatformException catch (err) {
+        debugPrint('getResourcesCRDs error: $err');
+        error.value =
+            'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}';
         loading.value = false;
       } catch (err) {
         debugPrint('getResourcesCRDs error: $err');
