@@ -1,19 +1,18 @@
-import 'package:flutter/material.dart';
-
 import 'package:kubenav/models/cluster_model.dart';
 import 'package:kubenav/models/tuple_model.dart';
 import 'package:kubenav/utils/logger.dart';
 
-// kubeconfigToClusters converts a kubeconfig file to a list of clusters. For this we are going through each context in
-// the kubeconfig and getting the corresponding cluster and user. Then these values are used to create a cluster object.
+/// [kubeconfigToClusters] converts a [kubeconfig] file to a list of clusters. For this we are going through each
+/// context in the kubeconfig and getting the corresponding cluster and user. Then these values are used to create a
+/// cluster object.
 Tuple<List<Cluster>?, String> kubeconfigToClusters(dynamic kubeconfig) {
   final List<Cluster> clusters = [];
 
-  // The 'contexts' property must exists in the kubeconfig file, because we are creating all clusters based on it. We
-  // also check that the contexts is a list.
+  /// The `contexts` property must exists in the kubeconfig file, because we are creating all clusters based on it. We
+  /// also check that the contexts is a list.
   if (kubeconfig['contexts'] != null && kubeconfig['contexts'] is List) {
     for (var context in kubeconfig['contexts']) {
-      // Get the cluster for the current context and check if the 'getCluster' function returns an error.
+      /// Get the cluster for the current context and check if the [getCluster] function returns an error.
       final cluster = getCluster(
         context['context']['cluster'],
         kubeconfig['clusters'],
@@ -29,7 +28,7 @@ Tuple<List<Cluster>?, String> kubeconfigToClusters(dynamic kubeconfig) {
         );
       }
 
-      // Get the user for the current context and check if the 'getUser' function returns an error.
+      /// Get the user for the current context and check if the [getUser] function returns an error.
       final user = getUser(
         context['context']['user'],
         kubeconfig['users'],
@@ -45,8 +44,8 @@ Tuple<List<Cluster>?, String> kubeconfigToClusters(dynamic kubeconfig) {
         );
       }
 
-      // The context must have a 'name', which we can use as cluster name. The cluster must have a 'server' property. If
-      // these two conditions are met we can add the current context to our list of clusters.
+      /// The context must have a [name], which we can use as cluster name. The cluster must have a [server] property.
+      /// If these two conditions are met we can add the current context to our list of clusters.
       if (context['name'] == null) {
         return Tuple<List<Cluster>?, String>(
           item1: null,
@@ -89,7 +88,7 @@ Tuple<List<Cluster>?, String> kubeconfigToClusters(dynamic kubeconfig) {
   );
 }
 
-// getCluster returns the cluster property from a kubeconfig file for the given cluster name.
+/// [getCluster] returns the cluster property from a kubeconfig file for the given [clusterName].
 Tuple<dynamic, String> getCluster(String clusterName, dynamic clusters) {
   if (clusters != null && clusters is List) {
     for (var cluster in clusters) {
@@ -108,7 +107,7 @@ Tuple<dynamic, String> getCluster(String clusterName, dynamic clusters) {
   );
 }
 
-// getUser returns the user property from a kubeconfig file for a given user name.
+/// [getUser] returns the user property from a kubeconfig file for a given [userName].
 Tuple<dynamic, String> getUser(String userName, dynamic users) {
   if (users != null && users is List) {
     for (var user in users) {

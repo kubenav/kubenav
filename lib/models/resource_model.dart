@@ -30,9 +30,9 @@ import 'package:kubenav/pages/resources_list/widgets/serviceaccount_list_item_wi
 import 'package:kubenav/pages/resources_list/widgets/statefulset_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/storageclass_list_item_widget.dart';
 
-// ResourceType is a enum, which can be used to categorize all the Kubernetes resources within a cluster. Besides the
-// categorization of resources, no functions of kubenav should depend on it. This means in the current state of kubenav
-// we are only using it in the resources page to create multiple lists of resources by the the 'ResourceType'.
+/// [ResourceType] is a `enum`, which can be used to categorize all the Kubernetes resources within a cluster. Besides
+/// the categorization of resources, no functions of kubenav should depend on it. This means in the current state of
+/// kubenav we are only using it in the resources page to create multiple lists of resources by the the [ResourceType].
 enum ResourceType {
   workload,
   discoveryandloadbalancing,
@@ -41,17 +41,18 @@ enum ResourceType {
   cluster,
 }
 
-// ResourceScope is a enum for the scope of the Kubernetes resource. A Kubernetes resource can be 'namespaced' (e.g.
-// Pods, Deployments, etc.) or 'cluster' (e.g. Custom Resource Definitions, Nodes, etc.).
-// To get the string representation of the scope the '.name' property can be used (e.g. 'resource.scope.name').
+/// [ResourceScope] is a `enum` for the scope of the Kubernetes resource. A Kubernetes resource can be `namespaced`
+/// (e.g. Pods, Deployments, etc.) or `cluster` (e.g. Custom Resource Definitions, Nodes, etc.).
+///
+/// To get the string representation of the scope the `.name` property can be used (e.g. `resource.scope.name`).
 enum ResourceScope {
   namespaced,
   cluster,
 }
 
-// resourceScopeFromString is a helper function to get the 'ResourceScope' from it's string representation. If the
-// provided scope string is 'namespaced' it will be 'ResourceScope.namespaced', if it is 'cluster' it will be
-// 'ResourceScope.cluster'. If the provided scope string doesn't match one of these values we return 'null'.
+/// [resourceScopeFromString] is a helper function to get the `ResourceScope` from it's string representation. If the
+/// provided scope string is `namespaced` it will be `ResourceScope.namespaced`, if it is `cluster` it will be
+/// `ResourceScope.cluster`. If the provided scope string doesn't match one of these values we return `null`.
 ResourceScope? resourceScopeFromString(String? scope) {
   if (scope == null) {
     return null;
@@ -68,14 +69,14 @@ ResourceScope? resourceScopeFromString(String? scope) {
   return null;
 }
 
-// Resource represents a single Kubernetes resource. Each resource must contain a 'ResourceType', a human readable
-// title, a description and the 'resource', 'path' and 'scope' so the corresponding Kubernetes manifests can be
-// retrieved from the Kubernetes API. A resource can also contain a 'buildListItem' and 'buildDetailsItem' function, to
-// customize the look of the items in the resources list and details page.
-//
-// NOTE: If a resource is passed through different pages via query parameters, like it is done in the resource page ->
-// resource list page -> resource details page flow, we shouldn't always pass the 'resource', 'path' and 'scope'
-// property, so that we can also work with resources which are not defined in the 'Resources' map.
+/// A [Resource] represents a single Kubernetes resource. Each resource must contain a [resourceType], a human readable
+/// [title], a [description] and the [resource], [path] and [scope] so the corresponding Kubernetes manifests can be
+/// retrieved from the Kubernetes API. A resource can also contain a [buildListItem] and [buildDetailsItem] function, to
+/// customize the look of the items in the resources list and details page.
+///
+/// NOTE: If a resource is passed through different pages via query parameters, like it is done in the resource page ->
+/// resource list page -> resource details page flow, we should always pass the [resource], [path] and [scope] property,
+/// so that we can also work with resources which are not defined in the [Resources] map.
 class Resource {
   ResourceType resourceType;
   String title;
@@ -104,9 +105,9 @@ class Resource {
   });
 }
 
-// Resources contains a 'map' of all first party Kubernetes resources, like Pods, Deployments, Nodes, etc. The map
-// should be used carefully. As mentioned in the 'Resource' note the app also have to work with unknown resources like
-// Custom Resources.
+/// [Resources] contains a [map] of all first party Kubernetes resources, like Pods, Deployments, Nodes, etc. The map
+/// should be used carefully. As mentioned in the [Resource] note the app also have to work with unknown resources like
+/// Custom Resources.
 abstract class Resources {
   static Map<String, Resource> map = {
     'cronjobs': Resource(

@@ -2,8 +2,8 @@ import 'package:kubenav/models/kubernetes/api.dart'
     show IoK8sApiCoreV1Pod, IoK8sApiCoreV1ContainerPort;
 import 'package:kubenav/pages/resources_list/widgets/list_item_widget.dart';
 
-// getRestarts returns the number of container restarts for a Pod. The number of restarts is the sum of all restarts
-// from the init conatainers and containers.
+/// [getRestarts] returns the number of container restarts for a [pod]. The number of restarts is the sum of all restarts
+/// from the init conatainers and containers.
 int getRestarts(IoK8sApiCoreV1Pod? pod) {
   final containerRestarts = pod?.status?.containerStatuses != null &&
           pod!.status!.containerStatuses.isNotEmpty
@@ -83,8 +83,8 @@ Status getStatus(IoK8sApiCoreV1Pod? pod) {
   return Status.danger;
 }
 
-// PodContainerPort represents a single port of a Pod. it contains the name of the container where the port is used and
-// the port specification.
+/// [PodContainerPort] represents a single port of a Pod. it contains the name of the container ([containerName]) where
+/// the port is used and the [port] specification.
 class PodContainerPort {
   String containerName;
   IoK8sApiCoreV1ContainerPort port;
@@ -95,8 +95,8 @@ class PodContainerPort {
   });
 }
 
-// getPorts returns a list of ports for all init containers, containers and ephemeral containers of a Pod. The returned
-// list if of the type PodContainerPort, so that we know to which container a port relates to.
+/// [getPorts] returns a list of ports for all init containers, containers and ephemeral containers of a [pod]. The
+/// returned list if of the type `PodContainerPort`, so that we know to which container a port relates to.
 List<PodContainerPort>? getPorts(IoK8sApiCoreV1Pod? pod) {
   if (pod == null || pod.spec == null) {
     return null;

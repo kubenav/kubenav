@@ -52,8 +52,8 @@ class AddClusterManualController extends GetxController {
     super.onClose();
   }
 
-  // validator is used to validate the required fields 'name' and 'server'. If they are missing the validation of
-  // the form will fail and the cluster will not be added to our list of clusters.
+  /// [validator] is used to validate the required fields [name] and [server]. If they are missing the validation of
+  /// the form will fail and the cluster will not be added to our list of clusters.
   String? validator(String? value) {
     if (value == null || value.isEmpty) {
       return 'This field is required';
@@ -62,15 +62,15 @@ class AddClusterManualController extends GetxController {
     return null;
   }
 
-  // toggleClusterInsecureSkipTLSVerify is used to toggle the value for the 'insecure-skip-tls-verify' value in the
-  // cluster configuration. This means if the value is 'true' it will be set to 'false' and vice versa.
+  /// [toggleClusterInsecureSkipTLSVerify] is used to toggle the value for the [clusterInsecureSkipTLSVerify] value in
+  /// the cluster configuration. This means if the value is `true` it will be set to `false` and vice versa.
   void toggleClusterInsecureSkipTLSVerify() =>
       clusterInsecureSkipTLSVerify.value =
           clusterInsecureSkipTLSVerify.value ? false : true;
 
-  // addCluster adds a new cluster to our global list of clusters. Before we add the cluster we validate all the form
-  // values which have an validator. We also modify the user input to remove a possible trailing '/' from the server
-  // value and to remove possible white spaces.
+  /// [addCluster] adds a new cluster to our global list of clusters. Before we add the cluster we validate all the form
+  /// values which have an validator. We also modify the user input to remove a possible trailing '/' from the server
+  /// value and to remove possible white spaces.
   void addCluster(BuildContext context) {
     if (addClusterManualFormKey.currentState != null &&
         addClusterManualFormKey.currentState!.validate()) {

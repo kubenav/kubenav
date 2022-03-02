@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 
-// AppBottomSheetWidget is a widget which can be used within a bottom sheet to show a bottom sheet with a height of 75%
-// of the display height, for more complex user inteactions. The widget required a title, subtitle and icon which are
-// used in the header. The 'onClosePressed' function is executed when the user clicks the close icon in the header of
-// the bottom sheet. The action properties are used within a button which is displayed in the footer of the bottom
-// sheet. The body of the bottom sheet is defined via the child property.
+/// [AppBottomSheetWidget] is a widget which can be used within a bottom sheet to show a bottom sheet with a height of
+/// 75% of the display height, for more complex user inteactions. The widget required a [title], [subtitle] and [icon]
+/// which are used in the header. The [onClosePressed] function is executed when the user clicks the close icon in the
+/// header of the bottom sheet. The action properties are used within a button which is displayed in the footer of the
+/// bottom sheet. The body of the bottom sheet is defined via the child property.
 class AppBottomSheetWidget extends StatelessWidget {
   const AppBottomSheetWidget({
     Key? key,
@@ -28,8 +28,8 @@ class AppBottomSheetWidget extends StatelessWidget {
   final void Function() onActionPressed;
   final Widget child;
 
-  // buildIcon creates the icon container for the bottom sheet header. The icon parameter for the widget could be of
-  // type 'String' or 'IconData' to also allow images from the assets folder as icons.
+  /// [buildIcon] creates the icon container for the bottom sheet header. The [icon] parameter for the widget could be
+  /// of type `String` or `IconData` to also allow images from the assets folder as icons.
   Widget buildIcon(dynamic icon) {
     if (icon is String) {
       return Container(
@@ -127,7 +127,7 @@ class AppBottomSheetWidget extends StatelessWidget {
                   IconButton(
                     icon: const Icon(
                       Icons.close_outlined,
-                    ), // Your desired icon
+                    ),
                     onPressed: onClosePressed,
                   ),
                 ],

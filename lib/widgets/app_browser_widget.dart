@@ -8,8 +8,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 
-// AppBrowserController is the controller for the AppBrowserWidget widget. It contains the WebViewController and the
-// value for the url input field. It is also responsible for loading the url provided by the user via the input field.
+/// [AppBrowserController] is the controller for the [AppBrowserWidget] widget. It contains the [WebViewController] and
+/// the value for the [url] input field. It is also responsible for loading the url provided by the user via the input
+/// field.
 class AppBrowserController extends GetxController {
   AppBrowserController({this.webViewController});
 
@@ -35,8 +36,9 @@ class AppBrowserController extends GetxController {
     webViewController = wvc;
   }
 
-  // changeUrl is called when a user triggers the submit action of the url input field in the AppBrowserWidget. When the
-  // webViewController was initialized we call the 'loadUrl' function to go to the new url provided by the user.
+  /// [changeUrl] is called when a user triggers the submit action of the [url] input field in the [AppBrowserWidget].
+  /// When the [webViewController] was initialized we call the `loadUrl` function to go to the new url provided by the
+  /// user.
   void changeUrl(String url) async {
     if (webViewController != null) {
       await webViewController!.loadUrl(url);
@@ -44,28 +46,30 @@ class AppBrowserController extends GetxController {
   }
 }
 
-// AppBrowserWidget is a simple in app browser widget. It should be displayed within a bottom sheet and can be created
-// as follows:
-//
-// Get.bottomSheet(
-//   BottomSheet(
-//     shape: RoundedRectangleBorder(
-//       borderRadius:
-//           BorderRadius.circular(Constants.sizeBorderRadius),
-//     ),
-//     onClosing: () {},
-//     enableDrag: false,
-//     builder: (builder) {
-//       return AppBrowserWidget(
-//         initialUrl: 'https://github.com/sponsors/ricoberger',
-//         onClosePressed: () {
-//           finish(context);
-//         },
-//       );
-//     },
-//   ),
-//   isScrollControlled: true,
-// );
+/// [AppBrowserWidget] is a simple in app browser widget. It should be displayed within a bottom sheet and can be
+/// created as follows:
+///
+/// ```
+/// Get.bottomSheet(
+///   BottomSheet(
+///     shape: RoundedRectangleBorder(
+///       borderRadius:
+///           BorderRadius.circular(Constants.sizeBorderRadius),
+///     ),
+///     onClosing: () {},
+///     enableDrag: false,
+///     builder: (builder) {
+///       return AppBrowserWidget(
+///         initialUrl: 'https://github.com/sponsors/ricoberger',
+///         onClosePressed: () {
+///           finish(context);
+///         },
+///       );
+///     },
+///   ),
+///   isScrollControlled: true,
+/// );
+/// ```
 class AppBrowserWidget extends StatelessWidget {
   AppBrowserWidget({
     Key? key,
@@ -140,7 +144,7 @@ class AppBrowserWidget extends StatelessWidget {
                           icon: const Icon(
                             Icons.close_outlined,
                             color: Colors.white,
-                          ), // Your desired icon
+                          ),
                           onPressed: onClosePressed,
                         ),
                       ],
@@ -171,9 +175,9 @@ class AppBrowserWidget extends StatelessWidget {
   }
 }
 
-// NavigationControls is a widget, which provides some basic navigation features for our in app browser in a bottom
-// navigation bar. This allows a user to go back or forward, to reload the current page or to open the page in the
-// systems default browser.
+/// [NavigationControls] is a widget, which provides some basic navigation features for our in app browser in a bottom
+/// navigation bar. This allows a user to go back or forward, to reload the current page or to open the page in the
+/// systems default browser.
 class NavigationControls extends StatelessWidget {
   const NavigationControls({
     Key? key,

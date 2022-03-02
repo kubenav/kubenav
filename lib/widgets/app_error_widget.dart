@@ -4,8 +4,8 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
 
-// AppErrorWidget is a widget which renders a full width card, to show an error which occured during an operation in the
-// app. A user must pass in a 'error' message and an optional 'title' which defaults to 'Error'.
+/// [AppErrorWidget] is a widget which renders a full width card, to show an error which occured during an operation in
+/// the app. A user must pass in a error [message] and the error [details]. A user can also provide an options [icon].
 class AppErrorWidget extends StatelessWidget {
   const AppErrorWidget({
     Key? key,
@@ -18,8 +18,8 @@ class AppErrorWidget extends StatelessWidget {
   final String details;
   final dynamic icon;
 
-  // buildIcon creates the icon for the error widget. The icon parameter for the widget could be of type 'String' or
-  //'IconData' to also allow images from the assets folder as icons. If the icon is null, we use a default one.
+  /// [buildIcon] creates the icon for the error widget. The [icon] parameter for the widget could be of type `String`
+  /// or `IconData` to also allow images from the assets folder as icons. If the icon is null, we use a default one.
   Widget buildIcon(dynamic icon) {
     if (icon is String) {
       return Image.asset(icon);

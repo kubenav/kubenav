@@ -30,9 +30,9 @@ class ClusterItemController extends GetxController {
     super.onClose();
   }
 
-  // getClusterStatus makes an request against the Kubernetes api of the given cluster. If the request returns a status
-  // code >= 200 and < 300 we set the 'statusOk' variable to 'true'. If the request fails with another status code, we set
-  // the 'statusOk' variable to 'false'.
+  /// [getClusterStatus] makes an request against the Kubernetes api of the given cluster. If the request returns a
+  /// status code >= 200 and < 300 we set the [statusOk] variable to `true`. If the request fails with another status
+  /// code, we set the [statusOk] variable to `false`.
   void getClusterStatus() async {
     try {
       final result = await KubernetesService(cluster: cluster).checkHealth();

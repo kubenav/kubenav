@@ -1,9 +1,9 @@
 import 'package:kubenav/models/kubernetes/api.dart'
     show IoK8sApimachineryPkgApisMetaV1LabelSelector;
 
-// Returns the age of a Kubernetes resources in a human readable format. This is mostly used to dertermine the age of
-// a resource via the 'metadata.creationTimestamp' field. If the given timestamp is null we return a dash as
-// placceholder for the age.
+/// [getAge] returns the age of a Kubernetes resources in a human readable format. This is mostly used to dertermine the
+/// age of a resource via the `metadata.creationTimestamp` field. If the given [timestamp] is `null` we return a dash as
+/// placceholder for the age.
 String getAge(DateTime? timestamp) {
   if (timestamp == null) {
     return '-';
@@ -34,11 +34,12 @@ String timeDiff(DateTime? start, DateTime? end) {
   return '${age.inSeconds}s';
 }
 
-// getSelector returns a selector string which can be used in a Kubernetes API request to the the all resources, which
-// are matching the given selector. For example this can be used to get all Pods for a Deployment by using the
-// 'deployment.spec.selector' field.
-// TODO: Currently we only have implemented this function for the 'matchLabels' field in the selector. in the future we
-// should also implement it for 'matchExpressions'.
+/// [getSelector] returns a selector string which can be used in a Kubernetes API request to the the all resources,
+/// which are matching the given selector. For example this can be used to get all Pods for a Deployment by using the
+/// `deployment.spec.selector` field.
+///
+/// TODO: Currently we only have implemented this function for the `matchLabels` field in the selector. in the future we
+/// should also implement it for `matchExpressions`.
 String getSelector(IoK8sApimachineryPkgApisMetaV1LabelSelector? selector) {
   if (selector == null) {
     return '';

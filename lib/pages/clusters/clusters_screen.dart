@@ -13,7 +13,7 @@ import 'package:kubenav/utils/helpers.dart';
 class Clusters extends GetView<ClustersController> {
   const Clusters({Key? key}) : super(key: key);
 
-  // _proxyDecorator is used to highlight the cluster which is currently draged by the user.
+  /// [_proxyDecorator] is used to highlight the cluster which is currently draged by the user.
   Widget _proxyDecorator(Widget child, int index, Animation<double> animation) {
     return AnimatedBuilder(
       animation: animation,

@@ -33,10 +33,10 @@ class ResourcesDetailsController extends GetxController {
   RxString error = ''.obs;
   RxBool loading = false.obs;
 
+  /// When [onInit] is called, we get the resource for the specified resource [name] and [namespace] of the resource.
+  /// The [namespace] parameter is optional and only required for namespaced resources.
   @override
   void onInit() {
-    // Get the resource for the specified resource name and the name and namespace of the resource. The namespace
-    // parameter is optional and only required for namespaced resources.
     getResource();
 
     super.onInit();

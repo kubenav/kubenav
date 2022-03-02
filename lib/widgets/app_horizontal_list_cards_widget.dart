@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 
-// AppHorizontalListCardsModel is the model, which is used to create a card in the horizontal list.
+/// [AppHorizontalListCardsModel] is the model, which is used to create a card in the horizontal list.
 class AppHorizontalListCardsModel {
   String title;
   String subtitle;
@@ -20,25 +20,27 @@ class AppHorizontalListCardsModel {
   });
 }
 
-// AppHorizontalListCardsWidget is a horizontal list widget, where the items in the list are rendered as cards with a
-// title, subtitle, image and onTap function. To create the list the user must also provide an title for the list and
-// some optional 'more' arguments. When the 'more' prefixed arguments are provided the 'moreText' and 'moreIcon' will be
-// displayed next to the title. The widget can be used as follows:
-//
-// AppHorizontalListCardsWidget(
-//   title: 'Add Cluster',
-//   cards: List.generate(
-//     controller.providers.length,
-//     (index) => AppHorizontalListCardsModel(
-//       title: controller.providers[index].title,
-//       subtitle: controller.providers[index].subtitle,
-//       image: controller.providers[index].image,
-//       onTap: () {
-//         controller.showAddClusterBottomSheet(index);
-//       },
-//     ),
-//   ),
-// ),
+/// [AppHorizontalListCardsWidget] is a horizontal list widget, where the items in the list are rendered as [cards] with
+/// a title, subtitle, image and onTap function. To create the list the user must also provide an [title] for the list
+/// and some optional more arguments. When the more prefixed arguments are provided the [moreText] and [moreIcon] will
+/// be displayed next to the title. The widget can be used as follows:
+///
+/// ```
+/// AppHorizontalListCardsWidget(
+///   title: 'Add Cluster',
+///   cards: List.generate(
+///     controller.providers.length,
+///     (index) => AppHorizontalListCardsModel(
+///       title: controller.providers[index].title,
+///       subtitle: controller.providers[index].subtitle,
+///       image: controller.providers[index].image,
+///       onTap: () {
+///         controller.showAddClusterBottomSheet(index);
+///       },
+///     ),
+///   ),
+/// ),
+///  ```
 class AppHorizontalListCardsWidget extends StatelessWidget {
   const AppHorizontalListCardsWidget({
     Key? key,
@@ -55,8 +57,8 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
   final IconData? moreIcon;
   final void Function()? moreOnTap;
 
-  // buildMore creates the more widget  with the provided text, icon and onTap function. If the user doesn't provided
-  // these arguments, the function returns an empty container widget.
+  /// [buildMore] creates the more widget  with the provided text, icon and onTap function. If the user doesn't provided
+  /// these arguments, the function returns an empty container widget.
   Widget buildMore(
       String? moreText, IconData? moreIcon, void Function()? moreOnTap) {
     if (moreText != null && moreIcon != null) {

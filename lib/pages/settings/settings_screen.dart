@@ -15,8 +15,9 @@ import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
 class Settings extends GetView<SettingsController> {
   const Settings({Key? key}) : super(key: key);
 
-  // Apple doesn't like it, when you are not using their In-App Purchase API.
-  // See https://github.com/kubenav/kubenav/commit/6b4932a313a55366fa5b4674800a3cf40df23647
+  /// [buildSponsors] is used to decided if we can show the sponsors section or not. This is required because Apple
+  /// doesn't like it, when you are not using their In-App Purchase API.
+  /// See https://github.com/kubenav/kubenav/commit/6b4932a313a55366fa5b4674800a3cf40df23647
   Widget buildSponsors() {
     if (!Platform.isIOS) {
       return const SponsorWidget();

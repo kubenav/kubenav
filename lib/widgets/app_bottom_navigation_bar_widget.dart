@@ -5,16 +5,16 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/routes/app_routes.dart';
 
-// AppBottomNavigationBarWidget is the global bottom navigation bar for our app. It provides easy access to the most
-// important pages of the app.
+/// [AppBottomNavigationBarWidget] is the global bottom navigation bar for our app. It provides easy access to the most
+/// important pages of the app.
 class AppBottomNavigationBarWidget extends StatelessWidget {
   const AppBottomNavigationBarWidget({Key? key}) : super(key: key);
 
-  // getCurrentIndex is used to get the index of the current route. The function is used to highlight the selected page
-  // in the bottom navigation bar. To work with nested pages the must be start with the same prefix as the main page,
-  // which is accessed via the bottom navigation bar (e.g. to highlight the settings page with the route '/settings/',
-  // the clusters page which is accessed via the settings must also contain the '/settings/' prefix,
-  // '/settings/clusters').
+  /// [getCurrentIndex] is used to get the index of the current route. The function is used to highlight the selected
+  /// page in the bottom navigation bar. To work with nested pages the must be start with the same prefix as the main
+  /// page, which is accessed via the bottom navigation bar (e.g. to highlight the settings page with the route
+  /// `/settings/`, the clusters page which is accessed via the settings must also contain the `/settings/` prefix,
+  /// `/settings/clusters`).
   getCurrentIndex(String currentRoute) {
     if (currentRoute.startsWith(Routes.home)) {
       return 0;

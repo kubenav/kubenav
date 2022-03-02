@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 
+/// [Logger] is our custom log implementation, which allows us to log messages to the console and to access the logs via
+/// the app. So that a user can share the logs when he encountered a problem within the app.
 class Logger extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

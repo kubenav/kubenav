@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 
-// AppActionsHeaderModel is the class to define an action for the AppActionsHeaderWidget widget. Each action must have a
-// title, a icon and a onTap function which is executed when a user clicks on the action.
+/// [AppActionsHeaderModel] is the class to define an action for the [AppActionsHeaderWidget] widget. Each action must
+/// have a [title], a [icon] and a [onTap] function which is executed when a user clicks on the action.
 class AppActionsHeaderModel {
   String title;
   IconData icon;
@@ -17,8 +17,8 @@ class AppActionsHeaderModel {
   });
 }
 
-// AppActionsHeaderWidget is a header widget for a page, which can be used to show actions with a title and icon. The
-// actions are defined via the AppActionsHeaderModel.
+/// [AppActionsHeaderWidget] is a header widget for a page, which can be used to show [actions] with a title and icon.
+/// The actions are defined via the [AppActionsHeaderModel].
 class AppActionsHeaderWidget extends StatelessWidget {
   const AppActionsHeaderWidget({
     Key? key,

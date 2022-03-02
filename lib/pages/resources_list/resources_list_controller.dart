@@ -33,14 +33,14 @@ class ResourcesListController extends GetxController {
   RxBool loading = false.obs;
   Worker? worker;
 
+  /// When [onInit] is called we get a list of resource items.
   @override
   void onInit() {
-    // Get a list of resource items, when the controller is initialized.
     getResources();
 
-    // Whenever the active cluster changes, e.g. the user selects a new namespace, we reload the list of resource items.
-    // To not get the resources when the user changed the resource, we have to call 'worker.dispose()' in the 'onClose'
-    // method of the controller.
+    /// Whenever the active cluster changes, e.g. the user selects a new namespace, we reload the list of resource
+    /// items. To not get the resources when the user changed the resource, we have to call `worker.dispose()` in the
+    /// [onClose] method of the controller.
     if (namespace == null &&
         clusterController.clusters.isNotEmpty &&
         clusterController.activeClusterIndex.value != -1) {
@@ -68,9 +68,9 @@ class ResourcesListController extends GetxController {
     super.onClose();
   }
 
-  // getResources returns all items for the requested 'resource', 'path' and 'scope'. If the optional 'namespace' and
-  // 'selector' properties are defined, the will also be used to get the resource. If not we will use the namespace from
-  // the active cluster when the resource hasn't a namespaced scope.
+  /// [getResources] returns all items for the requested [resource], [path] and [scope]. If the optional [namespace] and
+  /// [selector] properties are defined, the will also be used to get the resource. If not we will use the namespace
+  /// from the active cluster when the resource hasn't a namespaced scope.
   void getResources() async {
     if (title == null || resource == null || path == null || scope == null) {
       Logger.log(
@@ -124,9 +124,9 @@ class ResourcesListController extends GetxController {
     }
   }
 
-  // showNamespaces shows a bottom sheet to select the namespace for the active cluster. This allows a user to quickly
-  // change the namespace within the resource list page, so that he haven't to go to the settings page to edit the
-  // current cluster configuration.
+  /// [showNamespaces] shows a bottom sheet to select the namespace for the active cluster. This allows a user to
+  /// quickly change the namespace within the resource list page, so that he haven't to go to the settings page to edit
+  /// the current cluster configuration.
   void showNamespaces() {
     Get.bottomSheet(
       BottomSheet(

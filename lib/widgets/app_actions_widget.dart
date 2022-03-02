@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/utils/constants.dart';
 
-// Action defines the structure of a single action for the AppActionsWidget. Each action must have a title, an optional
-// color (the default one will be the primary color of the app) and a onTap function which is called, when the user
-// clicks on the action.
+/// [Action] defines the structure of a single action for the [AppActionsWidget]. Each action must have a [title], an
+/// optional [color] (the default one will be the primary color of the app) and an [onTap] function which is called,
+/// when the user clicks on the action.
 class AppActionsWidgetAction {
   String title;
   Color color;
@@ -17,23 +17,25 @@ class AppActionsWidgetAction {
   });
 }
 
-// AppActionsWidget is a widget which can be used within a bottom sheet to show some additional actions for a component,
-// when a user clicks on the component. The actions are defined as a list of our Action model. The widget can be used
-// as follows:
-//
-// AppActionsWidget(
-//   actions: [
-//     AppActionsWidgetAction(
-//       title: 'Edit',
-//       onTap: () {},
-//     ),
-//     AppActionsWidgetAction(
-//       title: 'Delete',
-//       color: Constants.colorDanger,
-//       onTap: () {},
-//     ),
-//   ],
-// )
+/// [AppActionsWidget] is a widget which can be used within a bottom sheet to show some additional [actions] for a
+/// component, when a user clicks on the component. The actions are defined as a list of our [AppActionsWidgetAction]
+/// model. The widget can be used as follows:
+///
+/// ```
+/// AppActionsWidget(
+///   actions: [
+///     AppActionsWidgetAction(
+///       title: 'Edit',
+///       onTap: () {},
+///     ),
+///     AppActionsWidgetAction(
+///       title: 'Delete',
+///       color: Constants.colorDanger,
+///       onTap: () {},
+///     ),
+///   ],
+/// )
+/// ```
 class AppActionsWidget extends StatelessWidget {
   const AppActionsWidget({
     Key? key,

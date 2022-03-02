@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/utils/constants.dart';
 
-// finish can be used to go back to previous screen. For example this can be used to close a modal bottom sheet
-// programmatically.
+/// [finish] can be used to go back to previous screen. For example this can be used to close a modal bottom sheet
+/// programmatically.
 void finish(BuildContext context, [Object? result]) {
   if (Navigator.canPop(context)) {
     Navigator.pop(context, result);
   }
 }
 
-// noramlTextStyle applies our default styles for normal text.
+/// [noramlTextStyle] applies our default styles for normal text.
 TextStyle noramlTextStyle({
   int? size,
   Color? color,
@@ -22,7 +22,7 @@ TextStyle noramlTextStyle({
   );
 }
 
-// primaryTextStyle applies our default styles for primary text.
+/// [primaryTextStyle] applies our default styles for primary text.
 TextStyle primaryTextStyle({
   int? size,
   Color? color,
@@ -34,7 +34,7 @@ TextStyle primaryTextStyle({
   );
 }
 
-// secondaryTextStyle applies our default styles for secondary text.
+/// [secondaryTextStyle] applies our default styles for secondary text.
 TextStyle secondaryTextStyle({
   int? size,
   Color? color,
@@ -46,8 +46,8 @@ TextStyle secondaryTextStyle({
   );
 }
 
-// snackbar creates a new snackbar with the given title and message. This wraps the 'Get.snackbar' function to apply our
-// custom styling, so that we have the same appearance for the snackbar accross all components in our app.
+/// [snackbar] creates a new snackbar with the given title and message. This wraps the `Get.snackbar` function to apply
+/// our custom styling, so that we have the same appearance for the snackbar accross all components in our app.
 void snackbar(
   String title,
   String message, {

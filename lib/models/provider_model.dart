@@ -1,6 +1,6 @@
-// Provider represents all our Kubernetes cluster providers. The providers are implementing different ways to add a
-// Kubernetes cluster to kubenav. For example a user can add clusters via it's Kubeconfig file or by logging in to his
-// cloud provider and directly adding the clusters via their api.
+/// A [Provider] represents all our Kubernetes cluster providers. The providers are implementing different ways to add a
+/// Kubernetes cluster to kubenav. For example a user can add clusters via it's Kubeconfig file or by logging in to his
+/// cloud provider and directly adding the clusters via their api.
 class Provider {
   String name;
   String title;
@@ -17,8 +17,8 @@ class Provider {
   });
 }
 
-// Providers implements a list of providers via our provider model. It contains all providers which can be used to add
-// and interact with a Kubernetes cluster.
+/// [Providers] implements a [list] of providers via our [Provider] model. It contains all providers which can be used
+/// to add and interact with a Kubernetes cluster.
 abstract class Providers {
   static List<Provider> list = [
     Provider(

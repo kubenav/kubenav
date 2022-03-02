@@ -14,8 +14,8 @@ import 'package:kubenav/utils/constants.dart';
 class ResourcesDetails extends GetView {
   const ResourcesDetails({Key? key}) : super(key: key);
 
-  // buildDetailsItem is responsible for showing the correct details item for the selected resource. If we do not have a
-  // dedicated item for a resource (e.g. Custom Resources) we are showing the events for the resource.
+  /// [buildDetailsItem] is responsible for showing the correct details item for the selected resource. If we do not
+  /// have a dedicated item for a resource (e.g. Custom Resources) we are showing the events for the resource.
   Widget buildDetailsItem(
     String? title,
     String? resource,
