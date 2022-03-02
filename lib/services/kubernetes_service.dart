@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:kubenav/models/cluster_model.dart';
+import 'package:kubenav/utils/logger.dart';
 
 // KubernetesService implements a service to interactiv with the Kubernetes functions from our Go code. The
 // implementation details of each Go function can be found in the 'cmd/kubenav/helpers.go' file.
@@ -41,10 +41,18 @@ class KubernetesService {
         },
       );
 
-      debugPrint('checkHealth result: $result');
+      Logger.log(
+        'KubernetesService checkHealth',
+        'Health check was ok',
+        result,
+      );
       return true;
     } catch (err) {
-      debugPrint('checkHealth error: $err');
+      Logger.log(
+        'KubernetesService checkHealth',
+        'Health check failed',
+        err,
+      );
       return Future.error(err);
     }
   }
@@ -72,11 +80,19 @@ class KubernetesService {
         },
       );
 
-      debugPrint('getRequest result: $result');
+      Logger.log(
+        'KubernetesService getRequest',
+        'Get request was ok',
+        result,
+      );
       Map<String, dynamic> jsonData = json.decode(result);
       return jsonData;
     } catch (err) {
-      debugPrint('getRequest error: $err');
+      Logger.log(
+        'KubernetesService getRequest',
+        'Get request failed',
+        err,
+      );
       return Future.error(err);
     }
   }
@@ -104,10 +120,18 @@ class KubernetesService {
         },
       );
 
-      debugPrint('deleteRequest result: $result');
+      Logger.log(
+        'KubernetesService deleteRequest',
+        'Delete request was ok',
+        result,
+      );
       return;
     } catch (err) {
-      debugPrint('deleteRequest error: $err');
+      Logger.log(
+        'KubernetesService deleteRequest',
+        'Delete request failed',
+        err,
+      );
       return Future.error(err);
     }
   }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:kubenav/pages/settings/settings_controller.dart';
+import 'package:kubenav/pages/settings/widgets/help_widget.dart';
 import 'package:kubenav/pages/settings/widgets/info_widget.dart';
 import 'package:kubenav/pages/settings/widgets/sponsor_widget.dart';
 import 'package:kubenav/utils/custom_icons.dart';
@@ -143,7 +144,6 @@ class Settings extends GetView<SettingsController> {
                   ),
                   child: InkWell(
                     onTap: () {
-                      debugPrint('Set active cluster index to $index');
                       controller.clusterController.setActiveCluster(index);
                     },
                     child: Row(
@@ -242,8 +242,10 @@ class Settings extends GetView<SettingsController> {
                 ],
               ),
             ),
+            const HelpWidget(),
             const InfoWidget(),
             buildSponsors(),
+            const SizedBox(height: Constants.spacingMiddle),
           ],
         ),
       ),

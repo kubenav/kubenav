@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/cluster_model.dart';
 import 'package:kubenav/models/tuple_model.dart';
+import 'package:kubenav/utils/logger.dart';
 
 // kubeconfigToClusters converts a kubeconfig file to a list of clusters. For this we are going through each context in
 // the kubeconfig and getting the corresponding cluster and user. Then these values are used to create a cluster object.
@@ -17,8 +18,10 @@ Tuple<List<Cluster>?, String> kubeconfigToClusters(dynamic kubeconfig) {
         context['context']['cluster'],
         kubeconfig['clusters'],
       );
-      debugPrint(
-          "kubeconfigToClusters: cluster property is ${cluster.item1.toString()}");
+      Logger.log(
+        'kubeconfigToClusters',
+        'Cluster property is ${cluster.item1.toString()}',
+      );
       if (cluster.item2 != '') {
         return Tuple<List<Cluster>?, String>(
           item1: null,
@@ -31,8 +34,10 @@ Tuple<List<Cluster>?, String> kubeconfigToClusters(dynamic kubeconfig) {
         context['context']['user'],
         kubeconfig['users'],
       );
-      debugPrint(
-          "kubeconfigToClusters: user property is ${user.item1.toString()}");
+      Logger.log(
+        'kubeconfigToClusters',
+        'User property is ${user.item1.toString()}',
+      );
       if (user.item2 != '') {
         return Tuple<List<Cluster>?, String>(
           item1: null,

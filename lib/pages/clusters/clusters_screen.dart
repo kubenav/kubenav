@@ -50,8 +50,6 @@ class Clusters extends GetView<ClustersController> {
                   subtitle: controller.providers[index].subtitle,
                   image: controller.providers[index].image250x140,
                   onTap: () {
-                    debugPrint(
-                        'Add cluster list item with index $index was pressed');
                     controller.showAddClusterBottomSheet(index);
                   },
                 ),
@@ -82,7 +80,6 @@ class Clusters extends GetView<ClustersController> {
                     left: Constants.spacingMiddle,
                   ),
                   onReorder: (int start, int current) {
-                    debugPrint('Reorder start $start current $current');
                     controller.clusterController.reorder(start, current);
                   },
                   proxyDecorator: _proxyDecorator,
@@ -113,14 +110,10 @@ class Clusters extends GetView<ClustersController> {
                                 .value
                                 .provider),
                             onTap: () {
-                              debugPrint(
-                                  'Change active cluster index to $index');
                               controller.clusterController
                                   .setActiveCluster(index);
                             },
                             onDoubleTap: () {
-                              debugPrint(
-                                  'Show actions for cluster with index $index');
                               controller.showClusterActionsBottomSheet(index);
                             },
                           );

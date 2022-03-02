@@ -8,6 +8,7 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/models/kubernetes/api.dart'
     show
         IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinitionList;
+import 'package:kubenav/utils/logger.dart';
 
 class ResourcesListCRDsController extends GetxController {
   ClusterController clusterController = Get.find();
@@ -53,8 +54,11 @@ class ResourcesListCRDsController extends GetxController {
             IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinitionList
                 .fromJson(data);
         if (crds != null) {
-          debugPrint(
-              'getResourcesCRDs success: ${crds.items.length} CRDs were returned');
+          Logger.log(
+            'ResourcesListCRDsController getResources',
+            '${crds.items.length} items were returned',
+            'Request URL: $url\nManifest: ${crds.toString()}',
+          );
 
           final List<Resource> resources = [];
           for (final crd in crds.items) {
@@ -77,12 +81,20 @@ class ResourcesListCRDsController extends GetxController {
 
         loading.value = false;
       } on PlatformException catch (err) {
-        debugPrint('getResourcesCRDs error: $err');
+        Logger.log(
+          'ResourcesListCRDsController getResources',
+          'An error was returned while getting resources',
+          'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+        );
         error.value =
             'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}';
         loading.value = false;
       } catch (err) {
-        debugPrint('getResourcesCRDs error: $err');
+        Logger.log(
+          'ResourcesListCRDsController getResources',
+          'An error was returned while getting resources',
+          err,
+        );
         error.value = err.toString();
         loading.value = false;
       }

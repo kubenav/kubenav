@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:kubenav/utils/logger.dart';
+
 // HelpersService implements a service to interactiv with the helper functions from our Go code. The implementation
 // details of each Go function can be found in the 'cmd/kubenav/helpers.go' file.
 class HelpersService {
@@ -24,10 +26,18 @@ class HelpersService {
         },
       );
 
-      debugPrint('prettifyYAML result: $result');
+      Logger.log(
+        'HelpersService prettifyYAML',
+        'Yaml was prettifyed',
+        result,
+      );
       return result;
     } catch (err) {
-      debugPrint('prettifyYAML error: $err');
+      Logger.log(
+        'HelpersService prettifyYAML',
+        'Could not prettify',
+        err,
+      );
       return Future.error(err);
     }
   }

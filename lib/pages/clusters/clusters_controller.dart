@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/provider_model.dart';
@@ -8,6 +9,7 @@ import 'package:kubenav/pages/clusters/widgets/add_cluster_manual_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/cluster_actions_widget.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/logger.dart';
 
 class ClustersController extends GetxController {
   ClusterController clusterController = Get.find();
@@ -81,8 +83,19 @@ class ClustersController extends GetxController {
       await KubernetesService(cluster: clusterController.clusters[index].value)
           .getRequest('/');
       return true;
+    } on PlatformException catch (err) {
+      Logger.log(
+        'ClustersController getClusterStatus',
+        'Could not get cluster status',
+        'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+      );
+      return false;
     } catch (err) {
-      debugPrint('Error during getClusterStatus call: $err');
+      Logger.log(
+        'ClustersController getClusterStatus',
+        'Could not get cluster status',
+        err,
+      );
       return false;
     }
   }

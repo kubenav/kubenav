@@ -44,7 +44,6 @@ class ClusterActionsWidget extends StatelessWidget {
         AppActionsWidgetAction(
           title: 'Edit',
           onTap: () {
-            debugPrint('Edit cluster with index $clusterIndex');
             finish(context);
           },
         ),
@@ -54,8 +53,6 @@ class ClusterActionsWidget extends StatelessWidget {
           onTap: () {
             final clusterName =
                 controller.clusterController.getActiveClusterName();
-            debugPrint(
-                'Delete cluster with index $clusterIndex ($clusterName)');
             controller.clusterController.deleteCluster(clusterIndex);
             snackbar(
               'Cluster deleted',

@@ -38,12 +38,10 @@ class LicenseWidget extends StatelessWidget {
       subtitle: 'MIT License',
       icon: CustomIcons.license,
       onClosePressed: () {
-        debugPrint('Close license buttom sheet');
         finish(context);
       },
       actionText: 'Close',
       onActionPressed: () {
-        debugPrint('Close license buttom sheet');
         finish(context);
       },
       child: Form(

@@ -7,6 +7,7 @@ import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/app_error_widget.dart';
 import 'package:kubenav/widgets/app_horizontal_list_cards_widget.dart';
 
@@ -59,17 +60,28 @@ class DetailsResourcesPreviewController extends GetxController {
         final resourcesList =
             await KubernetesService(cluster: cluster).getRequest(url);
 
-        debugPrint(
-            'getResources success: ${resourcesList['items'].length} $resource were returned');
+        Logger.log(
+          'DetailsResourcesPreviewController getResources',
+          '${resourcesList['items'].length} items were returned',
+          'Request URL: $url\nManifest: $resourcesList',
+        );
         items.value = resourcesList['items'];
         loading.value = false;
       } on PlatformException catch (err) {
-        debugPrint('getResources error: $err');
+        Logger.log(
+          'DetailsResourcesPreviewController getResources',
+          'An error was returned while getting resources',
+          'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+        );
         error.value =
             'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}';
         loading.value = false;
       } catch (err) {
-        debugPrint('getResources error: $err');
+        Logger.log(
+          'DetailsResourcesPreviewController getResources',
+          'An error was returned while getting resources',
+          err,
+        );
         error.value = err.toString();
         loading.value = false;
       }

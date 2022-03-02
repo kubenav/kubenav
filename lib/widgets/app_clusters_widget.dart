@@ -56,7 +56,6 @@ class AppClustersWidget extends StatelessWidget {
       subtitle: 'Select the active cluster',
       icon: CustomIcons.clusters,
       onClosePressed: () {
-        debugPrint('Close app clusters widget buttom sheet');
         finish(context);
       },
       actionText: 'Close',

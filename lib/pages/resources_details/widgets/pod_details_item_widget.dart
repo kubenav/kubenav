@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiCoreV1Pod;
-import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/resources/pods.dart';
-import 'package:kubenav/utils/resources/general.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/logger.dart';
 
 class PodDetailsItemController extends GetxController {
   ClusterController clusterController = Get.find();
@@ -38,7 +37,11 @@ class PodDetailsItemController extends GetxController {
 
       // await KubernetesService(cluster: cluster).portForward(url);
     } catch (err) {
-      debugPrint('portForward error: $err');
+      Logger.log(
+        'PodDetailsItemController portForward',
+        'Could not establish port forwarding',
+        err,
+      );
     }
   }
 }

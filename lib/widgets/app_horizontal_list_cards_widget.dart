@@ -34,8 +34,6 @@ class AppHorizontalListCardsModel {
 //       subtitle: controller.providers[index].subtitle,
 //       image: controller.providers[index].image,
 //       onTap: () {
-//         debugPrint(
-//             'Add cluster list item with index $index was pressed');
 //         controller.showAddClusterBottomSheet(index);
 //       },
 //     ),

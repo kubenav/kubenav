@@ -122,7 +122,6 @@ class AddClusterManualWidget extends StatelessWidget {
       subtitle: provider.subtitle,
       icon: provider.image54x54,
       onClosePressed: () {
-        debugPrint('Close manual widget buttom sheet');
         finish(context);
       },
       actionText: 'Add Cluster',

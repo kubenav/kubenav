@@ -9,6 +9,7 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 import 'package:kubenav/widgets/app_error_widget.dart';
 
@@ -49,18 +50,28 @@ class AppNamespacesController extends GetxController {
           .getRequest('/api/v1/namespaces');
       final namespaceList = IoK8sApiCoreV1NamespaceList.fromJson(data);
 
-      debugPrint(
-          'getNamespaces success: ${namespaceList!.items.length} namespaces were returned');
-
+      Logger.log(
+        'AppNamespacesController getNamespaces',
+        '${namespaceList!.items.length} namespaces were returned',
+        namespaceList,
+      );
       namespaces.value = namespaceList.items;
       loading.value = false;
     } on PlatformException catch (err) {
-      debugPrint('getNamespaces error: $err');
+      Logger.log(
+        'AppNamespacesController getNamespaces',
+        'Could not get namespaces',
+        'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+      );
       error.value =
           'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}';
       loading.value = false;
     } catch (err) {
-      debugPrint('getNamespaces error: $err');
+      Logger.log(
+        'AppNamespacesController getNamespaces',
+        'Could not get namespaces',
+        err,
+      );
       error.value = err.toString();
       loading.value = false;
     }
@@ -97,7 +108,6 @@ class AppNamespacesWidget extends StatelessWidget {
       subtitle: 'Select the active namespace',
       icon: CustomIcons.namespaces,
       onClosePressed: () {
-        debugPrint('Close app namespaces widget buttom sheet');
         finish(context);
       },
       actionText: 'Close',

@@ -6,6 +6,7 @@ import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/app_namespaces_widget.dart';
 
 class ResourcesListController extends GetxController {
@@ -67,10 +68,16 @@ class ResourcesListController extends GetxController {
     super.onClose();
   }
 
+  // getResources returns all items for the requested 'resource', 'path' and 'scope'. If the optional 'namespace' and
+  // 'selector' properties are defined, the will also be used to get the resource. If not we will use the namespace from
+  // the active cluster when the resource hasn't a namespaced scope.
   void getResources() async {
     if (title == null || resource == null || path == null || scope == null) {
-      debugPrint(
-          'title: $title, resource: $resource, path: $path, scope: $scope');
+      Logger.log(
+        'ResourcesListController getResources',
+        'The requested resource was not found',
+        'title: $title, resource: $resource, path: $path, scope: $scope',
+      );
       error.value = 'The requested resource was not found';
     } else {
       loading.value = true;
@@ -88,17 +95,28 @@ class ResourcesListController extends GetxController {
           final resourcesList =
               await KubernetesService(cluster: cluster).getRequest(url);
 
-          debugPrint(
-              'getResources success: ${resourcesList['items'].length} $resource were returned');
+          Logger.log(
+            'ResourcesListController getResources',
+            '${resourcesList['items'].length} items were returned',
+            'Request URL: $url\nManifest: $resourcesList',
+          );
           items.value = resourcesList['items'];
           loading.value = false;
         } on PlatformException catch (err) {
-          debugPrint('getResources error: $err');
+          Logger.log(
+            'ResourcesListController getResources',
+            'An error was returned while getting resources',
+            'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+          );
           error.value =
               'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}';
           loading.value = false;
         } catch (err) {
-          debugPrint('getResources error: $err');
+          Logger.log(
+            'ResourcesListController getResources',
+            'An error was returned while getting resources',
+            err,
+          );
           error.value = err.toString();
           loading.value = false;
         }

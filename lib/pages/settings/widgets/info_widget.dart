@@ -8,6 +8,7 @@ import 'package:kubenav/widgets/app_browser_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/logger.dart';
 
 class InfoController extends GetxController {
   RxString version = '-'.obs;
@@ -33,7 +34,11 @@ class InfoController extends GetxController {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       version.value = packageInfo.version;
     } catch (err) {
-      debugPrint('getVersion: $err');
+      Logger.log(
+        'InfoController getVersion',
+        'Could not get package info',
+        err,
+      );
     }
   }
 }

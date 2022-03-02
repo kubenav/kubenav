@@ -6,6 +6,7 @@ import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 
 class DetailsDeleteResourceController extends GetxController {
@@ -62,13 +63,21 @@ class DetailsDeleteResourceController extends GetxController {
               ? 'The resource $name is deleted'
               : 'The resource $name in namespace $namespace is deleted');
     } on PlatformException catch (err) {
-      debugPrint('deleteResource error: $err');
+      Logger.log(
+        'DetailsDeleteResourceController deleteResource',
+        'An error was returned while deleting the resource',
+        'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+      );
       snackbar(
         'Could not delete resource',
         'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
       );
     } catch (err) {
-      debugPrint('deleteResource error: $err');
+      Logger.log(
+        'DetailsDeleteResourceController deleteResource',
+        'An error was returned while deleting the resource',
+        err,
+      );
       snackbar('Could not delete resource', err.toString());
     }
 
@@ -106,12 +115,10 @@ class DetailsDeleteResourceWidget extends StatelessWidget {
       subtitle: name,
       icon: Icons.delete,
       onClosePressed: () {
-        debugPrint('Close show yaml widget buttom sheet');
         finish(context);
       },
       actionText: 'Delete',
       onActionPressed: () {
-        debugPrint('Delete resource');
         controller.deleteResource(context);
       },
       child: Form(

@@ -8,7 +8,7 @@ import 'package:highlight/languages/yaml.dart';
 
 import 'package:kubenav/services/helpers_service.dart';
 import 'package:kubenav/utils/helpers.dart';
-// import 'package:kubenav/utils/yaml_writer.dart';
+import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 
 class DetailsShowYamlController extends GetxController {
@@ -44,7 +44,11 @@ class DetailsShowYamlController extends GetxController {
       final data = await HelpersService().prettifyYAML(item);
       codeController?.text = data;
     } catch (err) {
-      debugPrint('prettifyYAML error: $err');
+      Logger.log(
+        'DetailsShowYamlController prettifyYAML',
+        'An error was returned while prettyfing yaml',
+        err,
+      );
     }
   }
 }
@@ -68,12 +72,10 @@ class DetailsShowYamlWidget extends StatelessWidget {
       subtitle: item['metadata']['name'] ?? '',
       icon: Icons.description,
       onClosePressed: () {
-        debugPrint('Close show yaml widget buttom sheet');
         finish(context);
       },
       actionText: 'Close',
       onActionPressed: () {
-        debugPrint('Close show yaml widget buttom sheet');
         finish(context);
       },
       child: Form(

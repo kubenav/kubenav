@@ -6,6 +6,7 @@ import 'package:kubenav/models/provider_model.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/logger.dart';
 
 class ClusterItemController extends GetxController {
   Cluster cluster;
@@ -34,11 +35,19 @@ class ClusterItemController extends GetxController {
   // the 'statusOk' variable to 'false'.
   void getClusterStatus() async {
     try {
-      await KubernetesService(cluster: cluster).checkHealth();
-      debugPrint('getClusterStatus success');
-      statusOk.value = true;
+      final result = await KubernetesService(cluster: cluster).checkHealth();
+      Logger.log(
+        'ClusterItemController getClusterStatus',
+        'Cluster status was returned successfully',
+        result,
+      );
+      statusOk.value = result;
     } catch (err) {
-      debugPrint('getClusterStatus error: $err');
+      Logger.log(
+        'ClusterItemController getClusterStatus',
+        'There was an error while returning the cluster status',
+        err,
+      );
       statusOk.value = false;
     }
   }

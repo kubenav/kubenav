@@ -6,6 +6,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/logger.dart';
 
 // AppBrowserController is the controller for the AppBrowserWidget widget. It contains the WebViewController and the
 // value for the url input field. It is also responsible for loading the url provided by the user via the input field.
@@ -180,20 +181,24 @@ class NavigationControls extends StatelessWidget {
 
   void goBack(WebViewController? controller) async {
     if (await controller!.canGoBack()) {
-      debugPrint('Browser: go back');
       await controller.goBack();
     } else {
-      debugPrint('Browser: can not go back');
+      Logger.log(
+        'NavigationControls goBack',
+        'Can not go back',
+      );
       return;
     }
   }
 
   void goForward(WebViewController? controller) async {
     if (await controller!.canGoForward()) {
-      debugPrint('Browser: go forward');
       await controller.goForward();
     } else {
-      debugPrint('Browser: can not go forward');
+      Logger.log(
+        'NavigationControls goForward',
+        'Can not go forward',
+      );
       return;
     }
   }
@@ -203,14 +208,16 @@ class NavigationControls extends StatelessWidget {
     if (url != null && await canLaunch(url)) {
       await launch(url);
     } else {
-      debugPrint('Browser: can not open url $url in browser');
+      Logger.log(
+        'NavigationControls goForward',
+        'Can not open url $url in browser',
+      );
       return;
     }
   }
 
   void reload(WebViewController? controller) async {
     await controller!.reload();
-    debugPrint('Browser: reload current page');
   }
 
   @override

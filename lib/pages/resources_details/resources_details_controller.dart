@@ -8,6 +8,7 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_delete_resource_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_show_yaml_widget.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/logger.dart';
 
 class ResourcesDetailsController extends GetxController {
   ClusterController clusterController = Get.find();
@@ -57,8 +58,11 @@ class ResourcesDetailsController extends GetxController {
         path == null ||
         scope == null ||
         name == null) {
-      debugPrint(
-          'title: $title, resource: $resource, path: $path, scope: $scope, name: $name, namespace: $namespace');
+      Logger.log(
+        'ResourcesDetailsController getResource',
+        'The requested resource was not found',
+        'title: $title, resource: $resource, path: $path, scope: $scope, name: $name, namespace: $namespace',
+      );
       error.value = 'The requested resource was not found';
     } else {
       loading.value = true;
@@ -73,16 +77,28 @@ class ResourcesDetailsController extends GetxController {
         final resource =
             await KubernetesService(cluster: cluster).getRequest(url);
 
-        debugPrint('getResource success: ${resource.toString()}');
+        Logger.log(
+          'ResourcesDetailsController getResources',
+          'Get resource result was returned',
+          resource,
+        );
         item.value = resource;
         loading.value = false;
       } on PlatformException catch (err) {
-        debugPrint('getResources error: $err');
+        Logger.log(
+          'ResourcesDetailsController getResources',
+          'An error was returned while getting a resource',
+          'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+        );
         error.value =
             'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}';
         loading.value = false;
       } catch (err) {
-        debugPrint('getResources error: $err');
+        Logger.log(
+          'ResourcesDetailsController getResources',
+          'An error was returned while getting a resource',
+          err,
+        );
         error.value = err.toString();
         loading.value = false;
       }
