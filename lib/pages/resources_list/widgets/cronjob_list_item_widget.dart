@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiBatchV1CronJob;
 import 'package:kubenav/pages/resources_list/widgets/list_item_widget.dart';
-import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/utils/resources/cronjobs.dart';
 
 class CronJobListItemWidget extends StatelessWidget implements IListItemWidget {
   const CronJobListItemWidget({
@@ -29,14 +29,11 @@ class CronJobListItemWidget extends StatelessWidget implements IListItemWidget {
   @override
   Widget build(BuildContext context) {
     final cronJob = IoK8sApiBatchV1CronJob.fromJson(item);
-    final age = getAge(cronJob?.metadata?.creationTimestamp);
-    final schedule = cronJob?.spec?.schedule;
+    final info = buildInfoText(cronJob);
     final suspend =
         cronJob?.spec?.suspend == null || cronJob?.spec?.suspend == false
             ? 'False'
             : 'True';
-    final active = cronJob?.status?.active.length ?? 0;
-    final lastSchedule = getAge(cronJob?.status?.lastScheduleTime);
 
     return ListItemWidget(
       title: title,
@@ -45,8 +42,7 @@ class CronJobListItemWidget extends StatelessWidget implements IListItemWidget {
       scope: scope,
       name: cronJob?.metadata?.name ?? '',
       namespace: cronJob?.metadata?.namespace,
-      info:
-          'Namespace: ${cronJob?.metadata?.namespace ?? '-'} \nSchedule: $schedule \nSuspend: $suspend \nActive: $active \nLast Schedule: $lastSchedule \nAge: $age',
+      info: info,
       status: suspend == 'True' ? Status.warning : Status.success,
     );
   }

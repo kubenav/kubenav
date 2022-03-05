@@ -1,12 +1,15 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiCoreV1Pod;
-import 'package:kubenav/utils/resources/pods.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/details_containers_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
+import 'package:kubenav/utils/resources/pods.dart';
 
 class PodDetailsItemController extends GetxController {
   ClusterController clusterController = Get.find();
@@ -63,8 +66,13 @@ class PodDetailsItemWidget extends StatelessWidget
     );
 
     final pod = IoK8sApiCoreV1Pod.fromJson(item);
+
+    if (pod == null || pod.spec == null || pod.status == null) {
+      return Container();
+    }
+
     final ready =
-        '${pod?.status?.containerStatuses.where((containerStatus) => containerStatus.ready).length ?? '0'}/${pod?.spec?.containers.length ?? '0'}';
+        '${pod.status!.containerStatuses.where((containerStatus) => containerStatus.ready).length}/${pod.spec!.containers.length}';
     final restarts = getRestarts(pod);
     final status = getStatusText(pod);
     final ports = getPorts(pod);
@@ -76,27 +84,27 @@ class PodDetailsItemWidget extends StatelessWidget
           details: [
             DetailsItemModel(
               name: 'Priority',
-              values: ['${pod?.spec?.priority ?? '-'}'],
+              values: pod.spec!.priority ?? '-',
             ),
             DetailsItemModel(
               name: 'Node',
-              values: [pod?.spec?.nodeName ?? '-'],
+              values: pod.spec!.nodeName ?? '-',
             ),
             DetailsItemModel(
               name: 'Node',
-              values: [pod?.spec?.serviceAccountName ?? '-'],
+              values: pod.spec!.serviceAccountName ?? '-',
             ),
             DetailsItemModel(
               name: 'Service Account',
-              values: [pod?.spec?.serviceAccountName ?? '-'],
+              values: pod.spec!.serviceAccountName ?? '-',
             ),
             DetailsItemModel(
               name: 'Restart Policy',
-              values: [pod?.spec?.restartPolicy.toString() ?? '-'],
+              values: pod.spec!.restartPolicy.toString(),
             ),
             DetailsItemModel(
               name: 'Termination Grace Period Seconds',
-              values: ['${pod?.spec?.terminationGracePeriodSeconds ?? '-'}'],
+              values: pod.spec!.terminationGracePeriodSeconds ?? '-',
             ),
             DetailsItemModel(
               name: 'Ports',
@@ -105,9 +113,9 @@ class PodDetailsItemWidget extends StatelessWidget
                       .map((port) =>
                           '${port.containerName}: ${port.port.containerPort}${port.port.protocol != null ? '/${port.port.protocol!.value}' : ''}${port.port.name != null ? ' (${port.port.name})' : ''}')
                       .toList()
-                  : ['-'],
+                  : '-',
               onTap: (index) {
-                if (pod != null && ports != null) {
+                if (ports != null) {
                   controller.portForward(
                     pod.metadata!.name!,
                     pod.metadata!.namespace!,
@@ -125,29 +133,46 @@ class PodDetailsItemWidget extends StatelessWidget
           details: [
             DetailsItemModel(
               name: 'Ready',
-              values: [ready],
+              values: ready,
             ),
             DetailsItemModel(
               name: 'Restarts',
-              values: ['$restarts'],
+              values: restarts,
             ),
             DetailsItemModel(
               name: 'Status',
-              values: [status],
+              values: status,
             ),
             DetailsItemModel(
               name: 'QoS',
-              values: [pod?.status?.qosClass.toString() ?? '-'],
+              values: pod.status!.qosClass.toString(),
             ),
             DetailsItemModel(
               name: 'Pod IP',
-              values: [pod?.status?.podIP ?? '-'],
+              values: pod.status!.podIP ?? '-',
             ),
             DetailsItemModel(
               name: 'Host IP',
-              values: [pod?.status?.hostIP ?? '-'],
+              values: pod.status!.hostIP ?? '-',
             ),
           ],
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        DetailsContainersWidget(
+          initContainers: pod.spec!.initContainers,
+          containers: pod.spec!.containers,
+          initContainerStatuses: pod.status!.initContainerStatuses,
+          containerStatuses: pod.status!.containerStatuses,
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        DetailsResourcesPreviewWidget(
+          title: Resources.map['events']!.title,
+          resource: Resources.map['events']!.resource,
+          path: Resources.map['events']!.path,
+          scope: Resources.map['events']!.scope,
+          namespace: pod.metadata?.namespace,
+          selector:
+              'fieldSelector=involvedObject.name=${pod.metadata?.name ?? ''}',
         ),
       ],
     );

@@ -6,9 +6,9 @@ import 'package:kubenav/models/kubernetes/api.dart'
 import 'package:kubenav/pages/resources_list/widgets/list_item_widget.dart';
 import 'package:kubenav/utils/resources/general.dart';
 
-class EndpoinstListItemWidget extends StatelessWidget
+class EndpointListItemWidget extends StatelessWidget
     implements IListItemWidget {
-  const EndpoinstListItemWidget({
+  const EndpointListItemWidget({
     Key? key,
     required this.title,
     required this.resource,
@@ -30,9 +30,9 @@ class EndpoinstListItemWidget extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    final endpoints = IoK8sApiCoreV1Endpoints.fromJson(item);
-    final age = getAge(endpoints?.metadata?.creationTimestamp);
-    final ips = endpoints?.subsets
+    final endpoint = IoK8sApiCoreV1Endpoints.fromJson(item);
+    final age = getAge(endpoint?.metadata?.creationTimestamp);
+    final ips = endpoint?.subsets
         .map((subset) => subset.addresses.map((address) => address.ip).toList())
         .expand((e) => e)
         .toList();
@@ -42,10 +42,10 @@ class EndpoinstListItemWidget extends StatelessWidget
       resource: resource,
       path: path,
       scope: scope,
-      name: endpoints?.metadata?.name ?? '',
-      namespace: endpoints?.metadata?.namespace,
+      name: endpoint?.metadata?.name ?? '',
+      namespace: endpoint?.metadata?.namespace,
       info:
-          'Namespace: ${endpoints?.metadata?.namespace ?? '-'} \nEndpoints: ${ips != null && ips.isNotEmpty ? ips.join(', ') : '-'} \nAge: $age',
+          'Namespace: ${endpoint?.metadata?.namespace ?? '-'} \nEndpoints: ${ips != null && ips.isNotEmpty ? ips.join(', ') : '-'} \nAge: $age',
       status: ips != null && ips.isNotEmpty ? Status.success : Status.warning,
     );
   }

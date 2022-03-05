@@ -32,7 +32,8 @@ class NodeListItemWidget extends StatelessWidget implements IListItemWidget {
     final age = getAge(node?.metadata?.creationTimestamp);
     final status = node?.status?.conditions
         .where((condition) => condition.status == 'True')
-        .map((condition) => condition.type.value);
+        .where((condition) => condition.type != null)
+        .map((condition) => condition.type?.value ?? '-');
     final roles = node?.metadata?.labels['kubernetes.azure.com/role'] ?? '-';
     final version = node?.status?.nodeInfo?.kubeletVersion ?? '-';
 

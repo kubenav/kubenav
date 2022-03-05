@@ -1,6 +1,12 @@
 import 'package:kubenav/models/kubernetes/api.dart'
-    show IoK8sApiCoreV1Pod, IoK8sApiCoreV1ContainerPort;
+    show
+        IoK8sApiCoreV1Pod,
+        IoK8sApiCoreV1ContainerPort,
+        IoK8sApiCoreV1ContainerState,
+        IoK8sApiCoreV1EnvVarSource,
+        IoK8sApiCoreV1Probe;
 import 'package:kubenav/pages/resources_list/widgets/list_item_widget.dart';
+import 'package:kubenav/utils/resources/general.dart';
 
 /// [getRestarts] returns the number of container restarts for a [pod]. The number of restarts is the sum of all restarts
 /// from the init conatainers and containers.
@@ -65,6 +71,41 @@ String getStatusText(IoK8sApiCoreV1Pod? pod) {
   return reason != '' ? reason : phase;
 }
 
+String getContainerState(
+  IoK8sApiCoreV1ContainerState? state, [
+  bool detailed = false,
+]) {
+  if (state == null) {
+    return '-';
+  }
+
+  if (state.waiting != null) {
+    if (detailed) {
+      return 'Waiting: ${state.waiting!.reason ?? '-'} / ${state.waiting!.message ?? '-'}';
+    }
+
+    return state.waiting!.reason ?? 'Waiting';
+  }
+
+  if (state.terminated != null) {
+    if (detailed) {
+      return 'Terminated with ${state.terminated!.exitCode} at ${formatTime(state.terminated?.finishedAt)}: ${state.terminated!.reason ?? '-'} / ${state.terminated!.message ?? '-'}';
+    }
+
+    return state.terminated!.reason ?? 'Terminated';
+  }
+
+  if (state.running != null) {
+    if (detailed) {
+      return 'Running since ${formatTime(state.running?.startedAt)}';
+    }
+
+    return 'Running';
+  }
+
+  return '-';
+}
+
 Status getStatus(IoK8sApiCoreV1Pod? pod) {
   if (pod == null) {
     return Status.warning;
@@ -127,4 +168,69 @@ List<PodContainerPort>? getPorts(IoK8sApiCoreV1Pod? pod) {
   }
 
   return ports;
+}
+
+String buildInfoText(IoK8sApiCoreV1Pod? pod) {
+  final age = getAge(pod?.metadata?.creationTimestamp);
+  final ready =
+      '${pod?.status?.containerStatuses.where((containerStatus) => containerStatus.ready).length ?? '0'}/${pod?.spec?.containers.length ?? '0'}';
+  final statusText = getStatusText(pod);
+  final restarts = getRestarts(pod);
+
+  return 'Namespace: ${pod?.metadata?.namespace ?? '-'} \nReady: $ready \nStatus: $statusText \nRestarts: $restarts \nAge: $age';
+}
+
+List<String> getProbe(IoK8sApiCoreV1Probe probe) {
+  final List<String> list = [];
+
+  if (probe.exec != null) {
+    list.add(probe.exec!.command.join(', '));
+  }
+
+  if (probe.httpGet != null) {
+    list.add(
+        '${probe.httpGet!.scheme?.value.toLowerCase()}://${probe.httpGet!.host ?? 'localhost'}:${probe.httpGet!.port}${probe.httpGet!.path}');
+  }
+
+  if (probe.initialDelaySeconds != null) {
+    list.add('delay=${probe.initialDelaySeconds}s');
+  }
+
+  if (probe.timeoutSeconds != null) {
+    list.add('timeout=${probe.timeoutSeconds}s');
+  }
+
+  if (probe.periodSeconds != null) {
+    list.add('period=${probe.periodSeconds}s');
+  }
+
+  if (probe.successThreshold != null) {
+    list.add('#success=${probe.successThreshold}');
+  }
+
+  if (probe.failureThreshold != null) {
+    list.add('#failure=${probe.failureThreshold}');
+  }
+
+  return list;
+}
+
+String getValueFrom(IoK8sApiCoreV1EnvVarSource valueFrom) {
+  if (valueFrom.configMapKeyRef != null) {
+    return 'configMapKeyRef(${valueFrom.configMapKeyRef!.name}: ${valueFrom.configMapKeyRef!.key})';
+  }
+
+  if (valueFrom.fieldRef != null) {
+    return 'fieldRef(${valueFrom.fieldRef!.apiVersion}: ${valueFrom.fieldRef!.fieldPath})';
+  }
+
+  if (valueFrom.resourceFieldRef != null) {
+    return 'secretKeyRef(${valueFrom.resourceFieldRef!.containerName}: ${valueFrom.resourceFieldRef!.resource})';
+  }
+
+  if (valueFrom.secretKeyRef != null) {
+    return 'secretKeyRef(${valueFrom.secretKeyRef!.name}: ${valueFrom.secretKeyRef!.key})';
+  }
+
+  return '-';
 }

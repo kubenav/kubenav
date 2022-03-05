@@ -1,17 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:kubenav/pages/resources_details/widgets/deployment_details_item_widget.dart';
 
+import 'package:kubenav/pages/resources_details/widgets/clusterrole_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/clusterrolebinding_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/configmap_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/cronjob_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/daemonset_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/deployment_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/endpoint_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/event_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/horizontalpodautoscaler_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/ingress_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/job_details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/namespace_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/networkpolicy_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/node_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/persistentvolume_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/persistentvolumeclaim_details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/pod_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/poddisruptionbudget_details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/podsecuritypolicy_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/replicaset_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/role_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/rolebinding_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/secret_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/service_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/serviceaccount_details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/statefulset_details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/storageclass_details_item_widget.dart';
 
+import 'package:kubenav/pages/resources_list/widgets/clusterrolebinding_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/configmap_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/cronjob_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/daemonset_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/deployment_list_item_widget.dart';
-import 'package:kubenav/pages/resources_list/widgets/endpoints_list_item_widget.dart';
-import 'package:kubenav/pages/resources_list/widgets/events_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/endpoint_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/event_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/horizontalpodautoscaler_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/ingress_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/job_list_item_widget.dart';
@@ -24,6 +47,7 @@ import 'package:kubenav/pages/resources_list/widgets/pod_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/poddisruptionbudget_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/podsecuritypolicy_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/replicaset_list_item_widget.dart';
+import 'package:kubenav/pages/resources_list/widgets/rolebinding_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/secret_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/service_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/serviceaccount_list_item_widget.dart';
@@ -101,7 +125,7 @@ class Resource {
     required this.path,
     required this.scope,
     this.buildListItem,
-    required this.buildDetailsItem,
+    this.buildDetailsItem,
   });
 }
 
@@ -131,7 +155,7 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) => CronJobDetailsItemWidget(item: item),
     ),
     'daemonsets': Resource(
       resourceType: ResourceType.workload,
@@ -155,7 +179,8 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) =>
+          DaemonSetDetailsItemWidget(item: item),
     ),
     'deployments': Resource(
       resourceType: ResourceType.workload,
@@ -204,7 +229,7 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) => JobDetailsItemWidget(item: item),
     ),
     'pods': Resource(
       resourceType: ResourceType.workload,
@@ -252,7 +277,8 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) =>
+          ReplicaSetDetailsItemWidget(item: item),
     ),
     'statefulsets': Resource(
       resourceType: ResourceType.workload,
@@ -276,7 +302,8 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) =>
+          StatefulSetDetailsItemWidget(item: item),
     ),
     'endpoints': Resource(
       resourceType: ResourceType.discoveryandloadbalancing,
@@ -293,14 +320,14 @@ abstract class Resources {
         ResourceScope? scope,
         dynamic item,
       ) =>
-          EndpoinstListItemWidget(
+          EndpointListItemWidget(
         title: title,
         resource: resource,
         path: path,
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) => EndpointDetailsItemWidget(item: item),
     ),
     'horizontalpodautoscalers': Resource(
       resourceType: ResourceType.discoveryandloadbalancing,
@@ -324,7 +351,8 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) =>
+          HorizontalPodAutoscalerDetailsItemWidget(item: item),
     ),
     'ingresses': Resource(
       resourceType: ResourceType.discoveryandloadbalancing,
@@ -348,7 +376,7 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) => IngressDetailsItemWidget(item: item),
     ),
     'networkpolicies': Resource(
       resourceType: ResourceType.discoveryandloadbalancing,
@@ -372,7 +400,8 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) =>
+          NetworkPolicyDetailsItemWidget(item: item),
     ),
     'services': Resource(
       resourceType: ResourceType.discoveryandloadbalancing,
@@ -396,7 +425,7 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) => ServiceDetailsItemWidget(item: item),
     ),
     'configmaps': Resource(
       resourceType: ResourceType.configandstorage,
@@ -420,7 +449,33 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) =>
+          ConfigMapDetailsItemWidget(item: item),
+    ),
+    'persistentvolumes': Resource(
+      resourceType: ResourceType.configandstorage,
+      title: 'PersistentVolumes',
+      description:
+          'A PersistentVolume (PV) is a piece of storage in the cluster that has been provisioned by an administrator or dynamically provisioned using Storage Classes.',
+      resource: 'persistentvolumes',
+      path: '/api/v1',
+      scope: ResourceScope.cluster,
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          PersistentVolumeListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
+      buildDetailsItem: (dynamic item) =>
+          PersistentVolumeDetailsItemWidget(item: item),
     ),
     'persistentvolumeclaims': Resource(
       resourceType: ResourceType.configandstorage,
@@ -444,31 +499,8 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
-    ),
-    'persistentvolumes': Resource(
-      resourceType: ResourceType.configandstorage,
-      title: 'Persistent Volumes',
-      description:
-          'A PersistentVolume (PV) is a piece of storage in the cluster that has been provisioned by an administrator or dynamically provisioned using Storage Classes.',
-      resource: 'persistentvolumes',
-      path: '/api/v1',
-      scope: ResourceScope.cluster,
-      buildListItem: (
-        String? title,
-        String? resource,
-        String? path,
-        ResourceScope? scope,
-        dynamic item,
-      ) =>
-          PersistentVolumeListItemWidget(
-        title: title,
-        resource: resource,
-        path: path,
-        scope: scope,
-        item: item,
-      ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) =>
+          PersistentVolumeClaimDetailsItemWidget(item: item),
     ),
     'poddisruptionbudgets': Resource(
       resourceType: ResourceType.configandstorage,
@@ -492,7 +524,8 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) =>
+          PodDisruptionBudgetDetailsItemWidget(item: item),
     ),
     'secrets': Resource(
       resourceType: ResourceType.configandstorage,
@@ -516,7 +549,7 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) => SecretDetailsItemWidget(item: item),
     ),
     'serviceaccounts': Resource(
       resourceType: ResourceType.configandstorage,
@@ -540,7 +573,8 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) =>
+          ServiceAccountDetailsItemWidget(item: item),
     ),
     'storageclasses': Resource(
       resourceType: ResourceType.configandstorage,
@@ -567,35 +601,41 @@ abstract class Resources {
       buildDetailsItem: (dynamic item) =>
           StorageClassDetailsItemWidget(item: item),
     ),
-    'clusterrolebindings': Resource(
-      resourceType: ResourceType.rbac,
-      title: 'Cluster Role Bindings',
-      description:
-          'A role binding grants the permissions defined in a role to a user or set of users.',
-      resource: 'clusterrolebindings',
-      path: '/apis/rbac.authorization.k8s.io/v1',
-      scope: ResourceScope.cluster,
-      buildDetailsItem: (dynamic item) => const Text('test'),
-    ),
     'clusterroles': Resource(
       resourceType: ResourceType.rbac,
-      title: 'Cluster Roles',
+      title: 'ClusterRoles',
       description:
           'An RBAC ClusterRole contains rules that represent a set of permissions.',
       resource: 'clusterroles',
       path: '/apis/rbac.authorization.k8s.io/v1',
       scope: ResourceScope.cluster,
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) =>
+          ClusterRoleDetailsItemWidget(item: item),
     ),
-    'rolebindings': Resource(
+    'clusterrolebindings': Resource(
       resourceType: ResourceType.rbac,
-      title: 'Role Bindings',
+      title: 'ClusterRoleBindings',
       description:
           'A role binding grants the permissions defined in a role to a user or set of users.',
-      resource: 'rolebindings',
+      resource: 'clusterrolebindings',
       path: '/apis/rbac.authorization.k8s.io/v1',
-      scope: ResourceScope.namespaced,
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      scope: ResourceScope.cluster,
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          ClusterRoleBindingListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
+      buildDetailsItem: (dynamic item) =>
+          ClusterRoleBindingDetailsItemWidget(item: item),
     ),
     'roles': Resource(
       resourceType: ResourceType.rbac,
@@ -605,7 +645,32 @@ abstract class Resources {
       resource: 'roles',
       path: '/apis/rbac.authorization.k8s.io/v1',
       scope: ResourceScope.namespaced,
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) => RoleDetailsItemWidget(item: item),
+    ),
+    'rolebindings': Resource(
+      resourceType: ResourceType.rbac,
+      title: 'RoleBindings',
+      description:
+          'A role binding grants the permissions defined in a role to a user or set of users.',
+      resource: 'rolebindings',
+      path: '/apis/rbac.authorization.k8s.io/v1',
+      scope: ResourceScope.namespaced,
+      buildListItem: (
+        String? title,
+        String? resource,
+        String? path,
+        ResourceScope? scope,
+        dynamic item,
+      ) =>
+          RoleBindingListItemWidget(
+        title: title,
+        resource: resource,
+        path: path,
+        scope: scope,
+        item: item,
+      ),
+      buildDetailsItem: (dynamic item) =>
+          RoleBindingDetailsItemWidget(item: item),
     ),
     'events': Resource(
       resourceType: ResourceType.cluster,
@@ -629,7 +694,7 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) => EventDetailsItemWidget(item: item),
     ),
     'customresourcedefinitions': Resource(
       resourceType: ResourceType.cluster,
@@ -638,15 +703,6 @@ abstract class Resources {
       resource: 'customresourcedefinitions',
       path: '/apis/apiextensions.k8s.io/v1',
       scope: ResourceScope.cluster,
-      buildListItem: (
-        String? title,
-        String? resource,
-        String? path,
-        ResourceScope? scope,
-        dynamic item,
-      ) =>
-          const Text('test'),
-      buildDetailsItem: (dynamic item) => const Text('test'),
     ),
     'namespaces': Resource(
       resourceType: ResourceType.cluster,
@@ -695,7 +751,7 @@ abstract class Resources {
         scope: scope,
         item: item,
       ),
-      buildDetailsItem: (dynamic item) => const Text('test'),
+      buildDetailsItem: (dynamic item) => NodeDetailsItemWidget(item: item),
     ),
     'podsecuritypolicies': Resource(
       resourceType: ResourceType.cluster,

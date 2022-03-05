@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/api.dart'
     show IoK8sApiPolicyV1beta1PodSecurityPolicy;
+import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
+import 'package:kubenav/utils/constants.dart';
 
 class PodSecurityPolicyDetailsItemWidget extends StatelessWidget
     implements IDetailsItemWidget {
@@ -29,111 +32,103 @@ class PodSecurityPolicyDetailsItemWidget extends StatelessWidget
           details: [
             DetailsItemModel(
               name: 'Allow Privileged',
-              values: [
-                psp.spec!.privileged != null && psp.spec!.privileged == true
-                    ? 'True'
-                    : 'Flase'
-              ],
+              values:
+                  psp.spec!.privileged != null && psp.spec!.privileged == true
+                      ? 'True'
+                      : 'Flase',
             ),
             DetailsItemModel(
               name: 'Allow Privilege Escalation',
-              values: [
-                psp.spec!.allowPrivilegeEscalation != null &&
-                        psp.spec!.allowPrivilegeEscalation == true
-                    ? 'True'
-                    : 'Flase'
-              ],
+              values: psp.spec!.allowPrivilegeEscalation != null &&
+                      psp.spec!.allowPrivilegeEscalation == true
+                  ? 'True'
+                  : 'Flase',
             ),
             DetailsItemModel(
               name: 'Default Add Capabilities',
-              values: [
-                psp.spec!.defaultAddCapabilities.isNotEmpty
-                    ? psp.spec!.defaultAddCapabilities.join(', ')
-                    : '-'
-              ],
+              values: psp.spec!.defaultAddCapabilities.isNotEmpty
+                  ? psp.spec!.defaultAddCapabilities.join(', ')
+                  : '-',
             ),
             DetailsItemModel(
               name: 'Required Drop Capabilities',
-              values: [
-                psp.spec!.requiredDropCapabilities.isNotEmpty
-                    ? psp.spec!.requiredDropCapabilities.join(', ')
-                    : '-'
-              ],
+              values: psp.spec!.requiredDropCapabilities.isNotEmpty
+                  ? psp.spec!.requiredDropCapabilities.join(', ')
+                  : '-',
             ),
             DetailsItemModel(
               name: 'Allowed Capabilities',
-              values: [
-                psp.spec!.allowedCapabilities.isNotEmpty
-                    ? psp.spec!.allowedCapabilities.join(', ')
-                    : '-'
-              ],
+              values: psp.spec!.allowedCapabilities.isNotEmpty
+                  ? psp.spec!.allowedCapabilities.join(', ')
+                  : '-',
             ),
             DetailsItemModel(
               name: 'Allowed Volume Types',
-              values: [
-                psp.spec!.volumes.isNotEmpty
-                    ? psp.spec!.volumes.join(', ')
-                    : '-'
-              ],
+              values: psp.spec!.volumes.isNotEmpty
+                  ? psp.spec!.volumes.join(', ')
+                  : '-',
             ),
             DetailsItemModel(
               name: 'Allow Host Network',
-              values: [
-                psp.spec!.hostNetwork != null && psp.spec!.hostNetwork == true
-                    ? 'True'
-                    : 'Flase'
-              ],
+              values:
+                  psp.spec!.hostNetwork != null && psp.spec!.hostNetwork == true
+                      ? 'True'
+                      : 'Flase',
             ),
             DetailsItemModel(
               name: 'Allow Host Ports',
-              values: [
-                psp.spec!.hostPorts.isNotEmpty
-                    ? psp.spec!.hostPorts.join(', ')
-                    : '-'
-              ],
+              values: psp.spec!.hostPorts.isNotEmpty
+                  ? psp.spec!.hostPorts
+                      .map((e) => '${e.min} - ${e.max}')
+                      .join(', ')
+                  : '-',
             ),
             DetailsItemModel(
               name: 'Allow Host PID',
-              values: [
-                psp.spec!.hostPID != null && psp.spec!.hostPID == true
-                    ? 'True'
-                    : 'Flase'
-              ],
+              values: psp.spec!.hostPID != null && psp.spec!.hostPID == true
+                  ? 'True'
+                  : 'Flase',
             ),
             DetailsItemModel(
               name: 'Allow Host IPC',
-              values: [
-                psp.spec!.hostIPC != null && psp.spec!.hostIPC == true
-                    ? 'True'
-                    : 'Flase'
-              ],
+              values: psp.spec!.hostIPC != null && psp.spec!.hostIPC == true
+                  ? 'True'
+                  : 'Flase',
             ),
             DetailsItemModel(
               name: 'Read Only Root Filesystem',
-              values: [
-                psp.spec!.readOnlyRootFilesystem != null &&
-                        psp.spec!.readOnlyRootFilesystem == true
-                    ? 'True'
-                    : 'Flase'
-              ],
+              values: psp.spec!.readOnlyRootFilesystem != null &&
+                      psp.spec!.readOnlyRootFilesystem == true
+                  ? 'True'
+                  : 'Flase',
             ),
             DetailsItemModel(
               name: 'SELinux Context Strategy',
-              values: [psp.spec!.seLinux.rule],
+              values: psp.spec!.seLinux.rule,
             ),
             DetailsItemModel(
               name: 'Run As User Strategy',
-              values: [psp.spec!.runAsUser.rule],
+              values: psp.spec!.runAsUser.rule,
             ),
             DetailsItemModel(
               name: 'FSGroup Strategy',
-              values: [psp.spec!.fsGroup.rule ?? '-'],
+              values: psp.spec!.fsGroup.rule ?? '-',
             ),
             DetailsItemModel(
               name: 'Supplemental Groups Strategy',
-              values: [psp.spec!.supplementalGroups.rule ?? '-'],
+              values: psp.spec!.supplementalGroups.rule ?? '-',
             ),
           ],
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        DetailsResourcesPreviewWidget(
+          title: Resources.map['events']!.title,
+          resource: Resources.map['events']!.resource,
+          path: Resources.map['events']!.path,
+          scope: Resources.map['events']!.scope,
+          namespace: item['metadata']['namespace'],
+          selector:
+              'fieldSelector=involvedObject.name=${item['metadata']['name']}',
         ),
       ],
     );

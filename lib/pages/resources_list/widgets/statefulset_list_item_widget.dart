@@ -4,7 +4,7 @@ import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/models/kubernetes/api.dart'
     show IoK8sApiAppsV1StatefulSet;
 import 'package:kubenav/pages/resources_list/widgets/list_item_widget.dart';
-import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/utils/resources/statefulsets.dart';
 
 class StatefulSetListItemWidget extends StatelessWidget
     implements IListItemWidget {
@@ -50,21 +50,20 @@ class StatefulSetListItemWidget extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    final deplyoment = IoK8sApiAppsV1StatefulSet.fromJson(item);
-    final age = getAge(deplyoment?.metadata?.creationTimestamp);
-    final replicas = deplyoment?.status?.replicas ?? 0;
-    final ready = deplyoment?.status?.readyReplicas ?? 0;
-    final upToDate = deplyoment?.status?.updatedReplicas ?? 0;
+    final sts = IoK8sApiAppsV1StatefulSet.fromJson(item);
+    final info = buildInfoText(sts);
+    final replicas = sts?.status?.replicas ?? 0;
+    final ready = sts?.status?.readyReplicas ?? 0;
+    final upToDate = sts?.status?.updatedReplicas ?? 0;
 
     return ListItemWidget(
       title: title,
       resource: resource,
       path: path,
       scope: scope,
-      name: deplyoment?.metadata?.name ?? '',
-      namespace: deplyoment?.metadata?.namespace,
-      info:
-          'Namespace: ${deplyoment?.metadata?.namespace ?? '-'} \nReady: $ready/$replicas \nUp to date: $upToDate \nAge: $age',
+      name: sts?.metadata?.name ?? '',
+      namespace: sts?.metadata?.namespace,
+      info: info,
       status: getStatus(
         replicas,
         ready,

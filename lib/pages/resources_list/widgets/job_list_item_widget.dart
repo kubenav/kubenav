@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiBatchV1Job;
 import 'package:kubenav/pages/resources_list/widgets/list_item_widget.dart';
-import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/utils/resources/jobs.dart';
 
 class JobListItemWidget extends StatelessWidget implements IListItemWidget {
   const JobListItemWidget({
@@ -29,11 +29,9 @@ class JobListItemWidget extends StatelessWidget implements IListItemWidget {
   @override
   Widget build(BuildContext context) {
     final job = IoK8sApiBatchV1Job.fromJson(item);
-    final age = getAge(job?.metadata?.creationTimestamp);
     final completions = job?.spec?.completions ?? 0;
     final succeeded = job?.status?.succeeded ?? 0;
-    final duration =
-        timeDiff(job?.status?.startTime, job?.status?.completionTime);
+    final info = buildInfoText(job);
 
     return ListItemWidget(
       title: title,
@@ -42,8 +40,7 @@ class JobListItemWidget extends StatelessWidget implements IListItemWidget {
       scope: scope,
       name: job?.metadata?.name ?? '',
       namespace: job?.metadata?.namespace,
-      info:
-          'Namespace: ${job?.metadata?.namespace ?? '-'} \nCompletions: $succeeded/$completions \nDuration: $duration \nAge: $age',
+      info: info,
       status: completions != 0 && completions != succeeded
           ? Status.danger
           : Status.success,

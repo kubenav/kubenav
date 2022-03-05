@@ -36,6 +36,15 @@ class AppBottomSheetWidget extends StatelessWidget {
         margin: const EdgeInsets.only(
           right: Constants.spacingMiddle,
         ),
+        padding: const EdgeInsets.all(
+          Constants.spacingExtraSmall,
+        ),
+        decoration: const BoxDecoration(
+          color: Constants.colorPrimary,
+          borderRadius: BorderRadius.all(
+            Radius.circular(Constants.sizeBorderRadius),
+          ),
+        ),
         height: 54,
         width: 54,
         child: ClipRRect(
@@ -52,6 +61,9 @@ class AppBottomSheetWidget extends StatelessWidget {
       return Container(
         margin: const EdgeInsets.only(
           right: Constants.spacingMiddle,
+        ),
+        padding: const EdgeInsets.all(
+          Constants.spacingExtraSmall,
         ),
         decoration: const BoxDecoration(
           color: Constants.colorPrimary,

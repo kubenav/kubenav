@@ -18,7 +18,7 @@ class IoK8sApiCoreV1NodeCondition {
     this.message,
     this.reason,
     required this.status,
-    required this.type,
+    this.type,
   });
 
   /// Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
@@ -61,7 +61,7 @@ class IoK8sApiCoreV1NodeCondition {
   String status;
 
   /// Type of node condition.  Possible enum values:  - `\"DiskPressure\"` means the kubelet is under pressure due to insufficient available disk.  - `\"MemoryPressure\"` means the kubelet is under pressure due to insufficient available memory.  - `\"NetworkUnavailable\"` means that network for the node is not correctly configured.  - `\"PIDPressure\"` means the kubelet is under pressure due to insufficient available PID.  - `\"Ready\"` means kubelet is healthy and ready to accept pods.
-  IoK8sApiCoreV1NodeConditionTypeEnum type;
+  IoK8sApiCoreV1NodeConditionTypeEnum? type;
 
   @override
   bool operator ==(Object other) =>
@@ -104,7 +104,9 @@ class IoK8sApiCoreV1NodeCondition {
       json[r'reason'] = reason;
     }
     json[r'status'] = status;
-    json[r'type'] = type;
+    if (type != null) {
+      json[r'type'] = type;
+    }
     return json;
   }
 
@@ -134,7 +136,7 @@ class IoK8sApiCoreV1NodeCondition {
         message: mapValueOfType<String>(json, r'message'),
         reason: mapValueOfType<String>(json, r'reason'),
         status: mapValueOfType<String>(json, r'status')!,
-        type: IoK8sApiCoreV1NodeConditionTypeEnum.fromJson(json[r'type'])!,
+        type: IoK8sApiCoreV1NodeConditionTypeEnum.fromJson(json[r'type']),
       );
     }
     return null;
@@ -194,7 +196,6 @@ class IoK8sApiCoreV1NodeCondition {
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
     'status',
-    'type',
   };
 }
 

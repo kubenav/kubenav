@@ -69,25 +69,34 @@ class AppVertialListSimpleModel {
 ///   ],
 /// )
 /// ```
+///
+/// The [smallPadding] argument can be used to minimize the additional padding for the widget, so that it can be used in
+/// other places, like a bottom sheet.
 class AppVertialListSimpleWidget extends StatelessWidget {
   const AppVertialListSimpleWidget({
     Key? key,
     required this.title,
     required this.items,
+    this.smallPadding = false,
   }) : super(key: key);
 
   final String title;
   final List<AppVertialListSimpleModel> items;
+  final bool smallPadding;
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
       children: [
         Padding(
-          padding: const EdgeInsets.only(
+          padding: EdgeInsets.only(
             top: Constants.spacingMiddle,
-            left: Constants.spacingMiddle,
-            right: Constants.spacingMiddle,
+            left: smallPadding
+                ? Constants.spacingExtraSmall
+                : Constants.spacingMiddle,
+            right: smallPadding
+                ? Constants.spacingExtraSmall
+                : Constants.spacingMiddle,
             bottom: Constants.spacingMiddle,
           ),
           child: Row(
@@ -102,9 +111,13 @@ class AppVertialListSimpleWidget extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(
-            left: Constants.spacingMiddle,
-            right: Constants.spacingMiddle,
+          padding: EdgeInsets.only(
+            left: smallPadding
+                ? Constants.spacingExtraSmall
+                : Constants.spacingMiddle,
+            right: smallPadding
+                ? Constants.spacingExtraSmall
+                : Constants.spacingMiddle,
           ),
           child: Column(
             children: List.generate(

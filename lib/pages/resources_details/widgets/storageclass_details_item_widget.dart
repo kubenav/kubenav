@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/api.dart'
     show IoK8sApiStorageV1StorageClass;
+import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
+import 'package:kubenav/utils/constants.dart';
 
 class StorageClassDetailsItemWidget extends StatelessWidget
     implements IDetailsItemWidget {
@@ -29,23 +32,21 @@ class StorageClassDetailsItemWidget extends StatelessWidget
           details: [
             DetailsItemModel(
               name: 'Default',
-              values: [
-                sc.metadata != null &&
-                        sc.metadata!.annotations.containsKey(
-                            'storageclass.kubernetes.io/is-default-class') &&
-                        sc
-                                .metadata!
-                                .annotations[
-                                    'storageclass.kubernetes.io/is-default-class']!
-                                .toLowerCase() ==
-                            'true'
-                    ? 'Yes'
-                    : 'No'
-              ],
+              values: sc.metadata != null &&
+                      sc.metadata!.annotations.containsKey(
+                          'storageclass.kubernetes.io/is-default-class') &&
+                      sc
+                              .metadata!
+                              .annotations[
+                                  'storageclass.kubernetes.io/is-default-class']!
+                              .toLowerCase() ==
+                          'true'
+                  ? 'Yes'
+                  : 'No',
             ),
             DetailsItemModel(
               name: 'Provisioner',
-              values: [sc.provisioner],
+              values: sc.provisioner,
             ),
             DetailsItemModel(
               name: 'Parameters',
@@ -55,26 +56,34 @@ class StorageClassDetailsItemWidget extends StatelessWidget
             ),
             DetailsItemModel(
               name: 'Allow Volume Expansion',
-              values: [
-                sc.allowVolumeExpansion != null &&
-                        sc.allowVolumeExpansion == true
-                    ? 'True'
-                    : 'False'
-              ],
+              values: sc.allowVolumeExpansion != null &&
+                      sc.allowVolumeExpansion == true
+                  ? 'True'
+                  : 'False',
             ),
             DetailsItemModel(
               name: 'Mount Options',
-              values: sc.mountOptions.isNotEmpty ? sc.mountOptions : ['-'],
+              values: sc.mountOptions.isNotEmpty ? sc.mountOptions : '-',
             ),
             DetailsItemModel(
               name: 'Reclaim Policy',
-              values: [sc.reclaimPolicy ?? '-'],
+              values: sc.reclaimPolicy ?? '-',
             ),
             DetailsItemModel(
               name: 'Volume Bind Mode',
-              values: [sc.volumeBindingMode ?? '-'],
+              values: sc.volumeBindingMode ?? '-',
             ),
           ],
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        DetailsResourcesPreviewWidget(
+          title: Resources.map['events']!.title,
+          resource: Resources.map['events']!.resource,
+          path: Resources.map['events']!.path,
+          scope: Resources.map['events']!.scope,
+          namespace: item['metadata']['namespace'],
+          selector:
+              'fieldSelector=involvedObject.name=${item['metadata']['name']}',
         ),
       ],
     );

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/resource_model.dart';
-import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiCoreV1Event;
+import 'package:kubenav/models/kubernetes/api.dart'
+    show IoK8sApiRbacV1ClusterRoleBinding;
 import 'package:kubenav/pages/resources_list/widgets/list_item_widget.dart';
 import 'package:kubenav/utils/resources/general.dart';
 
-class EventListItemWidget extends StatelessWidget implements IListItemWidget {
-  const EventListItemWidget({
+class ClusterRoleBindingListItemWidget extends StatelessWidget
+    implements IListItemWidget {
+  const ClusterRoleBindingListItemWidget({
     Key? key,
     required this.title,
     required this.resource,
@@ -28,23 +30,19 @@ class EventListItemWidget extends StatelessWidget implements IListItemWidget {
 
   @override
   Widget build(BuildContext context) {
-    final event = IoK8sApiCoreV1Event.fromJson(item);
-    final lastSeen = getAge(event?.lastTimestamp);
-    final type = event?.type ?? '-';
-    final reason = event?.reason ?? '-';
-    final object =
-        '${event?.involvedObject.kind ?? '-'}/${event?.involvedObject.name ?? '-'}';
-    final message = event?.message ?? '-';
+    final clusterRoleBinding = IoK8sApiRbacV1ClusterRoleBinding.fromJson(item);
+    final age = getAge(clusterRoleBinding?.metadata?.creationTimestamp);
+    final role =
+        '${clusterRoleBinding?.roleRef.kind ?? '-'}/${clusterRoleBinding?.roleRef.name ?? '-'}';
 
     return ListItemWidget(
       title: title,
       resource: resource,
       path: path,
       scope: scope,
-      name: event?.metadata.name ?? '',
-      namespace: event?.metadata.namespace,
-      info:
-          'Last Seen: $lastSeen \nType: $type \nReason: $reason \nObject: $object \nMessage: $message',
+      name: clusterRoleBinding?.metadata?.name ?? '',
+      namespace: null,
+      info: 'Role: $role \nAge: $age',
     );
   }
 }

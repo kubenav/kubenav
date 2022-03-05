@@ -53,7 +53,7 @@ class Resources extends GetView<ResourcesController> {
                       Text(
                         value.title,
                         style: primaryTextStyle(),
-                        maxLines: 2,
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(

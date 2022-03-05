@@ -1,5 +1,5 @@
 import 'package:kubenav/models/kubernetes/api.dart'
-    show IoK8sApimachineryPkgApisMetaV1LabelSelector;
+    show IoK8sApimachineryPkgApisMetaV1LabelSelector, IoK8sApiRbacV1PolicyRule;
 
 /// [getAge] returns the age of a Kubernetes resources in a human readable format. This is mostly used to dertermine the
 /// age of a resource via the `metadata.creationTimestamp` field. If the given [timestamp] is `null` we return a dash as
@@ -46,12 +46,65 @@ String getSelector(IoK8sApimachineryPkgApisMetaV1LabelSelector? selector) {
   }
 
   if (selector.matchLabels.isNotEmpty) {
-    List<String> labelSelectors = [];
-    selector.matchLabels
-        .forEach((key, value) => labelSelectors.add('$key=$value'));
-
-    return 'labelSelector=${labelSelectors.join(',')}';
+    return getMatchLabelsSelector(selector.matchLabels);
   }
 
   return '';
+}
+
+/// [getMatchLabelsSelector] builds the selector the [matchLabels] values of a selector. The [matchLabels] argument must
+/// be of type `Map<String, String>`.
+String getMatchLabelsSelector(Map<String, String> matchLabels) {
+  if (matchLabels.isEmpty) {
+    return '';
+  }
+
+  List<String> labelSelectors = [];
+  matchLabels.forEach((key, value) => labelSelectors.add('$key=$value'));
+
+  return 'labelSelector=${Uri.encodeComponent(labelSelectors.join(','))}';
+}
+
+/// [formatTime] formats the given `DateTime` parameter. The returned `String` is the in the form `YYYY-MM-DD HH:mm:SS`.
+String formatTime(DateTime? timestamp) {
+  if (timestamp == null) {
+    return '-';
+  }
+
+  return '${timestamp.year.toString()}-${timestamp.month.toString().padLeft(2, '0')}-${timestamp.day.toString().padLeft(2, '0')} ${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}';
+}
+
+class Rule {
+  String resource;
+  List<String> nonResourceURLs;
+  List<String> resourceNames;
+  List<String> verbs;
+
+  Rule({
+    required this.resource,
+    required this.nonResourceURLs,
+    required this.resourceNames,
+    required this.verbs,
+  });
+}
+
+List<Rule> formatRules(List<IoK8sApiRbacV1PolicyRule> rules) {
+  final List<Rule> formattedRules = [];
+
+  for (var rule in rules) {
+    for (var apiGroup in rule.apiGroups) {
+      for (var resource in rule.resources) {
+        formattedRules.add(
+          Rule(
+            resource: '$resource${apiGroup != '' ? '.$apiGroup' : ''}',
+            nonResourceURLs: rule.nonResourceURLs,
+            resourceNames: rule.resourceNames,
+            verbs: rule.verbs,
+          ),
+        );
+      }
+    }
+  }
+
+  return formattedRules;
 }

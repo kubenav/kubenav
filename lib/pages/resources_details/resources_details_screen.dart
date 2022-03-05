@@ -75,7 +75,7 @@ class ResourcesDetails extends GetView {
               ),
             ),
             Text(
-              Characters(controller.namespace ?? '')
+              Characters(controller.namespace ?? 'No Namespace')
                   .replaceAll(Characters(''), Characters('\u{200B}'))
                   .toString(),
               textAlign: TextAlign.center,

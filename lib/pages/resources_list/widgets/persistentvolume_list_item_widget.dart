@@ -32,7 +32,10 @@ class PersistentVolumeListItemWidget extends StatelessWidget
   Widget build(BuildContext context) {
     final pv = IoK8sApiCoreV1PersistentVolume.fromJson(item);
     final age = getAge(pv?.metadata?.creationTimestamp);
-    final capacity = pv?.spec?.capacity['storage'] ?? '-';
+    final capacity =
+        pv?.spec?.capacity != null && pv!.spec!.capacity.containsKey('storage')
+            ? pv.spec?.capacity['storage']
+            : '-';
     final accessMode = pv?.spec?.accessModes.join(', ') ?? '-';
     final reclaimPolicy = pv?.spec?.persistentVolumeReclaimPolicy ?? '-';
     final status = pv?.status?.phase?.value ?? '-';
@@ -49,7 +52,7 @@ class PersistentVolumeListItemWidget extends StatelessWidget
       name: pv?.metadata?.name ?? '',
       namespace: null,
       info:
-          'Capacity: $capacity \nAccess Mode: $accessMode \nReclaim Policy: $reclaimPolicy \nStatus: $status \nClaim: $claim \nStorage Class: $storageClass \nReason: $reason \nAge: $age',
+          'Capacity: $capacity \nAccess Modes: $accessMode \nReclaim Policy: $reclaimPolicy \nStatus: $status \nClaim: $claim \nStorage Class: $storageClass \nReason: $reason \nAge: $age',
       status: status == 'Bound' ? Status.success : Status.warning,
     );
   }

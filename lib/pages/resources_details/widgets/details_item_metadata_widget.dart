@@ -23,20 +23,20 @@ class DetailsItemMetadataWidget extends StatelessWidget {
       if (metadata.name != null) {
         detailsItems.add(DetailsItemModel(
           name: 'Name',
-          values: [metadata.name!],
+          values: metadata.name!,
         ));
       }
 
       if (metadata.namespace != null) {
         detailsItems.add(DetailsItemModel(
           name: 'Namespace',
-          values: [metadata.namespace!],
+          values: metadata.namespace!,
         ));
       }
 
       detailsItems.add(DetailsItemModel(
         name: 'Age',
-        values: [getAge(metadata.creationTimestamp)],
+        values: getAge(metadata.creationTimestamp),
       ));
 
       List<String> labelValues = [];

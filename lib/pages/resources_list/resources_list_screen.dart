@@ -99,7 +99,8 @@ class ResourcesList extends GetView {
 
     return Scaffold(
       appBar: AppBar(
-        actions: controller.scope == ResourceScope.namespaced
+        actions: controller.scope == ResourceScope.namespaced &&
+                controller.selector == null
             ? [
                 IconButton(
                   icon: const Icon(CustomIcons.namespaces),
@@ -110,47 +111,59 @@ class ResourcesList extends GetView {
                 ),
               ]
             : null,
-        title: Obx(
-          () {
-            return Column(
-              children: [
-                Text(
-                  Characters(controller.title != null
-                          ? controller.title!
-                          : 'Unknown Resource')
-                      .replaceAll(Characters(''), Characters('\u{200B}'))
-                      .toString(),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    overflow: TextOverflow.ellipsis,
+        title: Column(
+          children: [
+            Text(
+              Characters(controller.title != null
+                      ? controller.title!
+                      : 'Unknown Resource')
+                  .replaceAll(Characters(''), Characters('\u{200B}'))
+                  .toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            controller.selector == null
+                ? Obx(() {
+                    return Text(
+                      Characters(controller.clusterController
+                                          .getActiveClusterNamespace() ==
+                                      '' ||
+                                  (controller.scope == ResourceScope.cluster)
+                              ? 'All Namespaces'
+                              : controller
+                                  .clusterController
+                                  .clusters[controller.clusterController
+                                      .activeClusterIndex.value]
+                                  .value
+                                  .namespace)
+                          .replaceAll(Characters(''), Characters('\u{200B}'))
+                          .toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  })
+                : Text(
+                    Characters(controller.namespace != null
+                            ? controller.namespace!
+                            : 'All Namespaces')
+                        .replaceAll(Characters(''), Characters('\u{200B}'))
+                        .toString(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-                Text(
-                  Characters(controller.clusterController
-                                      .getActiveClusterNamespace() ==
-                                  '' ||
-                              (controller.scope == ResourceScope.cluster)
-                          ? 'All Namespaces'
-                          : controller
-                              .clusterController
-                              .clusters[controller
-                                  .clusterController.activeClusterIndex.value]
-                              .value
-                              .namespace)
-                      .replaceAll(Characters(''), Characters('\u{200B}'))
-                      .toString(),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            );
-          },
+          ],
         ),
       ),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),

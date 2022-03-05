@@ -11,6 +11,10 @@ abstract class IDetailsItemWidget {
   final dynamic item;
 }
 
+/// [DetailsItemModel] is the structure of a single item in the [DetailsItemWidget]. Each item requires a [name] and a
+/// [values] parameter. The [values] parameter can be of type `String` or a `List<String>`. The optional [onTap]
+/// function can be used to overwrite the behaviour of what happens when the user clicks on a value. It returns the
+/// `index` of the value which was clicked.
 class DetailsItemModel {
   const DetailsItemModel({
     required this.name,
@@ -19,54 +23,70 @@ class DetailsItemModel {
   });
 
   final String name;
-  final List<String> values;
+  final dynamic values;
   final void Function(int index)? onTap;
 }
 
+/// [DetailsItemWidget] is a widget which can be used to render a list of details for a resource. It takes a list of
+/// [details] which are of type [DetailsItemModel] and a [title]. The [smallPadding] argument can be used to minimize
+/// the additional padding for the widget, so that it can be used in other places, like a bottom sheet.
 class DetailsItemWidget extends StatelessWidget {
   const DetailsItemWidget({
     Key? key,
     required this.title,
     required this.details,
+    this.smallPadding = false,
   }) : super(key: key);
 
   final String title;
   final List<DetailsItemModel> details;
+  final bool smallPadding;
 
+  /// [buildValue] build the values field for a details item. If the value is of type `List<String>` it will render the
+  /// values via the [Chip] widget. If it is of type `String` or has an unknown type it will render the value via a
+  /// [Text] component.
   Widget buildValue(
-      String name, List<String> values, void Function(int index)? onTap) {
-    if (values.length == 1) {
+    String name,
+    dynamic values,
+    void Function(int index)? onTap,
+  ) {
+    if (values is List<String>) {
       return Flexible(
-        child: InkWell(
-          onTap: () {
-            if (onTap != null) {
-              onTap(0);
-            }
-          },
-          child: Text(
-            values[0],
-            softWrap: true,
+        child: Wrap(
+          children: List.generate(
+            values.length,
+            (index) => InkWell(
+              onTap: () {
+                if (onTap != null) {
+                  onTap(index);
+                } else {
+                  snackbar(name, values[index]);
+                }
+              },
+              child: Chip(
+                label: Text(values[index]),
+              ),
+            ),
           ),
         ),
       );
     }
 
     return Flexible(
-      child: Wrap(
-        children: List.generate(
-          values.length,
-          (index) => InkWell(
-            onTap: () {
-              if (onTap != null) {
-                onTap(index);
-              } else {
-                snackbar('$name Value', values[index]);
-              }
-            },
-            child: Chip(
-              label: Text(values[index]),
-            ),
-          ),
+      child: InkWell(
+        onTap: () {
+          if (onTap != null) {
+            onTap(-1);
+          }
+        },
+        child: Text(
+          values.toString(),
+          softWrap: true,
+          style: onTap != null
+              ? const TextStyle(
+                  decoration: TextDecoration.underline,
+                )
+              : null,
         ),
       ),
     );
@@ -77,10 +97,14 @@ class DetailsItemWidget extends StatelessWidget {
     return Wrap(
       children: [
         Padding(
-          padding: const EdgeInsets.only(
+          padding: EdgeInsets.only(
             top: Constants.spacingMiddle,
-            left: Constants.spacingMiddle,
-            right: Constants.spacingMiddle,
+            left: smallPadding
+                ? Constants.spacingExtraSmall
+                : Constants.spacingMiddle,
+            right: smallPadding
+                ? Constants.spacingExtraSmall
+                : Constants.spacingMiddle,
             bottom: Constants.spacingMiddle,
           ),
           child: Row(
@@ -96,9 +120,13 @@ class DetailsItemWidget extends StatelessWidget {
         ),
         Container(
           width: double.infinity,
-          margin: const EdgeInsets.only(
-            left: Constants.spacingMiddle,
-            right: Constants.spacingMiddle,
+          margin: EdgeInsets.only(
+            left: smallPadding
+                ? Constants.spacingExtraSmall
+                : Constants.spacingMiddle,
+            right: smallPadding
+                ? Constants.spacingExtraSmall
+                : Constants.spacingMiddle,
           ),
           padding: const EdgeInsets.all(12.0),
           decoration: BoxDecoration(
@@ -131,6 +159,7 @@ class DetailsItemWidget extends StatelessWidget {
                       Text(
                         '${details[index].name}:',
                         style: primaryTextStyle(size: 14),
+                        maxLines: 2,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       buildValue(
