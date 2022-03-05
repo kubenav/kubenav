@@ -114,6 +114,7 @@ class Resource {
     String? path,
     ResourceScope? scope,
     dynamic item,
+    dynamic metrics,
   )? buildListItem;
   Widget Function(dynamic item)? buildDetailsItem;
 
@@ -147,6 +148,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           CronJobListItemWidget(
         title: title,
@@ -171,6 +173,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           DaemonSetListItemWidget(
         title: title,
@@ -196,6 +199,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           DeploymentListItemWidget(
         title: title,
@@ -221,6 +225,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           JobListItemWidget(
         title: title,
@@ -245,6 +250,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           PodListItemWidget(
         title: title,
@@ -252,6 +258,7 @@ abstract class Resources {
         path: path,
         scope: scope,
         item: item,
+        metrics: metrics,
       ),
       buildDetailsItem: (dynamic item) => PodDetailsItemWidget(item: item),
     ),
@@ -269,6 +276,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           ReplicaSetListItemWidget(
         title: title,
@@ -294,6 +302,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           StatefulSetListItemWidget(
         title: title,
@@ -319,6 +328,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           EndpointListItemWidget(
         title: title,
@@ -343,6 +353,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           HorizontalPodAutoscalerListItemWidget(
         title: title,
@@ -368,6 +379,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           IngressListItemWidget(
         title: title,
@@ -392,6 +404,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           NetworkPolicyListItemWidget(
         title: title,
@@ -417,6 +430,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           ServiceListItemWidget(
         title: title,
@@ -441,6 +455,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           ConfigMapListItemWidget(
         title: title,
@@ -466,6 +481,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           PersistentVolumeListItemWidget(
         title: title,
@@ -491,6 +507,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           PersistentVolumeClaimListItemWidget(
         title: title,
@@ -516,6 +533,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           PodDisruptionBudgetListItemWidget(
         title: title,
@@ -541,6 +559,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           SecretListItemWidget(
         title: title,
@@ -565,6 +584,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           ServiceAccountListItemWidget(
         title: title,
@@ -590,6 +610,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           StorageClassListItemWidget(
         title: title,
@@ -626,6 +647,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           ClusterRoleBindingListItemWidget(
         title: title,
@@ -661,6 +683,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           RoleBindingListItemWidget(
         title: title,
@@ -686,6 +709,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           EventListItemWidget(
         title: title,
@@ -718,6 +742,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           NamespaceListItemWidget(
         title: title,
@@ -743,6 +768,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           NodeListItemWidget(
         title: title,
@@ -750,6 +776,7 @@ abstract class Resources {
         path: path,
         scope: scope,
         item: item,
+        metrics: metrics,
       ),
       buildDetailsItem: (dynamic item) => NodeDetailsItemWidget(item: item),
     ),
@@ -767,6 +794,7 @@ abstract class Resources {
         String? path,
         ResourceScope? scope,
         dynamic item,
+        dynamic metrics,
       ) =>
           PodSecurityPolicyListItemWidget(
         title: title,

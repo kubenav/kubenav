@@ -13,6 +13,7 @@ class PodListItemWidget extends StatelessWidget implements IListItemWidget {
     required this.path,
     required this.scope,
     required this.item,
+    required this.metrics,
   }) : super(key: key);
 
   @override
@@ -25,12 +26,20 @@ class PodListItemWidget extends StatelessWidget implements IListItemWidget {
   final ResourceScope? scope;
   @override
   final dynamic item;
+  final dynamic metrics;
 
   @override
   Widget build(BuildContext context) {
     final pod = IoK8sApiCoreV1Pod.fromJson(item);
-    final info = buildInfoText(pod);
+    var info = buildInfoText(pod);
+    final podResources = getResources(pod);
+    final podMetrics = getMetricsFromList(pod, metrics);
     final status = getStatus(pod);
+
+    if (podMetrics != null) {
+      info = info +
+          '\nCPU: ${podMetrics.cpu} ${podResources?.cpu ?? ''}\nMemory: ${podMetrics.memory} ${podResources?.memory ?? ''}';
+    }
 
     return ListItemWidget(
       title: title,

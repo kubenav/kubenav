@@ -1,12 +1,15 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiCoreV1Pod;
+import 'package:kubenav/models/kubernetes-extensions/pod_metrics.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_containers_widget.dart';
+import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/resources/pods.dart';
@@ -14,8 +17,18 @@ import 'package:kubenav/utils/resources/pods.dart';
 class PodDetailsItemController extends GetxController {
   ClusterController clusterController = Get.find();
 
+  final IoK8sApiCoreV1Pod? pod;
+  RxList<ApisMetricsV1beta1PodMetricsItemContainer> metrics =
+      <ApisMetricsV1beta1PodMetricsItemContainer>[].obs;
+
+  PodDetailsItemController({
+    required this.pod,
+  });
+
   @override
   void onInit() {
+    getMetrics();
+
     super.onInit();
   }
 
@@ -47,6 +60,48 @@ class PodDetailsItemController extends GetxController {
       );
     }
   }
+
+  /// [getMetrics] returns the CPU and Memory usage for each container of the Pod. This function is called in the
+  /// during the initalization ([onInit]) of the controller.
+  void getMetrics() async {
+    final cluster = clusterController.getActiveCluster();
+    if (cluster != null &&
+        pod != null &&
+        pod!.metadata != null &&
+        pod!.metadata!.name != null &&
+        pod!.metadata!.namespace != null) {
+      final url =
+          '/apis/metrics.k8s.io/v1beta1/namespaces/${pod!.metadata!.namespace}/pods/${pod!.metadata!.name}';
+
+      try {
+        final metricsData =
+            await KubernetesService(cluster: cluster).getRequest(url);
+
+        Logger.log(
+          'PodDetailsItemController getMetrics',
+          'Pod metrics were returned',
+          'Request URL: $url\nManifest: $metricsData',
+        );
+        final containerMetrics =
+            ApisMetricsV1beta1PodMetricsItem.fromJson(metricsData).containers;
+        if (containerMetrics != null) {
+          metrics.value = containerMetrics;
+        }
+      } on PlatformException catch (err) {
+        Logger.log(
+          'PodDetailsItemController getMetrics',
+          'An error was returned while getting metrics',
+          'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+        );
+      } catch (err) {
+        Logger.log(
+          'PodDetailsItemController getMetrics',
+          'An error was returned while getting metrics',
+          err,
+        );
+      }
+    }
+  }
 }
 
 class PodDetailsItemWidget extends StatelessWidget
@@ -61,11 +116,11 @@ class PodDetailsItemWidget extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    PodDetailsItemController controller = Get.put(
-      PodDetailsItemController(),
-    );
-
     final pod = IoK8sApiCoreV1Pod.fromJson(item);
+
+    PodDetailsItemController controller = Get.put(
+      PodDetailsItemController(pod: pod),
+    );
 
     if (pod == null || pod.spec == null || pod.status == null) {
       return Container();
@@ -163,6 +218,7 @@ class PodDetailsItemWidget extends StatelessWidget
           containers: pod.spec!.containers,
           initContainerStatuses: pod.status!.initContainerStatuses,
           containerStatuses: pod.status!.containerStatuses,
+          containerMetrics: controller.metrics,
         ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsResourcesPreviewWidget(

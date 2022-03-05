@@ -29,6 +29,7 @@ class ResourcesListController extends GetxController {
   });
 
   RxList<dynamic> items = <dynamic>[].obs;
+  dynamic metrics;
   RxString error = ''.obs;
   RxBool loading = false.obs;
   Worker? worker;
@@ -81,6 +82,8 @@ class ResourcesListController extends GetxController {
       error.value = 'The requested resource was not found';
     } else {
       loading.value = true;
+      await getMetrics();
+
       final cluster = clusterController.getActiveCluster();
       if (cluster == null) {
         error.value = 'No active cluster';
@@ -119,6 +122,64 @@ class ResourcesListController extends GetxController {
           );
           error.value = err.toString();
           loading.value = false;
+        }
+      }
+    }
+  }
+
+  /// [getMetrics] returns the metrics for Pods and Nodes. The returned list can be used to show the CPU / Memory usage
+  /// of a Pod / Node within the list item. We try to get the metrics within the list screen so that we do not have to
+  /// make one API call per returned Pod / Node.
+  Future getMetrics() async {
+    if (title == null || resource == null || path == null || scope == null) {
+      Logger.log(
+        'ResourcesListController getMetrics',
+        'The requested resource was not found',
+        'title: $title, resource: $resource, path: $path, scope: $scope',
+      );
+    } else {
+      final cluster = clusterController.getActiveCluster();
+      if (cluster == null) {
+        error.value = 'No active cluster';
+      } else {
+        if ((resource == Resources.map['pods']!.resource &&
+                path == Resources.map['pods']!.path) ||
+            (resource == Resources.map['nodes']!.resource &&
+                path == Resources.map['nodes']!.path)) {
+          final url = scope == ResourceScope.cluster
+              ? '/apis/metrics.k8s.io/v1beta1/$resource?${selector ?? ''}'
+              : namespace != null
+                  ? '/apis/metrics.k8s.io/v1beta1/namespaces/$namespace/$resource?${selector ?? ''}'
+                  : '/apis/metrics.k8s.io/v1beta1${cluster.namespace != '' ? '/namespaces/${cluster.namespace}' : ''}/$resource?${selector ?? ''}';
+
+          try {
+            final resourcesList =
+                await KubernetesService(cluster: cluster).getRequest(url);
+
+            Logger.log(
+              'ResourcesListController getMetrics',
+              '${resourcesList['items'].length} items were returned',
+              'Request URL: $url\nManifest: $resourcesList',
+            );
+            metrics = resourcesList;
+          } on PlatformException catch (err) {
+            Logger.log(
+              'ResourcesListController getMetrics',
+              'An error was returned while getting metrics',
+              'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+            );
+          } catch (err) {
+            Logger.log(
+              'ResourcesListController getMetrics',
+              'An error was returned while getting metrics',
+              err,
+            );
+          }
+        } else {
+          Logger.log(
+            'ResourcesListController getMetrics',
+            'Metrics are only supported for Pods and Nodes',
+          );
         }
       }
     }

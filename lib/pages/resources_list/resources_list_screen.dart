@@ -57,6 +57,7 @@ class ResourcesList extends GetView {
     String? path,
     ResourceScope? scope,
     dynamic item,
+    dynamic metrics,
   ) {
     if (resource != null &&
         path != null &&
@@ -70,6 +71,7 @@ class ResourcesList extends GetView {
         path,
         scope,
         item,
+        metrics,
       );
     }
 
@@ -254,6 +256,7 @@ class ResourcesList extends GetView {
                             controller.path,
                             controller.scope,
                             controller.items[index],
+                            controller.metrics,
                           );
                         },
                       ),

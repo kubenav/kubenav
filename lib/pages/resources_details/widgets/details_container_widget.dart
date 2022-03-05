@@ -1,10 +1,13 @@
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/api.dart'
     show IoK8sApiCoreV1Container, IoK8sApiCoreV1ContainerStatus;
+import 'package:kubenav/models/kubernetes-extensions/pod_metrics.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/resources/general.dart';
 import 'package:kubenav/utils/resources/pods.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 import 'package:kubenav/widgets/app_vertical_list_simple_widget.dart';
@@ -16,12 +19,14 @@ class DetailsContainerWidget extends StatelessWidget {
     required this.container,
     required this.initContainerStatuses,
     required this.containerStatuses,
+    required this.containerMetrics,
   }) : super(key: key);
 
   final String containerType;
   final IoK8sApiCoreV1Container container;
   final List<IoK8sApiCoreV1ContainerStatus> initContainerStatuses;
   final List<IoK8sApiCoreV1ContainerStatus> containerStatuses;
+  final RxList<ApisMetricsV1beta1PodMetricsItemContainer> containerMetrics;
 
   List<Widget> buildStatus() {
     List<IoK8sApiCoreV1ContainerStatus> status = [];
@@ -68,6 +73,11 @@ class DetailsContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<ApisMetricsV1beta1PodMetricsItemContainer> containerMetric =
+        containerMetrics
+            .where((containerMetric) => containerMetric.name == container.name)
+            .toList();
+
     return AppBottomSheetWidget(
       title: container.name,
       subtitle: containerType,
@@ -137,9 +147,13 @@ class DetailsContainerWidget extends StatelessWidget {
             smallPadding: true,
             title: 'Resources',
             details: [
-              const DetailsItemModel(
+              DetailsItemModel(
                 name: 'CPU Usage',
-                values: '-',
+                values: containerMetric.isNotEmpty &&
+                        containerMetric[0].usage?.cpu != null
+                    ? formatCpuMetric(
+                        cpuMetricsStringToInt(containerMetric[0].usage!.cpu!))
+                    : '-',
               ),
               DetailsItemModel(
                 name: 'CPU Requests',
@@ -155,9 +169,13 @@ class DetailsContainerWidget extends StatelessWidget {
                     ? container.resources!.limits['cpu']
                     : '-',
               ),
-              const DetailsItemModel(
+              DetailsItemModel(
                 name: 'Memory Usage',
-                values: '-',
+                values: containerMetric.isNotEmpty &&
+                        containerMetric[0].usage?.memory != null
+                    ? formatMemoryMetric(memoryMetricsStringToInt(
+                        containerMetric[0].usage!.memory!))
+                    : '-',
               ),
               DetailsItemModel(
                 name: 'Memory Requests',
