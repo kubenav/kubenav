@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
+import 'package:kubenav/pages/resources_details/widgets/details_create_job_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_delete_resource_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_edit_resource_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_restart_resource_widget.dart';
@@ -208,6 +209,28 @@ class ResourcesDetailsController extends GetxController {
             return DetailsRestartResourceWidget(
               resource: resource!,
               path: path!,
+              name: name!,
+              namespace: namespace!,
+              item: item,
+            );
+          },
+        ),
+        isScrollControlled: true,
+      );
+    }
+  }
+
+  void createJob() async {
+    if (name != null && namespace != null) {
+      Get.bottomSheet(
+        BottomSheet(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
+          ),
+          onClosing: () {},
+          enableDrag: false,
+          builder: (builder) {
+            return DetailsCreateJobWidget(
               name: name!,
               namespace: namespace!,
               item: item,

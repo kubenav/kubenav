@@ -173,4 +173,43 @@ class KubernetesService {
       return Future.error(err);
     }
   }
+
+  /// [postRequest] can be used to run a post request against a Kubernetes cluster. Besides the [url] of the resource,
+  /// which should be created, we also have to pass a [body] to the function. The [body] must be contain the Kubernetes
+  /// manifest which should be created.
+  Future<void> postRequest(String url, String body) async {
+    try {
+      final String result = await platform.invokeMethod(
+        'kubernetesRequest',
+        <String, dynamic>{
+          'clusterServer': cluster.clusterServer,
+          'clusterCertificateAuthorityData':
+              cluster.clusterCertificateAuthorityData,
+          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
+          'userClientCertificateData': cluster.userClientCertificateData,
+          'userClientKeyData': cluster.userClientKeyData,
+          'userToken': cluster.userToken,
+          'userUsername': cluster.userUsername,
+          'userPassword': cluster.userPassword,
+          'requestMethod': 'POST',
+          'requestURL': url,
+          'requestBody': body,
+        },
+      );
+
+      Logger.log(
+        'KubernetesService postRequest',
+        'Patch request was ok',
+        result,
+      );
+      return;
+    } catch (err) {
+      Logger.log(
+        'KubernetesService postRequest',
+        'Patch request failed',
+        err,
+      );
+      return Future.error(err);
+    }
+  }
 }

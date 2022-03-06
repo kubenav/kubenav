@@ -80,11 +80,22 @@ class ResourcesDetails extends GetView {
                 Resources.map['daemonsets']!.path == path))) {
       additionalActions.add(AppActionsHeaderModel(
         title: 'Restart',
-        // TODO: Change scale icon to: Icons.difference
-        // icon: Icons.difference,
         icon: Icons.restart_alt,
         onTap: () {
           controller.restartResource();
+        },
+      ));
+    }
+
+    if (resource != null &&
+        path != null &&
+        Resources.map['cronjobs']!.resource == resource &&
+        Resources.map['cronjobs']!.path == path) {
+      additionalActions.add(AppActionsHeaderModel(
+        title: 'Create Job',
+        icon: Icons.play_arrow,
+        onTap: () {
+          controller.createJob();
         },
       ));
     }
