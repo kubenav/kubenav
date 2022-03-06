@@ -39,6 +39,15 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
+    } else if call.method == "createJSONPatch" {
+      if let args = call.arguments as? Dictionary<String, Any>,
+        let source = args["source"] as? String,
+        let target = args["target"] as? String
+      {
+        createJSONPatch(source: source, target: target, result: result)
+      } else {
+        result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
+      }
     } else {
       result(FlutterMethodNotImplemented)
     }
@@ -61,6 +70,17 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     let data = KubenavPrettifyYAML(jsonStr, &error)
     if error != nil {
       result(FlutterError(code: "PRETTIFY_YAML_FAILED", message: error?.localizedDescription ?? "", details: nil))
+    } else {
+      result(data)
+    }
+  }
+
+  private func createJSONPatch(source: String, target: String, result: FlutterResult) {
+    var error: NSError?
+
+    let data = KubenavCreateJSONPatch(source, target, &error)
+    if error != nil {
+      result(FlutterError(code: "CREATE_JSON_PATCH_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
       result(data)
     }

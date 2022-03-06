@@ -48,6 +48,15 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       } else {
         prettifyYAML(jsonStr, result)
       }
+    } else if (call.method == "createJSONPatch") {
+      val source = call.argument("source") as String?
+      val target = call.argument("target") as String?
+
+      if (source == null || target == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        createJSONPatch(source, target, result)
+      }
     } else {
       result.notImplemented()
     }
@@ -68,6 +77,15 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       result.success(data)
     } catch (e: Exception) {
       result.error("PRETTIFY_YAML_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun createJSONPatch(source: String, target: String, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.createJSONPatch(source, target)
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("CREATE_JSON_PATCH_FAILED", e.localizedMessage, null)
     }
   }
 }

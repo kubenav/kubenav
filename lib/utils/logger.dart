@@ -93,7 +93,7 @@ class _Log {
     length.value++;
 
     debugPrint(
-      '${log.time} ${log.name} ${log.message}${log.detail == null ? '' : '\n${log.detail.toString().substring(0, log.detail.toString().length > 255 ? 255 : null)}'}\n--------------------------------',
+      '[${log.time}] [${log.name}] ${log.message}${log.detail == null ? '' : '\n${log.detail.toString().substring(0, log.detail.toString().length > 255 ? 255 : null)}'}\n--------------------------------',
     );
   }
 

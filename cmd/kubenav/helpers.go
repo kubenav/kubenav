@@ -3,6 +3,7 @@ package kubenav
 import (
 	"encoding/json"
 
+	"github.com/wI2L/jsondiff"
 	"sigs.k8s.io/yaml"
 )
 
@@ -22,4 +23,16 @@ func PrettifyYAML(jsonStr string) (string, error) {
 	}
 
 	return string(yamlStr), nil
+}
+
+// CreateJSONPatch creates a path for two given json strings. This is needed when a user edits a resource, where the
+// source argument is the manifest of the current resource and the target is the edited manifest. The returned patch
+// can then be send to the Kubernetes API to edit the resource.
+func CreateJSONPatch(source, target string) (string, error) {
+	patch, err := jsondiff.CompareJSON([]byte(source), []byte(target))
+	if err != nil {
+		return "", err
+	}
+
+	return patch.String(), nil
 }

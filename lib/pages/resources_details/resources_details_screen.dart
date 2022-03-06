@@ -144,7 +144,9 @@ class ResourcesDetails extends GetView {
                         AppActionsHeaderModel(
                           title: 'Edit',
                           icon: Icons.edit,
-                          onTap: () {},
+                          onTap: () {
+                            controller.editResource();
+                          },
                         ),
                         AppActionsHeaderModel(
                           title: 'Delete',

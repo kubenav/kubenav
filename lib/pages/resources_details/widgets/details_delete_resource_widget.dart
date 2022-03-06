@@ -58,10 +58,11 @@ class DetailsDeleteResourceController extends GetxController {
 
       await KubernetesService(cluster: cluster).deleteRequest(url, body);
       snackbar(
-          'Resource is deleted',
-          namespace == null
-              ? 'The resource $name is deleted'
-              : 'The resource $name in namespace $namespace is deleted');
+        'Resource is deleted',
+        namespace == null
+            ? 'The resource $name is deleted'
+            : 'The resource $name in namespace $namespace is deleted',
+      );
     } on PlatformException catch (err) {
       Logger.log(
         'DetailsDeleteResourceController deleteResource',

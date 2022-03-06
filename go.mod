@@ -3,6 +3,7 @@ module github.com/kubenav/kubenav
 go 1.17
 
 require (
+	github.com/wI2L/jsondiff v0.1.1
 	golang.org/x/mobile v0.0.0-20190719004257-d2bd2a29d028
 	k8s.io/apimachinery v0.23.4
 	k8s.io/client-go v0.23.4
