@@ -70,6 +70,25 @@ class ResourcesDetails extends GetView {
       ));
     }
 
+    if (resource != null &&
+        path != null &&
+        ((Resources.map['deployments']!.resource == resource &&
+                Resources.map['deployments']!.path == path) ||
+            (Resources.map['statefulsets']!.resource == resource &&
+                Resources.map['statefulsets']!.path == path) ||
+            (Resources.map['daemonsets']!.resource == resource &&
+                Resources.map['daemonsets']!.path == path))) {
+      additionalActions.add(AppActionsHeaderModel(
+        title: 'Restart',
+        // TODO: Change scale icon to: Icons.difference
+        // icon: Icons.difference,
+        icon: Icons.restart_alt,
+        onTap: () {
+          controller.restartResource();
+        },
+      ));
+    }
+
     return additionalActions;
   }
 

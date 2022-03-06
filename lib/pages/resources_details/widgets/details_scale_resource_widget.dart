@@ -90,7 +90,7 @@ class DetailsScaleResourceController extends GetxController {
           'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
         );
         snackbar(
-          'Could not delete resource',
+          'Could not scale resource',
           'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
         );
       } catch (err) {
@@ -99,7 +99,7 @@ class DetailsScaleResourceController extends GetxController {
           'An error was returned while scaling the resource',
           err,
         );
-        snackbar('Could not delete resource', err.toString());
+        snackbar('Could not scale resource', err.toString());
       }
 
       finish(context);

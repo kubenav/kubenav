@@ -7,6 +7,7 @@ import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_delete_resource_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_edit_resource_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/details_restart_resource_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_show_yaml_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_scale_resource_widget.dart';
 import 'package:kubenav/utils/constants.dart';
@@ -181,6 +182,30 @@ class ResourcesDetailsController extends GetxController {
           enableDrag: false,
           builder: (builder) {
             return DetailsScaleResourceWidget(
+              resource: resource!,
+              path: path!,
+              name: name!,
+              namespace: namespace!,
+              item: item,
+            );
+          },
+        ),
+        isScrollControlled: true,
+      );
+    }
+  }
+
+  void restartResource() async {
+    if (resource != null && path != null && name != null && namespace != null) {
+      Get.bottomSheet(
+        BottomSheet(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
+          ),
+          onClosing: () {},
+          enableDrag: false,
+          builder: (builder) {
+            return DetailsRestartResourceWidget(
               resource: resource!,
               path: path!,
               name: name!,
