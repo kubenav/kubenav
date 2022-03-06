@@ -220,7 +220,25 @@ class ResourcesList extends GetView {
                         AppActionsHeaderModel(
                           title: 'Create',
                           icon: Icons.create,
-                          onTap: () {},
+                          onTap: () {
+                            if (controller.title != null &&
+                                controller.resource != null &&
+                                controller.path != null &&
+                                Resources.map
+                                    .containsKey(controller.resource) &&
+                                Resources.map[controller.resource]!.resource ==
+                                    controller.resource &&
+                                Resources.map[controller.resource]!.path ==
+                                    controller.path &&
+                                Resources.map[controller.resource]!.template !=
+                                    '') {
+                              controller.createResource(
+                                  Resources.map[controller.resource]!.template);
+                            } else {
+                              controller.createResource(
+                                  '{"apiVersion":"","kind":"","metadata":{"name":"","namespace":""},"spec":{}}');
+                            }
+                          },
                         ),
                         AppActionsHeaderModel(
                           title: 'Refresh',

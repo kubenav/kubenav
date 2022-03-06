@@ -108,6 +108,7 @@ class Resource {
   String resource;
   String path;
   ResourceScope scope;
+  String template;
   Widget Function(
     String? title,
     String? resource,
@@ -125,6 +126,7 @@ class Resource {
     required this.resource,
     required this.path,
     required this.scope,
+    required this.template,
     this.buildListItem,
     this.buildDetailsItem,
   });
@@ -142,6 +144,8 @@ abstract class Resources {
       resource: 'cronjobs',
       path: '/apis/batch/v1beta1',
       scope: ResourceScope.namespaced,
+      template:
+          '{"apiVersion":"batch/v1","kind":"CronJob","metadata":{"name":"","namespace":""},"spec":{"schedule":"5 4 * * *","suspend":false,"successfulJobsHistoryLimit":1,"failedJobsHistoryLimit":1,"jobTemplate":{"spec":{"backoffLimit":0,"template":{"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}}}',
       buildListItem: (
         String? title,
         String? resource,
@@ -167,6 +171,8 @@ abstract class Resources {
       resource: 'daemonsets',
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
+      template:
+          '{"apiVersion":"apps/v1","kind":"DaemonSet","metadata":{"name":"","namespace":""},"spec":{"selector":{"matchLabels":{"app":"nginx"}},"template":{"metadata":{"labels":{"app":"nginx"}},"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}',
       buildListItem: (
         String? title,
         String? resource,
@@ -193,6 +199,8 @@ abstract class Resources {
       resource: 'deployments',
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
+      template:
+          '{"apiVersion":"apps/v1","kind":"Deployment","metadata":{"name":"","namespace":""},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"nginx"}},"template":{"metadata":{"labels":{"app":"nginx"}},"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}',
       buildListItem: (
         String? title,
         String? resource,
@@ -219,6 +227,8 @@ abstract class Resources {
       resource: 'jobs',
       path: '/apis/batch/v1',
       scope: ResourceScope.namespaced,
+      template:
+          '{"apiVersion":"batch/v1","kind":"Job","metadata":{"name":"","namespace":""},"spec":{"backoffLimit":0,"completions":1,"parallelism":1,"template":{"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}',
       buildListItem: (
         String? title,
         String? resource,
@@ -244,6 +254,8 @@ abstract class Resources {
       resource: 'pods',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      template:
+          '{"apiVersion":"v1","kind":"Pod","metadata":{"name":"","namespace":""},"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}',
       buildListItem: (
         String? title,
         String? resource,
@@ -270,6 +282,7 @@ abstract class Resources {
       resource: 'replicasets',
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -296,6 +309,8 @@ abstract class Resources {
       resource: 'statefulsets',
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
+      template:
+          '{"apiVersion":"apps/v1","kind":"StatefulSet","metadata":{"name":"","namespace":""},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"nginx"}},"serviceName":"nginx","template":{"metadata":{"labels":{"app":"nginx"},"name":"nginx"},"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}',
       buildListItem: (
         String? title,
         String? resource,
@@ -322,6 +337,7 @@ abstract class Resources {
       resource: 'endpoints',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -347,6 +363,7 @@ abstract class Resources {
       resource: 'horizontalpodautoscalers',
       path: '/apis/autoscaling/v2beta1',
       scope: ResourceScope.namespaced,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -373,6 +390,7 @@ abstract class Resources {
       resource: 'ingresses',
       path: '/apis/extensions/v1beta1',
       scope: ResourceScope.namespaced,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -398,6 +416,7 @@ abstract class Resources {
       resource: 'networkpolicies',
       path: '/apis/networking.k8s.io/v1',
       scope: ResourceScope.namespaced,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -424,6 +443,7 @@ abstract class Resources {
       resource: 'services',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -449,6 +469,7 @@ abstract class Resources {
       resource: 'configmaps',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -475,6 +496,7 @@ abstract class Resources {
       resource: 'persistentvolumes',
       path: '/api/v1',
       scope: ResourceScope.cluster,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -501,6 +523,7 @@ abstract class Resources {
       resource: 'persistentvolumeclaims',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -527,6 +550,7 @@ abstract class Resources {
       resource: 'poddisruptionbudgets',
       path: '/apis/policy/v1beta1',
       scope: ResourceScope.namespaced,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -553,6 +577,7 @@ abstract class Resources {
       resource: 'secrets',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -578,6 +603,7 @@ abstract class Resources {
       resource: 'serviceaccounts',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -604,6 +630,7 @@ abstract class Resources {
       resource: 'storageclasses',
       path: '/apis/storage.k8s.io/v1',
       scope: ResourceScope.cluster,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -630,6 +657,7 @@ abstract class Resources {
       resource: 'clusterroles',
       path: '/apis/rbac.authorization.k8s.io/v1',
       scope: ResourceScope.cluster,
+      template: '',
       buildDetailsItem: (dynamic item) =>
           ClusterRoleDetailsItemWidget(item: item),
     ),
@@ -641,6 +669,7 @@ abstract class Resources {
       resource: 'clusterrolebindings',
       path: '/apis/rbac.authorization.k8s.io/v1',
       scope: ResourceScope.cluster,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -667,6 +696,7 @@ abstract class Resources {
       resource: 'roles',
       path: '/apis/rbac.authorization.k8s.io/v1',
       scope: ResourceScope.namespaced,
+      template: '',
       buildDetailsItem: (dynamic item) => RoleDetailsItemWidget(item: item),
     ),
     'rolebindings': Resource(
@@ -677,6 +707,7 @@ abstract class Resources {
       resource: 'rolebindings',
       path: '/apis/rbac.authorization.k8s.io/v1',
       scope: ResourceScope.namespaced,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -703,6 +734,7 @@ abstract class Resources {
       resource: 'events',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -727,6 +759,7 @@ abstract class Resources {
       resource: 'customresourcedefinitions',
       path: '/apis/apiextensions.k8s.io/v1',
       scope: ResourceScope.cluster,
+      template: '',
     ),
     'namespaces': Resource(
       resourceType: ResourceType.cluster,
@@ -736,6 +769,8 @@ abstract class Resources {
       resource: 'namespaces',
       path: '/api/v1',
       scope: ResourceScope.cluster,
+      template:
+          '{"apiVersion":"v1","kind":"Namespace","metadata":{"name":"nginx"}}',
       buildListItem: (
         String? title,
         String? resource,
@@ -762,6 +797,7 @@ abstract class Resources {
       resource: 'nodes',
       path: '/api/v1',
       scope: ResourceScope.cluster,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,
@@ -788,6 +824,7 @@ abstract class Resources {
       resource: 'podsecuritypolicies',
       path: '/apis/policy/v1beta1',
       scope: ResourceScope.cluster,
+      template: '',
       buildListItem: (
         String? title,
         String? resource,

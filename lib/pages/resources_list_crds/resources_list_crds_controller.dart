@@ -71,6 +71,7 @@ class ResourcesListCRDsController extends GetxController {
                 path: '/apis/${crd.spec.group}/${version.name}',
                 scope: resourceScopeFromString(crd.spec.scope) ??
                     ResourceScope.cluster,
+                template: '',
                 buildDetailsItem: (dynamic item) => const Text('test'),
               ));
             }

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/resource_model.dart';
+import 'package:kubenav/pages/resources_list/widgets/list_create_resource_widget.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
@@ -202,5 +203,28 @@ class ResourcesListController extends GetxController {
       ),
       isScrollControlled: true,
     );
+  }
+
+  void createResource(String template) async {
+    if (title != null && resource != null && path != null) {
+      Get.bottomSheet(
+        BottomSheet(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
+          ),
+          onClosing: () {},
+          enableDrag: false,
+          builder: (builder) {
+            return ListCreateResourceWidget(
+              title: title!,
+              resource: resource!,
+              path: path!,
+              template: template,
+            );
+          },
+        ),
+        isScrollControlled: true,
+      );
+    }
   }
 }

@@ -16,7 +16,7 @@ class HelpersService {
   /// good package to work with YAML.
   Future<String> prettifyYAML(dynamic jsonObj) async {
     try {
-      final jsonStr = json.encode(jsonObj);
+      final jsonStr = jsonObj is String ? jsonObj : json.encode(jsonObj);
 
       final String result = await platform.invokeMethod(
         'prettifyYAML',

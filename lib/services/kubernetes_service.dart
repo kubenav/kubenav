@@ -199,14 +199,14 @@ class KubernetesService {
 
       Logger.log(
         'KubernetesService postRequest',
-        'Patch request was ok',
+        'Post request was ok',
         result,
       );
       return;
     } catch (err) {
       Logger.log(
         'KubernetesService postRequest',
-        'Patch request failed',
+        'Post request failed',
         err,
       );
       return Future.error(err);
