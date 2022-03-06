@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:kubenav/controllers/bookmark_controller.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -15,6 +16,7 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 
 class ResourcesDetailsController extends GetxController {
+  BookmarkController bookmarkController = Get.find();
   ClusterController clusterController = Get.find();
 
   String? title;

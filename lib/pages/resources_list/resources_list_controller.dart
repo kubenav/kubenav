@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:kubenav/controllers/bookmark_controller.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_list/widgets/list_create_resource_widget.dart';
@@ -11,7 +12,10 @@ import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/app_namespaces_widget.dart';
 
 class ResourcesListController extends GetxController {
+  BookmarkController bookmarkController = Get.find();
   ClusterController clusterController = Get.find();
+  final search = TextEditingController();
+  RxString filter = ''.obs;
 
   String? title;
   String? resource;
@@ -68,6 +72,20 @@ class ResourcesListController extends GetxController {
     }
 
     super.onClose();
+  }
+
+  List<dynamic> getItems() {
+    if (filter.value == '') {
+      return items.toList();
+    }
+
+    return items
+        .where((item) =>
+            item['metadata'] != null &&
+            item['metadata']['name'] != null &&
+            item['metadata']['name'] is String &&
+            item['metadata']['name'].contains(filter.value))
+        .toList();
   }
 
   /// [getResources] returns all items for the requested [resource], [path] and [scope]. If the optional [namespace] and

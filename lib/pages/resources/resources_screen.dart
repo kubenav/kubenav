@@ -1,16 +1,85 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:kubenav/models/bookmark_model.dart';
 import 'package:kubenav/models/resource_model.dart' as resource_model;
 import 'package:kubenav/pages/resources/resources_controller.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
+import 'package:kubenav/widgets/app_horizontal_list_cards_widget.dart';
 import 'package:kubenav/widgets/app_vertical_list_simple_widget.dart';
 
 class Resources extends GetView<ResourcesController> {
   const Resources({Key? key}) : super(key: key);
+
+  Widget buildBookmarks() {
+    if (controller.bookmarkController.bookmarks.isEmpty) {
+      return Container();
+    }
+
+    return AppHorizontalListCardsWidget(
+      title: 'Bookmarks',
+      cards: List.generate(
+        controller.bookmarkController.bookmarks.length <= 10
+            ? controller.bookmarkController.bookmarks.length
+            : 10,
+        (index) => AppHorizontalListCardsModel(
+          title: controller.bookmarkController.bookmarks[index].title,
+          subtitle:
+              'Cluster: ${controller.bookmarkController.bookmarks[index].cluster}\nNamespace: ${controller.bookmarkController.bookmarks[index].namespace}${controller.bookmarkController.bookmarks[index].name != null ? '\nName: ${controller.bookmarkController.bookmarks[index].name}' : '\n'}',
+          image: resource_model.Resources.map.containsKey(controller
+                      .bookmarkController.bookmarks[index].resource) &&
+                  resource_model
+                          .Resources
+                          .map[controller
+                              .bookmarkController.bookmarks[index].resource]!
+                          .resource ==
+                      controller.bookmarkController.bookmarks[index].resource &&
+                  resource_model
+                          .Resources
+                          .map[controller
+                              .bookmarkController.bookmarks[index].resource]!
+                          .path ==
+                      controller.bookmarkController.bookmarks[index].path
+              ? 'assets/resources/image108x108/${controller.bookmarkController.bookmarks[index].resource}.png'
+              : 'assets/resources/image108x108/customresourcedefinitions.png',
+          imageFit: BoxFit.none,
+          onTap: () {
+            if (controller.bookmarkController.bookmarks[index].type ==
+                BookmarkType.list) {
+              if (controller.clusterController.setActiveClusterAndNamespace(
+                controller.bookmarkController.bookmarks[index].cluster,
+                controller.bookmarkController.bookmarks[index].namespace,
+              )) {
+                Get.toNamed(
+                  '/resources/list?title=${controller.bookmarkController.bookmarks[index].title}&resource=${controller.bookmarkController.bookmarks[index].resource}&path=${controller.bookmarkController.bookmarks[index].path}&scope=${controller.bookmarkController.bookmarks[index].scope.name}',
+                );
+              }
+            } else if (controller.bookmarkController.bookmarks[index].type ==
+                BookmarkType.details) {
+              if (controller.clusterController.setActiveClusterAndNamespace(
+                controller.bookmarkController.bookmarks[index].cluster,
+                controller.bookmarkController.bookmarks[index].namespace,
+              )) {
+                Get.toNamed(
+                  '/resources/details?title=${controller.bookmarkController.bookmarks[index].title}&resource=${controller.bookmarkController.bookmarks[index].resource}&path=${controller.bookmarkController.bookmarks[index].path}&scope=${controller.bookmarkController.bookmarks[index].scope.name}&name=${controller.bookmarkController.bookmarks[index].name}&${controller.bookmarkController.bookmarks[index].scope == resource_model.ResourceScope.namespaced ? 'namespace=${controller.bookmarkController.bookmarks[index].namespace}' : ''}',
+                );
+              }
+            }
+          },
+        ),
+      ),
+      moreIcon: Icons.keyboard_arrow_right,
+      moreText: 'View all',
+      moreOnTap: () {
+        Get.toNamed(
+          '/resources/bookmarks',
+        );
+      },
+    );
+  }
 
   List<AppVertialListSimpleModel> getItems(
       resource_model.ResourceType resourceType) {
@@ -131,6 +200,9 @@ class Resources extends GetView<ResourcesController> {
         child: Column(
           children: [
             const SizedBox(height: Constants.spacingSmall),
+            Obx(() {
+              return buildBookmarks();
+            }),
             AppVertialListSimpleWidget(
               title: 'Workloads',
               items: getItems(

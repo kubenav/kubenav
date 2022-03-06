@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:kubenav/pages/clusters/clusters_controller.dart';
-import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
-import 'package:kubenav/widgets/app_horizontal_list_cards_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/cluster_item_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
+import 'package:kubenav/widgets/app_horizontal_list_cards_widget.dart';
 
 class Clusters extends GetView<ClustersController> {
   const Clusters({Key? key}) : super(key: key);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:kubenav/models/bookmark_model.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_list/resources_list_controller.dart';
 import 'package:kubenav/pages/resources_list/widgets/default_list_item_widget.dart';
@@ -215,6 +216,46 @@ class ResourcesList extends GetView {
 
                 return Wrap(
                   children: [
+                    Container(
+                      padding: const EdgeInsets.only(
+                        top: Constants.spacingSmall,
+                        bottom: Constants.spacingSmall,
+                        left: Constants.spacingMiddle,
+                        right: Constants.spacingMiddle,
+                      ),
+                      color: Constants.colorPrimary,
+                      child: TextField(
+                        controller: controller.search,
+                        onSubmitted: (value) {
+                          controller.filter.value = controller.search.text;
+                        },
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        cursorColor: Colors.white,
+                        keyboardType: TextInputType.url,
+                        autocorrect: false,
+                        enableSuggestions: false,
+                        maxLines: 1,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 0.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 0.0),
+                          ),
+                          isDense: true,
+                          contentPadding: EdgeInsets.all(8),
+                          hintStyle: TextStyle(
+                            color: Colors.white,
+                          ),
+                          hintText: 'Filter...',
+                        ),
+                      ),
+                    ),
                     AppActionsHeaderWidget(
                       actions: [
                         AppActionsHeaderModel(
@@ -249,8 +290,53 @@ class ResourcesList extends GetView {
                         ),
                         AppActionsHeaderModel(
                           title: 'Bookmark',
-                          icon: Icons.bookmark_border,
-                          onTap: () {},
+                          icon: controller.bookmarkController.isBookmarked(
+                                    controller.clusterController
+                                        .getActiveClusterName(),
+                                    BookmarkType.list,
+                                    controller.title,
+                                    controller.resource,
+                                    controller.path,
+                                    controller.scope,
+                                    null,
+                                    controller.clusterController
+                                        .getActiveClusterNamespace(),
+                                  ) >
+                                  -1
+                              ? Icons.bookmark
+                              : Icons.bookmark_border,
+                          onTap: () {
+                            final bookmarkIndex =
+                                controller.bookmarkController.isBookmarked(
+                              controller.clusterController
+                                  .getActiveClusterName(),
+                              BookmarkType.list,
+                              controller.title,
+                              controller.resource,
+                              controller.path,
+                              controller.scope,
+                              null,
+                              controller.clusterController
+                                  .getActiveClusterNamespace(),
+                            );
+                            if (bookmarkIndex > -1) {
+                              controller.bookmarkController
+                                  .removeBookmark(bookmarkIndex);
+                            } else {
+                              controller.bookmarkController.addBookmark(
+                                controller.clusterController
+                                    .getActiveClusterName(),
+                                BookmarkType.list,
+                                controller.title,
+                                controller.resource,
+                                controller.path,
+                                controller.scope,
+                                null,
+                                controller.clusterController
+                                    .getActiveClusterNamespace(),
+                              );
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -259,22 +345,26 @@ class ResourcesList extends GetView {
                         top: Constants.spacingMiddle,
                         bottom: Constants.spacingMiddle,
                       ),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.only(
-                          right: Constants.spacingMiddle,
-                          left: Constants.spacingMiddle,
-                        ),
-                        itemCount: controller.items.length,
-                        itemBuilder: (context, index) {
-                          return buildListItem(
-                            controller.title,
-                            controller.resource,
-                            controller.path,
-                            controller.scope,
-                            controller.items[index],
-                            controller.metrics,
+                      child: Obx(
+                        () {
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: const EdgeInsets.only(
+                              right: Constants.spacingMiddle,
+                              left: Constants.spacingMiddle,
+                            ),
+                            itemCount: controller.getItems().length,
+                            itemBuilder: (context, index) {
+                              return buildListItem(
+                                controller.title,
+                                controller.resource,
+                                controller.path,
+                                controller.scope,
+                                controller.getItems()[index],
+                                controller.metrics,
+                              );
+                            },
                           );
                         },
                       ),

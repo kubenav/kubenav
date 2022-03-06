@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/controllers/bookmark_controller.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
-import 'package:kubenav/models/resource_model.dart';
+import 'package:kubenav/pages/resources_bookmarks/widgets/bookmark_actions_widget.dart';
 import 'package:kubenav/utils/constants.dart';
-import 'package:kubenav/widgets/app_clusters_widget.dart';
 
-class ResourcesController extends GetxController {
+class ResourcesBookmarksController extends GetxController {
   BookmarkController bookmarkController = Get.find();
   ClusterController clusterController = Get.find();
-  Map<String, Resource> resources = Resources.map;
 
   @override
   void onInit() {
@@ -27,7 +25,7 @@ class ResourcesController extends GetxController {
     super.onClose();
   }
 
-  void showClusters() {
+  void showBookmarkActionsBottomSheet(int index) {
     Get.bottomSheet(
       BottomSheet(
         shape: RoundedRectangleBorder(
@@ -35,8 +33,9 @@ class ResourcesController extends GetxController {
         ),
         onClosing: () {},
         enableDrag: false,
+        backgroundColor: Colors.transparent,
         builder: (builder) {
-          return const AppClustersWidget();
+          return BookmarkActionsWidget(bookmarkIndex: index);
         },
       ),
       isScrollControlled: true,

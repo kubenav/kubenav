@@ -84,6 +84,28 @@ class ClusterController extends GetxController {
     activeClusterIndex.value = index;
   }
 
+  /// [setActiveClusterAndNamespace] changes the active cluster to the given [name] and set the namespace of the cluster
+  /// to the given [namespace]. If the active cluster was changed, the function returns `true`, if it wasn't changed the
+  /// function returns `false`.
+  bool setActiveClusterAndNamespace(String name, String namespace) {
+    var tmpActiveClusterIndex = -1;
+
+    for (var i = 0; i < clusters.length; i++) {
+      if (clusters[i].value.name == name) {
+        tmpActiveClusterIndex = i;
+        break;
+      }
+    }
+
+    if (tmpActiveClusterIndex == -1) {
+      return false;
+    }
+
+    setActiveCluster(tmpActiveClusterIndex);
+    setNamespace(namespace);
+    return true;
+  }
+
   /// [reorder] can be used to change the order of the clusters (e.g. via ReorderableListView). The order of the
   /// clusters, matters, because in some parts of the ui we are only displaying the top X clusters instead of all
   /// clusters.

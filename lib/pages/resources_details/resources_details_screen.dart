@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:kubenav/models/bookmark_model.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/resources_details_controller.dart';
 import 'package:kubenav/widgets/app_actions_header_widget.dart';
@@ -223,8 +224,50 @@ class ResourcesDetails extends GetView {
                         ),
                         AppActionsHeaderModel(
                           title: 'Bookmark',
-                          icon: Icons.bookmark_border,
-                          onTap: () {},
+                          icon: controller.bookmarkController.isBookmarked(
+                                    controller.clusterController
+                                        .getActiveClusterName(),
+                                    BookmarkType.details,
+                                    controller.title,
+                                    controller.resource,
+                                    controller.path,
+                                    controller.scope,
+                                    controller.name,
+                                    controller.namespace,
+                                  ) >
+                                  -1
+                              ? Icons.bookmark
+                              : Icons.bookmark_border,
+                          onTap: () {
+                            final bookmarkIndex =
+                                controller.bookmarkController.isBookmarked(
+                              controller.clusterController
+                                  .getActiveClusterName(),
+                              BookmarkType.details,
+                              controller.title,
+                              controller.resource,
+                              controller.path,
+                              controller.scope,
+                              controller.name,
+                              controller.namespace,
+                            );
+                            if (bookmarkIndex > -1) {
+                              controller.bookmarkController
+                                  .removeBookmark(bookmarkIndex);
+                            } else {
+                              controller.bookmarkController.addBookmark(
+                                controller.clusterController
+                                    .getActiveClusterName(),
+                                BookmarkType.details,
+                                controller.title,
+                                controller.resource,
+                                controller.path,
+                                controller.scope,
+                                controller.name,
+                                controller.namespace,
+                              );
+                            }
+                          },
                         ),
                         ...buildAdditionalActions(
                           controller,

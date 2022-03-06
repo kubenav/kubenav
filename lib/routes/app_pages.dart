@@ -10,6 +10,8 @@ import 'package:kubenav/pages/plugins/plugins_binding.dart';
 import 'package:kubenav/pages/plugins/plugins_screen.dart';
 import 'package:kubenav/pages/resources/resources_binding.dart';
 import 'package:kubenav/pages/resources/resources_screen.dart';
+import 'package:kubenav/pages/resources_bookmarks/resources_bookmarks_binding.dart';
+import 'package:kubenav/pages/resources_bookmarks/resources_bookmarks_screen.dart';
 import 'package:kubenav/pages/resources_details/resources_details_screen.dart';
 import 'package:kubenav/pages/resources_list/resources_list_screen.dart';
 import 'package:kubenav/pages/resources_list_crds/resources_list_crds_binding.dart';
@@ -30,6 +32,11 @@ abstract class AppPages {
       name: Routes.resources,
       page: () => const Resources(),
       binding: ResourcesBinding(),
+    ),
+    GetPage(
+      name: Routes.resourcesBookmarks,
+      page: () => const ResourcesBookmarks(),
+      binding: ResourcesBookmarksBinding(),
     ),
     GetPage(
       name: Routes.resourcesDetails,
