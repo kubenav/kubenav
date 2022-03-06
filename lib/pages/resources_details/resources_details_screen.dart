@@ -44,6 +44,35 @@ class ResourcesDetails extends GetView {
     );
   }
 
+  List<AppActionsHeaderModel> buildAdditionalActions(
+    ResourcesDetailsController controller,
+    String? resource,
+    String? path,
+    String? name,
+    String? namespace,
+  ) {
+    final List<AppActionsHeaderModel> additionalActions = [];
+
+    if (resource != null &&
+        path != null &&
+        ((Resources.map['deployments']!.resource == resource &&
+                Resources.map['deployments']!.path == path) ||
+            (Resources.map['statefulsets']!.resource == resource &&
+                Resources.map['statefulsets']!.path == path))) {
+      additionalActions.add(AppActionsHeaderModel(
+        title: 'Scale',
+        // TODO: Change scale icon to: Icons.difference
+        // icon: Icons.difference,
+        icon: Icons.copy,
+        onTap: () {
+          controller.scaleResource();
+        },
+      ));
+    }
+
+    return additionalActions;
+  }
+
   @override
   Widget build(BuildContext context) {
     ResourcesDetailsController controller = Get.put(
@@ -166,6 +195,13 @@ class ResourcesDetails extends GetView {
                           title: 'Bookmark',
                           icon: Icons.bookmark_border,
                           onTap: () {},
+                        ),
+                        ...buildAdditionalActions(
+                          controller,
+                          controller.resource,
+                          controller.path,
+                          controller.name,
+                          controller.namespace,
                         ),
                       ],
                     ),
