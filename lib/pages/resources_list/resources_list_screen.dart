@@ -218,7 +218,7 @@ class ResourcesList extends GetView {
                   children: [
                     Container(
                       padding: const EdgeInsets.only(
-                        top: Constants.spacingSmall,
+                        top: Constants.spacingMiddle,
                         bottom: Constants.spacingSmall,
                         left: Constants.spacingMiddle,
                         right: Constants.spacingMiddle,

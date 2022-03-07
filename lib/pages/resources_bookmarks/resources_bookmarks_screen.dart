@@ -40,7 +40,7 @@ class ResourcesBookmarks extends GetView<ResourcesBookmarksController> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: Constants.spacingSmall),
+            const SizedBox(height: Constants.spacingLarge),
             Obx(
               () {
                 return ReorderableListView.builder(
@@ -123,26 +123,34 @@ class ResourcesBookmarks extends GetView<ResourcesBookmarksController> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        controller.bookmarkController
-                                            .bookmarks[index].title,
-                                        style: primaryTextStyle(),
-                                      ),
-                                      Text(
-                                        'Cluster: ${controller.bookmarkController.bookmarks[index].cluster}\nNamespace: ${controller.bookmarkController.bookmarks[index].namespace}${controller.bookmarkController.bookmarks[index].name != null ? '\nName: ${controller.bookmarkController.bookmarks[index].name}' : ''}',
-                                        style: secondaryTextStyle(),
-                                      ),
-                                    ],
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          controller.bookmarkController
+                                              .bookmarks[index].title,
+                                          style: primaryTextStyle(),
+                                        ),
+                                        Text(
+                                          Characters(
+                                                  'Cluster: ${controller.bookmarkController.bookmarks[index].cluster}\nNamespace: ${controller.bookmarkController.bookmarks[index].namespace}${controller.bookmarkController.bookmarks[index].name != null ? '\nName: ${controller.bookmarkController.bookmarks[index].name}' : ''}')
+                                              .replaceAll(Characters(''),
+                                                  Characters('\u{200B}'))
+                                              .toString(),
+                                          style: secondaryTextStyle(),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   Icon(
                                     Icons.arrow_forward_ios,
                                     color: Colors.grey[300],
-                                    size: 16,
+                                    size: 24,
                                   ),
                                 ],
                               ),
