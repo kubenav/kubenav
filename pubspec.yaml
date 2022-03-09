@@ -41,6 +41,7 @@ dependencies:
   webview_flutter: ^3.0.0
   url_launcher: ^6.0.20
   code_text_field: ^1.0.2
+  flutter_launcher_icons: ^0.9.2
 
 dev_dependencies:
   flutter_test:
@@ -107,3 +108,10 @@ flutter:
       fonts:
         - asset: fonts/CustomIcons.ttf
 
+flutter_icons:
+  image_path_android: assets/_images/app-icons/android.png
+  image_path_ios: assets/_images/app-icons/ios.png
+  android: true
+  ios: true
+  adaptive_icon_background: "#326ce5"
+  adaptive_icon_foreground: assets/_images/app-icons/android-adaptive.png
