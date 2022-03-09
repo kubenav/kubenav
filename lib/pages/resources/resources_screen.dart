@@ -8,6 +8,7 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
+import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/app_horizontal_list_cards_widget.dart';
 import 'package:kubenav/widgets/app_vertical_list_simple_widget.dart';
 
@@ -196,6 +197,7 @@ class Resources extends GetView<ResourcesController> {
         ),
       ),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),
+      floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SingleChildScrollView(
         child: Column(
           children: [

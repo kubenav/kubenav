@@ -11,6 +11,7 @@ import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_actions_header_widget.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/app_error_widget.dart';
+import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
 
 class ResourcesList extends GetView {
   const ResourcesList({Key? key}) : super(key: key);
@@ -170,6 +171,7 @@ class ResourcesList extends GetView {
         ),
       ),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),
+      floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SingleChildScrollView(
         child: Column(
           children: [

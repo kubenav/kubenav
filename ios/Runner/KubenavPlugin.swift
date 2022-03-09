@@ -48,6 +48,27 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
+    } else if call.method == "kubernetesGetLogs" {
+      if let args = call.arguments as? Dictionary<String, Any>,
+        let clusterServer = args["clusterServer"] as? String,
+        let clusterCertificateAuthorityData = args["clusterCertificateAuthorityData"] as? String,
+        let clusterInsecureSkipTLSVerify = args["clusterInsecureSkipTLSVerify"] as? Bool,
+        let userClientCertificateData = args["userClientCertificateData"] as? String,
+        let userClientKeyData = args["userClientKeyData"] as? String,
+        let userToken = args["userToken"] as? String,
+        let userUsername = args["userUsername"] as? String,
+        let userPassword = args["userPassword"] as? String,
+        let names = args["names"] as? String,
+        let namespace = args["namespace"] as? String,
+        let container = args["container"] as? String,
+        let since = args["since"] as? Int64,
+        let filter = args["filter"] as? String,
+        let previous = args["previous"] as? Bool
+      {
+        kubernetesGetLogs(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, names: names, namespace: namespace, container: container, since: since, filter: filter, previous: previous, result: result)
+      } else {
+        result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
+      }
     } else {
       result(FlutterMethodNotImplemented)
     }
@@ -81,6 +102,17 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     let data = KubenavCreateJSONPatch(source, target, &error)
     if error != nil {
       result(FlutterError(code: "CREATE_JSON_PATCH_FAILED", message: error?.localizedDescription ?? "", details: nil))
+    } else {
+      result(data)
+    }
+  }
+
+  private func kubernetesGetLogs(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, names: String, namespace: String, container: String, since: Int64, filter: String, previous: Bool, result: FlutterResult) {
+    var error: NSError?
+
+    let data = KubenavKubernetesGetLogs(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, names, namespace, container, since, filter, previous, &error)
+    if error != nil {
+      result(FlutterError(code: "KUBERNETES_GET_LOGS_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
       result(data)
     }

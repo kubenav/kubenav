@@ -6,6 +6,7 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/app_actions_header_widget.dart';
+import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
 
 class Home extends GetView<HomeController> {
   const Home({Key? key}) : super(key: key);
@@ -61,6 +62,7 @@ class Home extends GetView<HomeController> {
         ),
       ),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),
+      floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SingleChildScrollView(
         child: Column(
           children: [

@@ -9,6 +9,7 @@ import 'package:kubenav/pages/resources_bookmarks/resources_bookmarks_controller
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
+import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
 
 class ResourcesBookmarks extends GetView<ResourcesBookmarksController> {
   const ResourcesBookmarks({Key? key}) : super(key: key);
@@ -37,6 +38,7 @@ class ResourcesBookmarks extends GetView<ResourcesBookmarksController> {
         title: const Text('Bookmarks'),
       ),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),
+      floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SingleChildScrollView(
         child: Column(
           children: [

@@ -11,6 +11,7 @@ import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
+import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
 
 class Settings extends GetView<SettingsController> {
   const Settings({Key? key}) : super(key: key);
@@ -186,6 +187,7 @@ class Settings extends GetView<SettingsController> {
         title: const Text("Settings"),
       ),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),
+      floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SingleChildScrollView(
         child: Column(
           children: [

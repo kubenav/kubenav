@@ -8,6 +8,7 @@ import 'package:kubenav/pages/clusters/widgets/cluster_item_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
+import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/app_horizontal_list_cards_widget.dart';
 
 class Clusters extends GetView<ClustersController> {
@@ -37,6 +38,7 @@ class Clusters extends GetView<ClustersController> {
         title: const Text('Clusters'),
       ),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),
+      floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SingleChildScrollView(
         child: Column(
           children: [

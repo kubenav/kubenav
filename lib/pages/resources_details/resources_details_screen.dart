@@ -11,6 +11,7 @@ import 'package:kubenav/pages/resources_details/widgets/details_item_conditions_
 import 'package:kubenav/pages/resources_details/widgets/details_item_metadata_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
 
 class ResourcesDetails extends GetView {
   const ResourcesDetails({Key? key}) : super(key: key);
@@ -62,9 +63,7 @@ class ResourcesDetails extends GetView {
                 Resources.map['statefulsets']!.path == path))) {
       additionalActions.add(AppActionsHeaderModel(
         title: 'Scale',
-        // TODO: Change scale icon to: Icons.difference
-        // icon: Icons.difference,
-        icon: Icons.copy,
+        icon: Icons.difference,
         onTap: () {
           controller.scaleResource();
         },
@@ -97,6 +96,19 @@ class ResourcesDetails extends GetView {
         icon: Icons.play_arrow,
         onTap: () {
           controller.createJob();
+        },
+      ));
+    }
+
+    if (resource != null &&
+        path != null &&
+        Resources.map['pods']!.resource == resource &&
+        Resources.map['pods']!.path == path) {
+      additionalActions.add(AppActionsHeaderModel(
+        title: 'Logs',
+        icon: Icons.subject,
+        onTap: () {
+          controller.getLogs();
         },
       ));
     }
@@ -149,6 +161,7 @@ class ResourcesDetails extends GetView {
         ),
       ),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),
+      floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SingleChildScrollView(
         child: Column(
           children: [

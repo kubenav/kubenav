@@ -212,4 +212,53 @@ class KubernetesService {
       return Future.error(err);
     }
   }
+
+  /// [getLogs] returns the logs for a list of pods (containers). The pod names are must be provided via the [names]
+  /// argument, which should be a commans separated list of pod names.
+  Future<List<dynamic>> getLogs(
+    String names,
+    String namespace,
+    String container,
+    int since,
+    String filter,
+    bool previous,
+  ) async {
+    try {
+      final String result = await platform.invokeMethod(
+        'kubernetesGetLogs',
+        <String, dynamic>{
+          'clusterServer': cluster.clusterServer,
+          'clusterCertificateAuthorityData':
+              cluster.clusterCertificateAuthorityData,
+          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
+          'userClientCertificateData': cluster.userClientCertificateData,
+          'userClientKeyData': cluster.userClientKeyData,
+          'userToken': cluster.userToken,
+          'userUsername': cluster.userUsername,
+          'userPassword': cluster.userPassword,
+          'names': names,
+          'namespace': namespace,
+          'container': container,
+          'since': since,
+          'filter': filter,
+          'previous': previous,
+        },
+      );
+
+      Logger.log(
+        'KubernetesService getLogs',
+        'Get logs request was ok',
+        result,
+      );
+      Map<String, dynamic> jsonData = json.decode(result);
+      return jsonData['logs'] ?? [];
+    } catch (err) {
+      Logger.log(
+        'KubernetesService getLogs',
+        'Get logs request failed',
+        err,
+      );
+      return Future.error(err);
+    }
+  }
 }

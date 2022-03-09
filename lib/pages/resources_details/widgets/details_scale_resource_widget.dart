@@ -138,9 +138,7 @@ class DetailsScaleResourceWidget extends StatelessWidget {
     return AppBottomSheetWidget(
       title: 'Scale',
       subtitle: name,
-      // TODO: Change scale icon to: Icons.difference
-      // icon: Icons.difference,
-      icon: Icons.copy,
+      icon: Icons.difference,
       onClosePressed: () {
         finish(context);
       },

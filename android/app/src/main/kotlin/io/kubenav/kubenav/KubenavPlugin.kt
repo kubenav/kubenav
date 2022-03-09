@@ -57,6 +57,27 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       } else {
         createJSONPatch(source, target, result)
       }
+    } else if (call.method == "kubernetesGetLogs") {
+      val clusterServer = call.argument("clusterServer") as String?
+      val clusterCertificateAuthorityData = call.argument("clusterCertificateAuthorityData") as String?
+      val clusterInsecureSkipTLSVerify = call.argument("clusterInsecureSkipTLSVerify") as Boolean?
+      val userClientCertificateData = call.argument("userClientCertificateData") as String?
+      val userClientKeyData = call.argument("userClientKeyData") as String?
+      val userToken = call.argument("userToken") as String?
+      val userUsername = call.argument("userUsername") as String?
+      val userPassword = call.argument("userPassword") as String?
+      val names = call.argument("names") as String?
+      val namespace = call.argument("namespace") as String?
+      val container = call.argument("container") as String?
+      val since = call.argument("since") as Long?
+      val filter = call.argument("filter") as String?
+      val previous = call.argument("previous") as Boolean?
+
+      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || names == null || namespace == null || container == null || since == null || filter == null || previous == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        kubernetesGetLogs(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, names, namespace, container, since, filter, previous, result)
+      }
     } else {
       result.notImplemented()
     }
@@ -86,6 +107,15 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       result.success(data)
     } catch (e: Exception) {
       result.error("CREATE_JSON_PATCH_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun kubernetesGetLogs(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, names: String, namespace: String, container: String, since: Long, filter: String, previous: Boolean, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.kubernetesGetLogs(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, names, namespace, container, since, filter, previous)
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("KUBERNETES_GET_LOGS_FAILED", e.localizedMessage, null)
     }
   }
 }
