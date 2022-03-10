@@ -1,5 +1,6 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
 
 import 'package:kubenav/models/terminal_model.dart';
 import 'package:kubenav/utils/constants.dart';
@@ -12,11 +13,6 @@ class TerminalController extends GetxController {
   RxList<Terminal> terminals = <Terminal>[].obs;
   RxBool showTerminals = false.obs;
   Worker? worker;
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   void showTerminalsBottomSheet() {
     showTerminals.value = true;

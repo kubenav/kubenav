@@ -1,5 +1,6 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/utils/constants.dart';
@@ -8,21 +9,6 @@ import 'package:kubenav/widgets/app_actions_widget.dart';
 
 class ClusterActionsController extends GetxController {
   ClusterController clusterController = Get.find();
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
 }
 
 class ClusterActionsWidget extends StatelessWidget {

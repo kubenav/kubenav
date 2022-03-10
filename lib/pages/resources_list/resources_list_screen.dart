@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 import 'package:kubenav/models/bookmark_model.dart';
@@ -103,6 +104,7 @@ class ResourcesList extends GetView {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         actions: controller.scope == ResourceScope.namespaced &&
                 controller.selector == null
             ? [
@@ -235,7 +237,7 @@ class ResourcesList extends GetView {
                           color: Colors.white,
                         ),
                         cursorColor: Colors.white,
-                        keyboardType: TextInputType.url,
+                        keyboardType: TextInputType.text,
                         autocorrect: false,
                         enableSuggestions: false,
                         maxLines: 1,

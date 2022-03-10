@@ -3,12 +3,13 @@
 //
 // @dart=2.12
 
-// ignore_for_file: unused_element, unused_import
+// ignore_for_file: unused_element
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
-part of openapi.api;
+import 'package:kubenav/models/kubernetes/helpers.dart';
 
 class IoK8sApiCoreV1Toleration {
   /// Returns a new [IoK8sApiCoreV1Toleration] instance.
@@ -33,7 +34,7 @@ class IoK8sApiCoreV1Toleration {
   String? key;
 
   /// Operator represents a key's relationship to the value. Valid operators are Exists and Equal. Defaults to Equal. Exists is equivalent to wildcard for value, so that a pod can tolerate all taints of a particular category.  Possible enum values:  - `\"Equal\"`  - `\"Exists\"`
-  IoK8sApiCoreV1TolerationOperator_Enum? operator_;
+  IoK8sApiCoreV1TolerationOperatorEnum? operator_;
 
   /// TolerationSeconds represents the period of time the toleration (which must be of effect NoExecute, otherwise this field is ignored) tolerates the taint. By default, it is not set, which means tolerate the taint forever (do not evict). Zero and negative values will be treated as 0 (evict immediately) by the system.
   ///
@@ -120,7 +121,7 @@ class IoK8sApiCoreV1Toleration {
         effect: IoK8sApiCoreV1TolerationEffectEnum.fromJson(json[r'effect']),
         key: mapValueOfType<String>(json, r'key'),
         operator_:
-            IoK8sApiCoreV1TolerationOperator_Enum.fromJson(json[r'operator']),
+            IoK8sApiCoreV1TolerationOperatorEnum.fromJson(json[r'operator']),
         tolerationSeconds: mapValueOfType<int>(json, r'tolerationSeconds'),
         value: mapValueOfType<String>(json, r'value'),
       );
@@ -270,9 +271,9 @@ class IoK8sApiCoreV1TolerationEffectEnumTypeTransformer {
 }
 
 /// Operator represents a key's relationship to the value. Valid operators are Exists and Equal. Defaults to Equal. Exists is equivalent to wildcard for value, so that a pod can tolerate all taints of a particular category.  Possible enum values:  - `\"Equal\"`  - `\"Exists\"`
-class IoK8sApiCoreV1TolerationOperator_Enum {
+class IoK8sApiCoreV1TolerationOperatorEnum {
   /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1TolerationOperator_Enum._(this.value);
+  const IoK8sApiCoreV1TolerationOperatorEnum._(this.value);
 
   /// The underlying value of this enum member.
   final String value;
@@ -282,26 +283,26 @@ class IoK8sApiCoreV1TolerationOperator_Enum {
 
   String toJson() => value;
 
-  static const equal = IoK8sApiCoreV1TolerationOperator_Enum._(r'Equal');
-  static const exists = IoK8sApiCoreV1TolerationOperator_Enum._(r'Exists');
+  static const equal = IoK8sApiCoreV1TolerationOperatorEnum._(r'Equal');
+  static const exists = IoK8sApiCoreV1TolerationOperatorEnum._(r'Exists');
 
-  /// List of all possible values in this [enum][IoK8sApiCoreV1TolerationOperator_Enum].
-  static const values = <IoK8sApiCoreV1TolerationOperator_Enum>[
+  /// List of all possible values in this [enum][IoK8sApiCoreV1TolerationOperatorEnum].
+  static const values = <IoK8sApiCoreV1TolerationOperatorEnum>[
     equal,
     exists,
   ];
 
-  static IoK8sApiCoreV1TolerationOperator_Enum? fromJson(dynamic value) =>
-      IoK8sApiCoreV1TolerationOperator_EnumTypeTransformer().decode(value);
+  static IoK8sApiCoreV1TolerationOperatorEnum? fromJson(dynamic value) =>
+      IoK8sApiCoreV1TolerationOperatorEnumTypeTransformer().decode(value);
 
-  static List<IoK8sApiCoreV1TolerationOperator_Enum>? listFromJson(
+  static List<IoK8sApiCoreV1TolerationOperatorEnum>? listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final result = <IoK8sApiCoreV1TolerationOperator_Enum>[];
+    final result = <IoK8sApiCoreV1TolerationOperatorEnum>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = IoK8sApiCoreV1TolerationOperator_Enum.fromJson(row);
+        final value = IoK8sApiCoreV1TolerationOperatorEnum.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -311,18 +312,17 @@ class IoK8sApiCoreV1TolerationOperator_Enum {
   }
 }
 
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1TolerationOperator_Enum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1TolerationOperator_Enum].
-class IoK8sApiCoreV1TolerationOperator_EnumTypeTransformer {
-  factory IoK8sApiCoreV1TolerationOperator_EnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1TolerationOperator_EnumTypeTransformer._();
+/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1TolerationOperatorEnum] to String,
+/// and [decode] dynamic data back to [IoK8sApiCoreV1TolerationOperatorEnum].
+class IoK8sApiCoreV1TolerationOperatorEnumTypeTransformer {
+  factory IoK8sApiCoreV1TolerationOperatorEnumTypeTransformer() => _instance ??=
+      const IoK8sApiCoreV1TolerationOperatorEnumTypeTransformer._();
 
-  const IoK8sApiCoreV1TolerationOperator_EnumTypeTransformer._();
+  const IoK8sApiCoreV1TolerationOperatorEnumTypeTransformer._();
 
-  String encode(IoK8sApiCoreV1TolerationOperator_Enum data) => data.value;
+  String encode(IoK8sApiCoreV1TolerationOperatorEnum data) => data.value;
 
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1TolerationOperator_Enum.
+  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1TolerationOperatorEnum.
   ///
   /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
   /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
@@ -330,14 +330,14 @@ class IoK8sApiCoreV1TolerationOperator_EnumTypeTransformer {
   ///
   /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
   /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1TolerationOperator_Enum? decode(dynamic data,
+  IoK8sApiCoreV1TolerationOperatorEnum? decode(dynamic data,
       {bool allowNull = true}) {
     if (data != null) {
       switch (data.toString()) {
         case r'Equal':
-          return IoK8sApiCoreV1TolerationOperator_Enum.equal;
+          return IoK8sApiCoreV1TolerationOperatorEnum.equal;
         case r'Exists':
-          return IoK8sApiCoreV1TolerationOperator_Enum.exists;
+          return IoK8sApiCoreV1TolerationOperatorEnum.exists;
         default:
           if (!allowNull) {
             throw ArgumentError('Unknown enum value to decode: $data');
@@ -347,6 +347,6 @@ class IoK8sApiCoreV1TolerationOperator_EnumTypeTransformer {
     return null;
   }
 
-  /// Singleton [IoK8sApiCoreV1TolerationOperator_EnumTypeTransformer] instance.
-  static IoK8sApiCoreV1TolerationOperator_EnumTypeTransformer? _instance;
+  /// Singleton [IoK8sApiCoreV1TolerationOperatorEnumTypeTransformer] instance.
+  static IoK8sApiCoreV1TolerationOperatorEnumTypeTransformer? _instance;
 }

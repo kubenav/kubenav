@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
@@ -16,21 +17,6 @@ class AppBrowserController extends GetxController {
 
   WebViewController? webViewController;
   final url = TextEditingController();
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   void setWebViewController(WebViewController wvc) async {
     webViewController = wvc;
@@ -80,8 +66,9 @@ class AppBrowserWidget extends StatelessWidget {
   final String initialUrl;
   final void Function() onClosePressed;
 
-  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers =
-      [Factory(() => EagerGestureRecognizer())].toSet();
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+    Factory(() => EagerGestureRecognizer())
+  };
 
   @override
   Widget build(BuildContext context) {

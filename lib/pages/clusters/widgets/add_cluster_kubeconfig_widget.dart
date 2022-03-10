@@ -1,5 +1,6 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
 import 'package:yaml/yaml.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
@@ -13,16 +14,6 @@ class AddClusterKubeconfigController extends GetxController {
 
   final addClusterKubeconfigFormKey = GlobalKey<FormState>();
   final kubeconfig = TextEditingController();
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
   @override
   void onClose() {
@@ -111,7 +102,7 @@ class AddClusterKubeconfigWidget extends StatelessWidget {
               ),
               child: TextFormField(
                 controller: controller.kubeconfig,
-                keyboardType: TextInputType.none,
+                keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
                 maxLines: null,

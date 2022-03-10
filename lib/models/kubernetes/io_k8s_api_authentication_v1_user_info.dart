@@ -3,12 +3,13 @@
 //
 // @dart=2.12
 
-// ignore_for_file: unused_element, unused_import
+// ignore_for_file: unused_element
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
-part of openapi.api;
+import 'package:kubenav/models/kubernetes/helpers.dart';
 
 class IoK8sApiAuthenticationV1UserInfo {
   /// Returns a new [IoK8sApiAuthenticationV1UserInfo] instance.
@@ -20,7 +21,7 @@ class IoK8sApiAuthenticationV1UserInfo {
   });
 
   /// Any additional information provided by the authenticator.
-  Map<String, List<String>> extra;
+  Map<String, List<dynamic>>? extra;
 
   /// The names of groups this user is a part of.
   List<String> groups;
@@ -98,9 +99,9 @@ class IoK8sApiAuthenticationV1UserInfo {
       }());
 
       return IoK8sApiAuthenticationV1UserInfo(
-        // TODO: Fix original generated code
-        // extra: json[r'extra'] == null ? const {} : mapCastOfType<String, List>(json, r'extra'),
-        extra: const {},
+        extra: json[r'extra'] == null
+            ? const {}
+            : mapCastOfType<String, List>(json, r'extra'),
         groups: json[r'groups'] is List
             ? (json[r'groups'] as List).cast<String>()
             : const [],

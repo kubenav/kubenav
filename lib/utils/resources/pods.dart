@@ -1,11 +1,9 @@
-import 'package:kubenav/models/kubernetes/api.dart'
-    show
-        IoK8sApiCoreV1Pod,
-        IoK8sApiCoreV1ContainerPort,
-        IoK8sApiCoreV1ContainerState,
-        IoK8sApiCoreV1EnvVarSource,
-        IoK8sApiCoreV1Probe;
 import 'package:kubenav/models/kubernetes-extensions/pod_metrics.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_port.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_state.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_env_var_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_probe.dart';
 import 'package:kubenav/pages/resources_list/widgets/list_item_widget.dart';
 import 'package:kubenav/utils/resources/general.dart';
 
@@ -337,9 +335,10 @@ PodMetrics? getResources(IoK8sApiCoreV1Pod? pod) {
     }
 
     return PodMetrics(
-      cpu: '/ ${formatCpuMetric(cpuRequests)} / ${formatCpuMetric(cpuLimits)}',
+      cpu:
+          '/ ${cpuRequests == 0 ? '-' : formatCpuMetric(cpuRequests)} / ${cpuLimits == 0 ? '-' : formatCpuMetric(cpuLimits)}',
       memory:
-          '/ ${formatMemoryMetric(memoryRequests)} / ${formatMemoryMetric(memoryLimits)}',
+          '/ ${memoryRequests == 0 ? '-' : formatMemoryMetric(memoryRequests)} / ${memoryLimits == 0 ? '-' : formatMemoryMetric(memoryLimits)}',
     );
   } catch (err) {
     return null;

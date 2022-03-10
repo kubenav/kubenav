@@ -1,5 +1,5 @@
-import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiCoreV1Node;
 import 'package:kubenav/models/kubernetes-extensions/node_metrics.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_node.dart';
 import 'package:kubenav/utils/resources/general.dart';
 
 class NodeMetrics {

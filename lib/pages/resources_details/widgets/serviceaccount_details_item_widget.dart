@@ -1,17 +1,11 @@
-import 'dart:convert';
-
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-import 'package:kubenav/models/kubernetes/api.dart'
-    show IoK8sApiCoreV1ServiceAccount;
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_service_account.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
-import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 import 'package:kubenav/widgets/app_vertical_list_simple_widget.dart';
 
 class ServiceAccountDetailsItemWidget extends StatelessWidget
@@ -66,7 +60,7 @@ class ServiceAccountDetailsItemWidget extends StatelessWidget
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            'Namespace: ${secret.namespace != null ? secret.namespace : sa.metadata?.namespace != null ? sa.metadata?.namespace : '-'}',
+                            'Namespace: ${secret.namespace ?? sa.metadata?.namespace ?? '-'}',
                             style: secondaryTextStyle(),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,

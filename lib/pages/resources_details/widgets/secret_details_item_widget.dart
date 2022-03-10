@@ -1,10 +1,11 @@
 import 'dart:convert';
 
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiCoreV1Secret;
+import 'package:get/get.dart';
+
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_secret.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';

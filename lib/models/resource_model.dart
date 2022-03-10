@@ -27,7 +27,6 @@ import 'package:kubenav/pages/resources_details/widgets/service_details_item_wid
 import 'package:kubenav/pages/resources_details/widgets/serviceaccount_details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/statefulset_details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/storageclass_details_item_widget.dart';
-
 import 'package:kubenav/pages/resources_list/widgets/clusterrolebinding_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/configmap_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/cronjob_list_item_widget.dart';

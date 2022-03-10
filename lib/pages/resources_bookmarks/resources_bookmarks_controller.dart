@@ -1,5 +1,6 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/bookmark_controller.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
@@ -9,21 +10,6 @@ import 'package:kubenav/utils/constants.dart';
 class ResourcesBookmarksController extends GetxController {
   BookmarkController bookmarkController = Get.find();
   ClusterController clusterController = Get.find();
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   void showBookmarkActionsBottomSheet(int index) {
     Get.bottomSheet(

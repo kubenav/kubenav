@@ -1,6 +1,7 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/controllers/terminal_controller.dart';
@@ -69,16 +70,6 @@ class DetailsGetLogsController extends GetxController {
     }
 
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   void getLogs(BuildContext context) async {
@@ -250,7 +241,7 @@ class DetailsGetLogsWidget extends StatelessWidget {
               ),
               child: TextFormField(
                 controller: controller.filter,
-                keyboardType: TextInputType.none,
+                keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
                 maxLines: 1,

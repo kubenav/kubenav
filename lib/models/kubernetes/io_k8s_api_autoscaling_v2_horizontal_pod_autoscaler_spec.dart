@@ -3,12 +3,16 @@
 //
 // @dart=2.12
 
-// ignore_for_file: unused_element, unused_import
+// ignore_for_file: unused_element
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
-part of openapi.api;
+import 'package:kubenav/models/kubernetes/helpers.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_autoscaling_v2_cross_version_object_reference.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_autoscaling_v2_horizontal_pod_autoscaler_behavior.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_autoscaling_v2_metric_spec.dart';
 
 class IoK8sApiAutoscalingV2HorizontalPodAutoscalerSpec {
   /// Returns a new [IoK8sApiAutoscalingV2HorizontalPodAutoscalerSpec] instance.

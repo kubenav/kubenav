@@ -1,7 +1,5 @@
 import 'package:get/get.dart';
 
-import 'package:kubenav/routes/app_routes.dart';
-
 import 'package:kubenav/pages/clusters/clusters_binding.dart';
 import 'package:kubenav/pages/clusters/clusters_screen.dart';
 import 'package:kubenav/pages/home/home_binding.dart';
@@ -18,6 +16,7 @@ import 'package:kubenav/pages/resources_list_crds/resources_list_crds_binding.da
 import 'package:kubenav/pages/resources_list_crds/resources_list_crds_screen.dart';
 import 'package:kubenav/pages/settings/settings_binding.dart';
 import 'package:kubenav/pages/settings/settings_screen.dart';
+import 'package:kubenav/routes/app_routes.dart';
 
 /// [AppPages] represents all pages, which are available in our app. For example the home, resources, plugins and
 /// settings page. In the [GetPage] function we also bind the corresponding page controller to the page screen.

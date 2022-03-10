@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 import 'package:kubenav/models/bookmark_model.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/resources_details_controller.dart';
-import 'package:kubenav/widgets/app_actions_header_widget.dart';
-import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
-import 'package:kubenav/widgets/app_error_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_conditions_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_metadata_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/widgets/app_actions_header_widget.dart';
+import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
+import 'package:kubenav/widgets/app_error_widget.dart';
 import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
 
 class ResourcesDetails extends GetView {
@@ -133,6 +134,7 @@ class ResourcesDetails extends GetView {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Column(
           children: [
             Text(

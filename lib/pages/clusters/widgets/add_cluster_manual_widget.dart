@@ -1,5 +1,6 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/cluster_model.dart';
@@ -24,16 +25,6 @@ class AddClusterManualController extends GetxController {
   final namespace = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
   @override
   void onClose() {
@@ -139,7 +130,7 @@ class AddClusterManualWidget extends StatelessWidget {
               ),
               child: TextFormField(
                 controller: controller.name,
-                keyboardType: TextInputType.none,
+                keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
                 maxLines: null,
@@ -155,7 +146,7 @@ class AddClusterManualWidget extends StatelessWidget {
                 vertical: Constants.spacingSmall,
               ),
               child: TextFormField(
-                keyboardType: TextInputType.none,
+                keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
                 maxLines: null,
@@ -171,7 +162,7 @@ class AddClusterManualWidget extends StatelessWidget {
                 vertical: Constants.spacingSmall,
               ),
               child: TextFormField(
-                keyboardType: TextInputType.none,
+                keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
                 maxLines: null,
@@ -206,7 +197,7 @@ class AddClusterManualWidget extends StatelessWidget {
                 vertical: Constants.spacingSmall,
               ),
               child: TextFormField(
-                keyboardType: TextInputType.none,
+                keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
                 maxLines: null,
@@ -221,7 +212,7 @@ class AddClusterManualWidget extends StatelessWidget {
                 vertical: Constants.spacingSmall,
               ),
               child: TextFormField(
-                keyboardType: TextInputType.none,
+                keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
                 maxLines: null,
@@ -236,7 +227,7 @@ class AddClusterManualWidget extends StatelessWidget {
                 vertical: Constants.spacingSmall,
               ),
               child: TextFormField(
-                keyboardType: TextInputType.none,
+                keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
                 maxLines: null,
@@ -251,7 +242,7 @@ class AddClusterManualWidget extends StatelessWidget {
                 vertical: Constants.spacingSmall,
               ),
               child: TextFormField(
-                keyboardType: TextInputType.none,
+                keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
                 maxLines: null,
@@ -266,7 +257,7 @@ class AddClusterManualWidget extends StatelessWidget {
                 vertical: Constants.spacingSmall,
               ),
               child: TextFormField(
-                keyboardType: TextInputType.none,
+                keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
                 maxLines: null,
@@ -281,7 +272,7 @@ class AddClusterManualWidget extends StatelessWidget {
                 vertical: Constants.spacingSmall,
               ),
               child: TextFormField(
-                keyboardType: TextInputType.none,
+                keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
                 maxLines: null,

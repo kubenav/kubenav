@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/api.dart'
-    show IoK8sApimachineryPkgApisMetaV1ObjectMeta;
+import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/utils/resources/general.dart';
 

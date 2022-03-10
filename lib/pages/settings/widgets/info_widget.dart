@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:kubenav/pages/settings/widgets/license_widget.dart';
-import 'package:kubenav/widgets/app_vertical_list_simple_widget.dart';
-import 'package:kubenav/widgets/app_browser_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
+import 'package:kubenav/widgets/app_browser_widget.dart';
+import 'package:kubenav/widgets/app_vertical_list_simple_widget.dart';
 
 class InfoController extends GetxController {
   RxString version = '-'.obs;
@@ -17,16 +18,6 @@ class InfoController extends GetxController {
   void onInit() {
     getVersion();
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   void getVersion() async {

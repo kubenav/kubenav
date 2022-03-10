@@ -1,9 +1,10 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/api.dart'
-    show IoK8sApiCoreV1Container, IoK8sApiCoreV1ContainerStatus;
+import 'package:get/get.dart';
+
 import 'package:kubenav/models/kubernetes-extensions/pod_metrics.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_status.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';

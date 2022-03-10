@@ -1,4 +1,4 @@
-import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiBatchV1CronJob;
+import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_cron_job.dart';
 import 'package:kubenav/utils/resources/general.dart';
 
 String buildInfoText(IoK8sApiBatchV1CronJob? cronJob) {

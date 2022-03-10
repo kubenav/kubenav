@@ -1,5 +1,3 @@
-import 'package:kubenav/pages/resources_bookmarks/resources_bookmarks_screen.dart';
-
 /// [Routes] represents all routes for our pages in the app. Each route must be starts with `/home`, `/resources`,
 /// `/plugins` or `/settings`, so that we can highlight the correct navigation in the bottom navigation menu.
 class Routes {

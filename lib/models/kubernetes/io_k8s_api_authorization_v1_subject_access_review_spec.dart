@@ -3,12 +3,15 @@
 //
 // @dart=2.12
 
-// ignore_for_file: unused_element, unused_import
+// ignore_for_file: unused_element
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
-part of openapi.api;
+import 'package:kubenav/models/kubernetes/helpers.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_authorization_v1_non_resource_attributes.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_authorization_v1_resource_attributes.dart';
 
 class IoK8sApiAuthorizationV1SubjectAccessReviewSpec {
   /// Returns a new [IoK8sApiAuthorizationV1SubjectAccessReviewSpec] instance.
@@ -22,7 +25,7 @@ class IoK8sApiAuthorizationV1SubjectAccessReviewSpec {
   });
 
   /// Extra corresponds to the user.Info.GetExtra() method from the authenticator.  Since that is input to the authorizer it needs a reflection here.
-  Map<String, List<String>> extra;
+  Map<String, List<dynamic>>? extra;
 
   /// Groups is the groups you're testing for.
   List<String> groups;
@@ -127,9 +130,9 @@ class IoK8sApiAuthorizationV1SubjectAccessReviewSpec {
       }());
 
       return IoK8sApiAuthorizationV1SubjectAccessReviewSpec(
-        // TODO: Fix original generated code
-        // extra: json[r'extra'] == null ? const {} : mapCastOfType<String, List>(json, r'extra'),
-        extra: const {},
+        extra: json[r'extra'] == null
+            ? const {}
+            : mapCastOfType<String, List>(json, r'extra'),
         groups: json[r'groups'] is List
             ? (json[r'groups'] as List).cast<String>()
             : const [],

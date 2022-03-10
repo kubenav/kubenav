@@ -1,6 +1,7 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/bookmark_controller.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
@@ -61,11 +62,6 @@ class ResourcesListController extends GetxController {
   }
 
   @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
   void onClose() {
     if (worker != null) {
       worker!.dispose();
@@ -74,6 +70,8 @@ class ResourcesListController extends GetxController {
     super.onClose();
   }
 
+  /// [getItems] returns a list of items, where the resource name contains the user provided [filter] value. The
+  /// [filter] is set from the [search] text field when a user submits this field.
   List<dynamic> getItems() {
     if (filter.value == '') {
       return items.toList();
@@ -84,7 +82,7 @@ class ResourcesListController extends GetxController {
             item['metadata'] != null &&
             item['metadata']['name'] != null &&
             item['metadata']['name'] is String &&
-            item['metadata']['name'].contains(filter.value))
+            item['metadata']['name'].contains(filter.value.toLowerCase()))
         .toList();
   }
 

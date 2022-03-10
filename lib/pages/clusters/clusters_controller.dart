@@ -1,6 +1,7 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/provider_model.dart';
@@ -15,27 +16,14 @@ class ClustersController extends GetxController {
   ClusterController clusterController = Get.find();
   List<Provider> providers = Providers.list;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   Provider? getProvider(String name) {
     for (var i = 0; i < providers.length; i++) {
       if (providers[i].name == name) {
         return providers[i];
       }
     }
+
+    return null;
   }
 
   void showAddClusterBottomSheet(int index) {

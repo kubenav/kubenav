@@ -1,14 +1,15 @@
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 import 'package:kubenav/pages/settings/settings_controller.dart';
 import 'package:kubenav/pages/settings/widgets/help_widget.dart';
 import 'package:kubenav/pages/settings/widgets/info_widget.dart';
 import 'package:kubenav/pages/settings/widgets/sponsor_widget.dart';
-import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
@@ -184,6 +185,7 @@ class Settings extends GetView<SettingsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text("Settings"),
       ),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),

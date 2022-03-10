@@ -1,17 +1,16 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:kubenav/models/resource_model.dart';
-import 'package:kubenav/models/kubernetes/api.dart'
-    show
-        IoK8sApiBatchV1CronJob,
-        IoK8sApiCoreV1Event,
-        IoK8sApiBatchV1Job,
-        IoK8sApiAppsV1Deployment,
-        IoK8sApiCoreV1Pod,
-        IoK8sApiAppsV1StatefulSet;
+import 'package:get/get.dart';
+
 import 'package:kubenav/controllers/cluster_controller.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_deployment.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_stateful_set.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_cron_job.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_job.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_event.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
+import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -21,10 +20,11 @@ import 'package:kubenav/utils/resources/deployments.dart' as deployment_helpers;
 import 'package:kubenav/utils/resources/events.dart' as event_helpers;
 import 'package:kubenav/utils/resources/jobs.dart' as job_helpers;
 import 'package:kubenav/utils/resources/pods.dart' as pod_helpers;
-import 'package:kubenav/utils/resources/statefulsets.dart'
-    as statefulset_helpers;
 import 'package:kubenav/widgets/app_error_widget.dart';
 import 'package:kubenav/widgets/app_horizontal_list_cards_widget.dart';
+
+import 'package:kubenav/utils/resources/statefulsets.dart'
+    as statefulset_helpers;
 
 class DetailsResourcesPreviewController extends GetxController {
   ClusterController clusterController = Get.find();
@@ -51,16 +51,6 @@ class DetailsResourcesPreviewController extends GetxController {
   void onInit() {
     getResources();
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   void getResources() async {

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 import 'package:kubenav/pages/home/home_controller.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
-import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/app_actions_header_widget.dart';
+import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
 
 class Home extends GetView<HomeController> {
@@ -15,6 +16,7 @@ class Home extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(CustomIcons.clusters),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
 import 'package:kubenav/models/resource_model.dart';
-import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiCoreV1Pod;
-import 'package:kubenav/utils/resources/pods.dart';
 import 'package:kubenav/pages/resources_list/widgets/list_item_widget.dart';
+import 'package:kubenav/utils/resources/pods.dart';
 
 class PodListItemWidget extends StatelessWidget implements IListItemWidget {
   const PodListItemWidget({
@@ -36,10 +36,8 @@ class PodListItemWidget extends StatelessWidget implements IListItemWidget {
     final podMetrics = getMetricsFromList(pod, metrics);
     final status = getStatus(pod);
 
-    if (podMetrics != null) {
-      info = info +
-          '\nCPU: ${podMetrics.cpu} ${podResources?.cpu ?? ''}\nMemory: ${podMetrics.memory} ${podResources?.memory ?? ''}';
-    }
+    info = info +
+        '\nCPU: ${podMetrics != null ? podMetrics.cpu : '-'} ${podResources?.cpu ?? '/ - / -'}\nMemory: ${podMetrics != null ? podMetrics.memory : '-'} ${podResources?.memory ?? '/ - / -'}';
 
     return ListItemWidget(
       title: title,

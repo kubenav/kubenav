@@ -1,4 +1,4 @@
-import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiBatchV1Job;
+import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_job.dart';
 import 'package:kubenav/utils/resources/general.dart';
 
 String buildInfoText(IoK8sApiBatchV1Job? job) {

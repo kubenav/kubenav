@@ -1,15 +1,16 @@
 import 'dart:io' show Platform;
 
-import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter/material.dart';
+
+import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter_highlight/themes/nord.dart';
 import 'package:get/get.dart';
 import 'package:highlight/languages/yaml.dart';
-import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:yaml/yaml.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/services/helpers_service.dart';
+import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
@@ -42,16 +43,6 @@ class DetailsEditResourceController extends GetxController {
     prettifyYAML();
 
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   /// [prettifyYAML] formats the given resource item as yaml.

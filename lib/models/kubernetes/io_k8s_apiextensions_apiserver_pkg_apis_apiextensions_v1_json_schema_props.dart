@@ -3,12 +3,15 @@
 //
 // @dart=2.12
 
-// ignore_for_file: unused_element, unused_import
+// ignore_for_file: unused_element
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
-part of openapi.api;
+import 'package:kubenav/models/kubernetes/helpers.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_apiextensions_apiserver_pkg_apis_apiextensions_v1_external_documentation.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_apiextensions_apiserver_pkg_apis_apiextensions_v1_validation_rule.dart';
 
 class IoK8sApiextensionsApiserverPkgApisApiextensionsV1JSONSchemaProps {
   /// Returns a new [IoK8sApiextensionsApiserverPkgApisApiextensionsV1JSONSchemaProps] instance.
@@ -628,8 +631,6 @@ class IoK8sApiextensionsApiserverPkgApisApiextensionsV1JSONSchemaProps {
             mapValueOfType<Map<String, Object>>(json, r'dependencies') ??
                 const {},
         description: mapValueOfType<String>(json, r'description'),
-        // TODO: Fix original generated code
-        // enum_: Object.listFromJson(json[r'enum']) ?? const [],
         enum_: const [],
         example: mapValueOfType<Object>(json, r'example'),
         exclusiveMaximum: mapValueOfType<bool>(json, r'exclusiveMaximum'),

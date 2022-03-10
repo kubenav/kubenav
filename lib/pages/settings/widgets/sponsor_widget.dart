@@ -1,28 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
-import 'package:kubenav/widgets/app_browser_widget.dart';
-import 'package:kubenav/widgets/app_vertical_list_simple_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
-
-class SponsorController extends GetxController {
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-}
+import 'package:kubenav/widgets/app_browser_widget.dart';
+import 'package:kubenav/widgets/app_vertical_list_simple_widget.dart';
 
 class SponsorWidget extends StatelessWidget {
   const SponsorWidget({
@@ -31,8 +15,6 @@ class SponsorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SponsorController controller = Get.put(SponsorController());
-
     return AppVertialListSimpleWidget(
       title: 'Sponsor',
       items: [

@@ -3,12 +3,13 @@
 //
 // @dart=2.12
 
-// ignore_for_file: unused_element, unused_import
+// ignore_for_file: unused_element
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
-part of openapi.api;
+import 'package:kubenav/models/kubernetes/io_k8s_kube_aggregator_pkg_apis_apiregistration_v1_api_service_condition.dart';
 
 class IoK8sKubeAggregatorPkgApisApiregistrationV1APIServiceStatus {
   /// Returns a new [IoK8sKubeAggregatorPkgApisApiregistrationV1APIServiceStatus] instance.

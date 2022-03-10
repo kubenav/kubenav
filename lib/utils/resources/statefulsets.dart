@@ -1,5 +1,4 @@
-import 'package:kubenav/models/kubernetes/api.dart'
-    show IoK8sApiAppsV1StatefulSet;
+import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_stateful_set.dart';
 import 'package:kubenav/utils/resources/general.dart';
 
 String buildInfoText(IoK8sApiAppsV1StatefulSet? sts) {

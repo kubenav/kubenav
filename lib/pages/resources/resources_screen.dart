@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 import 'package:kubenav/models/bookmark_model.dart';
@@ -155,6 +156,7 @@ class Resources extends GetView<ResourcesController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(CustomIcons.clusters),

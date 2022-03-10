@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 import 'package:kubenav/models/bookmark_model.dart';
@@ -35,6 +36,7 @@ class ResourcesBookmarks extends GetView<ResourcesBookmarksController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Bookmarks'),
       ),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),

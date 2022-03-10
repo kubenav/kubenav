@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
 
-import 'package:code_text_field/code_text_field.dart';
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter_highlight/themes/nord.dart';
+import 'package:get/get.dart';
 import 'package:highlight/languages/yaml.dart';
 import 'package:yaml/yaml.dart';
 
@@ -40,16 +41,6 @@ class ListCreateResourceController extends GetxController {
     prettifyYAML();
 
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   /// [prettifyYAML] formats the given resource template as yaml.

@@ -3,12 +3,13 @@
 //
 // @dart=2.12
 
-// ignore_for_file: unused_element, unused_import
+// ignore_for_file: unused_element
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
-part of openapi.api;
+import 'package:kubenav/models/kubernetes/helpers.dart';
 
 class IoK8sApiAppsV1RollingUpdateDeployment {
   /// Returns a new [IoK8sApiAppsV1RollingUpdateDeployment] instance.
@@ -24,7 +25,7 @@ class IoK8sApiAppsV1RollingUpdateDeployment {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  dynamic? maxSurge;
+  dynamic maxSurge;
 
   /// IntOrString is a type that can hold an int32 or a string.  When used in JSON or YAML marshalling and unmarshalling, it produces or consumes the inner type.  This allows you to have, for example, a JSON field that can accept a name or number.
   ///
@@ -33,7 +34,7 @@ class IoK8sApiAppsV1RollingUpdateDeployment {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  dynamic? maxUnavailable;
+  dynamic maxUnavailable;
 
   @override
   bool operator ==(Object other) =>

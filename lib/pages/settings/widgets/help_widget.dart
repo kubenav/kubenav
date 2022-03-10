@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
-import 'package:kubenav/widgets/app_vertical_list_simple_widget.dart';
 import 'package:kubenav/utils/constants.dart';
-import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/logger.dart';
+import 'package:kubenav/widgets/app_vertical_list_simple_widget.dart';
 
 class HelpWidget extends StatelessWidget {
   const HelpWidget({
@@ -27,7 +28,7 @@ class HelpWidget extends StatelessWidget {
                 onClosing: () {},
                 enableDrag: false,
                 builder: (builder) {
-                  return Logger();
+                  return const Logger();
                 },
               ),
               isScrollControlled: true,

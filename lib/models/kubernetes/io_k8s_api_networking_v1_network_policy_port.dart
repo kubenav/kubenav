@@ -3,12 +3,13 @@
 //
 // @dart=2.12
 
-// ignore_for_file: unused_element, unused_import
+// ignore_for_file: unused_element
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
-part of openapi.api;
+import 'package:kubenav/models/kubernetes/helpers.dart';
 
 class IoK8sApiNetworkingV1NetworkPolicyPort {
   /// Returns a new [IoK8sApiNetworkingV1NetworkPolicyPort] instance.
@@ -34,7 +35,7 @@ class IoK8sApiNetworkingV1NetworkPolicyPort {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  dynamic? port;
+  dynamic port;
 
   /// The protocol (TCP, UDP, or SCTP) which traffic must match. If not specified, this field defaults to TCP.
   ///

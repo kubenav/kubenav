@@ -3,12 +3,22 @@
 //
 // @dart=2.12
 
-// ignore_for_file: unused_element, unused_import
+// ignore_for_file: unused_element
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
-part of openapi.api;
+import 'package:kubenav/models/kubernetes/helpers.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_port.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_env_from_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_env_var.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_lifecycle.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_probe.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_resource_requirements.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_security_context.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_volume_device.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_volume_mount.dart';
 
 class IoK8sApiCoreV1EphemeralContainer {
   /// Returns a new [IoK8sApiCoreV1EphemeralContainer] instance.

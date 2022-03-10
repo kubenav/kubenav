@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 import 'package:kubenav/pages/clusters/clusters_controller.dart';
@@ -35,6 +36,7 @@ class Clusters extends GetView<ClustersController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Clusters'),
       ),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),

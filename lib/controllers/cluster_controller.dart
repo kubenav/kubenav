@@ -64,6 +64,8 @@ class ClusterController extends GetxController {
     if (activeClusterIndex.value == -1) {
       activeClusterIndex.value = 0;
     }
+
+    return null;
   }
 
   /// [deleteCluster] deletes the cluster with the given index from our [clusters] list. Besides that we also check if

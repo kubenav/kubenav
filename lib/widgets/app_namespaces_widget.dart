@@ -1,10 +1,11 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:get/get.dart';
+
 import 'package:kubenav/controllers/cluster_controller.dart';
-import 'package:kubenav/models/kubernetes/api.dart'
-    show IoK8sApiCoreV1Namespace, IoK8sApiCoreV1NamespaceList;
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_namespace.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_namespace_list.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
@@ -25,16 +26,6 @@ class AppNamespacesController extends GetxController {
   void onInit() {
     getNamespaces();
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   /// [getNamespaces] can be used to get a list of the [namespaces] of an cluster. While the request is executed it sets

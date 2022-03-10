@@ -3,12 +3,23 @@
 //
 // @dart=2.12
 
-// ignore_for_file: unused_element, unused_import
+// ignore_for_file: unused_element
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
-part of openapi.api;
+import 'package:kubenav/models/kubernetes/helpers.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1beta1_allowed_csi_driver.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1beta1_allowed_flex_volume.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1beta1_allowed_host_path.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1beta1_fs_group_strategy_options.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1beta1_host_port_range.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1beta1_run_as_group_strategy_options.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1beta1_run_as_user_strategy_options.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1beta1_runtime_class_strategy_options.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1beta1_se_linux_strategy_options.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1beta1_supplemental_groups_strategy_options.dart';
 
 class IoK8sApiPolicyV1beta1PodSecurityPolicySpec {
   /// Returns a new [IoK8sApiPolicyV1beta1PodSecurityPolicySpec] instance.

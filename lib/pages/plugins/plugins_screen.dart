@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 import 'package:kubenav/pages/plugins/plugins_controller.dart';
@@ -12,6 +13,7 @@ class Plugins extends GetView<PluginsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text("Plugins"),
       ),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),

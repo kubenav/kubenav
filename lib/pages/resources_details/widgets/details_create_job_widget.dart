@@ -1,18 +1,15 @@
 import 'dart:convert';
 
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:kubenav/models/resource_model.dart';
-import 'package:kubenav/models/kubernetes/api.dart'
-    show
-        IoK8sApiBatchV1CronJob,
-        IoK8sApiBatchV1Job,
-        IoK8sApiBatchV1JobSpec,
-        IoK8sApiCoreV1PodTemplateSpec,
-        IoK8sApimachineryPkgApisMetaV1ObjectMeta;
+import 'package:get/get.dart';
+
 import 'package:kubenav/controllers/cluster_controller.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_cron_job.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_job.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
+import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -31,21 +28,6 @@ class DetailsCreateJobController extends GetxController {
     required this.namespace,
     required this.item,
   });
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   void createJob(BuildContext context) async {
     try {

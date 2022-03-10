@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_service_account.dart';
 import 'package:kubenav/models/resource_model.dart';
-import 'package:kubenav/models/kubernetes/api.dart'
-    show IoK8sApiCoreV1ServiceAccount;
 import 'package:kubenav/pages/resources_list/widgets/list_item_widget.dart';
 import 'package:kubenav/utils/resources/general.dart';
 

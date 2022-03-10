@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 import 'package:kubenav/models/cluster_model.dart';
@@ -18,16 +19,6 @@ class ClusterItemController extends GetxController {
   void onInit() {
     getClusterStatus();
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   /// [getClusterStatus] makes an request against the Kubernetes api of the given cluster. If the request returns a

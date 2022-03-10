@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiRbacV1Role;
+import 'package:kubenav/models/kubernetes/io_k8s_api_rbac_v1_role.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';

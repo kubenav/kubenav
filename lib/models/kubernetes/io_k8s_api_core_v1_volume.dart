@@ -3,12 +3,42 @@
 //
 // @dart=2.12
 
-// ignore_for_file: unused_element, unused_import
+// ignore_for_file: unused_element
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
-part of openapi.api;
+import 'package:kubenav/models/kubernetes/helpers.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_aws_elastic_block_store_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_azure_disk_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_azure_file_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_ceph_fs_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_cinder_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_config_map_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_csi_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_downward_api_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_empty_dir_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_ephemeral_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_fc_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_flex_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_flocker_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_gce_persistent_disk_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_git_repo_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_glusterfs_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_host_path_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_iscsi_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_nfs_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_persistent_volume_claim_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_photon_persistent_disk_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_portworx_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_projected_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_quobyte_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_rbd_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_scale_io_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_secret_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_storage_os_volume_source.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_vsphere_virtual_disk_volume_source.dart';
 
 class IoK8sApiCoreV1Volume {
   /// Returns a new [IoK8sApiCoreV1Volume] instance.

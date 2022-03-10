@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
+import 'package:kubenav/routes/app_routes.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
-import 'package:kubenav/routes/app_routes.dart';
 
 /// [AppBottomNavigationBarWidget] is the global bottom navigation bar for our app. It provides easy access to the most
 /// important pages of the app.

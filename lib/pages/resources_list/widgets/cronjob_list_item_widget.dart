@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_cron_job.dart';
 import 'package:kubenav/models/resource_model.dart';
-import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiBatchV1CronJob;
 import 'package:kubenav/pages/resources_list/widgets/list_item_widget.dart';
 import 'package:kubenav/utils/resources/cronjobs.dart';
 

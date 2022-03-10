@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/api.dart' show IoK8sApiCoreV1Event;
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_event.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources/general.dart';

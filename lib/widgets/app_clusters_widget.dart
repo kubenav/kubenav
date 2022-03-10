@@ -1,29 +1,15 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:kubenav/utils/custom_icons.dart';
+
+import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 
 class AppClustersController extends GetxController {
   ClusterController clusterController = Get.find();
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
 }
 
 /// [AppClustersWidget] is a widget which can be used to switch the active Kubernetes cluster. It should be used within

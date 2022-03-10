@@ -1,26 +1,12 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/terminal_controller.dart';
 import 'package:kubenav/utils/constants.dart';
 
 class AppFloatingActionButtonsController extends GetxController {
   TerminalController terminalController = Get.find();
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
 }
 
 class AppFloatingActionButtonsWidget extends StatelessWidget {
