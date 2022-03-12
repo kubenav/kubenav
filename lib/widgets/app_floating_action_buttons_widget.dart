@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import 'package:kubenav/controllers/portforwarding_controller.dart';
 import 'package:kubenav/controllers/terminal_controller.dart';
 import 'package:kubenav/utils/constants.dart';
 
 class AppFloatingActionButtonsController extends GetxController {
   TerminalController terminalController = Get.find();
+  PortForwardingController portForwardingController = Get.find();
 }
 
 class AppFloatingActionButtonsWidget extends StatelessWidget {
@@ -29,16 +31,18 @@ class AppFloatingActionButtonsWidget extends StatelessWidget {
       );
     }
 
-    // if (controller.portForwardingController.connections.isNotEmpty) {
-    //   floatingActionButtons.add(
-    //     FloatingActionButton(
-    //       heroTag: "portforwarding",
-    //       backgroundColor: Constants.colorPrimary,
-    //       onPressed: () {},
-    //       child: const Icon(Icons.link),
-    //     ),
-    //   );
-    // }
+    if (controller.portForwardingController.sessions.isNotEmpty) {
+      floatingActionButtons.add(
+        FloatingActionButton(
+          heroTag: "portforwarding",
+          backgroundColor: Constants.colorPrimary,
+          onPressed: () {
+            controller.portForwardingController.showSessionsBottomSheet();
+          },
+          child: const Icon(Icons.link),
+        ),
+      );
+    }
 
     return floatingActionButtons;
   }
@@ -54,7 +58,8 @@ class AppFloatingActionButtonsWidget extends StatelessWidget {
         return Wrap(
           direction: Axis.vertical,
           spacing: Constants.spacingMiddle,
-          children: controller.terminalController.showTerminals.value
+          children: controller.terminalController.showTerminals.value ||
+                  controller.portForwardingController.showSessions.value
               ? []
               : buildFloatingActionButtons(controller),
         );

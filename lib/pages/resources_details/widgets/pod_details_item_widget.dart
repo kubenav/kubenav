@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
+import 'package:kubenav/controllers/portforwarding_controller.dart';
 import 'package:kubenav/models/kubernetes-extensions/pod_metrics.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
 import 'package:kubenav/models/resource_model.dart';
@@ -12,11 +13,13 @@ import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/resources/pods.dart';
 
 class PodDetailsItemController extends GetxController {
   ClusterController clusterController = Get.find();
+  PortForwardingController portForwardingController = Get.find();
 
   final IoK8sApiCoreV1Pod? pod;
   RxList<ApisMetricsV1beta1PodMetricsItemContainer> metrics =
@@ -33,21 +36,50 @@ class PodDetailsItemController extends GetxController {
     super.onInit();
   }
 
+  /// [portForward] forwards the given port of a container to a local port, so that a user can connects to the container
+  /// port.
   void portForward(
-      String name, String namespace, String container, int port) async {
+    String name,
+    String namespace,
+    String container,
+    int port,
+  ) async {
     try {
       final cluster = clusterController
           .clusters[clusterController.activeClusterIndex.value].value;
 
-      final url =
-          '/api/v1/namespaces/$namespace/pods/$name/portforward?ports=$port';
+      final isStarted = await KubernetesService(cluster: cluster).startServer();
+      if (isStarted) {
+        Logger.log(
+          'PodDetailsItemController portForward',
+          'Internal http server is started and healthy, try to establish port forwarding',
+        );
 
-      // await KubernetesService(cluster: cluster).portForward(url);
+        final result = await KubernetesService(cluster: cluster)
+            .portForwarding(name, namespace, port);
+        portForwardingController.addSession(
+          result['sessionID'],
+          name,
+          namespace,
+          container,
+          port,
+          result['localPort'],
+        );
+      } else {
+        snackbar(
+          'Could not establish port forwarding',
+          'The internal http server is unhealthy',
+        );
+      }
     } catch (err) {
       Logger.log(
         'PodDetailsItemController portForward',
         'Could not establish port forwarding',
         err,
+      );
+      snackbar(
+        'Could not establish port forwarding',
+        'An error was returned: $err',
       );
     }
   }

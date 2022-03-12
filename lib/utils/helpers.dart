@@ -55,6 +55,7 @@ void snackbar(
   Widget? titleText,
   Widget? messageText,
   Widget? icon,
+  void Function()? onTap,
 }) {
   Get.snackbar(
     title,
@@ -62,6 +63,11 @@ void snackbar(
     titleText: titleText,
     messageText: messageText,
     icon: icon,
+    onTap: (GetSnackBar getSnackBar) {
+      if (onTap != null) {
+        onTap();
+      }
+    },
     backgroundColor: Colors.white,
     boxShadows: [
       BoxShadow(

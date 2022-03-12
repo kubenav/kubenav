@@ -5,6 +5,7 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.*
 import java.lang.Exception
+import java.util.concurrent.Executors;
 
 import kubenav.Kubenav;
 
@@ -78,6 +79,8 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       } else {
         kubernetesGetLogs(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, names, namespace, container, since, filter, previous, result)
       }
+    } else if (call.method == "kubernetesStartServer") {
+      kubernetesStartServer(result)
     } else {
       result.notImplemented()
     }
@@ -117,5 +120,13 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     } catch (e: Exception) {
       result.error("KUBERNETES_GET_LOGS_FAILED", e.localizedMessage, null)
     }
+  }
+
+  private fun kubernetesStartServer(result: MethodChannel.Result) {
+    val executor = Executors.newSingleThreadExecutor()
+    executor.execute {
+      Kubenav.kubernetesStartServer();
+    }
+    result.success("")
   }
 }

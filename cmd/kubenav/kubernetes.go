@@ -8,9 +8,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/kubenav/kubenav/pkg/api"
-	"github.com/kubenav/kubenav/pkg/api/middleware"
 	"github.com/kubenav/kubenav/pkg/kube"
+	"github.com/kubenav/kubenav/pkg/server"
 
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes"
@@ -162,10 +161,5 @@ func kubernetesGetLogs(clientset *kubernetes.Clientset, clusterServer, name, nam
 // KubernetesStartServer starts an Go server which listens on "14122". The server is responsible for providing the
 // port forwarding and Pod exec feature for kubenav.
 func KubernetesStartServer() {
-	router := http.NewServeMux()
-	router.HandleFunc("/health", middleware.Cors(api.HealthHandler))
-
-	if err := http.ListenAndServe(":14122", router); err != nil {
-		return
-	}
+	server.Start()
 }

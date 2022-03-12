@@ -43,6 +43,7 @@ dependencies:
   code_text_field: ^1.0.2
   flutter_launcher_icons: ^0.9.2
   import_sorter: ^4.6.0
+  http: ^0.13.4
 
 dev_dependencies:
   flutter_test:

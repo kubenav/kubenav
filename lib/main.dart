@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 
 import 'package:kubenav/controllers/bookmark_controller.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
+import 'package:kubenav/controllers/portforwarding_controller.dart';
 import 'package:kubenav/controllers/terminal_controller.dart';
 import 'package:kubenav/routes/app_pages.dart';
 import 'package:kubenav/routes/app_routes.dart';
@@ -16,6 +17,7 @@ void main() async {
   Get.put(ClusterController());
   Get.put(BookmarkController());
   Get.put(TerminalController());
+  Get.put(PortForwardingController());
 
   runApp(const App());
 }

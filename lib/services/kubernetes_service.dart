@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
+import 'package:http/http.dart' as http;
+
 import 'package:kubenav/models/cluster_model.dart';
 import 'package:kubenav/utils/logger.dart';
 
@@ -256,6 +258,188 @@ class KubernetesService {
       Logger.log(
         'KubernetesService getLogs',
         'Get logs request failed',
+        err,
+      );
+      return Future.error(err);
+    }
+  }
+
+  /// [startServer] starts the internal Go server, which is responsible for features like port forwarding and getting a
+  /// shell in a container.
+  ///
+  /// To start the server we call the `kubernetesStartServer` method, after that we are waiting 3 seconds and check if
+  /// the server is healthy. This is necessary, because we directly return when the server is started and we do not have
+  /// the chance to wait if the server is really started.
+  Future<bool> startServer() async {
+    try {
+      final isServerHealthy = await _checkServerHealth();
+      if (isServerHealthy) {
+        return true;
+      } else {
+        await platform.invokeMethod('kubernetesStartServer');
+        Logger.log(
+          'KubernetesService startServer',
+          'Internal http server was started',
+        );
+
+        await Future.delayed(const Duration(seconds: 3));
+        return await _checkServerHealth();
+      }
+    } catch (err) {
+      Logger.log(
+        'KubernetesService startServer',
+        'Could not start server',
+        err,
+      );
+      return Future.error(err);
+    }
+  }
+
+  /// [_checkServerHealth] is an internal helper funtion, which checks if our internal http server is healthy. If this
+  /// is the case the function returns `true`. If the server is unhealthy it returns `false`.
+  ///
+  /// The function can be used to determine if the internal http server must be started or if he was started
+  /// successfully.
+  Future<bool> _checkServerHealth() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:14122/health'),
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        Logger.log(
+          'KubernetesService _checkServerHealth',
+          'Health check for internal http server failed with status code ${response.statusCode}',
+          response,
+        );
+        return false;
+      }
+    } catch (err) {
+      Logger.log(
+        'KubernetesService _checkServerHealth',
+        'An error was returned while checking the health of the internal http server',
+        err,
+      );
+      return false;
+    }
+  }
+
+  /// [portForwarding] creates a new port forwarding session to the remote port of the given Pod name, by using the
+  /// `portforwarding` endpoint of the internal http server.
+  Future<Map<String, dynamic>> portForwarding(
+      String name, String namespace, int port) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:14122/portforwarding'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'clusterServer': cluster.clusterServer,
+          'clusterCertificateAuthorityData':
+              cluster.clusterCertificateAuthorityData,
+          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
+          'userClientCertificateData': cluster.userClientCertificateData,
+          'userClientKeyData': cluster.userClientKeyData,
+          'userToken': cluster.userToken,
+          'userUsername': cluster.userUsername,
+          'userPassword': cluster.userPassword,
+          'podName': name,
+          'podNamespace': namespace,
+          'podPort': port,
+        }),
+      );
+
+      Logger.log(
+        'KubernetesService portForwarding',
+        'Port forwarding returnes a response with status code ${response.statusCode}',
+        response.body,
+      );
+
+      Map<String, dynamic> jsonData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        return jsonData;
+      } else {
+        Logger.log(
+          'KubernetesService portForwarding',
+          'Port forwarding failed with status code ${response.statusCode}',
+          jsonData,
+        );
+        return Future.error(jsonData);
+      }
+    } catch (err) {
+      Logger.log(
+        'KubernetesService portForwarding',
+        'An error was returned while establishing the port forwarding connection',
+        err,
+      );
+      return Future.error(err);
+    }
+  }
+
+  /// [deletePortForwardingSession] deletes a port forwarding session by the given id. This just deletes the session in
+  /// our internal http server. The user must take care of the deliting the session also on the client side by calling
+  /// the `removeSession` of the `PortForwardingController`.
+  Future<void> deletePortForwardingSession(String sessionID) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('http://localhost:14122/portforwarding'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'sessionID': sessionID,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        Map<String, dynamic> jsonData = json.decode(response.body);
+        Logger.log(
+          'KubernetesService deletePortForwardingSession',
+          'Deleting the port forwarding session failed with response code ${response.statusCode}',
+          jsonData,
+        );
+        return Future.error(jsonData);
+      }
+    } catch (err) {
+      Logger.log(
+        'KubernetesService deletePortForwardingSession',
+        'An error was returned while deleting the port forwarding connection',
+        err,
+      );
+      return Future.error(err);
+    }
+  }
+
+  /// [getPortForwardingSession] returns a list of session from our internal http server, which can be used to replace
+  /// the current list of sessions hold by the `PortForwardingController`.
+  Future<Map<String, dynamic>> getPortForwardingSession() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:14122/portforwarding'),
+      );
+
+      Map<String, dynamic> jsonData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        return jsonData;
+      } else {
+        Logger.log(
+          'KubernetesService getPortForwardingSession',
+          'Could not sessions, with response code ${response.statusCode}',
+          jsonData,
+        );
+        return Future.error(jsonData);
+      }
+    } catch (err) {
+      Logger.log(
+        'KubernetesService getPortForwardingSession',
+        'An error was returned while returning port forwarding sessions',
         err,
       );
       return Future.error(err);

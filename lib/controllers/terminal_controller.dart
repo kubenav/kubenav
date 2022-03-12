@@ -12,7 +12,6 @@ import 'package:kubenav/widgets/app_terminals_widget.dart';
 class TerminalController extends GetxController {
   RxList<Terminal> terminals = <Terminal>[].obs;
   RxBool showTerminals = false.obs;
-  Worker? worker;
 
   void showTerminalsBottomSheet() {
     showTerminals.value = true;

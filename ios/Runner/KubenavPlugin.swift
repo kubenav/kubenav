@@ -69,6 +69,8 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
+    } else if call.method == "kubernetesStartServer" {
+      kubernetesStartServer(result: result)
     } else {
       result(FlutterMethodNotImplemented)
     }
@@ -116,5 +118,12 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     } else {
       result(data)
     }
+  }
+
+  private func kubernetesStartServer(result: FlutterResult) {
+    DispatchQueue.background {
+      KubenavKubernetesStartServer()
+    }
+    result("")
   }
 }
