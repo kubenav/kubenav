@@ -18,6 +18,7 @@ import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/resources/cronjobs.dart' as cronjob_helpers;
 import 'package:kubenav/utils/resources/deployments.dart' as deployment_helpers;
 import 'package:kubenav/utils/resources/events.dart' as event_helpers;
+import 'package:kubenav/utils/resources/general.dart';
 import 'package:kubenav/utils/resources/jobs.dart' as job_helpers;
 import 'package:kubenav/utils/resources/pods.dart' as pod_helpers;
 import 'package:kubenav/widgets/app_error_widget.dart';
@@ -157,7 +158,7 @@ class DetailsResourcesPreviewWidget extends StatelessWidget {
     );
   }
 
-  String buildSubtitle(
+  List<String> buildSubtitle(
     String title,
     String resource,
     String path,
@@ -197,7 +198,14 @@ class DetailsResourcesPreviewWidget extends StatelessWidget {
           .buildInfoText(IoK8sApiAppsV1StatefulSet.fromJson(item));
     }
 
-    return item['metadata']?['namespace'] ?? '';
+    final age = getAge(item['metadata'] != null &&
+            item['metadata']['creationTimestamp'] != null
+        ? DateTime.parse(item['metadata']['creationTimestamp'])
+        : null);
+
+    return item['metadata']?['namespace'] != null
+        ? ['Namespace: ${item['metadata']?['namespace']}', 'Age: $age']
+        : ['Age: $age'];
   }
 
   @override

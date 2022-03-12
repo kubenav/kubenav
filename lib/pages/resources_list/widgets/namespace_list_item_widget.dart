@@ -40,7 +40,10 @@ class NamespaceListItemWidget extends StatelessWidget
       scope: scope,
       name: namespace?.metadata?.name ?? '',
       namespace: null,
-      info: 'Status: $status \nAge: $age',
+      info: [
+        'Status: $status',
+        'Age: $age',
+      ],
     );
   }
 }

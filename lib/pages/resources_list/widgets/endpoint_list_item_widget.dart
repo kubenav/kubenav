@@ -43,8 +43,11 @@ class EndpointListItemWidget extends StatelessWidget
       scope: scope,
       name: endpoint?.metadata?.name ?? '',
       namespace: endpoint?.metadata?.namespace,
-      info:
-          'Namespace: ${endpoint?.metadata?.namespace ?? '-'} \nEndpoints: ${ips != null && ips.isNotEmpty ? ips.join(', ') : '-'} \nAge: $age',
+      info: [
+        'Namespace: ${endpoint?.metadata?.namespace ?? '-'}',
+        'Endpoints: ${ips != null && ips.isNotEmpty ? ips.join(', ') : '-'}',
+        'Age: $age',
+      ],
       status: ips != null && ips.isNotEmpty ? Status.success : Status.warning,
     );
   }

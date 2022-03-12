@@ -169,14 +169,20 @@ List<PodContainerPort>? getPorts(IoK8sApiCoreV1Pod? pod) {
   return ports;
 }
 
-String buildInfoText(IoK8sApiCoreV1Pod? pod) {
+List<String> buildInfoText(IoK8sApiCoreV1Pod? pod) {
   final age = getAge(pod?.metadata?.creationTimestamp);
   final ready =
       '${pod?.status?.containerStatuses.where((containerStatus) => containerStatus.ready).length ?? '0'}/${pod?.spec?.containers.length ?? '0'}';
   final statusText = getStatusText(pod);
   final restarts = getRestarts(pod);
 
-  return 'Namespace: ${pod?.metadata?.namespace ?? '-'} \nReady: $ready \nStatus: $statusText \nRestarts: $restarts \nAge: $age';
+  return [
+    'Namespace: ${pod?.metadata?.namespace ?? '-'}',
+    'Ready: $ready',
+    'Status: $statusText',
+    'Restarts: $restarts',
+    'Age: $age',
+  ];
 }
 
 List<String> getProbe(IoK8sApiCoreV1Probe probe) {

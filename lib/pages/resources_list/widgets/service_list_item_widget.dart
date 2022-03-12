@@ -47,8 +47,14 @@ class ServiceListItemWidget extends StatelessWidget implements IListItemWidget {
       scope: scope,
       name: service?.metadata?.name ?? '',
       namespace: service?.metadata?.namespace,
-      info:
-          'Namespace: ${service?.metadata?.namespace ?? '-'} \nType: $type \nCluster IP: $clusterIP \nExternal IP: ${externalIP != null && externalIP.isNotEmpty ? externalIP.join(', ') : '-'} \nPort(s): ${ports != null && ports.isNotEmpty ? ports.join(', ') : '-'} \nAge: $age',
+      info: [
+        'Namespace: ${service?.metadata?.namespace ?? '-'}',
+        'Type: $type',
+        'Cluster IP: $clusterIP',
+        'External IP: ${externalIP != null && externalIP.isNotEmpty ? externalIP.join(', ') : '-'}',
+        'Port(s): ${ports != null && ports.isNotEmpty ? ports.join(', ') : '-'}',
+        'Age: $age',
+      ],
     );
   }
 }

@@ -40,8 +40,11 @@ class ConfigMapListItemWidget extends StatelessWidget
       scope: scope,
       name: configMap?.metadata?.name ?? '',
       namespace: configMap?.metadata?.namespace,
-      info:
-          'Namespace: ${configMap?.metadata?.namespace ?? '-'} \nData: $data \nAge: $age',
+      info: [
+        'Namespace: ${configMap?.metadata?.namespace ?? '-'}',
+        'Data: $data',
+        'Age: $age',
+      ],
     );
   }
 }

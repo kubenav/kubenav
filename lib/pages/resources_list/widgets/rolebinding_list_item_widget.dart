@@ -41,8 +41,11 @@ class RoleBindingListItemWidget extends StatelessWidget
       scope: scope,
       name: roleBinding?.metadata?.name ?? '',
       namespace: roleBinding?.metadata?.namespace,
-      info:
-          'Namespace: ${roleBinding?.metadata?.namespace ?? '-'} \nRole: $role \nAge: $age',
+      info: [
+        'Namespace: ${roleBinding?.metadata?.namespace ?? '-'}',
+        'Role: $role',
+        'Age: $age',
+      ],
     );
   }
 }

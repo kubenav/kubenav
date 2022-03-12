@@ -46,8 +46,13 @@ class StorageClassListItemWidget extends StatelessWidget
       scope: scope,
       name: sc?.metadata?.name ?? '',
       namespace: null,
-      info:
-          'Provisioner: $provisioner \nReclaim Policy: $reclaimPolicy \nVolume Binding Mode: $volumeBindingMode \nAllow Volume Expansion: $allowVolumeExpansion \nAge: $age',
+      info: [
+        'Provisioner: $provisioner',
+        'Reclaim Policy: $reclaimPolicy',
+        'Volume Binding Mode: $volumeBindingMode',
+        'Allow Volume Expansion: $allowVolumeExpansion',
+        'Age: $age',
+      ],
     );
   }
 }

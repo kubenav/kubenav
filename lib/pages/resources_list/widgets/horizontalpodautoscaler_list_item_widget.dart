@@ -57,8 +57,14 @@ class HorizontalPodAutoscalerListItemWidget extends StatelessWidget
       scope: scope,
       name: hpa?.metadata?.name ?? '',
       namespace: hpa?.metadata?.namespace,
-      info:
-          'Namespace: ${hpa?.metadata?.namespace ?? '-'} \nReference: $reference \nReplicas: $replicas \nMin. Pods: $minPods \nMax. Pods: $maxPods \nAge: $age',
+      info: [
+        'Namespace: ${hpa?.metadata?.namespace ?? '-'}',
+        'Reference: $reference',
+        'Replicas: $replicas',
+        'Min. Pods: $minPods',
+        'Max. Pods: $maxPods',
+        'Age: $age',
+      ],
       status: getStatus(
         replicas,
         minPods,

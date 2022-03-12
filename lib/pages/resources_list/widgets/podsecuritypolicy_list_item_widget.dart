@@ -56,8 +56,17 @@ class PodSecurityPolicyListItemWidget extends StatelessWidget
       scope: scope,
       name: psp?.metadata?.name ?? '',
       namespace: null,
-      info:
-          'Privileged: $privileged \nCapabilities: $capabilities \nSELinux: $seLinux \nRun as User: $runAsUser \nFS Group: $fsGroup \nSupplemental Groups: $supplementalGroups \nRead Only Root FS: $readOnlyRootFS \nVolumes: $volumes \nAge: $age',
+      info: [
+        'Privileged: $privileged',
+        'Capabilities: $capabilities',
+        'SELinux: $seLinux',
+        'Run as User: $runAsUser',
+        'FS Group: $fsGroup',
+        'Supplemental Groups: $supplementalGroups',
+        'Read Only Root FS: $readOnlyRootFS',
+        'Volumes: $volumes',
+        'Age: $age',
+      ],
     );
   }
 }

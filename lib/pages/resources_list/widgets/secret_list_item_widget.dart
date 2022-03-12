@@ -55,8 +55,12 @@ class SecretListItemWidget extends StatelessWidget implements IListItemWidget {
       scope: scope,
       name: secret?.metadata?.name ?? '',
       namespace: secret?.metadata?.namespace,
-      info:
-          'Namespace: ${secret?.metadata?.namespace ?? '-'} \nType: $type \nData: $data \nAge: $age',
+      info: [
+        'Namespace: ${secret?.metadata?.namespace ?? '-'}',
+        'Type: $type',
+        'Data: $data',
+        'Age: $age',
+      ],
     );
   }
 }

@@ -51,7 +51,7 @@ class Clusters extends GetView<ClustersController> {
                 controller.providers.length,
                 (index) => AppHorizontalListCardsModel(
                   title: controller.providers[index].title,
-                  subtitle: controller.providers[index].subtitle,
+                  subtitle: [controller.providers[index].subtitle],
                   image: controller.providers[index].image250x140,
                   onTap: () {
                     controller.showAddClusterBottomSheet(index);

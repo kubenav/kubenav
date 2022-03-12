@@ -49,7 +49,7 @@ class ListItemWidget extends StatelessWidget {
   final ResourceScope? scope;
   final String name;
   final String? namespace;
-  final String info;
+  final List<String> info;
   final Status status;
   final void Function()? onTap;
 
@@ -72,6 +72,25 @@ class ListItemWidget extends StatelessWidget {
     }
 
     return Container();
+  }
+
+  /// [buildInfo] creates the info widget. Eachitem in the list of [info] represents one line of text in the
+  /// returned column widget.
+  Widget buildInfo(List<String> info) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: info
+          .map((e) => Text(
+                Characters(e)
+                    .replaceAll(Characters(''), Characters('\u{200B}'))
+                    .toString(),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: secondaryTextStyle(),
+              ))
+          .toList(),
+    );
   }
 
   @override
@@ -116,14 +135,7 @@ class ListItemWidget extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: primaryTextStyle(),
                   ),
-                  Text(
-                    Characters(info)
-                        .replaceAll(Characters(''), Characters('\u{200B}'))
-                        .toString(),
-                    overflow: TextOverflow.fade,
-                    softWrap: false,
-                    style: secondaryTextStyle(),
-                  ),
+                  buildInfo(info),
                 ],
               ),
             ),

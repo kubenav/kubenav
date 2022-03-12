@@ -27,7 +27,8 @@ class DetailsContainersWidget extends StatelessWidget {
   final List<IoK8sApiCoreV1ContainerStatus> containerStatuses;
   final RxList<ApisMetricsV1beta1PodMetricsItemContainer> containerMetrics;
 
-  String getSubtitle(String containerType, IoK8sApiCoreV1Container container) {
+  List<String> getSubtitle(
+      String containerType, IoK8sApiCoreV1Container container) {
     List<IoK8sApiCoreV1ContainerStatus> status = [];
     if (containerType == 'Init Container') {
       status =
@@ -38,7 +39,9 @@ class DetailsContainersWidget extends StatelessWidget {
     }
 
     if (status.length != 1) {
-      return 'Type: $containerType';
+      return [
+        'Type: $containerType',
+      ];
     }
 
     List<ApisMetricsV1beta1PodMetricsItemContainer> filteredContainerMetrics =
@@ -49,7 +52,14 @@ class DetailsContainersWidget extends StatelessWidget {
           .toList();
     }
 
-    return 'Type: $containerType \nReady: ${status[0].ready ? 'True' : 'False'}\nRestarts: ${status[0].restartCount}\nState: ${getContainerState(status[0].state)}\nCPU: ${filteredContainerMetrics.isNotEmpty && filteredContainerMetrics[0].usage?.cpu != null ? formatCpuMetric(cpuMetricsStringToInt(filteredContainerMetrics[0].usage!.cpu!)) : '-'} / ${container.resources != null && container.resources!.requests.containsKey('cpu') ? container.resources!.requests['cpu'] : '-'} / ${container.resources != null && container.resources!.limits.containsKey('cpu') ? container.resources!.limits['cpu'] : '-'}\nMemory: ${filteredContainerMetrics.isNotEmpty && filteredContainerMetrics[0].usage?.memory != null ? formatMemoryMetric(memoryMetricsStringToInt(filteredContainerMetrics[0].usage!.memory!)) : '-'} / ${container.resources != null && container.resources!.requests.containsKey('memory') ? container.resources!.requests['memory'] : '-'} / ${container.resources != null && container.resources!.limits.containsKey('memory') ? container.resources!.limits['memory'] : '-'}';
+    return [
+      'Type: $containerType ',
+      'Ready: ${status[0].ready ? 'True' : 'False'}',
+      'Restarts: ${status[0].restartCount}',
+      'State: ${getContainerState(status[0].state)}',
+      'CPU: ${filteredContainerMetrics.isNotEmpty && filteredContainerMetrics[0].usage?.cpu != null ? formatCpuMetric(cpuMetricsStringToInt(filteredContainerMetrics[0].usage!.cpu!)) : '-'} / ${container.resources != null && container.resources!.requests.containsKey('cpu') ? container.resources!.requests['cpu'] : '-'} / ${container.resources != null && container.resources!.limits.containsKey('cpu') ? container.resources!.limits['cpu'] : '-'}',
+      'Memory: ${filteredContainerMetrics.isNotEmpty && filteredContainerMetrics[0].usage?.memory != null ? formatMemoryMetric(memoryMetricsStringToInt(filteredContainerMetrics[0].usage!.memory!)) : '-'} / ${container.resources != null && container.resources!.requests.containsKey('memory') ? container.resources!.requests['memory'] : '-'} / ${container.resources != null && container.resources!.limits.containsKey('memory') ? container.resources!.limits['memory'] : '-'}',
+    ];
   }
 
   @override

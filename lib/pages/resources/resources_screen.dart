@@ -29,8 +29,16 @@ class Resources extends GetView<ResourcesController> {
             : 10,
         (index) => AppHorizontalListCardsModel(
           title: controller.bookmarkController.bookmarks[index].title,
-          subtitle:
-              'Cluster: ${controller.bookmarkController.bookmarks[index].cluster}\nNamespace: ${controller.bookmarkController.bookmarks[index].namespace}${controller.bookmarkController.bookmarks[index].name != null ? '\nName: ${controller.bookmarkController.bookmarks[index].name}' : '\n'}',
+          subtitle: controller.bookmarkController.bookmarks[index].name == null
+              ? [
+                  'Cluster: ${controller.bookmarkController.bookmarks[index].cluster}',
+                  'Namespace: ${controller.bookmarkController.bookmarks[index].namespace}',
+                ]
+              : [
+                  'Cluster: ${controller.bookmarkController.bookmarks[index].cluster}',
+                  'Namespace: ${controller.bookmarkController.bookmarks[index].namespace}',
+                  'Name: ${controller.bookmarkController.bookmarks[index].name}',
+                ],
           image: resource_model.Resources.map.containsKey(controller
                       .bookmarkController.bookmarks[index].resource) &&
                   resource_model

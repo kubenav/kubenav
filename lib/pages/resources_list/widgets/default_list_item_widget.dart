@@ -44,8 +44,14 @@ class DefaultListItemWidget extends StatelessWidget implements IListItemWidget {
       scope: scope,
       name: name,
       namespace: namespace,
-      info:
-          namespace != null ? 'Namespace: $namespace \nAge: $age' : 'Age: $age',
+      info: namespace != null
+          ? [
+              'Namespace: $namespace',
+              'Age: $age',
+            ]
+          : [
+              'Age: $age',
+            ],
     );
   }
 }

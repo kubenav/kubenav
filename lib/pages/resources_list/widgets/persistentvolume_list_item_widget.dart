@@ -50,8 +50,16 @@ class PersistentVolumeListItemWidget extends StatelessWidget
       scope: scope,
       name: pv?.metadata?.name ?? '',
       namespace: null,
-      info:
-          'Capacity: $capacity \nAccess Modes: $accessMode \nReclaim Policy: $reclaimPolicy \nStatus: $status \nClaim: $claim \nStorage Class: $storageClass \nReason: $reason \nAge: $age',
+      info: [
+        'Capacity: $capacity',
+        'Access Modes: $accessMode',
+        'Reclaim Policy: $reclaimPolicy',
+        'Status: $status',
+        'Claim: $claim',
+        'Storage Class: $storageClass',
+        'Reason: $reason',
+        'Age: $age',
+      ],
       status: status == 'Bound' ? Status.success : Status.warning,
     );
   }

@@ -72,8 +72,16 @@ class DaemonSetListItemWidget extends StatelessWidget
       scope: scope,
       name: daemonSet?.metadata?.name ?? '',
       namespace: daemonSet?.metadata?.namespace,
-      info:
-          'Namespace: ${daemonSet?.metadata?.namespace ?? '-'} \nDesired: $desired \nCurrent: $current \nReady: $ready \nUp to date: $upToDate \nAvailable: $available \nNode Selector: ${nodeSelector.isEmpty ? '-' : nodeSelector.join(', ')} \nAge: $age',
+      info: [
+        'Namespace: ${daemonSet?.metadata?.namespace ?? '-'}',
+        'Desired: $desired',
+        'Current: $current',
+        'Ready: $ready',
+        'Up to date: $upToDate',
+        'Available: $available',
+        'Node Selector: ${nodeSelector.isEmpty ? '-' : nodeSelector.join(', ')}',
+        'Age: $age',
+      ],
       status: getStatus(
         desired,
         current,

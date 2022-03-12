@@ -58,8 +58,13 @@ class ReplicaSetListItemWidget extends StatelessWidget
       scope: scope,
       name: replicaSet?.metadata?.name ?? '',
       namespace: replicaSet?.metadata?.namespace,
-      info:
-          'Namespace: ${replicaSet?.metadata?.namespace ?? '-'} \nDesired: $desired \nCurrent: $current \nReady: $ready \nAge: $age',
+      info: [
+        'Namespace: ${replicaSet?.metadata?.namespace ?? '-'}',
+        'Desired: $desired',
+        'Current: $current',
+        'Ready: $ready',
+        'Age: $age',
+      ],
       status: getStatus(
         desired,
         current,

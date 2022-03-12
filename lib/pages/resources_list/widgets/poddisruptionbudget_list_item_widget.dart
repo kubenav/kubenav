@@ -59,8 +59,13 @@ class PodDisruptionBudgetListItemWidget extends StatelessWidget
       scope: scope,
       name: pdb?.metadata?.name ?? '',
       namespace: pdb?.metadata?.namespace,
-      info:
-          'Namespace: ${pdb?.metadata?.namespace ?? '-'} \nMin. Available: $minAvailable \nMax. Unavailable: $maxUnavailable \nAllowed Disruptions: $allowedDisruptions \nAge: $age',
+      info: [
+        'Namespace: ${pdb?.metadata?.namespace ?? '-'}',
+        'Min. Available: $minAvailable',
+        'Max. Unavailable: $maxUnavailable',
+        'Allowed Disruptions: $allowedDisruptions',
+        'Age: $age',
+      ],
       status: getStatus(
         desiredHealthy,
         currentHealthy,

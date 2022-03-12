@@ -36,8 +36,12 @@ class PodListItemWidget extends StatelessWidget implements IListItemWidget {
     final podMetrics = getMetricsFromList(pod, metrics);
     final status = getStatus(pod);
 
-    info = info +
-        '\nCPU: ${podMetrics != null ? podMetrics.cpu : '-'} ${podResources?.cpu ?? '/ - / -'}\nMemory: ${podMetrics != null ? podMetrics.memory : '-'} ${podResources?.memory ?? '/ - / -'}';
+    info.add(
+      'CPU: ${podMetrics != null ? podMetrics.cpu : '-'} ${podResources?.cpu ?? '/ - / -'}',
+    );
+    info.add(
+      'Memory: ${podMetrics != null ? podMetrics.memory : '-'} ${podResources?.memory ?? '/ - / -'}',
+    );
 
     return ListItemWidget(
       title: title,

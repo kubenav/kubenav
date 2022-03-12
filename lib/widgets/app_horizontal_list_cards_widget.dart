@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 
-/// [AppHorizontalListCardsModel] is the model, which is used to create a card in the horizontal list.
+/// [AppHorizontalListCardsModel] is the model, which is used to create a card in the horizontal list. The [subtitle] of
+/// a card is of the type `List<String>`, where each item in the list represents one line of the subtitle. This allows
+/// us to render a multiline subtitle with control of the overflow for each line.
 class AppHorizontalListCardsModel {
   String title;
-  String subtitle;
+  List<String> subtitle;
   String image;
   BoxFit imageFit;
   void Function() onTap;
@@ -57,7 +59,7 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
   final IconData? moreIcon;
   final void Function()? moreOnTap;
 
-  /// [buildMore] creates the more widget  with the provided text, icon and onTap function. If the user doesn't provided
+  /// [buildMore] creates the more widget with the provided text, icon and onTap function. If the user doesn't provided
   /// these arguments, the function returns an empty container widget.
   Widget buildMore(
       String? moreText, IconData? moreIcon, void Function()? moreOnTap) {
@@ -82,6 +84,25 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
     }
 
     return Container();
+  }
+
+  /// [buildSubtitle] creates the subtitle widget. Eachitem in the list of [subtitle] represents one line of text in the
+  /// returned column widget.
+  Widget buildSubtitle(List<String> subtitle) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: subtitle
+          .map((e) => Text(
+                Characters(e)
+                    .replaceAll(Characters(''), Characters('\u{200B}'))
+                    .toString(),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: secondaryTextStyle(),
+              ))
+          .toList(),
+    );
   }
 
   @override
@@ -191,14 +212,7 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(
                           left: Constants.spacingSmall,
                         ),
-                        child: Text(
-                          Characters(cards[index].subtitle)
-                              .replaceAll(
-                                  Characters(''), Characters('\u{200B}'))
-                              .toString(),
-                          overflow: TextOverflow.ellipsis,
-                          style: secondaryTextStyle(),
-                        ),
+                        child: buildSubtitle(cards[index].subtitle),
                       ),
                       const SizedBox(height: Constants.spacingSmall),
                     ],

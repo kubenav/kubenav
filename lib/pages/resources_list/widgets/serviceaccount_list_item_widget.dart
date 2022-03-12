@@ -40,8 +40,11 @@ class ServiceAccountListItemWidget extends StatelessWidget
       scope: scope,
       name: sa?.metadata?.name ?? '',
       namespace: sa?.metadata?.namespace,
-      info:
-          'Namespace: ${sa?.metadata?.namespace ?? '-'} \nSecrets: $secrets \nAge: $age',
+      info: [
+        'Namespace: ${sa?.metadata?.namespace ?? '-'}',
+        'Secrets: $secrets',
+        'Age: $age',
+      ],
     );
   }
 }

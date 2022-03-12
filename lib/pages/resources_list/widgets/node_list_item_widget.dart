@@ -42,6 +42,19 @@ class NodeListItemWidget extends StatelessWidget implements IListItemWidget {
     final nodeMetrics = getMetricsFromList(node, metrics);
     final nodeAllocatableResources = getAllocatableResources(node);
 
+    final info = [
+      'Status: ${status != null && status.isNotEmpty ? status.join(', ') : '-'}',
+      'Roles: $roles',
+      'Version: $version',
+      'Age: $age',
+    ];
+
+    info.add(
+        'CPU: ${nodeMetrics != null ? nodeMetrics.cpu : '-'} / ${nodeAllocatableResources != null ? nodeAllocatableResources.cpu : '-'}');
+    info.add(
+      'Memory: ${nodeMetrics != null ? nodeMetrics.memory : '-'} / ${nodeAllocatableResources != null ? nodeAllocatableResources.memory : '-'}',
+    );
+
     return ListItemWidget(
       title: title,
       resource: resource,
@@ -49,8 +62,7 @@ class NodeListItemWidget extends StatelessWidget implements IListItemWidget {
       scope: scope,
       name: node?.metadata?.name ?? '',
       namespace: null,
-      info:
-          'Status: ${status != null && status.isNotEmpty ? status.join(', ') : '-'} \nRoles: $roles \nVersion: $version \nAge: $age ${nodeMetrics != null ? ' \nCPU: ${nodeMetrics.cpu}${nodeAllocatableResources != null ? ' / ${nodeAllocatableResources.cpu}' : ''}\nMemory: ${nodeMetrics.memory}${nodeAllocatableResources != null ? ' / ${nodeAllocatableResources.memory}' : ''}' : ''}',
+      info: info,
       status: status != null && status.where((e) => e == 'Ready').isNotEmpty
           ? Status.success
           : Status.warning,

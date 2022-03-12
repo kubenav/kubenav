@@ -44,8 +44,15 @@ class PersistentVolumeClaimListItemWidget extends StatelessWidget
       scope: scope,
       name: pvc?.metadata?.name ?? '',
       namespace: pvc?.metadata?.namespace,
-      info:
-          'Namespace: ${pvc?.metadata?.namespace ?? '-'} \nStatus: $status \nVolume: $volume \nCapacity: $capacity \nAccess Mode: $accessMode \nStorage Class: $storageClass \nAge: $age',
+      info: [
+        'Namespace: ${pvc?.metadata?.namespace ?? '-'}',
+        'Status: $status',
+        'Volume: $volume',
+        'Capacity: $capacity',
+        'Access Mode: $accessMode',
+        'Storage Class: $storageClass',
+        'Age: $age',
+      ],
       status: status == 'Bound' ? Status.success : Status.warning,
     );
   }

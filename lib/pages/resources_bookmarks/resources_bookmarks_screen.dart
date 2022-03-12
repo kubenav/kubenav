@@ -63,6 +63,7 @@ class ResourcesBookmarks extends GetView<ResourcesBookmarksController> {
                     context,
                     index,
                   ) {
+                    print(controller.bookmarkController.bookmarks[index].type);
                     return Container(
                       key: Key(
                         '${controller.bookmarkController.bookmarks[index].cluster} ${controller.bookmarkController.bookmarks[index].type} ${controller.bookmarkController.bookmarks[index].title} ${controller.bookmarkController.bookmarks[index].resource} ${controller.bookmarkController.bookmarks[index].path} ${controller.bookmarkController.bookmarks[index].scope} ${controller.bookmarkController.bookmarks[index].name} ${controller.bookmarkController.bookmarks[index].namespace}',
@@ -139,15 +140,53 @@ class ResourcesBookmarks extends GetView<ResourcesBookmarksController> {
                                               .bookmarks[index].title,
                                           style: primaryTextStyle(),
                                         ),
-                                        Text(
-                                          Characters(
-                                                  'Cluster: ${controller.bookmarkController.bookmarks[index].cluster}\nNamespace: ${controller.bookmarkController.bookmarks[index].namespace}${controller.bookmarkController.bookmarks[index].name != null ? '\nName: ${controller.bookmarkController.bookmarks[index].name}' : ''}')
-                                              .replaceAll(Characters(''),
-                                                  Characters('\u{200B}'))
-                                              .toString(),
-                                          style: secondaryTextStyle(),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              Characters(
+                                                      'Cluster: ${controller.bookmarkController.bookmarks[index].cluster}')
+                                                  .replaceAll(Characters(''),
+                                                      Characters('\u{200B}'))
+                                                  .toString(),
+                                              style: secondaryTextStyle(),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            Text(
+                                              Characters(
+                                                      'Namespace: ${controller.bookmarkController.bookmarks[index].namespace}')
+                                                  .replaceAll(Characters(''),
+                                                      Characters('\u{200B}'))
+                                                  .toString(),
+                                              style: secondaryTextStyle(),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            controller
+                                                        .bookmarkController
+                                                        .bookmarks[index]
+                                                        .name !=
+                                                    null
+                                                ? Text(
+                                                    Characters(
+                                                            'Name: ${controller.bookmarkController.bookmarks[index].name}')
+                                                        .replaceAll(
+                                                            Characters(''),
+                                                            Characters(
+                                                                '\u{200B}'))
+                                                        .toString(),
+                                                    style: secondaryTextStyle(),
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  )
+                                                : Container(),
+                                          ],
+                                        )
                                       ],
                                     ),
                                   ),

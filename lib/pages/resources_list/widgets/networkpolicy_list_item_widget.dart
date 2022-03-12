@@ -42,8 +42,11 @@ class NetworkPolicyListItemWidget extends StatelessWidget
       scope: scope,
       name: np?.metadata?.name ?? '',
       namespace: np?.metadata?.namespace,
-      info:
-          'Namespace: ${np?.metadata?.namespace ?? '-'} \nPod Selector: ${podSelector != null && podSelector.isNotEmpty ? podSelector.join(', ') : '-'} \nAge: $age',
+      info: [
+        'Namespace: ${np?.metadata?.namespace ?? '-'}',
+        'Pod Selector: ${podSelector != null && podSelector.isNotEmpty ? podSelector.join(', ') : '-'}',
+        'Age: $age',
+      ],
       status: podSelector == null || podSelector.isEmpty
           ? Status.warning
           : Status.success,

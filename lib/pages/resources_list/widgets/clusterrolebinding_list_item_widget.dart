@@ -41,7 +41,10 @@ class ClusterRoleBindingListItemWidget extends StatelessWidget
       scope: scope,
       name: clusterRoleBinding?.metadata?.name ?? '',
       namespace: null,
-      info: 'Role: $role \nAge: $age',
+      info: [
+        'Role: $role',
+        'Age: $age',
+      ],
     );
   }
 }

@@ -43,8 +43,12 @@ class IngressListItemWidget extends StatelessWidget implements IListItemWidget {
       scope: scope,
       name: ingress?.metadata?.name ?? '',
       namespace: ingress?.metadata?.namespace,
-      info:
-          'Namespace: ${ingress?.metadata?.namespace ?? '-'} \nHosts: ${hosts != null && hosts.isNotEmpty ? hosts.join(', ') : '-'} \nAddress: ${address != null && address.isNotEmpty ? address.join(', ') : '-'} \nAge: $age',
+      info: [
+        'Namespace: ${ingress?.metadata?.namespace ?? '-'}',
+        'Hosts: ${hosts != null && hosts.isNotEmpty ? hosts.join(', ') : '-'}',
+        'Address: ${address != null && address.isNotEmpty ? address.join(', ') : '-'}',
+        'Age: $age',
+      ],
       status:
           hosts == null || hosts.isEmpty || address == null || address.isEmpty
               ? Status.warning
