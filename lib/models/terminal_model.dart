@@ -1,3 +1,5 @@
+import 'package:xterm/xterm.dart' as xterm;
+
 /// [TerminalType] is a `enum`, which defines if a terminal is used to show logs or for connection to a container.
 enum TerminalType {
   log,
@@ -10,10 +12,12 @@ class Terminal {
   TerminalType type;
   String name;
   List<dynamic>? logs;
+  xterm.Terminal? terminal;
 
   Terminal({
     required this.type,
     required this.name,
     this.logs,
+    this.terminal,
   });
 }

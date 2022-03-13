@@ -3,8 +3,11 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:xterm/flutter.dart';
+import 'package:xterm/xterm.dart' as xterm;
 
 import 'package:kubenav/controllers/terminal_controller.dart';
+import 'package:kubenav/models/terminal_model.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 
@@ -189,34 +192,56 @@ class AppTerminalsWidget extends StatelessWidget {
                                   .entries
                                   .map(
                                 (terminal) {
-                                  return SingleChildScrollView(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(
-                                        Constants.spacingSmall,
-                                      ),
-                                      color: const Color(0xff2E3440),
-                                      child: Wrap(
-                                        children: terminal.value.logs == null
-                                            ? []
-                                            : terminal.value.logs!
-                                                .asMap()
-                                                .entries
-                                                .map(
-                                                  (e) => SelectableText(
-                                                    e.value.join('\n\n'),
-                                                    style: TextStyle(
-                                                      color: getColor(e.key),
-                                                      fontSize: 14,
-                                                      fontFamily: Platform.isIOS
-                                                          ? 'Courier'
-                                                          : 'monospace',
-                                                    ),
-                                                  ),
-                                                )
-                                                .toList(),
-                                      ),
-                                    ),
-                                  );
+                                  return terminal.value.type ==
+                                          TerminalType.exec
+                                      ? terminal.value.terminal != null
+                                          // ? MyHomePage()
+                                          // ? AppTerminalWidget(
+                                          //     terminal:
+                                          //         terminal.value.terminal!,
+                                          //   )
+                                          ? TerminalView(
+                                              terminal:
+                                                  terminal.value.terminal!,
+                                              style: xterm.TerminalStyle(
+                                                fontSize: 14,
+                                                fontFamily: Platform.isIOS
+                                                    ? ['Courier']
+                                                    : ['monospace'],
+                                              ),
+                                            )
+                                          : Container()
+                                      : SingleChildScrollView(
+                                          child: Container(
+                                            padding: const EdgeInsets.all(
+                                              Constants.spacingSmall,
+                                            ),
+                                            color: const Color(0xff2E3440),
+                                            child: Wrap(
+                                              children: terminal.value.logs ==
+                                                      null
+                                                  ? []
+                                                  : terminal.value.logs!
+                                                      .asMap()
+                                                      .entries
+                                                      .map(
+                                                        (e) => SelectableText(
+                                                          e.value.join('\n\n'),
+                                                          style: TextStyle(
+                                                            color:
+                                                                getColor(e.key),
+                                                            fontSize: 14,
+                                                            fontFamily: Platform
+                                                                    .isIOS
+                                                                ? 'Courier'
+                                                                : 'monospace',
+                                                          ),
+                                                        ),
+                                                      )
+                                                      .toList(),
+                                            ),
+                                          ),
+                                        );
                                 },
                               ).toList(),
                             ),

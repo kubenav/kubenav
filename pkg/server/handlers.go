@@ -4,19 +4,26 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/kubenav/kubenav/pkg/kube"
 	"github.com/kubenav/kubenav/pkg/server/middleware"
 	"github.com/kubenav/kubenav/pkg/server/portforwarding"
+	"github.com/kubenav/kubenav/pkg/server/terminal"
+
+	"github.com/gorilla/websocket"
+	"k8s.io/client-go/tools/remotecommand"
 )
 
-// HealthHandler always returns a status ok response and can be used to check if the server is running or not.
+// healthHandler always returns a status ok response and can be used to check if the server is running or not.
 func healthHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-// PortForwardingHandler can be used to establish a new port forwarding connection ("POST"), to get a list of all
+// portForwardingHandler can be used to establish a new port forwarding connection ("POST"), to get a list of all
 // established connections ("GET") and to close a port forwarding connection ("DELETE").
 func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 	// The get method is used to return all user initalized session (prefixed with "_user"). This is required so that
@@ -129,4 +136,97 @@ func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 
 	middleware.Write(w, r, nil)
 	return
+}
+
+// terminalHandler handles exec requests to a container via WebSockets.
+func terminalHandler(w http.ResponseWriter, r *http.Request) {
+	// The Pod data (name and namespace) as well as the container and shell are send via query parameters. While the
+	// credentials required to authenticate against the Kubernetes API must be send via our custom headers.
+	name := r.URL.Query().Get("name")
+	namespace := r.URL.Query().Get("namespace")
+	container := r.URL.Query().Get("container")
+	shell := r.URL.Query().Get("shell")
+
+	clusterServer := r.Header.Get("X-CLUSTER-SERVER")
+	clusterCertificateAuthorityData := r.Header.Get("X-CLUSTER-CERTIFICATE-AUTHORITY-DATA")
+	clusterInsecureSkipTLSVerify := r.Header.Get("X-CLUSTER-INSECURE-SKIP-TLS-VERIFY")
+	userClientCertificateData := r.Header.Get("X-USER-CLIENT-CERTIFICATE-DATA")
+	userClientKeyData := r.Header.Get("X-USER-CLIENT-KEY-DATA")
+	userToken := r.Header.Get("X-USER-TOKEN")
+	userUsername := r.Header.Get("X-USER-USERNAME")
+	userPassword := r.Header.Get("X-USER-PASSWORD")
+
+	parsedClusterInsecureSkipTLSVerify, err := strconv.ParseBool(clusterInsecureSkipTLSVerify)
+	if err != nil {
+		parsedClusterInsecureSkipTLSVerify = false
+	}
+
+	restConfig, _, err := kube.GetClient(clusterServer, clusterCertificateAuthorityData, parsedClusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword)
+
+	// After we create a client to interact with the Kubernetes API, we can upgrade the underlying http connection, to
+	// get a shell into the requested container.
+	//
+	// We also setup the ping and pong handlers, so that the WebSocket connection isn't closed, when the user doesn't
+	// send any data for a while.
+	var upgrader = websocket.Upgrader{}
+	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
+
+	c, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not upgrade connection: %s", err.Error()))
+		return
+	}
+	defer c.Close()
+
+	c.SetPongHandler(func(string) error { return nil })
+
+	go func() {
+		ticker := time.NewTicker(30 * time.Second)
+		defer ticker.Stop()
+
+		for {
+			select {
+			case <-ticker.C:
+				if err := c.WriteMessage(websocket.PingMessage, nil); err != nil {
+					return
+				}
+			}
+		}
+	}()
+
+	// After our WebSocket connection is established, we create the request url for the Kubernetes API to get a terminal
+	// into the requested container.
+	//
+	// We also validating the user defined shell and fallback to "sh" when it was invalid.
+	reqURL, err := url.Parse(fmt.Sprintf("%s/api/v1/namespaces/%s/pods/%s/exec?container=%s&command=%s&stdin=true&stdout=true&stderr=true&tty=true", restConfig.Host, namespace, name, container, shell))
+	if err != nil {
+		msg, _ := json.Marshal(terminal.Message{
+			Op:   "stdout",
+			Data: fmt.Sprintf("Could not create request url: %s", err.Error()),
+		})
+		c.WriteMessage(websocket.TextMessage, msg)
+		return
+	}
+
+	if !terminal.IsValidShell(shell) {
+		shell = "sh"
+	}
+	cmd := []string{shell}
+
+	// Finally we create a new terminal session and we are starting the terminal process, where the communication
+	// between the user and the container happens via the WebSocket connection we established before.
+	session := &terminal.Session{
+		WebSocket: c,
+		SizeChan:  make(chan remotecommand.TerminalSize),
+	}
+
+	err = terminal.StartProcess(restConfig, reqURL, cmd, session)
+	if err != nil {
+		msg, _ := json.Marshal(terminal.Message{
+			Op:   "stdout",
+			Data: fmt.Sprintf("Could not create terminal: %s", err.Error()),
+		})
+		c.WriteMessage(websocket.TextMessage, msg)
+		return
+	}
 }

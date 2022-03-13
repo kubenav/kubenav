@@ -40,7 +40,6 @@ class AppPortForwardingSessionsController extends GetxController {
       for (var session in result['sessions']) {
         newSessions.add(PortForwardingSession.fromJson(session));
       }
-      print("SET SESSIONS");
       portForwardingController.setSession(newSessions);
     } catch (err) {
       Logger.log(

@@ -114,6 +114,19 @@ class ResourcesDetails extends GetView {
       ));
     }
 
+    if (resource != null &&
+        path != null &&
+        Resources.map['pods']!.resource == resource &&
+        Resources.map['pods']!.path == path) {
+      additionalActions.add(AppActionsHeaderModel(
+        title: 'Terminal',
+        icon: Icons.terminal,
+        onTap: () {
+          controller.getTerminal();
+        },
+      ));
+    }
+
     return additionalActions;
   }
 

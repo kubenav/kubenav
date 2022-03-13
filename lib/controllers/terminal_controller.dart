@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
+import 'package:xterm/xterm.dart' as xterm;
 
 import 'package:kubenav/models/terminal_model.dart';
 import 'package:kubenav/utils/constants.dart';
@@ -28,7 +30,10 @@ class TerminalController extends GetxController {
         },
       ),
       isScrollControlled: true,
-    ).whenComplete(() => hideTerminalsBottomSheet());
+    ).whenComplete(() {
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+      hideTerminalsBottomSheet();
+    });
   }
 
   void hideTerminalsBottomSheet() {
@@ -37,14 +42,16 @@ class TerminalController extends GetxController {
 
   void addTerminal(
     TerminalType type,
-    String name, [
+    String name,
     List<dynamic>? logs,
-  ]) {
+    xterm.Terminal? terminal,
+  ) {
     terminals.add(
       Terminal(
         type: type,
         name: name,
         logs: logs,
+        terminal: terminal,
       ),
     );
 
@@ -52,6 +59,10 @@ class TerminalController extends GetxController {
   }
 
   void removeTerminal(BuildContext context, int index) {
+    if (terminals[index].terminal != null) {
+      terminals[index].terminal!.terminateBackend();
+    }
+
     terminals.removeAt(index);
     if (terminals.isEmpty) {
       finish(context);

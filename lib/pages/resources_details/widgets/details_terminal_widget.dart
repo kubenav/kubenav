@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:xterm/theme/terminal_theme.dart';
+import 'package:xterm/xterm.dart' as xterm;
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/controllers/terminal_controller.dart';
@@ -10,22 +13,10 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
+import 'package:kubenav/utils/terminal_backend.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 
-Map<String, int> sinceOptions = {
-  '5 Minutes': 300,
-  '15 Minutes': 900,
-  '30 Minutes': 1800,
-  '1 Hour': 3600,
-  '3 Hours': 10800,
-  '6 Hours': 21600,
-  '12 Hours': 43200,
-  '1 Day': 86400,
-  '2 Days': 172800,
-  '7 Days': 604800,
-};
-
-class DetailsGetLogsController extends GetxController {
+class DetailsTerminalController extends GetxController {
   final String name;
   final String namespace;
   final dynamic item;
@@ -33,14 +24,12 @@ class DetailsGetLogsController extends GetxController {
   ClusterController clusterController = Get.find();
   TerminalController terminalController = Get.find();
 
-  final logsFormKey = GlobalKey<FormState>();
+  final terminalFormKey = GlobalKey<FormState>();
   RxString container = ''.obs;
   RxList<String> containers = <String>[''].obs;
-  RxString since = '5 Minutes'.obs;
-  final filter = TextEditingController();
-  RxBool previous = false.obs;
+  RxString shell = 'sh'.obs;
 
-  DetailsGetLogsController({
+  DetailsTerminalController({
     required this.name,
     required this.namespace,
     required this.item,
@@ -72,38 +61,85 @@ class DetailsGetLogsController extends GetxController {
     super.onInit();
   }
 
-  void getLogs(BuildContext context) async {
-    if (logsFormKey.currentState != null &&
-        logsFormKey.currentState!.validate()) {
+  void getTerminal(BuildContext context) async {
+    if (terminalFormKey.currentState != null &&
+        terminalFormKey.currentState!.validate()) {
       try {
         final cluster = clusterController
             .clusters[clusterController.activeClusterIndex.value].value;
 
-        final logs = await KubernetesService(cluster: cluster).getLogs(
-          item['metadata']['name'],
-          item['metadata']['namespace'],
-          container.value,
-          sinceOptions[since.value]!,
-          filter.text,
-          previous.value,
-        );
+        final isStarted =
+            await KubernetesService(cluster: cluster).startServer();
+        if (isStarted) {
+          Logger.log(
+            'DetailsTerminalController getTerminal',
+            'Internal http server is started and healthy, try to create terminal',
+          );
 
-        Logger.log(
-          'DetailsGetLogsController getLogs',
-          'The get logs request returned ${logs.length} log lines',
-          logs,
-        );
+          final channel = IOWebSocketChannel.connect(
+            'ws://localhost:14122/terminal?name=${item['metadata']['name']}&namespace=${item['metadata']['namespace']}&container=${container.value}&shell=$shell',
+            headers: <String, String>{
+              'X-CLUSTER-SERVER': cluster.clusterServer,
+              'X-CLUSTER-CERTIFICATE-AUTHORITY-DATA':
+                  cluster.clusterCertificateAuthorityData,
+              'X-CLUSTER-INSECURE-SKIP-TLS-VERIFY':
+                  '${cluster.clusterInsecureSkipTLSVerify}',
+              'X-USER-CLIENT-CERTIFICATE-DATA':
+                  cluster.userClientCertificateData,
+              'X-USER-CLIENT-KEY-DATA': cluster.userClientKeyData,
+              'X-USER-TOKEN': cluster.userToken,
+              'X-USER-USERNAME': cluster.userUsername,
+              'X-USER-PASSWORD': cluster.userPassword,
+            },
+          );
 
-        finish(context);
-        terminalController.addTerminal(
-          TerminalType.log,
-          container.value,
-          logs,
-          null,
-        );
+          TerminalBackend backend = TerminalBackend(channel: channel);
+          xterm.Terminal terminal = xterm.Terminal(
+            backend: backend,
+            maxLines: 10000,
+            theme: const TerminalTheme(
+              cursor: 0xffd8dee9,
+              selection: 0xff434c5ecc,
+              foreground: 0xffd8dee9,
+              background: 0xff2e3440,
+              black: 0xff3b4251,
+              red: 0xffbf6069,
+              green: 0xffa3be8b,
+              yellow: 0xffeacb8a,
+              blue: 0xff81a1c1,
+              magenta: 0xffb48dac,
+              cyan: 0xff88c0d0,
+              white: 0xffe5e9f0,
+              brightBlack: 0xff4c556a,
+              brightRed: 0xffbf6069,
+              brightGreen: 0xffa3be8b,
+              brightYellow: 0xffeacb8a,
+              brightBlue: 0xff81a1c1,
+              brightMagenta: 0xffb48dac,
+              brightCyan: 0xff8fbcbb,
+              brightWhite: 0xffeceef4,
+              searchHitBackground: 0xffeacb8a,
+              searchHitBackgroundCurrent: 0xffeacb8a,
+              searchHitForeground: 0xff2e3440,
+            ),
+          );
+
+          finish(context);
+          terminalController.addTerminal(
+            TerminalType.exec,
+            container.value,
+            null,
+            terminal,
+          );
+        } else {
+          snackbar(
+            'Could not create terminal',
+            'The internal http server is unhealthy',
+          );
+        }
       } on PlatformException catch (err) {
         Logger.log(
-          'DetailsGetLogsController getLogs',
+          'DetailsTerminalController getLogs',
           'An error was returned while getting the logs',
           'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
         );
@@ -127,8 +163,8 @@ class DetailsGetLogsController extends GetxController {
   }
 }
 
-class DetailsGetLogsWidget extends StatelessWidget {
-  const DetailsGetLogsWidget({
+class DetailsTerminalWidget extends StatelessWidget {
+  const DetailsTerminalWidget({
     Key? key,
     required this.name,
     required this.namespace,
@@ -141,8 +177,8 @@ class DetailsGetLogsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DetailsGetLogsController controller = Get.put(
-      DetailsGetLogsController(
+    DetailsTerminalController controller = Get.put(
+      DetailsTerminalController(
         name: name,
         namespace: namespace,
         item: item,
@@ -150,18 +186,18 @@ class DetailsGetLogsWidget extends StatelessWidget {
     );
 
     return AppBottomSheetWidget(
-      title: 'Logs',
+      title: 'Terminal',
       subtitle: name,
-      icon: Icons.subject,
+      icon: Icons.terminal,
       onClosePressed: () {
         finish(context);
       },
-      actionText: 'Get Logs',
+      actionText: 'Get Terminal',
       onActionPressed: () {
-        controller.getLogs(context);
+        controller.getTerminal(context);
       },
       child: Form(
-        key: controller.logsFormKey,
+        key: controller.terminalFormKey,
         child: ListView(
           shrinkWrap: false,
           children: [
@@ -203,70 +239,28 @@ class DetailsGetLogsWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text("Since"),
+                  const Text("Shell"),
                   Obx(
                     () => DropdownButton(
-                      value: controller.since.value,
+                      value: controller.shell.value,
                       underline: Container(
                         height: 2,
                         color: Constants.colorPrimary,
                       ),
                       onChanged: (String? newValue) {
-                        controller.since.value = newValue ?? '';
+                        controller.shell.value = newValue ?? 'sh';
                       },
                       items: [
-                        '5 Minutes',
-                        '15 Minutes',
-                        '30 Minutes',
-                        '1 Hour',
-                        '3 Hours',
-                        '6 Hours',
-                        '12 Hours',
-                        '1 Day',
-                        '2 Days',
-                        '7 Days',
+                        'sh',
+                        'bash',
+                        'powershell',
+                        'cmd',
                       ].map((value) {
                         return DropdownMenuItem(
                           value: value,
                           child: Text(value),
                         );
                       }).toList(),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: TextFormField(
-                controller: controller.filter,
-                keyboardType: TextInputType.text,
-                autocorrect: false,
-                enableSuggestions: false,
-                maxLines: 1,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Filter',
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text("Previous"),
-                  Obx(
-                    () => Switch(
-                      activeColor: Constants.colorPrimary,
-                      onChanged: (val) => controller.previous.value =
-                          !controller.previous.value,
-                      value: controller.previous.value,
                     ),
                   )
                 ],

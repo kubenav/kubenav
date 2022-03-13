@@ -11,6 +11,7 @@ func Start() {
 	router := http.NewServeMux()
 	router.HandleFunc("/health", middleware.Cors(healthHandler))
 	router.HandleFunc("/portforwarding", middleware.Cors(portForwardingHandler))
+	router.HandleFunc("/terminal", middleware.Cors(terminalHandler))
 
 	if err := http.ListenAndServe(":14122", router); err != nil {
 		return

@@ -13,6 +13,7 @@ import 'package:kubenav/pages/resources_details/widgets/details_get_logs_widget.
 import 'package:kubenav/pages/resources_details/widgets/details_restart_resource_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_scale_resource_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_show_yaml_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/details_terminal_widget.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
@@ -247,6 +248,28 @@ class ResourcesDetailsController extends GetxController {
           enableDrag: false,
           builder: (builder) {
             return DetailsGetLogsWidget(
+              name: name!,
+              namespace: namespace!,
+              item: item,
+            );
+          },
+        ),
+        isScrollControlled: true,
+      );
+    }
+  }
+
+  void getTerminal() async {
+    if (name != null && namespace != null) {
+      Get.bottomSheet(
+        BottomSheet(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
+          ),
+          onClosing: () {},
+          enableDrag: false,
+          builder: (builder) {
+            return DetailsTerminalWidget(
               name: name!,
               namespace: namespace!,
               item: item,
