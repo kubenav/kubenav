@@ -280,9 +280,12 @@ class DetailsResourcesPreviewWidget extends StatelessWidget {
               },
             ),
           ),
-          moreText: controller.items.length >= 5 ? 'View all' : null,
-          moreIcon:
-              controller.items.length >= 5 ? Icons.keyboard_arrow_right : null,
+          moreText: controller.items.length >= 5 && filter == null
+              ? 'View all'
+              : null,
+          moreIcon: controller.items.length >= 5 && filter == null
+              ? Icons.keyboard_arrow_right
+              : null,
           moreOnTap: () {
             Get.toNamed(
               '/resources/list?title=$title&resource=$resource&path=$path&scope=${scope.name}${namespace != null ? '&namespace=$namespace' : ''}&selector=$selector',
