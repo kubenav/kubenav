@@ -7,7 +7,12 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 
 class MetricsWidget extends StatelessWidget {
-  const MetricsWidget({Key? key}) : super(key: key);
+  const MetricsWidget({
+    Key? key,
+    required this.nodeName,
+  }) : super(key: key);
+
+  final String? nodeName;
 
   Widget buildCard(String title, IconData icon, [void Function()? onTap]) {
     return InkWell(
@@ -60,6 +65,7 @@ class MetricsWidget extends StatelessWidget {
           return MetricWidget(
             metricType: metricType,
             icon: icon,
+            nodeName: nodeName,
           );
         },
       ),

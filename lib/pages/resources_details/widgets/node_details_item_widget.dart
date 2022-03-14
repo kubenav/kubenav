@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_node.dart';
 import 'package:kubenav/models/resource_model.dart';
+import 'package:kubenav/pages/home/widgets/metrics_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
@@ -101,6 +102,11 @@ class NodeDetailsItemWidget extends StatelessWidget
             ),
           ],
         ),
+        const SizedBox(height: Constants.spacingMiddle),
+        MetricsWidget(
+          nodeName: node.metadata?.name,
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
         DetailsItemWidget(
           title: 'Resources',
           details: node.status!.allocatable.entries

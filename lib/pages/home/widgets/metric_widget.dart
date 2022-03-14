@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:get/get.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/kubernetes-extensions/node_metrics.dart';
@@ -72,6 +72,12 @@ class MetricWidgetController extends GetxController {
   RxString error = ''.obs;
   RxBool loading = false.obs;
 
+  final String? nodeName;
+
+  MetricWidgetController({
+    required this.nodeName,
+  });
+
   @override
   void onInit() {
     getMetrics();
@@ -85,19 +91,22 @@ class MetricWidgetController extends GetxController {
       final nodesData = await KubernetesService(
               cluster: clusterController
                   .clusters[clusterController.activeClusterIndex.value].value)
-          .getRequest('/api/v1/nodes');
+          .getRequest(
+              '/api/v1/nodes${nodeName != null ? '?fieldSelector=metadata.name=$nodeName' : ''}');
       final nodesList = IoK8sApiCoreV1NodeList.fromJson(nodesData);
 
       final podsData = await KubernetesService(
               cluster: clusterController
                   .clusters[clusterController.activeClusterIndex.value].value)
-          .getRequest('/api/v1/pods');
+          .getRequest(
+              '/api/v1/pods${nodeName != null ? '?fieldSelector=spec.nodeName=$nodeName' : ''}');
       final podsList = IoK8sApiCoreV1PodList.fromJson(podsData);
 
       final nodeMetricsData = await KubernetesService(
               cluster: clusterController
                   .clusters[clusterController.activeClusterIndex.value].value)
-          .getRequest('/apis/metrics.k8s.io/v1beta1/nodes');
+          .getRequest(
+              '/apis/metrics.k8s.io/v1beta1/nodes${nodeName != null ? '?fieldSelector=metadata.name=$nodeName' : ''}');
       final nodeMetricsList =
           ApisMetricsV1beta1NodeMetricsList.fromJson(nodeMetricsData);
 
@@ -201,8 +210,8 @@ class MetricWidgetController extends GetxController {
           MetricType.pods: Metric(
             allocatable: podsAllocatable,
             usage: podsUsage,
-            requests: -1,
-            limits: -1,
+            requests: 0,
+            limits: 0,
           ),
         })
       ];
@@ -235,10 +244,12 @@ class MetricWidget extends StatelessWidget {
     Key? key,
     required this.metricType,
     required this.icon,
+    required this.nodeName,
   }) : super(key: key);
 
   final MetricType metricType;
   final IconData icon;
+  final String? nodeName;
 
   String formatValue(int value) {
     if (metricType == MetricType.cpu) {
@@ -253,7 +264,7 @@ class MetricWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MetricWidgetController controller = Get.put(
-      MetricWidgetController(),
+      MetricWidgetController(nodeName: nodeName),
     );
 
     return AppBottomSheetWidget(
@@ -366,36 +377,147 @@ class MetricWidget extends StatelessWidget {
                     Radius.circular(Constants.sizeBorderRadius),
                   ),
                 ),
-                child: Expanded(
-                  child: charts.BarChart(
-                    [
-                      charts.Series<MetricSerie, String>(
-                        id: 'Metrics',
-                        seriesColor: charts.ColorUtil.fromDartColor(
-                            Constants.colorPrimary),
-                        domainFn: (MetricSerie metric, _) => metric.name,
-                        measureFn: (MetricSerie metric, _) => metric.value,
-                        data: [
-                          MetricSerie(
-                              'Allocatable',
-                              controller
-                                  .metrics[0].metrics[metricType]!.allocatable),
-                          MetricSerie('Usage',
-                              controller.metrics[0].metrics[metricType]!.usage),
-                          MetricSerie(
-                              'Requests',
-                              controller
-                                  .metrics[0].metrics[metricType]!.requests),
-                          MetricSerie(
-                              'Limits',
-                              controller
-                                  .metrics[0].metrics[metricType]!.limits),
+                child: BarChart(
+                  BarChartData(
+                    barGroups: [
+                      BarChartGroupData(
+                        x: 0,
+                        barRods: [
+                          BarChartRodData(
+                            toY: controller
+                                .metrics[0].metrics[metricType]!.allocatable
+                                .toDouble(),
+                            colors: [Constants.colorPrimary],
+                            width: 25,
+                            borderRadius: const BorderRadius.all(Radius.zero),
+                          ),
                         ],
-                      )
+                      ),
+                      BarChartGroupData(
+                        x: 1,
+                        barRods: [
+                          BarChartRodData(
+                            toY: controller
+                                .metrics[0].metrics[metricType]!.usage
+                                .toDouble(),
+                            colors: [Constants.colorPrimary],
+                            width: 25,
+                            borderRadius: const BorderRadius.all(Radius.zero),
+                          ),
+                        ],
+                      ),
+                      BarChartGroupData(
+                        x: 2,
+                        barRods: [
+                          BarChartRodData(
+                            toY: controller
+                                .metrics[0].metrics[metricType]!.requests
+                                .toDouble(),
+                            colors: [Constants.colorPrimary],
+                            width: 25,
+                            borderRadius: const BorderRadius.all(Radius.zero),
+                          ),
+                        ],
+                      ),
+                      BarChartGroupData(
+                        x: 3,
+                        barRods: [
+                          BarChartRodData(
+                            toY: controller
+                                .metrics[0].metrics[metricType]!.limits
+                                .toDouble(),
+                            colors: [Constants.colorPrimary],
+                            width: 25,
+                            borderRadius: const BorderRadius.all(Radius.zero),
+                          ),
+                        ],
+                      ),
                     ],
-                    animate: false,
-                    primaryMeasureAxis: const charts.NumericAxisSpec(
-                      renderSpec: charts.NoneRenderSpec(),
+                    barTouchData: BarTouchData(
+                      touchTooltipData: BarTouchTooltipData(
+                        tooltipBgColor: Colors.black,
+                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                          String label;
+                          switch (group.x.toInt()) {
+                            case 0:
+                              label = 'Allocatable';
+                              break;
+                            case 1:
+                              label = 'Usage';
+                              break;
+                            case 2:
+                              label = 'Requests';
+                              break;
+                            case 3:
+                              label = 'Limits';
+                              break;
+                            default:
+                              label = '';
+                              break;
+                          }
+                          return BarTooltipItem(
+                            label + '\n',
+                            const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 14,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: (rod.toY - 1).toStringAsFixed(0),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    titlesData: FlTitlesData(
+                      show: true,
+                      rightTitles: SideTitles(showTitles: false),
+                      topTitles: SideTitles(showTitles: false),
+                      leftTitles: SideTitles(showTitles: false),
+                      bottomTitles: SideTitles(
+                        showTitles: true,
+                        getTextStyles: (context, value) => secondaryTextStyle(),
+                        margin: 16,
+                        getTitles: (double value) {
+                          switch (value.toInt()) {
+                            case 0:
+                              return 'Allocatable';
+                            case 1:
+                              return 'Usage';
+                            case 2:
+                              return 'Requests';
+                            case 3:
+                              return 'Limits';
+                            default:
+                              return '';
+                          }
+                        },
+                      ),
+                    ),
+                    borderData: FlBorderData(show: false),
+                    gridData: FlGridData(
+                      show: true,
+                      getDrawingHorizontalLine: (value) {
+                        return FlLine(
+                          color: Constants.colorTextSecondary,
+                          strokeWidth: 0.4,
+                          dashArray: [8, 4],
+                        );
+                      },
+                      getDrawingVerticalLine: (value) {
+                        return FlLine(
+                          color: Constants.colorTextSecondary,
+                          strokeWidth: 0.4,
+                          dashArray: [8, 4],
+                        );
+                      },
                     ),
                   ),
                 ),

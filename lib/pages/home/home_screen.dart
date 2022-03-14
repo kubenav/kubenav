@@ -162,7 +162,9 @@ class Home extends GetView<HomeController> {
           ),
         ],
       ),
-      const MetricsWidget(),
+      const MetricsWidget(
+        nodeName: null,
+      ),
       const SizedBox(height: Constants.spacingMiddle),
       const EventsWidget(),
       const SizedBox(height: Constants.spacingSmall),
