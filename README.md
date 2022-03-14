@@ -28,3 +28,25 @@ Sort imports:
 Build for native device:
 
 - `flutter run --release`
+
+Create a new release:
+
+- Create a file `/android/key.properties`
+
+```
+storePassword=
+keyPassword=
+keyAlias=upload
+storeFile=
+```
+
+- Update the `version` key in the `pubspec.yaml` file
+
+- Run `make bindings` to build the Go code
+
+- Build the app: `flutter build appbundle`
+- Updload the build from `/build/app/outputs/bundle/release/app-release.aab` to https://play.google.com/apps/publish
+
+- Build the app: `flutter build ipa`
+- Open the `/build/ios/archive/Runner.xcarchive` file in Xcode then click **Validate App** and **Distribute App**
+- Open https://appstoreconnect.apple.com

@@ -464,7 +464,7 @@ class MetricWidget extends StatelessWidget {
                             ),
                             children: [
                               TextSpan(
-                                text: (rod.toY - 1).toStringAsFixed(0),
+                                text: rod.toY.toStringAsFixed(0),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
