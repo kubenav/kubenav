@@ -24,3 +24,7 @@ Create icons:
 Sort imports:
 
 - `flutter pub run import_sorter:main`
+
+Build for native device:
+
+- `flutter run --release`

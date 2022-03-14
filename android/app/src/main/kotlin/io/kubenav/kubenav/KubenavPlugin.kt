@@ -70,7 +70,7 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val names = call.argument("names") as String?
       val namespace = call.argument("namespace") as String?
       val container = call.argument("container") as String?
-      val since = call.argument("since") as Long?
+      val since = call.argument("since") as kotlin.Int?
       val filter = call.argument("filter") as String?
       val previous = call.argument("previous") as Boolean?
 
@@ -113,9 +113,9 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun kubernetesGetLogs(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, names: String, namespace: String, container: String, since: Long, filter: String, previous: Boolean, result: MethodChannel.Result) {
+  private fun kubernetesGetLogs(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, names: String, namespace: String, container: String, since: kotlin.Int, filter: String, previous: Boolean, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.kubernetesGetLogs(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, names, namespace, container, since, filter, previous)
+      val data: String = Kubenav.kubernetesGetLogs(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, names, namespace, container, since.toLong(), filter, previous)
       result.success(data)
     } catch (e: Exception) {
       result.error("KUBERNETES_GET_LOGS_FAILED", e.localizedMessage, null)

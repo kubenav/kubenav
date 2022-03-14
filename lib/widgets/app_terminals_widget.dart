@@ -195,11 +195,6 @@ class AppTerminalsWidget extends StatelessWidget {
                                   return terminal.value.type ==
                                           TerminalType.exec
                                       ? terminal.value.terminal != null
-                                          // ? MyHomePage()
-                                          // ? AppTerminalWidget(
-                                          //     terminal:
-                                          //         terminal.value.terminal!,
-                                          //   )
                                           ? TerminalView(
                                               terminal:
                                                   terminal.value.terminal!,
@@ -212,6 +207,8 @@ class AppTerminalsWidget extends StatelessWidget {
                                             )
                                           : Container()
                                       : SingleChildScrollView(
+                                          physics:
+                                              const ClampingScrollPhysics(),
                                           child: Container(
                                             padding: const EdgeInsets.all(
                                               Constants.spacingSmall,

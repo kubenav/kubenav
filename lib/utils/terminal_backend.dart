@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io' show Platform;
 
 import 'package:web_socket_channel/io.dart';
 import 'package:xterm/xterm.dart' as xterm;
@@ -72,6 +73,10 @@ class TerminalBackend extends xterm.TerminalBackend {
   void write(String input) {
     if (input == '\r') {
       channel.sink.add('{"Data": "\\r", "Op": "stdin"}');
+    } else if (input.codeUnitAt(0) == 27 && Platform.isIOS) {
+      // Here we are ignoring when the input is "27", because when we are on iOS this breaks the backspace support. It
+      // seems that when a user presses the backspace key it triggers the input two time. The first time it sends "27"
+      // and the second time "127" which is the correct code. So that we always ignore the first one.
     } else {
       channel.sink.add('{"Data": "$input", "Op": "stdin"}');
     }
