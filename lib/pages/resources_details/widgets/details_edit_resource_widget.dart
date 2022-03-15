@@ -153,6 +153,7 @@ class DetailsEditResourceWidget extends StatelessWidget {
       child: Form(
         child: ListView(
           shrinkWrap: false,
+          physics: const ClampingScrollPhysics(),
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(

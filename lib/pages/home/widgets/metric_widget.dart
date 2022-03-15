@@ -348,7 +348,7 @@ class MetricWidget extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'Chart',
+                        texts[metricType]!['title']!,
                         style: primaryTextStyle(size: 18),
                       ),
                     ),
@@ -356,8 +356,6 @@ class MetricWidget extends StatelessWidget {
                 ),
               ),
               Container(
-                height: 320,
-                width: double.infinity,
                 margin: const EdgeInsets.only(
                   left: Constants.spacingExtraSmall,
                   right: Constants.spacingExtraSmall,
@@ -377,177 +375,229 @@ class MetricWidget extends StatelessWidget {
                     Radius.circular(Constants.sizeBorderRadius),
                   ),
                 ),
-                child: BarChart(
-                  BarChartData(
-                    barGroups: [
-                      BarChartGroupData(
-                        x: 0,
-                        barRods: [
-                          BarChartRodData(
-                            toY: controller
-                                .metrics[0].metrics[metricType]!.allocatable
-                                .toDouble(),
-                            colors: [Constants.colorPrimary],
-                            width: 25,
-                            borderRadius: const BorderRadius.all(Radius.zero),
-                          ),
-                        ],
-                      ),
-                      BarChartGroupData(
-                        x: 1,
-                        barRods: [
-                          BarChartRodData(
-                            toY: controller
-                                .metrics[0].metrics[metricType]!.usage
-                                .toDouble(),
-                            colors: [Constants.colorPrimary],
-                            width: 25,
-                            borderRadius: const BorderRadius.all(Radius.zero),
-                          ),
-                        ],
-                      ),
-                      BarChartGroupData(
-                        x: 2,
-                        barRods: [
-                          BarChartRodData(
-                            toY: controller
-                                .metrics[0].metrics[metricType]!.requests
-                                .toDouble(),
-                            colors: [Constants.colorPrimary],
-                            width: 25,
-                            borderRadius: const BorderRadius.all(Radius.zero),
-                          ),
-                        ],
-                      ),
-                      BarChartGroupData(
-                        x: 3,
-                        barRods: [
-                          BarChartRodData(
-                            toY: controller
-                                .metrics[0].metrics[metricType]!.limits
-                                .toDouble(),
-                            colors: [Constants.colorPrimary],
-                            width: 25,
-                            borderRadius: const BorderRadius.all(Radius.zero),
-                          ),
-                        ],
-                      ),
-                    ],
-                    barTouchData: BarTouchData(
-                      touchTooltipData: BarTouchTooltipData(
-                        tooltipBgColor: Colors.black,
-                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                          String label;
-                          switch (group.x.toInt()) {
-                            case 0:
-                              label = 'Allocatable';
-                              break;
-                            case 1:
-                              label = 'Usage';
-                              break;
-                            case 2:
-                              label = 'Requests';
-                              break;
-                            case 3:
-                              label = 'Limits';
-                              break;
-                            default:
-                              label = '';
-                              break;
-                          }
-                          return BarTooltipItem(
-                            label + '\n',
-                            const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 14,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: rod.toY.toStringAsFixed(0),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 320,
+                      width: double.infinity,
+                      child: BarChart(
+                        BarChartData(
+                          barGroups: [
+                            BarChartGroupData(
+                              x: 0,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: controller.metrics[0]
+                                      .metrics[metricType]!.allocatable
+                                      .toDouble(),
+                                  colors: [Constants.colorPrimary],
+                                  width: 25,
+                                  borderRadius:
+                                      const BorderRadius.all(Radius.zero),
                                 ),
-                              ),
-                            ],
-                          );
-                        },
+                              ],
+                            ),
+                            BarChartGroupData(
+                              x: 1,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: controller
+                                      .metrics[0].metrics[metricType]!.usage
+                                      .toDouble(),
+                                  colors: [Constants.colorPrimary],
+                                  width: 25,
+                                  borderRadius:
+                                      const BorderRadius.all(Radius.zero),
+                                ),
+                              ],
+                            ),
+                            BarChartGroupData(
+                              x: 2,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: controller
+                                      .metrics[0].metrics[metricType]!.requests
+                                      .toDouble(),
+                                  colors: [Constants.colorPrimary],
+                                  width: 25,
+                                  borderRadius:
+                                      const BorderRadius.all(Radius.zero),
+                                ),
+                              ],
+                            ),
+                            BarChartGroupData(
+                              x: 3,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: controller
+                                      .metrics[0].metrics[metricType]!.limits
+                                      .toDouble(),
+                                  colors: [Constants.colorPrimary],
+                                  width: 25,
+                                  borderRadius:
+                                      const BorderRadius.all(Radius.zero),
+                                ),
+                              ],
+                            ),
+                          ],
+                          barTouchData: BarTouchData(
+                            touchTooltipData: BarTouchTooltipData(
+                              tooltipBgColor: Colors.black,
+                              getTooltipItem:
+                                  (group, groupIndex, rod, rodIndex) {
+                                String label;
+                                switch (group.x.toInt()) {
+                                  case 0:
+                                    label = 'Allocatable';
+                                    break;
+                                  case 1:
+                                    label = 'Usage';
+                                    break;
+                                  case 2:
+                                    label = 'Requests';
+                                    break;
+                                  case 3:
+                                    label = 'Limits';
+                                    break;
+                                  default:
+                                    label = '';
+                                    break;
+                                }
+                                return BarTooltipItem(
+                                  label + '\n',
+                                  const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 14,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: formatValue(rod.toY.round()),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                          titlesData: FlTitlesData(
+                            show: true,
+                            rightTitles: SideTitles(showTitles: false),
+                            topTitles: SideTitles(showTitles: false),
+                            leftTitles: SideTitles(showTitles: false),
+                            bottomTitles: SideTitles(
+                              showTitles: true,
+                              getTextStyles: (context, value) =>
+                                  secondaryTextStyle(),
+                              margin: 16,
+                              getTitles: (double value) {
+                                switch (value.toInt()) {
+                                  case 0:
+                                    return 'Allocatable';
+                                  case 1:
+                                    return 'Usage';
+                                  case 2:
+                                    return 'Requests';
+                                  case 3:
+                                    return 'Limits';
+                                  default:
+                                    return '';
+                                }
+                              },
+                            ),
+                          ),
+                          borderData: FlBorderData(show: false),
+                          gridData: FlGridData(
+                            show: true,
+                            getDrawingHorizontalLine: (value) {
+                              return FlLine(
+                                color: Constants.colorTextSecondary,
+                                strokeWidth: 0.4,
+                                dashArray: [8, 4],
+                              );
+                            },
+                            getDrawingVerticalLine: (value) {
+                              return FlLine(
+                                color: Constants.colorTextSecondary,
+                                strokeWidth: 0.4,
+                                dashArray: [8, 4],
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ),
-                    titlesData: FlTitlesData(
-                      show: true,
-                      rightTitles: SideTitles(showTitles: false),
-                      topTitles: SideTitles(showTitles: false),
-                      leftTitles: SideTitles(showTitles: false),
-                      bottomTitles: SideTitles(
-                        showTitles: true,
-                        getTextStyles: (context, value) => secondaryTextStyle(),
-                        margin: 16,
-                        getTitles: (double value) {
-                          switch (value.toInt()) {
-                            case 0:
-                              return 'Allocatable';
-                            case 1:
-                              return 'Usage';
-                            case 2:
-                              return 'Requests';
-                            case 3:
-                              return 'Limits';
-                            default:
-                              return '';
-                          }
-                        },
-                      ),
+                    const SizedBox(height: Constants.spacingMiddle),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Allocatable',
+                          style: noramlTextStyle(
+                            size: Constants.sizeTextSecondary,
+                          ),
+                        ),
+                        Text(
+                          formatValue(controller
+                              .metrics[0].metrics[metricType]!.allocatable),
+                          style: secondaryTextStyle(),
+                        ),
+                      ],
                     ),
-                    borderData: FlBorderData(show: false),
-                    gridData: FlGridData(
-                      show: true,
-                      getDrawingHorizontalLine: (value) {
-                        return FlLine(
-                          color: Constants.colorTextSecondary,
-                          strokeWidth: 0.4,
-                          dashArray: [8, 4],
-                        );
-                      },
-                      getDrawingVerticalLine: (value) {
-                        return FlLine(
-                          color: Constants.colorTextSecondary,
-                          strokeWidth: 0.4,
-                          dashArray: [8, 4],
-                        );
-                      },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Usage',
+                          style: noramlTextStyle(
+                            size: Constants.sizeTextSecondary,
+                          ),
+                        ),
+                        Text(
+                          formatValue(
+                              controller.metrics[0].metrics[metricType]!.usage),
+                          style: secondaryTextStyle(),
+                        ),
+                      ],
                     ),
-                  ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Requests',
+                          style: noramlTextStyle(
+                            size: Constants.sizeTextSecondary,
+                          ),
+                        ),
+                        Text(
+                          formatValue(controller
+                              .metrics[0].metrics[metricType]!.requests),
+                          style: secondaryTextStyle(),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Limits',
+                          style: noramlTextStyle(
+                            size: Constants.sizeTextSecondary,
+                          ),
+                        ),
+                        Text(
+                          formatValue(controller
+                              .metrics[0].metrics[metricType]!.limits),
+                          style: secondaryTextStyle(),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(height: Constants.spacingMiddle),
-              DetailsItemWidget(
-                smallPadding: true,
-                title: 'Legend',
-                details: [
-                  DetailsItemModel(
-                    name: 'Allocatable',
-                    values: formatValue(
-                        controller.metrics[0].metrics[metricType]!.allocatable),
-                  ),
-                  DetailsItemModel(
-                    name: 'Usage',
-                    values: formatValue(
-                        controller.metrics[0].metrics[metricType]!.usage),
-                  ),
-                  DetailsItemModel(
-                    name: 'Requests',
-                    values: formatValue(
-                        controller.metrics[0].metrics[metricType]!.requests),
-                  ),
-                  DetailsItemModel(
-                    name: 'Limits',
-                    values: formatValue(
-                        controller.metrics[0].metrics[metricType]!.limits),
-                  ),
-                ],
               ),
               const SizedBox(height: Constants.spacingMiddle),
             ],

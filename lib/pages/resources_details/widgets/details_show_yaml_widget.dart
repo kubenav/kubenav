@@ -71,6 +71,7 @@ class DetailsShowYamlWidget extends StatelessWidget {
       },
       child: Form(
         child: ListView(
+          physics: const ClampingScrollPhysics(),
           shrinkWrap: false,
           children: [
             Padding(

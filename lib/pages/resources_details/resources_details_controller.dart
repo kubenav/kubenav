@@ -10,6 +10,7 @@ import 'package:kubenav/pages/resources_details/widgets/details_create_job_widge
 import 'package:kubenav/pages/resources_details/widgets/details_delete_resource_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_edit_resource_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_get_logs_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/details_live_metrics_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_restart_resource_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_scale_resource_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_show_yaml_widget.dart';
@@ -273,6 +274,27 @@ class ResourcesDetailsController extends GetxController {
               name: name!,
               namespace: namespace!,
               item: item,
+            );
+          },
+        ),
+        isScrollControlled: true,
+      );
+    }
+  }
+
+  void showLiveMetrics() {
+    if (name != null && namespace != null) {
+      Get.bottomSheet(
+        BottomSheet(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
+          ),
+          onClosing: () {},
+          enableDrag: false,
+          builder: (builder) {
+            return DetailsLiveMetricsWidget(
+              name: name!,
+              namespace: namespace!,
             );
           },
         ),

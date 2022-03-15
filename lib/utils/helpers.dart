@@ -14,22 +14,22 @@ void finish(BuildContext context, [Object? result]) {
 
 /// [noramlTextStyle] applies our default styles for normal text.
 TextStyle noramlTextStyle({
-  int? size,
+  double? size,
   Color? color,
 }) {
   return TextStyle(
-    fontSize: size != null ? size.toDouble() : Constants.sizeTextPrimary,
+    fontSize: size ?? Constants.sizeTextPrimary,
     color: color ?? Constants.colorTextPrimary,
   );
 }
 
 /// [primaryTextStyle] applies our default styles for primary text.
 TextStyle primaryTextStyle({
-  int? size,
+  double? size,
   Color? color,
 }) {
   return TextStyle(
-    fontSize: size != null ? size.toDouble() : Constants.sizeTextPrimary,
+    fontSize: size ?? Constants.sizeTextPrimary,
     color: color ?? Constants.colorTextPrimary,
     fontWeight: FontWeight.bold,
   );
@@ -37,11 +37,11 @@ TextStyle primaryTextStyle({
 
 /// [secondaryTextStyle] applies our default styles for secondary text.
 TextStyle secondaryTextStyle({
-  int? size,
+  double? size,
   Color? color,
 }) {
   return TextStyle(
-    fontSize: size != null ? size.toDouble() : Constants.sizeTextSecondary,
+    fontSize: size ?? Constants.sizeTextSecondary,
     color: color ?? Constants.colorTextSecondary,
     fontWeight: FontWeight.normal,
   );

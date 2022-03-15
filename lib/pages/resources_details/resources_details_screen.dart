@@ -127,6 +127,19 @@ class ResourcesDetails extends GetView {
       ));
     }
 
+    if (resource != null &&
+        path != null &&
+        Resources.map['pods']!.resource == resource &&
+        Resources.map['pods']!.path == path) {
+      additionalActions.add(AppActionsHeaderModel(
+        title: 'Live Metrics',
+        icon: Icons.insights,
+        onTap: () {
+          controller.showLiveMetrics();
+        },
+      ));
+    }
+
     return additionalActions;
   }
 
