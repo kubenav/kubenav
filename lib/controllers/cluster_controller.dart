@@ -68,6 +68,47 @@ class ClusterController extends GetxController {
     return null;
   }
 
+  /// [editCluster] modifies the properties of the cluster with the given index. Before we modify the cluster properties
+  /// we have to check if another cluster has the provided [name]. If this is the case we abort this operation and
+  /// return an error string. If the no other cluster has the same [name] or the name wasn't changed we set all the new
+  /// cluster properties. Finally we have to trigger a manual write to the storage for the list of clusters.
+  String? editCluster(
+    int clusterIndex,
+    String name,
+    String clusterServer,
+    String clusterCertificateAuthorityData,
+    bool clusterInsecureSkipTLSVerify,
+    String userClientCertificateData,
+    String userClientKeyData,
+    String userToken,
+    String userUsername,
+    String userPassword,
+    String namespace,
+  ) {
+    for (var i = 0; i < clusters.length; i++) {
+      if (clusters[i].value.name == name && clusterIndex != i) {
+        return 'A cluster with the same name already exists';
+      }
+    }
+
+    clusters[clusterIndex].value.name = name;
+    clusters[clusterIndex].value.clusterServer = clusterServer;
+    clusters[clusterIndex].value.clusterCertificateAuthorityData =
+        clusterCertificateAuthorityData;
+    clusters[clusterIndex].value.clusterInsecureSkipTLSVerify =
+        clusterInsecureSkipTLSVerify;
+    clusters[clusterIndex].value.userClientCertificateData =
+        userClientCertificateData;
+    clusters[clusterIndex].value.userClientKeyData = userClientKeyData;
+    clusters[clusterIndex].value.userToken = userToken;
+    clusters[clusterIndex].value.userUsername = userUsername;
+    clusters[clusterIndex].value.userPassword = userPassword;
+    clusters[clusterIndex].value.namespace = namespace;
+
+    GetStorage().write('clusters', clusters.toList());
+    return null;
+  }
+
   /// [deleteCluster] deletes the cluster with the given index from our [clusters] list. Besides that we also check if
   /// the list is empty to reset the [activeClusterIndex]. If the active cluster index is equal to the index of the
   /// cluster which should be removed we set the first cluster in the list as active cluster.

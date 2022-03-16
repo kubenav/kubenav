@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
+import 'package:kubenav/pages/clusters/widgets/edit_cluster_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_actions_widget.dart';
@@ -31,6 +32,20 @@ class ClusterActionsWidget extends StatelessWidget {
           title: 'Edit',
           onTap: () {
             finish(context);
+            Get.bottomSheet(
+              BottomSheet(
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(Constants.sizeBorderRadius),
+                ),
+                onClosing: () {},
+                enableDrag: false,
+                builder: (builder) {
+                  return EditClusterWidget(clusterIndex: clusterIndex);
+                },
+              ),
+              isScrollControlled: true,
+            );
           },
         ),
         AppActionsWidgetAction(

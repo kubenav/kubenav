@@ -9,10 +9,17 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 
-class AddClusterManualController extends GetxController {
+class EditClusterController extends GetxController {
   ClusterController clusterController = Get.find();
 
-  final addClusterManualFormKey = GlobalKey<FormState>();
+  final int clusterIndex;
+  late Cluster cluster;
+
+  EditClusterController({
+    required this.clusterIndex,
+  });
+
+  final editClusterFormKey = GlobalKey<FormState>();
   final name = TextEditingController();
   final clusterServer = TextEditingController();
   final clusterCertificateAuthorityData = TextEditingController();
@@ -23,6 +30,25 @@ class AddClusterManualController extends GetxController {
   final userUsername = TextEditingController();
   final userPassword = TextEditingController();
   final namespace = TextEditingController();
+
+  @override
+  void onInit() {
+    cluster = clusterController.clusters[clusterIndex].value;
+
+    name.text = cluster.name;
+    clusterServer.text = cluster.clusterServer;
+    clusterCertificateAuthorityData.text =
+        cluster.clusterCertificateAuthorityData;
+    clusterInsecureSkipTLSVerify.value = cluster.clusterInsecureSkipTLSVerify;
+    userClientCertificateData.text = cluster.userClientCertificateData;
+    userClientKeyData.text = cluster.userClientKeyData;
+    userToken.text = cluster.userToken;
+    userUsername.text = cluster.userUsername;
+    userPassword.text = cluster.userPassword;
+    namespace.text = cluster.namespace;
+
+    super.onInit();
+  }
 
   @override
   void onClose() {
@@ -55,68 +81,64 @@ class AddClusterManualController extends GetxController {
       clusterInsecureSkipTLSVerify.value =
           clusterInsecureSkipTLSVerify.value ? false : true;
 
-  /// [addCluster] adds a new cluster to our global list of clusters. Before we add the cluster we validate all the form
-  /// values which have an validator. We also modify the user input to remove a possible trailing '/' from the server
-  /// value and to remove possible white spaces.
-  void addCluster(BuildContext context) {
-    if (addClusterManualFormKey.currentState != null &&
-        addClusterManualFormKey.currentState!.validate()) {
-      final Cluster cluster = Cluster(
-        name: name.text,
-        provider: 'manual',
-        clusterServer: clusterServer.text.endsWith('/')
+  /// [editCluster] modifies the cluster in our global list of clusters. Before we save the cluster we validate all the
+  /// form values which have an validator. We also modify the user input to remove a possible trailing '/' from the
+  /// server value and to remove possible white spaces.
+  void editCluster(BuildContext context) {
+    if (editClusterFormKey.currentState != null &&
+        editClusterFormKey.currentState!.validate()) {
+      final error = clusterController.editCluster(
+        clusterIndex,
+        name.text,
+        clusterServer.text.endsWith('/')
             ? clusterServer.text.substring(0, clusterServer.text.length - 1)
             : clusterServer.text,
-        clusterCertificateAuthorityData:
-            clusterCertificateAuthorityData.text.trim(),
-        clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify.value,
-        userClientCertificateData: userClientCertificateData.text.trim(),
-        userClientKeyData: userClientKeyData.text.trim(),
-        userToken: userToken.text.trim(),
-        userUsername: userUsername.text.trim(),
-        userPassword: userPassword.text.trim(),
-        namespace:
-            namespace.text.trim() == '' ? 'default' : namespace.text.trim(),
+        clusterCertificateAuthorityData.text.trim(),
+        clusterInsecureSkipTLSVerify.value,
+        userClientCertificateData.text.trim(),
+        userClientKeyData.text.trim(),
+        userToken.text.trim(),
+        userUsername.text.trim(),
+        userPassword.text.trim(),
+        namespace.text.trim() == '' ? 'default' : namespace.text.trim(),
       );
-
-      final error = clusterController.addCluster(cluster);
       if (error != null) {
-        snackbar('Could not add cluster', error);
+        snackbar('Could not save cluster', error);
       } else {
-        snackbar('Cluster added', 'The cluster ${cluster.name} was added');
+        snackbar('Changes were saved', 'The cluster ${name.text} was saved');
         finish(context);
       }
     }
   }
 }
 
-class AddClusterManualWidget extends StatelessWidget {
-  const AddClusterManualWidget({
+class EditClusterWidget extends StatelessWidget {
+  const EditClusterWidget({
     Key? key,
-    required this.provider,
+    required this.clusterIndex,
   }) : super(key: key);
 
-  final Provider provider;
+  final int clusterIndex;
 
   @override
   Widget build(BuildContext context) {
-    AddClusterManualController controller = Get.put(
-      AddClusterManualController(),
+    EditClusterController controller = Get.put(
+      EditClusterController(clusterIndex: clusterIndex),
     );
 
     return AppBottomSheetWidget(
-      title: provider.title,
-      subtitle: provider.subtitle,
-      icon: provider.image54x54,
+      title: 'Edit',
+      subtitle: 'Edit ${controller.cluster.name}',
+      icon: Icons.edit,
       onClosePressed: () {
         finish(context);
       },
-      actionText: 'Add Cluster',
+      actionText: 'Save',
       onActionPressed: () {
-        controller.addCluster(context);
+        controller.editCluster(context);
       },
       child: Form(
-        key: controller.addClusterManualFormKey,
+        key: controller.editClusterFormKey,
         child: ListView(
           shrinkWrap: false,
           children: [
