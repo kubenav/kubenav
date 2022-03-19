@@ -64,6 +64,7 @@ class AddClusterManualController extends GetxController {
       final Cluster cluster = Cluster(
         name: name.text,
         provider: 'manual',
+        providerConfig: '',
         clusterServer: clusterServer.text.endsWith('/')
             ? clusterServer.text.substring(0, clusterServer.text.length - 1)
             : clusterServer.text,

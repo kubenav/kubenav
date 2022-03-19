@@ -71,6 +71,18 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
       }
     } else if call.method == "kubernetesStartServer" {
       kubernetesStartServer(result: result)
+    } else if call.method == "azureGetClusters" {
+      if let args = call.arguments as? Dictionary<String, Any>,
+        let subscriptionID = args["subscriptionID"] as? String,
+        let tenantID = args["tenantID"] as? String,
+        let clientID = args["clientID"] as? String,
+        let clientSecret = args["clientSecret"] as? String,
+        let isAdmin = args["isAdmin"] as? Bool
+      {
+        azureGetClusters(subscriptionID: subscriptionID, tenantID: tenantID, clientID: clientID, clientSecret: clientSecret, isAdmin: isAdmin, result: result)
+      } else {
+        result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
+      }
     } else {
       result(FlutterMethodNotImplemented)
     }
@@ -125,5 +137,16 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
       KubenavKubernetesStartServer()
     }
     result("")
+  }
+
+  private func azureGetClusters(subscriptionID: String, tenantID: String, clientID: String, clientSecret: String, isAdmin: Bool, result: FlutterResult) {
+    var error: NSError?
+
+    let data = KubenavAzureGetClusters(subscriptionID, tenantID, clientID, clientSecret, isAdmin, &error)
+    if error != nil {
+      result(FlutterError(code: "AZURE_GET_CLUSTERS_FAILED", message: error?.localizedDescription ?? "", details: nil))
+    } else {
+      result(data)
+    }
   }
 }

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:kubenav/pages/settings/settings_controller.dart';
 import 'package:kubenav/pages/settings/widgets/help_widget.dart';
 import 'package:kubenav/pages/settings/widgets/info_widget.dart';
+import 'package:kubenav/pages/settings/widgets/settings_widget.dart';
 import 'package:kubenav/pages/settings/widgets/sponsor_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
@@ -232,21 +233,7 @@ class Settings extends GetView<SettingsController> {
             Obx(() {
               return buildClusters(context);
             }),
-            Padding(
-              padding: const EdgeInsets.all(
-                Constants.spacingMiddle,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Settings',
-                      style: primaryTextStyle(size: 18),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            const SettingsWidget(),
             const HelpWidget(),
             const InfoWidget(),
             buildSponsors(),

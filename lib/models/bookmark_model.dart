@@ -48,15 +48,15 @@ class Bookmark {
   });
 
   factory Bookmark.fromJson(Map<String, dynamic> json) => Bookmark(
-        cluster: json['cluster'],
+        cluster: json['cluster'] ?? '',
         type: bookmarkTypeFromString(json['type']) ?? BookmarkType.list,
-        title: json['title'],
-        resource: json['resource'],
-        path: json['path'],
+        title: json['title'] ?? '',
+        resource: json['resource'] ?? '',
+        path: json['path'] ?? '',
         scope:
             resourceScopeFromString(json['scope']) ?? ResourceScope.namespaced,
-        name: json['name'],
-        namespace: json['namespace'],
+        name: json['name'] ?? '',
+        namespace: json['namespace'] ?? '',
       );
 
   Map<String, dynamic> toJson() => {

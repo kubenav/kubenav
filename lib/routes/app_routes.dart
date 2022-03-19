@@ -10,4 +10,5 @@ class Routes {
   static const plugins = '/plugins';
   static const settings = '/settings/';
   static const settingsClusters = '/settings/clusters';
+  static const settingsProviders = '/settings/providers';
 }

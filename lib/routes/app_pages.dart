@@ -6,6 +6,8 @@ import 'package:kubenav/pages/home/home_binding.dart';
 import 'package:kubenav/pages/home/home_screen.dart';
 import 'package:kubenav/pages/plugins/plugins_binding.dart';
 import 'package:kubenav/pages/plugins/plugins_screen.dart';
+import 'package:kubenav/pages/providers/providers_binding.dart';
+import 'package:kubenav/pages/providers/providers_screen.dart';
 import 'package:kubenav/pages/resources/resources_binding.dart';
 import 'package:kubenav/pages/resources/resources_screen.dart';
 import 'package:kubenav/pages/resources_bookmarks/resources_bookmarks_binding.dart';
@@ -64,6 +66,11 @@ abstract class AppPages {
       name: Routes.settingsClusters,
       page: () => const Clusters(),
       binding: ClustersBinding(),
+    ),
+    GetPage(
+      name: Routes.settingsProviders,
+      page: () => const Providers(),
+      binding: ProvidersBinding(),
     ),
   ];
 }

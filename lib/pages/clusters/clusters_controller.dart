@@ -4,16 +4,19 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
+import 'package:kubenav/controllers/provider_config_controller.dart';
 import 'package:kubenav/models/provider_model.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_kubeconfig_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_manual_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/cluster_actions_widget.dart';
+import 'package:kubenav/pages/clusters/widgets/reuse_provider_config_actions_widget.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 
 class ClustersController extends GetxController {
   ClusterController clusterController = Get.find();
+  ProviderConfigController providerConfigController = Get.find();
   List<Provider> providers = Providers.list;
 
   Provider? getProvider(String name) {
@@ -27,26 +30,48 @@ class ClustersController extends GetxController {
   }
 
   void showAddClusterBottomSheet(int index) {
-    Get.bottomSheet(
-      BottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-        ),
-        onClosing: () {},
-        enableDrag: false,
-        builder: (builder) {
-          switch (providers[index].name) {
-            case 'manual':
-              return AddClusterManualWidget(provider: providers[index]);
-            case 'kubeconfig':
-              return AddClusterKubeconfigWidget(provider: providers[index]);
-            default:
-              return AddClusterManualWidget(provider: providers[index]);
-          }
-        },
-      ),
-      isScrollControlled: true,
-    );
+    switch (providers[index].name) {
+      case 'manual':
+      case 'kubeconfig':
+        Get.bottomSheet(
+          BottomSheet(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
+            ),
+            onClosing: () {},
+            enableDrag: false,
+            builder: (builder) {
+              switch (providers[index].name) {
+                case 'manual':
+                  return AddClusterManualWidget(provider: providers[index]);
+                case 'kubeconfig':
+                  return AddClusterKubeconfigWidget(provider: providers[index]);
+                default:
+                  return AddClusterManualWidget(provider: providers[index]);
+              }
+            },
+          ),
+          isScrollControlled: true,
+        );
+        break;
+      default:
+        Get.bottomSheet(
+          BottomSheet(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
+            ),
+            onClosing: () {},
+            enableDrag: false,
+            backgroundColor: Colors.transparent,
+            builder: (builder) {
+              return ReuseProviderConfigActionsWidget(
+                  provider: providers[index].name);
+            },
+          ),
+          isScrollControlled: true,
+        );
+        break;
+    }
   }
 
   void showClusterActionsBottomSheet(int index) {

@@ -81,6 +81,18 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       }
     } else if (call.method == "kubernetesStartServer") {
       kubernetesStartServer(result)
+    } else if (call.method == "azureGetClusters") {
+      val subscriptionID = call.argument("subscriptionID") as String?
+      val tenantID = call.argument("tenantID") as String?
+      val clientID = call.argument("clientID") as String?
+      val clientSecret = call.argument("clientSecret") as String?
+      val isAdmin = call.argument("isAdmin") as Boolean?
+
+      if (subscriptionID == null || tenantID == null || clientID == null || clientSecret == null || isAdmin == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        azureGetClusters(subscriptionID, tenantID, clientID, clientSecret, isAdmin, result)
+      }
     } else {
       result.notImplemented()
     }
@@ -128,5 +140,14 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       Kubenav.kubernetesStartServer();
     }
     result.success("")
+  }
+
+  private fun azureGetClusters(subscriptionID: String, tenantID: String, clientID: String, clientSecret: String, isAdmin: Boolean, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.azureGetClusters(subscriptionID, tenantID, clientID, clientSecret, isAdmin)
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("AZURE_GET_CLUSTERS_FAILED", e.localizedMessage, null)
+    }
   }
 }

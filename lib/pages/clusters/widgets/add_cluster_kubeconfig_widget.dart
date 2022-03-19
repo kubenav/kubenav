@@ -1,12 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:yaml/yaml.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
+import 'package:kubenav/models/kubeconfig_model.dart';
 import 'package:kubenav/models/provider_model.dart';
 import 'package:kubenav/utils/helpers.dart';
-import 'package:kubenav/utils/kubeconfig.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 
 class AddClusterKubeconfigController extends GetxController {
@@ -38,15 +40,21 @@ class AddClusterKubeconfigController extends GetxController {
   void addCluster(BuildContext context) {
     if (addClusterKubeconfigFormKey.currentState != null &&
         addClusterKubeconfigFormKey.currentState!.validate()) {
-      var isError = false;
-      var count = 0;
-      final clusters = kubeconfigToClusters(loadYaml(kubeconfig.text));
+      try {
+        var isError = false;
+        var count = 0;
 
-      if (clusters.item1 == null || clusters.item2 != '') {
-        snackbar('Could not add cluster',
-            'The parsing of the kubeconfig failes: ${clusters.item2}');
-      } else {
-        for (var cluster in clusters.item1!) {
+        final clusters = Kubeconfig.fromJson(
+          json.decode(
+            json.encode(
+              loadYaml(
+                kubeconfig.text,
+              ),
+            ),
+          ),
+        ).getClusters('kubeconfig', '');
+
+        for (var cluster in clusters) {
           final error = clusterController.addCluster(cluster);
           if (error != null) {
             isError = true;
@@ -61,6 +69,11 @@ class AddClusterKubeconfigController extends GetxController {
         if (!isError) {
           finish(context);
         }
+      } catch (err) {
+        snackbar(
+          'Could not add cluster(s)',
+          err.toString(),
+        );
       }
     }
   }
