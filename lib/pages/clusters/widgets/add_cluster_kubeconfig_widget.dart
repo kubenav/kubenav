@@ -1,14 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:yaml/yaml.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/kubeconfig_model.dart';
 import 'package:kubenav/models/provider_model.dart';
+import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 
 class AddClusterKubeconfigController extends GetxController {
@@ -32,6 +36,27 @@ class AddClusterKubeconfigController extends GetxController {
     }
 
     return null;
+  }
+
+  void selectKubeconfigFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['yaml', 'yml', 'txt', 'conf'],
+      );
+
+      if (result != null && result.files.single.path != null) {
+        final File file = File(result.files.single.path!);
+        final kubeconfigFileContent = await file.readAsString();
+        kubeconfig.text = kubeconfigFileContent;
+      }
+    } catch (err) {
+      Logger.log(
+        'AddClusterKubeconfigController selectKubeconfigFile',
+        'Could not select file: $err',
+      );
+    }
   }
 
   /// [addCluster] adds a new cluster to our global list of clusters. Before we add the cluster we validate all the form
@@ -109,6 +134,56 @@ class AddClusterKubeconfigWidget extends StatelessWidget {
         child: ListView(
           shrinkWrap: false,
           children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8,
+              ),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Constants.colorPrimary,
+                  onPrimary: Colors.white,
+                  minimumSize: const Size.fromHeight(40),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      Constants.sizeBorderRadius,
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  controller.selectKubeconfigFile();
+                },
+                child: Text(
+                  'Select Kubeconfig',
+                  style: primaryTextStyle(
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: Constants.spacingMiddle,
+                bottom: Constants.spacingMiddle,
+              ),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Divider(
+                      height: 0,
+                      thickness: 1.0,
+                    ),
+                  ),
+                  Text("or paste content", style: secondaryTextStyle()),
+                  const Expanded(
+                    child: Divider(
+                      height: 0,
+                      thickness: 1.0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: 8,
