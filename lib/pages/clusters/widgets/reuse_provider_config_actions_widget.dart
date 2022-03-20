@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:kubenav/controllers/provider_config_controller.dart';
 import 'package:kubenav/models/provider_config_model.dart';
 import 'package:kubenav/models/provider_model.dart';
+import 'package:kubenav/pages/clusters/widgets/add_cluster_aws_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_azure_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_digitalocean_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_kubeconfig_widget.dart';
@@ -41,6 +42,10 @@ class ReuseProviderConfigActionsController extends GetxController {
             case 'kubeconfig':
               return AddClusterKubeconfigWidget(
                 provider: Providers.kubeconfig,
+              );
+            case 'aws':
+              return AddClusterAWSWidget(
+                providerConfig: providerConfig,
               );
             case 'azure':
               return AddClusterAzureWidget(

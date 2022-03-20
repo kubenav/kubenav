@@ -80,6 +80,8 @@ class KubernetesService {
   /// it returns an other response code.
   Future<bool> checkHealth() async {
     try {
+      final token = await _getAccessToken();
+
       final String result = await platform.invokeMethod(
         'kubernetesRequest',
         <String, dynamic>{
@@ -89,7 +91,7 @@ class KubernetesService {
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
           'userClientCertificateData': cluster.userClientCertificateData,
           'userClientKeyData': cluster.userClientKeyData,
-          'userToken': cluster.userToken,
+          'userToken': token,
           'userUsername': cluster.userUsername,
           'userPassword': cluster.userPassword,
           'requestMethod': 'GET',
@@ -161,6 +163,8 @@ class KubernetesService {
   /// delete a resource. The function doesn't return anything, expect an error in case there was one.
   Future<void> deleteRequest(String url, String? body) async {
     try {
+      final token = await _getAccessToken();
+
       final String result = await platform.invokeMethod(
         'kubernetesRequest',
         <String, dynamic>{
@@ -170,7 +174,7 @@ class KubernetesService {
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
           'userClientCertificateData': cluster.userClientCertificateData,
           'userClientKeyData': cluster.userClientKeyData,
-          'userToken': cluster.userToken,
+          'userToken': token,
           'userUsername': cluster.userUsername,
           'userPassword': cluster.userPassword,
           'requestMethod': 'DELETE',
@@ -199,6 +203,8 @@ class KubernetesService {
   /// which should be patched, we also have to pass a [body] to the function. The [body] must be a valid json patch.
   Future<void> patchRequest(String url, String body) async {
     try {
+      final token = await _getAccessToken();
+
       final String result = await platform.invokeMethod(
         'kubernetesRequest',
         <String, dynamic>{
@@ -208,7 +214,7 @@ class KubernetesService {
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
           'userClientCertificateData': cluster.userClientCertificateData,
           'userClientKeyData': cluster.userClientKeyData,
-          'userToken': cluster.userToken,
+          'userToken': token,
           'userUsername': cluster.userUsername,
           'userPassword': cluster.userPassword,
           'requestMethod': 'PATCH',
@@ -238,6 +244,8 @@ class KubernetesService {
   /// manifest which should be created.
   Future<void> postRequest(String url, String body) async {
     try {
+      final token = await _getAccessToken();
+
       final String result = await platform.invokeMethod(
         'kubernetesRequest',
         <String, dynamic>{
@@ -247,7 +255,7 @@ class KubernetesService {
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
           'userClientCertificateData': cluster.userClientCertificateData,
           'userClientKeyData': cluster.userClientKeyData,
-          'userToken': cluster.userToken,
+          'userToken': token,
           'userUsername': cluster.userUsername,
           'userPassword': cluster.userPassword,
           'requestMethod': 'POST',
@@ -283,6 +291,8 @@ class KubernetesService {
     bool previous,
   ) async {
     try {
+      final token = await _getAccessToken();
+
       final String result = await platform.invokeMethod(
         'kubernetesGetLogs',
         <String, dynamic>{
@@ -292,7 +302,7 @@ class KubernetesService {
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
           'userClientCertificateData': cluster.userClientCertificateData,
           'userClientKeyData': cluster.userClientKeyData,
-          'userToken': cluster.userToken,
+          'userToken': token,
           'userUsername': cluster.userUsername,
           'userPassword': cluster.userPassword,
           'names': names,
@@ -388,6 +398,8 @@ class KubernetesService {
   Future<Map<String, dynamic>> portForwarding(
       String name, String namespace, int port) async {
     try {
+      final token = await _getAccessToken();
+
       final response = await http.post(
         Uri.parse('http://localhost:14122/portforwarding'),
         headers: {
@@ -400,7 +412,7 @@ class KubernetesService {
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
           'userClientCertificateData': cluster.userClientCertificateData,
           'userClientKeyData': cluster.userClientKeyData,
-          'userToken': cluster.userToken,
+          'userToken': token,
           'userUsername': cluster.userUsername,
           'userPassword': cluster.userPassword,
           'podName': name,
