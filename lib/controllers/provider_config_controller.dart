@@ -68,4 +68,14 @@ class ProviderConfigController extends GetxController {
   void deleteConfig(int index) {
     configs.removeAt(index);
   }
+
+  ProviderConfig? getConfig(String name) {
+    for (var config in configs) {
+      if (config.value.name == name) {
+        return config.value;
+      }
+    }
+
+    return null;
+  }
 }

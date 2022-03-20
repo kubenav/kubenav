@@ -225,4 +225,17 @@ class ClusterController extends GetxController {
 
     return clusters[activeClusterIndex.value].value;
   }
+
+  /// [setNewToken] sets a new access token for the cluster with the given name. After the token was set for the given
+  /// cluster, we save the list of clusters to the storage.
+  void setNewToken(String name, String token, int tokenExpireTimestamp) {
+    for (var cluster in clusters) {
+      if (cluster.value.name == name) {
+        cluster.value.userToken = token;
+        cluster.value.userTokenExpireTimestamp = tokenExpireTimestamp;
+        GetStorage().write('clusters', clusters.toList());
+        return;
+      }
+    }
+  }
 }

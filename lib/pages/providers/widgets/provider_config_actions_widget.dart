@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/controllers/provider_config_controller.dart';
+import 'package:kubenav/pages/providers/widgets/aws_provider_config_widget.dart';
 import 'package:kubenav/pages/providers/widgets/azure_provider_config_widget.dart';
+import 'package:kubenav/pages/providers/widgets/digitalocean_provider_config_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_actions_widget.dart';
@@ -56,8 +58,16 @@ class ProviderConfigActionsController extends GetxController {
         enableDrag: false,
         builder: (builder) {
           switch (providerConfig.provider) {
+            case 'aws':
+              return AWSProviderConfigWidget(
+                providerConfigIndex: providerConfigIndex,
+              );
             case 'azure':
               return AzureProviderConfigWidget(
+                providerConfigIndex: providerConfigIndex,
+              );
+            case 'digitalocean':
+              return DigitalOceanProviderConfigWidget(
                 providerConfigIndex: providerConfigIndex,
               );
             default:

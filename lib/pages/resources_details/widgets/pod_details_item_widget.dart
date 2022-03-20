@@ -116,12 +116,14 @@ class PodDetailsItemController extends GetxController {
           'An error was returned while getting metrics',
           'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
         );
+        metrics.value = [];
       } catch (err) {
         Logger.log(
           'PodDetailsItemController getMetrics',
           'An error was returned while getting metrics',
           err,
         );
+        metrics.value = [];
       }
     }
   }

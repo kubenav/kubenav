@@ -93,6 +93,29 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       } else {
         azureGetClusters(subscriptionID, tenantID, clientID, clientSecret, isAdmin, result)
       }
+    } else if (call.method == "awsGetClusters") {
+      val accessKeyID = call.argument("accessKeyID") as String?
+      val secretKey = call.argument("secretKey") as String?
+      val region = call.argument("region") as String?
+      val sessionToken = call.argument("sessionToken") as String?
+
+      if (accessKeyID == null || secretKey == null || region == null || sessionToken == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        awsGetClusters(accessKeyID, secretKey, region, sessionToken, result)
+      }
+    } else if (call.method == "awsGetToken") {
+      val accessKeyID = call.argument("accessKeyID") as String?
+      val secretKey = call.argument("secretKey") as String?
+      val region = call.argument("region") as String?
+      val sessionToken = call.argument("sessionToken") as String?
+      val clusterID = call.argument("clusterID") as String?
+
+      if (accessKeyID == null || secretKey == null || region == null || sessionToken == null || clusterID == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        awsGetToken(accessKeyID, secretKey, region, sessionToken, clusterID, result)
+      }
     } else {
       result.notImplemented()
     }
@@ -148,6 +171,24 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       result.success(data)
     } catch (e: Exception) {
       result.error("AZURE_GET_CLUSTERS_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun awsGetClusters(accessKeyID: String, secretKey: String, region: String, sessionToken: String, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.awsGetClusters(accessKeyID, secretKey, region, sessionToken)
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("AWS_GET_CLUSTERS_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun awsGetToken(accessKeyID: String, secretKey: String, region: String, sessionToken: String, clusterID: String, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.awsGetToken(accessKeyID, secretKey, region, sessionToken, clusterID)
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("AWS_GET_TOKEN_FAILED", e.localizedMessage, null)
     }
   }
 }

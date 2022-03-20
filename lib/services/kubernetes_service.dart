@@ -3,9 +3,13 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:kubenav/controllers/cluster_controller.dart';
+import 'package:kubenav/controllers/provider_config_controller.dart';
 
 import 'package:kubenav/models/cluster_model.dart';
+import 'package:kubenav/services/aws_service.dart';
 import 'package:kubenav/utils/logger.dart';
 
 /// [KubernetesService] implements a service to interactiv with the Kubernetes functions from our Go code. The
@@ -13,12 +17,63 @@ import 'package:kubenav/utils/logger.dart';
 ///
 /// To use the [KubernetesService] a user must provide a Kubernetes [cluster] during the initialization of the service.
 class KubernetesService {
+  ClusterController clusterController = Get.find();
+  ProviderConfigController providerConfigController = Get.find();
+
   static const platform = MethodChannel('kubenav.io');
   Cluster cluster;
 
   KubernetesService({
     required this.cluster,
   });
+
+  /// [_getAccessToken] is our internal function for the [KubernetesService] to get a valid access token to access the
+  /// Kubernetes API. The logic for the different providers is as follows:
+  ///
+  /// - `aws`: Check if the token is expired or empty -> get a new access token and set the token for the current
+  ///   cluster (the token is valid for 10 minutes)
+  /// - For all other providers we are using the token saved in the cluster configuration
+  Future<String> _getAccessToken() async {
+    try {
+      final tokenExpireTimestamp =
+          DateTime.fromMicrosecondsSinceEpoch(cluster.userTokenExpireTimestamp);
+
+      if (cluster.provider == 'aws' &&
+          (tokenExpireTimestamp.isBefore(DateTime.now()) ||
+              cluster.userToken == '')) {
+        final providerConfig =
+            providerConfigController.getConfig(cluster.providerConfig);
+        if (providerConfig != null && providerConfig.aws != null) {
+          final token = await AWSService().getToken(
+            providerConfig.aws!.accessKeyID,
+            providerConfig.aws!.secretKey,
+            providerConfig.aws!.region,
+            providerConfig.aws!.sessionToken,
+            cluster.providerConfigInternal,
+          );
+          clusterController.setNewToken(
+            cluster.name,
+            token,
+            DateTime.now()
+                .add(const Duration(minutes: 10))
+                .microsecondsSinceEpoch,
+          );
+          return token;
+        } else {
+          Future.error('could not get access token');
+        }
+      }
+
+      return cluster.userToken;
+    } catch (err) {
+      Logger.log(
+        'KubernetesService _getAccessToken',
+        'Could not get access token',
+        err,
+      );
+      return Future.error(err);
+    }
+  }
 
   /// [checkHealth] can be used to check the health of a Kubernetes cluster. The health of a cluster can be checked by
   /// calling the `/readyz` endpoint of the cluster. If the cluster is healthy it should return 200, if it isn't healthy
@@ -64,6 +119,8 @@ class KubernetesService {
   /// API.
   Future<Map<String, dynamic>> getRequest(String url) async {
     try {
+      final token = await _getAccessToken();
+
       final String result = await platform.invokeMethod(
         'kubernetesRequest',
         <String, dynamic>{
@@ -73,7 +130,7 @@ class KubernetesService {
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
           'userClientCertificateData': cluster.userClientCertificateData,
           'userClientKeyData': cluster.userClientKeyData,
-          'userToken': cluster.userToken,
+          'userToken': token,
           'userUsername': cluster.userUsername,
           'userPassword': cluster.userPassword,
           'requestMethod': 'GET',

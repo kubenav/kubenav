@@ -83,6 +83,29 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
+    } else if call.method == "awsGetClusters" {
+      if let args = call.arguments as? Dictionary<String, Any>,
+        let accessKeyID = args["accessKeyID"] as? String,
+        let secretKey = args["secretKey"] as? String,
+        let region = args["region"] as? String,
+        let sessionToken = args["sessionToken"] as? String
+      {
+        awsGetClusters(accessKeyID: accessKeyID, secretKey: secretKey, region: region, sessionToken: sessionToken, result: result)
+      } else {
+        result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
+      }
+    } else if call.method == "awsGetToken" {
+      if let args = call.arguments as? Dictionary<String, Any>,
+        let accessKeyID = args["accessKeyID"] as? String,
+        let secretKey = args["secretKey"] as? String,
+        let region = args["region"] as? String,
+        let sessionToken = args["sessionToken"] as? String,
+        let clusterID = args["clusterID"] as? String
+      {
+        awsGetToken(accessKeyID: accessKeyID, secretKey: secretKey, region: region, sessionToken: sessionToken, clusterID: clusterID, result: result)
+      } else {
+        result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
+      }
     } else {
       result(FlutterMethodNotImplemented)
     }
@@ -145,6 +168,28 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     let data = KubenavAzureGetClusters(subscriptionID, tenantID, clientID, clientSecret, isAdmin, &error)
     if error != nil {
       result(FlutterError(code: "AZURE_GET_CLUSTERS_FAILED", message: error?.localizedDescription ?? "", details: nil))
+    } else {
+      result(data)
+    }
+  }
+
+  private func awsGetClusters(accessKeyID: String, secretKey: String, region: String, sessionToken: String, result: FlutterResult) {
+    var error: NSError?
+
+    let data = KubenavAWSGetClusters(accessKeyID, secretKey, region, sessionToken, &error)
+    if error != nil {
+      result(FlutterError(code: "AWS_GET_CLUSTERS_FAILED", message: error?.localizedDescription ?? "", details: nil))
+    } else {
+      result(data)
+    }
+  }
+
+  private func awsGetToken(accessKeyID: String, secretKey: String, region: String, sessionToken: String, clusterID: String, result: FlutterResult) {
+    var error: NSError?
+
+    let data = KubenavAWSGetToken(accessKeyID, secretKey, region, sessionToken, clusterID, &error)
+    if error != nil {
+      result(FlutterError(code: "AWS_GET_TOKEN_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
       result(data)
     }

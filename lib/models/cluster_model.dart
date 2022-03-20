@@ -5,12 +5,14 @@ class Cluster {
   String name;
   String provider;
   String providerConfig;
+  String providerConfigInternal;
   String clusterServer;
   String clusterCertificateAuthorityData;
   bool clusterInsecureSkipTLSVerify;
   String userClientCertificateData;
   String userClientKeyData;
   String userToken;
+  int userTokenExpireTimestamp;
   String userUsername;
   String userPassword;
   String namespace;
@@ -19,12 +21,14 @@ class Cluster {
     required this.name,
     required this.provider,
     required this.providerConfig,
+    this.providerConfigInternal = '',
     required this.clusterServer,
     this.clusterCertificateAuthorityData = '',
     this.clusterInsecureSkipTLSVerify = false,
     this.userClientCertificateData = '',
     this.userClientKeyData = '',
     this.userToken = '',
+    this.userTokenExpireTimestamp = 0,
     this.userUsername = '',
     this.userPassword = '',
     this.namespace = '',
@@ -34,6 +38,7 @@ class Cluster {
         name: json['name'] ?? '',
         provider: json['provider'] ?? '',
         providerConfig: json['providerConfig'] ?? '',
+        providerConfigInternal: json['providerConfigInternal'] ?? '',
         clusterServer: json['clusterServer'] ?? '',
         clusterCertificateAuthorityData:
             json['clusterCertificateAuthorityData'] ?? '',
@@ -42,6 +47,7 @@ class Cluster {
         userClientCertificateData: json['userClientCertificateData'] ?? '',
         userClientKeyData: json['userClientKeyData'] ?? '',
         userToken: json['userToken'] ?? '',
+        userTokenExpireTimestamp: json['userTokenExpireTimestamp'] ?? 0,
         userUsername: json['userUsername'] ?? '',
         userPassword: json['userPassword'] ?? '',
         namespace: json['namespace'] ?? 'default',
@@ -51,12 +57,14 @@ class Cluster {
         'name': name,
         'provider': provider,
         'providerConfig': providerConfig,
+        'providerConfigInternal': providerConfigInternal,
         'clusterServer': clusterServer,
         'clusterCertificateAuthorityData': clusterCertificateAuthorityData,
         'clusterInsecureSkipTLSVerify': clusterInsecureSkipTLSVerify,
         'userClientCertificateData': userClientCertificateData,
         'userClientKeyData': userClientKeyData,
         'userToken': userToken,
+        'userTokenExpireTimestamp': userTokenExpireTimestamp,
         'userUsername': userUsername,
         'userPassword': userPassword,
         'namespace': namespace,

@@ -3,12 +3,14 @@
 class ProviderConfig {
   String name;
   String provider;
+  ProviderConfigAWS? aws;
   ProviderConfigAzure? azure;
   ProviderConfigDigitalOcean? digitalocean;
 
   ProviderConfig({
     required this.name,
     required this.provider,
+    this.aws,
     this.azure,
     this.digitalocean,
   });
@@ -16,6 +18,9 @@ class ProviderConfig {
   factory ProviderConfig.fromJson(Map<String, dynamic> json) => ProviderConfig(
         name: json['name'] ?? '',
         provider: json['provider'] ?? '',
+        aws: json['aws'] != null
+            ? ProviderConfigAWS.fromJson(json['aws'])
+            : null,
         azure: json['azure'] != null
             ? ProviderConfigAzure.fromJson(json['azure'])
             : null,
@@ -28,6 +33,9 @@ class ProviderConfig {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
     data['provider'] = provider;
+    if (aws != null) {
+      data['aws'] = aws!.toJson();
+    }
     if (azure != null) {
       data['azure'] = azure!.toJson();
     }
@@ -36,6 +44,37 @@ class ProviderConfig {
     }
     return data;
   }
+}
+
+/// A [ProviderConfigAWS] represents the provider configuration for the `aws` provider. To get the clusters from AWS we
+/// need the [accessKeyID], [secretKey], [region] and a optional [sessionToken].
+class ProviderConfigAWS {
+  String accessKeyID;
+  String secretKey;
+  String region;
+  String sessionToken;
+
+  ProviderConfigAWS({
+    required this.accessKeyID,
+    required this.secretKey,
+    required this.region,
+    required this.sessionToken,
+  });
+
+  factory ProviderConfigAWS.fromJson(Map<String, dynamic> json) =>
+      ProviderConfigAWS(
+        accessKeyID: json['accessKeyID'] ?? '',
+        secretKey: json['secretKey'] ?? '',
+        region: json['region'] ?? '',
+        sessionToken: json['sessionToken'] ?? '',
+      );
+
+  Map<String, dynamic> toJson() => {
+        'accessKeyID': accessKeyID,
+        'secretKey': secretKey,
+        'region': region,
+        'sessionToken': sessionToken,
+      };
 }
 
 /// A [ProviderConfigAzure] represents the provider configuration for the `azure` provider. To get the clusters from
