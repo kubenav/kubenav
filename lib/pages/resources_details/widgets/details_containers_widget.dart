@@ -25,7 +25,7 @@ class DetailsContainersWidget extends StatelessWidget {
   final List<IoK8sApiCoreV1Container> containers;
   final List<IoK8sApiCoreV1ContainerStatus> initContainerStatuses;
   final List<IoK8sApiCoreV1ContainerStatus> containerStatuses;
-  final RxList<ApisMetricsV1beta1PodMetricsItemContainer> containerMetrics;
+  final List<ApisMetricsV1beta1PodMetricsItemContainer> containerMetrics;
 
   List<String> getSubtitle(
       String containerType, IoK8sApiCoreV1Container container) {
@@ -64,76 +64,72 @@ class DetailsContainersWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () {
-        return AppHorizontalListCardsWidget(
-          title: 'Containers',
-          cards: [
-            ...List.generate(
-              initContainers.length,
-              (index) => AppHorizontalListCardsModel(
-                title: initContainers[index].name,
-                subtitle: getSubtitle('Init Container', initContainers[index]),
-                image: 'assets/resources/image108x108/containers.png',
-                imageFit: BoxFit.none,
-                onTap: () {
-                  Get.bottomSheet(
-                    BottomSheet(
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(Constants.sizeBorderRadius),
-                      ),
-                      onClosing: () {},
-                      enableDrag: false,
-                      builder: (builder) {
-                        return DetailsContainerWidget(
-                          containerType: 'Init Container',
-                          container: initContainers[index],
-                          initContainerStatuses: initContainerStatuses,
-                          containerStatuses: containerStatuses,
-                          containerMetrics: containerMetrics,
-                        );
-                      },
-                    ),
-                    isScrollControlled: true,
-                  );
-                },
-              ),
-            ),
-            ...List.generate(
-              containers.length,
-              (index) => AppHorizontalListCardsModel(
-                title: containers[index].name,
-                subtitle: getSubtitle('Container', containers[index]),
-                image: 'assets/resources/image108x108/containers.png',
-                imageFit: BoxFit.none,
-                onTap: () {
-                  Get.bottomSheet(
-                    BottomSheet(
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(Constants.sizeBorderRadius),
-                      ),
-                      onClosing: () {},
-                      enableDrag: false,
-                      builder: (builder) {
-                        return DetailsContainerWidget(
-                          containerType: 'Container',
-                          container: containers[index],
-                          initContainerStatuses: initContainerStatuses,
-                          containerStatuses: containerStatuses,
-                          containerMetrics: containerMetrics,
-                        );
-                      },
-                    ),
-                    isScrollControlled: true,
-                  );
-                },
-              ),
-            ),
-          ],
-        );
-      },
+    return AppHorizontalListCardsWidget(
+      title: 'Containers',
+      cards: [
+        ...List.generate(
+          initContainers.length,
+          (index) => AppHorizontalListCardsModel(
+            title: initContainers[index].name,
+            subtitle: getSubtitle('Init Container', initContainers[index]),
+            image: 'assets/resources/image108x108/containers.png',
+            imageFit: BoxFit.none,
+            onTap: () {
+              Get.bottomSheet(
+                BottomSheet(
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(Constants.sizeBorderRadius),
+                  ),
+                  onClosing: () {},
+                  enableDrag: false,
+                  builder: (builder) {
+                    return DetailsContainerWidget(
+                      containerType: 'Init Container',
+                      container: initContainers[index],
+                      initContainerStatuses: initContainerStatuses,
+                      containerStatuses: containerStatuses,
+                      containerMetrics: containerMetrics,
+                    );
+                  },
+                ),
+                isScrollControlled: true,
+              );
+            },
+          ),
+        ),
+        ...List.generate(
+          containers.length,
+          (index) => AppHorizontalListCardsModel(
+            title: containers[index].name,
+            subtitle: getSubtitle('Container', containers[index]),
+            image: 'assets/resources/image108x108/containers.png',
+            imageFit: BoxFit.none,
+            onTap: () {
+              Get.bottomSheet(
+                BottomSheet(
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(Constants.sizeBorderRadius),
+                  ),
+                  onClosing: () {},
+                  enableDrag: false,
+                  builder: (builder) {
+                    return DetailsContainerWidget(
+                      containerType: 'Container',
+                      container: containers[index],
+                      initContainerStatuses: initContainerStatuses,
+                      containerStatuses: containerStatuses,
+                      containerMetrics: containerMetrics,
+                    );
+                  },
+                ),
+                isScrollControlled: true,
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

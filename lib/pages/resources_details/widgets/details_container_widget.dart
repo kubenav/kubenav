@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:get/get.dart';
-
 import 'package:kubenav/models/kubernetes-extensions/pod_metrics.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_status.dart';
@@ -27,7 +25,7 @@ class DetailsContainerWidget extends StatelessWidget {
   final IoK8sApiCoreV1Container container;
   final List<IoK8sApiCoreV1ContainerStatus> initContainerStatuses;
   final List<IoK8sApiCoreV1ContainerStatus> containerStatuses;
-  final RxList<ApisMetricsV1beta1PodMetricsItemContainer> containerMetrics;
+  final List<ApisMetricsV1beta1PodMetricsItemContainer> containerMetrics;
 
   List<Widget> buildStatus() {
     List<IoK8sApiCoreV1ContainerStatus> status = [];

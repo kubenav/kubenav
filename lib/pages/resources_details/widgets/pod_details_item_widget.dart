@@ -22,6 +22,7 @@ class PodDetailsItemController extends GetxController {
   PortForwardingController portForwardingController = Get.find();
 
   final IoK8sApiCoreV1Pod? pod;
+  RxBool isLoadingMetricsFinished = false.obs;
   RxList<ApisMetricsV1beta1PodMetricsItemContainer> metrics =
       <ApisMetricsV1beta1PodMetricsItemContainer>[].obs;
 
@@ -126,6 +127,8 @@ class PodDetailsItemController extends GetxController {
         metrics.value = [];
       }
     }
+
+    isLoadingMetricsFinished.value = true;
   }
 }
 
@@ -238,13 +241,21 @@ class PodDetailsItemWidget extends StatelessWidget
           ],
         ),
         const SizedBox(height: Constants.spacingMiddle),
-        DetailsContainersWidget(
-          initContainers: pod.spec!.initContainers,
-          containers: pod.spec!.containers,
-          initContainerStatuses: pod.status!.initContainerStatuses,
-          containerStatuses: pod.status!.containerStatuses,
-          containerMetrics: controller.metrics,
-        ),
+        Obx(() {
+          if (controller.isLoadingMetricsFinished.value) {
+            return DetailsContainersWidget(
+              initContainers: pod.spec!.initContainers,
+              containers: pod.spec!.containers,
+              initContainerStatuses: pod.status!.initContainerStatuses,
+              containerStatuses: pod.status!.containerStatuses,
+              containerMetrics: controller.metrics,
+            );
+          } else {
+            return const CircularProgressIndicator(
+              color: Constants.colorPrimary,
+            );
+          }
+        }),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsResourcesPreviewWidget(
           title: Resources.map['events']!.title,
