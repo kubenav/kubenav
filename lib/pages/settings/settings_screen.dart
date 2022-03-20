@@ -164,7 +164,8 @@ class Settings extends GetView<SettingsController> {
                         const SizedBox(width: Constants.spacingSmall),
                         Expanded(
                           child: Text(
-                            controller.clusterController.getActiveClusterName(),
+                            controller
+                                .clusterController.clusters[index].value.name,
                             style: noramlTextStyle(),
                             overflow: TextOverflow.ellipsis,
                           ),

@@ -6,9 +6,11 @@ import 'package:kubenav/controllers/provider_config_controller.dart';
 import 'package:kubenav/models/provider_config_model.dart';
 import 'package:kubenav/models/provider_model.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_azure_widget.dart';
+import 'package:kubenav/pages/clusters/widgets/add_cluster_digitalocean_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_kubeconfig_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_manual_widget.dart';
 import 'package:kubenav/pages/providers/widgets/azure_provider_config_widget.dart';
+import 'package:kubenav/pages/providers/widgets/digitalocean_provider_config_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_actions_widget.dart';
@@ -32,11 +34,21 @@ class ReuseProviderConfigActionsController extends GetxController {
         builder: (builder) {
           switch (provider) {
             case 'manual':
-              return AddClusterManualWidget(provider: Providers.manual);
+              return AddClusterManualWidget(
+                provider: Providers.manual,
+              );
             case 'kubeconfig':
-              return AddClusterKubeconfigWidget(provider: Providers.kubeconfig);
+              return AddClusterKubeconfigWidget(
+                provider: Providers.kubeconfig,
+              );
             case 'azure':
-              return AddClusterAzureWidget(providerConfig: providerConfig);
+              return AddClusterAzureWidget(
+                providerConfig: providerConfig,
+              );
+            case 'digitalocean':
+              return AddClusterDigitalOceanWidget(
+                providerConfig: providerConfig,
+              );
             default:
               return AddClusterManualWidget(provider: Providers.manual);
           }
@@ -57,11 +69,19 @@ class ReuseProviderConfigActionsController extends GetxController {
         builder: (builder) {
           switch (provider) {
             case 'manual':
-              return AddClusterManualWidget(provider: Providers.manual);
+              return AddClusterManualWidget(
+                provider: Providers.manual,
+              );
             case 'kubeconfig':
-              return AddClusterKubeconfigWidget(provider: Providers.kubeconfig);
+              return AddClusterKubeconfigWidget(
+                provider: Providers.kubeconfig,
+              );
             case 'azure':
               return const AzureProviderConfigWidget(
+                providerConfigIndex: -1,
+              );
+            case 'digitalocean':
+              return const DigitalOceanProviderConfigWidget(
                 providerConfigIndex: -1,
               );
             default:

@@ -96,19 +96,31 @@ class ClusterItemWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          cluster.name,
-                          style: primaryTextStyle(),
-                        ),
-                        Text(
-                          provider != null ? provider!.title : '-',
-                          style: secondaryTextStyle(),
-                        ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            Characters(cluster.name)
+                                .replaceAll(
+                                    Characters(''), Characters('\u{200B}'))
+                                .toString(),
+                            style: primaryTextStyle(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            Characters(provider != null ? provider!.title : '-')
+                                .replaceAll(
+                                    Characters(''), Characters('\u{200B}'))
+                                .toString(),
+                            style: secondaryTextStyle(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
                     Icon(
                       isActiveCluster

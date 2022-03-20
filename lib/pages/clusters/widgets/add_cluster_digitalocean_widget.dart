@@ -1,0 +1,239 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+import 'package:yaml/yaml.dart';
+
+import 'package:kubenav/controllers/cluster_controller.dart';
+import 'package:kubenav/models/kubeconfig_model.dart';
+import 'package:kubenav/models/provider_config_model.dart';
+import 'package:kubenav/models/provider_model.dart';
+import 'package:kubenav/services/digitalocean_service.dart';
+import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/logger.dart';
+import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
+import 'package:kubenav/widgets/app_error_widget.dart';
+
+class AddClusterDigitalOceanController extends GetxController {
+  ClusterController clusterController = Get.find();
+  final ProviderConfig providerConfig;
+  RxString error = ''.obs;
+  RxBool loading = false.obs;
+  RxList<DigitalOceanCluster> clusters = <DigitalOceanCluster>[].obs;
+  RxList<DigitalOceanCluster> selectedClusters = <DigitalOceanCluster>[].obs;
+
+  AddClusterDigitalOceanController({
+    required this.providerConfig,
+  });
+
+  @override
+  void onInit() {
+    getClusters();
+    super.onInit();
+  }
+
+  void getClusters() async {
+    loading.value = true;
+
+    try {
+      if (providerConfig.digitalocean != null) {
+        final tmpClusters = await DigitalOceanService().getClusters(
+          providerConfig.digitalocean!.token,
+        );
+
+        Logger.log(
+          'AddClusterDigitalOceanController getClusters',
+          'Clusters were returned',
+          tmpClusters,
+        );
+
+        for (var i = 0; i < tmpClusters.length; i++) {
+          final kubeconfig = await DigitalOceanService().getKubeconfig(
+            tmpClusters[i].id!,
+            providerConfig.digitalocean!.token,
+          );
+          tmpClusters[i].kubeconfig = Kubeconfig.fromJson(
+            json.decode(
+              json.encode(
+                loadYaml(
+                  kubeconfig,
+                ),
+              ),
+            ),
+          );
+        }
+
+        clusters.value = tmpClusters;
+      } else {
+        error.value = 'Provider configuration is invalid';
+      }
+    } catch (err) {
+      Logger.log(
+        'AddClusterDigitalOceanController getClusters',
+        'Could not get clusters',
+        err,
+      );
+      error.value = err.toString();
+    }
+
+    loading.value = false;
+  }
+
+  void addClusters() {
+    for (var selectedCluster in selectedClusters) {
+      if (selectedCluster.name != null && selectedCluster.kubeconfig != null) {
+        final tmpClusters = selectedCluster.kubeconfig!
+            .getClusters('digitalocean', providerConfig.name);
+        for (var tmpCluster in tmpClusters) {
+          tmpCluster.name = selectedCluster.name!;
+          final addClusterError = clusterController.addCluster(tmpCluster);
+          if (addClusterError != null) {
+            snackbar(
+              'Could not add cluster ${tmpCluster.name}',
+              addClusterError,
+            );
+          }
+        }
+      }
+    }
+  }
+}
+
+class AddClusterDigitalOceanWidget extends StatelessWidget {
+  const AddClusterDigitalOceanWidget({
+    Key? key,
+    required this.providerConfig,
+  }) : super(key: key);
+
+  final ProviderConfig providerConfig;
+
+  @override
+  Widget build(BuildContext context) {
+    AddClusterDigitalOceanController controller = Get.put(
+      AddClusterDigitalOceanController(providerConfig: providerConfig),
+    );
+
+    return AppBottomSheetWidget(
+      title: Providers.digitalocean.title,
+      subtitle: Providers.digitalocean.subtitle,
+      icon: Providers.digitalocean.image54x54,
+      onClosePressed: () {
+        finish(context);
+      },
+      actionText: 'Add Clusters',
+      onActionPressed: () {
+        controller.addClusters();
+        finish(context);
+      },
+      child: Obx(
+        () {
+          if (controller.loading.value) {
+            return Flex(
+              direction: Axis.vertical,
+              children: [
+                Expanded(
+                  child: Wrap(
+                    children: const [
+                      CircularProgressIndicator(color: Constants.colorPrimary),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          }
+
+          if (controller.error.value != '') {
+            return Flex(
+              direction: Axis.vertical,
+              children: [
+                Expanded(
+                  child: Wrap(
+                    children: [
+                      AppErrorWidget(
+                        message: 'Could not load clusters',
+                        details: controller.error.value,
+                        icon: Providers.digitalocean.image250x140,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          }
+
+          return ListView(
+            children: [
+              ...List.generate(
+                controller.clusters.length,
+                (index) {
+                  return Container(
+                    margin: const EdgeInsets.only(
+                      top: Constants.spacingSmall,
+                      bottom: Constants.spacingSmall,
+                      left: Constants.spacingExtraSmall,
+                      right: Constants.spacingExtraSmall,
+                    ),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Constants.shadowColorGlobal,
+                          blurRadius: Constants.sizeBorderBlurRadius,
+                          spreadRadius: Constants.sizeBorderSpreadRadius,
+                          offset: const Offset(0.0, 0.0),
+                        ),
+                      ],
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(Constants.sizeBorderRadius),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          checkColor: Colors.white,
+                          fillColor: MaterialStateProperty.all(
+                            Constants.colorPrimary,
+                          ),
+                          value: controller.selectedClusters
+                                  .where((c) =>
+                                      c.name == controller.clusters[index].name)
+                                  .toList()
+                                  .length ==
+                              1,
+                          onChanged: (bool? value) {
+                            if (value == true) {
+                              controller.selectedClusters
+                                  .add(controller.clusters[index]);
+                            }
+                            if (value == false) {
+                              controller.selectedClusters.value = controller
+                                  .selectedClusters
+                                  .where((c) =>
+                                      c.name != controller.clusters[index].name)
+                                  .toList();
+                            }
+                          },
+                        ),
+                        const SizedBox(width: Constants.spacingSmall),
+                        Expanded(
+                          child: Text(
+                            controller.clusters[index].name ?? '',
+                            style: noramlTextStyle(),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          flex: 1,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}

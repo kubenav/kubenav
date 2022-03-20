@@ -168,7 +168,7 @@ class AzureProviderConfigWidget extends StatelessWidget {
                 keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
-                maxLines: null,
+                maxLines: 1,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Name',
@@ -185,7 +185,7 @@ class AzureProviderConfigWidget extends StatelessWidget {
                 keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
-                maxLines: null,
+                maxLines: 1,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Subscription ID',
@@ -202,7 +202,7 @@ class AzureProviderConfigWidget extends StatelessWidget {
                 keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
-                maxLines: null,
+                maxLines: 1,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Tenant ID',
@@ -219,7 +219,7 @@ class AzureProviderConfigWidget extends StatelessWidget {
                 keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
-                maxLines: null,
+                maxLines: 1,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Client ID',
@@ -236,7 +236,7 @@ class AzureProviderConfigWidget extends StatelessWidget {
                 keyboardType: TextInputType.text,
                 autocorrect: false,
                 enableSuggestions: false,
-                maxLines: null,
+                maxLines: 1,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Client Secret',

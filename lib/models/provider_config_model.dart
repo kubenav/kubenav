@@ -4,11 +4,13 @@ class ProviderConfig {
   String name;
   String provider;
   ProviderConfigAzure? azure;
+  ProviderConfigDigitalOcean? digitalocean;
 
   ProviderConfig({
     required this.name,
     required this.provider,
     this.azure,
+    this.digitalocean,
   });
 
   factory ProviderConfig.fromJson(Map<String, dynamic> json) => ProviderConfig(
@@ -16,6 +18,9 @@ class ProviderConfig {
         provider: json['provider'] ?? '',
         azure: json['azure'] != null
             ? ProviderConfigAzure.fromJson(json['azure'])
+            : null,
+        digitalocean: json['digitalocean'] != null
+            ? ProviderConfigDigitalOcean.fromJson(json['digitalocean'])
             : null,
       );
 
@@ -25,6 +30,9 @@ class ProviderConfig {
     data['provider'] = provider;
     if (azure != null) {
       data['azure'] = azure!.toJson();
+    }
+    if (digitalocean != null) {
+      data['digitalocean'] = digitalocean!.toJson();
     }
     return data;
   }
@@ -63,5 +71,24 @@ class ProviderConfigAzure {
         'clientID': clientID,
         'clientSecret': clientSecret,
         'isAdmin': isAdmin,
+      };
+}
+
+/// A [ProviderConfigDigitalOcean] represents the provider configuration for the `digitalocean` provider. To get the
+/// clusters from DigitalOcean an API [token] is required.
+class ProviderConfigDigitalOcean {
+  String token;
+
+  ProviderConfigDigitalOcean({
+    required this.token,
+  });
+
+  factory ProviderConfigDigitalOcean.fromJson(Map<String, dynamic> json) =>
+      ProviderConfigDigitalOcean(
+        token: json['token'] ?? '',
+      );
+
+  Map<String, dynamic> toJson() => {
+        'token': token,
       };
 }
