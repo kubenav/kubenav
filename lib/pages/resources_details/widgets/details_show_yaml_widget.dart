@@ -1,4 +1,4 @@
-import 'dart:io' show Platform;
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 
@@ -6,6 +6,7 @@ import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter_highlight/themes/nord.dart';
 import 'package:get/get.dart';
 import 'package:highlight/languages/yaml.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:kubenav/services/helpers_service.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -42,6 +43,36 @@ class DetailsShowYamlController extends GetxController {
       );
     }
   }
+
+  void export() async {
+    try {
+      if (codeController != null) {
+        final name =
+            item.containsKey('metadata') && item['metadata'].containsKey('name')
+                ? item['metadata']['name']
+                : 'manifest';
+
+        final directory = await getApplicationDocumentsDirectory();
+        final file = File('${directory.path}/$name.yaml');
+        await file.writeAsString(codeController!.text);
+
+        snackbar(
+          'Manifest was exported',
+          'The manifest was exported as $name.yaml',
+        );
+      }
+    } catch (err) {
+      Logger.log(
+        'DetailsShowYamlController export',
+        'Could not export manifest: $err',
+        err,
+      );
+      snackbar(
+        'Could not export manifest',
+        err.toString(),
+      );
+    }
+  }
 }
 
 class DetailsShowYamlWidget extends StatelessWidget {
@@ -65,8 +96,9 @@ class DetailsShowYamlWidget extends StatelessWidget {
       onClosePressed: () {
         finish(context);
       },
-      actionText: 'Close',
+      actionText: 'Export',
       onActionPressed: () {
+        controller.export();
         finish(context);
       },
       child: Form(

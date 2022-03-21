@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/controllers/provider_config_controller.dart';
-
 import 'package:kubenav/models/cluster_model.dart';
 import 'package:kubenav/services/aws_service.dart';
 import 'package:kubenav/utils/logger.dart';
