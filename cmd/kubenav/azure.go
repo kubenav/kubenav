@@ -26,18 +26,24 @@ func AzureGetClusters(subscriptionID, tenantID, clientID, clientSecret string, i
 		return "", err
 	}
 
+	managedClustersClient, err := armcontainerservice.NewManagedClustersClient(subscriptionID, credentials, &arm.ClientOptions{})
+	if err != nil {
+		return "", err
+	}
+
 	ctx := context.Background()
-	managedClustersClient := armcontainerservice.NewManagedClustersClient(subscriptionID, credentials, &arm.ClientOptions{})
 	var managedClusters []*armcontainerservice.ManagedCluster
 	var clusters []AzureCluster
 
-	pager := managedClustersClient.List(&armcontainerservice.ManagedClustersClientListOptions{})
-	if pager.Err() != nil {
-		return "", pager.Err()
-	}
+	pager := managedClustersClient.NewListPager(&armcontainerservice.ManagedClustersClientListOptions{})
 
-	for pager.NextPage(ctx) {
-		managedClusters = append(managedClusters, pager.PageResponse().Value...)
+	for pager.More() {
+		page, err := pager.NextPage(ctx)
+		if err != nil {
+			return "", err
+		}
+
+		managedClusters = append(managedClusters, page.Value...)
 	}
 
 	for _, managedCluster := range managedClusters {
