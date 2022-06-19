@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -201,29 +202,50 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                       dotData: FlDotData(
                                         show: false,
                                       ),
-                                      colors: [Constants.colorPrimary],
-                                      colorStops: [0.1, 1.0],
+                                      color: Constants.colorPrimary,
                                       barWidth: 4,
                                       isCurved: false,
                                     ))
                                 .toList(),
                             titlesData: FlTitlesData(
                               show: true,
-                              rightTitles: SideTitles(showTitles: false),
-                              topTitles: SideTitles(showTitles: false),
-                              leftTitles: SideTitles(showTitles: false),
-                              bottomTitles: SideTitles(
-                                showTitles: true,
-                                getTextStyles: (context, value) =>
-                                    secondaryTextStyle(),
-                                margin: 16,
-                                rotateAngle: 45,
-                                getTitles: (double value) {
-                                  final timestamp =
-                                      DateTime.fromMillisecondsSinceEpoch(
-                                          value.round());
-                                  return '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}';
-                                },
+                              rightTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: false,
+                                ),
+                              ),
+                              topTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: false,
+                                ),
+                              ),
+                              leftTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: false,
+                                ),
+                              ),
+                              bottomTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  reservedSize: 32,
+                                  getTitlesWidget: (value, titleMeta) {
+                                    final timestamp =
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            value.round());
+
+                                    return Container(
+                                      // You can use any widget here
+                                      margin: const EdgeInsets.only(top: 16),
+                                      child: Transform.rotate(
+                                        angle: pi / 4,
+                                        child: Text(
+                                          '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}',
+                                          style: secondaryTextStyle(),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                             borderData: FlBorderData(show: false),
@@ -334,29 +356,50 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                       dotData: FlDotData(
                                         show: false,
                                       ),
-                                      colors: [Constants.colorPrimary],
-                                      colorStops: [0.1, 1.0],
+                                      color: Constants.colorPrimary,
                                       barWidth: 4,
                                       isCurved: false,
                                     ))
                                 .toList(),
                             titlesData: FlTitlesData(
                               show: true,
-                              rightTitles: SideTitles(showTitles: false),
-                              topTitles: SideTitles(showTitles: false),
-                              leftTitles: SideTitles(showTitles: false),
-                              bottomTitles: SideTitles(
-                                showTitles: true,
-                                getTextStyles: (context, value) =>
-                                    secondaryTextStyle(),
-                                margin: 16,
-                                rotateAngle: 45,
-                                getTitles: (double value) {
-                                  final timestamp =
-                                      DateTime.fromMillisecondsSinceEpoch(
-                                          value.round());
-                                  return '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}';
-                                },
+                              rightTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: false,
+                                ),
+                              ),
+                              topTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: false,
+                                ),
+                              ),
+                              leftTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: false,
+                                ),
+                              ),
+                              bottomTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  reservedSize: 32,
+                                  getTitlesWidget: (value, titleMeta) {
+                                    final timestamp =
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            value.round());
+
+                                    return Container(
+                                      // You can use any widget here
+                                      margin: const EdgeInsets.only(top: 16),
+                                      child: Transform.rotate(
+                                        angle: pi / 4,
+                                        child: Text(
+                                          '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}',
+                                          style: secondaryTextStyle(),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                             borderData: FlBorderData(show: false),

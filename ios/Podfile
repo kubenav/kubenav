@@ -27,6 +27,9 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 
 flutter_ios_podfile_setup
 
+Pod::PICKER_MEDIA = false
+Pod::PICKER_AUDIO = false
+
 target 'Runner' do
   use_frameworks!
   use_modular_headers!

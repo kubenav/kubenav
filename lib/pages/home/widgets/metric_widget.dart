@@ -389,7 +389,7 @@ class MetricWidget extends StatelessWidget {
                                   toY: controller.metrics[0]
                                       .metrics[metricType]!.allocatable
                                       .toDouble(),
-                                  colors: [Constants.colorPrimary],
+                                  color: Constants.colorPrimary,
                                   width: 25,
                                   borderRadius:
                                       const BorderRadius.all(Radius.zero),
@@ -403,7 +403,7 @@ class MetricWidget extends StatelessWidget {
                                   toY: controller
                                       .metrics[0].metrics[metricType]!.usage
                                       .toDouble(),
-                                  colors: [Constants.colorPrimary],
+                                  color: Constants.colorPrimary,
                                   width: 25,
                                   borderRadius:
                                       const BorderRadius.all(Radius.zero),
@@ -417,7 +417,7 @@ class MetricWidget extends StatelessWidget {
                                   toY: controller
                                       .metrics[0].metrics[metricType]!.requests
                                       .toDouble(),
-                                  colors: [Constants.colorPrimary],
+                                  color: Constants.colorPrimary,
                                   width: 25,
                                   borderRadius:
                                       const BorderRadius.all(Radius.zero),
@@ -431,7 +431,7 @@ class MetricWidget extends StatelessWidget {
                                   toY: controller
                                       .metrics[0].metrics[metricType]!.limits
                                       .toDouble(),
-                                  colors: [Constants.colorPrimary],
+                                  color: Constants.colorPrimary,
                                   width: 25,
                                   borderRadius:
                                       const BorderRadius.all(Radius.zero),
@@ -485,28 +485,49 @@ class MetricWidget extends StatelessWidget {
                           ),
                           titlesData: FlTitlesData(
                             show: true,
-                            rightTitles: SideTitles(showTitles: false),
-                            topTitles: SideTitles(showTitles: false),
-                            leftTitles: SideTitles(showTitles: false),
-                            bottomTitles: SideTitles(
-                              showTitles: true,
-                              getTextStyles: (context, value) =>
-                                  secondaryTextStyle(),
-                              margin: 16,
-                              getTitles: (double value) {
-                                switch (value.toInt()) {
-                                  case 0:
-                                    return 'Allocatable';
-                                  case 1:
-                                    return 'Usage';
-                                  case 2:
-                                    return 'Requests';
-                                  case 3:
-                                    return 'Limits';
-                                  default:
-                                    return '';
-                                }
-                              },
+                            rightTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: false,
+                              ),
+                            ),
+                            topTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: false,
+                              ),
+                            ),
+                            leftTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: false,
+                              ),
+                            ),
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                reservedSize: 32,
+                                getTitlesWidget: (value, titleMeta) {
+                                  var title = '';
+                                  if (value.toInt() == 0) {
+                                    title = 'Allocatable';
+                                  } else if (value.toInt() == 1) {
+                                    title = 'Usage';
+                                  } else if (value.toInt() == 2) {
+                                    title = 'Requests';
+                                  } else if (value.toInt() == 3) {
+                                    title = 'Limits';
+                                  }
+
+                                  return Padding(
+                                    // You can use any widget here
+                                    padding: const EdgeInsets.only(top: 16),
+                                    child: Text(
+                                      title,
+                                      style: secondaryTextStyle(),
+                                      textDirection: TextDirection.rtl,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                           borderData: FlBorderData(show: false),

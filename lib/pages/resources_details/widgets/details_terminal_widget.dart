@@ -253,7 +253,7 @@ class DetailsTerminalWidget extends StatelessWidget {
                       items: [
                         'sh',
                         'bash',
-                        'powershell',
+                        'pwsh',
                         'cmd',
                       ].map((value) {
                         return DropdownMenuItem(
