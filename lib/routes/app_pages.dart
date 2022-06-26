@@ -4,6 +4,8 @@ import 'package:kubenav/pages/clusters/clusters_binding.dart';
 import 'package:kubenav/pages/clusters/clusters_screen.dart';
 import 'package:kubenav/pages/home/home_binding.dart';
 import 'package:kubenav/pages/home/home_screen.dart';
+import 'package:kubenav/pages/plugins/pages/helm_details/helm_details_screen.dart';
+import 'package:kubenav/pages/plugins/pages/helm_list/helm_list_screen.dart';
 import 'package:kubenav/pages/plugins/plugins_binding.dart';
 import 'package:kubenav/pages/plugins/plugins_screen.dart';
 import 'package:kubenav/pages/providers/providers_binding.dart';
@@ -56,6 +58,14 @@ abstract class AppPages {
       name: Routes.plugins,
       page: () => const Plugins(),
       binding: PluginsBinding(),
+    ),
+    GetPage(
+      name: Routes.pluginsHelmList,
+      page: () => const HelmList(),
+    ),
+    GetPage(
+      name: Routes.pluginsHelmDetails,
+      page: () => const HelmDetails(),
     ),
     GetPage(
       name: Routes.settings,

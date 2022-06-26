@@ -138,7 +138,58 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       if (accountID == null || roleName == null || ssoRegion == null || ssoClientID == null || ssoClientSecret == null || ssoDeviceCode == null || accessToken == null || accessTokenExpire == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        awsGetSSOToken(startURL, accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, region, accessToken, accessTokenExpire, result)
+        awsGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, accessToken, accessTokenExpire, result)
+      }
+    } else if (call.method == "helmListCharts") {
+      val clusterServer = call.argument("clusterServer") as String?
+      val clusterCertificateAuthorityData = call.argument("clusterCertificateAuthorityData") as String?
+      val clusterInsecureSkipTLSVerify = call.argument("clusterInsecureSkipTLSVerify") as Boolean?
+      val userClientCertificateData = call.argument("userClientCertificateData") as String?
+      val userClientKeyData = call.argument("userClientKeyData") as String?
+      val userToken = call.argument("userToken") as String?
+      val userUsername = call.argument("userUsername") as String?
+      val userPassword = call.argument("userPassword") as String?
+      val namespace = call.argument("namespace") as String?
+
+      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || namespace == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        helmListCharts(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, result)
+      }
+    } else if (call.method == "helmGetChart") {
+      val clusterServer = call.argument("clusterServer") as String?
+      val clusterCertificateAuthorityData = call.argument("clusterCertificateAuthorityData") as String?
+      val clusterInsecureSkipTLSVerify = call.argument("clusterInsecureSkipTLSVerify") as Boolean?
+      val userClientCertificateData = call.argument("userClientCertificateData") as String?
+      val userClientKeyData = call.argument("userClientKeyData") as String?
+      val userToken = call.argument("userToken") as String?
+      val userUsername = call.argument("userUsername") as String?
+      val userPassword = call.argument("userPassword") as String?
+      val namespace = call.argument("namespace") as String?
+      val name = call.argument("name") as String?
+      val version = call.argument("version") as kotlin.Int?
+
+      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || namespace == null || name == null || version == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        helmGetChart(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name, version, result)
+      }
+    } else if (call.method == "helmGetHistory") {
+      val clusterServer = call.argument("clusterServer") as String?
+      val clusterCertificateAuthorityData = call.argument("clusterCertificateAuthorityData") as String?
+      val clusterInsecureSkipTLSVerify = call.argument("clusterInsecureSkipTLSVerify") as Boolean?
+      val userClientCertificateData = call.argument("userClientCertificateData") as String?
+      val userClientKeyData = call.argument("userClientKeyData") as String?
+      val userToken = call.argument("userToken") as String?
+      val userUsername = call.argument("userUsername") as String?
+      val userPassword = call.argument("userPassword") as String?
+      val namespace = call.argument("namespace") as String?
+      val name = call.argument("name") as String?
+
+      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || namespace == null || name == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        helmGetHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name, result)
       }
     } else {
       result.notImplemented()
@@ -231,6 +282,33 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       result.success(data)
     } catch (e: Exception) {
       result.error("AWS_GET_SSO_TOKEN_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun helmListCharts(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, namespace: String, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.helmListCharts(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace)
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("HELM_LIST_CHARTS_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun helmGetChart(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, namespace: String, name: String, version: kotlin.Int, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.helmGetChart(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name, version.toLong())
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("HELM_GET_CHART_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun helmGetHistory(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, namespace: String, name: String, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.helmGetHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name)
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("HELM_GET_HISTORY_FAILED", e.localizedMessage, null)
     }
   }
 }

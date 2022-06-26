@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/controllers/provider_config_controller.dart';
 import 'package:kubenav/models/cluster_model.dart';
+import 'package:kubenav/models/helm_model.dart';
 import 'package:kubenav/services/aws_service.dart';
 import 'package:kubenav/utils/logger.dart';
 
@@ -570,6 +571,142 @@ class KubernetesService {
       Logger.log(
         'KubernetesService getPortForwardingSession',
         'An error was returned while returning port forwarding sessions',
+        err,
+      );
+      return Future.error(err);
+    }
+  }
+
+  /// [helmListCharts]
+  Future<List<Release>> helmListCharts(String namespace) async {
+    try {
+      final token = await _getAccessToken();
+
+      final String result = await platform.invokeMethod(
+        'helmListCharts',
+        <String, dynamic>{
+          'clusterServer': cluster.clusterServer,
+          'clusterCertificateAuthorityData':
+              cluster.clusterCertificateAuthorityData,
+          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
+          'userClientCertificateData': cluster.userClientCertificateData,
+          'userClientKeyData': cluster.userClientKeyData,
+          'userToken': token,
+          'userUsername': cluster.userUsername,
+          'userPassword': cluster.userPassword,
+          'namespace': namespace,
+        },
+      );
+
+      Logger.log(
+        'KubernetesService helmListCharts',
+        'List Helm charts was ok',
+        result,
+      );
+
+      List<dynamic> jsonData = json.decode(result);
+      final releases = <Release>[];
+      for (var release in jsonData) {
+        releases.add(Release.fromJson(release));
+      }
+      return releases;
+    } catch (err) {
+      Logger.log(
+        'KubernetesService helmListCharts',
+        'List Helm charts failed',
+        err,
+      );
+      return Future.error(err);
+    }
+  }
+
+  /// [helmGetChart]
+  Future<Release> helmGetChart(
+    String namespace,
+    String name,
+    int version,
+  ) async {
+    try {
+      final token = await _getAccessToken();
+
+      final String result = await platform.invokeMethod(
+        'helmGetChart',
+        <String, dynamic>{
+          'clusterServer': cluster.clusterServer,
+          'clusterCertificateAuthorityData':
+              cluster.clusterCertificateAuthorityData,
+          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
+          'userClientCertificateData': cluster.userClientCertificateData,
+          'userClientKeyData': cluster.userClientKeyData,
+          'userToken': token,
+          'userUsername': cluster.userUsername,
+          'userPassword': cluster.userPassword,
+          'namespace': namespace,
+          'name': name,
+          'version': version,
+        },
+      );
+
+      Logger.log(
+        'KubernetesService helmGetChart',
+        'Get Helm chart was ok',
+        result,
+      );
+
+      Map<String, dynamic> jsonData = json.decode(result);
+      Release release = Release.fromJson(jsonData);
+      return release;
+    } catch (err) {
+      Logger.log(
+        'KubernetesService helmGetChart',
+        'Get Helm chart failed',
+        err,
+      );
+      return Future.error(err);
+    }
+  }
+
+  /// [helmGetHistory]
+  Future<List<Release>> helmGetHistory(
+    String namespace,
+    String name,
+  ) async {
+    try {
+      final token = await _getAccessToken();
+
+      final String result = await platform.invokeMethod(
+        'helmGetHistory',
+        <String, dynamic>{
+          'clusterServer': cluster.clusterServer,
+          'clusterCertificateAuthorityData':
+              cluster.clusterCertificateAuthorityData,
+          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
+          'userClientCertificateData': cluster.userClientCertificateData,
+          'userClientKeyData': cluster.userClientKeyData,
+          'userToken': token,
+          'userUsername': cluster.userUsername,
+          'userPassword': cluster.userPassword,
+          'namespace': namespace,
+          'name': name,
+        },
+      );
+
+      Logger.log(
+        'KubernetesService helmGetHistory',
+        'Get Helm history was ok',
+        result,
+      );
+
+      List<dynamic> jsonData = json.decode(result);
+      final releases = <Release>[];
+      for (var release in jsonData) {
+        releases.add(Release.fromJson(release));
+      }
+      return releases;
+    } catch (err) {
+      Logger.log(
+        'KubernetesService helmGetHistory',
+        'Get Helm history failed',
         err,
       );
       return Future.error(err);

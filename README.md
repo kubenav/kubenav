@@ -44,6 +44,8 @@ storeFile=
 
 - Run `make bindings` to build the Go code
 
+- Delete old builds `rm -rf build`
+
 - Build the app: `flutter build appbundle`
 - Updload the build from `/build/app/outputs/bundle/release/app-release.aab` to https://play.google.com/apps/publish
 

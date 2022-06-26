@@ -8,6 +8,8 @@ class Routes {
   static const resourcesList = '/resources/list';
   static const resourcesListCRDs = '/resources/list/crds';
   static const plugins = '/plugins';
+  static const pluginsHelmList = '/plugins/helm/list';
+  static const pluginsHelmDetails = '/plugins/helm/details';
   static const settings = '/settings/';
   static const settingsClusters = '/settings/clusters';
   static const settingsProviders = '/settings/providers';
