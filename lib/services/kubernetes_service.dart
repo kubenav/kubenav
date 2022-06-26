@@ -62,6 +62,67 @@ class KubernetesService {
         } else {
           Future.error('could not get access token');
         }
+      } else if (cluster.provider == 'awssso' &&
+          (tokenExpireTimestamp.isBefore(DateTime.now()) ||
+              cluster.userToken == '')) {
+        final providerConfig =
+            providerConfigController.getConfig(cluster.providerConfig);
+        if (providerConfig != null && providerConfig.awssso != null) {
+          if (providerConfig.awssso!.ssoConfig.client!.clientSecretExpiresAt! *
+                  1000 <
+              DateTime.now().millisecondsSinceEpoch) {
+            Future.error(
+                'client secret is expired, you have to re-start the sso flow');
+          }
+
+          final credentials = await AWSService().getSSOToken(
+            providerConfig.awssso!.accountID,
+            providerConfig.awssso!.roleName,
+            providerConfig.awssso!.ssoRegion,
+            providerConfig.awssso!.ssoConfig.client!.clientId!,
+            providerConfig.awssso!.ssoConfig.client!.clientSecret!,
+            providerConfig.awssso!.ssoConfig.device!.deviceCode!,
+            providerConfig.awssso!.ssoCredentials.accessToken!,
+            providerConfig.awssso!.ssoCredentials.accessTokenExpire!,
+          );
+
+          Logger.log(
+            'KubernetesService _getAccessToken',
+            'getSSOToken',
+            credentials,
+          );
+
+          providerConfig.awssso!.ssoCredentials = credentials;
+          providerConfigController.editConfigByName(
+            providerConfig.name,
+            providerConfig,
+          );
+
+          final token = await AWSService().getToken(
+            credentials.accessKeyId!,
+            credentials.secretAccessKey!,
+            providerConfig.awssso!.region,
+            credentials.sessionToken!,
+            cluster.providerConfigInternal,
+          );
+
+          Logger.log(
+            'KubernetesService _getAccessToken',
+            'getToken',
+            credentials,
+          );
+
+          clusterController.setNewToken(
+            cluster.name,
+            token,
+            DateTime.now()
+                .add(const Duration(minutes: 10))
+                .microsecondsSinceEpoch,
+          );
+          return token;
+        } else {
+          Future.error('could not get access token');
+        }
       }
 
       return cluster.userToken;

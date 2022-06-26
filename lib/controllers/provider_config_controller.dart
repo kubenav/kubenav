@@ -63,6 +63,20 @@ class ProviderConfigController extends GetxController {
     return null;
   }
 
+  /// [editConfigByName] is a wrapper for [editConfig] to edit the provider configuration by it's name.
+  String? editConfigByName(
+    String name,
+    ProviderConfig config,
+  ) {
+    for (var i = 0; i < configs.length; i++) {
+      if (configs[i].value.name == name) {
+        return editConfig(i, config);
+      }
+    }
+
+    return 'Provider configuration not found';
+  }
+
   /// [deleteConfig] deletes the config with the given [index] from our [configs] list. We have to check if the config
   /// is still in use by a cluster, before this function is called.
   void deleteConfig(int index) {
@@ -77,5 +91,17 @@ class ProviderConfigController extends GetxController {
     }
 
     return null;
+  }
+
+  /// [getIndex] returns the index of provider configuration with the given name. If the provider configuration was not
+  /// found it retur `-1`.
+  int getIndex(String name) {
+    for (var i = 0; i < configs.length; i++) {
+      if (configs[i].value.name == name) {
+        return i;
+      }
+    }
+
+    return -1;
   }
 }

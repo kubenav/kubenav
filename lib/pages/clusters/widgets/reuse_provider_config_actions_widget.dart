@@ -6,11 +6,13 @@ import 'package:kubenav/controllers/provider_config_controller.dart';
 import 'package:kubenav/models/provider_config_model.dart';
 import 'package:kubenav/models/provider_model.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_aws_widget.dart';
+import 'package:kubenav/pages/clusters/widgets/add_cluster_awssso_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_azure_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_digitalocean_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_kubeconfig_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_manual_widget.dart';
 import 'package:kubenav/pages/providers/widgets/aws_provider_config_widget.dart';
+import 'package:kubenav/pages/providers/widgets/awssso_provider_config_widget.dart';
 import 'package:kubenav/pages/providers/widgets/azure_provider_config_widget.dart';
 import 'package:kubenav/pages/providers/widgets/digitalocean_provider_config_widget.dart';
 import 'package:kubenav/utils/constants.dart';
@@ -45,6 +47,10 @@ class ReuseProviderConfigActionsController extends GetxController {
               );
             case 'aws':
               return AddClusterAWSWidget(
+                providerConfig: providerConfig,
+              );
+            case 'awssso':
+              return AddClusterAWSSSOWidget(
                 providerConfig: providerConfig,
               );
             case 'azure':
@@ -84,6 +90,10 @@ class ReuseProviderConfigActionsController extends GetxController {
               );
             case 'aws':
               return const AWSProviderConfigWidget(
+                providerConfigIndex: -1,
+              );
+            case 'awssso':
+              return const AWSSSOProviderConfigWidget(
                 providerConfigIndex: -1,
               );
             case 'azure':

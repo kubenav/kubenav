@@ -116,6 +116,30 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       } else {
         awsGetToken(accessKeyID, secretKey, region, sessionToken, clusterID, result)
       }
+    } else if (call.method == "awsGetSSOConfig") {
+      val ssoRegion = call.argument("ssoRegion") as String?
+      val startURL = call.argument("startURL") as String?
+
+      if (ssoRegion == null || startURL == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        awsGetSSOConfig(ssoRegion, startURL, result)
+      }
+    } else if (call.method == "awsGetSSOToken") {
+      val accountID = call.argument("accountID") as String?
+      val roleName = call.argument("roleName") as String?
+      val ssoRegion = call.argument("ssoRegion") as String?
+      val ssoClientID = call.argument("ssoClientID") as String?
+      val ssoClientSecret = call.argument("ssoClientSecret") as String?
+      val ssoDeviceCode = call.argument("ssoDeviceCode") as String?
+      val accessToken = call.argument("accessToken") as String?
+      val accessTokenExpire = call.argument("accessTokenExpire") as kotlin.Int?
+
+      if (accountID == null || roleName == null || ssoRegion == null || ssoClientID == null || ssoClientSecret == null || ssoDeviceCode == null || accessToken == null || accessTokenExpire == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        awsGetSSOToken(startURL, accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, region, accessToken, accessTokenExpire, result)
+      }
     } else {
       result.notImplemented()
     }
@@ -189,6 +213,24 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       result.success(data)
     } catch (e: Exception) {
       result.error("AWS_GET_TOKEN_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun awsGetSSOConfig(ssoRegion: String, startURL: String, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.awsGetSSOConfig(ssoRegion, startURL)
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("AWS_GET_SSO_CONFIG_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun awsGetSSOToken(accountID: String, roleName: String, ssoRegion: String, ssoClientID: String, ssoClientSecret: String, ssoDeviceCode: String, accessToken: String, accessTokenExpire: kotlin.Int, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.awsGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, accessToken, accessTokenExpire.toLong())
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("AWS_GET_SSO_TOKEN_FAILED", e.localizedMessage, null)
     }
   }
 }

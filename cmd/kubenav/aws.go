@@ -112,7 +112,7 @@ func AWSGetToken(accessKeyID, secretKey, region, sessionToken, clusterID string)
 // authentication is returned, so that we can use the information in the following steps of the SSO flow.
 func AWSGetSSOConfig(ssoRegion, startURL string) (string, error) {
 	clientName := "kubenav"
-	clientType := "kubenav"
+	clientType := "public"
 
 	sess, err := session.NewSession()
 	if err != nil {
@@ -151,7 +151,7 @@ func AWSGetSSOConfig(ssoRegion, startURL string) (string, error) {
 
 // AWSGetSSOToken is used to request a new token with the client and device information from the former step in the sso
 // flow. The retrieved access token is then used to get the credentials for AWS.
-func AWSGetSSOToken(startURL, accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, region, accessToken string, accessTokenExpire int64) (string, error) {
+func AWSGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, accessToken string, accessTokenExpire int64) (string, error) {
 	grantType := "urn:ietf:params:oauth:grant-type:device_code"
 
 	sess, err := session.NewSession()
@@ -196,11 +196,6 @@ func AWSGetSSOToken(startURL, accountID, roleName, ssoRegion, ssoClientID, ssoCl
 		SecretAccessKey:   *creds.RoleCredentials.SecretAccessKey,
 		SessionToken:      *creds.RoleCredentials.SessionToken,
 		Expire:            *creds.RoleCredentials.Expiration,
-		Region:            region,
-		SSORegion:         ssoRegion,
-		StartURL:          startURL,
-		AccountID:         accountID,
-		RoleName:          roleName,
 		AccessToken:       accessToken,
 		AccessTokenExpire: accessTokenExpire,
 	})

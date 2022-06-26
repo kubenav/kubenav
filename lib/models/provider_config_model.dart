@@ -1,9 +1,12 @@
+import 'package:kubenav/services/aws_service.dart';
+
 /// A [ProviderConfig] represents a single provider configuration. It contains all the credentials to get the clusters
 /// from a cloud provider and for some providers also the information to get a token for the cluster.
 class ProviderConfig {
   String name;
   String provider;
   ProviderConfigAWS? aws;
+  ProviderConfigAWSSSO? awssso;
   ProviderConfigAzure? azure;
   ProviderConfigDigitalOcean? digitalocean;
 
@@ -11,6 +14,7 @@ class ProviderConfig {
     required this.name,
     required this.provider,
     this.aws,
+    this.awssso,
     this.azure,
     this.digitalocean,
   });
@@ -20,6 +24,9 @@ class ProviderConfig {
         provider: json['provider'] ?? '',
         aws: json['aws'] != null
             ? ProviderConfigAWS.fromJson(json['aws'])
+            : null,
+        awssso: json['awssso'] != null
+            ? ProviderConfigAWSSSO.fromJson(json['awssso'])
             : null,
         azure: json['azure'] != null
             ? ProviderConfigAzure.fromJson(json['azure'])
@@ -35,6 +42,9 @@ class ProviderConfig {
     data['provider'] = provider;
     if (aws != null) {
       data['aws'] = aws!.toJson();
+    }
+    if (awssso != null) {
+      data['awssso'] = awssso!.toJson();
     }
     if (azure != null) {
       data['azure'] = azure!.toJson();
@@ -74,6 +84,48 @@ class ProviderConfigAWS {
         'secretKey': secretKey,
         'region': region,
         'sessionToken': sessionToken,
+      };
+}
+
+/// A [ProviderConfigAWSSSO] represents the provider configuration for the `awssso` provider.
+class ProviderConfigAWSSSO {
+  String startURL;
+  String accountID;
+  String roleName;
+  String ssoRegion;
+  String region;
+  AWSSSOConfig ssoConfig;
+  AWSSSOCredentials ssoCredentials;
+
+  ProviderConfigAWSSSO({
+    required this.startURL,
+    required this.accountID,
+    required this.roleName,
+    required this.ssoRegion,
+    required this.region,
+    required this.ssoConfig,
+    required this.ssoCredentials,
+  });
+
+  factory ProviderConfigAWSSSO.fromJson(Map<String, dynamic> json) =>
+      ProviderConfigAWSSSO(
+        startURL: json['startURL'] ?? '',
+        accountID: json['accountID'] ?? '',
+        roleName: json['roleName'] ?? '',
+        ssoRegion: json['ssoRegion'] ?? '',
+        region: json['region'] ?? '',
+        ssoConfig: AWSSSOConfig.fromJson(json['ssoConfig']),
+        ssoCredentials: AWSSSOCredentials.fromJson(json['ssoCredentials']),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'startURL': startURL,
+        'accountID': accountID,
+        'roleName': roleName,
+        'ssoRegion': ssoRegion,
+        'region': region,
+        'ssoConfig': ssoConfig.toJson(),
+        'ssoCredentials': ssoCredentials.toJson(),
       };
 }
 

@@ -62,14 +62,14 @@ abstract class Providers {
     image54x54: 'assets/provider/image54x54/digitalocean54x54.png',
     image250x140: 'assets/provider/image250x140/digitalocean250x140.png',
   );
-  // static final awssso = Provider(
-  //   name: 'awssso',
-  //   title: 'AWS Single Sign-On',
-  //   subtitle: 'Import your EKS clusters via AWS SSO',
-  //   image42x42: 'assets/provider/image42x42/aws42x42.png',
-  //   image54x54: 'assets/provider/image54x54/aws54x54.png',
-  //   image250x140: 'assets/provider/image250x140/aws250x140.png',
-  // );
+  static final awssso = Provider(
+    name: 'awssso',
+    title: 'AWS Single Sign-On',
+    subtitle: 'Import your EKS clusters via AWS SSO',
+    image42x42: 'assets/provider/image42x42/aws42x42.png',
+    image54x54: 'assets/provider/image54x54/aws54x54.png',
+    image250x140: 'assets/provider/image250x140/aws250x140.png',
+  );
   // static final oidc = Provider(
   //   name: 'oidc',
   //   title: 'OIDC',
@@ -90,6 +90,7 @@ abstract class Providers {
   static List<Provider> list = [
     kubeconfig,
     aws,
+    awssso,
     azure,
     digitalocean,
     manual,

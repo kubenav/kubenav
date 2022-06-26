@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/pages/providers/widgets/reauthenticate/awssso_provider_config_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -36,6 +37,14 @@ class AppErrorWidget extends StatelessWidget {
       color: Colors.white,
       size: 108,
     );
+  }
+
+  Widget buildReauthWidget(String details) {
+    if (details.contains('aws_sso_access_token_is_expired')) {
+      return const AWSSSOProviderReauthenticateWidget();
+    }
+
+    return Container();
   }
 
   @override
@@ -95,6 +104,7 @@ class AppErrorWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: Constants.spacingSmall),
+          buildReauthWidget(details),
         ],
       ),
     );

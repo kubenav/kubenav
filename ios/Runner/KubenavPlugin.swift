@@ -106,6 +106,30 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
+    } else if call.method == "awsGetSSOConfig" {
+      if let args = call.arguments as? Dictionary<String, Any>,
+        let ssoRegion = args["ssoRegion"] as? String,
+        let startURL = args["startURL"] as? String
+      {
+        awsGetSSOConfig(ssoRegion: ssoRegion, startURL: startURL, result: result)
+      } else {
+        result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
+      }
+    } else if call.method == "awsGetSSOToken" {
+      if let args = call.arguments as? Dictionary<String, Any>,
+        let accountID = args["accountID"] as? String,
+        let roleName = args["roleName"] as? String,
+        let ssoRegion = args["ssoRegion"] as? String,
+        let ssoClientID = args["ssoClientID"] as? String,
+        let ssoClientSecret = args["ssoClientSecret"] as? String,
+        let ssoDeviceCode = args["ssoDeviceCode"] as? String,
+        let accessToken = args["accessToken"] as? String,
+        let accessTokenExpire = args["accessTokenExpire"] as? Int64
+      {
+        awsGetSSOToken(accountID: accountID, roleName: roleName, ssoRegion: ssoRegion, ssoClientID: ssoClientID, ssoClientSecret: ssoClientSecret, ssoDeviceCode: ssoDeviceCode, accessToken: accessToken, accessTokenExpire: accessTokenExpire, result: result)
+      } else {
+        result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
+      }
     } else {
       result(FlutterMethodNotImplemented)
     }
@@ -190,6 +214,28 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     let data = KubenavAWSGetToken(accessKeyID, secretKey, region, sessionToken, clusterID, &error)
     if error != nil {
       result(FlutterError(code: "AWS_GET_TOKEN_FAILED", message: error?.localizedDescription ?? "", details: nil))
+    } else {
+      result(data)
+    }
+  }
+
+  private func awsGetSSOConfig(ssoRegion: String, startURL: String, result: FlutterResult) {
+    var error: NSError?
+
+    let data = KubenavAWSGetSSOConfig(ssoRegion, startURL, &error)
+    if error != nil {
+      result(FlutterError(code: "AWS_GET_SSO_CONFIG_FAILED", message: error?.localizedDescription ?? "", details: nil))
+    } else {
+      result(data)
+    }
+  }
+
+  private func awsGetSSOToken(accountID: String, roleName: String, ssoRegion: String, ssoClientID: String, ssoClientSecret: String, ssoDeviceCode: String, accessToken: String, accessTokenExpire: Int64, result: FlutterResult) {
+    var error: NSError?
+
+    let data = KubenavAWSGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, accessToken, accessTokenExpire, &error)
+    if error != nil {
+      result(FlutterError(code: "AWS_GET_SSO_TOKEN_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
       result(data)
     }

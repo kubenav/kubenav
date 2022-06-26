@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/controllers/provider_config_controller.dart';
 import 'package:kubenav/pages/providers/widgets/aws_provider_config_widget.dart';
+import 'package:kubenav/pages/providers/widgets/awssso_provider_config_widget.dart';
 import 'package:kubenav/pages/providers/widgets/azure_provider_config_widget.dart';
 import 'package:kubenav/pages/providers/widgets/digitalocean_provider_config_widget.dart';
 import 'package:kubenav/utils/constants.dart';
@@ -60,6 +61,10 @@ class ProviderConfigActionsController extends GetxController {
           switch (providerConfig.provider) {
             case 'aws':
               return AWSProviderConfigWidget(
+                providerConfigIndex: providerConfigIndex,
+              );
+            case 'awssso':
+              return AWSSSOProviderConfigWidget(
                 providerConfigIndex: providerConfigIndex,
               );
             case 'azure':
