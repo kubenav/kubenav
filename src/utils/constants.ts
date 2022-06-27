@@ -53,6 +53,8 @@ export const GOOGLE_OAUTH2_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/a
 export const GOOGLE_REDIRECT_URI = `${CUSTOM_URI_SCHEME}:/settings/clusters/google`;
 export const GOOGLE_RESPONSE_TYPE = 'code';
 export const GOOGLE_SCOPE = 'https://www.googleapis.com/auth/cloud-platform';
+export const GOOGLE_CONTAINER_ENGINE_API = 'container.googleapis.com';
+export const GOOGLE_SERVICE_USAGE_STATE_ENABLED = 'ENABLED';
 
 export const OIDC_REDIRECT_URL = `${CUSTOM_URI_SCHEME}:/settings/clusters/oidc/redirect`;
 export const OIDC_REDIRECT_URL_WEB = 'https://kubenav.io/oidc.html';

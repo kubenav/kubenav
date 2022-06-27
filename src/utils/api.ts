@@ -31,7 +31,15 @@ import {
   IRancherTokenResponse,
   IOIDCLinkResponse,
 } from '../declarations';
-import { GOOGLE_REDIRECT_URI, INCLUSTER_URL, OIDC_REDIRECT_URL_WEB } from './constants';
+
+import {
+  GOOGLE_REDIRECT_URI,
+  INCLUSTER_URL,
+  OIDC_REDIRECT_URL_WEB,
+  GOOGLE_SERVICE_USAGE_STATE_ENABLED,
+  GOOGLE_CONTAINER_ENGINE_API,
+} from './constants';
+
 import { isJSON } from './helpers';
 
 const { KubenavPlugin } = Plugins;
@@ -405,6 +413,33 @@ export const getGoogleAccessToken = async (
   }
 };
 
+// isGoogleAPIEnabled returns true if the given API is enabled for the provided project. For the authentication against the
+// Google API a valid access token is required.
+const isGoogleAPIEnabled = async (accessToken: string, project: string, api: string): Promise<boolean> => {
+  try {
+    const response = await fetch(`https://serviceusage.googleapis.com/v1/projects/${project}/services/${api}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      method: 'GET',
+    });
+
+    const json = await response.json();
+
+    if (response.status >= 200 && response.status < 300) {
+      return json.state == GOOGLE_SERVICE_USAGE_STATE_ENABLED;
+    }
+
+    if (json.error.message) {
+      throw new Error(json.error.message);
+    } else {
+      throw new Error('An unknown error occurred.');
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
 // getGoogleClusters returns all available GKE clusters for the provided project. For the authentication against the
 // Google API a valid access token is required.
 export const getGoogleClusters = async (accessToken: string, project: string): Promise<IGoogleCluster[]> => {
@@ -446,7 +481,15 @@ export const getGoogleProjects = async (accessToken: string): Promise<IGooglePro
     const json = await response.json();
 
     if (response.status >= 200 && response.status < 300) {
-      return json.projects;
+      const projectList: IGoogleProject[] = [];
+      for (const project of json.projects) {
+        const isContainerEngineEnabled = await isGoogleAPIEnabled(accessToken, project, GOOGLE_CONTAINER_ENGINE_API);
+
+        if (isContainerEngineEnabled) {
+          projectList.push(project);
+        }
+      }
+      return projectList;
     }
 
     if (json.error.message) {
