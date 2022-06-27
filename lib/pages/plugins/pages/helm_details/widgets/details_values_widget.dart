@@ -6,7 +6,6 @@ import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter_highlight/themes/nord.dart';
 import 'package:get/get.dart';
 import 'package:highlight/languages/yaml.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'package:kubenav/models/helm_model.dart';
 import 'package:kubenav/services/helpers_service.dart';
@@ -34,7 +33,7 @@ class DetailsValuesController extends GetxController {
 
   void prettifyYAML() async {
     try {
-      final data = await HelpersService().prettifyYAML(item.chart!.values);
+      final data = await HelpersService().prettifyYAML(item.config);
       codeController?.text = data;
     } catch (err) {
       Logger.log(
