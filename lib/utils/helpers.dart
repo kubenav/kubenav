@@ -1,7 +1,9 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:kubenav/utils/constants.dart';
 
 /// [finish] can be used to go back to previous screen. For example this can be used to close a modal bottom sheet
@@ -77,5 +79,18 @@ void snackbar(
         offset: const Offset(0.0, 0.0),
       ),
     ],
+  );
+}
+
+Future<void> openUrl(String url) async {
+  var launchMode = LaunchMode.platformDefault;
+
+  if (Platform.isAndroid) {
+    launchMode = LaunchMode.externalApplication;
+  }
+
+  await launchUrl(
+    Uri.parse(url),
+    mode: launchMode,
   );
 }

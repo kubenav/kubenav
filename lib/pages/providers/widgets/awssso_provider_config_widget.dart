@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:kubenav/controllers/provider_config_controller.dart';
 import 'package:kubenav/models/provider_config_model.dart';
@@ -99,8 +98,7 @@ class AWSSSOProviderConfigController extends GetxController {
 
   void verifyDevice() async {
     try {
-      await launchUrl(
-          Uri.parse(awsSSOConfig!.value.device!.verificationUriComplete!));
+      await openUrl(awsSSOConfig!.value.device!.verificationUriComplete!);
       verified.value = true;
     } catch (err) {
       Logger.log(

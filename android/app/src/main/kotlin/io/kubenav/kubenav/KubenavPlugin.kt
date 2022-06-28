@@ -133,7 +133,7 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val ssoClientSecret = call.argument("ssoClientSecret") as String?
       val ssoDeviceCode = call.argument("ssoDeviceCode") as String?
       val accessToken = call.argument("accessToken") as String?
-      val accessTokenExpire = call.argument("accessTokenExpire") as kotlin.Int?
+      val accessTokenExpire = call.argument("accessTokenExpire") as kotlin.Long?
 
       if (accountID == null || roleName == null || ssoRegion == null || ssoClientID == null || ssoClientSecret == null || ssoDeviceCode == null || accessToken == null || accessTokenExpire == null) {
         result.error("BAD_ARGUMENTS", null, null)
@@ -276,7 +276,7 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun awsGetSSOToken(accountID: String, roleName: String, ssoRegion: String, ssoClientID: String, ssoClientSecret: String, ssoDeviceCode: String, accessToken: String, accessTokenExpire: kotlin.Int, result: MethodChannel.Result) {
+  private fun awsGetSSOToken(accountID: String, roleName: String, ssoRegion: String, ssoClientID: String, ssoClientSecret: String, ssoDeviceCode: String, accessToken: String, accessTokenExpire: kotlin.Long, result: MethodChannel.Result) {
     try {
       val data: String = Kubenav.awsGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, accessToken, accessTokenExpire.toLong())
       result.success(data)

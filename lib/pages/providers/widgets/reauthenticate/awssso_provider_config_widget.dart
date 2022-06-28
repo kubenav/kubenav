@@ -65,8 +65,7 @@ class AWSSSOProviderReauthenticateController extends GetxController {
 
   void verifyDevice() async {
     try {
-      await launchUrl(
-          Uri.parse(awsSSOConfig!.value.device!.verificationUriComplete!));
+      await openUrl(awsSSOConfig!.value.device!.verificationUriComplete!);
       verified.value = true;
     } catch (err) {
       Logger.log(
