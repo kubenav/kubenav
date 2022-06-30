@@ -415,9 +415,9 @@ export const getGoogleAccessToken = async (
 
 // isGoogleAPIEnabled returns true if the given API is enabled for the provided project. For the authentication against the
 // Google API a valid access token is required.
-const isGoogleAPIEnabled = async (accessToken: string, project: string, api: string): Promise<boolean> => {
+const isGoogleAPIEnabled = async (accessToken: string, projectId: string, api: string): Promise<boolean> => {
   try {
-    const response = await fetch(`https://serviceusage.googleapis.com/v1/projects/${project}/services/${api}`, {
+    const response = await fetch(`https://serviceusage.googleapis.com/v1/projects/${projectId}/services/${api}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -442,9 +442,9 @@ const isGoogleAPIEnabled = async (accessToken: string, project: string, api: str
 
 // getGoogleClusters returns all available GKE clusters for the provided project. For the authentication against the
 // Google API a valid access token is required.
-export const getGoogleClusters = async (accessToken: string, project: string): Promise<IGoogleCluster[]> => {
+export const getGoogleClusters = async (accessToken: string, projectId: string): Promise<IGoogleCluster[]> => {
   try {
-    const response = await fetch(`https://container.googleapis.com/v1/projects/${project}/locations/-/clusters`, {
+    const response = await fetch(`https://container.googleapis.com/v1/projects/${projectId}/locations/-/clusters`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -471,19 +471,26 @@ export const getGoogleClusters = async (accessToken: string, project: string): P
 // access token is required.
 export const getGoogleProjects = async (accessToken: string): Promise<IGoogleProject[]> => {
   try {
-    const response = await fetch('https://cloudresourcemanager.googleapis.com/v1/projects', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await fetch(
+      'https://cloudresourcemanager.googleapis.com/v1/projects?filter=lifecycleState%3AACTIVE',
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        method: 'GET',
       },
-      method: 'GET',
-    });
+    );
 
     const json = await response.json();
 
     if (response.status >= 200 && response.status < 300) {
       const projectList: IGoogleProject[] = [];
       for (const project of json.projects) {
-        const isContainerEngineEnabled = await isGoogleAPIEnabled(accessToken, project, GOOGLE_CONTAINER_ENGINE_API);
+        const isContainerEngineEnabled = await isGoogleAPIEnabled(
+          accessToken,
+          project.projectId,
+          GOOGLE_CONTAINER_ENGINE_API,
+        );
 
         if (isContainerEngineEnabled) {
           projectList.push(project);
