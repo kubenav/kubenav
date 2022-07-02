@@ -59,10 +59,10 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
             credentials = await getGoogleTokens(credentials.clientID, params.code);
             const projects = await getGoogleProjects(credentials.accessToken);
 
+            const tmpClusters: ICluster[] = [];
+
             for (const project of projects) {
               const projectClusters = await getGoogleClusters(credentials.accessToken, project.projectId);
-
-              const tmpClusters: ICluster[] = [];
 
               if (projectClusters) {
                 // eslint-disable-next-line
@@ -85,10 +85,9 @@ const GooglePage: React.FunctionComponent<IGooglePageProps> = ({ location, histo
                     namespace: 'default',
                   });
                 });
-
-                return tmpClusters;
               }
             }
+            return tmpClusters;
           }
         } else {
           throw new Error('Could not read credentials for Google');
