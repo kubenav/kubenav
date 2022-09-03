@@ -54,8 +54,8 @@ class InfoWidget extends StatelessWidget {
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
-              child: Text('Version', style: noramlTextStyle()),
               flex: 1,
+              child: Text('Version', style: noramlTextStyle()),
             ),
             Container(
               padding: const EdgeInsets.only(
@@ -113,8 +113,8 @@ class InfoWidget extends StatelessWidget {
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
-              child: Text('License', style: noramlTextStyle()),
               flex: 1,
+              child: Text('License', style: noramlTextStyle()),
             ),
             Icon(
               Icons.arrow_forward_ios,
@@ -152,8 +152,8 @@ class InfoWidget extends StatelessWidget {
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
-              child: Text('Website', style: noramlTextStyle()),
               flex: 1,
+              child: Text('Website', style: noramlTextStyle()),
             ),
             Icon(
               Icons.arrow_forward_ios,
@@ -192,8 +192,8 @@ class InfoWidget extends StatelessWidget {
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
-              child: Text('GitHub', style: noramlTextStyle()),
               flex: 1,
+              child: Text('GitHub', style: noramlTextStyle()),
             ),
             Icon(
               Icons.arrow_forward_ios,
@@ -231,8 +231,8 @@ class InfoWidget extends StatelessWidget {
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
-              child: Text('Twitter', style: noramlTextStyle()),
               flex: 1,
+              child: Text('Twitter', style: noramlTextStyle()),
             ),
             Icon(
               Icons.arrow_forward_ios,

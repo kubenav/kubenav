@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter_highlight/themes/nord.dart';
 import 'package:get/get.dart';
+// ignore: unused_import
 import 'package:highlight/languages/yaml.dart';
 
 import 'package:kubenav/utils/helpers.dart';

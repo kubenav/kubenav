@@ -58,7 +58,7 @@ class ListCreateResourceController extends GetxController {
   }
 
   /// [createResource] creates the given resource with the manifest provided by a user.
-  void createResource(BuildContext context) async {
+  void createResource() async {
     try {
       final manifest = loadYaml(codeController!.text);
       final name =
@@ -89,7 +89,6 @@ class ListCreateResourceController extends GetxController {
             ? 'The resource $name in namespace $namespace was created'
             : 'The resource $name was created',
       );
-      finish(context);
     } on PlatformException catch (err) {
       Logger.log(
         'ListCreateResourceController createResource',
@@ -144,7 +143,8 @@ class ListCreateResourceWidget extends StatelessWidget {
       },
       actionText: 'Create',
       onActionPressed: () {
-        controller.createResource(context);
+        controller.createResource();
+        finish(context);
       },
       child: Form(
         child: ListView(

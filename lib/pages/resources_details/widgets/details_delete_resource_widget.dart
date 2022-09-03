@@ -28,7 +28,7 @@ class DetailsDeleteResourceController extends GetxController {
 
   void toggleForce() => force.value = force.value ? false : true;
 
-  void deleteResource(BuildContext context) async {
+  void deleteResource() async {
     String? body;
     if (force.value) {
       body = '{"gracePeriodSeconds": 0}';
@@ -67,8 +67,6 @@ class DetailsDeleteResourceController extends GetxController {
       );
       snackbar('Could not delete resource', err.toString());
     }
-
-    finish(context);
   }
 }
 
@@ -106,7 +104,8 @@ class DetailsDeleteResourceWidget extends StatelessWidget {
       },
       actionText: 'Delete',
       onActionPressed: () {
-        controller.deleteResource(context);
+        controller.deleteResource();
+        finish(context);
       },
       child: Form(
         child: ListView(

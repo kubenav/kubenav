@@ -93,12 +93,12 @@ class AppClustersWidget extends StatelessWidget {
                   ),
                   const SizedBox(width: Constants.spacingSmall),
                   Expanded(
+                    flex: 1,
                     child: Text(
                       controller.clusterController.clusters[index].value.name,
                       style: noramlTextStyle(),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    flex: 1,
                   ),
                 ],
               ),

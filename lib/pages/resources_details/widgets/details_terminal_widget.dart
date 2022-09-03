@@ -61,7 +61,7 @@ class DetailsTerminalController extends GetxController {
     super.onInit();
   }
 
-  void getTerminal(BuildContext context) async {
+  void getTerminal() async {
     if (terminalFormKey.currentState != null &&
         terminalFormKey.currentState!.validate()) {
       try {
@@ -124,7 +124,6 @@ class DetailsTerminalController extends GetxController {
             ),
           );
 
-          finish(context);
           terminalController.addTerminal(
             TerminalType.exec,
             container.value,
@@ -147,7 +146,6 @@ class DetailsTerminalController extends GetxController {
           'Could not get logs',
           'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
         );
-        finish(context);
       } catch (err) {
         Logger.log(
           'An error was returned while getting the logs',
@@ -155,10 +153,7 @@ class DetailsTerminalController extends GetxController {
           err,
         );
         snackbar('Could not get logs', err.toString());
-        finish(context);
       }
-    } else {
-      finish(context);
     }
   }
 }
@@ -194,7 +189,8 @@ class DetailsTerminalWidget extends StatelessWidget {
       },
       actionText: 'Get Terminal',
       onActionPressed: () {
-        controller.getTerminal(context);
+        controller.getTerminal();
+        finish(context);
       },
       child: Form(
         key: controller.terminalFormKey,

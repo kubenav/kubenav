@@ -41,8 +41,8 @@ class HelpWidget extends StatelessWidget {
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
-              child: Text('Logs', style: noramlTextStyle()),
               flex: 1,
+              child: Text('Logs', style: noramlTextStyle()),
             ),
             Icon(
               Icons.arrow_forward_ios,

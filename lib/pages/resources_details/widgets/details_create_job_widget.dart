@@ -29,7 +29,7 @@ class DetailsCreateJobController extends GetxController {
     required this.item,
   });
 
-  void createJob(BuildContext context) async {
+  void createJob() async {
     try {
       final cronJob = IoK8sApiBatchV1CronJob.fromJson(item);
       final jobName = '$name-manual';
@@ -79,8 +79,6 @@ class DetailsCreateJobController extends GetxController {
       );
       snackbar('Could not create Job', err.toString());
     }
-
-    finish(context);
   }
 }
 
@@ -115,7 +113,8 @@ class DetailsCreateJobWidget extends StatelessWidget {
       },
       actionText: 'Create Job',
       onActionPressed: () {
-        controller.createJob(context);
+        controller.createJob();
+        finish(context);
       },
       child: Form(
         child: ListView(

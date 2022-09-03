@@ -72,7 +72,7 @@ class DetailsGetLogsController extends GetxController {
     super.onInit();
   }
 
-  void getLogs(BuildContext context) async {
+  void getLogs() async {
     if (logsFormKey.currentState != null &&
         logsFormKey.currentState!.validate()) {
       try {
@@ -94,7 +94,6 @@ class DetailsGetLogsController extends GetxController {
           logs,
         );
 
-        finish(context);
         terminalController.addTerminal(
           TerminalType.log,
           container.value,
@@ -111,7 +110,6 @@ class DetailsGetLogsController extends GetxController {
           'Could not get logs',
           'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
         );
-        finish(context);
       } catch (err) {
         Logger.log(
           'An error was returned while getting the logs',
@@ -119,10 +117,7 @@ class DetailsGetLogsController extends GetxController {
           err,
         );
         snackbar('Could not get logs', err.toString());
-        finish(context);
       }
-    } else {
-      finish(context);
     }
   }
 }
@@ -158,7 +153,8 @@ class DetailsGetLogsWidget extends StatelessWidget {
       },
       actionText: 'Get Logs',
       onActionPressed: () {
-        controller.getLogs(context);
+        controller.getLogs();
+        finish(context);
       },
       child: Form(
         key: controller.logsFormKey,

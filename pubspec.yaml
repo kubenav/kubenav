@@ -37,18 +37,20 @@ dependencies:
   get: ^4.6.1
   get_storage: ^2.0.3
   yaml: ^3.1.0
-  package_info_plus: ^1.4.0
+  package_info_plus: ^1.4.3+1
   webview_flutter: ^3.0.0
   url_launcher: ^6.0.20
   code_text_field: ^1.0.2
-  flutter_launcher_icons: ^0.9.2
+  flutter_launcher_icons: ^0.10.0
   import_sorter: ^4.6.0
   http: ^0.13.4
   xterm: ^2.6.0
   web_socket_channel: ^2.1.0
   fl_chart: ^0.55.0
-  file_picker: ^4.5.1
+  file_picker: ^5.0.1
   path_provider: ^2.0.9
+  flutter_highlight: ^0.7.0
+  highlight: ^0.7.0
 
 dev_dependencies:
   flutter_test:

@@ -218,12 +218,12 @@ class AddClusterDigitalOceanWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: Constants.spacingSmall),
                         Expanded(
+                          flex: 1,
                           child: Text(
                             controller.clusters[index].name ?? '',
                             style: noramlTextStyle(),
                             overflow: TextOverflow.ellipsis,
                           ),
-                          flex: 1,
                         ),
                       ],
                     ),

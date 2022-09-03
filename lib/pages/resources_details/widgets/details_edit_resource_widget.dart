@@ -61,7 +61,7 @@ class DetailsEditResourceController extends GetxController {
 
   /// [save] saves the changes made to the resources manifest file. To apply all the changes made by the user, we have
   /// to create a json patch and send it to the Kubernetes API.
-  void save(BuildContext context) async {
+  void save() async {
     try {
       if (codeController != null) {
         final jsonPatch = await HelpersService().createJSONPatch(
@@ -97,8 +97,6 @@ class DetailsEditResourceController extends GetxController {
                 : 'The changes for the resource $name in namespace $namespace are saved',
           );
         }
-
-        finish(context);
       }
     } catch (err) {
       Logger.log(
@@ -148,7 +146,8 @@ class DetailsEditResourceWidget extends StatelessWidget {
       },
       actionText: 'Save',
       onActionPressed: () {
-        controller.save(context);
+        controller.save();
+        finish(context);
       },
       child: Form(
         child: ListView(

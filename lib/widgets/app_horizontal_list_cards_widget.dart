@@ -119,8 +119,8 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: Text(title, style: primaryTextStyle(size: 18)),
                 flex: 1,
+                child: Text(title, style: primaryTextStyle(size: 18)),
               ),
               buildMore(moreText, moreIcon, moreOnTap),
             ],
@@ -184,13 +184,13 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                             topRight:
                                 Radius.circular(Constants.sizeBorderRadius),
                           ),
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
                           child: Image.asset(
                             cards[index].image,
                             height: 140,
                             width: 250,
                             fit: cards[index].imageFit,
                           ),
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
                         ),
                       ),
                       const SizedBox(height: Constants.spacingSmall),

@@ -27,7 +27,7 @@ class DetailsRestartResourceController extends GetxController {
     required this.item,
   });
 
-  void restartResource(BuildContext context) async {
+  void restartResource() async {
     try {
       final now = DateTime.now().toIso8601String();
       final String body = item['spec'] != null &&
@@ -68,8 +68,6 @@ class DetailsRestartResourceController extends GetxController {
       );
       snackbar('Could not restart resource', err.toString());
     }
-
-    finish(context);
   }
 }
 
@@ -110,7 +108,8 @@ class DetailsRestartResourceWidget extends StatelessWidget {
       },
       actionText: 'Restart',
       onActionPressed: () {
-        controller.restartResource(context);
+        controller.restartResource();
+        finish(context);
       },
       child: Form(
         child: ListView(

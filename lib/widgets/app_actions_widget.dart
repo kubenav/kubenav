@@ -70,6 +70,7 @@ class AppActionsWidget extends StatelessWidget {
               return Wrap(
                 children: [
                   InkWell(
+                    onTap: actions[index].onTap,
                     child: ListTile(
                       title: Text(
                         actions[index].title,
@@ -77,7 +78,6 @@ class AppActionsWidget extends StatelessWidget {
                         style: TextStyle(color: actions[index].color),
                       ),
                     ),
-                    onTap: actions[index].onTap,
                   ),
                   const Divider(
                     height: 0,
@@ -87,6 +87,7 @@ class AppActionsWidget extends StatelessWidget {
               );
             } else {
               return InkWell(
+                onTap: actions[index].onTap,
                 child: ListTile(
                   title: Text(
                     actions[index].title,
@@ -94,7 +95,6 @@ class AppActionsWidget extends StatelessWidget {
                     style: TextStyle(color: actions[index].color),
                   ),
                 ),
-                onTap: actions[index].onTap,
               );
             }
           }),

@@ -57,7 +57,7 @@ class DetailsScaleResourceController extends GetxController {
     return null;
   }
 
-  void scaleResource(BuildContext context) async {
+  void scaleResource() async {
     if (scaleFormKey.currentState != null &&
         scaleFormKey.currentState!.validate()) {
       try {
@@ -92,8 +92,6 @@ class DetailsScaleResourceController extends GetxController {
         );
         snackbar('Could not scale resource', err.toString());
       }
-
-      finish(context);
     }
   }
 }
@@ -135,7 +133,8 @@ class DetailsScaleResourceWidget extends StatelessWidget {
       },
       actionText: 'Scale',
       onActionPressed: () {
-        controller.scaleResource(context);
+        controller.scaleResource();
+        finish(context);
       },
       child: Form(
         key: controller.scaleFormKey,

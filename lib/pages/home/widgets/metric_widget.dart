@@ -463,7 +463,7 @@ class MetricWidget extends StatelessWidget {
                                     break;
                                 }
                                 return BarTooltipItem(
-                                  label + '\n',
+                                  '$label\n',
                                   const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.normal,

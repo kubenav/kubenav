@@ -105,12 +105,12 @@ class DetailsItemConditionsWidget extends StatelessWidget {
                               ),
                               const SizedBox(width: Constants.spacingSmall),
                               Expanded(
+                                flex: 1,
                                 child: Text(
                                   item['status']['conditions'][index]['type'],
                                   style: noramlTextStyle(),
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                flex: 1,
                               ),
                             ],
                           ),

@@ -189,12 +189,12 @@ class AppNamespacesWidget extends StatelessWidget {
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
+                        flex: 1,
                         child: Text(
                           'All Namespaces',
                           style: noramlTextStyle(),
                           overflow: TextOverflow.ellipsis,
                         ),
-                        flex: 1,
                       ),
                     ],
                   ),
@@ -253,12 +253,12 @@ class AppNamespacesWidget extends StatelessWidget {
                           ),
                           const SizedBox(width: Constants.spacingSmall),
                           Expanded(
+                            flex: 1,
                             child: Text(
                               name ?? '',
                               style: noramlTextStyle(),
                               overflow: TextOverflow.ellipsis,
                             ),
-                            flex: 1,
                           ),
                         ],
                       ),

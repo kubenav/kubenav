@@ -141,8 +141,8 @@ class DetailsResourcesPreviewWidget extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: Text(title, style: primaryTextStyle(size: 18)),
                 flex: 1,
+                child: Text(title, style: primaryTextStyle(size: 18)),
               ),
             ],
           ),

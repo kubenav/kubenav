@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/controllers/provider_config_controller.dart';

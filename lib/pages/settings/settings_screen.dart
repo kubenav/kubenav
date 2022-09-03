@@ -163,13 +163,13 @@ class Settings extends GetView<SettingsController> {
                         ),
                         const SizedBox(width: Constants.spacingSmall),
                         Expanded(
+                          flex: 1,
                           child: Text(
                             controller
                                 .clusterController.clusters[index].value.name,
                             style: noramlTextStyle(),
                             overflow: TextOverflow.ellipsis,
                           ),
-                          flex: 1,
                         ),
                       ],
                     ),
@@ -206,8 +206,8 @@ class Settings extends GetView<SettingsController> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text('Clusters', style: primaryTextStyle(size: 18)),
                     flex: 1,
+                    child: Text('Clusters', style: primaryTextStyle(size: 18)),
                   ),
                   InkWell(
                     onTap: () {

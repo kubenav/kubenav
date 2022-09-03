@@ -17,6 +17,13 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Contributing
 
+Go mobile:
+
+```sh
+go install golang.org/x/mobile/cmd/gomobile@latest
+gomobile init
+```
+
 Create icons:
 
 - `flutter pub run flutter_launcher_icons:main`

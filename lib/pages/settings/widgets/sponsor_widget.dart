@@ -47,11 +47,11 @@ class SponsorWidget extends StatelessWidget {
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
+              flex: 1,
               child: Text(
                 'GitHub',
                 style: noramlTextStyle(),
               ),
-              flex: 1,
             ),
             Icon(
               Icons.arrow_forward_ios,
@@ -89,8 +89,8 @@ class SponsorWidget extends StatelessWidget {
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
-              child: Text('PayPal', style: noramlTextStyle()),
               flex: 1,
+              child: Text('PayPal', style: noramlTextStyle()),
             ),
             Icon(
               Icons.arrow_forward_ios,

@@ -196,8 +196,8 @@ class NavigationControls extends StatelessWidget {
 
   void openInBrowser(WebViewController? controller) async {
     final url = await controller!.currentUrl();
-    if (url != null && await canLaunch(url)) {
-      await launch(url);
+    if (url != null && await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
     } else {
       Logger.log(
         'NavigationControls goForward',
