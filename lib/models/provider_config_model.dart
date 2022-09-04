@@ -9,6 +9,7 @@ class ProviderConfig {
   ProviderConfigAWSSSO? awssso;
   ProviderConfigAzure? azure;
   ProviderConfigDigitalOcean? digitalocean;
+  ProviderConfigGoogle? google;
 
   ProviderConfig({
     required this.name,
@@ -17,6 +18,7 @@ class ProviderConfig {
     this.awssso,
     this.azure,
     this.digitalocean,
+    this.google,
   });
 
   factory ProviderConfig.fromJson(Map<String, dynamic> json) => ProviderConfig(
@@ -33,6 +35,9 @@ class ProviderConfig {
             : null,
         digitalocean: json['digitalocean'] != null
             ? ProviderConfigDigitalOcean.fromJson(json['digitalocean'])
+            : null,
+        google: json['google'] != null
+            ? ProviderConfigGoogle.fromJson(json['google'])
             : null,
       );
 
@@ -51,6 +56,9 @@ class ProviderConfig {
     }
     if (digitalocean != null) {
       data['digitalocean'] = digitalocean!.toJson();
+    }
+    if (google != null) {
+      data['google'] = google!.toJson();
     }
     return data;
   }
@@ -181,5 +189,44 @@ class ProviderConfigDigitalOcean {
 
   Map<String, dynamic> toJson() => {
         'token': token,
+      };
+}
+
+/// A [ProviderConfigGoogle] represents the provider configuration for the `google` provider. To get the clusters from
+/// Google an API [clientID] is required. All other values are retrieved during the authentication process.
+class ProviderConfigGoogle {
+  String clientID;
+  String clientSecret;
+  String code;
+  String accessToken;
+  int accessTokenExpires;
+  String refreshToken;
+
+  ProviderConfigGoogle({
+    required this.clientID,
+    required this.clientSecret,
+    required this.code,
+    required this.accessToken,
+    required this.accessTokenExpires,
+    required this.refreshToken,
+  });
+
+  factory ProviderConfigGoogle.fromJson(Map<String, dynamic> json) =>
+      ProviderConfigGoogle(
+        clientID: json['clientID'] ?? '',
+        clientSecret: json['clientSecret'] ?? '',
+        code: json['code'] ?? '',
+        accessToken: json['accessToken'] ?? '',
+        accessTokenExpires: json['accessTokenExpires'] ?? '',
+        refreshToken: json['refreshToken'] ?? '',
+      );
+
+  Map<String, dynamic> toJson() => {
+        'clientID': clientID,
+        'clientSecret': clientSecret,
+        'code': code,
+        'accessToken': accessToken,
+        'accessTokenExpires': accessTokenExpires,
+        'refreshToken': refreshToken,
       };
 }

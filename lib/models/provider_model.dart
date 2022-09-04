@@ -30,14 +30,14 @@ abstract class Providers {
     image54x54: 'assets/provider/image54x54/kubeconfig54x54.png',
     image250x140: 'assets/provider/image250x140/kubeconfig250x140.png',
   );
-  // static final gcp = Provider(
-  //   name: 'gcp',
-  //   title: 'Google Cloud Platform',
-  //   subtitle: 'Import your GKE clusters',
-  //   image42x42: 'assets/provider/image42x42/gcp42x42.png',
-  //   image54x54: 'assets/provider/image54x54/gcp54x54.png',
-  //   image250x140: 'assets/provider/image250x140/gcp250x140.png',
-  // );
+  static final google = Provider(
+    name: 'google',
+    title: 'Google Cloud Platform',
+    subtitle: 'Import your GKE clusters',
+    image42x42: 'assets/provider/image42x42/google42x42.png',
+    image54x54: 'assets/provider/image54x54/google54x54.png',
+    image250x140: 'assets/provider/image250x140/google250x140.png',
+  );
   static final aws = Provider(
     name: 'aws',
     title: 'Amazon Web Services',
@@ -89,6 +89,7 @@ abstract class Providers {
 
   static List<Provider> list = [
     kubeconfig,
+    google,
     aws,
     awssso,
     azure,

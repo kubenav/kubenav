@@ -29,4 +29,6 @@ class Constants {
 
   static const opacityLight = 0.75;
   static const opacityHeavy = 0.25;
+
+  static const googleRedirectURI = 'https://kubenav.io/google.html';
 }

@@ -11,6 +11,7 @@ import 'package:kubenav/controllers/provider_config_controller.dart';
 import 'package:kubenav/models/cluster_model.dart';
 import 'package:kubenav/models/helm_model.dart';
 import 'package:kubenav/services/aws_service.dart';
+import 'package:kubenav/services/google_service.dart';
 import 'package:kubenav/utils/logger.dart';
 
 /// [KubernetesService] implements a service to interactiv with the Kubernetes functions from our Go code. The
@@ -123,6 +124,39 @@ class KubernetesService {
           return token;
         } else {
           Future.error('could not get access token');
+        }
+      } else if (cluster.provider == 'google') {
+        final providerConfig =
+            providerConfigController.getConfig(cluster.providerConfig);
+
+        if (DateTime.fromMillisecondsSinceEpoch(
+                providerConfig!.google!.accessTokenExpires)
+            .isBefore(DateTime.now())) {
+          final googleTokens = await GoogleService().getTokensFromRefreshToken(
+            providerConfig.google!.clientID,
+            providerConfig.google!.clientSecret,
+            providerConfig.google!.refreshToken,
+          );
+
+          Logger.log(
+            'KubernetesService _getAccessToken',
+            'getToken',
+            googleTokens,
+          );
+
+          final expires = DateTime.now().millisecondsSinceEpoch +
+              googleTokens.expiresIn! * 1000;
+          providerConfig.google!.accessToken = googleTokens.accessToken!;
+          providerConfig.google!.accessTokenExpires = expires;
+
+          providerConfigController.editConfigByName(
+            providerConfig.name,
+            providerConfig,
+          );
+
+          return googleTokens.accessToken!;
+        } else {
+          return providerConfig.google!.accessToken;
         }
       }
 

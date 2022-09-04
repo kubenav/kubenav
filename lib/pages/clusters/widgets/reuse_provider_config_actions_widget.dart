@@ -9,12 +9,14 @@ import 'package:kubenav/pages/clusters/widgets/add_cluster_aws_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_awssso_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_azure_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_digitalocean_widget.dart';
+import 'package:kubenav/pages/clusters/widgets/add_cluster_google_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_kubeconfig_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/add_cluster_manual_widget.dart';
 import 'package:kubenav/pages/providers/widgets/aws_provider_config_widget.dart';
 import 'package:kubenav/pages/providers/widgets/awssso_provider_config_widget.dart';
 import 'package:kubenav/pages/providers/widgets/azure_provider_config_widget.dart';
 import 'package:kubenav/pages/providers/widgets/digitalocean_provider_config_widget.dart';
+import 'package:kubenav/pages/providers/widgets/google_provider_config_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_actions_widget.dart';
@@ -61,6 +63,10 @@ class ReuseProviderConfigActionsController extends GetxController {
               return AddClusterDigitalOceanWidget(
                 providerConfig: providerConfig,
               );
+            case 'google':
+              return AddClusterGoogleWidget(
+                providerConfig: providerConfig,
+              );
             default:
               return AddClusterManualWidget(provider: Providers.manual);
           }
@@ -102,6 +108,10 @@ class ReuseProviderConfigActionsController extends GetxController {
               );
             case 'digitalocean':
               return const DigitalOceanProviderConfigWidget(
+                providerConfigIndex: -1,
+              );
+            case 'google':
+              return const GoogleProviderConfigWidget(
                 providerConfigIndex: -1,
               );
             default:
