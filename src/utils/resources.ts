@@ -231,10 +231,10 @@ export const resources: IAppSections = {
         detailsComponent: HorizontalPodAutoscalerDetails,
       },
       ingresses: {
-        singleText: 'Ingresse',
+        singleText: 'Ingress',
         pluralText: 'Ingresses',
         icon: '/assets/icons/kubernetes/ing.png',
-        kind: 'Ingresse',
+        kind: 'Ingress',
         apiVersion: 'networking.k8s.io/v1',
         listURL: (namespace: string): string => {
           return namespace
