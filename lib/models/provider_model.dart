@@ -70,14 +70,14 @@ abstract class Providers {
     image54x54: 'assets/provider/image54x54/aws54x54.png',
     image250x140: 'assets/provider/image250x140/aws250x140.png',
   );
-  // static final oidc = Provider(
-  //   name: 'oidc',
-  //   title: 'OIDC',
-  //   subtitle: 'OIDC cluster configuration',
-  //   image42x42: 'assets/provider/image42x42/oidc42x42.png',
-  //   image54x54: 'assets/provider/image54x54/oidc54x54.png',
-  //   image250x140: 'assets/provider/image250x140/oidc250x140.png',
-  // );
+  static final oidc = Provider(
+    name: 'oidc',
+    title: 'OIDC',
+    subtitle: 'OIDC cluster configuration',
+    image42x42: 'assets/provider/image42x42/oidc42x42.png',
+    image54x54: 'assets/provider/image54x54/oidc54x54.png',
+    image250x140: 'assets/provider/image250x140/oidc250x140.png',
+  );
   static final manual = Provider(
     name: 'manual',
     title: 'Manual',
@@ -93,6 +93,7 @@ abstract class Providers {
     aws,
     awssso,
     azure,
+    oidc,
     digitalocean,
     manual,
   ];

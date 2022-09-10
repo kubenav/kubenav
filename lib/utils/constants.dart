@@ -31,4 +31,5 @@ class Constants {
   static const opacityHeavy = 0.25;
 
   static const googleRedirectURI = 'https://kubenav.io/google.html';
+  static const oidcRedirectURI = 'https://kubenav.io/oidcv4.html';
 }

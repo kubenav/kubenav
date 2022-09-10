@@ -181,6 +181,50 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
+    } else if call.method == "oidcGetLink" {
+      if let args = call.arguments as? Dictionary<String, Any>,
+        let discoveryURL = args["discoveryURL"] as? String,
+        let clientID = args["clientID"] as? String,
+        let clientSecret = args["clientSecret"] as? String,
+        let certificateAuthority = args["certificateAuthority"] as? String,
+        let scopes = args["scopes"] as? String,
+        let redirectURL = args["redirectURL"] as? String,
+        let pkceMethod = args["pkceMethod"] as? String
+      {
+        oidcGetLink(discoveryURL: discoveryURL, clientID: clientID, clientSecret: clientSecret, certificateAuthority: certificateAuthority, scopes: scopes, redirectURL: redirectURL, pkceMethod: pkceMethod, result: result)
+      } else {
+        result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
+      }
+    } else if call.method == "oidcGetRefreshToken" {
+      if let args = call.arguments as? Dictionary<String, Any>,
+        let discoveryURL = args["discoveryURL"] as? String,
+        let clientID = args["clientID"] as? String,
+        let clientSecret = args["clientSecret"] as? String,
+        let certificateAuthority = args["certificateAuthority"] as? String,
+        let scopes = args["scopes"] as? String,
+        let redirectURL = args["redirectURL"] as? String,
+        let pkceMethod = args["pkceMethod"] as? String,
+        let code = args["code"] as? String,
+        let verifier = args["verifier"] as? String
+      {
+        oidcGetRefreshToken(discoveryURL: discoveryURL, clientID: clientID, clientSecret: clientSecret, certificateAuthority: certificateAuthority, scopes: scopes, redirectURL: redirectURL, pkceMethod: pkceMethod, code: code, verifier: verifier, result: result)
+      } else {
+        result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
+      }
+    } else if call.method == "oidcGetAccessToken" {
+      if let args = call.arguments as? Dictionary<String, Any>,
+        let discoveryURL = args["discoveryURL"] as? String,
+        let clientID = args["clientID"] as? String,
+        let clientSecret = args["clientSecret"] as? String,
+        let certificateAuthority = args["certificateAuthority"] as? String,
+        let scopes = args["scopes"] as? String,
+        let redirectURL = args["redirectURL"] as? String,
+        let refreshToken = args["refreshToken"] as? String
+      {
+        oidcGetAccessToken(discoveryURL: discoveryURL, clientID: clientID, clientSecret: clientSecret, certificateAuthority: certificateAuthority, scopes: scopes, redirectURL: redirectURL, refreshToken: refreshToken, result: result)
+      } else {
+        result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
+      }
     } else {
       result(FlutterMethodNotImplemented)
     }
@@ -320,6 +364,39 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     let data = KubenavHelmGetHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name, &error)
     if error != nil {
       result(FlutterError(code: "HELM_GET_HISTORY_FAILED", message: error?.localizedDescription ?? "", details: nil))
+    } else {
+      result(data)
+    }
+  }
+
+  private func oidcGetLink(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, pkceMethod: String, result: FlutterResult) {
+    var error: NSError?
+
+    let data = KubenavOIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, &error)
+    if error != nil {
+      result(FlutterError(code: "OIDC_GET_LINK_FAILED", message: error?.localizedDescription ?? "", details: nil))
+    } else {
+      result(data)
+    }
+  }
+
+  private func oidcGetRefreshToken(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, pkceMethod: String, code: String, verifier: String, result: FlutterResult) {
+    var error: NSError?
+
+    let data = KubenavOIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, code, verifier, &error)
+    if error != nil {
+      result(FlutterError(code: "OIDC_GET_REFRESH_TOKEN_FAILED", message: error?.localizedDescription ?? "", details: nil))
+    } else {
+      result(data)
+    }
+  }
+
+  private func oidcGetAccessToken(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, refreshToken: String, result: FlutterResult) {
+    var error: NSError?
+
+    let data = KubenavOIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, refreshToken, &error)
+    if error != nil {
+      result(FlutterError(code: "OIDC_GET_ACCESS_TOKEN_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
       result(data)
     }

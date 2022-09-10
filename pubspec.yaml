@@ -51,6 +51,7 @@ dependencies:
   path_provider: ^2.0.9
   flutter_highlight: ^0.7.0
   highlight: ^0.7.0
+  jwt_decode: ^0.3.1
 
 dev_dependencies:
   flutter_test:

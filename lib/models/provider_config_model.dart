@@ -10,6 +10,7 @@ class ProviderConfig {
   ProviderConfigAzure? azure;
   ProviderConfigDigitalOcean? digitalocean;
   ProviderConfigGoogle? google;
+  ProviderConfigOIDC? oidc;
 
   ProviderConfig({
     required this.name,
@@ -19,6 +20,7 @@ class ProviderConfig {
     this.azure,
     this.digitalocean,
     this.google,
+    this.oidc,
   });
 
   factory ProviderConfig.fromJson(Map<String, dynamic> json) => ProviderConfig(
@@ -38,6 +40,9 @@ class ProviderConfig {
             : null,
         google: json['google'] != null
             ? ProviderConfigGoogle.fromJson(json['google'])
+            : null,
+        oidc: json['oidc'] != null
+            ? ProviderConfigOIDC.fromJson(json['oidc'])
             : null,
       );
 
@@ -59,6 +64,9 @@ class ProviderConfig {
     }
     if (google != null) {
       data['google'] = google!.toJson();
+    }
+    if (oidc != null) {
+      data['oidc'] = oidc!.toJson();
     }
     return data;
   }
@@ -227,6 +235,60 @@ class ProviderConfigGoogle {
         'code': code,
         'accessToken': accessToken,
         'accessTokenExpires': accessTokenExpires,
+        'refreshToken': refreshToken,
+      };
+}
+
+/// A [ProviderConfigOIDC] represents the provider configuration for the `oidc` provider.
+class ProviderConfigOIDC {
+  String discoveryURL;
+  String clientID;
+  String clientSecret;
+  String certificateAuthority;
+  String scopes;
+  String pkceMethod;
+  String verifier;
+  String code;
+  String idToken;
+  String refreshToken;
+
+  ProviderConfigOIDC({
+    required this.discoveryURL,
+    required this.clientID,
+    required this.clientSecret,
+    required this.certificateAuthority,
+    required this.scopes,
+    required this.pkceMethod,
+    required this.verifier,
+    required this.code,
+    required this.idToken,
+    required this.refreshToken,
+  });
+
+  factory ProviderConfigOIDC.fromJson(Map<String, dynamic> json) =>
+      ProviderConfigOIDC(
+        discoveryURL: json['discoveryURL'] ?? '',
+        clientID: json['clientID'] ?? '',
+        clientSecret: json['clientSecret'] ?? '',
+        certificateAuthority: json['certificateAuthority'] ?? '',
+        scopes: json['scopes'] ?? '',
+        pkceMethod: json['pkceMethod'] ?? '',
+        verifier: json['verifier'] ?? '',
+        code: json['code'] ?? '',
+        idToken: json['idToken'] ?? '',
+        refreshToken: json['refreshToken'] ?? '',
+      );
+
+  Map<String, dynamic> toJson() => {
+        'discoveryURL': discoveryURL,
+        'clientID': clientID,
+        'clientSecret': clientSecret,
+        'certificateAuthority': certificateAuthority,
+        'scopes': scopes,
+        'pkceMethod': pkceMethod,
+        'verifier': verifier,
+        'code': code,
+        'idToken': idToken,
         'refreshToken': refreshToken,
       };
 }

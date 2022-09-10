@@ -191,6 +191,50 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       } else {
         helmGetHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name, result)
       }
+    } else if (call.method == "oidcGetLink") {
+      val discoveryURL = call.argument<String>("discoveryURL")
+      val clientID = call.argument<String>("clientID")
+      val clientSecret = call.argument<String>("clientSecret")
+      val certificateAuthority = call.argument<String>("certificateAuthority")
+      val scopes = call.argument<String>("scopes")
+      val redirectURL = call.argument<String>("redirectURL")
+      val pkceMethod = call.argument<String>("pkceMethod")
+
+      if (discoveryURL == null || clientID == null || clientSecret == null || certificateAuthority == null || scopes == null || redirectURL == null || pkceMethod == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        oidcGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, result)
+      }
+    } else if (call.method == "oidcGetRefreshToken") {
+      val discoveryURL = call.argument<String>("discoveryURL")
+      val clientID = call.argument<String>("clientID")
+      val clientSecret = call.argument<String>("clientSecret")
+      val certificateAuthority = call.argument<String>("certificateAuthority")
+      val scopes = call.argument<String>("scopes")
+      val redirectURL = call.argument<String>("redirectURL")
+      val pkceMethod = call.argument<String>("pkceMethod")
+      val code = call.argument<String>("code")
+      val verifier = call.argument<String>("verifier")
+
+      if (discoveryURL == null || clientID == null || clientSecret == null || certificateAuthority == null || scopes == null || redirectURL == null || pkceMethod == null || code == null || verifier == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        oidcGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, code, verifier, result)
+      }
+    } else if (call.method == "oidcGetAccessToken") {
+      val discoveryURL = call.argument<String>("discoveryURL")
+      val clientID = call.argument<String>("clientID")
+      val clientSecret = call.argument<String>("clientSecret")
+      val certificateAuthority = call.argument<String>("certificateAuthority")
+      val scopes = call.argument<String>("scopes")
+      val redirectURL = call.argument<String>("redirectURL")
+      val refreshToken = call.argument<String>("refreshToken")
+
+      if (discoveryURL == null || clientID == null || clientSecret == null || certificateAuthority == null || scopes == null || redirectURL == null || refreshToken == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        oidcGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, refreshToken, result)
+      }
     } else {
       result.notImplemented()
     }
@@ -309,6 +353,33 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       result.success(data)
     } catch (e: Exception) {
       result.error("HELM_GET_HISTORY_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun oidcGetLink(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, pkceMethod: String, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.oidcGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod)
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("OIDC_GET_LINK_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun oidcGetRefreshToken(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, pkceMethod: String, code: String, verifier: String, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.oidcGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, code, verifier)
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("OIDC_GET_REFRESH_TOKEN_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun oidcGetAccessToken(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, refreshToken: String, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.oidcGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, refreshToken)
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("OIDC_GET_ACCESS_TOKEN_FAILED", e.localizedMessage, null)
     }
   }
 }

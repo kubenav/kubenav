@@ -8,6 +8,8 @@ import 'package:kubenav/pages/providers/widgets/aws_provider_config_widget.dart'
 import 'package:kubenav/pages/providers/widgets/awssso_provider_config_widget.dart';
 import 'package:kubenav/pages/providers/widgets/azure_provider_config_widget.dart';
 import 'package:kubenav/pages/providers/widgets/digitalocean_provider_config_widget.dart';
+import 'package:kubenav/pages/providers/widgets/google_provider_config_widget.dart';
+import 'package:kubenav/pages/providers/widgets/oidc_provider_config_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_actions_widget.dart';
@@ -73,6 +75,14 @@ class ProviderConfigActionsController extends GetxController {
               );
             case 'digitalocean':
               return DigitalOceanProviderConfigWidget(
+                providerConfigIndex: providerConfigIndex,
+              );
+            case 'google':
+              return GoogleProviderConfigWidget(
+                providerConfigIndex: providerConfigIndex,
+              );
+            case 'oidc':
+              return OIDCProviderConfigWidget(
                 providerConfigIndex: providerConfigIndex,
               );
             default:

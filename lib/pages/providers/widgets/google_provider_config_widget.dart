@@ -68,11 +68,11 @@ class GoogleProviderConfigController extends GetxController {
           'https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientID.text}&redirect_uri=${Constants.googleRedirectURI}&response_type=code&scope=https://www.googleapis.com/auth/cloud-platform&access_type=offline&include_granted_scopes=true');
     } catch (err) {
       Logger.log(
-        'AWSSSOProviderConfigController signIn',
-        'Could not open sing in url',
+        'GoogleProviderConfigController signIn',
+        'Could not open sign in url',
         err,
       );
-      snackbar('Could not open sing in url', err.toString());
+      snackbar('Could not open sign in url', err.toString());
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decode/jwt_decode.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/controllers/provider_config_controller.dart';
@@ -12,6 +13,8 @@ import 'package:kubenav/models/cluster_model.dart';
 import 'package:kubenav/models/helm_model.dart';
 import 'package:kubenav/services/aws_service.dart';
 import 'package:kubenav/services/google_service.dart';
+import 'package:kubenav/services/oidc_service.dart';
+import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 
 /// [KubernetesService] implements a service to interactiv with the Kubernetes functions from our Go code. The
@@ -157,6 +160,47 @@ class KubernetesService {
           return googleTokens.accessToken!;
         } else {
           return providerConfig.google!.accessToken;
+        }
+      } else if (cluster.provider == 'oidc') {
+        final providerConfig =
+            providerConfigController.getConfig(cluster.providerConfig);
+
+        DateTime? expiryDate = Jwt.getExpiryDate(providerConfig!.oidc!.idToken);
+
+        if (expiryDate != null && expiryDate.isBefore(DateTime.now())) {
+          final oidcResponse = await OIDCService().getAccessToken(
+            providerConfig.oidc!.discoveryURL,
+            providerConfig.oidc!.clientID,
+            providerConfig.oidc!.clientSecret,
+            providerConfig.oidc!.certificateAuthority,
+            providerConfig.oidc!.scopes,
+            Constants.oidcRedirectURI,
+            providerConfig.oidc!.refreshToken,
+          );
+
+          Logger.log(
+            'KubernetesService _getAccessToken',
+            'getToken',
+            oidcResponse,
+          );
+
+          if (oidcResponse.idToken != null) {
+            providerConfig.oidc!.idToken = oidcResponse.idToken!;
+          }
+
+          if (oidcResponse.refreshToken != null &&
+              oidcResponse.refreshToken != "") {
+            providerConfig.oidc!.refreshToken = oidcResponse.refreshToken!;
+          }
+
+          providerConfigController.editConfigByName(
+            providerConfig.name,
+            providerConfig,
+          );
+
+          return oidcResponse.idToken!;
+        } else {
+          return providerConfig.oidc!.idToken;
         }
       }
 
