@@ -34,13 +34,13 @@ class Home extends GetView<HomeController> {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: Constants.shadowColorGlobal,
+                  color: Theme.of(context).shadowColor,
                   blurRadius: Constants.sizeBorderBlurRadius,
                   spreadRadius: Constants.sizeBorderSpreadRadius,
                   offset: const Offset(0.0, 0.0),
                 ),
               ],
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               borderRadius: const BorderRadius.all(
                 Radius.circular(Constants.sizeBorderRadius),
               ),
@@ -75,7 +75,9 @@ class Home extends GetView<HomeController> {
                     ),
                     child: Text(
                       'Add a Cluster',
-                      style: primaryTextStyle(),
+                      style: primaryTextStyle(
+                        context,
+                      ),
                     ),
                   ),
                   const SizedBox(height: Constants.spacingExtraSmall),
@@ -85,7 +87,9 @@ class Home extends GetView<HomeController> {
                     ),
                     child: Text(
                       'Add your fist cluster and start using kubenav',
-                      style: secondaryTextStyle(),
+                      style: secondaryTextStyle(
+                        context,
+                      ),
                     ),
                   ),
                   const SizedBox(height: Constants.spacingSmall),
@@ -141,10 +145,6 @@ class Home extends GetView<HomeController> {
             onTap: () {
               Get.bottomSheet(
                 BottomSheet(
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(Constants.sizeBorderRadius),
-                  ),
                   onClosing: () {},
                   enableDrag: false,
                   builder: (builder) {

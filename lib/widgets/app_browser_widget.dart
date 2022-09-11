@@ -38,10 +38,6 @@ class AppBrowserController extends GetxController {
 /// ```
 /// Get.bottomSheet(
 ///   BottomSheet(
-///     shape: RoundedRectangleBorder(
-///       borderRadius:
-///           BorderRadius.circular(Constants.sizeBorderRadius),
-///     ),
 ///     onClosing: () {},
 ///     enableDrag: false,
 ///     builder: (builder) {
@@ -78,7 +74,7 @@ class AppBrowserWidget extends StatelessWidget {
 
     return Container(
       height: MediaQuery.of(context).size.height,
-      color: Constants.colorAppBarBackground,
+      color: Theme.of(context).appBarTheme.backgroundColor,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

@@ -46,6 +46,7 @@ class DetailsItemWidget extends StatelessWidget {
   /// values via the [Chip] widget. If it is of type `String` or has an unknown type it will render the value via a
   /// [Text] component.
   Widget buildValue(
+    BuildContext context,
     String name,
     dynamic values,
     void Function(int index)? onTap,
@@ -83,10 +84,13 @@ class DetailsItemWidget extends StatelessWidget {
           values.toString(),
           softWrap: true,
           style: onTap != null
-              ? const TextStyle(
+              ? TextStyle(
+                  color: Theme.of(context).textTheme.displayMedium!.color,
                   decoration: TextDecoration.underline,
                 )
-              : null,
+              : TextStyle(
+                  color: Theme.of(context).textTheme.displayMedium!.color,
+                ),
         ),
       ),
     );
@@ -112,7 +116,7 @@ class DetailsItemWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: primaryTextStyle(size: 18),
+                  style: primaryTextStyle(context, size: 18),
                 ),
               ),
             ],
@@ -132,13 +136,13 @@ class DetailsItemWidget extends StatelessWidget {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Constants.shadowColorGlobal,
+                color: Theme.of(context).shadowColor,
                 blurRadius: Constants.sizeBorderBlurRadius,
                 spreadRadius: Constants.sizeBorderSpreadRadius,
                 offset: const Offset(0.0, 0.0),
               ),
             ],
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: const BorderRadius.all(
               Radius.circular(Constants.sizeBorderRadius),
             ),
@@ -158,11 +162,12 @@ class DetailsItemWidget extends StatelessWidget {
                     children: [
                       Text(
                         '${details[index].name}:',
-                        style: primaryTextStyle(size: 14),
+                        style: primaryTextStyle(context, size: 14),
                         maxLines: 2,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       buildValue(
+                        context,
                         details[index].name,
                         details[index].values,
                         details[index].onTap,

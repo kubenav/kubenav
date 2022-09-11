@@ -12,7 +12,7 @@ import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
 class Providers extends GetView<ProvidersController> {
   const Providers({Key? key}) : super(key: key);
 
-  Widget buildProviderConfig(int index) {
+  Widget buildProviderConfig(BuildContext context, int index) {
     final provider = provider_model.Providers.list
         .where((p) =>
             p.name ==
@@ -27,13 +27,13 @@ class Providers extends GetView<ProvidersController> {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Constants.shadowColorGlobal,
+            color: Theme.of(context).shadowColor,
             blurRadius: Constants.sizeBorderBlurRadius,
             spreadRadius: Constants.sizeBorderSpreadRadius,
             offset: const Offset(0.0, 0.0),
           ),
         ],
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),
@@ -66,7 +66,9 @@ class Providers extends GetView<ProvidersController> {
                   Text(
                     controller
                         .providerConfigController.configs[index].value.name,
-                    style: primaryTextStyle(),
+                    style: primaryTextStyle(
+                      context,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -74,7 +76,9 @@ class Providers extends GetView<ProvidersController> {
                     provider.length == 1
                         ? provider[0].title
                         : provider_model.Providers.manual.title,
-                    style: secondaryTextStyle(),
+                    style: secondaryTextStyle(
+                      context,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -82,7 +86,9 @@ class Providers extends GetView<ProvidersController> {
                     provider.length == 1
                         ? provider[0].subtitle
                         : provider_model.Providers.manual.subtitle,
-                    style: secondaryTextStyle(),
+                    style: secondaryTextStyle(
+                      context,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -106,7 +112,7 @@ class Providers extends GetView<ProvidersController> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Provider Configurations"),
+        title: const Text('Provider Configurations'),
       ),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
@@ -124,7 +130,7 @@ class Providers extends GetView<ProvidersController> {
                   return Column(
                     children: List.generate(
                       controller.providerConfigController.configs.length,
-                      (index) => buildProviderConfig(index),
+                      (index) => buildProviderConfig(context, index),
                     ),
                   );
                 },

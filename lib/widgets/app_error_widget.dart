@@ -57,13 +57,13 @@ class AppErrorWidget extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Constants.shadowColorGlobal,
+            color: Theme.of(context).shadowColor,
             blurRadius: Constants.sizeBorderBlurRadius,
             spreadRadius: Constants.sizeBorderSpreadRadius,
             offset: const Offset(0.0, 0.0),
           ),
         ],
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),
@@ -90,7 +90,9 @@ class AppErrorWidget extends StatelessWidget {
             ),
             child: Text(
               message,
-              style: primaryTextStyle(),
+              style: primaryTextStyle(
+                context,
+              ),
             ),
           ),
           const SizedBox(height: Constants.spacingExtraSmall),
@@ -100,7 +102,9 @@ class AppErrorWidget extends StatelessWidget {
             ),
             child: Text(
               details,
-              style: secondaryTextStyle(),
+              style: secondaryTextStyle(
+                context,
+              ),
             ),
           ),
           const SizedBox(height: Constants.spacingSmall),

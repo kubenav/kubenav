@@ -128,7 +128,7 @@ class DetailsResourcesPreviewWidget extends StatelessWidget {
   final String selector;
   final List<dynamic> Function(List<dynamic> items)? filter;
 
-  Widget buildContainer(Widget child) {
+  Widget buildContainer(BuildContext context, Widget child) {
     return Column(
       children: [
         Padding(
@@ -142,7 +142,7 @@ class DetailsResourcesPreviewWidget extends StatelessWidget {
             children: [
               Expanded(
                 flex: 1,
-                child: Text(title, style: primaryTextStyle(size: 18)),
+                child: Text(title, style: primaryTextStyle(context, size: 18)),
               ),
             ],
           ),
@@ -225,6 +225,7 @@ class DetailsResourcesPreviewWidget extends StatelessWidget {
       () {
         if (controller.loading.value) {
           return buildContainer(
+            context,
             const CircularProgressIndicator(
               color: Constants.colorPrimary,
             ),
@@ -233,6 +234,7 @@ class DetailsResourcesPreviewWidget extends StatelessWidget {
 
         if (controller.error.value != '') {
           return buildContainer(
+            context,
             AppErrorWidget(
               message: 'Could not load $title',
               details: controller.error.value,
@@ -246,6 +248,7 @@ class DetailsResourcesPreviewWidget extends StatelessWidget {
 
         if (controller.items.isEmpty) {
           return buildContainer(
+            context,
             AppErrorWidget(
               message: 'No $title found',
               details: 'We could not found any $title',

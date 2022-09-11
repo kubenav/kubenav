@@ -66,13 +66,17 @@ class ClusterRoleBindingDetailsItemWidget extends StatelessWidget
                         children: [
                           Text(
                             subject.kind,
-                            style: primaryTextStyle(),
+                            style: primaryTextStyle(
+                              context,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             '${subject.namespace ?? '-'}/${subject.name}',
-                            style: secondaryTextStyle(),
+                            style: secondaryTextStyle(
+                              context,
+                            ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),

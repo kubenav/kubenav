@@ -69,7 +69,7 @@ class DetailsEditResourceController extends GetxController {
           loadYaml(codeController!.text),
         );
 
-        if (jsonPatch != "") {
+        if (jsonPatch != '') {
           final jsonPatchBody =
               jsonPatch.startsWith('[') && jsonPatch.endsWith(']')
                   ? jsonPatch

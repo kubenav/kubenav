@@ -108,10 +108,6 @@ class GoogleProviderConfigController extends GetxController {
             } else {
               Get.bottomSheet(
                 BottomSheet(
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(Constants.sizeBorderRadius),
-                  ),
                   onClosing: () {},
                   enableDrag: false,
                   builder: (builder) {
@@ -148,12 +144,12 @@ class GoogleProviderConfigController extends GetxController {
         }
       } catch (err) {
         Logger.log(
-          "GoogleProviderConfigController saveProviderConfig",
-          "Could not get access token",
+          'GoogleProviderConfigController saveProviderConfig',
+          'Could not get access token',
           err,
         );
         snackbar(
-          "Could not get access token",
+          'Could not get access token',
           err.toString(),
         );
       }
@@ -263,6 +259,7 @@ class GoogleProviderConfigWidget extends StatelessWidget {
                 child: Text(
                   'Sign In',
                   style: primaryTextStyle(
+                    context,
                     color: Colors.white,
                   ),
                   textAlign: TextAlign.center,

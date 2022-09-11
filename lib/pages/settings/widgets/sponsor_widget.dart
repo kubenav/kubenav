@@ -22,10 +22,6 @@ class SponsorWidget extends StatelessWidget {
           onTap: () {
             Get.bottomSheet(
               BottomSheet(
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(Constants.sizeBorderRadius),
-                ),
                 onClosing: () {},
                 enableDrag: false,
                 builder: (builder) {
@@ -50,7 +46,9 @@ class SponsorWidget extends StatelessWidget {
               flex: 1,
               child: Text(
                 'GitHub',
-                style: noramlTextStyle(),
+                style: noramlTextStyle(
+                  context,
+                ),
               ),
             ),
             Icon(
@@ -64,10 +62,6 @@ class SponsorWidget extends StatelessWidget {
           onTap: () {
             Get.bottomSheet(
               BottomSheet(
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(Constants.sizeBorderRadius),
-                ),
                 onClosing: () {},
                 enableDrag: false,
                 builder: (builder) {
@@ -90,7 +84,12 @@ class SponsorWidget extends StatelessWidget {
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text('PayPal', style: noramlTextStyle()),
+              child: Text(
+                'PayPal',
+                style: noramlTextStyle(
+                  context,
+                ),
+              ),
             ),
             Icon(
               Icons.arrow_forward_ios,

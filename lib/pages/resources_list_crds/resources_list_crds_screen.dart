@@ -14,6 +14,7 @@ class ResourcesListCRDs extends GetView<ResourcesListCRDsController> {
   const ResourcesListCRDs({Key? key}) : super(key: key);
 
   Widget buildListItem(
+    BuildContext context,
     Resource resource,
   ) {
     return Container(
@@ -24,13 +25,13 @@ class ResourcesListCRDs extends GetView<ResourcesListCRDsController> {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Constants.shadowColorGlobal,
+            color: Theme.of(context).shadowColor,
             blurRadius: Constants.sizeBorderBlurRadius,
             spreadRadius: Constants.sizeBorderSpreadRadius,
             offset: const Offset(0.0, 0.0),
           ),
         ],
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),
@@ -53,7 +54,9 @@ class ResourcesListCRDs extends GetView<ResourcesListCRDsController> {
                         .toString(),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: primaryTextStyle(),
+                    style: primaryTextStyle(
+                      context,
+                    ),
                   ),
                   Text(
                     Characters(resource.description)
@@ -61,7 +64,9 @@ class ResourcesListCRDs extends GetView<ResourcesListCRDsController> {
                         .toString(),
                     overflow: TextOverflow.fade,
                     softWrap: false,
-                    style: secondaryTextStyle(),
+                    style: secondaryTextStyle(
+                      context,
+                    ),
                   ),
                 ],
               ),
@@ -204,6 +209,7 @@ class ResourcesListCRDs extends GetView<ResourcesListCRDsController> {
                         itemCount: controller.getItems().length,
                         itemBuilder: (context, index) {
                           return buildListItem(
+                            context,
                             controller.getItems()[index],
                           );
                         },

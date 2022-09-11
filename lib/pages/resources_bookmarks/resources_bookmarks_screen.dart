@@ -16,7 +16,8 @@ class ResourcesBookmarks extends GetView<ResourcesBookmarksController> {
   const ResourcesBookmarks({Key? key}) : super(key: key);
 
   /// [_proxyDecorator] is used to highlight the cluster which is currently draged by the user.
-  Widget _proxyDecorator(Widget child, int index, Animation<double> animation) {
+  Widget _proxyDecorator(BuildContext context, Widget child, int index,
+      Animation<double> animation) {
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, Widget? child) {
@@ -24,7 +25,7 @@ class ResourcesBookmarks extends GetView<ResourcesBookmarksController> {
         final double elevation = lerpDouble(0, 6, animValue)!;
         return Material(
           elevation: elevation,
-          shadowColor: Constants.shadowColorGlobal,
+          shadowColor: Theme.of(context).shadowColor,
           child: child,
         );
       },
@@ -57,7 +58,9 @@ class ResourcesBookmarks extends GetView<ResourcesBookmarksController> {
                   onReorder: (int start, int current) {
                     controller.bookmarkController.reorder(start, current);
                   },
-                  proxyDecorator: _proxyDecorator,
+                  proxyDecorator:
+                      (Widget child, int index, Animation<double> animation) =>
+                          _proxyDecorator(context, child, index, animation),
                   itemCount: controller.bookmarkController.bookmarks.length,
                   itemBuilder: (
                     context,
@@ -75,13 +78,13 @@ class ResourcesBookmarks extends GetView<ResourcesBookmarksController> {
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                              color: Constants.shadowColorGlobal,
+                              color: Theme.of(context).shadowColor,
                               blurRadius: Constants.sizeBorderBlurRadius,
                               spreadRadius: Constants.sizeBorderSpreadRadius,
                               offset: const Offset(0.0, 0.0),
                             ),
                           ],
-                          color: Colors.white,
+                          color: Theme.of(context).cardColor,
                           borderRadius: const BorderRadius.all(
                             Radius.circular(Constants.sizeBorderRadius),
                           ),
@@ -137,7 +140,9 @@ class ResourcesBookmarks extends GetView<ResourcesBookmarksController> {
                                         Text(
                                           controller.bookmarkController
                                               .bookmarks[index].title,
-                                          style: primaryTextStyle(),
+                                          style: primaryTextStyle(
+                                            context,
+                                          ),
                                         ),
                                         Column(
                                           mainAxisAlignment:
@@ -151,7 +156,9 @@ class ResourcesBookmarks extends GetView<ResourcesBookmarksController> {
                                                   .replaceAll(Characters(''),
                                                       Characters('\u{200B}'))
                                                   .toString(),
-                                              style: secondaryTextStyle(),
+                                              style: secondaryTextStyle(
+                                                context,
+                                              ),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -161,7 +168,9 @@ class ResourcesBookmarks extends GetView<ResourcesBookmarksController> {
                                                   .replaceAll(Characters(''),
                                                       Characters('\u{200B}'))
                                                   .toString(),
-                                              style: secondaryTextStyle(),
+                                              style: secondaryTextStyle(
+                                                context,
+                                              ),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -178,7 +187,9 @@ class ResourcesBookmarks extends GetView<ResourcesBookmarksController> {
                                                             Characters(
                                                                 '\u{200B}'))
                                                         .toString(),
-                                                    style: secondaryTextStyle(),
+                                                    style: secondaryTextStyle(
+                                                      context,
+                                                    ),
                                                     maxLines: 1,
                                                     overflow:
                                                         TextOverflow.ellipsis,

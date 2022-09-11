@@ -92,6 +92,7 @@ class AppTerminalsWidget extends StatelessWidget {
                                   'Terminals',
                                   overflow: TextOverflow.ellipsis,
                                   style: primaryTextStyle(
+                                    context,
                                     size: 18,
                                   ),
                                 ),
@@ -104,7 +105,9 @@ class AppTerminalsWidget extends StatelessWidget {
                                             Characters('\u{200B}'))
                                         .toString(),
                                     overflow: TextOverflow.ellipsis,
-                                    style: secondaryTextStyle(),
+                                    style: secondaryTextStyle(
+                                      context,
+                                    ),
                                   );
                                 }),
                               ],

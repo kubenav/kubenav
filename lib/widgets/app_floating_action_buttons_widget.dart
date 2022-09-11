@@ -21,7 +21,7 @@ class AppFloatingActionButtonsWidget extends StatelessWidget {
     if (controller.terminalController.terminals.isNotEmpty) {
       floatingActionButtons.add(
         FloatingActionButton(
-          heroTag: "terminal",
+          heroTag: 'terminal',
           backgroundColor: Constants.colorPrimary,
           onPressed: () {
             controller.terminalController.showTerminalsBottomSheet();
@@ -34,7 +34,7 @@ class AppFloatingActionButtonsWidget extends StatelessWidget {
     if (controller.portForwardingController.sessions.isNotEmpty) {
       floatingActionButtons.add(
         FloatingActionButton(
-          heroTag: "portforwarding",
+          heroTag: 'portforwarding',
           backgroundColor: Constants.colorPrimary,
           onPressed: () {
             controller.portForwardingController.showSessionsBottomSheet();

@@ -179,10 +179,6 @@ class OIDCProviderConfigController extends GetxController {
           } else {
             Get.bottomSheet(
               BottomSheet(
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(Constants.sizeBorderRadius),
-                ),
                 onClosing: () {},
                 enableDrag: false,
                 builder: (builder) {
@@ -222,12 +218,12 @@ class OIDCProviderConfigController extends GetxController {
         }
       } catch (err) {
         Logger.log(
-          "OIDCProviderConfigController saveProviderConfig",
-          "Could not get access token",
+          'OIDCProviderConfigController saveProviderConfig',
+          'Could not get access token',
           err,
         );
         snackbar(
-          "Could not get access token",
+          'Could not get access token',
           err.toString(),
         );
       }
@@ -343,7 +339,15 @@ class OIDCProviderConfigWidget extends StatelessWidget {
                       ].map((value) {
                         return DropdownMenuItem(
                           value: value,
-                          child: Text(value),
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .displayMedium!
+                                  .color,
+                            ),
+                          ),
                         );
                       }).toList(),
                     ),
@@ -440,6 +444,7 @@ class OIDCProviderConfigWidget extends StatelessWidget {
                 child: Text(
                   'Sign In',
                   style: primaryTextStyle(
+                    context,
                     color: Colors.white,
                   ),
                   textAlign: TextAlign.center,

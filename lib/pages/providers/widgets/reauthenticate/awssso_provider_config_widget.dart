@@ -88,7 +88,7 @@ class AWSSSOProviderReauthenticateController extends GetxController {
         awsSSOConfig!.value.client!.clientId!,
         awsSSOConfig!.value.client!.clientSecret!,
         awsSSOConfig!.value.device!.deviceCode!,
-        "",
+        '',
         0,
       );
 
@@ -166,6 +166,7 @@ class AWSSSOProviderReauthenticateWidget extends StatelessWidget {
             child: Text(
               'Sign In',
               style: primaryTextStyle(
+                context,
                 color: Colors.white,
               ),
               textAlign: TextAlign.center,
@@ -192,6 +193,7 @@ class AWSSSOProviderReauthenticateWidget extends StatelessWidget {
             child: Text(
               'Verify',
               style: primaryTextStyle(
+                context,
                 color: Colors.white,
               ),
               textAlign: TextAlign.center,
@@ -218,6 +220,7 @@ class AWSSSOProviderReauthenticateWidget extends StatelessWidget {
             child: Text(
               'Get Credentials',
               style: primaryTextStyle(
+                context,
                 color: Colors.white,
               ),
               textAlign: TextAlign.center,

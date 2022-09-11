@@ -53,7 +53,7 @@ class ListItemWidget extends StatelessWidget {
   final Status status;
   final void Function()? onTap;
 
-  Widget buildStatus(BuildContext context) {
+  Widget buildStatus() {
     if (status != Status.undefined) {
       return Wrap(
         children: [
@@ -76,7 +76,7 @@ class ListItemWidget extends StatelessWidget {
 
   /// [buildInfo] creates the info widget. Eachitem in the list of [info] represents one line of text in the
   /// returned column widget.
-  Widget buildInfo(List<String> info) {
+  Widget buildInfo(BuildContext context, List<String> info) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +87,9 @@ class ListItemWidget extends StatelessWidget {
                     .toString(),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
-                style: secondaryTextStyle(),
+                style: secondaryTextStyle(
+                  context,
+                ),
               ))
           .toList(),
     );
@@ -103,13 +105,13 @@ class ListItemWidget extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Constants.shadowColorGlobal,
+            color: Theme.of(context).shadowColor,
             blurRadius: Constants.sizeBorderBlurRadius,
             spreadRadius: Constants.sizeBorderSpreadRadius,
             offset: const Offset(0.0, 0.0),
           ),
         ],
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),
@@ -133,13 +135,15 @@ class ListItemWidget extends StatelessWidget {
                         .toString(),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: primaryTextStyle(),
+                    style: primaryTextStyle(
+                      context,
+                    ),
                   ),
-                  buildInfo(info),
+                  buildInfo(context, info),
                 ],
               ),
             ),
-            buildStatus(context),
+            buildStatus(),
           ],
         ),
       ),

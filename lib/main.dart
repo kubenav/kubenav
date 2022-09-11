@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 
 import 'package:kubenav/controllers/bookmark_controller.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
+import 'package:kubenav/controllers/global_settings_controller.dart';
 import 'package:kubenav/controllers/portforwarding_controller.dart';
 import 'package:kubenav/controllers/provider_config_controller.dart';
 import 'package:kubenav/controllers/terminal_controller.dart';
@@ -15,6 +16,7 @@ import 'package:kubenav/utils/constants.dart';
 void main() async {
   await GetStorage.init();
 
+  Get.put(GlobalSettingsController());
   Get.put(ProviderConfigController());
   Get.put(ClusterController());
   Get.put(BookmarkController());
@@ -31,31 +33,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'kubenav',
-      theme: ThemeData(
-        primaryColor: Constants.colorPrimary,
-        canvasColor: Constants.colorCanvas,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Constants.colorAppBarBackground,
-          foregroundColor: Constants.colorAppBarForeground,
-          elevation: 0,
-        ),
-        inputDecorationTheme: const InputDecorationTheme(
-          floatingLabelStyle: TextStyle(
-            color: Constants.colorPrimary,
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              style: BorderStyle.solid,
-              color: Constants.colorPrimary,
-            ),
-          ),
-        ),
-        textSelectionTheme: TextSelectionThemeData(
-          cursorColor: Constants.colorPrimary,
-          selectionColor: Constants.colorPrimary.withOpacity(0.25),
-          selectionHandleColor: Constants.colorPrimary,
-        ),
-      ),
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: ThemeMode.system,
       initialRoute: Routes.home,
       getPages: AppPages.pages,
     );

@@ -21,10 +21,6 @@ class HelpWidget extends StatelessWidget {
           onTap: () {
             Get.bottomSheet(
               BottomSheet(
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(Constants.sizeBorderRadius),
-                ),
                 onClosing: () {},
                 enableDrag: false,
                 builder: (builder) {
@@ -42,7 +38,12 @@ class HelpWidget extends StatelessWidget {
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text('Logs', style: noramlTextStyle()),
+              child: Text(
+                'Logs',
+                style: noramlTextStyle(
+                  context,
+                ),
+              ),
             ),
             Icon(
               Icons.arrow_forward_ios,

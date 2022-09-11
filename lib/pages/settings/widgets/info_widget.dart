@@ -55,7 +55,10 @@ class InfoWidget extends StatelessWidget {
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text('Version', style: noramlTextStyle()),
+              child: Text('Version',
+                  style: noramlTextStyle(
+                    context,
+                  )),
             ),
             Container(
               padding: const EdgeInsets.only(
@@ -79,6 +82,7 @@ class InfoWidget extends StatelessWidget {
                   return Text(
                     controller.version.value,
                     style: secondaryTextStyle(
+                      context,
                       size: 14,
                       color: Colors.white,
                     ),
@@ -93,10 +97,6 @@ class InfoWidget extends StatelessWidget {
           onTap: () {
             Get.bottomSheet(
               BottomSheet(
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(Constants.sizeBorderRadius),
-                ),
                 onClosing: () {},
                 enableDrag: false,
                 builder: (builder) {
@@ -114,7 +114,12 @@ class InfoWidget extends StatelessWidget {
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text('License', style: noramlTextStyle()),
+              child: Text(
+                'License',
+                style: noramlTextStyle(
+                  context,
+                ),
+              ),
             ),
             Icon(
               Icons.arrow_forward_ios,
@@ -127,10 +132,6 @@ class InfoWidget extends StatelessWidget {
           onTap: () {
             Get.bottomSheet(
               BottomSheet(
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(Constants.sizeBorderRadius),
-                ),
                 onClosing: () {},
                 enableDrag: false,
                 builder: (builder) {
@@ -153,7 +154,12 @@ class InfoWidget extends StatelessWidget {
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text('Website', style: noramlTextStyle()),
+              child: Text(
+                'Website',
+                style: noramlTextStyle(
+                  context,
+                ),
+              ),
             ),
             Icon(
               Icons.arrow_forward_ios,
@@ -166,10 +172,6 @@ class InfoWidget extends StatelessWidget {
           onTap: () {
             Get.bottomSheet(
               BottomSheet(
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(Constants.sizeBorderRadius),
-                ),
                 onClosing: () {},
                 enableDrag: false,
                 builder: (builder) {
@@ -193,7 +195,12 @@ class InfoWidget extends StatelessWidget {
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text('GitHub', style: noramlTextStyle()),
+              child: Text(
+                'GitHub',
+                style: noramlTextStyle(
+                  context,
+                ),
+              ),
             ),
             Icon(
               Icons.arrow_forward_ios,
@@ -206,10 +213,6 @@ class InfoWidget extends StatelessWidget {
           onTap: () {
             Get.bottomSheet(
               BottomSheet(
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(Constants.sizeBorderRadius),
-                ),
                 onClosing: () {},
                 enableDrag: false,
                 builder: (builder) {
@@ -232,7 +235,12 @@ class InfoWidget extends StatelessWidget {
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text('Twitter', style: noramlTextStyle()),
+              child: Text(
+                'Twitter',
+                style: noramlTextStyle(
+                  context,
+                ),
+              ),
             ),
             Icon(
               Icons.arrow_forward_ios,

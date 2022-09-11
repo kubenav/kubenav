@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/helm_model.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
-import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/app_namespaces_widget.dart';
 
@@ -94,9 +93,6 @@ class HelmListController extends GetxController {
   void showNamespaces() {
     Get.bottomSheet(
       BottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-        ),
         onClosing: () {},
         enableDrag: false,
         builder: (builder) {

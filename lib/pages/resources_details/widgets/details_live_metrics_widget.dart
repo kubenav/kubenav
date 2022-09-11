@@ -158,7 +158,7 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                   Expanded(
                     child: Text(
                       'CPU',
-                      style: primaryTextStyle(size: 18),
+                      style: primaryTextStyle(context, size: 18),
                     ),
                   ),
                 ],
@@ -175,13 +175,13 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Constants.shadowColorGlobal,
+                        color: Theme.of(context).shadowColor,
                         blurRadius: Constants.sizeBorderBlurRadius,
                         spreadRadius: Constants.sizeBorderSpreadRadius,
                         offset: const Offset(0.0, 0.0),
                       ),
                     ],
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(Constants.sizeBorderRadius),
                     ),
@@ -240,7 +240,9 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                         angle: pi / 4,
                                         child: Text(
                                           '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}',
-                                          style: secondaryTextStyle(),
+                                          style: secondaryTextStyle(
+                                            context,
+                                          ),
                                         ),
                                       ),
                                     );
@@ -281,6 +283,7 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                 Text(
                                   e.key,
                                   style: noramlTextStyle(
+                                    context,
                                     size: Constants.sizeTextSecondary,
                                   ),
                                 ),
@@ -288,7 +291,9 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                   formatCpuMetric(e
                                       .value.cpu[e.value.cpu.length - 1].y
                                       .toInt()),
-                                  style: secondaryTextStyle(),
+                                  style: secondaryTextStyle(
+                                    context,
+                                  ),
                                 ),
                               ],
                             ),
@@ -312,7 +317,7 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                   Expanded(
                     child: Text(
                       'Memory',
-                      style: primaryTextStyle(size: 18),
+                      style: primaryTextStyle(context, size: 18),
                     ),
                   ),
                 ],
@@ -329,13 +334,13 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Constants.shadowColorGlobal,
+                        color: Theme.of(context).shadowColor,
                         blurRadius: Constants.sizeBorderBlurRadius,
                         spreadRadius: Constants.sizeBorderSpreadRadius,
                         offset: const Offset(0.0, 0.0),
                       ),
                     ],
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(Constants.sizeBorderRadius),
                     ),
@@ -394,7 +399,9 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                         angle: pi / 4,
                                         child: Text(
                                           '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}',
-                                          style: secondaryTextStyle(),
+                                          style: secondaryTextStyle(
+                                            context,
+                                          ),
                                         ),
                                       ),
                                     );
@@ -435,6 +442,7 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                 Text(
                                   e.key,
                                   style: noramlTextStyle(
+                                    context,
                                     size: Constants.sizeTextSecondary,
                                   ),
                                 ),
@@ -442,7 +450,9 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                   formatMemoryMetric(e
                                       .value.memory[e.value.memory.length - 1].y
                                       .toInt()),
-                                  style: secondaryTextStyle(),
+                                  style: secondaryTextStyle(
+                                    context,
+                                  ),
                                 ),
                               ],
                             ),

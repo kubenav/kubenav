@@ -85,9 +85,6 @@ class AWSProviderConfigController extends GetxController {
           finish(context);
           Get.bottomSheet(
             BottomSheet(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-              ),
               onClosing: () {},
               enableDrag: false,
               builder: (builder) {
@@ -251,7 +248,15 @@ class AWSProviderConfigWidget extends StatelessWidget {
                       ].map((value) {
                         return DropdownMenuItem(
                           value: value,
-                          child: Text(value),
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .displayMedium!
+                                  .color,
+                            ),
+                          ),
                         );
                       }).toList(),
                     ),

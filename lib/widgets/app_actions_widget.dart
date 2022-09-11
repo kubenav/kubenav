@@ -56,9 +56,9 @@ class AppActionsWidget extends StatelessWidget {
           left: Constants.spacingMiddle,
           right: Constants.spacingMiddle,
         ),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
         ),

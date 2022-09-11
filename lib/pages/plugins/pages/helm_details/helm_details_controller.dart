@@ -8,7 +8,6 @@ import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/helm_model.dart';
 import 'package:kubenav/pages/plugins/pages/helm_details/widgets/details_values_widget.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
-import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 
 class HelmDetailsController extends GetxController {
@@ -116,9 +115,6 @@ class HelmDetailsController extends GetxController {
   void showValues() {
     Get.bottomSheet(
       BottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-        ),
         onClosing: () {},
         enableDrag: false,
         builder: (builder) {

@@ -17,7 +17,7 @@ class Plugins extends GetView<PluginsController> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Plugins"),
+        title: const Text('Plugins'),
       ),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
@@ -53,13 +53,17 @@ class Plugins extends GetView<PluginsController> {
                         children: [
                           Text(
                             'Helm',
-                            style: primaryTextStyle(),
+                            style: primaryTextStyle(
+                              context,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             'The package manager for Kubernetes',
-                            style: secondaryTextStyle(),
+                            style: secondaryTextStyle(
+                              context,
+                            ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),

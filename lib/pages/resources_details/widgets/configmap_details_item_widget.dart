@@ -78,10 +78,6 @@ class ConfigMapDetailsItemWidget extends StatelessWidget
                   onTap: () {
                     Get.bottomSheet(
                       BottomSheet(
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(Constants.sizeBorderRadius),
-                        ),
                         onClosing: () {},
                         enableDrag: false,
                         builder: (builder) {
@@ -114,13 +110,17 @@ class ConfigMapDetailsItemWidget extends StatelessWidget
                         children: [
                           Text(
                             data.key,
-                            style: primaryTextStyle(),
+                            style: primaryTextStyle(
+                              context,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             data.value,
-                            style: secondaryTextStyle(),
+                            style: secondaryTextStyle(
+                              context,
+                            ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),

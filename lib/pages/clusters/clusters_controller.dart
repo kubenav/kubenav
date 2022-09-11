@@ -11,7 +11,6 @@ import 'package:kubenav/pages/clusters/widgets/add_cluster_manual_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/cluster_actions_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/reuse_provider_config_actions_widget.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
-import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 
 class ClustersController extends GetxController {
@@ -35,9 +34,6 @@ class ClustersController extends GetxController {
       case 'kubeconfig':
         Get.bottomSheet(
           BottomSheet(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-            ),
             onClosing: () {},
             enableDrag: false,
             builder: (builder) {
@@ -57,9 +53,6 @@ class ClustersController extends GetxController {
       default:
         Get.bottomSheet(
           BottomSheet(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-            ),
             onClosing: () {},
             enableDrag: false,
             backgroundColor: Colors.transparent,
@@ -77,9 +70,6 @@ class ClustersController extends GetxController {
   void showClusterActionsBottomSheet(int index) {
     Get.bottomSheet(
       BottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-        ),
         onClosing: () {},
         enableDrag: false,
         backgroundColor: Colors.transparent,

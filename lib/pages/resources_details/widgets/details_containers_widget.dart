@@ -6,7 +6,6 @@ import 'package:kubenav/models/kubernetes-extensions/pod_metrics.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_status.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_container_widget.dart';
-import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources/general.dart';
 import 'package:kubenav/utils/resources/pods.dart';
 import 'package:kubenav/widgets/app_horizontal_list_cards_widget.dart';
@@ -77,10 +76,6 @@ class DetailsContainersWidget extends StatelessWidget {
             onTap: () {
               Get.bottomSheet(
                 BottomSheet(
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(Constants.sizeBorderRadius),
-                  ),
                   onClosing: () {},
                   enableDrag: false,
                   builder: (builder) {
@@ -108,10 +103,6 @@ class DetailsContainersWidget extends StatelessWidget {
             onTap: () {
               Get.bottomSheet(
                 BottomSheet(
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(Constants.sizeBorderRadius),
-                  ),
                   onClosing: () {},
                   enableDrag: false,
                   builder: (builder) {

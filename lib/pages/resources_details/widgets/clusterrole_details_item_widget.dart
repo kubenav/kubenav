@@ -67,13 +67,17 @@ class ClusterRoleDetailsItemWidget extends StatelessWidget
                                 .replaceAll(
                                     Characters(''), Characters('\u{200B}'))
                                 .toString(),
-                            style: primaryTextStyle(),
+                            style: primaryTextStyle(
+                              context,
+                            ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             'Non-Resource URLs: ${rule.nonResourceURLs.isNotEmpty ? rule.nonResourceURLs.join(', ') : '-'}\nResource Names: ${rule.resourceNames.isNotEmpty ? rule.resourceNames.join(', ') : '-'}\nVerbs: ${rule.verbs.isNotEmpty ? rule.verbs.join(', ') : '-'}',
-                            style: secondaryTextStyle(),
+                            style: secondaryTextStyle(
+                              context,
+                            ),
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),

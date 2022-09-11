@@ -16,7 +16,6 @@ import 'package:kubenav/pages/resources_details/widgets/details_scale_resource_w
 import 'package:kubenav/pages/resources_details/widgets/details_show_yaml_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_terminal_widget.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
-import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 
 class ResourcesDetailsController extends GetxController {
@@ -108,9 +107,6 @@ class ResourcesDetailsController extends GetxController {
   void showYaml() {
     Get.bottomSheet(
       BottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-        ),
         onClosing: () {},
         enableDrag: false,
         builder: (builder) {
@@ -125,9 +121,6 @@ class ResourcesDetailsController extends GetxController {
     if (resource != null && path != null && name != null) {
       Get.bottomSheet(
         BottomSheet(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-          ),
           onClosing: () {},
           enableDrag: false,
           builder: (builder) {
@@ -149,9 +142,6 @@ class ResourcesDetailsController extends GetxController {
     if (resource != null && path != null && name != null) {
       Get.bottomSheet(
         BottomSheet(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-          ),
           onClosing: () {},
           enableDrag: false,
           builder: (builder) {
@@ -172,9 +162,6 @@ class ResourcesDetailsController extends GetxController {
     if (resource != null && path != null && name != null && namespace != null) {
       Get.bottomSheet(
         BottomSheet(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-          ),
           onClosing: () {},
           enableDrag: false,
           builder: (builder) {
@@ -196,9 +183,6 @@ class ResourcesDetailsController extends GetxController {
     if (resource != null && path != null && name != null && namespace != null) {
       Get.bottomSheet(
         BottomSheet(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-          ),
           onClosing: () {},
           enableDrag: false,
           builder: (builder) {
@@ -220,9 +204,6 @@ class ResourcesDetailsController extends GetxController {
     if (name != null && namespace != null) {
       Get.bottomSheet(
         BottomSheet(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-          ),
           onClosing: () {},
           enableDrag: false,
           builder: (builder) {
@@ -242,9 +223,6 @@ class ResourcesDetailsController extends GetxController {
     if (name != null && namespace != null) {
       Get.bottomSheet(
         BottomSheet(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-          ),
           onClosing: () {},
           enableDrag: false,
           builder: (builder) {
@@ -264,9 +242,6 @@ class ResourcesDetailsController extends GetxController {
     if (name != null && namespace != null) {
       Get.bottomSheet(
         BottomSheet(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-          ),
           onClosing: () {},
           enableDrag: false,
           builder: (builder) {
@@ -286,9 +261,6 @@ class ResourcesDetailsController extends GetxController {
     if (name != null && namespace != null) {
       Get.bottomSheet(
         BottomSheet(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-          ),
           onClosing: () {},
           enableDrag: false,
           builder: (builder) {

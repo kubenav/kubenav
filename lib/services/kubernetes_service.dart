@@ -189,7 +189,7 @@ class KubernetesService {
           }
 
           if (oidcResponse.refreshToken != null &&
-              oidcResponse.refreshToken != "") {
+              oidcResponse.refreshToken != '') {
             providerConfig.oidc!.refreshToken = oidcResponse.refreshToken!;
           }
 

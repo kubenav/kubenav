@@ -48,12 +48,17 @@ class LicenseWidget extends StatelessWidget {
         key: const Key('settings/license'),
         child: ListView(
           shrinkWrap: false,
-          children: const [
+          children: [
             Padding(
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 vertical: 8,
               ),
-              child: Text(licenseText),
+              child: Text(
+                licenseText,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.displayMedium!.color,
+                ),
+              ),
             ),
           ],
         ),

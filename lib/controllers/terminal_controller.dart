@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:xterm/xterm.dart' as xterm;
 
 import 'package:kubenav/models/terminal_model.dart';
-import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_terminals_widget.dart';
 
@@ -20,9 +19,6 @@ class TerminalController extends GetxController {
 
     Get.bottomSheet(
       BottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-        ),
         onClosing: () {},
         enableDrag: false,
         builder: (builder) {

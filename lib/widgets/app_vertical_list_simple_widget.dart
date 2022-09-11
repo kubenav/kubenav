@@ -57,7 +57,6 @@ class AppVertialListSimpleModel {
 ///                 controller.version.value,
 ///                 style: secondaryTextStyle(
 ///                   size: 14,
-///                   color: Colors.white,
 ///                 ),
 ///                 textAlign: TextAlign.center,
 ///               );
@@ -104,7 +103,7 @@ class AppVertialListSimpleWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: primaryTextStyle(size: 18),
+                  style: primaryTextStyle(context, size: 18),
                 ),
               ),
             ],
@@ -130,13 +129,13 @@ class AppVertialListSimpleWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Constants.shadowColorGlobal,
+                      color: Theme.of(context).shadowColor,
                       blurRadius: Constants.sizeBorderBlurRadius,
                       spreadRadius: Constants.sizeBorderSpreadRadius,
                       offset: const Offset(0.0, 0.0),
                     ),
                   ],
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(Constants.sizeBorderRadius),
                   ),

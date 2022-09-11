@@ -205,7 +205,7 @@ class DetailsTerminalWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text("Container"),
+                  const Text('Container'),
                   Obx(
                     () => DropdownButton(
                       value: controller.container.value,
@@ -219,7 +219,15 @@ class DetailsTerminalWidget extends StatelessWidget {
                       items: controller.containers.map((value) {
                         return DropdownMenuItem(
                           value: value,
-                          child: Text(value),
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .displayMedium!
+                                  .color,
+                            ),
+                          ),
                         );
                       }).toList(),
                     ),
@@ -235,7 +243,7 @@ class DetailsTerminalWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text("Shell"),
+                  const Text('Shell'),
                   Obx(
                     () => DropdownButton(
                       value: controller.shell.value,
@@ -254,7 +262,15 @@ class DetailsTerminalWidget extends StatelessWidget {
                       ].map((value) {
                         return DropdownMenuItem(
                           value: value,
-                          child: Text(value),
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .displayMedium!
+                                  .color,
+                            ),
+                          ),
                         );
                       }).toList(),
                     ),

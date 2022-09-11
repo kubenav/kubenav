@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:kubenav/models/portforwarding_session_model.dart';
-import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_browser_widget.dart';
 import 'package:kubenav/widgets/app_portforwarding_sessions_widget.dart';
@@ -19,9 +18,6 @@ class PortForwardingController extends GetxController {
 
     Get.bottomSheet(
       BottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-        ),
         onClosing: () {},
         enableDrag: false,
         backgroundColor: Colors.transparent,
@@ -38,9 +34,6 @@ class PortForwardingController extends GetxController {
 
     Get.bottomSheet(
       BottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-        ),
         onClosing: () {},
         enableDrag: false,
         backgroundColor: Colors.transparent,
@@ -91,9 +84,6 @@ class PortForwardingController extends GetxController {
   void openSession(int localPort) {
     Get.bottomSheet(
       BottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-        ),
         onClosing: () {},
         enableDrag: false,
         builder: (builder) {

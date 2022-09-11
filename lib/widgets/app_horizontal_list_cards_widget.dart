@@ -62,7 +62,11 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
   /// [buildMore] creates the more widget with the provided text, icon and onTap function. If the user doesn't provided
   /// these arguments, the function returns an empty container widget.
   Widget buildMore(
-      String? moreText, IconData? moreIcon, void Function()? moreOnTap) {
+    BuildContext context,
+    String? moreText,
+    IconData? moreIcon,
+    void Function()? moreOnTap,
+  ) {
     if (moreText != null && moreIcon != null) {
       return InkWell(
         onTap: moreOnTap,
@@ -70,7 +74,7 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
           children: [
             Text(
               moreText,
-              style: secondaryTextStyle(color: Constants.colorPrimary),
+              style: secondaryTextStyle(context, color: Constants.colorPrimary),
             ),
             const SizedBox(width: Constants.spacingExtraSmall),
             Icon(
@@ -88,7 +92,10 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
 
   /// [buildSubtitle] creates the subtitle widget. Eachitem in the list of [subtitle] represents one line of text in the
   /// returned column widget.
-  Widget buildSubtitle(List<String> subtitle) {
+  Widget buildSubtitle(
+    BuildContext context,
+    List<String> subtitle,
+  ) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +106,9 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                     .toString(),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
-                style: secondaryTextStyle(),
+                style: secondaryTextStyle(
+                  context,
+                ),
               ))
           .toList(),
     );
@@ -120,9 +129,9 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
             children: [
               Expanded(
                 flex: 1,
-                child: Text(title, style: primaryTextStyle(size: 18)),
+                child: Text(title, style: primaryTextStyle(context, size: 18)),
               ),
-              buildMore(moreText, moreIcon, moreOnTap),
+              buildMore(context, moreText, moreIcon, moreOnTap),
             ],
           ),
         ),
@@ -151,13 +160,13 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Constants.shadowColorGlobal,
+                      color: Theme.of(context).shadowColor,
                       blurRadius: Constants.sizeBorderBlurRadius,
                       spreadRadius: Constants.sizeBorderSpreadRadius,
                       offset: const Offset(0.0, 0.0),
                     ),
                   ],
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(Constants.sizeBorderRadius),
                   ),
@@ -204,7 +213,9 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                                   Characters(''), Characters('\u{200B}'))
                               .toString(),
                           overflow: TextOverflow.ellipsis,
-                          style: primaryTextStyle(),
+                          style: primaryTextStyle(
+                            context,
+                          ),
                         ),
                       ),
                       const SizedBox(height: Constants.spacingExtraSmall),
@@ -212,7 +223,7 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(
                           left: Constants.spacingSmall,
                         ),
-                        child: buildSubtitle(cards[index].subtitle),
+                        child: buildSubtitle(context, cards[index].subtitle),
                       ),
                       const SizedBox(height: Constants.spacingSmall),
                     ],

@@ -55,13 +55,17 @@ class ServiceAccountDetailsItemWidget extends StatelessWidget
                         children: [
                           Text(
                             secret.name ?? '-',
-                            style: primaryTextStyle(),
+                            style: primaryTextStyle(
+                              context,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             'Namespace: ${secret.namespace ?? sa.metadata?.namespace ?? '-'}',
-                            style: secondaryTextStyle(),
+                            style: secondaryTextStyle(
+                              context,
+                            ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),

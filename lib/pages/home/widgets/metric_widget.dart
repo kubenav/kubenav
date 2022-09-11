@@ -348,7 +348,7 @@ class MetricWidget extends StatelessWidget {
                     Expanded(
                       child: Text(
                         texts[metricType]!['title']!,
-                        style: primaryTextStyle(size: 18),
+                        style: primaryTextStyle(context, size: 18),
                       ),
                     ),
                   ],
@@ -363,13 +363,13 @@ class MetricWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Constants.shadowColorGlobal,
+                      color: Theme.of(context).shadowColor,
                       blurRadius: Constants.sizeBorderBlurRadius,
                       spreadRadius: Constants.sizeBorderSpreadRadius,
                       offset: const Offset(0.0, 0.0),
                     ),
                   ],
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(Constants.sizeBorderRadius),
                   ),
@@ -521,7 +521,9 @@ class MetricWidget extends StatelessWidget {
                                     padding: const EdgeInsets.only(top: 16),
                                     child: Text(
                                       title,
-                                      style: secondaryTextStyle(),
+                                      style: secondaryTextStyle(
+                                        context,
+                                      ),
                                       textDirection: TextDirection.rtl,
                                       textAlign: TextAlign.center,
                                     ),
@@ -558,13 +560,16 @@ class MetricWidget extends StatelessWidget {
                         Text(
                           'Allocatable',
                           style: noramlTextStyle(
+                            context,
                             size: Constants.sizeTextSecondary,
                           ),
                         ),
                         Text(
                           formatValue(controller
                               .metrics[0].metrics[metricType]!.allocatable),
-                          style: secondaryTextStyle(),
+                          style: secondaryTextStyle(
+                            context,
+                          ),
                         ),
                       ],
                     ),
@@ -574,13 +579,16 @@ class MetricWidget extends StatelessWidget {
                         Text(
                           'Usage',
                           style: noramlTextStyle(
+                            context,
                             size: Constants.sizeTextSecondary,
                           ),
                         ),
                         Text(
                           formatValue(
                               controller.metrics[0].metrics[metricType]!.usage),
-                          style: secondaryTextStyle(),
+                          style: secondaryTextStyle(
+                            context,
+                          ),
                         ),
                       ],
                     ),
@@ -590,13 +598,16 @@ class MetricWidget extends StatelessWidget {
                         Text(
                           'Requests',
                           style: noramlTextStyle(
+                            context,
                             size: Constants.sizeTextSecondary,
                           ),
                         ),
                         Text(
                           formatValue(controller
                               .metrics[0].metrics[metricType]!.requests),
-                          style: secondaryTextStyle(),
+                          style: secondaryTextStyle(
+                            context,
+                          ),
                         ),
                       ],
                     ),
@@ -606,13 +617,16 @@ class MetricWidget extends StatelessWidget {
                         Text(
                           'Limits',
                           style: noramlTextStyle(
+                            context,
                             size: Constants.sizeTextSecondary,
                           ),
                         ),
                         Text(
                           formatValue(controller
                               .metrics[0].metrics[metricType]!.limits),
-                          style: secondaryTextStyle(),
+                          style: secondaryTextStyle(
+                            context,
+                          ),
                         ),
                       ],
                     ),

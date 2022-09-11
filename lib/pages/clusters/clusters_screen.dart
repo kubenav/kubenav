@@ -16,7 +16,8 @@ class Clusters extends GetView<ClustersController> {
   const Clusters({Key? key}) : super(key: key);
 
   /// [_proxyDecorator] is used to highlight the cluster which is currently draged by the user.
-  Widget _proxyDecorator(Widget child, int index, Animation<double> animation) {
+  Widget _proxyDecorator(BuildContext context, Widget child, int index,
+      Animation<double> animation) {
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, Widget? child) {
@@ -24,7 +25,7 @@ class Clusters extends GetView<ClustersController> {
         final double elevation = lerpDouble(0, 6, animValue)!;
         return Material(
           elevation: elevation,
-          shadowColor: Constants.shadowColorGlobal,
+          shadowColor: Theme.of(context).shadowColor,
           child: child,
         );
       },
@@ -68,7 +69,7 @@ class Clusters extends GetView<ClustersController> {
                   Expanded(
                     child: Text(
                       'Clusters',
-                      style: primaryTextStyle(size: 18),
+                      style: primaryTextStyle(context, size: 18),
                     ),
                   ),
                 ],
@@ -86,7 +87,9 @@ class Clusters extends GetView<ClustersController> {
                   onReorder: (int start, int current) {
                     controller.clusterController.reorder(start, current);
                   },
-                  proxyDecorator: _proxyDecorator,
+                  proxyDecorator:
+                      (Widget child, int index, Animation<double> animation) =>
+                          _proxyDecorator(context, child, index, animation),
                   itemCount: controller.clusterController.clusters.length,
                   itemBuilder: (
                     context,

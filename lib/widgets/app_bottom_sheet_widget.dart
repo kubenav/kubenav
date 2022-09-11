@@ -120,6 +120,7 @@ class AppBottomSheetWidget extends StatelessWidget {
                                   title,
                                   overflow: TextOverflow.ellipsis,
                                   style: primaryTextStyle(
+                                    context,
                                     size: 18,
                                   ),
                                 ),
@@ -129,7 +130,9 @@ class AppBottomSheetWidget extends StatelessWidget {
                                           Characters('\u{200B}'))
                                       .toString(),
                                   overflow: TextOverflow.ellipsis,
-                                  style: secondaryTextStyle(),
+                                  style: secondaryTextStyle(
+                                    context,
+                                  ),
                                 ),
                               ],
                             ),
@@ -138,8 +141,9 @@ class AppBottomSheetWidget extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.close_outlined,
+                        color: Theme.of(context).textTheme.displayMedium!.color,
                       ),
                       onPressed: onClosePressed,
                     ),
@@ -179,6 +183,7 @@ class AppBottomSheetWidget extends StatelessWidget {
                   child: Text(
                     actionText,
                     style: primaryTextStyle(
+                      context,
                       color: Colors.white,
                     ),
                     textAlign: TextAlign.center,

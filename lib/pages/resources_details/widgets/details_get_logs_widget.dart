@@ -169,7 +169,7 @@ class DetailsGetLogsWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text("Container"),
+                  const Text('Container'),
                   Obx(
                     () => DropdownButton(
                       value: controller.container.value,
@@ -183,7 +183,15 @@ class DetailsGetLogsWidget extends StatelessWidget {
                       items: controller.containers.map((value) {
                         return DropdownMenuItem(
                           value: value,
-                          child: Text(value),
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .displayMedium!
+                                  .color,
+                            ),
+                          ),
                         );
                       }).toList(),
                     ),
@@ -199,7 +207,7 @@ class DetailsGetLogsWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text("Since"),
+                  const Text('Since'),
                   Obx(
                     () => DropdownButton(
                       value: controller.since.value,
@@ -224,7 +232,15 @@ class DetailsGetLogsWidget extends StatelessWidget {
                       ].map((value) {
                         return DropdownMenuItem(
                           value: value,
-                          child: Text(value),
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .displayMedium!
+                                  .color,
+                            ),
+                          ),
                         );
                       }).toList(),
                     ),
@@ -256,7 +272,7 @@ class DetailsGetLogsWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text("Previous"),
+                  const Text('Previous'),
                   Obx(
                     () => Switch(
                       activeColor: Constants.colorPrimary,

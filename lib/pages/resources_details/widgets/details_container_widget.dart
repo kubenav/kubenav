@@ -231,7 +231,9 @@ class DetailsContainerWidget extends StatelessWidget {
                           children: [
                             Text(
                               env.name,
-                              style: primaryTextStyle(),
+                              style: primaryTextStyle(
+                                context,
+                              ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -241,7 +243,9 @@ class DetailsContainerWidget extends StatelessWidget {
                                   : env.valueFrom != null
                                       ? getValueFrom(env.valueFrom!)
                                       : '-',
-                              style: secondaryTextStyle(),
+                              style: secondaryTextStyle(
+                                context,
+                              ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -293,13 +297,17 @@ class DetailsContainerWidget extends StatelessWidget {
                           children: [
                             Text(
                               volumeMount.name,
-                              style: primaryTextStyle(),
+                              style: primaryTextStyle(
+                                context,
+                              ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                             Text(
                               volumeMount.mountPath,
-                              style: secondaryTextStyle(),
+                              style: secondaryTextStyle(
+                                context,
+                              ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),

@@ -8,7 +8,6 @@ import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_list/widgets/list_create_resource_widget.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
-import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/app_namespaces_widget.dart';
 
@@ -208,9 +207,6 @@ class ResourcesListController extends GetxController {
   void showNamespaces() {
     Get.bottomSheet(
       BottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-        ),
         onClosing: () {},
         enableDrag: false,
         builder: (builder) {
@@ -225,9 +221,6 @@ class ResourcesListController extends GetxController {
     if (title != null && resource != null && path != null) {
       Get.bottomSheet(
         BottomSheet(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-          ),
           onClosing: () {},
           enableDrag: false,
           builder: (builder) {

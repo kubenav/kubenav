@@ -117,8 +117,11 @@ class DetailsDeleteResourceWidget extends StatelessWidget {
               ),
               child: namespace != null
                   ? Text(
-                      'Do you really want to delete $name in namespace $namespace?')
-                  : Text('Do you really want to delete $name?'),
+                      'Do you really want to delete $name in namespace $namespace?',
+                    )
+                  : Text(
+                      'Do you really want to delete $name?',
+                    ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -128,7 +131,7 @@ class DetailsDeleteResourceWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text("Force"),
+                  const Text('Force'),
                   Obx(
                     () => Switch(
                       activeColor: Constants.colorPrimary,

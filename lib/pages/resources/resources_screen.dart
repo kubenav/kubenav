@@ -92,7 +92,9 @@ class Resources extends GetView<ResourcesController> {
   }
 
   List<AppVertialListSimpleModel> getItems(
-      resource_model.ResourceType resourceType) {
+    BuildContext context,
+    resource_model.ResourceType resourceType,
+  ) {
     List<AppVertialListSimpleModel> items = [];
 
     resource_model.Resources.map.forEach(
@@ -131,13 +133,17 @@ class Resources extends GetView<ResourcesController> {
                     children: [
                       Text(
                         value.title,
-                        style: primaryTextStyle(),
+                        style: primaryTextStyle(
+                          context,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
                         value.description,
-                        style: secondaryTextStyle(),
+                        style: secondaryTextStyle(
+                          context,
+                        ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -218,30 +224,35 @@ class Resources extends GetView<ResourcesController> {
             AppVertialListSimpleWidget(
               title: 'Workloads',
               items: getItems(
+                context,
                 resource_model.ResourceType.workload,
               ),
             ),
             AppVertialListSimpleWidget(
               title: 'Discovery and Load Balancing',
               items: getItems(
+                context,
                 resource_model.ResourceType.discoveryandloadbalancing,
               ),
             ),
             AppVertialListSimpleWidget(
               title: 'Config and Storage',
               items: getItems(
+                context,
                 resource_model.ResourceType.configandstorage,
               ),
             ),
             AppVertialListSimpleWidget(
               title: 'RBAC',
               items: getItems(
+                context,
                 resource_model.ResourceType.rbac,
               ),
             ),
             AppVertialListSimpleWidget(
               title: 'Cluster',
               items: getItems(
+                context,
                 resource_model.ResourceType.cluster,
               ),
             ),

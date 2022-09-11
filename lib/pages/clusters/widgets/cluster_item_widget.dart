@@ -77,13 +77,13 @@ class ClusterItemWidget extends StatelessWidget {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Constants.shadowColorGlobal,
+                color: Theme.of(context).shadowColor,
                 blurRadius: Constants.sizeBorderBlurRadius,
                 spreadRadius: Constants.sizeBorderSpreadRadius,
                 offset: const Offset(0.0, 0.0),
               ),
             ],
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: const BorderRadius.all(
               Radius.circular(Constants.sizeBorderRadius),
             ),
@@ -106,7 +106,9 @@ class ClusterItemWidget extends StatelessWidget {
                                 .replaceAll(
                                     Characters(''), Characters('\u{200B}'))
                                 .toString(),
-                            style: primaryTextStyle(),
+                            style: primaryTextStyle(
+                              context,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -115,7 +117,9 @@ class ClusterItemWidget extends StatelessWidget {
                                 .replaceAll(
                                     Characters(''), Characters('\u{200B}'))
                                 .toString(),
-                            style: secondaryTextStyle(),
+                            style: secondaryTextStyle(
+                              context,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),

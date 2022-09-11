@@ -14,7 +14,8 @@ class MetricsWidget extends StatelessWidget {
 
   final String? nodeName;
 
-  Widget buildCard(String title, IconData icon, [void Function()? onTap]) {
+  Widget buildCard(BuildContext context, String title, IconData icon,
+      [void Function()? onTap]) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -24,13 +25,13 @@ class MetricsWidget extends StatelessWidget {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Constants.shadowColorGlobal,
+              color: Theme.of(context).shadowColor,
               blurRadius: Constants.sizeBorderBlurRadius,
               spreadRadius: Constants.sizeBorderSpreadRadius,
               offset: const Offset(0.0, 0.0),
             ),
           ],
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
@@ -45,7 +46,9 @@ class MetricsWidget extends StatelessWidget {
             const SizedBox(height: Constants.spacingSmall),
             Text(
               title,
-              style: primaryTextStyle(),
+              style: primaryTextStyle(
+                context,
+              ),
             ),
           ],
         ),
@@ -56,9 +59,6 @@ class MetricsWidget extends StatelessWidget {
   void showMetrics(MetricType metricType, IconData icon) {
     Get.bottomSheet(
       BottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-        ),
         onClosing: () {},
         enableDrag: false,
         builder: (builder) {
@@ -89,7 +89,7 @@ class MetricsWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   'Metrics',
-                  style: primaryTextStyle(size: 18),
+                  style: primaryTextStyle(context, size: 18),
                 ),
               ),
             ],
@@ -99,6 +99,7 @@ class MetricsWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             buildCard(
+              context,
               'CPU',
               Icons.bar_chart,
               () {
@@ -109,6 +110,7 @@ class MetricsWidget extends StatelessWidget {
               },
             ),
             buildCard(
+              context,
               'Memory',
               Icons.area_chart,
               () {
@@ -119,6 +121,7 @@ class MetricsWidget extends StatelessWidget {
               },
             ),
             buildCard(
+              context,
               'Pods',
               Icons.pie_chart,
               () {

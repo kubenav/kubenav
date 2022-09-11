@@ -199,7 +199,7 @@ class EditClusterWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text("Insecure Skip TLS Verify"),
+                  const Text('Insecure Skip TLS Verify'),
                   Obx(
                     () => Switch(
                       activeColor: Constants.colorPrimary,

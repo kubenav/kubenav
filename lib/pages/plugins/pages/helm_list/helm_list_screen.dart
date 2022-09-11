@@ -16,7 +16,7 @@ import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
 class HelmList extends GetView {
   const HelmList({Key? key}) : super(key: key);
 
-  Widget buildItem(Release release) {
+  Widget buildItem(BuildContext context, Release release) {
     return Container(
       margin: const EdgeInsets.only(
         bottom: Constants.spacingMiddle,
@@ -25,13 +25,13 @@ class HelmList extends GetView {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Constants.shadowColorGlobal,
+            color: Theme.of(context).shadowColor,
             blurRadius: Constants.sizeBorderBlurRadius,
             spreadRadius: Constants.sizeBorderSpreadRadius,
             offset: const Offset(0.0, 0.0),
           ),
         ],
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),
@@ -55,7 +55,9 @@ class HelmList extends GetView {
                         .toString(),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: primaryTextStyle(),
+                    style: primaryTextStyle(
+                      context,
+                    ),
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -67,7 +69,9 @@ class HelmList extends GetView {
                             .toString(),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: secondaryTextStyle(),
+                        style: secondaryTextStyle(
+                          context,
+                        ),
                       ),
                       Text(
                         Characters('Revision: ${release.version}')
@@ -75,7 +79,9 @@ class HelmList extends GetView {
                             .toString(),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: secondaryTextStyle(),
+                        style: secondaryTextStyle(
+                          context,
+                        ),
                       ),
                       Text(
                         Characters(
@@ -84,7 +90,9 @@ class HelmList extends GetView {
                             .toString(),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: secondaryTextStyle(),
+                        style: secondaryTextStyle(
+                          context,
+                        ),
                       ),
                       Text(
                         Characters('Status: ${release.info?.status}')
@@ -92,7 +100,9 @@ class HelmList extends GetView {
                             .toString(),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: secondaryTextStyle(),
+                        style: secondaryTextStyle(
+                          context,
+                        ),
                       ),
                       Text(
                         Characters('Chart: ${release.chart?.metadata?.version}')
@@ -100,7 +110,9 @@ class HelmList extends GetView {
                             .toString(),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: secondaryTextStyle(),
+                        style: secondaryTextStyle(
+                          context,
+                        ),
                       ),
                       Text(
                         Characters(
@@ -109,7 +121,9 @@ class HelmList extends GetView {
                             .toString(),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: secondaryTextStyle(),
+                        style: secondaryTextStyle(
+                          context,
+                        ),
                       ),
                     ],
                   ),
@@ -248,7 +262,8 @@ class HelmList extends GetView {
                             ),
                             itemCount: controller.items.length,
                             itemBuilder: (context, index) {
-                              return buildItem(controller.items[index]);
+                              return buildItem(
+                                  context, controller.items[index]);
                             },
                           );
                         },

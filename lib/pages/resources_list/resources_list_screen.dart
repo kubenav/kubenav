@@ -45,7 +45,7 @@ class ResourcesList extends GetView {
             ),
             Text(
               text,
-              style: primaryTextStyle(size: 12),
+              style: primaryTextStyle(context, size: 12),
               textAlign: TextAlign.center,
             ),
           ],

@@ -119,7 +119,7 @@ class AWSSSOProviderConfigController extends GetxController {
         awsSSOConfig!.value.client!.clientId!,
         awsSSOConfig!.value.client!.clientSecret!,
         awsSSOConfig!.value.device!.deviceCode!,
-        "",
+        '',
         0,
       );
 
@@ -168,9 +168,6 @@ class AWSSSOProviderConfigController extends GetxController {
           finish(context);
           Get.bottomSheet(
             BottomSheet(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-              ),
               onClosing: () {},
               enableDrag: false,
               builder: (builder) {
@@ -354,7 +351,15 @@ class AWSSSOProviderConfigWidget extends StatelessWidget {
                       ].map((value) {
                         return DropdownMenuItem(
                           value: value,
-                          child: Text(value),
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .displayMedium!
+                                  .color,
+                            ),
+                          ),
                         );
                       }).toList(),
                     ),
@@ -408,7 +413,15 @@ class AWSSSOProviderConfigWidget extends StatelessWidget {
                       ].map((value) {
                         return DropdownMenuItem(
                           value: value,
-                          child: Text(value),
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .displayMedium!
+                                  .color,
+                            ),
+                          ),
                         );
                       }).toList(),
                     ),
@@ -435,6 +448,7 @@ class AWSSSOProviderConfigWidget extends StatelessWidget {
                 child: Text(
                   'Sign In',
                   style: primaryTextStyle(
+                    context,
                     color: Colors.white,
                   ),
                   textAlign: TextAlign.center,
@@ -460,6 +474,7 @@ class AWSSSOProviderConfigWidget extends StatelessWidget {
                 child: Text(
                   'Verify',
                   style: primaryTextStyle(
+                    context,
                     color: Colors.white,
                   ),
                   textAlign: TextAlign.center,
@@ -485,6 +500,7 @@ class AWSSSOProviderConfigWidget extends StatelessWidget {
                 child: Text(
                   'Get Credentials',
                   style: primaryTextStyle(
+                    context,
                     color: Colors.white,
                   ),
                   textAlign: TextAlign.center,

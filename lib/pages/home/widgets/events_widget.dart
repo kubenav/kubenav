@@ -177,7 +177,7 @@ class EventsWidget extends StatelessWidget {
                       Expanded(
                         child: Text(
                           'Warnings',
-                          style: primaryTextStyle(size: 18),
+                          style: primaryTextStyle(context, size: 18),
                         ),
                       ),
                     ],

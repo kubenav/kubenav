@@ -19,7 +19,6 @@ import 'package:kubenav/pages/providers/widgets/azure_provider_config_widget.dar
 import 'package:kubenav/pages/providers/widgets/digitalocean_provider_config_widget.dart';
 import 'package:kubenav/pages/providers/widgets/google_provider_config_widget.dart';
 import 'package:kubenav/pages/providers/widgets/oidc_provider_config_widget.dart';
-import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_actions_widget.dart';
 
@@ -34,9 +33,6 @@ class ReuseProviderConfigActionsController extends GetxController {
   void useExisting(ProviderConfig providerConfig) {
     Get.bottomSheet(
       BottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-        ),
         onClosing: () {},
         enableDrag: false,
         builder: (builder) {
@@ -85,9 +81,6 @@ class ReuseProviderConfigActionsController extends GetxController {
   void useNew() {
     Get.bottomSheet(
       BottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-        ),
         onClosing: () {},
         enableDrag: false,
         builder: (builder) {

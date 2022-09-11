@@ -174,13 +174,13 @@ class AddClusterGoogleWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: Constants.shadowColorGlobal,
+                          color: Theme.of(context).shadowColor,
                           blurRadius: Constants.sizeBorderBlurRadius,
                           spreadRadius: Constants.sizeBorderSpreadRadius,
                           offset: const Offset(0.0, 0.0),
                         ),
                       ],
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       borderRadius: const BorderRadius.all(
                         Radius.circular(Constants.sizeBorderRadius),
                       ),
@@ -217,7 +217,9 @@ class AddClusterGoogleWidget extends StatelessWidget {
                           flex: 1,
                           child: Text(
                             controller.clusters[index].name ?? '',
-                            style: noramlTextStyle(),
+                            style: noramlTextStyle(
+                              context,
+                            ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),

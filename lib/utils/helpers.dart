@@ -16,36 +16,39 @@ void finish(BuildContext context, [Object? result]) {
 }
 
 /// [noramlTextStyle] applies our default styles for normal text.
-TextStyle noramlTextStyle({
+TextStyle noramlTextStyle(
+  BuildContext context, {
   double? size,
   Color? color,
 }) {
   return TextStyle(
     fontSize: size ?? Constants.sizeTextPrimary,
-    color: color ?? Constants.colorTextPrimary,
+    color: color ?? Theme.of(context).textTheme.displayMedium!.color,
   );
 }
 
 /// [primaryTextStyle] applies our default styles for primary text.
-TextStyle primaryTextStyle({
+TextStyle primaryTextStyle(
+  BuildContext context, {
   double? size,
   Color? color,
 }) {
   return TextStyle(
     fontSize: size ?? Constants.sizeTextPrimary,
-    color: color ?? Constants.colorTextPrimary,
+    color: color ?? Theme.of(context).textTheme.displayLarge!.color,
     fontWeight: FontWeight.bold,
   );
 }
 
 /// [secondaryTextStyle] applies our default styles for secondary text.
-TextStyle secondaryTextStyle({
+TextStyle secondaryTextStyle(
+  BuildContext context, {
   double? size,
   Color? color,
 }) {
   return TextStyle(
     fontSize: size ?? Constants.sizeTextSecondary,
-    color: color ?? Constants.colorTextSecondary,
+    color: color ?? Theme.of(context).textTheme.displaySmall!.color,
     fontWeight: FontWeight.normal,
   );
 }
@@ -71,10 +74,11 @@ void snackbar(
         onTap();
       }
     },
-    backgroundColor: Colors.white,
+    backgroundColor: Get.theme.cardColor,
+    colorText: Get.theme.textTheme.displayMedium!.color,
     boxShadows: [
       BoxShadow(
-        color: Constants.shadowColorGlobal,
+        color: Get.theme.shadowColor,
         blurRadius: Constants.sizeBorderBlurRadius,
         spreadRadius: Constants.sizeBorderSpreadRadius,
         offset: const Offset(0.0, 0.0),

@@ -44,13 +44,13 @@ class Settings extends GetView<SettingsController> {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Constants.shadowColorGlobal,
+                color: Theme.of(context).shadowColor,
                 blurRadius: Constants.sizeBorderBlurRadius,
                 spreadRadius: Constants.sizeBorderSpreadRadius,
                 offset: const Offset(0.0, 0.0),
               ),
             ],
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: const BorderRadius.all(
               Radius.circular(Constants.sizeBorderRadius),
             ),
@@ -85,7 +85,9 @@ class Settings extends GetView<SettingsController> {
                   ),
                   child: Text(
                     'Add a Cluster',
-                    style: primaryTextStyle(),
+                    style: primaryTextStyle(
+                      context,
+                    ),
                   ),
                 ),
                 const SizedBox(height: Constants.spacingExtraSmall),
@@ -95,7 +97,9 @@ class Settings extends GetView<SettingsController> {
                   ),
                   child: Text(
                     'Add your fist cluster and start using kubenav',
-                    style: secondaryTextStyle(),
+                    style: secondaryTextStyle(
+                      context,
+                    ),
                   ),
                 ),
                 const SizedBox(height: Constants.spacingSmall),
@@ -135,13 +139,13 @@ class Settings extends GetView<SettingsController> {
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Constants.shadowColorGlobal,
+                        color: Theme.of(context).shadowColor,
                         blurRadius: Constants.sizeBorderBlurRadius,
                         spreadRadius: Constants.sizeBorderSpreadRadius,
                         offset: const Offset(0.0, 0.0),
                       ),
                     ],
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(Constants.sizeBorderRadius),
                     ),
@@ -167,7 +171,9 @@ class Settings extends GetView<SettingsController> {
                           child: Text(
                             controller
                                 .clusterController.clusters[index].value.name,
-                            style: noramlTextStyle(),
+                            style: noramlTextStyle(
+                              context,
+                            ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -188,7 +194,7 @@ class Settings extends GetView<SettingsController> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Settings"),
+        title: const Text('Settings'),
       ),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
@@ -207,7 +213,8 @@ class Settings extends GetView<SettingsController> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: Text('Clusters', style: primaryTextStyle(size: 18)),
+                    child: Text('Clusters',
+                        style: primaryTextStyle(context, size: 18)),
                   ),
                   InkWell(
                     onTap: () {
@@ -217,6 +224,7 @@ class Settings extends GetView<SettingsController> {
                       children: [
                         Text('View all',
                             style: secondaryTextStyle(
+                              context,
                               color: Constants.colorPrimary,
                             )),
                         const SizedBox(width: Constants.spacingExtraSmall),

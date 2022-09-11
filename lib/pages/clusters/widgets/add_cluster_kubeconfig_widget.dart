@@ -155,6 +155,7 @@ class AddClusterKubeconfigWidget extends StatelessWidget {
                 child: Text(
                   'Select Kubeconfig',
                   style: primaryTextStyle(
+                    context,
                     color: Colors.white,
                   ),
                   textAlign: TextAlign.center,
@@ -174,7 +175,10 @@ class AddClusterKubeconfigWidget extends StatelessWidget {
                       thickness: 1.0,
                     ),
                   ),
-                  Text("or paste content", style: secondaryTextStyle()),
+                  Text('or paste content',
+                      style: secondaryTextStyle(
+                        context,
+                      )),
                   const Expanded(
                     child: Divider(
                       height: 0,

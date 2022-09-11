@@ -66,7 +66,7 @@ class HelmDetails extends GetView {
     return Container();
   }
 
-  Widget buildTemplates(Release? release) {
+  Widget buildTemplates(BuildContext context, Release? release) {
     if (release != null &&
         release.chart != null &&
         release.chart!.templates != null) {
@@ -78,10 +78,6 @@ class HelmDetails extends GetView {
                 onTap: () {
                   Get.bottomSheet(
                     BottomSheet(
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(Constants.sizeBorderRadius),
-                      ),
                       onClosing: () {},
                       enableDrag: false,
                       builder: (builder) {
@@ -107,7 +103,9 @@ class HelmDetails extends GetView {
                               .replaceAll(
                                   Characters(''), Characters('\u{200B}'))
                               .toString(),
-                          style: primaryTextStyle(),
+                          style: primaryTextStyle(
+                            context,
+                          ),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -253,7 +251,9 @@ class HelmDetails extends GetView {
                                             .replaceAll(Characters(''),
                                                 Characters('\u{200B}'))
                                             .toString(),
-                                        style: primaryTextStyle(),
+                                        style: primaryTextStyle(
+                                          context,
+                                        ),
                                         maxLines: 3,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -263,7 +263,9 @@ class HelmDetails extends GetView {
                                             .replaceAll(Characters(''),
                                                 Characters('\u{200B}'))
                                             .toString(),
-                                        style: secondaryTextStyle(),
+                                        style: secondaryTextStyle(
+                                          context,
+                                        ),
                                         maxLines: 3,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -273,7 +275,9 @@ class HelmDetails extends GetView {
                                             .replaceAll(Characters(''),
                                                 Characters('\u{200B}'))
                                             .toString(),
-                                        style: secondaryTextStyle(),
+                                        style: secondaryTextStyle(
+                                          context,
+                                        ),
                                         maxLines: 3,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -283,7 +287,9 @@ class HelmDetails extends GetView {
                                             .replaceAll(Characters(''),
                                                 Characters('\u{200B}'))
                                             .toString(),
-                                        style: secondaryTextStyle(),
+                                        style: secondaryTextStyle(
+                                          context,
+                                        ),
                                         maxLines: 3,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -293,7 +299,9 @@ class HelmDetails extends GetView {
                                             .replaceAll(Characters(''),
                                                 Characters('\u{200B}'))
                                             .toString(),
-                                        style: secondaryTextStyle(),
+                                        style: secondaryTextStyle(
+                                          context,
+                                        ),
                                         maxLines: 3,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -306,7 +314,7 @@ class HelmDetails extends GetView {
                           .toList(),
                     ),
                     const SizedBox(height: Constants.spacingMiddle),
-                    buildTemplates(controller.item?.value),
+                    buildTemplates(context, controller.item?.value),
                     const SizedBox(height: Constants.spacingExtraLarge),
                   ],
                 );

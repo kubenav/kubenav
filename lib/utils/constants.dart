@@ -4,16 +4,11 @@ import 'package:flutter/material.dart';
 /// be used or the values for the spacing (padding/margin) between components.
 class Constants {
   static const colorPrimary = Color(0xff326ce5);
-  static const colorCanvas = Colors.white;
-  static const colorAppBarBackground = Color(0xff326ce5);
-  static const colorAppBarForeground = Colors.white;
   static const colorSuccess = Colors.green;
   static const colorWarning = Colors.yellow;
   static const colorDanger = Colors.red;
   static const colorTextPrimary = Color(0xFF2E3033);
   static const colorTextSecondary = Color(0xFF757575);
-
-  static var shadowColorGlobal = Colors.grey.withOpacity(0.2);
 
   static const sizeTextPrimary = 16.0;
   static const sizeTextSecondary = 14.0;
@@ -33,3 +28,149 @@ class Constants {
   static const googleRedirectURI = 'https://kubenav.io/google.html';
   static const oidcRedirectURI = 'https://kubenav.io/oidcv4.html';
 }
+
+ThemeData lightTheme = ThemeData(
+  brightness: Brightness.light,
+  primaryColor: Constants.colorPrimary,
+  canvasColor: Colors.white,
+  appBarTheme: const AppBarTheme(
+    backgroundColor: Color(0xff326ce5),
+    foregroundColor: Colors.white,
+    elevation: 0,
+  ),
+  cardColor: Colors.white,
+  inputDecorationTheme: const InputDecorationTheme(
+    floatingLabelStyle: TextStyle(
+      color: Constants.colorPrimary,
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        style: BorderStyle.solid,
+        color: Constants.colorPrimary,
+      ),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        style: BorderStyle.solid,
+        color: Color(0xFF2E3033),
+      ),
+    ),
+    labelStyle: TextStyle(
+      color: Color(0xFF2E3033),
+    ),
+  ),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: Constants.colorPrimary,
+    selectionColor: Constants.colorPrimary.withOpacity(0.25),
+    selectionHandleColor: Constants.colorPrimary,
+  ),
+  shadowColor: Colors.grey.withOpacity(0.2),
+  textTheme: const TextTheme(
+    displayLarge: TextStyle(
+      color: Color(0xFF2E3033),
+    ),
+    displayMedium: TextStyle(
+      color: Color(0xFF2E3033),
+    ),
+    displaySmall: TextStyle(
+      color: Color(0xFF757575),
+    ),
+    bodyLarge: TextStyle(
+      color: Color(0xFF2E3033),
+    ),
+    bodyMedium: TextStyle(
+      color: Color(0xFF2E3033),
+    ),
+    bodySmall: TextStyle(
+      color: Color(0xFF2E3033),
+    ),
+    titleLarge: TextStyle(
+      color: Color(0xFF2E3033),
+    ),
+    titleMedium: TextStyle(
+      color: Color(0xFF2E3033),
+    ),
+    titleSmall: TextStyle(
+      color: Color(0xFF2E3033),
+    ),
+  ),
+  bottomSheetTheme: BottomSheetThemeData(
+    backgroundColor: Colors.white,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
+    ),
+  ),
+);
+
+ThemeData darkTheme = ThemeData(
+  brightness: Brightness.dark,
+  primaryColor: Constants.colorPrimary,
+  canvasColor: Colors.black,
+  appBarTheme: const AppBarTheme(
+    backgroundColor: Color(0xff326ce5),
+    foregroundColor: Colors.white,
+    elevation: 0,
+  ),
+  cardColor: Colors.black,
+  inputDecorationTheme: const InputDecorationTheme(
+    floatingLabelStyle: TextStyle(
+      color: Constants.colorPrimary,
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        style: BorderStyle.solid,
+        color: Constants.colorPrimary,
+      ),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        style: BorderStyle.solid,
+        color: Color(0xFFD1CFCC),
+      ),
+    ),
+    labelStyle: TextStyle(
+      color: Color(0xFFD1CFCC),
+    ),
+  ),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: Constants.colorPrimary,
+    selectionColor: Constants.colorPrimary.withOpacity(0.25),
+    selectionHandleColor: Constants.colorPrimary,
+  ),
+  shadowColor: Colors.grey.withOpacity(0.4),
+  textTheme: const TextTheme(
+    displayLarge: TextStyle(
+      color: Color(0xFFD1CFCC),
+    ),
+    displayMedium: TextStyle(
+      color: Color(0xFFD1CFCC),
+    ),
+    displaySmall: TextStyle(
+      color: Color(0xFF8A8A8A),
+    ),
+    bodyLarge: TextStyle(
+      color: Color(0xFFD1CFCC),
+    ),
+    bodyMedium: TextStyle(
+      color: Color(0xFFD1CFCC),
+    ),
+    bodySmall: TextStyle(
+      color: Color(0xFFD1CFCC),
+    ),
+    titleLarge: TextStyle(
+      color: Color(0xFFD1CFCC),
+    ),
+    titleMedium: TextStyle(
+      color: Color(0xFFD1CFCC),
+    ),
+    titleSmall: TextStyle(
+      color: Color(0xFFD1CFCC),
+    ),
+  ),
+  bottomSheetTheme: BottomSheetThemeData(
+    backgroundColor: Colors.black,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
+    ),
+  ),
+);
