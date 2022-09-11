@@ -49,6 +49,32 @@ class SettingsWidget extends StatelessWidget {
         AppVertialListSimpleModel(
           children: [
             const Icon(
+              Icons.fingerprint,
+              color: Constants.colorPrimary,
+            ),
+            const SizedBox(width: Constants.spacingSmall),
+            Expanded(
+              flex: 1,
+              child: Text(
+                'Authentication',
+                style: noramlTextStyle(
+                  context,
+                ),
+              ),
+            ),
+            Obx(
+              () => Switch(
+                activeColor: Constants.colorPrimary,
+                onChanged: (val) =>
+                    globalSettingsController.toogleAuthentication(),
+                value: globalSettingsController.isAuthenticationEnabled.value,
+              ),
+            )
+          ],
+        ),
+        AppVertialListSimpleModel(
+          children: [
+            const Icon(
               Icons.dark_mode,
               color: Constants.colorPrimary,
             ),

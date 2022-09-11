@@ -31,12 +31,16 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GlobalSettingsController globalSettingsController = Get.find();
+
     return GetMaterialApp(
       title: 'kubenav',
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
-      initialRoute: Routes.home,
+      initialRoute: globalSettingsController.isAuthenticationEnabled.value
+          ? Routes.login
+          : Routes.home,
       getPages: AppPages.pages,
     );
   }

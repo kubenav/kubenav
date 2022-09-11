@@ -4,6 +4,8 @@ import 'package:kubenav/pages/clusters/clusters_binding.dart';
 import 'package:kubenav/pages/clusters/clusters_screen.dart';
 import 'package:kubenav/pages/home/home_binding.dart';
 import 'package:kubenav/pages/home/home_screen.dart';
+import 'package:kubenav/pages/login/login_binding.dart';
+import 'package:kubenav/pages/login/login_screen.dart';
 import 'package:kubenav/pages/plugins/pages/helm_details/helm_details_screen.dart';
 import 'package:kubenav/pages/plugins/pages/helm_list/helm_list_screen.dart';
 import 'package:kubenav/pages/plugins/plugins_binding.dart';
@@ -26,6 +28,11 @@ import 'package:kubenav/routes/app_routes.dart';
 /// settings page. In the [GetPage] function we also bind the corresponding page controller to the page screen.
 abstract class AppPages {
   static final pages = [
+    GetPage(
+      name: Routes.login,
+      page: () => const Login(),
+      binding: LoginBinding(),
+    ),
     GetPage(
       name: Routes.home,
       page: () => const Home(),
