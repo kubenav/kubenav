@@ -11,7 +11,6 @@ import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_actions_header_widget.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
-import 'package:kubenav/widgets/app_browser_widget.dart';
 import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
 
 class Home extends GetView<HomeController> {
@@ -143,21 +142,7 @@ class Home extends GetView<HomeController> {
             title: 'GitHub',
             icon: CustomIcons.github,
             onTap: () {
-              Get.bottomSheet(
-                BottomSheet(
-                  onClosing: () {},
-                  enableDrag: false,
-                  builder: (builder) {
-                    return AppBrowserWidget(
-                      initialUrl: 'https://github.com/kubenav/kubenav',
-                      onClosePressed: () {
-                        finish(context);
-                      },
-                    );
-                  },
-                ),
-                isScrollControlled: true,
-              );
+              openUrl('https://github.com/kubenav/kubenav');
             },
           ),
         ],

@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 
 import 'package:kubenav/models/portforwarding_session_model.dart';
 import 'package:kubenav/utils/helpers.dart';
-import 'package:kubenav/widgets/app_browser_widget.dart';
 import 'package:kubenav/widgets/app_portforwarding_sessions_widget.dart';
 
 /// The [PortForwardingController] is responsible for handling all port forwarding session which are saved in the
@@ -82,23 +81,7 @@ class PortForwardingController extends GetxController {
   }
 
   void openSession(int localPort) {
-    Get.bottomSheet(
-      BottomSheet(
-        onClosing: () {},
-        enableDrag: false,
-        builder: (builder) {
-          return AppBrowserWidget(
-            initialUrl: 'http://localhost:$localPort',
-            onClosePressed: () {
-              if (Get.context != null) {
-                finish(Get.context!);
-              }
-            },
-          );
-        },
-      ),
-      isScrollControlled: true,
-    );
+    openUrl('http://localhost:$localPort');
   }
 
   void removeSession(int index) async {

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:get/get.dart';
-
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
-import 'package:kubenav/widgets/app_browser_widget.dart';
 import 'package:kubenav/widgets/app_vertical_list_simple_widget.dart';
 
 class SponsorWidget extends StatelessWidget {
@@ -20,21 +17,7 @@ class SponsorWidget extends StatelessWidget {
       items: [
         AppVertialListSimpleModel(
           onTap: () {
-            Get.bottomSheet(
-              BottomSheet(
-                onClosing: () {},
-                enableDrag: false,
-                builder: (builder) {
-                  return AppBrowserWidget(
-                    initialUrl: 'https://github.com/sponsors/ricoberger',
-                    onClosePressed: () {
-                      finish(context);
-                    },
-                  );
-                },
-              ),
-              isScrollControlled: true,
-            );
+            openUrl('https://github.com/sponsors/ricoberger');
           },
           children: [
             const Icon(
@@ -60,21 +43,7 @@ class SponsorWidget extends StatelessWidget {
         ),
         AppVertialListSimpleModel(
           onTap: () {
-            Get.bottomSheet(
-              BottomSheet(
-                onClosing: () {},
-                enableDrag: false,
-                builder: (builder) {
-                  return AppBrowserWidget(
-                    initialUrl: 'https://www.paypal.com/paypalme/ricoberger',
-                    onClosePressed: () {
-                      finish(context);
-                    },
-                  );
-                },
-              ),
-              isScrollControlled: true,
-            );
+            openUrl('https://www.paypal.com/paypalme/ricoberger');
           },
           children: [
             const Icon(

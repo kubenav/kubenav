@@ -32,7 +32,7 @@ Sort imports:
 
 - `flutter pub run import_sorter:main`
 
-Build for native device:
+Build for testing on native device:
 
 - `flutter run --release`
 

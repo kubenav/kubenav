@@ -26,7 +26,10 @@ class AppFloatingActionButtonsWidget extends StatelessWidget {
           onPressed: () {
             controller.terminalController.showTerminalsBottomSheet();
           },
-          child: const Icon(Icons.terminal),
+          child: const Icon(
+            Icons.terminal,
+            color: Colors.white,
+          ),
         ),
       );
     }
@@ -39,7 +42,10 @@ class AppFloatingActionButtonsWidget extends StatelessWidget {
           onPressed: () {
             controller.portForwardingController.showSessionsBottomSheet();
           },
-          child: const Icon(Icons.link),
+          child: const Icon(
+            Icons.link,
+            color: Colors.white,
+          ),
         ),
       );
     }

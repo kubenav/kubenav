@@ -8,7 +8,6 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
-import 'package:kubenav/widgets/app_browser_widget.dart';
 import 'package:kubenav/widgets/app_vertical_list_simple_widget.dart';
 
 class InfoController extends GetxController {
@@ -130,21 +129,7 @@ class InfoWidget extends StatelessWidget {
         ),
         AppVertialListSimpleModel(
           onTap: () {
-            Get.bottomSheet(
-              BottomSheet(
-                onClosing: () {},
-                enableDrag: false,
-                builder: (builder) {
-                  return AppBrowserWidget(
-                    initialUrl: 'https://kubenav.io',
-                    onClosePressed: () {
-                      finish(context);
-                    },
-                  );
-                },
-              ),
-              isScrollControlled: true,
-            );
+            openUrl('https://kubenav.io');
           },
           children: [
             const Icon(
@@ -170,21 +155,7 @@ class InfoWidget extends StatelessWidget {
         ),
         AppVertialListSimpleModel(
           onTap: () {
-            Get.bottomSheet(
-              BottomSheet(
-                onClosing: () {},
-                enableDrag: false,
-                builder: (builder) {
-                  return AppBrowserWidget(
-                    initialUrl: 'https://github.com/kubenav/kubenav',
-                    onClosePressed: () {
-                      finish(context);
-                    },
-                  );
-                },
-              ),
-              isScrollControlled: true,
-            );
+            openUrl('https://github.com/kubenav/kubenav');
           },
           children: [
             // const Icon(Icons.tab, size: 24, color: Colors.blue),
@@ -211,21 +182,7 @@ class InfoWidget extends StatelessWidget {
         ),
         AppVertialListSimpleModel(
           onTap: () {
-            Get.bottomSheet(
-              BottomSheet(
-                onClosing: () {},
-                enableDrag: false,
-                builder: (builder) {
-                  return AppBrowserWidget(
-                    initialUrl: 'https://twitter.com/kubenav',
-                    onClosePressed: () {
-                      finish(context);
-                    },
-                  );
-                },
-              ),
-              isScrollControlled: true,
-            );
+            openUrl('https://twitter.com/kubenav');
           },
           children: [
             const Icon(
