@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -5,15 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter_highlight/themes/nord.dart';
 import 'package:get/get.dart';
+import 'package:highlight/languages/json.dart';
 import 'package:highlight/languages/yaml.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'package:kubenav/controllers/global_settings_controller.dart';
 import 'package:kubenav/services/helpers_service.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 
 class DetailsShowYamlController extends GetxController {
+  GlobalSettingsController globalSettingsController = Get.find();
+
   dynamic item;
   CodeController? codeController;
 
@@ -23,7 +28,8 @@ class DetailsShowYamlController extends GetxController {
   void onInit() {
     codeController = CodeController(
       text: '',
-      language: yaml,
+      language:
+          globalSettingsController.editorFormat.value == 'json' ? json : yaml,
       theme: nordTheme,
     );
     prettifyYAML();
@@ -33,8 +39,13 @@ class DetailsShowYamlController extends GetxController {
 
   void prettifyYAML() async {
     try {
-      final data = await HelpersService().prettifyYAML(item);
-      codeController?.text = data;
+      if (globalSettingsController.editorFormat.value == 'json') {
+        JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+        codeController?.text = encoder.convert(item);
+      } else {
+        final data = await HelpersService().prettifyYAML(item);
+        codeController?.text = data;
+      }
     } catch (err) {
       Logger.log(
         'DetailsShowYamlController prettifyYAML',
@@ -53,7 +64,8 @@ class DetailsShowYamlController extends GetxController {
                 : 'manifest';
 
         final directory = await getApplicationDocumentsDirectory();
-        final file = File('${directory.path}/$name.yaml');
+        final file = File(
+            '${directory.path}/$name.${globalSettingsController.editorFormat.value}');
         await file.writeAsString(codeController!.text);
 
         snackbar(
@@ -90,7 +102,9 @@ class DetailsShowYamlWidget extends StatelessWidget {
     );
 
     return AppBottomSheetWidget(
-      title: 'Yaml',
+      title: controller.globalSettingsController.editorFormat.value == 'json'
+          ? 'Json'
+          : 'Yaml',
       subtitle: item['metadata']['name'] ?? '',
       icon: Icons.description,
       onClosePressed: () {

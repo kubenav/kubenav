@@ -236,7 +236,11 @@ class ResourcesDetails extends GetView {
                     AppActionsHeaderWidget(
                       actions: [
                         AppActionsHeaderModel(
-                          title: 'Yaml',
+                          title: controller.globalSettingsController
+                                      .editorFormat.value ==
+                                  'json'
+                              ? 'Json'
+                              : 'Yaml',
                           icon: Icons.description,
                           onTap: () {
                             controller.showYaml();

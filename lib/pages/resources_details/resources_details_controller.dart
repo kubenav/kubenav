@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/bookmark_controller.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
+import 'package:kubenav/controllers/global_settings_controller.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_create_job_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_delete_resource_widget.dart';
@@ -19,6 +20,7 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/logger.dart';
 
 class ResourcesDetailsController extends GetxController {
+  GlobalSettingsController globalSettingsController = Get.find();
   BookmarkController bookmarkController = Get.find();
   ClusterController clusterController = Get.find();
 

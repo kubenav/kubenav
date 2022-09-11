@@ -72,6 +72,50 @@ class SettingsWidget extends StatelessWidget {
             )
           ],
         ),
+        AppVertialListSimpleModel(
+          children: [
+            const Icon(
+              Icons.code,
+              color: Constants.colorPrimary,
+            ),
+            const SizedBox(width: Constants.spacingSmall),
+            Expanded(
+              flex: 1,
+              child: Text(
+                'Editor Format',
+                style: noramlTextStyle(
+                  context,
+                ),
+              ),
+            ),
+            Obx(
+              () => DropdownButton(
+                value: globalSettingsController.editorFormat.value,
+                underline: Container(
+                  height: 2,
+                  color: Constants.colorPrimary,
+                ),
+                onChanged: (String? newValue) {
+                  globalSettingsController.editorFormat.value = newValue ?? '';
+                },
+                items: [
+                  'yaml',
+                  'json',
+                ].map((value) {
+                  return DropdownMenuItem(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.displayMedium!.color,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            )
+          ],
+        ),
       ],
     );
   }

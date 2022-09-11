@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter_highlight/themes/nord.dart';
 import 'package:get/get.dart';
-import 'package:highlight/languages/yaml.dart';
 
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';

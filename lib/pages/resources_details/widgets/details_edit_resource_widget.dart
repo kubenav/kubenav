@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
@@ -5,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter_highlight/themes/nord.dart';
 import 'package:get/get.dart';
-import 'package:highlight/languages/yaml.dart';
+import 'package:highlight/languages/json.dart' as highlight_json;
+import 'package:highlight/languages/yaml.dart' as highlight_yaml;
 import 'package:yaml/yaml.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
+import 'package:kubenav/controllers/global_settings_controller.dart';
 import 'package:kubenav/services/helpers_service.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -16,6 +19,8 @@ import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 
 class DetailsEditResourceController extends GetxController {
+  GlobalSettingsController globalSettingsController = Get.find();
+
   String resource;
   String path;
   String name;
@@ -37,7 +42,9 @@ class DetailsEditResourceController extends GetxController {
   void onInit() {
     codeController = CodeController(
       text: '',
-      language: yaml,
+      language: globalSettingsController.editorFormat.value == 'json'
+          ? highlight_json.json
+          : highlight_yaml.yaml,
       theme: nordTheme,
     );
     prettifyYAML();
@@ -48,8 +55,13 @@ class DetailsEditResourceController extends GetxController {
   /// [prettifyYAML] formats the given resource item as yaml.
   void prettifyYAML() async {
     try {
-      final data = await HelpersService().prettifyYAML(item);
-      codeController?.text = data;
+      if (globalSettingsController.editorFormat.value == 'json') {
+        JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+        codeController?.text = encoder.convert(item);
+      } else {
+        final data = await HelpersService().prettifyYAML(item);
+        codeController?.text = data;
+      }
     } catch (err) {
       Logger.log(
         'DetailsEditResourceController prettifyYAML',
@@ -66,7 +78,9 @@ class DetailsEditResourceController extends GetxController {
       if (codeController != null) {
         final jsonPatch = await HelpersService().createJSONPatch(
           item,
-          loadYaml(codeController!.text),
+          globalSettingsController.editorFormat.value == 'json'
+              ? json.decode(codeController!.text)
+              : loadYaml(codeController!.text),
         );
 
         if (jsonPatch != '') {

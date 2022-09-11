@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 /// The [GlobalSettingsController] is responsible for handling user defined settings in the app.
 class GlobalSettingsController extends GetxController {
   RxBool isDarkTheme = false.obs;
+  RxString editorFormat = 'yaml'.obs;
 
   /// [onInit] is used to initialize the settings. For that we are looking if the value is already saved in the storage.
   /// If this is the case we are reusing the saved value. If we could not found saved values we are using the default.
@@ -21,6 +22,14 @@ class GlobalSettingsController extends GetxController {
     ever(isDarkTheme, (_) {
       Get.changeThemeMode(isDarkTheme.value ? ThemeMode.dark : ThemeMode.light);
       GetStorage().write('settings.isDarkTheme', isDarkTheme.value);
+    });
+
+    String? storedEditorFormat =
+        GetStorage().read<String>('settings.editorFormat');
+    editorFormat.value = storedEditorFormat ?? 'yaml';
+
+    ever(editorFormat, (_) {
+      GetStorage().write('settings.editorFormat', editorFormat.value);
     });
 
     super.onInit();

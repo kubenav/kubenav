@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -5,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter_highlight/themes/nord.dart';
 import 'package:get/get.dart';
+import 'package:highlight/languages/json.dart';
 import 'package:highlight/languages/yaml.dart';
 
+import 'package:kubenav/controllers/global_settings_controller.dart';
 import 'package:kubenav/models/helm_model.dart';
 import 'package:kubenav/services/helpers_service.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -14,6 +17,8 @@ import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 
 class DetailsValuesController extends GetxController {
+  GlobalSettingsController globalSettingsController = Get.find();
+
   Release item;
   CodeController? codeController;
 
@@ -23,7 +28,8 @@ class DetailsValuesController extends GetxController {
   void onInit() {
     codeController = CodeController(
       text: '',
-      language: yaml,
+      language:
+          globalSettingsController.editorFormat.value == 'json' ? json : yaml,
       theme: nordTheme,
     );
     prettifyYAML();
@@ -33,8 +39,13 @@ class DetailsValuesController extends GetxController {
 
   void prettifyYAML() async {
     try {
-      final data = await HelpersService().prettifyYAML(item.config);
-      codeController?.text = data;
+      if (globalSettingsController.editorFormat.value == 'json') {
+        JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+        codeController?.text = encoder.convert(item.config);
+      } else {
+        final data = await HelpersService().prettifyYAML(item.config);
+        codeController?.text = data;
+      }
     } catch (err) {
       Logger.log(
         'DetailsValuesController prettifyYAML',
