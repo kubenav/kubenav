@@ -273,20 +273,20 @@ PodMetrics? getMetricsFromList(IoK8sApiCoreV1Pod? pod, dynamic metrics) {
       return null;
     }
 
-    int cpu = 0;
-    int memory = 0;
+    var cpu = 0.0;
+    var memory = 0.0;
 
     for (var i = 0; i < podMetricsItem[0].containers!.length; i++) {
       if (podMetricsItem[0].containers![i].usage != null) {
         if (podMetricsItem[0].containers![i].usage!.cpu != null) {
           cpu = cpu +
-              cpuMetricsStringToInt(
+              cpuMetricsStringToDouble(
                   podMetricsItem[0].containers![i].usage!.cpu!);
         }
 
         if (podMetricsItem[0].containers![i].usage!.memory != null) {
           memory = memory +
-              memoryMetricsStringToInt(
+              memoryMetricsStringToDouble(
                   podMetricsItem[0].containers![i].usage!.memory!);
         }
       }
@@ -307,34 +307,34 @@ PodMetrics? getResources(IoK8sApiCoreV1Pod? pod) {
       return null;
     }
 
-    int cpuRequests = 0;
-    int cpuLimits = 0;
-    int memoryRequests = 0;
-    int memoryLimits = 0;
+    var cpuRequests = 0.0;
+    var cpuLimits = 0.0;
+    var memoryRequests = 0.0;
+    var memoryLimits = 0.0;
 
     for (var i = 0; i < pod.spec!.containers.length; i++) {
       if (pod.spec!.containers[i].resources != null) {
         if (pod.spec!.containers[i].resources!.requests.containsKey('cpu')) {
           cpuRequests = cpuRequests +
-              cpuMetricsStringToInt(
+              cpuMetricsStringToDouble(
                   pod.spec!.containers[i].resources!.requests['cpu']!);
         }
 
         if (pod.spec!.containers[i].resources!.requests.containsKey('memory')) {
           memoryRequests = memoryRequests +
-              memoryMetricsStringToInt(
+              memoryMetricsStringToDouble(
                   pod.spec!.containers[i].resources!.requests['memory']!);
         }
 
         if (pod.spec!.containers[i].resources!.limits.containsKey('cpu')) {
           cpuLimits = cpuLimits +
-              cpuMetricsStringToInt(
+              cpuMetricsStringToDouble(
                   pod.spec!.containers[i].resources!.limits['cpu']!);
         }
 
         if (pod.spec!.containers[i].resources!.limits.containsKey('memory')) {
           memoryLimits = memoryLimits +
-              memoryMetricsStringToInt(
+              memoryMetricsStringToDouble(
                   pod.spec!.containers[i].resources!.limits['memory']!);
         }
       }

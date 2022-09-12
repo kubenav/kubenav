@@ -113,52 +113,52 @@ List<Rule> formatRules(List<IoK8sApiRbacV1PolicyRule> rules) {
   return formattedRules;
 }
 
-/// [cpuMetricsStringToInt] converts the given [metric] `String` into an `int` value. The `int` value uses the smallest
-/// unit for CPU `n`.
-int cpuMetricsStringToInt(String metric) {
+/// [cpuMetricsStringToDouble] converts the given [metric] `String` into an `double` value. The `double` value uses the
+/// smallest unit for CPU `n`.
+double cpuMetricsStringToDouble(String metric) {
   if (metric == '') {
     return 0;
   }
 
   if (metric.endsWith('n')) {
-    return int.parse(metric.substring(0, metric.length - 1));
+    return double.parse(metric.substring(0, metric.length - 1));
   }
 
   if (metric.endsWith('u')) {
-    return int.parse(metric.substring(0, metric.length - 1)) * 1000;
+    return double.parse(metric.substring(0, metric.length - 1)) * 1000;
   }
 
   if (metric.endsWith('m')) {
-    return int.parse(metric.substring(0, metric.length - 1)) * 1000 * 1000;
+    return double.parse(metric.substring(0, metric.length - 1)) * 1000 * 1000;
   }
 
-  return int.parse(metric) * 1000 * 1000 * 1000;
+  return double.parse(metric) * 1000 * 1000 * 1000;
 }
 
-/// [memoryMetricsStringToInt] converts the given [metric] `String` into an `int` value. The `int` value uses the
-/// smalles unit for Memory `Ki`.
-int memoryMetricsStringToInt(String metric) {
+/// [memoryMetricsStringToDouble] converts the given [metric] `String` into an `double` value. The `double` value uses
+/// the smalles unit for Memory `Ki`.
+double memoryMetricsStringToDouble(String metric) {
   if (metric == '') {
     return 0;
   }
 
   if (metric.endsWith('Ki') || metric.endsWith('ki')) {
-    return int.parse(metric.substring(0, metric.length - 2));
+    return double.parse(metric.substring(0, metric.length - 2));
   }
 
   if (metric.endsWith('Mi') || metric.endsWith('mi')) {
-    return int.parse(metric.substring(0, metric.length - 2)) * 1024;
+    return double.parse(metric.substring(0, metric.length - 2)) * 1024;
   }
 
   if (metric.endsWith('Gi') || metric.endsWith('gi')) {
-    return int.parse(metric.substring(0, metric.length - 2)) * 1024 * 1024;
+    return double.parse(metric.substring(0, metric.length - 2)) * 1024 * 1024;
   }
 
   return 0;
 }
 
 /// [formatCpuMetric] format a CPU metric value as it is returned by the [cpuMetricsStringToInt] function.
-String formatCpuMetric(int size, [int round = 2]) {
+String formatCpuMetric(double size, [int round = 2]) {
   int divider = 1000;
 
   if (size < divider) {
@@ -166,7 +166,7 @@ String formatCpuMetric(int size, [int round = 2]) {
   }
 
   if (size < divider * divider * divider && size % divider == 0) {
-    return '${(size / (divider * divider)).toStringAsFixed(0)}m';
+    return '${(size / (divider * divider)).toStringAsFixed(round)}m';
   }
 
   if (size < divider * divider * divider) {
@@ -174,14 +174,14 @@ String formatCpuMetric(int size, [int round = 2]) {
   }
 
   if (size < divider * divider * divider * divider && size % divider == 0) {
-    return (size / (divider * divider * divider)).toStringAsFixed(0);
+    return (size / (divider * divider * divider)).toStringAsFixed(round);
   }
 
   return (size / divider / divider / divider).toStringAsFixed(round);
 }
 
 /// [formatMemoryMetric] format a Memory metric value as it is returned by the [memoryMetricsStringToInt] function.
-String formatMemoryMetric(int size, [int round = 2]) {
+String formatMemoryMetric(double size, [int round = 2]) {
   int divider = 1024;
 
   if (size < divider) {
@@ -189,7 +189,7 @@ String formatMemoryMetric(int size, [int round = 2]) {
   }
 
   if (size < divider * divider && size % divider == 0) {
-    return '${(size / divider).toStringAsFixed(0)}Mi';
+    return '${(size / divider).toStringAsFixed(round)}Mi';
   }
 
   if (size < divider * divider) {
@@ -197,7 +197,7 @@ String formatMemoryMetric(int size, [int round = 2]) {
   }
 
   if (size < divider * divider * divider && size % divider == 0) {
-    return '${(size / (divider * divider)).toStringAsFixed(0)}Gi';
+    return '${(size / (divider * divider)).toStringAsFixed(round)}Gi';
   }
 
   return '${(size / divider / divider).toStringAsFixed(round)}Gi';

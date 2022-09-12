@@ -31,16 +31,16 @@ NodeMetrics? getMetricsFromList(IoK8sApiCoreV1Node? node, dynamic metrics) {
       return null;
     }
 
-    int cpu = 0;
-    int memory = 0;
+    var cpu = 0.0;
+    var memory = 0.0;
 
     if (nodeMetricsItem[0].usage!.cpu != null) {
-      cpu = cpu + cpuMetricsStringToInt(nodeMetricsItem[0].usage!.cpu!);
+      cpu = cpu + cpuMetricsStringToDouble(nodeMetricsItem[0].usage!.cpu!);
     }
 
     if (nodeMetricsItem[0].usage!.memory != null) {
-      memory =
-          memory + memoryMetricsStringToInt(nodeMetricsItem[0].usage!.memory!);
+      memory = memory +
+          memoryMetricsStringToDouble(nodeMetricsItem[0].usage!.memory!);
     }
 
     return NodeMetrics(
@@ -57,16 +57,16 @@ NodeMetrics? getAllocatableResources(IoK8sApiCoreV1Node? node) {
     return null;
   }
 
-  int cpu = 0;
-  int memory = 0;
+  var cpu = 0.0;
+  var memory = 0.0;
 
   if (node.status!.allocatable.containsKey('cpu')) {
-    cpu = cpu + cpuMetricsStringToInt(node.status!.allocatable['cpu']!);
+    cpu = cpu + cpuMetricsStringToDouble(node.status!.allocatable['cpu']!);
   }
 
   if (node.status!.allocatable.containsKey('memory')) {
-    memory =
-        memory + memoryMetricsStringToInt(node.status!.allocatable['memory']!);
+    memory = memory +
+        memoryMetricsStringToDouble(node.status!.allocatable['memory']!);
   }
 
   return NodeMetrics(

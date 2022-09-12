@@ -150,8 +150,8 @@ class DetailsContainerWidget extends StatelessWidget {
                 name: 'CPU Usage',
                 values: containerMetric.isNotEmpty &&
                         containerMetric[0].usage?.cpu != null
-                    ? formatCpuMetric(
-                        cpuMetricsStringToInt(containerMetric[0].usage!.cpu!))
+                    ? formatCpuMetric(cpuMetricsStringToDouble(
+                        containerMetric[0].usage!.cpu!))
                     : '-',
               ),
               DetailsItemModel(
@@ -172,7 +172,7 @@ class DetailsContainerWidget extends StatelessWidget {
                 name: 'Memory Usage',
                 values: containerMetric.isNotEmpty &&
                         containerMetric[0].usage?.memory != null
-                    ? formatMemoryMetric(memoryMetricsStringToInt(
+                    ? formatMemoryMetric(memoryMetricsStringToDouble(
                         containerMetric[0].usage!.memory!))
                     : '-',
               ),

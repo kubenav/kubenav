@@ -21,19 +21,19 @@ class ContainerMetric {
 
   ContainerMetric({
     required int initTime,
-    required int initCPU,
-    required int initMemory,
-  })  : cpu = [FlSpot(initTime.toDouble(), initCPU.toDouble())].obs,
-        memory = [FlSpot(initTime.toDouble(), initMemory.toDouble())].obs;
+    required double initCPU,
+    required double initMemory,
+  })  : cpu = [FlSpot(initTime.toDouble(), initCPU)].obs,
+        memory = [FlSpot(initTime.toDouble(), initMemory)].obs;
 
-  void add(int newTime, int newCPU, int newMemory) {
+  void add(int newTime, double newCPU, double newMemory) {
     if (cpu.length > 25 || memory.length > 25) {
       cpu.removeAt(0);
       memory.removeAt(0);
     }
 
-    cpu.add(FlSpot(newTime.toDouble(), newCPU.toDouble()));
-    memory.add(FlSpot(newTime.toDouble(), newMemory.toDouble()));
+    cpu.add(FlSpot(newTime.toDouble(), newCPU));
+    memory.add(FlSpot(newTime.toDouble(), newMemory));
   }
 }
 
@@ -89,14 +89,15 @@ class DetailsLiveMetricsController extends GetxController {
             if (containerMetrics.containsKey(container.name)) {
               containerMetrics[container.name].add(
                 DateTime.now().millisecondsSinceEpoch,
-                cpuMetricsStringToInt(container.usage!.cpu!),
-                memoryMetricsStringToInt(container.usage!.memory!),
+                cpuMetricsStringToDouble(container.usage!.cpu!),
+                memoryMetricsStringToDouble(container.usage!.memory!),
               );
             } else {
               containerMetrics[container.name] = ContainerMetric(
                 initTime: DateTime.now().millisecondsSinceEpoch,
-                initCPU: cpuMetricsStringToInt(container.usage!.cpu!),
-                initMemory: memoryMetricsStringToInt(container.usage!.memory!),
+                initCPU: cpuMetricsStringToDouble(container.usage!.cpu!),
+                initMemory:
+                    memoryMetricsStringToDouble(container.usage!.memory!),
               );
             }
           }

@@ -38,10 +38,10 @@ enum MetricType {
 }
 
 class Metric {
-  int allocatable;
-  int usage;
-  int requests;
-  int limits;
+  double allocatable;
+  double usage;
+  double requests;
+  double limits;
 
   Metric({
     required this.allocatable,
@@ -109,18 +109,18 @@ class MetricWidgetController extends GetxController {
       final nodeMetricsList =
           ApisMetricsV1beta1NodeMetricsList.fromJson(nodeMetricsData);
 
-      var cpuAllocatable = 0;
-      var cpuUsage = 0;
-      var cpuRequests = 0;
-      var cpuLimits = 0;
+      var cpuAllocatable = 0.0;
+      var cpuUsage = 0.0;
+      var cpuRequests = 0.0;
+      var cpuLimits = 0.0;
 
-      var memoryAllocatable = 0;
-      var memoryUsage = 0;
-      var memoryRequests = 0;
-      var memoryLimits = 0;
+      var memoryAllocatable = 0.0;
+      var memoryUsage = 0.0;
+      var memoryRequests = 0.0;
+      var memoryLimits = 0.0;
 
-      var podsAllocatable = 0;
-      var podsUsage = 0;
+      var podsAllocatable = 0.0;
+      var podsUsage = 0.0;
 
       if (nodesList != null &&
           podsList != null &&
@@ -129,13 +129,14 @@ class MetricWidgetController extends GetxController {
           if (node.status != null &&
               node.status!.allocatable.containsKey('cpu')) {
             cpuAllocatable = cpuAllocatable +
-                cpuMetricsStringToInt(node.status!.allocatable['cpu']!);
+                cpuMetricsStringToDouble(node.status!.allocatable['cpu']!);
           }
 
           if (node.status != null &&
               node.status!.allocatable.containsKey('memory')) {
             memoryAllocatable = memoryAllocatable +
-                memoryMetricsStringToInt(node.status!.allocatable['memory']!);
+                memoryMetricsStringToDouble(
+                    node.status!.allocatable['memory']!);
           }
 
           if (node.status != null &&
@@ -147,15 +148,15 @@ class MetricWidgetController extends GetxController {
 
         for (var usage in nodeMetricsList.items!) {
           if (usage.usage != null && usage.usage!.cpu != null) {
-            cpuUsage = cpuUsage + cpuMetricsStringToInt(usage.usage!.cpu!);
+            cpuUsage = cpuUsage + cpuMetricsStringToDouble(usage.usage!.cpu!);
           }
 
           if (usage.usage != null && usage.usage!.memory != null) {
             memoryUsage =
-                memoryUsage + memoryMetricsStringToInt(usage.usage!.memory!);
+                memoryUsage + memoryMetricsStringToDouble(usage.usage!.memory!);
           }
 
-          podsUsage = podsList.items.length;
+          podsUsage = podsList.items.length.toDouble();
         }
 
         for (var pod in podsList.items) {
@@ -164,27 +165,28 @@ class MetricWidgetController extends GetxController {
               if (container.resources != null &&
                   container.resources!.requests.containsKey('cpu')) {
                 cpuRequests = cpuRequests +
-                    cpuMetricsStringToInt(
+                    cpuMetricsStringToDouble(
                         container.resources!.requests['cpu']!);
               }
 
               if (container.resources != null &&
                   container.resources!.requests.containsKey('memory')) {
                 memoryRequests = memoryRequests +
-                    memoryMetricsStringToInt(
+                    memoryMetricsStringToDouble(
                         container.resources!.requests['memory']!);
               }
 
               if (container.resources != null &&
                   container.resources!.limits.containsKey('cpu')) {
                 cpuLimits = cpuLimits +
-                    cpuMetricsStringToInt(container.resources!.limits['cpu']!);
+                    cpuMetricsStringToDouble(
+                        container.resources!.limits['cpu']!);
               }
 
               if (container.resources != null &&
                   container.resources!.limits.containsKey('memory')) {
                 memoryLimits = memoryLimits +
-                    memoryMetricsStringToInt(
+                    memoryMetricsStringToDouble(
                         container.resources!.limits['memory']!);
               }
             }
@@ -250,7 +252,7 @@ class MetricWidget extends StatelessWidget {
   final IconData icon;
   final String? nodeName;
 
-  String formatValue(int value) {
+  String formatValue(double value) {
     if (metricType == MetricType.cpu) {
       return formatCpuMetric(value);
     } else if (metricType == MetricType.memory) {
@@ -471,7 +473,7 @@ class MetricWidget extends StatelessWidget {
                                   ),
                                   children: [
                                     TextSpan(
-                                      text: formatValue(rod.toY.round()),
+                                      text: formatValue(rod.toY),
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 14,
