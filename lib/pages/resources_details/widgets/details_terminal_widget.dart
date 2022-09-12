@@ -65,6 +65,10 @@ class DetailsTerminalController extends GetxController {
     if (terminalFormKey.currentState != null &&
         terminalFormKey.currentState!.validate()) {
       try {
+        snackbar(
+          'Terminal',
+          'Terminal is created ...',
+        );
         final cluster = clusterController
             .clusters[clusterController.activeClusterIndex.value].value;
 

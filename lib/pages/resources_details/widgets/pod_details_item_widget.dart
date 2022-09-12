@@ -46,6 +46,11 @@ class PodDetailsItemController extends GetxController {
     int port,
   ) async {
     try {
+      snackbar(
+        'Port forwarding',
+        'Session is created ...',
+      );
+
       final cluster = clusterController
           .clusters[clusterController.activeClusterIndex.value].value;
 

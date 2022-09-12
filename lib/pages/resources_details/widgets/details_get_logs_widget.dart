@@ -76,6 +76,11 @@ class DetailsGetLogsController extends GetxController {
     if (logsFormKey.currentState != null &&
         logsFormKey.currentState!.validate()) {
       try {
+        snackbar(
+          'Logs',
+          'Logs are loading ...',
+        );
+
         final cluster = clusterController
             .clusters[clusterController.activeClusterIndex.value].value;
 
