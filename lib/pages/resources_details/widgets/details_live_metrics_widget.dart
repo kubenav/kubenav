@@ -233,12 +233,23 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                       ),
                                       leftTitles: AxisTitles(
                                         sideTitles: SideTitles(
-                                          showTitles: false,
+                                          showTitles: true,
+                                          reservedSize: 42,
+                                          getTitlesWidget:
+                                              (double value, TitleMeta meta) {
+                                            return Text(
+                                              formatCpuMetric(value, 0),
+                                              style: secondaryTextStyle(
+                                                context,
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ),
                                       bottomTitles: AxisTitles(
                                         sideTitles: SideTitles(
                                           showTitles: true,
+                                          interval: 500000,
                                           reservedSize: 32,
                                           getTitlesWidget: (value, titleMeta) {
                                             final timestamp = DateTime
@@ -246,16 +257,14 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                                     value.round());
 
                                             return Container(
-                                              // You can use any widget here
-                                              margin: const EdgeInsets.only(
-                                                  top: 16),
-                                              child: Transform.rotate(
-                                                angle: pi / 4,
-                                                child: Text(
-                                                  '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}',
-                                                  style: secondaryTextStyle(
-                                                    context,
-                                                  ),
+                                              padding: const EdgeInsets.only(
+                                                top: 16,
+                                                right: 42,
+                                              ),
+                                              child: Text(
+                                                '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}',
+                                                style: secondaryTextStyle(
+                                                  context,
                                                 ),
                                               ),
                                             );
@@ -285,8 +294,7 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(
-                                height: Constants.spacingExtraLarge +
-                                    Constants.spacingMiddle,
+                                height: Constants.spacingMiddle,
                               ),
                               ...controller.containerMetrics.entries
                                   .map(
@@ -383,12 +391,23 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                       ),
                                       leftTitles: AxisTitles(
                                         sideTitles: SideTitles(
-                                          showTitles: false,
+                                          showTitles: true,
+                                          reservedSize: 42,
+                                          getTitlesWidget:
+                                              (double value, TitleMeta meta) {
+                                            return Text(
+                                              formatMemoryMetric(value, 0),
+                                              style: secondaryTextStyle(
+                                                context,
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ),
                                       bottomTitles: AxisTitles(
                                         sideTitles: SideTitles(
                                           showTitles: true,
+                                          interval: 500000,
                                           reservedSize: 32,
                                           getTitlesWidget: (value, titleMeta) {
                                             final timestamp = DateTime
@@ -396,16 +415,14 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                                     value.round());
 
                                             return Container(
-                                              // You can use any widget here
-                                              margin: const EdgeInsets.only(
-                                                  top: 16),
-                                              child: Transform.rotate(
-                                                angle: pi / 4,
-                                                child: Text(
-                                                  '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}',
-                                                  style: secondaryTextStyle(
-                                                    context,
-                                                  ),
+                                              padding: const EdgeInsets.only(
+                                                top: 16,
+                                                right: 42,
+                                              ),
+                                              child: Text(
+                                                '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}',
+                                                style: secondaryTextStyle(
+                                                  context,
                                                 ),
                                               ),
                                             );
@@ -435,8 +452,7 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(
-                                height: Constants.spacingExtraLarge +
-                                    Constants.spacingMiddle,
+                                height: Constants.spacingMiddle,
                               ),
                               ...controller.containerMetrics.entries
                                   .map(
