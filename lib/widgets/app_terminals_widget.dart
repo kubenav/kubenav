@@ -139,53 +139,38 @@ class AppTerminalsWidget extends StatelessWidget {
                       length: controller.terminalController.terminals.length,
                       child: Column(
                         children: [
-                          TabBar(
-                            isScrollable: true,
-                            labelColor: Colors.white,
-                            unselectedLabelColor: Constants.colorPrimary,
-                            indicatorSize: TabBarIndicatorSize.label,
-                            indicator: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                Constants.sizeBorderRadius,
-                              ),
-                              color: Constants.colorPrimary,
+                          ClipRRect(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(Constants.sizeBorderRadius),
                             ),
-                            tabs: controller.terminalController.terminals
-                                .asMap()
-                                .entries
-                                .map(
-                              (terminal) {
-                                return Tab(
-                                  child: GestureDetector(
-                                    onLongPress: () {
-                                      controller.terminalController
-                                          .removeTerminal(
-                                              context, terminal.key);
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(
-                                        Constants.spacingSmall,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                          Constants.sizeBorderRadius,
-                                        ),
-                                        border: Border.all(
-                                          color: Constants.colorPrimary,
-                                          width: 1,
-                                        ),
-                                      ),
-                                      child: Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          terminal.value.name,
-                                        ),
+                            child: TabBar(
+                              isScrollable: true,
+                              labelColor: Colors.white,
+                              unselectedLabelColor: Constants.colorPrimary,
+                              indicatorSize: TabBarIndicatorSize.tab,
+                              indicator: const BoxDecoration(
+                                color: Constants.colorPrimary,
+                              ),
+                              tabs: controller.terminalController.terminals
+                                  .asMap()
+                                  .entries
+                                  .map(
+                                (terminal) {
+                                  return Tab(
+                                    child: GestureDetector(
+                                      onLongPress: () {
+                                        controller.terminalController
+                                            .removeTerminal(
+                                                context, terminal.key);
+                                      },
+                                      child: Text(
+                                        terminal.value.name,
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
-                            ).toList(),
+                                  );
+                                },
+                              ).toList(),
+                            ),
                           ),
                           const SizedBox(height: Constants.spacingMiddle),
                           Expanded(

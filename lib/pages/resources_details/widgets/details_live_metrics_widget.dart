@@ -143,328 +143,337 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
       onActionPressed: () {
         finish(context);
       },
-      child: Form(
-        child: ListView(
-          shrinkWrap: false,
+      child: DefaultTabController(
+        length: 2,
+        child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: Constants.spacingMiddle,
-                left: Constants.spacingExtraSmall,
-                right: Constants.spacingExtraSmall,
-                bottom: Constants.spacingMiddle,
+            const ClipRRect(
+              borderRadius: BorderRadius.all(
+                Radius.circular(Constants.sizeBorderRadius),
               ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'CPU',
-                      style: primaryTextStyle(context, size: 18),
-                    ),
-                  ),
+              child: TabBar(
+                isScrollable: false,
+                labelColor: Colors.white,
+                unselectedLabelColor: Constants.colorPrimary,
+                labelPadding: EdgeInsets.zero,
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicator: BoxDecoration(
+                  color: Constants.colorPrimary,
+                ),
+                tabs: [
+                  Tab(text: 'CPU'),
+                  Tab(text: 'Memory'),
                 ],
               ),
             ),
-            Obx(
-              () {
-                return Container(
-                  margin: const EdgeInsets.only(
-                    left: Constants.spacingExtraSmall,
-                    right: Constants.spacingExtraSmall,
-                  ),
-                  padding: const EdgeInsets.all(12.0),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(context).shadowColor,
-                        blurRadius: Constants.sizeBorderBlurRadius,
-                        spreadRadius: Constants.sizeBorderSpreadRadius,
-                        offset: const Offset(0.0, 0.0),
-                      ),
-                    ],
-                    color: Theme.of(context).cardColor,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(Constants.sizeBorderRadius),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 320,
-                        width: double.infinity,
-                        child: LineChart(
-                          LineChartData(
-                            minY: 0,
-                            lineTouchData: LineTouchData(enabled: false),
-                            clipData: FlClipData.all(),
-                            lineBarsData: controller.containerMetrics.entries
-                                .map((e) => LineChartBarData(
-                                      spots: e.value.cpu,
-                                      dotData: FlDotData(
-                                        show: false,
+            // const SizedBox(height: Constants.spacingLarge),
+            const SizedBox(height: Constants.spacingMiddle),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  Obx(
+                    () {
+                      return SingleChildScrollView(
+                        child: Container(
+                          margin: const EdgeInsets.only(
+                            top: Constants.spacingSmall,
+                            bottom: Constants.spacingMiddle,
+                            left: Constants.spacingExtraSmall,
+                            right: Constants.spacingExtraSmall,
+                          ),
+                          padding: const EdgeInsets.all(12.0),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Theme.of(context).shadowColor,
+                                blurRadius: Constants.sizeBorderBlurRadius,
+                                spreadRadius: Constants.sizeBorderSpreadRadius,
+                                offset: const Offset(0.0, 0.0),
+                              ),
+                            ],
+                            color: Theme.of(context).cardColor,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(Constants.sizeBorderRadius),
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 320,
+                                width: double.infinity,
+                                child: LineChart(
+                                  LineChartData(
+                                    minY: 0,
+                                    lineTouchData:
+                                        LineTouchData(enabled: false),
+                                    clipData: FlClipData.all(),
+                                    lineBarsData:
+                                        controller.containerMetrics.entries
+                                            .map((e) => LineChartBarData(
+                                                  spots: e.value.cpu,
+                                                  dotData: FlDotData(
+                                                    show: false,
+                                                  ),
+                                                  color: Constants.colorPrimary,
+                                                  barWidth: 4,
+                                                  isCurved: false,
+                                                ))
+                                            .toList(),
+                                    titlesData: FlTitlesData(
+                                      show: true,
+                                      rightTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          showTitles: false,
+                                        ),
                                       ),
-                                      color: Constants.colorPrimary,
-                                      barWidth: 4,
-                                      isCurved: false,
-                                    ))
-                                .toList(),
-                            titlesData: FlTitlesData(
-                              show: true,
-                              rightTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                  showTitles: false,
-                                ),
-                              ),
-                              topTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                  showTitles: false,
-                                ),
-                              ),
-                              leftTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                  showTitles: false,
-                                ),
-                              ),
-                              bottomTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                  showTitles: true,
-                                  reservedSize: 32,
-                                  getTitlesWidget: (value, titleMeta) {
-                                    final timestamp =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            value.round());
+                                      topTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          showTitles: false,
+                                        ),
+                                      ),
+                                      leftTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          showTitles: false,
+                                        ),
+                                      ),
+                                      bottomTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          showTitles: true,
+                                          reservedSize: 32,
+                                          getTitlesWidget: (value, titleMeta) {
+                                            final timestamp = DateTime
+                                                .fromMillisecondsSinceEpoch(
+                                                    value.round());
 
-                                    return Container(
-                                      // You can use any widget here
-                                      margin: const EdgeInsets.only(top: 16),
-                                      child: Transform.rotate(
-                                        angle: pi / 4,
-                                        child: Text(
-                                          '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}',
+                                            return Container(
+                                              // You can use any widget here
+                                              margin: const EdgeInsets.only(
+                                                  top: 16),
+                                              child: Transform.rotate(
+                                                angle: pi / 4,
+                                                child: Text(
+                                                  '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}',
+                                                  style: secondaryTextStyle(
+                                                    context,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    borderData: FlBorderData(show: false),
+                                    gridData: FlGridData(
+                                      show: true,
+                                      getDrawingHorizontalLine: (value) {
+                                        return FlLine(
+                                          color: Constants.colorTextSecondary,
+                                          strokeWidth: 0.4,
+                                          dashArray: [8, 4],
+                                        );
+                                      },
+                                      getDrawingVerticalLine: (value) {
+                                        return FlLine(
+                                          color: Constants.colorTextSecondary,
+                                          strokeWidth: 0.4,
+                                          dashArray: [8, 4],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: Constants.spacingExtraLarge +
+                                    Constants.spacingMiddle,
+                              ),
+                              ...controller.containerMetrics.entries
+                                  .map(
+                                    (e) => Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          e.key,
+                                          style: noramlTextStyle(
+                                            context,
+                                            size: Constants.sizeTextSecondary,
+                                          ),
+                                        ),
+                                        Text(
+                                          formatCpuMetric(
+                                            e.value.cpu[e.value.cpu.length - 1]
+                                                .y
+                                                .toDouble(),
+                                          ),
                                           style: secondaryTextStyle(
                                             context,
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                            borderData: FlBorderData(show: false),
-                            gridData: FlGridData(
-                              show: true,
-                              getDrawingHorizontalLine: (value) {
-                                return FlLine(
-                                  color: Constants.colorTextSecondary,
-                                  strokeWidth: 0.4,
-                                  dashArray: [8, 4],
-                                );
-                              },
-                              getDrawingVerticalLine: (value) {
-                                return FlLine(
-                                  color: Constants.colorTextSecondary,
-                                  strokeWidth: 0.4,
-                                  dashArray: [8, 4],
-                                );
-                              },
-                            ),
+                                      ],
+                                    ),
+                                  )
+                                  .toList(),
+                            ],
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: Constants.spacingExtraLarge +
-                            Constants.spacingMiddle,
-                      ),
-                      ...controller.containerMetrics.entries
-                          .map(
-                            (e) => Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  e.key,
-                                  style: noramlTextStyle(
-                                    context,
-                                    size: Constants.sizeTextSecondary,
-                                  ),
-                                ),
-                                Text(
-                                  formatCpuMetric(e
-                                      .value.cpu[e.value.cpu.length - 1].y
-                                      .toInt()),
-                                  style: secondaryTextStyle(
-                                    context,
-                                  ),
-                                ),
-                              ],
+                      );
+                    },
+                  ),
+                  Obx(
+                    () {
+                      return SingleChildScrollView(
+                        child: Container(
+                          margin: const EdgeInsets.only(
+                            top: Constants.spacingSmall,
+                            bottom: Constants.spacingMiddle,
+                            left: Constants.spacingExtraSmall,
+                            right: Constants.spacingExtraSmall,
+                          ),
+                          padding: const EdgeInsets.all(12.0),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Theme.of(context).shadowColor,
+                                blurRadius: Constants.sizeBorderBlurRadius,
+                                spreadRadius: Constants.sizeBorderSpreadRadius,
+                                offset: const Offset(0.0, 0.0),
+                              ),
+                            ],
+                            color: Theme.of(context).cardColor,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(Constants.sizeBorderRadius),
                             ),
-                          )
-                          .toList(),
-                    ],
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: Constants.spacingMiddle),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: Constants.spacingMiddle,
-                left: Constants.spacingExtraSmall,
-                right: Constants.spacingExtraSmall,
-                bottom: Constants.spacingMiddle,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Memory',
-                      style: primaryTextStyle(context, size: 18),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Obx(
-              () {
-                return Container(
-                  margin: const EdgeInsets.only(
-                    left: Constants.spacingExtraSmall,
-                    right: Constants.spacingExtraSmall,
-                  ),
-                  padding: const EdgeInsets.all(12.0),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(context).shadowColor,
-                        blurRadius: Constants.sizeBorderBlurRadius,
-                        spreadRadius: Constants.sizeBorderSpreadRadius,
-                        offset: const Offset(0.0, 0.0),
-                      ),
-                    ],
-                    color: Theme.of(context).cardColor,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(Constants.sizeBorderRadius),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 320,
-                        width: double.infinity,
-                        child: LineChart(
-                          LineChartData(
-                            minY: 0,
-                            lineTouchData: LineTouchData(enabled: false),
-                            clipData: FlClipData.all(),
-                            lineBarsData: controller.containerMetrics.entries
-                                .map((e) => LineChartBarData(
-                                      spots: e.value.memory,
-                                      dotData: FlDotData(
-                                        show: false,
+                          ),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 320,
+                                width: double.infinity,
+                                child: LineChart(
+                                  LineChartData(
+                                    minY: 0,
+                                    lineTouchData:
+                                        LineTouchData(enabled: false),
+                                    clipData: FlClipData.all(),
+                                    lineBarsData:
+                                        controller.containerMetrics.entries
+                                            .map((e) => LineChartBarData(
+                                                  spots: e.value.memory,
+                                                  dotData: FlDotData(
+                                                    show: false,
+                                                  ),
+                                                  color: Constants.colorPrimary,
+                                                  barWidth: 4,
+                                                  isCurved: false,
+                                                ))
+                                            .toList(),
+                                    titlesData: FlTitlesData(
+                                      show: true,
+                                      rightTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          showTitles: false,
+                                        ),
                                       ),
-                                      color: Constants.colorPrimary,
-                                      barWidth: 4,
-                                      isCurved: false,
-                                    ))
-                                .toList(),
-                            titlesData: FlTitlesData(
-                              show: true,
-                              rightTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                  showTitles: false,
-                                ),
-                              ),
-                              topTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                  showTitles: false,
-                                ),
-                              ),
-                              leftTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                  showTitles: false,
-                                ),
-                              ),
-                              bottomTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                  showTitles: true,
-                                  reservedSize: 32,
-                                  getTitlesWidget: (value, titleMeta) {
-                                    final timestamp =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            value.round());
+                                      topTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          showTitles: false,
+                                        ),
+                                      ),
+                                      leftTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          showTitles: false,
+                                        ),
+                                      ),
+                                      bottomTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          showTitles: true,
+                                          reservedSize: 32,
+                                          getTitlesWidget: (value, titleMeta) {
+                                            final timestamp = DateTime
+                                                .fromMillisecondsSinceEpoch(
+                                                    value.round());
 
-                                    return Container(
-                                      // You can use any widget here
-                                      margin: const EdgeInsets.only(top: 16),
-                                      child: Transform.rotate(
-                                        angle: pi / 4,
-                                        child: Text(
-                                          '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}',
+                                            return Container(
+                                              // You can use any widget here
+                                              margin: const EdgeInsets.only(
+                                                  top: 16),
+                                              child: Transform.rotate(
+                                                angle: pi / 4,
+                                                child: Text(
+                                                  '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}',
+                                                  style: secondaryTextStyle(
+                                                    context,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    borderData: FlBorderData(show: false),
+                                    gridData: FlGridData(
+                                      show: true,
+                                      getDrawingHorizontalLine: (value) {
+                                        return FlLine(
+                                          color: Constants.colorTextSecondary,
+                                          strokeWidth: 0.4,
+                                          dashArray: [8, 4],
+                                        );
+                                      },
+                                      getDrawingVerticalLine: (value) {
+                                        return FlLine(
+                                          color: Constants.colorTextSecondary,
+                                          strokeWidth: 0.4,
+                                          dashArray: [8, 4],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: Constants.spacingExtraLarge +
+                                    Constants.spacingMiddle,
+                              ),
+                              ...controller.containerMetrics.entries
+                                  .map(
+                                    (e) => Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          e.key,
+                                          style: noramlTextStyle(
+                                            context,
+                                            size: Constants.sizeTextSecondary,
+                                          ),
+                                        ),
+                                        Text(
+                                          formatMemoryMetric(e
+                                              .value
+                                              .memory[e.value.memory.length - 1]
+                                              .y
+                                              .toDouble()),
                                           style: secondaryTextStyle(
                                             context,
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                            borderData: FlBorderData(show: false),
-                            gridData: FlGridData(
-                              show: true,
-                              getDrawingHorizontalLine: (value) {
-                                return FlLine(
-                                  color: Constants.colorTextSecondary,
-                                  strokeWidth: 0.4,
-                                  dashArray: [8, 4],
-                                );
-                              },
-                              getDrawingVerticalLine: (value) {
-                                return FlLine(
-                                  color: Constants.colorTextSecondary,
-                                  strokeWidth: 0.4,
-                                  dashArray: [8, 4],
-                                );
-                              },
-                            ),
+                                      ],
+                                    ),
+                                  )
+                                  .toList(),
+                            ],
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: Constants.spacingExtraLarge +
-                            Constants.spacingMiddle,
-                      ),
-                      ...controller.containerMetrics.entries
-                          .map(
-                            (e) => Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  e.key,
-                                  style: noramlTextStyle(
-                                    context,
-                                    size: Constants.sizeTextSecondary,
-                                  ),
-                                ),
-                                Text(
-                                  formatMemoryMetric(e
-                                      .value.memory[e.value.memory.length - 1].y
-                                      .toInt()),
-                                  style: secondaryTextStyle(
-                                    context,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                          .toList(),
-                    ],
+                      );
+                    },
                   ),
-                );
-              },
+                ],
+              ),
             ),
-            const SizedBox(height: Constants.spacingMiddle),
           ],
         ),
       ),
