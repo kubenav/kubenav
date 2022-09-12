@@ -51,8 +51,10 @@ class HelmListController extends GetxController {
   /// [getHelmCharts] returns a list of Helm charts for the selected namespace or all namespaces.
   void getHelmCharts() async {
     loading.value = true;
+    error.value = '';
 
     final cluster = clusterController.getActiveCluster();
+
     if (cluster == null) {
       error.value = 'No active cluster';
     } else {

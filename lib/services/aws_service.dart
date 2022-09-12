@@ -226,13 +226,13 @@ class AWSService {
         },
       );
 
-      List<dynamic> tmpClusters = json.decode(result);
       Logger.log(
         'AWSService getClusters',
-        '${tmpClusters.length} clusters were returned',
+        'Clusters were returned',
         result,
       );
 
+      List<dynamic> tmpClusters = json.decode(result);
       List<AWSCluster> clusters = [];
       for (var tmpCluster in tmpClusters) {
         clusters.add(AWSCluster.fromJson(tmpCluster));

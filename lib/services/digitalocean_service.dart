@@ -60,9 +60,21 @@ class DigitalOceanService {
         },
       );
 
-      Map<String, dynamic> jsonData = json.decode(response.body);
+      Logger.log(
+        'DigitalOceanService getClusters',
+        'Response status: ${response.statusCode}',
+        response.body,
+      );
+
+      Map<String, dynamic>? jsonData = json.decode(response.body);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
+        if (jsonData == null ||
+            !jsonData.containsKey('kubernetes_clusters') ||
+            jsonData['kubernetes_clusters'] == null) {
+          return [];
+        }
+
         final List<DigitalOceanCluster> clusters = [];
         for (var cluster in jsonData['kubernetes_clusters']) {
           clusters.add(DigitalOceanCluster.fromJson(cluster));
@@ -75,7 +87,7 @@ class DigitalOceanService {
           'Could not get clusters with status code ${response.statusCode}',
           jsonData,
         );
-        return Future.error(jsonData);
+        return Future.error(jsonData ?? 'An unknown error occured');
       }
     } catch (err) {
       Logger.log(
@@ -99,6 +111,12 @@ class DigitalOceanService {
         headers: {
           'Authorization': 'Bearer $token',
         },
+      );
+
+      Logger.log(
+        'DigitalOceanService getKubeconfig',
+        'Response status: ${response.statusCode}',
+        response.body,
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {

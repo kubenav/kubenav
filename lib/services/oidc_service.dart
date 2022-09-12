@@ -70,6 +70,12 @@ class OIDCService {
         },
       );
 
+      Logger.log(
+        'OIDCService getLink',
+        'Link was generated',
+        result,
+      );
+
       Map<String, dynamic> jsonData = json.decode(result);
       return OIDCResponse.fromJson(jsonData);
     } catch (err) {
@@ -111,6 +117,12 @@ class OIDCService {
         },
       );
 
+      Logger.log(
+        'OIDCService getRefreshToken',
+        'Refresh token was returned',
+        result,
+      );
+
       Map<String, dynamic> jsonData = json.decode(result);
       return OIDCResponse.fromJson(jsonData);
     } catch (err) {
@@ -145,6 +157,12 @@ class OIDCService {
           'redirectURL': redirectURL,
           'refreshToken': refreshToken,
         },
+      );
+
+      Logger.log(
+        'OIDCService getAccessToken',
+        'Access token was returned',
+        result,
       );
 
       Map<String, dynamic> jsonData = json.decode(result);

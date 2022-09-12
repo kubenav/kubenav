@@ -63,13 +63,13 @@ class AzureService {
         },
       );
 
-      List<dynamic> tmpClusters = json.decode(result);
       Logger.log(
         'AzureService getClusters',
-        '${tmpClusters.length} clusters were returned',
+        'Clusters were returned',
         result,
       );
 
+      List<dynamic> tmpClusters = json.decode(result);
       List<AzureCluster> clusters = [];
       for (var tmpCluster in tmpClusters) {
         clusters.add(AzureCluster.fromJson(tmpCluster));

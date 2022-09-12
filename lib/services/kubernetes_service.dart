@@ -682,6 +682,10 @@ class KubernetesService {
         result,
       );
 
+      if (result == 'null') {
+        return [];
+      }
+
       List<dynamic> jsonData = json.decode(result);
       final releases = <Release>[];
       for (var release in jsonData) {

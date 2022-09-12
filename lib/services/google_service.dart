@@ -162,6 +162,12 @@ class GoogleService {
             'https://oauth2.googleapis.com/token?code=$code&client_id=$clientID&client_secret=$clientSecret&redirect_uri=${Constants.googleRedirectURI}&grant_type=authorization_code'),
       );
 
+      Logger.log(
+        'GoogleService getTokensFromCode',
+        'Response status: ${response.statusCode}',
+        response.body,
+      );
+
       Map<String, dynamic> jsonData = json.decode(response.body);
       GoogleTokens googleTokens = GoogleTokens.fromJson(jsonData);
 
@@ -205,6 +211,12 @@ class GoogleService {
       final response = await http.post(
         Uri.parse(
             'https://oauth2.googleapis.com/token?refresh_token=$refreshToken&client_id=$clientID&client_secret=$clientSecret&grant_type=refresh_token'),
+      );
+
+      Logger.log(
+        'GoogleService getTokensFromRefreshToken',
+        'Response status: ${response.statusCode}',
+        response.body,
       );
 
       Map<String, dynamic> jsonData = json.decode(response.body);
@@ -255,6 +267,12 @@ class GoogleService {
         },
       );
 
+      Logger.log(
+        'GoogleService isGoogleAPIEnabled',
+        'Response status: ${response.statusCode}',
+        response.body,
+      );
+
       Map<String, dynamic> jsonData = json.decode(response.body);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -294,9 +312,21 @@ class GoogleService {
         },
       );
 
-      Map<String, dynamic> jsonData = json.decode(response.body);
+      Logger.log(
+        'GoogleService getProjects',
+        'Response status: ${response.statusCode}',
+        response.body,
+      );
+
+      Map<String, dynamic>? jsonData = json.decode(response.body);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
+        if (jsonData == null ||
+            !jsonData.containsKey('projects') ||
+            jsonData['projects'] == null) {
+          return [];
+        }
+
         final List<GoogleProject> projects = [];
         for (var projectJson in jsonData['projects']) {
           final project = GoogleProject.fromJson(projectJson);
@@ -318,7 +348,7 @@ class GoogleService {
           'Could not get projects, requests returned status code ${response.statusCode}',
           jsonData,
         );
-        return Future.error(jsonData);
+        return Future.error(jsonData ?? 'An unknown error occured');
       }
     } catch (err) {
       Logger.log(
@@ -344,9 +374,21 @@ class GoogleService {
         },
       );
 
-      Map<String, dynamic> jsonData = json.decode(response.body);
+      Logger.log(
+        'GoogleService getClusters',
+        'Response status: ${response.statusCode}',
+        response.body,
+      );
+
+      Map<String, dynamic>? jsonData = json.decode(response.body);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
+        if (jsonData == null ||
+            !jsonData.containsKey('clusters') ||
+            jsonData['clusters'] == null) {
+          return [];
+        }
+
         final List<GoogleCluster> clusters = [];
         for (var clusterJson in jsonData['clusters']) {
           clusters.add(GoogleCluster.fromJson(clusterJson));
@@ -359,7 +401,7 @@ class GoogleService {
           'Could not get clusters, requests returned status code ${response.statusCode}',
           jsonData,
         );
-        return Future.error(jsonData);
+        return Future.error(jsonData ?? 'An unknown error occured');
       }
     } catch (err) {
       Logger.log(
