@@ -79,11 +79,11 @@ class GlobalSettingsController extends GetxController {
         } else {
           Logger.log(
             'Enable Authentication failed',
-            'Authentication could not be activated, because the device is not supported.',
+            'Authentication could not be enabled, because the device is not supported.',
           );
           snackbar(
             'Enable Authentication failed',
-            'Authentication could not be activated, because the device is not supported.',
+            'Authentication could not be enabled, because the device is not supported.',
           );
         }
       }

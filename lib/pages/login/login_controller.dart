@@ -65,6 +65,6 @@ class LoginController extends GetxController {
       }
     }
 
-    Get.toNamed(Routes.home);
+    Get.offAndToNamed(Routes.home);
   }
 }
