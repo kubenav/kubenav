@@ -350,3 +350,72 @@ PodMetrics? getResources(IoK8sApiCoreV1Pod? pod) {
     return null;
   }
 }
+
+class PodResourceForLiveMetrics {
+  double cpuRequests;
+  double cpuLimits;
+  double memoryRequests;
+  double memoryLimits;
+
+  PodResourceForLiveMetrics({
+    required this.cpuRequests,
+    required this.cpuLimits,
+    required this.memoryRequests,
+    required this.memoryLimits,
+  });
+}
+
+PodResourceForLiveMetrics? getResourcesForLiveMetrics(
+    IoK8sApiCoreV1Pod? pod, String selectedContainer) {
+  try {
+    if (pod == null || pod.spec == null || pod.spec!.containers.isEmpty) {
+      return null;
+    }
+
+    var cpuRequests = 0.0;
+    var cpuLimits = 0.0;
+    var memoryRequests = 0.0;
+    var memoryLimits = 0.0;
+
+    for (var i = 0; i < pod.spec!.containers.length; i++) {
+      if (pod.spec!.containers[i].resources != null) {
+        if (selectedContainer == '' ||
+            selectedContainer == pod.spec!.containers[i].name) {
+          if (pod.spec!.containers[i].resources!.requests.containsKey('cpu')) {
+            cpuRequests = cpuRequests +
+                cpuMetricsStringToDouble(
+                    pod.spec!.containers[i].resources!.requests['cpu']!);
+          }
+
+          if (pod.spec!.containers[i].resources!.requests
+              .containsKey('memory')) {
+            memoryRequests = memoryRequests +
+                memoryMetricsStringToDouble(
+                    pod.spec!.containers[i].resources!.requests['memory']!);
+          }
+
+          if (pod.spec!.containers[i].resources!.limits.containsKey('cpu')) {
+            cpuLimits = cpuLimits +
+                cpuMetricsStringToDouble(
+                    pod.spec!.containers[i].resources!.limits['cpu']!);
+          }
+
+          if (pod.spec!.containers[i].resources!.limits.containsKey('memory')) {
+            memoryLimits = memoryLimits +
+                memoryMetricsStringToDouble(
+                    pod.spec!.containers[i].resources!.limits['memory']!);
+          }
+        }
+      }
+    }
+
+    return PodResourceForLiveMetrics(
+      cpuRequests: cpuRequests,
+      cpuLimits: cpuLimits,
+      memoryRequests: memoryRequests,
+      memoryLimits: memoryLimits,
+    );
+  } catch (err) {
+    return null;
+  }
+}

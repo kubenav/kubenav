@@ -6,12 +6,13 @@ import 'package:get/get.dart';
 import 'package:kubenav/controllers/bookmark_controller.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/controllers/global_settings_controller.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_create_job_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_delete_resource_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_edit_resource_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_get_logs_widget.dart';
-import 'package:kubenav/pages/resources_details/widgets/details_live_metrics_widget.dart';
+import 'package:kubenav/pages/resources_details/widgets/details_live_metrics_containers_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_restart_resource_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_scale_resource_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_show_yaml_widget.dart';
@@ -261,19 +262,24 @@ class ResourcesDetailsController extends GetxController {
 
   void showLiveMetrics() {
     if (name != null && namespace != null) {
-      Get.bottomSheet(
-        BottomSheet(
-          onClosing: () {},
-          enableDrag: false,
-          builder: (builder) {
-            return DetailsLiveMetricsWidget(
-              name: name!,
-              namespace: namespace!,
-            );
-          },
-        ),
-        isScrollControlled: true,
-      );
+      final pod = IoK8sApiCoreV1Pod.fromJson(item);
+      if (pod != null) {
+        Get.bottomSheet(
+          BottomSheet(
+            onClosing: () {},
+            enableDrag: false,
+            backgroundColor: Colors.transparent,
+            builder: (builder) {
+              return DetailsLiveMetricsContainersWidget(
+                name: name!,
+                namespace: namespace!,
+                pod: pod,
+              );
+            },
+          ),
+          isScrollControlled: true,
+        );
+      }
     }
   }
 }

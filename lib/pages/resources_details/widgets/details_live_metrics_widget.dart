@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -8,11 +7,13 @@ import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/kubernetes-extensions/pod_metrics.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/utils/resources/pods.dart';
 import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
 
 class ContainerMetric {
@@ -26,7 +27,11 @@ class ContainerMetric {
   })  : cpu = [FlSpot(initTime.toDouble(), initCPU)].obs,
         memory = [FlSpot(initTime.toDouble(), initMemory)].obs;
 
-  void add(int newTime, double newCPU, double newMemory) {
+  void add(
+    int newTime,
+    double newCPU,
+    double newMemory,
+  ) {
     if (cpu.length > 25 || memory.length > 25) {
       cpu.removeAt(0);
       memory.removeAt(0);
@@ -40,6 +45,8 @@ class ContainerMetric {
 class DetailsLiveMetricsController extends GetxController {
   final String name;
   final String namespace;
+  final IoK8sApiCoreV1Pod? pod;
+  final String selectedContainer;
   late Timer timer;
 
   RxMap containerMetrics = <String, ContainerMetric>{}.obs;
@@ -49,6 +56,8 @@ class DetailsLiveMetricsController extends GetxController {
   DetailsLiveMetricsController({
     required this.name,
     required this.namespace,
+    required this.pod,
+    required this.selectedContainer,
   });
 
   @override
@@ -86,21 +95,55 @@ class DetailsLiveMetricsController extends GetxController {
               container.usage != null &&
               container.usage!.cpu != null &&
               container.usage!.memory != null) {
-            if (containerMetrics.containsKey(container.name)) {
-              containerMetrics[container.name].add(
-                DateTime.now().millisecondsSinceEpoch,
-                cpuMetricsStringToDouble(container.usage!.cpu!),
-                memoryMetricsStringToDouble(container.usage!.memory!),
-              );
-            } else {
-              containerMetrics[container.name] = ContainerMetric(
-                initTime: DateTime.now().millisecondsSinceEpoch,
-                initCPU: cpuMetricsStringToDouble(container.usage!.cpu!),
-                initMemory:
-                    memoryMetricsStringToDouble(container.usage!.memory!),
-              );
+            if (selectedContainer == '' ||
+                selectedContainer == container.name) {
+              if (containerMetrics.containsKey(container.name)) {
+                containerMetrics[container.name].add(
+                  DateTime.now().millisecondsSinceEpoch,
+                  cpuMetricsStringToDouble(container.usage!.cpu!),
+                  memoryMetricsStringToDouble(container.usage!.memory!),
+                );
+              } else {
+                containerMetrics[container.name] = ContainerMetric(
+                  initTime: DateTime.now().millisecondsSinceEpoch,
+                  initCPU: cpuMetricsStringToDouble(container.usage!.cpu!),
+                  initMemory:
+                      memoryMetricsStringToDouble(container.usage!.memory!),
+                );
+              }
             }
           }
+        }
+      }
+
+      final podResources = getResourcesForLiveMetrics(pod, selectedContainer);
+      if (podResources != null) {
+        if (containerMetrics.containsKey('Requests')) {
+          containerMetrics['Requests'].add(
+            DateTime.now().millisecondsSinceEpoch,
+            podResources.cpuRequests,
+            podResources.memoryRequests,
+          );
+        } else {
+          containerMetrics['Requests'] = ContainerMetric(
+            initTime: DateTime.now().millisecondsSinceEpoch,
+            initCPU: podResources.cpuRequests,
+            initMemory: podResources.memoryRequests,
+          );
+        }
+
+        if (containerMetrics.containsKey('Limits')) {
+          containerMetrics['Limits'].add(
+            DateTime.now().millisecondsSinceEpoch,
+            podResources.cpuLimits,
+            podResources.memoryLimits,
+          );
+        } else {
+          containerMetrics['Limits'] = ContainerMetric(
+            initTime: DateTime.now().millisecondsSinceEpoch,
+            initCPU: podResources.cpuLimits,
+            initMemory: podResources.memoryLimits,
+          );
         }
       }
     } catch (err) {
@@ -118,10 +161,14 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
     Key? key,
     required this.name,
     required this.namespace,
+    required this.pod,
+    required this.selectedContainer,
   }) : super(key: key);
 
   final String name;
   final String namespace;
+  final IoK8sApiCoreV1Pod pod;
+  final String selectedContainer;
 
   @override
   Widget build(BuildContext context) {
@@ -129,6 +176,8 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
       DetailsLiveMetricsController(
         name: name,
         namespace: namespace,
+        pod: pod,
+        selectedContainer: selectedContainer,
       ),
     );
 
@@ -207,18 +256,22 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                     lineTouchData:
                                         LineTouchData(enabled: false),
                                     clipData: FlClipData.all(),
-                                    lineBarsData:
-                                        controller.containerMetrics.entries
-                                            .map((e) => LineChartBarData(
-                                                  spots: e.value.cpu,
-                                                  dotData: FlDotData(
-                                                    show: false,
-                                                  ),
-                                                  color: Constants.colorPrimary,
-                                                  barWidth: 4,
-                                                  isCurved: false,
-                                                ))
-                                            .toList(),
+                                    lineBarsData: controller
+                                        .containerMetrics.entries
+                                        .map((e) => LineChartBarData(
+                                              spots: e.value.cpu,
+                                              dotData: FlDotData(
+                                                show: false,
+                                              ),
+                                              color: e.key == 'Requests'
+                                                  ? Constants.colorWarning
+                                                  : e.key == 'Limits'
+                                                      ? Constants.colorDanger
+                                                      : Constants.colorPrimary,
+                                              barWidth: 4,
+                                              isCurved: false,
+                                            ))
+                                        .toList(),
                                     titlesData: FlTitlesData(
                                       show: true,
                                       rightTitles: AxisTitles(
@@ -365,18 +418,22 @@ class DetailsLiveMetricsWidget extends StatelessWidget {
                                     lineTouchData:
                                         LineTouchData(enabled: false),
                                     clipData: FlClipData.all(),
-                                    lineBarsData:
-                                        controller.containerMetrics.entries
-                                            .map((e) => LineChartBarData(
-                                                  spots: e.value.memory,
-                                                  dotData: FlDotData(
-                                                    show: false,
-                                                  ),
-                                                  color: Constants.colorPrimary,
-                                                  barWidth: 4,
-                                                  isCurved: false,
-                                                ))
-                                            .toList(),
+                                    lineBarsData: controller
+                                        .containerMetrics.entries
+                                        .map((e) => LineChartBarData(
+                                              spots: e.value.memory,
+                                              dotData: FlDotData(
+                                                show: false,
+                                              ),
+                                              color: e.key == 'Requests'
+                                                  ? Constants.colorWarning
+                                                  : e.key == 'Limits'
+                                                      ? Constants.colorDanger
+                                                      : Constants.colorPrimary,
+                                              barWidth: 4,
+                                              isCurved: false,
+                                            ))
+                                        .toList(),
                                     titlesData: FlTitlesData(
                                       show: true,
                                       rightTitles: AxisTitles(
