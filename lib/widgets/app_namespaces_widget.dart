@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
+import 'package:kubenav/controllers/global_settings_controller.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_namespace.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_namespace_list.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -17,6 +18,7 @@ import 'package:kubenav/widgets/app_error_widget.dart';
 /// [AppNamespacesController] is the controller for the [AppNamespacesWidget] widget. It is responsible to load the
 /// namespaces of the currently active cluster.
 class AppNamespacesController extends GetxController {
+  GlobalSettingsController globalSettingsController = Get.find();
   ClusterController clusterController = Get.find();
   RxList<IoK8sApiCoreV1Namespace> namespaces = <IoK8sApiCoreV1Namespace>[].obs;
   RxString error = ''.obs;
@@ -87,6 +89,157 @@ class AppNamespacesController extends GetxController {
 class AppNamespacesWidget extends StatelessWidget {
   const AppNamespacesWidget({Key? key}) : super(key: key);
 
+  List<Widget> buildFavoriteNamespace(
+      BuildContext context, AppNamespacesController controller) {
+    return [
+      Container(
+        margin: const EdgeInsets.only(
+          top: Constants.spacingSmall,
+          bottom: Constants.spacingSmall,
+          left: Constants.spacingExtraSmall,
+          right: Constants.spacingExtraSmall,
+        ),
+        child: Text(
+          'Favorites',
+          style: primaryTextStyle(context, size: 18),
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.only(
+          top: Constants.spacingSmall,
+          bottom: Constants.spacingSmall,
+          left: Constants.spacingExtraSmall,
+          right: Constants.spacingExtraSmall,
+        ),
+        padding: const EdgeInsets.all(12.0),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).shadowColor,
+              blurRadius: Constants.sizeBorderBlurRadius,
+              spreadRadius: Constants.sizeBorderSpreadRadius,
+              offset: const Offset(0.0, 0.0),
+            ),
+          ],
+          color: Theme.of(context).cardColor,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(Constants.sizeBorderRadius),
+          ),
+        ),
+        child: InkWell(
+          onTap: () {
+            controller.clusterController.setNamespace('');
+            finish(context);
+          },
+          child: Row(
+            children: [
+              Icon(
+                controller
+                            .clusterController
+                            .clusters[controller
+                                .clusterController.activeClusterIndex.value]
+                            .value
+                            .namespace ==
+                        ''
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_unchecked,
+                size: 24,
+                color: Constants.colorPrimary,
+              ),
+              const SizedBox(width: Constants.spacingSmall),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  'All Namespaces',
+                  style: noramlTextStyle(
+                    context,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      ...List.generate(
+        controller.globalSettingsController.namespaces.length,
+        (index) {
+          final name = controller.globalSettingsController.namespaces[index];
+
+          return Container(
+            margin: const EdgeInsets.only(
+              top: Constants.spacingSmall,
+              bottom: Constants.spacingSmall,
+              left: Constants.spacingExtraSmall,
+              right: Constants.spacingExtraSmall,
+            ),
+            padding: const EdgeInsets.all(12.0),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).shadowColor,
+                  blurRadius: Constants.sizeBorderBlurRadius,
+                  spreadRadius: Constants.sizeBorderSpreadRadius,
+                  offset: const Offset(0.0, 0.0),
+                ),
+              ],
+              color: Theme.of(context).cardColor,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(Constants.sizeBorderRadius),
+              ),
+            ),
+            child: InkWell(
+              onTap: () {
+                controller.clusterController.setNamespace(name);
+                finish(context);
+              },
+              child: Row(
+                children: [
+                  Icon(
+                    name ==
+                            controller
+                                .clusterController
+                                .clusters[controller
+                                    .clusterController.activeClusterIndex.value]
+                                .value
+                                .namespace
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
+                    size: 24,
+                    color: Constants.colorPrimary,
+                  ),
+                  const SizedBox(width: Constants.spacingSmall),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      name,
+                      style: noramlTextStyle(
+                        context,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+      Container(
+        margin: const EdgeInsets.only(
+          top: Constants.spacingSmall,
+          bottom: Constants.spacingSmall,
+          left: Constants.spacingExtraSmall,
+          right: Constants.spacingExtraSmall,
+        ),
+        child: Text(
+          'Namespaces',
+          style: primaryTextStyle(context, size: 18),
+        ),
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     AppNamespacesController controller = Get.put(
@@ -107,14 +260,12 @@ class AppNamespacesWidget extends StatelessWidget {
       child: Obx(
         () {
           if (controller.loading.value) {
-            return Flex(
-              direction: Axis.vertical,
+            return ListView(
               children: [
-                Expanded(
-                  child: Wrap(
-                    children: const [
-                      CircularProgressIndicator(color: Constants.colorPrimary),
-                    ],
+                ...buildFavoriteNamespace(context, controller),
+                const Center(
+                  child: CircularProgressIndicator(
+                    color: Constants.colorPrimary,
                   ),
                 ),
               ],
@@ -122,19 +273,17 @@ class AppNamespacesWidget extends StatelessWidget {
           }
 
           if (controller.error.value != '') {
-            return Flex(
-              direction: Axis.vertical,
+            return ListView(
               children: [
-                Expanded(
-                  child: Wrap(
-                    children: [
-                      AppErrorWidget(
-                        message: 'Could not load Namespaces',
-                        details: controller.error.value,
-                        icon: CustomIcons.namespaces,
-                      ),
-                    ],
-                  ),
+                ...buildFavoriteNamespace(context, controller),
+                Wrap(
+                  children: [
+                    AppErrorWidget(
+                      message: 'Could not load Namespaces',
+                      details: controller.error.value,
+                      icon: CustomIcons.namespaces,
+                    ),
+                  ],
                 ),
               ],
             );
@@ -142,63 +291,7 @@ class AppNamespacesWidget extends StatelessWidget {
 
           return ListView(
             children: [
-              Container(
-                margin: const EdgeInsets.only(
-                  top: Constants.spacingSmall,
-                  bottom: Constants.spacingSmall,
-                  left: Constants.spacingExtraSmall,
-                  right: Constants.spacingExtraSmall,
-                ),
-                padding: const EdgeInsets.all(12.0),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Theme.of(context).shadowColor,
-                      blurRadius: Constants.sizeBorderBlurRadius,
-                      spreadRadius: Constants.sizeBorderSpreadRadius,
-                      offset: const Offset(0.0, 0.0),
-                    ),
-                  ],
-                  color: Theme.of(context).cardColor,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(Constants.sizeBorderRadius),
-                  ),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    controller.clusterController.setNamespace('');
-                    finish(context);
-                  },
-                  child: Row(
-                    children: [
-                      Icon(
-                        controller
-                                    .clusterController
-                                    .clusters[controller.clusterController
-                                        .activeClusterIndex.value]
-                                    .value
-                                    .namespace ==
-                                ''
-                            ? Icons.radio_button_checked
-                            : Icons.radio_button_unchecked,
-                        size: 24,
-                        color: Constants.colorPrimary,
-                      ),
-                      const SizedBox(width: Constants.spacingSmall),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          'All Namespaces',
-                          style: noramlTextStyle(
-                            context,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              ...buildFavoriteNamespace(context, controller),
               ...List.generate(
                 controller.namespaces.length,
                 (index) {

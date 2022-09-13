@@ -9,6 +9,7 @@ import 'package:kubenav/utils/logger.dart';
 
 /// The [GlobalSettingsController] is responsible for handling user defined settings in the app.
 class GlobalSettingsController extends GetxController {
+  RxList<String> namespaces = <String>[].obs;
   RxBool isAuthenticationEnabled = false.obs;
   RxBool isDarkTheme = false.obs;
   RxString editorFormat = 'yaml'.obs;
@@ -20,6 +21,15 @@ class GlobalSettingsController extends GetxController {
   /// storage.
   @override
   void onInit() {
+    String? storedNamespaces = GetStorage().read<String>('settings.namespaces');
+    namespaces.value = storedNamespaces != null && storedNamespaces != ''
+        ? storedNamespaces.split(',')
+        : [];
+
+    ever(namespaces, (_) {
+      GetStorage().write('settings.namespaces', namespaces.toList().join(','));
+    });
+
     bool? storedIsAuthenticationEnabled =
         GetStorage().read<bool>('settings.isAuthenticationEnabled');
     isAuthenticationEnabled.value = storedIsAuthenticationEnabled ?? false;

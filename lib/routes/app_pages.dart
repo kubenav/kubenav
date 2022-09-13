@@ -6,6 +6,8 @@ import 'package:kubenav/pages/home/home_binding.dart';
 import 'package:kubenav/pages/home/home_screen.dart';
 import 'package:kubenav/pages/login/login_binding.dart';
 import 'package:kubenav/pages/login/login_screen.dart';
+import 'package:kubenav/pages/namespaces/namespaces_binding.dart';
+import 'package:kubenav/pages/namespaces/namespaces_screen.dart';
 import 'package:kubenav/pages/plugins/pages/helm_details/helm_details_screen.dart';
 import 'package:kubenav/pages/plugins/pages/helm_list/helm_list_screen.dart';
 import 'package:kubenav/pages/plugins/plugins_binding.dart';
@@ -88,6 +90,11 @@ abstract class AppPages {
       name: Routes.settingsProviders,
       page: () => const Providers(),
       binding: ProvidersBinding(),
+    ),
+    GetPage(
+      name: Routes.settingsNamespaces,
+      page: () => const Namespaces(),
+      binding: NamespacesBinding(),
     ),
   ];
 }

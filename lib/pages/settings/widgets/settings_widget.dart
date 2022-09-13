@@ -47,6 +47,32 @@ class SettingsWidget extends StatelessWidget {
           ],
         ),
         AppVertialListSimpleModel(
+          onTap: () {
+            Get.toNamed('/settings/namespaces');
+          },
+          children: [
+            const Icon(
+              CustomIcons.namespaces,
+              color: Constants.colorPrimary,
+            ),
+            const SizedBox(width: Constants.spacingSmall),
+            Expanded(
+              flex: 1,
+              child: Text(
+                'Namespaces',
+                style: noramlTextStyle(
+                  context,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.grey[300],
+              size: 16,
+            ),
+          ],
+        ),
+        AppVertialListSimpleModel(
           children: [
             const Icon(
               Icons.fingerprint,
