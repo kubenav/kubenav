@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'package:kubenav/models/cluster_model.dart';
+import 'package:kubenav/utils/ffi.dart';
 
 /// The [ClusterController] is responsible for managing all the clusters of a user. For that it holds a list of
 /// [clusters] and allows users to add / remove clusters to that list. Everytime the list of [clusters] is changed it
@@ -21,28 +24,54 @@ class ClusterController extends GetxController {
   /// cluster index are saved back to the storage.
   @override
   void onInit() {
-    List? storedClusters = GetStorage().read<List>('clusters');
-    int? storedActiveClusterIndex =
-        GetStorage().read<int>('activeClusterIndex');
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      var index = 0;
+      Map<String, dynamic> storedClusters = KubenavFFI().kubernetesClusters();
+      for (var storedCluster in storedClusters['clusters'].entries) {
+        clusters.add(
+          Cluster(
+            name: storedCluster.key,
+            provider: '',
+            providerConfig: '',
+            clusterServer: '',
+            namespace: storedCluster.value,
+          ).obs,
+        );
 
-    if (storedClusters != null && storedClusters.isNotEmpty) {
-      clusters =
-          storedClusters.map((e) => Cluster.fromJson(e).obs).toList().obs;
+        if (storedClusters['activeCluster'] == storedCluster.key) {
+          activeClusterIndex.value = index;
+        }
+        index++;
+      }
 
-      if (storedActiveClusterIndex != null) {
-        activeClusterIndex.value = storedActiveClusterIndex;
-      } else {
+      if (activeClusterIndex.value == -1 &&
+          storedClusters['clusters'].entries.length > 0) {
         activeClusterIndex.value = 0;
       }
+    } else {
+      List? storedClusters = GetStorage().read<List>('clusters');
+      int? storedActiveClusterIndex =
+          GetStorage().read<int>('activeClusterIndex');
+
+      if (storedClusters != null && storedClusters.isNotEmpty) {
+        clusters =
+            storedClusters.map((e) => Cluster.fromJson(e).obs).toList().obs;
+
+        if (storedActiveClusterIndex != null) {
+          activeClusterIndex.value = storedActiveClusterIndex;
+        } else {
+          activeClusterIndex.value = 0;
+        }
+      }
+
+      ever(clusters, (_) {
+        GetStorage().write('clusters', clusters.toList());
+      });
+
+      ever(activeClusterIndex, (_) {
+        GetStorage().write('activeClusterIndex', activeClusterIndex.value);
+      });
     }
-
-    ever(clusters, (_) {
-      GetStorage().write('clusters', clusters.toList());
-    });
-
-    ever(activeClusterIndex, (_) {
-      GetStorage().write('activeClusterIndex', activeClusterIndex.value);
-    });
 
     super.onInit();
   }

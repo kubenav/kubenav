@@ -19,6 +19,7 @@ import (
 // CreateRequest is the structure of a request to initalize a port forwarding session. It contains all the required
 // fields to create a Kubernetes client as well as the pod name and namespace and the port which should be forwarded.
 type CreateRequest struct {
+	ContextName                     string `json:"contextName"`
 	ClusterServer                   string `json:"clusterServer"`
 	ClusterCertificateAuthorityData string `json:"clusterCertificateAuthorityData"`
 	ClusterInsecureSkipTLSVerify    bool   `json:"clusterInsecureSkipTLSVerify"`

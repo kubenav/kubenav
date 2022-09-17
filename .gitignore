@@ -48,3 +48,6 @@ app.*.map.json
 # Go mobile builds
 /ios/Runner/libs
 /android/app/src/libs
+
+# Temporarily created files
+/tmp

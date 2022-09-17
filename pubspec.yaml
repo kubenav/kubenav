@@ -53,6 +53,11 @@ dependencies:
   highlight: ^0.7.0
   jwt_decode: ^0.3.1
   local_auth: ^2.1.2
+  window_size:
+    git:
+      url: https://github.com/google/flutter-desktop-embedding
+      path: plugins/window_size
+  ffi: ^2.0.1
 
 dev_dependencies:
   flutter_test:

@@ -12,6 +12,7 @@ import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_actions_header_widget.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
+import 'package:kubenav/widgets/app_no_clusters_widget.dart';
 
 class Home extends GetView<HomeController> {
   const Home({Key? key}) : super(key: key);
@@ -20,83 +21,7 @@ class Home extends GetView<HomeController> {
     if (controller.clusterController.clusters.isEmpty) {
       return [
         const SizedBox(height: Constants.spacingSmall),
-        Container(
-          padding: const EdgeInsets.only(
-            left: Constants.spacingMiddle,
-            right: Constants.spacingMiddle,
-          ),
-          child: Container(
-            margin: const EdgeInsets.only(
-              top: Constants.spacingSmall,
-              bottom: Constants.spacingSmall,
-            ),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context).shadowColor,
-                  blurRadius: Constants.sizeBorderBlurRadius,
-                  spreadRadius: Constants.sizeBorderSpreadRadius,
-                  offset: const Offset(0.0, 0.0),
-                ),
-              ],
-              color: Theme.of(context).cardColor,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(Constants.sizeBorderRadius),
-              ),
-            ),
-            child: InkWell(
-              onTap: () {
-                Get.toNamed('/settings/clusters');
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Constants.colorPrimary,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(Constants.sizeBorderRadius),
-                        topRight: Radius.circular(Constants.sizeBorderRadius),
-                      ),
-                    ),
-                    height: 140,
-                    width: MediaQuery.of(context).size.width,
-                    child: const Icon(
-                      CustomIcons.clusters,
-                      color: Colors.white,
-                      size: 108,
-                    ),
-                  ),
-                  const SizedBox(height: Constants.spacingSmall),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: Constants.spacingSmall,
-                    ),
-                    child: Text(
-                      'Add a Cluster',
-                      style: primaryTextStyle(
-                        context,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: Constants.spacingExtraSmall),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: Constants.spacingSmall,
-                    ),
-                    child: Text(
-                      'Add your fist cluster and start using kubenav',
-                      style: secondaryTextStyle(
-                        context,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: Constants.spacingSmall),
-                ],
-              ),
-            ),
-          ),
-        ),
+        const AppNoClustersWidget(),
       ];
     }
 

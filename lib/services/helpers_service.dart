@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 
+import 'package:kubenav/utils/ffi.dart';
 import 'package:kubenav/utils/logger.dart';
 
 /// [HelpersService] implements a service to interactiv with the helper functions from our Go code. The implementation
@@ -18,19 +20,24 @@ class HelpersService {
     try {
       final jsonStr = jsonObj is String ? jsonObj : json.encode(jsonObj);
 
-      final String result = await platform.invokeMethod(
-        'prettifyYAML',
-        <String, dynamic>{
-          'jsonStr': jsonStr,
-        },
-      );
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        final result = await KubenavFFI().prettifyYAML(jsonStr);
+        return result;
+      } else {
+        final String result = await platform.invokeMethod(
+          'prettifyYAML',
+          <String, dynamic>{
+            'jsonStr': jsonStr,
+          },
+        );
 
-      Logger.log(
-        'HelpersService prettifyYAML',
-        'Yaml was prettifyed',
-        result,
-      );
-      return result;
+        Logger.log(
+          'HelpersService prettifyYAML',
+          'Yaml was prettifyed',
+          result,
+        );
+        return result;
+      }
     } catch (err) {
       Logger.log(
         'HelpersService prettifyYAML',
@@ -49,20 +56,25 @@ class HelpersService {
       final sourceStr = json.encode(source);
       final targetStr = json.encode(target);
 
-      final String result = await platform.invokeMethod(
-        'createJSONPatch',
-        <String, dynamic>{
-          'source': sourceStr,
-          'target': targetStr,
-        },
-      );
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        final result = await KubenavFFI().createJSONPatch(sourceStr, targetStr);
+        return result;
+      } else {
+        final String result = await platform.invokeMethod(
+          'createJSONPatch',
+          <String, dynamic>{
+            'source': sourceStr,
+            'target': targetStr,
+          },
+        );
 
-      Logger.log(
-        'HelpersService createJSONPatch',
-        'Json patch was created',
-        result,
-      );
-      return result;
+        Logger.log(
+          'HelpersService createJSONPatch',
+          'Json patch was created',
+          result,
+        );
+        return result;
+      }
     } catch (err) {
       Logger.log(
         'HelpersService createJSONPatch',

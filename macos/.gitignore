@@ -1,0 +1,14 @@
+# Flutter-related
+**/Flutter/ephemeral/
+**/Pods/
+
+# Xcode-related
+**/dgph
+**/xcuserdata/
+
+# Go build
+kubenav.arm64.dylib
+kubenav.arm64.h
+kubenav.x64.dylib
+kubenav.x64.h
+kubenav.dylib

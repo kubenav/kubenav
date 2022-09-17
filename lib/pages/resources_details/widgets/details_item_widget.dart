@@ -64,8 +64,11 @@ class DetailsItemWidget extends StatelessWidget {
                   snackbar(name, values[index]);
                 }
               },
-              child: Chip(
-                label: Text(values[index]),
+              child: Container(
+                margin: const EdgeInsets.all(Constants.spacingExtraSmall),
+                child: Chip(
+                  label: Text(values[index]),
+                ),
               ),
             ),
           ),

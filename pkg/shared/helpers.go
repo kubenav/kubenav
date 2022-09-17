@@ -1,4 +1,4 @@
-package kubenav
+package shared
 
 import (
 	"encoding/json"

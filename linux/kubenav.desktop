@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=kubenav
+Comment=Kubernetes Dashboard
+Exec=/usr/bin/kubenav
+Icon=kubenav
+Categories=Development;
+Terminal=false

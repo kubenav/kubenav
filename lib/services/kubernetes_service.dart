@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 
@@ -15,6 +16,7 @@ import 'package:kubenav/services/aws_service.dart';
 import 'package:kubenav/services/google_service.dart';
 import 'package:kubenav/services/oidc_service.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/ffi.dart';
 import 'package:kubenav/utils/logger.dart';
 
 /// [KubernetesService] implements a service to interactiv with the Kubernetes functions from our Go code. The
@@ -220,32 +222,42 @@ class KubernetesService {
   /// it returns an other response code.
   Future<bool> checkHealth() async {
     try {
-      final token = await _getAccessToken();
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        final result =
+            KubenavFFI().kubernetesRequest(cluster.name, 'GET', '/readyz', '');
+        if (result == 'ok') {
+          return true;
+        }
+        return false;
+      } else {
+        final token = await _getAccessToken();
 
-      final String result = await platform.invokeMethod(
-        'kubernetesRequest',
-        <String, dynamic>{
-          'clusterServer': cluster.clusterServer,
-          'clusterCertificateAuthorityData':
-              cluster.clusterCertificateAuthorityData,
-          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
-          'userClientCertificateData': cluster.userClientCertificateData,
-          'userClientKeyData': cluster.userClientKeyData,
-          'userToken': token,
-          'userUsername': cluster.userUsername,
-          'userPassword': cluster.userPassword,
-          'requestMethod': 'GET',
-          'requestURL': '/readyz',
-          'requestBody': '',
-        },
-      );
+        final String result = await platform.invokeMethod(
+          'kubernetesRequest',
+          <String, dynamic>{
+            'clusterServer': cluster.clusterServer,
+            'clusterCertificateAuthorityData':
+                cluster.clusterCertificateAuthorityData,
+            'clusterInsecureSkipTLSVerify':
+                cluster.clusterInsecureSkipTLSVerify,
+            'userClientCertificateData': cluster.userClientCertificateData,
+            'userClientKeyData': cluster.userClientKeyData,
+            'userToken': token,
+            'userUsername': cluster.userUsername,
+            'userPassword': cluster.userPassword,
+            'requestMethod': 'GET',
+            'requestURL': '/readyz',
+            'requestBody': '',
+          },
+        );
 
-      Logger.log(
-        'KubernetesService checkHealth',
-        'Health check was ok',
-        result,
-      );
-      return true;
+        Logger.log(
+          'KubernetesService checkHealth',
+          'Health check was ok',
+          result,
+        );
+        return true;
+      }
     } catch (err) {
       Logger.log(
         'KubernetesService checkHealth',
@@ -261,33 +273,40 @@ class KubernetesService {
   /// API.
   Future<Map<String, dynamic>> getRequest(String url) async {
     try {
-      final token = await _getAccessToken();
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        final result =
+            await KubenavFFI().kubernetesRequest(cluster.name, 'GET', url, '');
+        return json.decode(result);
+      } else {
+        final token = await _getAccessToken();
 
-      final String result = await platform.invokeMethod(
-        'kubernetesRequest',
-        <String, dynamic>{
-          'clusterServer': cluster.clusterServer,
-          'clusterCertificateAuthorityData':
-              cluster.clusterCertificateAuthorityData,
-          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
-          'userClientCertificateData': cluster.userClientCertificateData,
-          'userClientKeyData': cluster.userClientKeyData,
-          'userToken': token,
-          'userUsername': cluster.userUsername,
-          'userPassword': cluster.userPassword,
-          'requestMethod': 'GET',
-          'requestURL': url,
-          'requestBody': '',
-        },
-      );
+        final String result = await platform.invokeMethod(
+          'kubernetesRequest',
+          <String, dynamic>{
+            'clusterServer': cluster.clusterServer,
+            'clusterCertificateAuthorityData':
+                cluster.clusterCertificateAuthorityData,
+            'clusterInsecureSkipTLSVerify':
+                cluster.clusterInsecureSkipTLSVerify,
+            'userClientCertificateData': cluster.userClientCertificateData,
+            'userClientKeyData': cluster.userClientKeyData,
+            'userToken': token,
+            'userUsername': cluster.userUsername,
+            'userPassword': cluster.userPassword,
+            'requestMethod': 'GET',
+            'requestURL': url,
+            'requestBody': '',
+          },
+        );
 
-      Logger.log(
-        'KubernetesService getRequest',
-        'Get request was ok',
-        result,
-      );
-      Map<String, dynamic> jsonData = json.decode(result);
-      return jsonData;
+        Logger.log(
+          'KubernetesService getRequest',
+          'Get request was ok',
+          result,
+        );
+        Map<String, dynamic> jsonData = json.decode(result);
+        return jsonData;
+      }
     } catch (err) {
       Logger.log(
         'KubernetesService getRequest',
@@ -303,32 +322,39 @@ class KubernetesService {
   /// delete a resource. The function doesn't return anything, expect an error in case there was one.
   Future<void> deleteRequest(String url, String? body) async {
     try {
-      final token = await _getAccessToken();
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        await KubenavFFI()
+            .kubernetesRequest(cluster.name, 'DELETE', url, body ?? '');
+        return;
+      } else {
+        final token = await _getAccessToken();
 
-      final String result = await platform.invokeMethod(
-        'kubernetesRequest',
-        <String, dynamic>{
-          'clusterServer': cluster.clusterServer,
-          'clusterCertificateAuthorityData':
-              cluster.clusterCertificateAuthorityData,
-          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
-          'userClientCertificateData': cluster.userClientCertificateData,
-          'userClientKeyData': cluster.userClientKeyData,
-          'userToken': token,
-          'userUsername': cluster.userUsername,
-          'userPassword': cluster.userPassword,
-          'requestMethod': 'DELETE',
-          'requestURL': url,
-          'requestBody': body ?? '',
-        },
-      );
+        final String result = await platform.invokeMethod(
+          'kubernetesRequest',
+          <String, dynamic>{
+            'clusterServer': cluster.clusterServer,
+            'clusterCertificateAuthorityData':
+                cluster.clusterCertificateAuthorityData,
+            'clusterInsecureSkipTLSVerify':
+                cluster.clusterInsecureSkipTLSVerify,
+            'userClientCertificateData': cluster.userClientCertificateData,
+            'userClientKeyData': cluster.userClientKeyData,
+            'userToken': token,
+            'userUsername': cluster.userUsername,
+            'userPassword': cluster.userPassword,
+            'requestMethod': 'DELETE',
+            'requestURL': url,
+            'requestBody': body ?? '',
+          },
+        );
 
-      Logger.log(
-        'KubernetesService deleteRequest',
-        'Delete request was ok',
-        result,
-      );
-      return;
+        Logger.log(
+          'KubernetesService deleteRequest',
+          'Delete request was ok',
+          result,
+        );
+        return;
+      }
     } catch (err) {
       Logger.log(
         'KubernetesService deleteRequest',
@@ -343,32 +369,38 @@ class KubernetesService {
   /// which should be patched, we also have to pass a [body] to the function. The [body] must be a valid json patch.
   Future<void> patchRequest(String url, String body) async {
     try {
-      final token = await _getAccessToken();
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        await KubenavFFI().kubernetesRequest(cluster.name, 'PATCH', url, body);
+        return;
+      } else {
+        final token = await _getAccessToken();
 
-      final String result = await platform.invokeMethod(
-        'kubernetesRequest',
-        <String, dynamic>{
-          'clusterServer': cluster.clusterServer,
-          'clusterCertificateAuthorityData':
-              cluster.clusterCertificateAuthorityData,
-          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
-          'userClientCertificateData': cluster.userClientCertificateData,
-          'userClientKeyData': cluster.userClientKeyData,
-          'userToken': token,
-          'userUsername': cluster.userUsername,
-          'userPassword': cluster.userPassword,
-          'requestMethod': 'PATCH',
-          'requestURL': url,
-          'requestBody': body,
-        },
-      );
+        final String result = await platform.invokeMethod(
+          'kubernetesRequest',
+          <String, dynamic>{
+            'clusterServer': cluster.clusterServer,
+            'clusterCertificateAuthorityData':
+                cluster.clusterCertificateAuthorityData,
+            'clusterInsecureSkipTLSVerify':
+                cluster.clusterInsecureSkipTLSVerify,
+            'userClientCertificateData': cluster.userClientCertificateData,
+            'userClientKeyData': cluster.userClientKeyData,
+            'userToken': token,
+            'userUsername': cluster.userUsername,
+            'userPassword': cluster.userPassword,
+            'requestMethod': 'PATCH',
+            'requestURL': url,
+            'requestBody': body,
+          },
+        );
 
-      Logger.log(
-        'KubernetesService patchRequest',
-        'Patch request was ok',
-        result,
-      );
-      return;
+        Logger.log(
+          'KubernetesService patchRequest',
+          'Patch request was ok',
+          result,
+        );
+        return;
+      }
     } catch (err) {
       Logger.log(
         'KubernetesService patchRequest',
@@ -384,32 +416,38 @@ class KubernetesService {
   /// manifest which should be created.
   Future<void> postRequest(String url, String body) async {
     try {
-      final token = await _getAccessToken();
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        await KubenavFFI().kubernetesRequest(cluster.name, 'POST', url, body);
+        return;
+      } else {
+        final token = await _getAccessToken();
 
-      final String result = await platform.invokeMethod(
-        'kubernetesRequest',
-        <String, dynamic>{
-          'clusterServer': cluster.clusterServer,
-          'clusterCertificateAuthorityData':
-              cluster.clusterCertificateAuthorityData,
-          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
-          'userClientCertificateData': cluster.userClientCertificateData,
-          'userClientKeyData': cluster.userClientKeyData,
-          'userToken': token,
-          'userUsername': cluster.userUsername,
-          'userPassword': cluster.userPassword,
-          'requestMethod': 'POST',
-          'requestURL': url,
-          'requestBody': body,
-        },
-      );
+        final String result = await platform.invokeMethod(
+          'kubernetesRequest',
+          <String, dynamic>{
+            'clusterServer': cluster.clusterServer,
+            'clusterCertificateAuthorityData':
+                cluster.clusterCertificateAuthorityData,
+            'clusterInsecureSkipTLSVerify':
+                cluster.clusterInsecureSkipTLSVerify,
+            'userClientCertificateData': cluster.userClientCertificateData,
+            'userClientKeyData': cluster.userClientKeyData,
+            'userToken': token,
+            'userUsername': cluster.userUsername,
+            'userPassword': cluster.userPassword,
+            'requestMethod': 'POST',
+            'requestURL': url,
+            'requestBody': body,
+          },
+        );
 
-      Logger.log(
-        'KubernetesService postRequest',
-        'Post request was ok',
-        result,
-      );
-      return;
+        Logger.log(
+          'KubernetesService postRequest',
+          'Post request was ok',
+          result,
+        );
+        return;
+      }
     } catch (err) {
       Logger.log(
         'KubernetesService postRequest',
@@ -431,36 +469,51 @@ class KubernetesService {
     bool previous,
   ) async {
     try {
-      final token = await _getAccessToken();
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        final result = await KubenavFFI().kubernetesGetLogs(
+          cluster.name,
+          names,
+          namespace,
+          container,
+          since,
+          filter,
+          previous,
+        );
+        Map<String, dynamic> jsonData = json.decode(result);
+        return jsonData['logs'] ?? [];
+      } else {
+        final token = await _getAccessToken();
 
-      final String result = await platform.invokeMethod(
-        'kubernetesGetLogs',
-        <String, dynamic>{
-          'clusterServer': cluster.clusterServer,
-          'clusterCertificateAuthorityData':
-              cluster.clusterCertificateAuthorityData,
-          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
-          'userClientCertificateData': cluster.userClientCertificateData,
-          'userClientKeyData': cluster.userClientKeyData,
-          'userToken': token,
-          'userUsername': cluster.userUsername,
-          'userPassword': cluster.userPassword,
-          'names': names,
-          'namespace': namespace,
-          'container': container,
-          'since': since,
-          'filter': filter,
-          'previous': previous,
-        },
-      );
+        final String result = await platform.invokeMethod(
+          'kubernetesGetLogs',
+          <String, dynamic>{
+            'clusterServer': cluster.clusterServer,
+            'clusterCertificateAuthorityData':
+                cluster.clusterCertificateAuthorityData,
+            'clusterInsecureSkipTLSVerify':
+                cluster.clusterInsecureSkipTLSVerify,
+            'userClientCertificateData': cluster.userClientCertificateData,
+            'userClientKeyData': cluster.userClientKeyData,
+            'userToken': token,
+            'userUsername': cluster.userUsername,
+            'userPassword': cluster.userPassword,
+            'names': names,
+            'namespace': namespace,
+            'container': container,
+            'since': since,
+            'filter': filter,
+            'previous': previous,
+          },
+        );
 
-      Logger.log(
-        'KubernetesService getLogs',
-        'Get logs request was ok',
-        result,
-      );
-      Map<String, dynamic> jsonData = json.decode(result);
-      return jsonData['logs'] ?? [];
+        Logger.log(
+          'KubernetesService getLogs',
+          'Get logs request was ok',
+          result,
+        );
+        Map<String, dynamic> jsonData = json.decode(result);
+        return jsonData['logs'] ?? [];
+      }
     } catch (err) {
       Logger.log(
         'KubernetesService getLogs',
@@ -483,14 +536,20 @@ class KubernetesService {
       if (isServerHealthy) {
         return true;
       } else {
-        await platform.invokeMethod('kubernetesStartServer');
-        Logger.log(
-          'KubernetesService startServer',
-          'Internal http server was started',
-        );
+        if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+          KubenavFFI().kubernetesStartServer();
+          await Future.delayed(const Duration(seconds: 3));
+          return await _checkServerHealth();
+        } else {
+          await platform.invokeMethod('kubernetesStartServer');
+          Logger.log(
+            'KubernetesService startServer',
+            'Internal http server was started',
+          );
 
-        await Future.delayed(const Duration(seconds: 3));
-        return await _checkServerHealth();
+          await Future.delayed(const Duration(seconds: 3));
+          return await _checkServerHealth();
+        }
       }
     } catch (err) {
       Logger.log(
@@ -546,6 +605,7 @@ class KubernetesService {
           'Content-Type': 'application/json',
         },
         body: json.encode({
+          'contextName': cluster.name,
           'clusterServer': cluster.clusterServer,
           'clusterCertificateAuthorityData':
               cluster.clusterCertificateAuthorityData,
@@ -658,40 +718,56 @@ class KubernetesService {
   /// [helmListCharts]
   Future<List<Release>> helmListCharts(String namespace) async {
     try {
-      final token = await _getAccessToken();
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        final result =
+            await KubenavFFI().helmListCharts(cluster.name, namespace);
+        if (result == 'null') {
+          return [];
+        }
 
-      final String result = await platform.invokeMethod(
-        'helmListCharts',
-        <String, dynamic>{
-          'clusterServer': cluster.clusterServer,
-          'clusterCertificateAuthorityData':
-              cluster.clusterCertificateAuthorityData,
-          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
-          'userClientCertificateData': cluster.userClientCertificateData,
-          'userClientKeyData': cluster.userClientKeyData,
-          'userToken': token,
-          'userUsername': cluster.userUsername,
-          'userPassword': cluster.userPassword,
-          'namespace': namespace,
-        },
-      );
+        List<dynamic> jsonData = json.decode(result);
+        final releases = <Release>[];
+        for (var release in jsonData) {
+          releases.add(Release.fromJson(release));
+        }
+        return releases;
+      } else {
+        final token = await _getAccessToken();
 
-      Logger.log(
-        'KubernetesService helmListCharts',
-        'List Helm charts was ok',
-        result,
-      );
+        final String result = await platform.invokeMethod(
+          'helmListCharts',
+          <String, dynamic>{
+            'clusterServer': cluster.clusterServer,
+            'clusterCertificateAuthorityData':
+                cluster.clusterCertificateAuthorityData,
+            'clusterInsecureSkipTLSVerify':
+                cluster.clusterInsecureSkipTLSVerify,
+            'userClientCertificateData': cluster.userClientCertificateData,
+            'userClientKeyData': cluster.userClientKeyData,
+            'userToken': token,
+            'userUsername': cluster.userUsername,
+            'userPassword': cluster.userPassword,
+            'namespace': namespace,
+          },
+        );
 
-      if (result == 'null') {
-        return [];
+        Logger.log(
+          'KubernetesService helmListCharts',
+          'List Helm charts was ok',
+          result,
+        );
+
+        if (result == 'null') {
+          return [];
+        }
+
+        List<dynamic> jsonData = json.decode(result);
+        final releases = <Release>[];
+        for (var release in jsonData) {
+          releases.add(Release.fromJson(release));
+        }
+        return releases;
       }
-
-      List<dynamic> jsonData = json.decode(result);
-      final releases = <Release>[];
-      for (var release in jsonData) {
-        releases.add(Release.fromJson(release));
-      }
-      return releases;
     } catch (err) {
       Logger.log(
         'KubernetesService helmListCharts',
@@ -709,35 +785,42 @@ class KubernetesService {
     int version,
   ) async {
     try {
-      final token = await _getAccessToken();
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        final result = await KubenavFFI()
+            .helmGetChart(cluster.name, namespace, name, version);
+        return Release.fromJson(json.decode(result));
+      } else {
+        final token = await _getAccessToken();
 
-      final String result = await platform.invokeMethod(
-        'helmGetChart',
-        <String, dynamic>{
-          'clusterServer': cluster.clusterServer,
-          'clusterCertificateAuthorityData':
-              cluster.clusterCertificateAuthorityData,
-          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
-          'userClientCertificateData': cluster.userClientCertificateData,
-          'userClientKeyData': cluster.userClientKeyData,
-          'userToken': token,
-          'userUsername': cluster.userUsername,
-          'userPassword': cluster.userPassword,
-          'namespace': namespace,
-          'name': name,
-          'version': version,
-        },
-      );
+        final String result = await platform.invokeMethod(
+          'helmGetChart',
+          <String, dynamic>{
+            'clusterServer': cluster.clusterServer,
+            'clusterCertificateAuthorityData':
+                cluster.clusterCertificateAuthorityData,
+            'clusterInsecureSkipTLSVerify':
+                cluster.clusterInsecureSkipTLSVerify,
+            'userClientCertificateData': cluster.userClientCertificateData,
+            'userClientKeyData': cluster.userClientKeyData,
+            'userToken': token,
+            'userUsername': cluster.userUsername,
+            'userPassword': cluster.userPassword,
+            'namespace': namespace,
+            'name': name,
+            'version': version,
+          },
+        );
 
-      Logger.log(
-        'KubernetesService helmGetChart',
-        'Get Helm chart was ok',
-        result,
-      );
+        Logger.log(
+          'KubernetesService helmGetChart',
+          'Get Helm chart was ok',
+          result,
+        );
 
-      Map<String, dynamic> jsonData = json.decode(result);
-      Release release = Release.fromJson(jsonData);
-      return release;
+        Map<String, dynamic> jsonData = json.decode(result);
+        Release release = Release.fromJson(jsonData);
+        return release;
+      }
     } catch (err) {
       Logger.log(
         'KubernetesService helmGetChart',
@@ -754,37 +837,57 @@ class KubernetesService {
     String name,
   ) async {
     try {
-      final token = await _getAccessToken();
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        final result =
+            await KubenavFFI().helmGetHistory(cluster.name, namespace, name);
+        if (result == 'null') {
+          return [];
+        }
 
-      final String result = await platform.invokeMethod(
-        'helmGetHistory',
-        <String, dynamic>{
-          'clusterServer': cluster.clusterServer,
-          'clusterCertificateAuthorityData':
-              cluster.clusterCertificateAuthorityData,
-          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
-          'userClientCertificateData': cluster.userClientCertificateData,
-          'userClientKeyData': cluster.userClientKeyData,
-          'userToken': token,
-          'userUsername': cluster.userUsername,
-          'userPassword': cluster.userPassword,
-          'namespace': namespace,
-          'name': name,
-        },
-      );
+        List<dynamic> jsonData = json.decode(result);
+        final releases = <Release>[];
+        for (var release in jsonData) {
+          releases.add(Release.fromJson(release));
+        }
+        return releases;
+      } else {
+        final token = await _getAccessToken();
 
-      Logger.log(
-        'KubernetesService helmGetHistory',
-        'Get Helm history was ok',
-        result,
-      );
+        final String result = await platform.invokeMethod(
+          'helmGetHistory',
+          <String, dynamic>{
+            'clusterServer': cluster.clusterServer,
+            'clusterCertificateAuthorityData':
+                cluster.clusterCertificateAuthorityData,
+            'clusterInsecureSkipTLSVerify':
+                cluster.clusterInsecureSkipTLSVerify,
+            'userClientCertificateData': cluster.userClientCertificateData,
+            'userClientKeyData': cluster.userClientKeyData,
+            'userToken': token,
+            'userUsername': cluster.userUsername,
+            'userPassword': cluster.userPassword,
+            'namespace': namespace,
+            'name': name,
+          },
+        );
 
-      List<dynamic> jsonData = json.decode(result);
-      final releases = <Release>[];
-      for (var release in jsonData) {
-        releases.add(Release.fromJson(release));
+        Logger.log(
+          'KubernetesService helmGetHistory',
+          'Get Helm history was ok',
+          result,
+        );
+
+        if (result == 'null') {
+          return [];
+        }
+
+        List<dynamic> jsonData = json.decode(result);
+        final releases = <Release>[];
+        for (var release in jsonData) {
+          releases.add(Release.fromJson(release));
+        }
+        return releases;
       }
-      return releases;
     } catch (err) {
       Logger.log(
         'KubernetesService helmGetHistory',
