@@ -9,6 +9,8 @@ import (
 	"github.com/kubenav/kubenav/cmd/desktop/dart_api_dl"
 	"github.com/kubenav/kubenav/pkg/kube"
 	"github.com/kubenav/kubenav/pkg/kube/desktop"
+
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
 var kubeClient kube.Client
