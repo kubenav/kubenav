@@ -28,6 +28,10 @@ Create icons:
 
 - `flutter pub run flutter_launcher_icons:main`
 
+Generate splash screen:
+
+- `flutter pub run flutter_native_splash:create`
+
 Sort imports:
 
 - `flutter pub run import_sorter:main`

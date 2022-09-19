@@ -58,6 +58,7 @@ dependencies:
       url: https://github.com/google/flutter-desktop-embedding
       path: plugins/window_size
   ffi: ^2.0.1
+  flutter_native_splash: ^2.2.9
 
 dev_dependencies:
   flutter_test:
@@ -140,3 +141,12 @@ import_sorter:
   emojis: false
   comments: false
   ignored_files: []
+
+flutter_native_splash:
+  color: "#326CE5"
+  image: assets/splash.png
+  android_12:
+    image: assets/android12splash.png
+    color: "#326CE5"
+    icon_background_color: "#326CE5"
+  fullscreen: true

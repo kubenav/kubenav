@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:window_size/window_size.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:kubenav/controllers/bookmark_controller.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
@@ -19,7 +20,8 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/ffi.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     KubenavFFI().init();
@@ -43,6 +45,7 @@ void main() async {
     setWindowMaxSize(Size.infinite);
   }
 
+  FlutterNativeSplash.remove();
   runApp(const App());
 }
 
