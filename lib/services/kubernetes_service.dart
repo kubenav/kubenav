@@ -537,7 +537,7 @@ class KubernetesService {
         return true;
       } else {
         if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-          KubenavFFI().kubernetesStartServer();
+          await KubenavFFI().kubernetesStartServer();
           await Future.delayed(const Duration(seconds: 3));
           return await _checkServerHealth();
         } else {

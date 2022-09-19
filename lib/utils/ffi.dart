@@ -198,24 +198,6 @@ class KubenavFFI {
     }
   }
 
-  static _kubernetesStartServer(String libraryPath) {
-    Logger.log(
-      '_kubernetesStartServer',
-      'Run _kubernetesStartServer function',
-    );
-
-    if (libraryPath != '') {
-      final library = DynamicLibrary.open(libraryPath);
-
-      var kubernetesStartServerC =
-          library.lookup<NativeFunction<kubernetesstartserver_func>>(
-              'KubernetesStartServer');
-      final kubernetesStartServer =
-          kubernetesStartServerC.asFunction<KubernetesStartServerFunc>();
-      kubernetesStartServer();
-    }
-  }
-
   Future<void> init() async {
     Logger.log(
       'KubenavFFI init',
@@ -386,7 +368,15 @@ class KubenavFFI {
       'Run kubernetesStartServer function',
     );
 
-    await Isolate.spawn(_kubernetesStartServer, getLibraryPath());
+    var kubernetesStartServerC =
+        library.lookup<NativeFunction<kubernetesstartserver_func>>(
+            'KubernetesStartServer');
+    final kubernetesStartServer =
+        kubernetesStartServerC.asFunction<KubernetesStartServerFunc>();
+
+    kubernetesStartServer();
+
+    return;
   }
 
   Future<String> prettifyYAML(

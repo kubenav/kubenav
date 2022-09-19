@@ -75,7 +75,7 @@ jobs:
       - name: Package
         run: |
           codesign --deep --force --options runtime --sign "Developer ID Application: Rico Berger (75AP6HWLUD)" build/macos/Build/Products/Release/kubenav.app -v
-          ditto -c -k --keepParent "build/macos/Build/Products/Release/kubenav.app" "build/macos/Build/Products/Release/kubenav-macos.zip"
+          ditto -c -k --keepParent "build/macos/Build/Products/Release/kubenav.app" "build/macos/Build/Products/Release/kubenav-macos-universal.zip"
 
       # If the following step returns an error like
       #   Current status: Invalid..........Processing complete
@@ -93,20 +93,20 @@ jobs:
         run: |
           mkdir -p ~/.appstoreconnect/private_keys
           echo -n "$MACOS_ASC_AUTH_KEY" > ~/.appstoreconnect/private_keys/AuthKey_${MACOS_ASC_API_KEY}.p8
-          xcrun notarytool submit build/macos/Build/Products/Release/kubenav-macos.zip --key ~/.appstoreconnect/private_keys/AuthKey_${MACOS_ASC_API_KEY}.p8 --key-id $MACOS_ASC_API_KEY --issuer $MACOS_ACS_ISSUER --wait
+          xcrun notarytool submit build/macos/Build/Products/Release/kubenav-macos-universal.zip --key ~/.appstoreconnect/private_keys/AuthKey_${MACOS_ASC_API_KEY}.p8 --key-id $MACOS_ASC_API_KEY --issuer $MACOS_ACS_ISSUER --wait
 
       - name: Upload Artifacts (PR)
         if: ${{ github.event_name == 'pull_request' }}
         uses: actions/upload-artifact@v3
         with:
-          name: kubenav-macos.zip
-          path: build/macos/Build/Products/Release/kubenav-macos.zip
+          name: kubenav-macos-universal.zip
+          path: build/macos/Build/Products/Release/kubenav-macos-universal.zip
 
       - name: Upload Artifacts (Release)
         uses: softprops/action-gh-release@v1
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
         with:
-          files: build/macos/Build/Products/Release/kubenav-macos.zip
+          files: build/macos/Build/Products/Release/kubenav-macos-universal.zip
 
       - name: Clean up Keychain and AuthKey for Notarization Service
         if: ${{ always() }}
@@ -217,17 +217,17 @@ jobs:
         run: |
           cp windows/kubenav.dll build/windows/runner/Release/
           mv build/windows/runner/Release build/windows/runner/kubenav
-          cd build/windows/runner && 7z a -tzip kubenav-windows.zip kubenav
+          cd build/windows/runner && 7z a -tzip kubenav-windows-x86_64.zip kubenav
 
       - name: Upload Artifacts (PR)
         if: ${{ github.event_name == 'pull_request' }}
         uses: actions/upload-artifact@v3
         with:
-          name: kubenav-windows.zip
-          path: build/windows/runner/kubenav-windows.zip
+          name: kubenav-windows-x86_64.zip
+          path: build/windows/runner/kubenav-windows-x86_64.zip
 
       - name: Upload Artifacts (Release)
         uses: softprops/action-gh-release@v1
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
         with:
-          files: build/windows/runner/kubenav-windows.zip
+          files: build/windows/runner/kubenav-windows-x86_64.zip

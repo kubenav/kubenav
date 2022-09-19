@@ -110,5 +110,5 @@ func kubernetesGetLogs(port int64, contextName, names, namespace, container stri
 //
 //export KubernetesStartServer
 func KubernetesStartServer() {
-	server.Start(kubeClient)
+	go server.Start(kubeClient)
 }
