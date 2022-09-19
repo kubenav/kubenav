@@ -74,6 +74,7 @@ void snackbar(
         onTap();
       }
     },
+    margin: const EdgeInsets.all(Constants.spacingMiddle),
     backgroundColor: Get.theme.cardColor,
     colorText: Get.theme.textTheme.displayMedium!.color,
     boxShadows: [

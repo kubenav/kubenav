@@ -83,6 +83,7 @@ class DetailsTerminalController extends GetxController {
           final channel = IOWebSocketChannel.connect(
             'ws://localhost:14122/terminal?name=${item['metadata']['name']}&namespace=${item['metadata']['namespace']}&container=${container.value}&shell=$shell',
             headers: <String, String>{
+              'X-CONTEXT-NAME': cluster.name,
               'X-CLUSTER-SERVER': cluster.clusterServer,
               'X-CLUSTER-CERTIFICATE-AUTHORITY-DATA':
                   cluster.clusterCertificateAuthorityData,

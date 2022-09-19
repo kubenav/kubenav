@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:kubenav/models/portforwarding_session_model.dart';
+import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_portforwarding_sessions_widget.dart';
 
@@ -21,7 +22,10 @@ class PortForwardingController extends GetxController {
         enableDrag: false,
         backgroundColor: Colors.transparent,
         builder: (builder) {
-          return const AppPortForwardingSessionsWidget();
+          return Container(
+            margin: const EdgeInsets.all(Constants.spacingMiddle),
+            child: const AppPortForwardingSessionsWidget(),
+          );
         },
       ),
       isScrollControlled: true,
@@ -37,7 +41,10 @@ class PortForwardingController extends GetxController {
         enableDrag: false,
         backgroundColor: Colors.transparent,
         builder: (builder) {
-          return AppPortForwardingSessionWidget(sessionIndex: sessionIndex);
+          return Container(
+            margin: const EdgeInsets.all(Constants.spacingMiddle),
+            child: AppPortForwardingSessionWidget(sessionIndex: sessionIndex),
+          );
         },
       ),
       isScrollControlled: true,

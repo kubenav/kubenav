@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:kubenav/controllers/bookmark_controller.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/pages/resources_bookmarks/widgets/bookmark_actions_widget.dart';
+import 'package:kubenav/utils/constants.dart';
 
 class ResourcesBookmarksController extends GetxController {
   BookmarkController bookmarkController = Get.find();
@@ -17,7 +18,10 @@ class ResourcesBookmarksController extends GetxController {
         enableDrag: false,
         backgroundColor: Colors.transparent,
         builder: (builder) {
-          return BookmarkActionsWidget(bookmarkIndex: index);
+          return Container(
+            margin: const EdgeInsets.all(Constants.spacingMiddle),
+            child: BookmarkActionsWidget(bookmarkIndex: index),
+          );
         },
       ),
       isScrollControlled: true,

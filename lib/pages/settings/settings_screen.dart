@@ -10,10 +10,10 @@ import 'package:kubenav/pages/settings/widgets/info_widget.dart';
 import 'package:kubenav/pages/settings/widgets/settings_widget.dart';
 import 'package:kubenav/pages/settings/widgets/sponsor_widget.dart';
 import 'package:kubenav/utils/constants.dart';
-import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
+import 'package:kubenav/widgets/app_no_clusters_widget.dart';
 
 class Settings extends GetView<SettingsController> {
   const Settings({Key? key}) : super(key: key);
@@ -31,83 +31,7 @@ class Settings extends GetView<SettingsController> {
 
   Widget buildClusters(BuildContext context) {
     if (controller.clusterController.clusters.isEmpty) {
-      return Container(
-        padding: const EdgeInsets.only(
-          left: Constants.spacingMiddle,
-          right: Constants.spacingMiddle,
-        ),
-        child: Container(
-          margin: const EdgeInsets.only(
-            top: Constants.spacingSmall,
-            bottom: Constants.spacingSmall,
-          ),
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Theme.of(context).shadowColor,
-                blurRadius: Constants.sizeBorderBlurRadius,
-                spreadRadius: Constants.sizeBorderSpreadRadius,
-                offset: const Offset(0.0, 0.0),
-              ),
-            ],
-            color: Theme.of(context).cardColor,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(Constants.sizeBorderRadius),
-            ),
-          ),
-          child: InkWell(
-            onTap: () {
-              Get.toNamed('/settings/clusters');
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Constants.colorPrimary,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(Constants.sizeBorderRadius),
-                      topRight: Radius.circular(Constants.sizeBorderRadius),
-                    ),
-                  ),
-                  height: 140,
-                  width: MediaQuery.of(context).size.width,
-                  child: const Icon(
-                    CustomIcons.clusters,
-                    color: Colors.white,
-                    size: 108,
-                  ),
-                ),
-                const SizedBox(height: Constants.spacingSmall),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: Constants.spacingSmall,
-                  ),
-                  child: Text(
-                    'Add a Cluster',
-                    style: primaryTextStyle(
-                      context,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: Constants.spacingExtraSmall),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: Constants.spacingSmall,
-                  ),
-                  child: Text(
-                    'Add your fist cluster and start using kubenav',
-                    style: secondaryTextStyle(
-                      context,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: Constants.spacingSmall),
-              ],
-            ),
-          ),
-        ),
-      );
+      return const AppNoClustersWidget();
     }
 
     return Container(
@@ -189,6 +113,50 @@ class Settings extends GetView<SettingsController> {
     );
   }
 
+  Widget buildViewAllClusters(BuildContext context) {
+    if (Platform.isAndroid || Platform.isIOS) {
+      return Padding(
+        padding: const EdgeInsets.only(
+          top: Constants.spacingMiddle,
+          left: Constants.spacingMiddle,
+          right: Constants.spacingMiddle,
+          bottom: Constants.spacingSmall,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child:
+                  Text('Clusters', style: primaryTextStyle(context, size: 18)),
+            ),
+            InkWell(
+              onTap: () {
+                Get.toNamed('/settings/clusters');
+              },
+              child: Wrap(
+                children: [
+                  Text('View all',
+                      style: secondaryTextStyle(
+                        context,
+                        color: Constants.colorPrimary,
+                      )),
+                  const SizedBox(width: Constants.spacingExtraSmall),
+                  const Icon(
+                    Icons.keyboard_arrow_right,
+                    color: Constants.colorPrimary,
+                    size: 16,
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -202,43 +170,7 @@ class Settings extends GetView<SettingsController> {
         child: Column(
           children: [
             const SizedBox(height: Constants.spacingSmall),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: Constants.spacingMiddle,
-                left: Constants.spacingMiddle,
-                right: Constants.spacingMiddle,
-                bottom: Constants.spacingSmall,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Text('Clusters',
-                        style: primaryTextStyle(context, size: 18)),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Get.toNamed('/settings/clusters');
-                    },
-                    child: Wrap(
-                      children: [
-                        Text('View all',
-                            style: secondaryTextStyle(
-                              context,
-                              color: Constants.colorPrimary,
-                            )),
-                        const SizedBox(width: Constants.spacingExtraSmall),
-                        const Icon(
-                          Icons.keyboard_arrow_right,
-                          color: Constants.colorPrimary,
-                          size: 16,
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
+            buildViewAllClusters(context),
             Obx(() {
               return buildClusters(context);
             }),

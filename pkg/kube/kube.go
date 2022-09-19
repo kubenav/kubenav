@@ -1,51 +1,30 @@
 package kube
 
 import (
-	"fmt"
+	"github.com/kubenav/kubenav/pkg/kube/desktop"
+	"github.com/kubenav/kubenav/pkg/kube/mobile"
 
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
-	"k8s.io/client-go/tools/clientcmd"
 )
 
-// GetClient returns a rest client and clientset to interact with the specified Kubernetes API.
-func GetClient(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword string) (*rest.Config, *kubernetes.Clientset, error) {
-	config, err := clientcmd.NewClientConfigFromBytes([]byte(`apiVersion: v1
-clusters:
-  - cluster:
-      certificate-authority-data: ` + clusterCertificateAuthorityData + `
-      insecure-skip-tls-verify: ` + fmt.Sprintf("%t", clusterInsecureSkipTLSVerify) + `
-      server: ` + clusterServer + `
-    name: kubenav
-contexts:
-  - context:
-      cluster: kubenav
-      user: kubenav
-    name: kubenav
-current-context: kubenav
-kind: Config
-users:
-  - name: kubenav
-    user:
-      client-certificate-data: ` + userClientCertificateData + `
-      client-key-data: ` + userClientKeyData + `
-      password: ` + userPassword + `
-      token: ` + userToken + `
-      username: ` + userUsername))
+// Client is the interface which must be implemented by the mobile and desktop client to interact with the Kubernetes
+// API.
+type Client interface {
+	GetPlatform() string
+	GetClusters() (string, map[string]string)
+	GetClient(contextName, clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword string) (*rest.Config, *kubernetes.Clientset, error)
+}
 
-	if err != nil {
-		return nil, nil, err
+// NewClient return the mobile or desktop client depending on the specified platform.
+func NewClient(platform string) Client {
+	if platform == mobile.Platform {
+		return mobile.NewClient()
 	}
 
-	restClient, err := config.ClientConfig()
-	if err != nil {
-		return nil, nil, err
+	if platform == desktop.Platform {
+		return desktop.NewClient()
 	}
 
-	clientset, err := kubernetes.NewForConfig(restClient)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return restClient, clientset, nil
+	return nil
 }

@@ -9,7 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kubenav/kubenav/pkg/kube"
 	"github.com/kubenav/kubenav/pkg/server/middleware"
 	"github.com/kubenav/kubenav/pkg/server/portforwarding"
 	"github.com/kubenav/kubenav/pkg/server/terminal"
@@ -19,13 +18,13 @@ import (
 )
 
 // healthHandler always returns a status ok response and can be used to check if the server is running or not.
-func healthHandler(w http.ResponseWriter, r *http.Request) {
+func (s *server) healthHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
 // portForwardingHandler can be used to establish a new port forwarding connection ("POST"), to get a list of all
 // established connections ("GET") and to close a port forwarding connection ("DELETE").
-func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
+func (s *server) portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 	// The get method is used to return all user initalized session (prefixed with "_user"). This is required so that
 	// wen can check if the session still exists or if the session was deleted because of an error.
 	if r.Method == http.MethodGet {
@@ -70,7 +69,7 @@ func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		restConfig, _, err := kube.GetClient(request.ClusterServer, request.ClusterCertificateAuthorityData, request.ClusterInsecureSkipTLSVerify, request.UserClientCertificateData, request.UserClientKeyData, request.UserToken, request.UserUsername, request.UserPassword)
+		restConfig, _, err := s.kubeClient.GetClient(request.ContextName, request.ClusterServer, request.ClusterCertificateAuthorityData, request.ClusterInsecureSkipTLSVerify, request.UserClientCertificateData, request.UserClientKeyData, request.UserToken, request.UserUsername, request.UserPassword)
 		if err != nil {
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 			return
@@ -139,7 +138,7 @@ func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // terminalHandler handles exec requests to a container via WebSockets.
-func terminalHandler(w http.ResponseWriter, r *http.Request) {
+func (s *server) terminalHandler(w http.ResponseWriter, r *http.Request) {
 	// The Pod data (name and namespace) as well as the container and shell are send via query parameters. While the
 	// credentials required to authenticate against the Kubernetes API must be send via our custom headers.
 	name := r.URL.Query().Get("name")
@@ -147,6 +146,7 @@ func terminalHandler(w http.ResponseWriter, r *http.Request) {
 	container := r.URL.Query().Get("container")
 	shell := r.URL.Query().Get("shell")
 
+	contextName := r.Header.Get("X-CONTEXT-NAME")
 	clusterServer := r.Header.Get("X-CLUSTER-SERVER")
 	clusterCertificateAuthorityData := r.Header.Get("X-CLUSTER-CERTIFICATE-AUTHORITY-DATA")
 	clusterInsecureSkipTLSVerify := r.Header.Get("X-CLUSTER-INSECURE-SKIP-TLS-VERIFY")
@@ -161,7 +161,7 @@ func terminalHandler(w http.ResponseWriter, r *http.Request) {
 		parsedClusterInsecureSkipTLSVerify = false
 	}
 
-	restConfig, _, err := kube.GetClient(clusterServer, clusterCertificateAuthorityData, parsedClusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword)
+	restConfig, _, err := s.kubeClient.GetClient(contextName, clusterServer, clusterCertificateAuthorityData, parsedClusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword)
 
 	// After we create a client to interact with the Kubernetes API, we can upgrade the underlying http connection, to
 	// get a shell into the requested container.

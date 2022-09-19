@@ -1,4 +1,4 @@
-package kubenav
+package shared
 
 import (
 	"context"
@@ -7,9 +7,6 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
-
-	"github.com/kubenav/kubenav/pkg/kube"
-	"github.com/kubenav/kubenav/pkg/server"
 
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes"
@@ -22,17 +19,10 @@ import (
 // server the "user*" arguments can be used.
 // The "requestMethod", "requestURL" and "requestBody" arguments are then used for the actually request. E.g. to get all
 // Pods from the Kubernetes API the method "GET" and the URL "/api/v1/pods" can be used.
-func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, requestMethod, requestURL, requestBody string) (string, error) {
-	_, clientset, err := kube.GetClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword)
-	if err != nil {
-		return "", err
-	}
-
+func KubernetesRequest(clientset *kubernetes.Clientset, requestMethod, requestURL, requestBody string) (string, error) {
 	var responseResult rest.Result
 	var statusCode int
 	ctx := context.Background()
-
-	requestURL = strings.TrimRight(clusterServer, "/") + requestURL
 
 	if requestMethod == http.MethodGet {
 		responseResult = clientset.RESTClient().Get().RequestURI(requestURL).Do(ctx)
@@ -68,14 +58,8 @@ func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, cl
 // KubernetesGetLogs returns the logs for a list of pods. The names of the Pods are provided via the "names" parameter,
 // which must be a comma separated list of the Pod names. To use this function a user must also provide the namespace,
 // container, since and previous parameter.
-func KubernetesGetLogs(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, names, namespace, container string, since int64, filter string, previous bool) (string, error) {
-	_, clientset, err := kube.GetClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword)
-	if err != nil {
-		return "", err
-	}
-
+func KubernetesGetLogs(clientset *kubernetes.Clientset, clusterServer, names, namespace, container string, since int64, filter string, previous bool) (string, error) {
 	var logs [][]string
-	clusterServer = strings.TrimRight(clusterServer, "/")
 	podNames := strings.Split(names, ",")
 
 	for _, podName := range podNames {
@@ -156,10 +140,4 @@ func kubernetesGetLogs(clientset *kubernetes.Clientset, clusterServer, name, nam
 	}
 
 	return logs, nil
-}
-
-// KubernetesStartServer starts an Go server which listens on "14122". The server is responsible for providing the
-// port forwarding and Pod exec feature for kubenav.
-func KubernetesStartServer() {
-	server.Start()
 }

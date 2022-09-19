@@ -1,4 +1,4 @@
-package kubenav
+package shared
 
 import (
 	"bytes"
@@ -12,10 +12,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/kubenav/kubenav/pkg/kube"
-
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
 )
 
 // Release describes a deployment of a chart, together with the chart and the variables used to deploy that chart.
@@ -319,12 +318,7 @@ func decompress(data []byte) ([]byte, error) {
 
 // HelmListCharts returns a list of Helm charts for the given cluster and namespace. If an error occures during the
 // process the error is returned.
-func HelmListCharts(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace string) (string, error) {
-	_, clientset, err := kube.GetClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword)
-	if err != nil {
-		return "", err
-	}
-
+func HelmListCharts(clientset *kubernetes.Clientset, namespace string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
 	defer cancel()
 
@@ -378,12 +372,7 @@ func HelmListCharts(clusterServer, clusterCertificateAuthorityData string, clust
 
 // HelmGetChart returns a single of Helm chart. The Helm chart is identified by it's namespace, name and version. If an
 // error occures during the process the error is returned.
-func HelmGetChart(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name string, version int64) (string, error) {
-	_, clientset, err := kube.GetClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword)
-	if err != nil {
-		return "", err
-	}
-
+func HelmGetChart(clientset *kubernetes.Clientset, namespace, name string, version int64) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
 	defer cancel()
 
@@ -413,12 +402,7 @@ func HelmGetChart(clusterServer, clusterCertificateAuthorityData string, cluster
 
 // HelmGetHistory returns the History of a Helm chart. The Helm chart is identified by it's namespace and name. If an
 // error occures during the process the error is returned.
-func HelmGetHistory(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name string) (string, error) {
-	_, clientset, err := kube.GetClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword)
-	if err != nil {
-		return "", err
-	}
-
+func HelmGetHistory(clientset *kubernetes.Clientset, namespace, name string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
 	defer cancel()
 

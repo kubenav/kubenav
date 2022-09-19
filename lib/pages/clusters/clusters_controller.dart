@@ -11,6 +11,7 @@ import 'package:kubenav/pages/clusters/widgets/add_cluster_manual_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/cluster_actions_widget.dart';
 import 'package:kubenav/pages/clusters/widgets/reuse_provider_config_actions_widget.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
+import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 
 class ClustersController extends GetxController {
@@ -57,8 +58,12 @@ class ClustersController extends GetxController {
             enableDrag: false,
             backgroundColor: Colors.transparent,
             builder: (builder) {
-              return ReuseProviderConfigActionsWidget(
-                  provider: providers[index].name);
+              return Container(
+                margin: const EdgeInsets.all(Constants.spacingMiddle),
+                child: ReuseProviderConfigActionsWidget(
+                  provider: providers[index].name,
+                ),
+              );
             },
           ),
           isScrollControlled: true,
@@ -74,7 +79,10 @@ class ClustersController extends GetxController {
         enableDrag: false,
         backgroundColor: Colors.transparent,
         builder: (builder) {
-          return ClusterActionsWidget(clusterIndex: index);
+          return Container(
+            margin: const EdgeInsets.all(Constants.spacingMiddle),
+            child: ClusterActionsWidget(clusterIndex: index),
+          );
         },
       ),
       isScrollControlled: true,

@@ -114,7 +114,7 @@ packages:
     source: hosted
     version: "1.3.0"
   ffi:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: ffi
       url: "https://pub.dartlang.org"
@@ -637,6 +637,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.7.0"
+  window_size:
+    dependency: "direct main"
+    description:
+      path: "plugins/window_size"
+      ref: HEAD
+      resolved-ref: "17d4710c17f4913137e7ec931f6e71eaef443363"
+      url: "https://github.com/google/flutter-desktop-embedding"
+    source: git
+    version: "0.1.0"
   xdg_directories:
     dependency: transitive
     description:

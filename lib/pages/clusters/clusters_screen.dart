@@ -79,6 +79,7 @@ class Clusters extends GetView<ClustersController> {
               () {
                 return ReorderableListView.builder(
                   shrinkWrap: true,
+                  buildDefaultDragHandles: false,
                   physics: const NeverScrollableScrollPhysics(),
                   padding: const EdgeInsets.only(
                     right: Constants.spacingMiddle,
@@ -95,36 +96,43 @@ class Clusters extends GetView<ClustersController> {
                     context,
                     index,
                   ) {
-                    return Container(
+                    return ReorderableDragStartListener(
                       key: Key(
                         controller.clusterController.clusters[index].value.name,
                       ),
-                      child: Obx(
-                        () {
-                          return ClusterItemWidget(
-                            key: Key(
-                              controller
-                                  .clusterController.clusters[index].value.name,
-                            ),
-                            cluster: controller
-                                .clusterController.clusters[index].value,
-                            isActiveCluster: index ==
-                                controller
-                                    .clusterController.activeClusterIndex.value,
-                            provider: controller.getProvider(controller
-                                .clusterController
-                                .clusters[index]
-                                .value
-                                .provider),
-                            onTap: () {
-                              controller.clusterController
-                                  .setActiveCluster(index);
-                            },
-                            onDoubleTap: () {
-                              controller.showClusterActionsBottomSheet(index);
-                            },
-                          );
-                        },
+                      index: index,
+                      child: Container(
+                        key: Key(
+                          controller
+                              .clusterController.clusters[index].value.name,
+                        ),
+                        child: Obx(
+                          () {
+                            return ClusterItemWidget(
+                              key: Key(
+                                controller.clusterController.clusters[index]
+                                    .value.name,
+                              ),
+                              cluster: controller
+                                  .clusterController.clusters[index].value,
+                              isActiveCluster: index ==
+                                  controller.clusterController
+                                      .activeClusterIndex.value,
+                              provider: controller.getProvider(controller
+                                  .clusterController
+                                  .clusters[index]
+                                  .value
+                                  .provider),
+                              onTap: () {
+                                controller.clusterController
+                                    .setActiveCluster(index);
+                              },
+                              onDoubleTap: () {
+                                controller.showClusterActionsBottomSheet(index);
+                              },
+                            );
+                          },
+                        ),
                       ),
                     );
                   },

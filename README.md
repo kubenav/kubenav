@@ -49,7 +49,7 @@ storeFile=
 
 - Update the `version` key in the `pubspec.yaml` file
 
-- Run `make bindings` to build the Go code
+- Run `make bindings-android` and `make bindings-ios` to build the Go code
 
 - Delete old builds `rm -rf build`
 
