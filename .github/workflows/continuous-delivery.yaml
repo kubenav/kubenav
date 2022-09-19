@@ -156,28 +156,26 @@ jobs:
 
       - name: Package
         run: |
-          mv build/linux/x64/release/bundle/kubenav build/linux/x64/release/bundle/lib/kubenav
-          cp linux/kubenav.desktop build/linux/x64/release/bundle/
-          cp linux/kubenav.sh build/linux/x64/release/bundle/
-          cp linux/install.sh build/linux/x64/release/bundle/
-          cp linux/kubenav build/linux/x64/release/bundle/
-          cp linux/kubenav.png build/linux/x64/release/bundle/
+          wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage
+          chmod +x appimagetool-x86_64.AppImage
           cp linux/kubenav.so build/linux/x64/release/bundle/lib/
-          mv build/linux/x64/release/bundle build/linux/x64/release/kubenav
-          cd build/linux/x64/release && zip -r -X kubenav-linux.zip kubenav
+          cp linux/AppRun build/linux/x64/release/bundle/
+          cp linux/kubenav.desktop build/linux/x64/release/bundle/
+          cp linux/kubenav.png build/linux/x64/release/bundle/
+          ./appimagetool-x86_64.AppImage build/linux/x64/release/bundle/
 
       - name: Upload Artifacts (PR)
         if: ${{ github.event_name == 'pull_request' }}
         uses: actions/upload-artifact@v3
         with:
-          name: kubenav-linux.zip
-          path: build/linux/x64/release/kubenav-linux.zip
+          name: kubenav-x86_64.AppImage
+          path: kubenav-x86_64.AppImage
 
       - name: Upload Artifacts (Release)
         uses: softprops/action-gh-release@v1
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
         with:
-          files: build/linux/x64/release/kubenav-linux.zip
+          files: kubenav-x86_64.AppImage
 
   windows:
     name: Windows
