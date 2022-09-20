@@ -2,11 +2,11 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:window_size/window_size.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:kubenav/controllers/bookmark_controller.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';

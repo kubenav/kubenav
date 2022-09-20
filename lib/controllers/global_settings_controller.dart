@@ -13,6 +13,8 @@ class GlobalSettingsController extends GetxController {
   RxBool isAuthenticationEnabled = false.obs;
   RxBool isDarkTheme = false.obs;
   RxString editorFormat = 'yaml'.obs;
+  RxString proxy = ''.obs;
+  RxInt timeout = 0.obs;
 
   /// [onInit] is used to initialize the settings. For that we are looking if the value is already saved in the storage.
   /// If this is the case we are reusing the saved value. If we could not found saved values we are using the default.
@@ -54,6 +56,20 @@ class GlobalSettingsController extends GetxController {
 
     ever(editorFormat, (_) {
       GetStorage().write('settings.editorFormat', editorFormat.value);
+    });
+
+    String? storedProxy = GetStorage().read<String>('settings.proxy');
+    proxy.value = storedProxy ?? '';
+
+    ever(proxy, (_) {
+      GetStorage().write('settings.proxy', proxy.value);
+    });
+
+    int? storedTimeout = GetStorage().read<int>('settings.timeout');
+    timeout.value = storedTimeout ?? 0;
+
+    ever(timeout, (_) {
+      GetStorage().write('settings.timeout', timeout.value);
     });
 
     super.onInit();

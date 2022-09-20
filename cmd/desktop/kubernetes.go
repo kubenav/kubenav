@@ -42,17 +42,18 @@ func KubernetesClusters() *C.char {
 // Pods from the Kubernetes API the method "GET" and the URL "/api/v1/pods" can be used.
 //
 //export KubernetesRequest
-func KubernetesRequest(port C.long, contextNameC *C.char, contextNameLen C.int, requestMethodC *C.char, requestMethodLen C.int, requestURLC *C.char, requestURLLen C.int, requestBodyC *C.char, requestBodyLen C.int) {
+func KubernetesRequest(port C.long, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.long, requestMethodC *C.char, requestMethodLen C.int, requestURLC *C.char, requestURLLen C.int, requestBodyC *C.char, requestBodyLen C.int) {
 	contextName := C.GoStringN(contextNameC, contextNameLen)
+	proxy := C.GoStringN(proxyC, proxyLen)
 	requestMethod := C.GoStringN(requestMethodC, requestMethodLen)
 	requestURL := C.GoStringN(requestURLC, requestURLLen)
 	requestBody := C.GoStringN(requestBodyC, requestBodyLen)
 
-	go kubernetesRequest(int64(port), contextName, requestMethod, requestURL, requestBody)
+	go kubernetesRequest(int64(port), contextName, proxy, int64(timeout), requestMethod, requestURL, requestBody)
 }
 
-func kubernetesRequest(port int64, contextName, requestMethod, requestURL, requestBody string) {
-	restConfig, clientset, err := kubeClient.GetClient(contextName, "", "", false, "", "", "", "", "")
+func kubernetesRequest(port int64, contextName, proxy string, timeout int64, requestMethod, requestURL, requestBody string) {
+	restConfig, clientset, err := kubeClient.GetClient(contextName, "", "", false, "", "", "", "", "", proxy, timeout)
 	if err != nil {
 		dart_api_dl.SendToPort(port, cerror.New(err))
 		return
@@ -74,8 +75,9 @@ func kubernetesRequest(port int64, contextName, requestMethod, requestURL, reque
 // container, since and previous parameter.
 //
 //export KubernetesGetLogs
-func KubernetesGetLogs(port C.long, contextNameC *C.char, contextNameLen C.int, namesC *C.char, namesLen C.int, namespaceC *C.char, namespaceLen C.int, containerC *C.char, containerLen C.int, sinceC C.int, filterC *C.char, filterLen C.int, previousC C.int) {
+func KubernetesGetLogs(port C.long, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.long, namesC *C.char, namesLen C.int, namespaceC *C.char, namespaceLen C.int, containerC *C.char, containerLen C.int, sinceC C.int, filterC *C.char, filterLen C.int, previousC C.int) {
 	contextName := C.GoStringN(contextNameC, contextNameLen)
+	proxy := C.GoStringN(proxyC, proxyLen)
 	names := C.GoStringN(namesC, namesLen)
 	namespace := C.GoStringN(namespaceC, namespaceLen)
 	container := C.GoStringN(containerC, containerLen)
@@ -86,11 +88,11 @@ func KubernetesGetLogs(port C.long, contextNameC *C.char, contextNameLen C.int, 
 		previous = true
 	}
 
-	go kubernetesGetLogs(int64(port), contextName, names, namespace, container, since, filter, previous)
+	go kubernetesGetLogs(int64(port), contextName, proxy, int64(timeout), names, namespace, container, since, filter, previous)
 }
 
-func kubernetesGetLogs(port int64, contextName, names, namespace, container string, since int64, filter string, previous bool) {
-	restConfig, clientset, err := kubeClient.GetClient(contextName, "", "", false, "", "", "", "", "")
+func kubernetesGetLogs(port int64, contextName, proxy string, timeout int64, names, namespace, container string, since int64, filter string, previous bool) {
+	restConfig, clientset, err := kubeClient.GetClient(contextName, "", "", false, "", "", "", "", "", proxy, timeout)
 	if err != nil {
 		dart_api_dl.SendToPort(port, cerror.New(err))
 		return

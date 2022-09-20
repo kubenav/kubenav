@@ -23,11 +23,13 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let userToken = args["userToken"] as? String,
         let userUsername = args["userUsername"] as? String,
         let userPassword = args["userPassword"] as? String,
+        let proxy = args["proxy"] as? String,
+        let timeout = args["timeout"] as? Int64,
         let requestMethod = args["requestMethod"] as? String,
         let requestURL = args["requestURL"] as? String,
         let requestBody = args["requestBody"] as? String
       {
-        kubernetesRequest(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, requestMethod: requestMethod, requestURL: requestURL, requestBody: requestBody, result: result)
+        kubernetesRequest(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, requestMethod: requestMethod, requestURL: requestURL, requestBody: requestBody, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -58,6 +60,8 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let userToken = args["userToken"] as? String,
         let userUsername = args["userUsername"] as? String,
         let userPassword = args["userPassword"] as? String,
+        let proxy = args["proxy"] as? String,
+        let timeout = args["timeout"] as? Int64,
         let names = args["names"] as? String,
         let namespace = args["namespace"] as? String,
         let container = args["container"] as? String,
@@ -65,7 +69,7 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let filter = args["filter"] as? String,
         let previous = args["previous"] as? Bool
       {
-        kubernetesGetLogs(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, names: names, namespace: namespace, container: container, since: since, filter: filter, previous: previous, result: result)
+        kubernetesGetLogs(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, names: names, namespace: namespace, container: container, since: since, filter: filter, previous: previous, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -140,9 +144,11 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let userToken = args["userToken"] as? String,
         let userUsername = args["userUsername"] as? String,
         let userPassword = args["userPassword"] as? String,
+        let proxy = args["proxy"] as? String,
+        let timeout = args["timeout"] as? Int64,
         let namespace = args["namespace"] as? String
       {
-        helmListCharts(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, namespace: namespace, result: result)
+        helmListCharts(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, namespace: namespace, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -156,11 +162,13 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let userToken = args["userToken"] as? String,
         let userUsername = args["userUsername"] as? String,
         let userPassword = args["userPassword"] as? String,
+        let proxy = args["proxy"] as? String,
+        let timeout = args["timeout"] as? Int64,
         let namespace = args["namespace"] as? String,
         let name = args["name"] as? String,
         let version = args["version"] as? Int64
       {
-        helmGetChart(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, namespace: namespace, name: name, version: version, result: result)
+        helmGetChart(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, namespace: namespace, name: name, version: version, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -174,10 +182,12 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let userToken = args["userToken"] as? String,
         let userUsername = args["userUsername"] as? String,
         let userPassword = args["userPassword"] as? String,
+        let proxy = args["proxy"] as? String,
+        let timeout = args["timeout"] as? Int64,
         let namespace = args["namespace"] as? String,
         let name = args["name"] as? String
       {
-        helmGetHistory(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, namespace: namespace, name: name, result: result)
+        helmGetHistory(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, namespace: namespace, name: name, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -230,10 +240,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func kubernetesRequest(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, requestMethod: String, requestURL: String, requestBody: String, result: FlutterResult) {
+  private func kubernetesRequest(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, requestMethod: String, requestURL: String, requestBody: String, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavKubernetesRequest(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, requestMethod, requestURL, requestBody, &error)
+    let data = KubenavKubernetesRequest(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, requestMethod, requestURL, requestBody, &error)
     if error != nil {
       result(FlutterError(code: "KUBERNETES_REQUEST_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
@@ -263,10 +273,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func kubernetesGetLogs(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, names: String, namespace: String, container: String, since: Int64, filter: String, previous: Bool, result: FlutterResult) {
+  private func kubernetesGetLogs(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, names: String, namespace: String, container: String, since: Int64, filter: String, previous: Bool, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavKubernetesGetLogs(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, names, namespace, container, since, filter, previous, &error)
+    let data = KubenavKubernetesGetLogs(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, names, namespace, container, since, filter, previous, &error)
     if error != nil {
       result(FlutterError(code: "KUBERNETES_GET_LOGS_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
@@ -336,10 +346,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func helmListCharts(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, namespace: String, result: FlutterResult) {
+  private func helmListCharts(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, namespace: String, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavHelmListCharts(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, &error)
+    let data = KubenavHelmListCharts(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, &error)
     if error != nil {
       result(FlutterError(code: "HELM_LIST_CHARTS_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
@@ -347,10 +357,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func helmGetChart(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, namespace: String, name: String, version: Int64, result: FlutterResult) {
+  private func helmGetChart(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, namespace: String, name: String, version: Int64, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavHelmGetChart(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name, version, &error)
+    let data = KubenavHelmGetChart(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, &error)
     if error != nil {
       result(FlutterError(code: "HELM_GET_CHART_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
@@ -358,10 +368,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func helmGetHistory(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, namespace: String, name: String, result: FlutterResult) {
+  private func helmGetHistory(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, namespace: String, name: String, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavHelmGetHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name, &error)
+    let data = KubenavHelmGetHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, &error)
     if error != nil {
       result(FlutterError(code: "HELM_GET_HISTORY_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {

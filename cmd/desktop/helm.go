@@ -12,15 +12,16 @@ import (
 // process the error is returned.
 //
 //export HelmListCharts
-func HelmListCharts(port C.long, contextNameC *C.char, contextNameLen C.int, namespaceC *C.char, namespaceLen C.int) {
+func HelmListCharts(port C.long, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.long, namespaceC *C.char, namespaceLen C.int) {
 	contextName := C.GoStringN(contextNameC, contextNameLen)
+	proxy := C.GoStringN(proxyC, proxyLen)
 	namespace := C.GoStringN(namespaceC, namespaceLen)
 
-	go helmListCharts(int64(port), contextName, namespace)
+	go helmListCharts(int64(port), contextName, proxy, int64(timeout), namespace)
 }
 
-func helmListCharts(port int64, contextName string, namespace string) {
-	_, clientset, err := kubeClient.GetClient(contextName, "", "", false, "", "", "", "", "")
+func helmListCharts(port int64, contextName, proxy string, timeout int64, namespace string) {
+	_, clientset, err := kubeClient.GetClient(contextName, "", "", false, "", "", "", "", "", proxy, timeout)
 	if err != nil {
 		dart_api_dl.SendToPort(port, cerror.New(err))
 		return
@@ -39,16 +40,17 @@ func helmListCharts(port int64, contextName string, namespace string) {
 // error occures during the process the error is returned.
 //
 //export HelmGetChart
-func HelmGetChart(port C.long, contextNameC *C.char, contextNameLen C.int, namespaceC *C.char, namespaceLen C.int, nameC *C.char, nameLen C.int, versionC C.long) {
+func HelmGetChart(port C.long, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.long, namespaceC *C.char, namespaceLen C.int, nameC *C.char, nameLen C.int, versionC C.long) {
 	contextName := C.GoStringN(contextNameC, contextNameLen)
+	proxy := C.GoStringN(proxyC, proxyLen)
 	namespace := C.GoStringN(namespaceC, namespaceLen)
 	name := C.GoStringN(nameC, nameLen)
 
-	go helmGetChart(int64(port), contextName, namespace, name, int64(versionC))
+	go helmGetChart(int64(port), contextName, proxy, int64(timeout), namespace, name, int64(versionC))
 }
 
-func helmGetChart(port int64, contextName, namespace, name string, version int64) {
-	_, clientset, err := kubeClient.GetClient(contextName, "", "", false, "", "", "", "", "")
+func helmGetChart(port int64, contextName, proxy string, timeout int64, namespace, name string, version int64) {
+	_, clientset, err := kubeClient.GetClient(contextName, "", "", false, "", "", "", "", "", proxy, timeout)
 	if err != nil {
 		dart_api_dl.SendToPort(port, cerror.New(err))
 		return
@@ -67,16 +69,17 @@ func helmGetChart(port int64, contextName, namespace, name string, version int64
 // error occures during the process the error is returned.
 //
 //export HelmGetHistory
-func HelmGetHistory(port C.long, contextNameC *C.char, contextNameLen C.int, namespaceC *C.char, namespaceLen C.int, nameC *C.char, nameLen C.int) {
+func HelmGetHistory(port C.long, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.long, namespaceC *C.char, namespaceLen C.int, nameC *C.char, nameLen C.int) {
 	contextName := C.GoStringN(contextNameC, contextNameLen)
+	proxy := C.GoStringN(proxyC, proxyLen)
 	namespace := C.GoStringN(namespaceC, namespaceLen)
 	name := C.GoStringN(nameC, nameLen)
 
-	go helmGetHistory(int64(port), contextName, namespace, name)
+	go helmGetHistory(int64(port), contextName, proxy, int64(timeout), namespace, name)
 }
 
-func helmGetHistory(port int64, contextName, namespace, name string) {
-	_, clientset, err := kubeClient.GetClient(contextName, "", "", false, "", "", "", "", "")
+func helmGetHistory(port int64, contextName, proxy string, timeout int64, namespace, name string) {
+	_, clientset, err := kubeClient.GetClient(contextName, "", "", false, "", "", "", "", "", proxy, timeout)
 	if err != nil {
 		dart_api_dl.SendToPort(port, cerror.New(err))
 		return

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/global_settings_controller.dart';
+import 'package:kubenav/pages/settings/widgets/settings_proxy_widget.dart';
+import 'package:kubenav/pages/settings/widgets/settings_timeout_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -182,6 +184,86 @@ class SettingsWidget extends StatelessWidget {
               }).toList(),
             ),
           )
+        ],
+      ),
+    );
+
+    items.add(
+      AppVertialListSimpleModel(
+        onTap: () {
+          Get.bottomSheet(
+            BottomSheet(
+              onClosing: () {},
+              enableDrag: false,
+              builder: (builder) {
+                return SettingsProxyWidget(
+                  currentProxy: globalSettingsController.proxy.value,
+                );
+              },
+            ),
+            isScrollControlled: true,
+          );
+        },
+        children: [
+          const Icon(
+            Icons.http,
+            color: Constants.colorPrimary,
+          ),
+          const SizedBox(width: Constants.spacingSmall),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'Proxy',
+              style: noramlTextStyle(
+                context,
+              ),
+            ),
+          ),
+          Icon(
+            Icons.arrow_forward_ios,
+            color: Colors.grey[300],
+            size: 16,
+          ),
+        ],
+      ),
+    );
+
+    items.add(
+      AppVertialListSimpleModel(
+        onTap: () {
+          Get.bottomSheet(
+            BottomSheet(
+              onClosing: () {},
+              enableDrag: false,
+              builder: (builder) {
+                return SettingsTimeoutWidget(
+                  currentTimeout: globalSettingsController.timeout.value,
+                );
+              },
+            ),
+            isScrollControlled: true,
+          );
+        },
+        children: [
+          const Icon(
+            Icons.schedule,
+            color: Constants.colorPrimary,
+          ),
+          const SizedBox(width: Constants.spacingSmall),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'Timeout',
+              style: noramlTextStyle(
+                context,
+              ),
+            ),
+          ),
+          Icon(
+            Icons.arrow_forward_ios,
+            color: Colors.grey[300],
+            size: 16,
+          ),
         ],
       ),
     );

@@ -32,14 +32,16 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val userToken = call.argument<String>("userToken")
       val userUsername = call.argument<String>("userUsername")
       val userPassword = call.argument<String>("userPassword")
+      val proxy = call.argument<String>("proxy")
+      val timeout = call.argument<Number>("timeout")?.toLong()
       val requestMethod = call.argument<String>("requestMethod")
       val requestURL = call.argument<String>("requestURL")
       val requestBody = call.argument<String>("requestBody")
 
-      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || requestMethod == null || requestURL == null || requestBody == null) {
+      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || requestMethod == null || requestURL == null || requestBody == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        kubernetesRequest(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, requestMethod, requestURL, requestBody, result)
+        kubernetesRequest(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, requestMethod, requestURL, requestBody, result)
       }
     } else if (call.method == "prettifyYAML") {
       val jsonStr = call.argument<String>("jsonStr")
@@ -67,6 +69,8 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val userToken = call.argument<String>("userToken")
       val userUsername = call.argument<String>("userUsername")
       val userPassword = call.argument<String>("userPassword")
+      val proxy = call.argument<String>("proxy")
+      val timeout = call.argument<Number>("timeout")?.toLong()
       val names = call.argument<String>("names")
       val namespace = call.argument<String>("namespace")
       val container = call.argument<String>("container")
@@ -74,10 +78,10 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val filter = call.argument<String>("filter")
       val previous = call.argument<Boolean>("previous")
 
-      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || names == null || namespace == null || container == null || since == null || filter == null || previous == null) {
+      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || names == null || namespace == null || container == null || since == null || filter == null || previous == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        kubernetesGetLogs(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, names, namespace, container, since, filter, previous, result)
+        kubernetesGetLogs(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, names, namespace, container, since, filter, previous, result)
       }
     } else if (call.method == "kubernetesStartServer") {
       kubernetesStartServer(result)
@@ -149,12 +153,14 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val userToken = call.argument<String>("userToken")
       val userUsername = call.argument<String>("userUsername")
       val userPassword = call.argument<String>("userPassword")
+      val proxy = call.argument<String>("proxy")
+      val timeout = call.argument<Number>("timeout")?.toLong()
       val namespace = call.argument<String>("namespace")
 
-      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || namespace == null) {
+      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        helmListCharts(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, result)
+        helmListCharts(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, result)
       }
     } else if (call.method == "helmGetChart") {
       val clusterServer = call.argument<String>("clusterServer")
@@ -165,14 +171,16 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val userToken = call.argument<String>("userToken")
       val userUsername = call.argument<String>("userUsername")
       val userPassword = call.argument<String>("userPassword")
+      val proxy = call.argument<String>("proxy")
+      val timeout = call.argument<Number>("timeout")?.toLong()
       val namespace = call.argument<String>("namespace")
       val name = call.argument<String>("name")
       val version = call.argument<Number>("version")?.toLong()
 
-      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || namespace == null || name == null || version == null) {
+      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null || name == null || version == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        helmGetChart(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name, version, result)
+        helmGetChart(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, result)
       }
     } else if (call.method == "helmGetHistory") {
       val clusterServer = call.argument<String>("clusterServer")
@@ -183,13 +191,15 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val userToken = call.argument<String>("userToken")
       val userUsername = call.argument<String>("userUsername")
       val userPassword = call.argument<String>("userPassword")
+      val proxy = call.argument<String>("proxy")
+      val timeout = call.argument<Number>("timeout")?.toLong()
       val namespace = call.argument<String>("namespace")
       val name = call.argument<String>("name")
 
-      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || namespace == null || name == null) {
+      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null || name == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        helmGetHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name, result)
+        helmGetHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, result)
       }
     } else if (call.method == "oidcGetLink") {
       val discoveryURL = call.argument<String>("discoveryURL")
@@ -240,9 +250,9 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun kubernetesRequest(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, requestMethod: String, requestURL: String, requestBody: String, result: MethodChannel.Result) {
+  private fun kubernetesRequest(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, requestMethod: String, requestURL: String, requestBody: String, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.kubernetesRequest(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, requestMethod, requestURL, requestBody)
+      val data: String = Kubenav.kubernetesRequest(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, requestMethod, requestURL, requestBody)
       result.success(data)
     } catch (e: Exception) {
       result.error("KUBERNETES_REQUEST_FAILED", e.localizedMessage, null)
@@ -267,9 +277,9 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun kubernetesGetLogs(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, names: String, namespace: String, container: String, since: Long, filter: String, previous: Boolean, result: MethodChannel.Result) {
+  private fun kubernetesGetLogs(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, names: String, namespace: String, container: String, since: Long, filter: String, previous: Boolean, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.kubernetesGetLogs(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, names, namespace, container, since, filter, previous)
+      val data: String = Kubenav.kubernetesGetLogs(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, names, namespace, container, since, filter, previous)
       result.success(data)
     } catch (e: Exception) {
       result.error("KUBERNETES_GET_LOGS_FAILED", e.localizedMessage, null)
@@ -329,27 +339,27 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun helmListCharts(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, namespace: String, result: MethodChannel.Result) {
+  private fun helmListCharts(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.helmListCharts(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace)
+      val data: String = Kubenav.helmListCharts(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace)
       result.success(data)
     } catch (e: Exception) {
       result.error("HELM_LIST_CHARTS_FAILED", e.localizedMessage, null)
     }
   }
 
-  private fun helmGetChart(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, namespace: String, name: String, version: Long, result: MethodChannel.Result) {
+  private fun helmGetChart(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, version: Long, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.helmGetChart(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name, version)
+      val data: String = Kubenav.helmGetChart(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version)
       result.success(data)
     } catch (e: Exception) {
       result.error("HELM_GET_CHART_FAILED", e.localizedMessage, null)
     }
   }
 
-  private fun helmGetHistory(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, namespace: String, name: String, result: MethodChannel.Result) {
+  private fun helmGetHistory(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.helmGetHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name)
+      val data: String = Kubenav.helmGetHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name)
       result.success(data)
     } catch (e: Exception) {
       result.error("HELM_GET_HISTORY_FAILED", e.localizedMessage, null)

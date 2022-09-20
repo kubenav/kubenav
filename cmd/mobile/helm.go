@@ -8,8 +8,8 @@ import (
 
 // HelmListCharts returns a list of Helm charts for the given cluster and namespace. If an error occures during the
 // process the error is returned.
-func HelmListCharts(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace string) (string, error) {
-	_, clientset, err := kube.NewClient(mobile.Platform).GetClient("", clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword)
+func HelmListCharts(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace string) (string, error) {
+	_, clientset, err := kube.NewClient(mobile.Platform).GetClient("", clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
 	if err != nil {
 		return "", err
 	}
@@ -19,8 +19,8 @@ func HelmListCharts(clusterServer, clusterCertificateAuthorityData string, clust
 
 // HelmGetChart returns a single of Helm chart. The Helm chart is identified by it's namespace, name and version. If an
 // error occures during the process the error is returned.
-func HelmGetChart(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name string, version int64) (string, error) {
-	_, clientset, err := kube.NewClient(mobile.Platform).GetClient("", clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword)
+func HelmGetChart(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace, name string, version int64) (string, error) {
+	_, clientset, err := kube.NewClient(mobile.Platform).GetClient("", clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
 	if err != nil {
 		return "", err
 	}
@@ -30,8 +30,8 @@ func HelmGetChart(clusterServer, clusterCertificateAuthorityData string, cluster
 
 // HelmGetHistory returns the History of a Helm chart. The Helm chart is identified by it's namespace and name. If an
 // error occures during the process the error is returned.
-func HelmGetHistory(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, namespace, name string) (string, error) {
-	_, clientset, err := kube.NewClient(mobile.Platform).GetClient("", clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword)
+func HelmGetHistory(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace, name string) (string, error) {
+	_, clientset, err := kube.NewClient(mobile.Platform).GetClient("", clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
 	if err != nil {
 		return "", err
 	}

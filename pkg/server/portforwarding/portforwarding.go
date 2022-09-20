@@ -28,6 +28,8 @@ type CreateRequest struct {
 	UserToken                       string `json:"userToken"`
 	UserUsername                    string `json:"userUsername"`
 	UserPassword                    string `json:"userPassword"`
+	Proxy                           string `json:"proxy"`
+	Timeout                         int64  `json:"timeout"`
 	PodName                         string `json:"podName"`
 	PodNamespace                    string `json:"podNamespace"`
 	PodContainer                    string `json:"podContainer"`

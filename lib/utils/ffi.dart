@@ -24,6 +24,9 @@ typedef kubernetesrequest_func = Void Function(
   Int64 port,
   Pointer<Utf8> contextName,
   Int32 contextNameLen,
+  Pointer<Utf8> proxy,
+  Int32 proxyLen,
+  Int64 timeout,
   Pointer<Utf8> requestMethod,
   Int32 requestMethodLen,
   Pointer<Utf8> requestURL,
@@ -35,6 +38,9 @@ typedef KubernetesRequestFunc = void Function(
   int port,
   Pointer<Utf8> contextName,
   int contextNameLen,
+  Pointer<Utf8> proxy,
+  int proxyLen,
+  int timeout,
   Pointer<Utf8> requestMethod,
   int requestMethodLen,
   Pointer<Utf8> requestURL,
@@ -48,6 +54,9 @@ typedef kubernetesgetlogs_func = Void Function(
   Int64 port,
   Pointer<Utf8> contextName,
   Int32 contextNameLen,
+  Pointer<Utf8> proxy,
+  Int32 proxyLen,
+  Int64 timeout,
   Pointer<Utf8> names,
   Int32 namesLen,
   Pointer<Utf8> namespace,
@@ -63,6 +72,9 @@ typedef KubernetesGetLogsFunc = void Function(
   int port,
   Pointer<Utf8> contextName,
   int contextNameLen,
+  Pointer<Utf8> proxy,
+  int proxyLen,
+  int timeout,
   Pointer<Utf8> names,
   int namesLen,
   Pointer<Utf8> namespace,
@@ -112,6 +124,9 @@ typedef helmlistcharts_func = Void Function(
   Int64 port,
   Pointer<Utf8> contextName,
   Int32 contextNameLen,
+  Pointer<Utf8> proxy,
+  Int32 proxyLen,
+  Int64 timeout,
   Pointer<Utf8> namespace,
   Int32 namespaceLen,
 );
@@ -119,6 +134,9 @@ typedef HelmListChartsFunc = void Function(
   int port,
   Pointer<Utf8> contextName,
   int contextNameLen,
+  Pointer<Utf8> proxy,
+  int proxyLen,
+  int timeout,
   Pointer<Utf8> namespace,
   int namespaceLen,
 );
@@ -128,6 +146,9 @@ typedef helmgetchart_func = Void Function(
   Int64 port,
   Pointer<Utf8> contextName,
   Int32 contextNameLen,
+  Pointer<Utf8> proxy,
+  Int32 proxyLen,
+  Int64 timeout,
   Pointer<Utf8> namespace,
   Int32 namespaceLen,
   Pointer<Utf8> name,
@@ -138,6 +159,9 @@ typedef HelmGetChartFunc = void Function(
   int port,
   Pointer<Utf8> contextName,
   int contextNameLen,
+  Pointer<Utf8> proxy,
+  int proxyLen,
+  int timeout,
   Pointer<Utf8> namespace,
   int namespaceLen,
   Pointer<Utf8> name,
@@ -150,6 +174,9 @@ typedef helmgethistory_func = Void Function(
   Int64 port,
   Pointer<Utf8> contextName,
   Int32 contextNameLen,
+  Pointer<Utf8> proxy,
+  Int32 proxyLen,
+  Int64 timeout,
   Pointer<Utf8> namespace,
   Int32 namespaceLen,
   Pointer<Utf8> name,
@@ -159,6 +186,9 @@ typedef HelmGetHistoryFunc = void Function(
   int port,
   Pointer<Utf8> contextName,
   int contextNameLen,
+  Pointer<Utf8> proxy,
+  int proxyLen,
+  int timeout,
   Pointer<Utf8> namespace,
   int namespaceLen,
   Pointer<Utf8> name,
@@ -238,7 +268,9 @@ class KubenavFFI {
   }
 
   Future<String> kubernetesRequest(
-    String name,
+    String contextName,
+    String proxy,
+    int timeout,
     String method,
     String url,
     String body,
@@ -246,7 +278,7 @@ class KubenavFFI {
     Logger.log(
       'KubenavFFI kubernetesRequest',
       'Run kubernetesRequest function',
-      '$name, $method, $url, $body',
+      '$contextName, $method, $url, $body',
     );
 
     var kubernetesRequestC = library
@@ -266,8 +298,11 @@ class KubenavFFI {
 
     kubernetesRequest(
       nativeSendPort,
-      name.toNativeUtf8(),
-      name.length,
+      contextName.toNativeUtf8(),
+      contextName.length,
+      proxy.toNativeUtf8(),
+      proxy.length,
+      timeout,
       method.toNativeUtf8(),
       method.length,
       url.toNativeUtf8(),
@@ -297,7 +332,9 @@ class KubenavFFI {
   }
 
   Future<String> kubernetesGetLogs(
-    String name,
+    String contextName,
+    String proxy,
+    int timeout,
     String names,
     String namespace,
     String container,
@@ -308,7 +345,7 @@ class KubenavFFI {
     Logger.log(
       'KubenavFFI kubernetesGetLogs',
       'Run kubernetesGetLogs function',
-      '$name, $names, $namespace, $container, $since, $filter, $previous',
+      '$contextName, $names, $namespace, $container, $since, $filter, $previous',
     );
 
     var kubernetesGetLogsC = library
@@ -328,8 +365,11 @@ class KubenavFFI {
 
     kubernetesGetLogs(
       nativeSendPort,
-      name.toNativeUtf8(),
-      name.length,
+      contextName.toNativeUtf8(),
+      contextName.length,
+      proxy.toNativeUtf8(),
+      proxy.length,
+      timeout,
       names.toNativeUtf8(),
       names.length,
       namespace.toNativeUtf8(),
@@ -482,6 +522,8 @@ class KubenavFFI {
 
   Future<String> helmListCharts(
     String contextName,
+    String proxy,
+    int timeout,
     String namespace,
   ) async {
     Logger.log(
@@ -508,6 +550,9 @@ class KubenavFFI {
       nativeSendPort,
       contextName.toNativeUtf8(),
       contextName.length,
+      proxy.toNativeUtf8(),
+      proxy.length,
+      timeout,
       namespace.toNativeUtf8(),
       namespace.length,
     );
@@ -534,6 +579,8 @@ class KubenavFFI {
 
   Future<String> helmGetChart(
     String contextName,
+    String proxy,
+    int timeout,
     String namespace,
     String name,
     int version,
@@ -562,6 +609,9 @@ class KubenavFFI {
       nativeSendPort,
       contextName.toNativeUtf8(),
       contextName.length,
+      proxy.toNativeUtf8(),
+      proxy.length,
+      timeout,
       namespace.toNativeUtf8(),
       namespace.length,
       name.toNativeUtf8(),
@@ -591,6 +641,8 @@ class KubenavFFI {
 
   Future<String> helmGetHistory(
     String contextName,
+    String proxy,
+    int timeout,
     String namespace,
     String name,
   ) async {
@@ -618,6 +670,9 @@ class KubenavFFI {
       nativeSendPort,
       contextName.toNativeUtf8(),
       contextName.length,
+      proxy.toNativeUtf8(),
+      proxy.length,
+      timeout,
       namespace.toNativeUtf8(),
       namespace.length,
       name.toNativeUtf8(),

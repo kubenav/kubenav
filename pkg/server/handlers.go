@@ -58,18 +58,19 @@ func (s *server) portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 	// and started, we return the session id which can be used to delete a session and the used local port from the
 	// session which can then used by the user to interact with the selected remote port.
 	if r.Method == http.MethodPost {
-		var request portforwarding.CreateRequest
 		if r.Body == nil {
 			middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
 			return
 		}
+
+		var request portforwarding.CreateRequest
 		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not decode request body: %s", err.Error()))
 			return
 		}
 
-		restConfig, _, err := s.kubeClient.GetClient(request.ContextName, request.ClusterServer, request.ClusterCertificateAuthorityData, request.ClusterInsecureSkipTLSVerify, request.UserClientCertificateData, request.UserClientKeyData, request.UserToken, request.UserUsername, request.UserPassword)
+		restConfig, _, err := s.kubeClient.GetClient(request.ContextName, request.ClusterServer, request.ClusterCertificateAuthorityData, request.ClusterInsecureSkipTLSVerify, request.UserClientCertificateData, request.UserClientKeyData, request.UserToken, request.UserUsername, request.UserPassword, request.Proxy, 0)
 		if err != nil {
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 			return
@@ -155,13 +156,14 @@ func (s *server) terminalHandler(w http.ResponseWriter, r *http.Request) {
 	userToken := r.Header.Get("X-USER-TOKEN")
 	userUsername := r.Header.Get("X-USER-USERNAME")
 	userPassword := r.Header.Get("X-USER-PASSWORD")
+	proxy := r.Header.Get("X-PROXY")
 
 	parsedClusterInsecureSkipTLSVerify, err := strconv.ParseBool(clusterInsecureSkipTLSVerify)
 	if err != nil {
 		parsedClusterInsecureSkipTLSVerify = false
 	}
 
-	restConfig, _, err := s.kubeClient.GetClient(contextName, clusterServer, clusterCertificateAuthorityData, parsedClusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword)
+	restConfig, _, err := s.kubeClient.GetClient(contextName, clusterServer, clusterCertificateAuthorityData, parsedClusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, 0)
 
 	// After we create a client to interact with the Kubernetes API, we can upgrade the underlying http connection, to
 	// get a shell into the requested container.

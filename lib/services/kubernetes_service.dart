@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
 
 import 'package:kubenav/controllers/cluster_controller.dart';
+import 'package:kubenav/controllers/global_settings_controller.dart';
 import 'package:kubenav/controllers/provider_config_controller.dart';
 import 'package:kubenav/models/cluster_model.dart';
 import 'package:kubenav/models/helm_model.dart';
@@ -24,6 +25,7 @@ import 'package:kubenav/utils/logger.dart';
 ///
 /// To use the [KubernetesService] a user must provide a Kubernetes [cluster] during the initialization of the service.
 class KubernetesService {
+  GlobalSettingsController globalSettingsController = Get.find();
   ClusterController clusterController = Get.find();
   ProviderConfigController providerConfigController = Get.find();
 
@@ -223,8 +225,14 @@ class KubernetesService {
   Future<bool> checkHealth() async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        final result =
-            KubenavFFI().kubernetesRequest(cluster.name, 'GET', '/readyz', '');
+        final result = await KubenavFFI().kubernetesRequest(
+          cluster.name,
+          globalSettingsController.proxy.value,
+          globalSettingsController.timeout.value,
+          'GET',
+          '/readyz',
+          '',
+        );
         if (result == 'ok') {
           return true;
         }
@@ -245,6 +253,8 @@ class KubernetesService {
             'userToken': token,
             'userUsername': cluster.userUsername,
             'userPassword': cluster.userPassword,
+            'proxy': globalSettingsController.proxy.value,
+            'timeout': globalSettingsController.timeout.value,
             'requestMethod': 'GET',
             'requestURL': '/readyz',
             'requestBody': '',
@@ -274,8 +284,14 @@ class KubernetesService {
   Future<Map<String, dynamic>> getRequest(String url) async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        final result =
-            await KubenavFFI().kubernetesRequest(cluster.name, 'GET', url, '');
+        final result = await KubenavFFI().kubernetesRequest(
+          cluster.name,
+          globalSettingsController.proxy.value,
+          globalSettingsController.timeout.value,
+          'GET',
+          url,
+          '',
+        );
         return json.decode(result);
       } else {
         final token = await _getAccessToken();
@@ -293,6 +309,8 @@ class KubernetesService {
             'userToken': token,
             'userUsername': cluster.userUsername,
             'userPassword': cluster.userPassword,
+            'proxy': globalSettingsController.proxy.value,
+            'timeout': globalSettingsController.timeout.value,
             'requestMethod': 'GET',
             'requestURL': url,
             'requestBody': '',
@@ -323,8 +341,14 @@ class KubernetesService {
   Future<void> deleteRequest(String url, String? body) async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        await KubenavFFI()
-            .kubernetesRequest(cluster.name, 'DELETE', url, body ?? '');
+        await KubenavFFI().kubernetesRequest(
+          cluster.name,
+          globalSettingsController.proxy.value,
+          globalSettingsController.timeout.value,
+          'DELETE',
+          url,
+          body ?? '',
+        );
         return;
       } else {
         final token = await _getAccessToken();
@@ -342,6 +366,8 @@ class KubernetesService {
             'userToken': token,
             'userUsername': cluster.userUsername,
             'userPassword': cluster.userPassword,
+            'proxy': globalSettingsController.proxy.value,
+            'timeout': globalSettingsController.timeout.value,
             'requestMethod': 'DELETE',
             'requestURL': url,
             'requestBody': body ?? '',
@@ -370,7 +396,14 @@ class KubernetesService {
   Future<void> patchRequest(String url, String body) async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        await KubenavFFI().kubernetesRequest(cluster.name, 'PATCH', url, body);
+        await KubenavFFI().kubernetesRequest(
+          cluster.name,
+          globalSettingsController.proxy.value,
+          globalSettingsController.timeout.value,
+          'PATCH',
+          url,
+          body,
+        );
         return;
       } else {
         final token = await _getAccessToken();
@@ -388,6 +421,8 @@ class KubernetesService {
             'userToken': token,
             'userUsername': cluster.userUsername,
             'userPassword': cluster.userPassword,
+            'proxy': globalSettingsController.proxy.value,
+            'timeout': globalSettingsController.timeout.value,
             'requestMethod': 'PATCH',
             'requestURL': url,
             'requestBody': body,
@@ -417,7 +452,14 @@ class KubernetesService {
   Future<void> postRequest(String url, String body) async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        await KubenavFFI().kubernetesRequest(cluster.name, 'POST', url, body);
+        await KubenavFFI().kubernetesRequest(
+          cluster.name,
+          globalSettingsController.proxy.value,
+          globalSettingsController.timeout.value,
+          'POST',
+          url,
+          body,
+        );
         return;
       } else {
         final token = await _getAccessToken();
@@ -435,6 +477,8 @@ class KubernetesService {
             'userToken': token,
             'userUsername': cluster.userUsername,
             'userPassword': cluster.userPassword,
+            'proxy': globalSettingsController.proxy.value,
+            'timeout': globalSettingsController.timeout.value,
             'requestMethod': 'POST',
             'requestURL': url,
             'requestBody': body,
@@ -472,6 +516,8 @@ class KubernetesService {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
         final result = await KubenavFFI().kubernetesGetLogs(
           cluster.name,
+          globalSettingsController.proxy.value,
+          globalSettingsController.timeout.value,
           names,
           namespace,
           container,
@@ -497,6 +543,8 @@ class KubernetesService {
             'userToken': token,
             'userUsername': cluster.userUsername,
             'userPassword': cluster.userPassword,
+            'proxy': globalSettingsController.proxy.value,
+            'timeout': globalSettingsController.timeout.value,
             'names': names,
             'namespace': namespace,
             'container': container,
@@ -615,6 +663,8 @@ class KubernetesService {
           'userToken': token,
           'userUsername': cluster.userUsername,
           'userPassword': cluster.userPassword,
+          'proxy': globalSettingsController.proxy.value,
+          'timeout': globalSettingsController.timeout.value,
           'podName': name,
           'podNamespace': namespace,
           'podPort': port,
@@ -719,8 +769,12 @@ class KubernetesService {
   Future<List<Release>> helmListCharts(String namespace) async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        final result =
-            await KubenavFFI().helmListCharts(cluster.name, namespace);
+        final result = await KubenavFFI().helmListCharts(
+          cluster.name,
+          globalSettingsController.proxy.value,
+          globalSettingsController.timeout.value,
+          namespace,
+        );
         if (result == 'null') {
           return [];
         }
@@ -747,6 +801,8 @@ class KubernetesService {
             'userToken': token,
             'userUsername': cluster.userUsername,
             'userPassword': cluster.userPassword,
+            'proxy': globalSettingsController.proxy.value,
+            'timeout': globalSettingsController.timeout.value,
             'namespace': namespace,
           },
         );
@@ -786,8 +842,14 @@ class KubernetesService {
   ) async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        final result = await KubenavFFI()
-            .helmGetChart(cluster.name, namespace, name, version);
+        final result = await KubenavFFI().helmGetChart(
+          cluster.name,
+          globalSettingsController.proxy.value,
+          globalSettingsController.timeout.value,
+          namespace,
+          name,
+          version,
+        );
         return Release.fromJson(json.decode(result));
       } else {
         final token = await _getAccessToken();
@@ -805,6 +867,8 @@ class KubernetesService {
             'userToken': token,
             'userUsername': cluster.userUsername,
             'userPassword': cluster.userPassword,
+            'proxy': globalSettingsController.proxy.value,
+            'timeout': globalSettingsController.timeout.value,
             'namespace': namespace,
             'name': name,
             'version': version,
@@ -838,8 +902,13 @@ class KubernetesService {
   ) async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        final result =
-            await KubenavFFI().helmGetHistory(cluster.name, namespace, name);
+        final result = await KubenavFFI().helmGetHistory(
+          cluster.name,
+          globalSettingsController.proxy.value,
+          globalSettingsController.timeout.value,
+          namespace,
+          name,
+        );
         if (result == 'null') {
           return [];
         }
@@ -866,6 +935,8 @@ class KubernetesService {
             'userToken': token,
             'userUsername': cluster.userUsername,
             'userPassword': cluster.userPassword,
+            'proxy': globalSettingsController.proxy.value,
+            'timeout': globalSettingsController.timeout.value,
             'namespace': namespace,
             'name': name,
           },

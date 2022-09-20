@@ -13,7 +13,7 @@ import (
 type Client interface {
 	GetPlatform() string
 	GetClusters() (string, map[string]string)
-	GetClient(contextName, clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword string) (*rest.Config, *kubernetes.Clientset, error)
+	GetClient(contextName, clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64) (*rest.Config, *kubernetes.Clientset, error)
 }
 
 // NewClient return the mobile or desktop client depending on the specified platform.

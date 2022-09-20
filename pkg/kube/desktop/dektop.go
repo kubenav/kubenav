@@ -2,9 +2,12 @@ package desktop
 
 import (
 	"fmt"
+	"net/http"
+	"net/url"
 	"os"
 	"os/user"
 	"path"
+	"time"
 
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -42,7 +45,7 @@ func (c *Client) GetClusters() (string, map[string]string) {
 }
 
 // GetClient returns a rest client and clientset to interact with the specified Kubernetes API.
-func (c *Client) GetClient(contextName, clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword string) (*rest.Config, *kubernetes.Clientset, error) {
+func (c *Client) GetClient(contextName, clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64) (*rest.Config, *kubernetes.Clientset, error) {
 	raw, err := c.config.RawConfig()
 	if err != nil {
 		return nil, nil, err
@@ -54,6 +57,19 @@ func (c *Client) GetClient(contextName, clusterServer, clusterCertificateAuthori
 	restClient, err := currentContextConfig.ClientConfig()
 	if err != nil {
 		return nil, nil, err
+	}
+
+	if timeout > 0 {
+		restClient.Timeout = time.Duration(timeout) * time.Second
+	}
+
+	if proxy != "" {
+		proxyURL, err := url.Parse(proxy)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		restClient.Transport = &http.Transport{Proxy: http.ProxyURL(proxyURL)}
 	}
 
 	clientset, err := kubernetes.NewForConfig(restClient)

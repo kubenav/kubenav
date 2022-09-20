@@ -7,6 +7,7 @@ import 'package:xterm/theme/terminal_theme.dart';
 import 'package:xterm/xterm.dart' as xterm;
 
 import 'package:kubenav/controllers/cluster_controller.dart';
+import 'package:kubenav/controllers/global_settings_controller.dart';
 import 'package:kubenav/controllers/terminal_controller.dart';
 import 'package:kubenav/models/terminal_model.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -21,6 +22,7 @@ class DetailsTerminalController extends GetxController {
   final String namespace;
   final dynamic item;
 
+  GlobalSettingsController globalSettingsController = Get.find();
   ClusterController clusterController = Get.find();
   TerminalController terminalController = Get.find();
 
@@ -82,7 +84,7 @@ class DetailsTerminalController extends GetxController {
 
           final channel = IOWebSocketChannel.connect(
             'ws://localhost:14122/terminal?name=${item['metadata']['name']}&namespace=${item['metadata']['namespace']}&container=${container.value}&shell=$shell',
-            headers: <String, String>{
+            headers: <String, dynamic>{
               'X-CONTEXT-NAME': cluster.name,
               'X-CLUSTER-SERVER': cluster.clusterServer,
               'X-CLUSTER-CERTIFICATE-AUTHORITY-DATA':
@@ -95,6 +97,8 @@ class DetailsTerminalController extends GetxController {
               'X-USER-TOKEN': cluster.userToken,
               'X-USER-USERNAME': cluster.userUsername,
               'X-USER-PASSWORD': cluster.userPassword,
+              'X-PROXY': globalSettingsController.proxy.value,
+              'X-TIMEOUT': globalSettingsController.timeout.value,
             },
           );
 
