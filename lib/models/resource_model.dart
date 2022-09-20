@@ -387,7 +387,7 @@ abstract class Resources {
       description:
           'An API object that manages external access to the services in a cluster, typically HTTP.',
       resource: 'ingresses',
-      path: '/apis/extensions/v1beta1',
+      path: '/apis/networking.k8s.io/v1',
       scope: ResourceScope.namespaced,
       template: '',
       buildListItem: (
