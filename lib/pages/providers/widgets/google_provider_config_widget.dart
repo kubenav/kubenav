@@ -77,22 +77,54 @@ class GoogleProviderConfigController extends GetxController {
   }
 
   void saveProviderConfig() async {
-    if (providerConfigFormKey.currentState != null &&
-        providerConfigFormKey.currentState!.validate()) {
-      try {
-        final googleTokens = await GoogleService()
-            .getTokensFromCode(clientID.text, clientSecret.text, code.text);
+    try {
+      final googleTokens = await GoogleService()
+          .getTokensFromCode(clientID.text, clientSecret.text, code.text);
 
-        if (googleTokens.accessToken != null &&
-            googleTokens.expiresIn != null &&
-            googleTokens.refreshToken != null) {
-          final expires = DateTime.now().millisecondsSinceEpoch +
-              googleTokens.expiresIn! * 1000;
+      if (googleTokens.accessToken != null &&
+          googleTokens.expiresIn != null &&
+          googleTokens.refreshToken != null) {
+        final expires = DateTime.now().millisecondsSinceEpoch +
+            googleTokens.expiresIn! * 1000;
 
-          if (providerConfigIndex == -1) {
-            final providerConfig = ProviderConfig(
-              name: name.text,
-              provider: 'google',
+        if (providerConfigIndex == -1) {
+          final providerConfig = ProviderConfig(
+            name: name.text,
+            provider: 'google',
+            google: ProviderConfigGoogle(
+              clientID: clientID.text,
+              clientSecret: clientSecret.text,
+              code: code.text,
+              accessToken: googleTokens.accessToken!,
+              accessTokenExpires: expires,
+              refreshToken: googleTokens.refreshToken!,
+            ),
+          );
+          final error = providerConfigController.addConfig(providerConfig);
+          if (error != null) {
+            snackbar('Could not add provider configuration', error);
+          } else {
+            Get.bottomSheet(
+              BottomSheet(
+                onClosing: () {},
+                enableDrag: false,
+                builder: (builder) {
+                  return AddClusterGoogleWidget(
+                    providerConfig: providerConfig,
+                  );
+                },
+              ),
+              isScrollControlled: true,
+            );
+          }
+        } else {
+          final providerConfig =
+              providerConfigController.configs[providerConfigIndex].value;
+          final error = providerConfigController.editConfig(
+            providerConfigIndex,
+            ProviderConfig(
+              name: providerConfig.name,
+              provider: providerConfig.provider,
               google: ProviderConfigGoogle(
                 clientID: clientID.text,
                 clientSecret: clientSecret.text,
@@ -101,58 +133,23 @@ class GoogleProviderConfigController extends GetxController {
                 accessTokenExpires: expires,
                 refreshToken: googleTokens.refreshToken!,
               ),
-            );
-            final error = providerConfigController.addConfig(providerConfig);
-            if (error != null) {
-              snackbar('Could not add provider configuration', error);
-            } else {
-              Get.bottomSheet(
-                BottomSheet(
-                  onClosing: () {},
-                  enableDrag: false,
-                  builder: (builder) {
-                    return AddClusterGoogleWidget(
-                      providerConfig: providerConfig,
-                    );
-                  },
-                ),
-                isScrollControlled: true,
-              );
-            }
-          } else {
-            final providerConfig =
-                providerConfigController.configs[providerConfigIndex].value;
-            final error = providerConfigController.editConfig(
-              providerConfigIndex,
-              ProviderConfig(
-                name: providerConfig.name,
-                provider: providerConfig.provider,
-                google: ProviderConfigGoogle(
-                  clientID: clientID.text,
-                  clientSecret: clientSecret.text,
-                  code: code.text,
-                  accessToken: googleTokens.accessToken!,
-                  accessTokenExpires: expires,
-                  refreshToken: googleTokens.refreshToken!,
-                ),
-              ),
-            );
-            if (error != null) {
-              snackbar('Could not save provider configuration', error);
-            }
+            ),
+          );
+          if (error != null) {
+            snackbar('Could not save provider configuration', error);
           }
         }
-      } catch (err) {
-        Logger.log(
-          'GoogleProviderConfigController saveProviderConfig',
-          'Could not get access token',
-          err,
-        );
-        snackbar(
-          'Could not get access token',
-          err.toString(),
-        );
       }
+    } catch (err) {
+      Logger.log(
+        'GoogleProviderConfigController saveProviderConfig',
+        'Could not get access token',
+        err,
+      );
+      snackbar(
+        'Could not get access token',
+        err.toString(),
+      );
     }
   }
 }
@@ -181,8 +178,11 @@ class GoogleProviderConfigWidget extends StatelessWidget {
       actionText:
           providerConfigIndex == -1 ? 'Save and add cluster(s)' : 'Save',
       onActionPressed: () {
-        controller.saveProviderConfig();
-        finish(context);
+        if (controller.providerConfigFormKey.currentState != null &&
+            controller.providerConfigFormKey.currentState!.validate()) {
+          controller.saveProviderConfig();
+          finish(context);
+        }
       },
       child: Form(
         key: controller.providerConfigFormKey,

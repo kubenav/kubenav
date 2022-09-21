@@ -73,56 +73,53 @@ class DetailsGetLogsController extends GetxController {
   }
 
   void getLogs() async {
-    if (logsFormKey.currentState != null &&
-        logsFormKey.currentState!.validate()) {
-      try {
-        snackbar(
-          'Logs',
-          'Logs are loading ...',
-        );
+    try {
+      snackbar(
+        'Logs',
+        'Logs are loading ...',
+      );
 
-        final cluster = clusterController
-            .clusters[clusterController.activeClusterIndex.value].value;
+      final cluster = clusterController
+          .clusters[clusterController.activeClusterIndex.value].value;
 
-        final logs = await KubernetesService(cluster: cluster).getLogs(
-          item['metadata']['name'],
-          item['metadata']['namespace'],
-          container.value,
-          sinceOptions[since.value]!,
-          filter.text,
-          previous.value,
-        );
+      final logs = await KubernetesService(cluster: cluster).getLogs(
+        item['metadata']['name'],
+        item['metadata']['namespace'],
+        container.value,
+        sinceOptions[since.value]!,
+        filter.text,
+        previous.value,
+      );
 
-        Logger.log(
-          'DetailsGetLogsController getLogs',
-          'The get logs request returned ${logs.length} log lines',
-          logs,
-        );
+      Logger.log(
+        'DetailsGetLogsController getLogs',
+        'The get logs request returned ${logs.length} log lines',
+        logs,
+      );
 
-        terminalController.addTerminal(
-          TerminalType.log,
-          container.value,
-          logs,
-          null,
-        );
-      } on PlatformException catch (err) {
-        Logger.log(
-          'DetailsGetLogsController getLogs',
-          'An error was returned while getting the logs',
-          'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
-        );
-        snackbar(
-          'Could not get logs',
-          'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
-        );
-      } catch (err) {
-        Logger.log(
-          'An error was returned while getting the logs',
-          'An error was returned while scaling the resource',
-          err,
-        );
-        snackbar('Could not get logs', err.toString());
-      }
+      terminalController.addTerminal(
+        TerminalType.log,
+        container.value,
+        logs,
+        null,
+      );
+    } on PlatformException catch (err) {
+      Logger.log(
+        'DetailsGetLogsController getLogs',
+        'An error was returned while getting the logs',
+        'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+      );
+      snackbar(
+        'Could not get logs',
+        'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+      );
+    } catch (err) {
+      Logger.log(
+        'An error was returned while getting the logs',
+        'An error was returned while scaling the resource',
+        err,
+      );
+      snackbar('Could not get logs', err.toString());
     }
   }
 }
@@ -158,8 +155,11 @@ class DetailsGetLogsWidget extends StatelessWidget {
       },
       actionText: 'Get Logs',
       onActionPressed: () {
-        controller.getLogs();
-        finish(context);
+        if (controller.logsFormKey.currentState != null &&
+            controller.logsFormKey.currentState!.validate()) {
+          controller.getLogs();
+          finish(context);
+        }
       },
       child: Form(
         key: controller.logsFormKey,

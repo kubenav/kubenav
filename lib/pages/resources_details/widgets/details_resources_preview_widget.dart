@@ -291,7 +291,7 @@ class DetailsResourcesPreviewWidget extends StatelessWidget {
               : null,
           moreOnTap: () {
             Get.toNamed(
-              '/resources/list?title=$title&resource=$resource&path=$path&scope=${scope.name}${namespace != null ? '&namespace=$namespace' : ''}&selector=$selector',
+              '/resources/list?title=$title&resource=$resource&path=$path&scope=${scope.name}${selector.startsWith('fieldSelector=spec.nodeName=') ? '&namespace=' : namespace != null ? '&namespace=$namespace' : ''}&selector=$selector',
               preventDuplicates: false,
             );
           },

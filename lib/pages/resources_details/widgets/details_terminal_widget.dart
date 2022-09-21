@@ -64,105 +64,100 @@ class DetailsTerminalController extends GetxController {
   }
 
   void getTerminal() async {
-    if (terminalFormKey.currentState != null &&
-        terminalFormKey.currentState!.validate()) {
-      try {
-        snackbar(
-          'Terminal',
-          'Terminal is created ...',
-        );
-        final cluster = clusterController
-            .clusters[clusterController.activeClusterIndex.value].value;
+    try {
+      snackbar(
+        'Terminal',
+        'Terminal is created ...',
+      );
+      final cluster = clusterController
+          .clusters[clusterController.activeClusterIndex.value].value;
 
-        final isStarted =
-            await KubernetesService(cluster: cluster).startServer();
-        if (isStarted) {
-          Logger.log(
-            'DetailsTerminalController getTerminal',
-            'Internal http server is started and healthy, try to create terminal',
-          );
-
-          final channel = IOWebSocketChannel.connect(
-            'ws://localhost:14122/terminal?name=${item['metadata']['name']}&namespace=${item['metadata']['namespace']}&container=${container.value}&shell=$shell',
-            headers: <String, dynamic>{
-              'X-CONTEXT-NAME': cluster.name,
-              'X-CLUSTER-SERVER': cluster.clusterServer,
-              'X-CLUSTER-CERTIFICATE-AUTHORITY-DATA':
-                  cluster.clusterCertificateAuthorityData,
-              'X-CLUSTER-INSECURE-SKIP-TLS-VERIFY':
-                  '${cluster.clusterInsecureSkipTLSVerify}',
-              'X-USER-CLIENT-CERTIFICATE-DATA':
-                  cluster.userClientCertificateData,
-              'X-USER-CLIENT-KEY-DATA': cluster.userClientKeyData,
-              'X-USER-TOKEN': cluster.userToken,
-              'X-USER-USERNAME': cluster.userUsername,
-              'X-USER-PASSWORD': cluster.userPassword,
-              'X-PROXY': globalSettingsController.proxy.value,
-              'X-TIMEOUT': globalSettingsController.timeout.value,
-            },
-          );
-
-          TerminalBackend backend = TerminalBackend(channel: channel);
-          xterm.Terminal terminal = xterm.Terminal(
-            backend: backend,
-            maxLines: 10000,
-            theme: const TerminalTheme(
-              cursor: 0xffd8dee9,
-              selection: 0xff434c5ecc,
-              foreground: 0xffd8dee9,
-              background: 0xff2e3440,
-              black: 0xff3b4251,
-              red: 0xffbf6069,
-              green: 0xffa3be8b,
-              yellow: 0xffeacb8a,
-              blue: 0xff81a1c1,
-              magenta: 0xffb48dac,
-              cyan: 0xff88c0d0,
-              white: 0xffe5e9f0,
-              brightBlack: 0xff4c556a,
-              brightRed: 0xffbf6069,
-              brightGreen: 0xffa3be8b,
-              brightYellow: 0xffeacb8a,
-              brightBlue: 0xff81a1c1,
-              brightMagenta: 0xffb48dac,
-              brightCyan: 0xff8fbcbb,
-              brightWhite: 0xffeceef4,
-              searchHitBackground: 0xffeacb8a,
-              searchHitBackgroundCurrent: 0xffeacb8a,
-              searchHitForeground: 0xff2e3440,
-            ),
-          );
-
-          terminalController.addTerminal(
-            TerminalType.exec,
-            container.value,
-            null,
-            terminal,
-          );
-        } else {
-          snackbar(
-            'Could not create terminal',
-            'The internal http server is unhealthy',
-          );
-        }
-      } on PlatformException catch (err) {
+      final isStarted = await KubernetesService(cluster: cluster).startServer();
+      if (isStarted) {
         Logger.log(
-          'DetailsTerminalController getLogs',
-          'An error was returned while getting the logs',
-          'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+          'DetailsTerminalController getTerminal',
+          'Internal http server is started and healthy, try to create terminal',
         );
+
+        final channel = IOWebSocketChannel.connect(
+          'ws://localhost:14122/terminal?name=${item['metadata']['name']}&namespace=${item['metadata']['namespace']}&container=${container.value}&shell=$shell',
+          headers: <String, dynamic>{
+            'X-CONTEXT-NAME': cluster.name,
+            'X-CLUSTER-SERVER': cluster.clusterServer,
+            'X-CLUSTER-CERTIFICATE-AUTHORITY-DATA':
+                cluster.clusterCertificateAuthorityData,
+            'X-CLUSTER-INSECURE-SKIP-TLS-VERIFY':
+                '${cluster.clusterInsecureSkipTLSVerify}',
+            'X-USER-CLIENT-CERTIFICATE-DATA': cluster.userClientCertificateData,
+            'X-USER-CLIENT-KEY-DATA': cluster.userClientKeyData,
+            'X-USER-TOKEN': cluster.userToken,
+            'X-USER-USERNAME': cluster.userUsername,
+            'X-USER-PASSWORD': cluster.userPassword,
+            'X-PROXY': globalSettingsController.proxy.value,
+            'X-TIMEOUT': globalSettingsController.timeout.value,
+          },
+        );
+
+        TerminalBackend backend = TerminalBackend(channel: channel);
+        xterm.Terminal terminal = xterm.Terminal(
+          backend: backend,
+          maxLines: 10000,
+          theme: const TerminalTheme(
+            cursor: 0xffd8dee9,
+            selection: 0xff434c5ecc,
+            foreground: 0xffd8dee9,
+            background: 0xff2e3440,
+            black: 0xff3b4251,
+            red: 0xffbf6069,
+            green: 0xffa3be8b,
+            yellow: 0xffeacb8a,
+            blue: 0xff81a1c1,
+            magenta: 0xffb48dac,
+            cyan: 0xff88c0d0,
+            white: 0xffe5e9f0,
+            brightBlack: 0xff4c556a,
+            brightRed: 0xffbf6069,
+            brightGreen: 0xffa3be8b,
+            brightYellow: 0xffeacb8a,
+            brightBlue: 0xff81a1c1,
+            brightMagenta: 0xffb48dac,
+            brightCyan: 0xff8fbcbb,
+            brightWhite: 0xffeceef4,
+            searchHitBackground: 0xffeacb8a,
+            searchHitBackgroundCurrent: 0xffeacb8a,
+            searchHitForeground: 0xff2e3440,
+          ),
+        );
+
+        terminalController.addTerminal(
+          TerminalType.exec,
+          container.value,
+          null,
+          terminal,
+        );
+      } else {
         snackbar(
-          'Could not get logs',
-          'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+          'Could not create terminal',
+          'The internal http server is unhealthy',
         );
-      } catch (err) {
-        Logger.log(
-          'An error was returned while getting the logs',
-          'An error was returned while scaling the resource',
-          err,
-        );
-        snackbar('Could not get logs', err.toString());
       }
+    } on PlatformException catch (err) {
+      Logger.log(
+        'DetailsTerminalController getLogs',
+        'An error was returned while getting the logs',
+        'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+      );
+      snackbar(
+        'Could not get logs',
+        'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+      );
+    } catch (err) {
+      Logger.log(
+        'An error was returned while getting the logs',
+        'An error was returned while scaling the resource',
+        err,
+      );
+      snackbar('Could not get logs', err.toString());
     }
   }
 }
@@ -198,8 +193,11 @@ class DetailsTerminalWidget extends StatelessWidget {
       },
       actionText: 'Get Terminal',
       onActionPressed: () {
-        controller.getTerminal();
-        finish(context);
+        if (controller.terminalFormKey.currentState != null &&
+            controller.terminalFormKey.currentState!.validate()) {
+          controller.getTerminal();
+          finish(context);
+        }
       },
       child: Form(
         key: controller.terminalFormKey,

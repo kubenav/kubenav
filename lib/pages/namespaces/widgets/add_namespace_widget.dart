@@ -24,10 +24,7 @@ class AddNamespaceController extends GetxController {
   }
 
   void addNamespace() {
-    if (namespaceFormKey.currentState != null &&
-        namespaceFormKey.currentState!.validate()) {
-      globalSettingsController.namespaces.add(namespace.text);
-    }
+    globalSettingsController.namespaces.add(namespace.text);
   }
 }
 
@@ -47,8 +44,11 @@ class AddNamespaceWidget extends StatelessWidget {
       },
       actionText: 'Add Namespace',
       onActionPressed: () {
-        controller.addNamespace();
-        finish(context);
+        if (controller.namespaceFormKey.currentState != null &&
+            controller.namespaceFormKey.currentState!.validate()) {
+          controller.addNamespace();
+          finish(context);
+        }
       },
       child: Form(
         key: controller.namespaceFormKey,

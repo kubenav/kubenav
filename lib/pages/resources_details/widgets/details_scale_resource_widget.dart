@@ -58,40 +58,37 @@ class DetailsScaleResourceController extends GetxController {
   }
 
   void scaleResource() async {
-    if (scaleFormKey.currentState != null &&
-        scaleFormKey.currentState!.validate()) {
-      try {
-        final newReplicas = int.parse(replicas.text);
+    try {
+      final newReplicas = int.parse(replicas.text);
 
-        final cluster = clusterController
-            .clusters[clusterController.activeClusterIndex.value].value;
+      final cluster = clusterController
+          .clusters[clusterController.activeClusterIndex.value].value;
 
-        final url = '$path/namespaces/$namespace/$resource/$name';
+      final url = '$path/namespaces/$namespace/$resource/$name';
 
-        await KubernetesService(cluster: cluster).patchRequest(url,
-            '[{"op": "replace", "path": "/spec/replicas", "value": $newReplicas}]');
-        snackbar(
-          'Resource is scaled',
-          'The resource $name in namespace $namespace is scaled',
-        );
-      } on PlatformException catch (err) {
-        Logger.log(
-          'DetailsScaleResourceController scaleResource',
-          'An error was returned while scaling the resource',
-          'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
-        );
-        snackbar(
-          'Could not scale resource',
-          'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
-        );
-      } catch (err) {
-        Logger.log(
-          'DetailsScaleResourceController scaleResource',
-          'An error was returned while scaling the resource',
-          err,
-        );
-        snackbar('Could not scale resource', err.toString());
-      }
+      await KubernetesService(cluster: cluster).patchRequest(url,
+          '[{"op": "replace", "path": "/spec/replicas", "value": $newReplicas}]');
+      snackbar(
+        'Resource is scaled',
+        'The resource $name in namespace $namespace is scaled',
+      );
+    } on PlatformException catch (err) {
+      Logger.log(
+        'DetailsScaleResourceController scaleResource',
+        'An error was returned while scaling the resource',
+        'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+      );
+      snackbar(
+        'Could not scale resource',
+        'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+      );
+    } catch (err) {
+      Logger.log(
+        'DetailsScaleResourceController scaleResource',
+        'An error was returned while scaling the resource',
+        err,
+      );
+      snackbar('Could not scale resource', err.toString());
     }
   }
 }
@@ -133,8 +130,11 @@ class DetailsScaleResourceWidget extends StatelessWidget {
       },
       actionText: 'Scale',
       onActionPressed: () {
-        controller.scaleResource();
-        finish(context);
+        if (controller.scaleFormKey.currentState != null &&
+            controller.scaleFormKey.currentState!.validate()) {
+          controller.scaleResource();
+          finish(context);
+        }
       },
       child: Form(
         key: controller.scaleFormKey,
