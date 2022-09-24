@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import 'package:code_text_field/code_text_field.dart';
@@ -67,7 +65,7 @@ class DetailsTemplateWidget extends StatelessWidget {
                 enabled: false,
                 textStyle: TextStyle(
                   fontSize: 14,
-                  fontFamily: Platform.isIOS ? 'Courier' : 'monospace',
+                  fontFamily: getMonospaceFontFamily(),
                 ),
               ),
             ),

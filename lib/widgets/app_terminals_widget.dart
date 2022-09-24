@@ -1,5 +1,3 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -188,9 +186,9 @@ class AppTerminalsWidget extends StatelessWidget {
                                                   terminal.value.terminal!,
                                               style: xterm.TerminalStyle(
                                                 fontSize: 14,
-                                                fontFamily: Platform.isIOS
-                                                    ? ['Courier']
-                                                    : ['monospace'],
+                                                fontFamily: [
+                                                  getMonospaceFontFamily(),
+                                                ],
                                               ),
                                             )
                                           : Container()
@@ -216,10 +214,8 @@ class AppTerminalsWidget extends StatelessWidget {
                                                             color:
                                                                 getColor(e.key),
                                                             fontSize: 14,
-                                                            fontFamily: Platform
-                                                                    .isIOS
-                                                                ? 'Courier'
-                                                                : 'monospace',
+                                                            fontFamily:
+                                                                getMonospaceFontFamily(),
                                                           ),
                                                         ),
                                                       )

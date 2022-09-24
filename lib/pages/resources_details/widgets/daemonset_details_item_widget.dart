@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_daemon_set.dart';
+import 'package:kubenav/models/prometheus_model.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
 
 class DaemonSetDetailsItemWidget extends StatelessWidget
     implements IDetailsItemWidget {
@@ -96,6 +98,43 @@ class DaemonSetDetailsItemWidget extends StatelessWidget
           namespace: daemonSet.metadata?.namespace,
           selector:
               'fieldSelector=involvedObject.name=${daemonSet.metadata?.name ?? ''}',
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        AppPrometheusMetricsWidget(
+          manifest: item,
+          defaultCharts: [
+            Chart(
+              title: 'Pods',
+              unit: '',
+              queries: [
+                Query(
+                  query:
+                      'kube_daemonset_status_desired_number_scheduled{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", daemonset="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                  label: 'Desired',
+                ),
+                Query(
+                  query:
+                      'kube_daemonset_status_current_number_scheduled{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", daemonset="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                  label: 'Current',
+                ),
+                Query(
+                  query:
+                      'kube_daemonset_status_number_ready{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", daemonset="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                  label: 'Ready',
+                ),
+                Query(
+                  query:
+                      'kube_daemonset_status_number_misscheduled{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", daemonset="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                  label: 'Misscheduled',
+                ),
+                Query(
+                  query:
+                      'kube_daemonset_updated_number_scheduled{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", daemonset="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                  label: 'Updated',
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );

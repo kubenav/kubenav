@@ -37,7 +37,7 @@ class SettingsProxyController extends GetxController {
     return null;
   }
 
-  void saveProxy() async {
+  void saveProxy() {
     globalSettingsController.proxy.value = proxy.text;
   }
 }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_deployment.dart';
+import 'package:kubenav/models/prometheus_model.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
 
 class DeploymentDetailsItemWidget extends StatelessWidget
     implements IDetailsItemWidget {
@@ -104,6 +106,38 @@ class DeploymentDetailsItemWidget extends StatelessWidget
           namespace: deployment.metadata?.namespace,
           selector:
               'fieldSelector=involvedObject.name=${deployment.metadata?.name ?? ''}',
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        AppPrometheusMetricsWidget(
+          manifest: item,
+          defaultCharts: [
+            Chart(
+              title: 'Pods',
+              unit: '',
+              queries: [
+                Query(
+                  query:
+                      'kube_deployment_spec_replicas{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", deployment="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                  label: 'Desired',
+                ),
+                Query(
+                  query:
+                      'kube_deployment_status_replicas{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", deployment="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                  label: 'Current',
+                ),
+                Query(
+                  query:
+                      'kube_deployment_status_replicas_available{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", deployment="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                  label: 'Available',
+                ),
+                Query(
+                  query:
+                      'kube_deployment_status_replicas_updated{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", deployment="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                  label: 'Updated',
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );

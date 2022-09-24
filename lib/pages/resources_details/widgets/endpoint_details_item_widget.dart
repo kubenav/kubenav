@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_endpoints.dart';
+import 'package:kubenav/models/prometheus_model.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
 
 class EndpointDetailsItemWidget extends StatelessWidget
     implements IDetailsItemWidget {
@@ -72,6 +74,28 @@ class EndpointDetailsItemWidget extends StatelessWidget
           namespace: item['metadata']['namespace'],
           selector:
               'fieldSelector=involvedObject.name=${item['metadata']['name']}',
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        AppPrometheusMetricsWidget(
+          manifest: item,
+          defaultCharts: [
+            Chart(
+              title: 'Addresses',
+              unit: '',
+              queries: [
+                Query(
+                  query:
+                      'kube_endpoint_address_available{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", endpoint="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                  label: 'Available',
+                ),
+                Query(
+                  query:
+                      'kube_endpoint_address_not_ready{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", endpoint="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                  label: 'Not Ready',
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );

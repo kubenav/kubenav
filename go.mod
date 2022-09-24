@@ -9,6 +9,8 @@ require (
 	github.com/aws/aws-sdk-go v1.43.45
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/gorilla/websocket v1.5.0
+	github.com/prometheus/client_golang v0.9.3
+	github.com/prometheus/common v0.4.0
 	github.com/wI2L/jsondiff v0.2.0
 	golang.org/x/mobile v0.0.0-20220414153400-ce6a79cf6a13
 	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f

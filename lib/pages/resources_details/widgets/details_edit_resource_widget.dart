@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 
@@ -177,7 +176,7 @@ class DetailsEditResourceWidget extends StatelessWidget {
                 enabled: true,
                 textStyle: TextStyle(
                   fontSize: 14,
-                  fontFamily: Platform.isIOS ? 'Courier' : 'monospace',
+                  fontFamily: getMonospaceFontFamily(),
                 ),
               ),
             ),

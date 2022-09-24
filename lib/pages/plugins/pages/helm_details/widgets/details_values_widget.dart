@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 
@@ -95,7 +94,7 @@ class DetailsValuesWidget extends StatelessWidget {
                 enabled: false,
                 textStyle: TextStyle(
                   fontSize: 14,
-                  fontFamily: Platform.isIOS ? 'Courier' : 'monospace',
+                  fontFamily: getMonospaceFontFamily(),
                 ),
               ),
             ),

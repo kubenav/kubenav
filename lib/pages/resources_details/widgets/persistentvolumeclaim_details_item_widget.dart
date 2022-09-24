@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_persistent_volume_claim.dart';
+import 'package:kubenav/models/prometheus_model.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
 
 class PersistentVolumeClaimDetailsItemWidget extends StatelessWidget
     implements IDetailsItemWidget {
@@ -87,6 +89,44 @@ class PersistentVolumeClaimDetailsItemWidget extends StatelessWidget
           namespace: item['metadata']['namespace'],
           selector:
               'fieldSelector=involvedObject.name=${item['metadata']['name']}',
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        AppPrometheusMetricsWidget(
+          manifest: item,
+          defaultCharts: [
+            Chart(
+              title: 'Volume Space Usage',
+              unit: '',
+              queries: [
+                Query(
+                  query:
+                      '(sum without(instance, node) (topk(1, (kubelet_volume_stats_capacity_bytes{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", persistentvolumeclaim="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}))) - sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", persistentvolumeclaim="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"})))) / 1024 / 1024 / 1024',
+                  label: 'Used',
+                ),
+                Query(
+                  query:
+                      'sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", persistentvolumeclaim="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}))) / 1024 / 1024 / 1024',
+                  label: 'Free',
+                ),
+              ],
+            ),
+            Chart(
+              title: 'Volume inodes Usage',
+              unit: '',
+              queries: [
+                Query(
+                  query:
+                      'sum without(instance, node) (topk(1, (kubelet_volume_stats_inodes_used{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", persistentvolumeclaim="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"})))',
+                  label: 'Used',
+                ),
+                Query(
+                  query:
+                      '(sum without(instance, node) (topk(1, (kubelet_volume_stats_inodes{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", persistentvolumeclaim="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}))) - sum without(instance, node) (topk(1, (kubelet_volume_stats_inodes_used{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", persistentvolumeclaim="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}))))',
+                  label: 'Free',
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );

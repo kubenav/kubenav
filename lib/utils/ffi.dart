@@ -195,6 +195,28 @@ typedef HelmGetHistoryFunc = void Function(
   int nameLen,
 );
 
+// ignore: camel_case_types
+typedef prometheusgetdata_func = Void Function(
+  Int64 port,
+  Pointer<Utf8> contextName,
+  Int32 contextNameLen,
+  Pointer<Utf8> proxy,
+  Int32 proxyLen,
+  Int64 timeout,
+  Pointer<Utf8> request,
+  Int32 requestLen,
+);
+typedef PrometheusGetDataFunc = void Function(
+  int port,
+  Pointer<Utf8> contextName,
+  int contextNameLen,
+  Pointer<Utf8> proxy,
+  int proxyLen,
+  int timeout,
+  Pointer<Utf8> request,
+  int requestLen,
+);
+
 class KubenavFFI {
   static final KubenavFFI _instance = KubenavFFI._internal();
   late DynamicLibrary library;
@@ -688,6 +710,64 @@ class KubenavFFI {
     Logger.log(
       'KubenavFFI helmGetHistory',
       'Result of the helmGetHistory function',
+      receiveData,
+    );
+
+    if (receiveData.startsWith('{"error":')) {
+      Map<String, dynamic> jsonData = json.decode(receiveData);
+      Future.error(jsonData['error']);
+    }
+
+    return receiveData;
+  }
+
+  Future<String> prometheusGetData(
+    String contextName,
+    String proxy,
+    int timeout,
+    String request,
+  ) async {
+    Logger.log(
+      'KubenavFFI prometheusGetData',
+      'Run prometheusGetData function',
+      '$contextName, $request',
+    );
+
+    var prometheusGetDataC = library
+        .lookup<NativeFunction<prometheusgetdata_func>>('PrometheusGetData');
+    final prometheusGetData =
+        prometheusGetDataC.asFunction<PrometheusGetDataFunc>();
+
+    String receiveData = '';
+    bool receivedCallback = false;
+
+    var receivePort = ReceivePort()
+      ..listen((data) {
+        receiveData = data;
+        receivedCallback = true;
+      });
+    final nativeSendPort = receivePort.sendPort.nativePort;
+
+    prometheusGetData(
+      nativeSendPort,
+      contextName.toNativeUtf8(),
+      contextName.length,
+      proxy.toNativeUtf8(),
+      proxy.length,
+      timeout,
+      request.toNativeUtf8(),
+      request.length,
+    );
+
+    while (!receivedCallback) {
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+
+    receivePort.close();
+
+    Logger.log(
+      'KubenavFFI prometheusGetData',
+      'Result of the prometheusGetData function',
       receiveData,
     );
 

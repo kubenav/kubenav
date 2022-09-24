@@ -7,6 +7,7 @@ import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/controllers/portforwarding_controller.dart';
 import 'package:kubenav/models/kubernetes-extensions/pod_metrics.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
+import 'package:kubenav/models/prometheus_model.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_containers_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
@@ -16,6 +17,7 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/resources/pods.dart';
+import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
 
 class PodDetailsItemController extends GetxController {
   ClusterController clusterController = Get.find();
@@ -270,6 +272,81 @@ class PodDetailsItemWidget extends StatelessWidget
           namespace: pod.metadata?.namespace,
           selector:
               'fieldSelector=involvedObject.name=${pod.metadata?.name ?? ''}',
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        AppPrometheusMetricsWidget(
+          manifest: item,
+          defaultCharts: [
+            Chart(
+              title: 'CPU Usage',
+              unit: 'Cores',
+              queries: [
+                Query(
+                  query:
+                      'sum(rate(container_cpu_usage_seconds_total{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", pod="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", container!="", container!="POD"}[2m])) by (container)',
+                  label: 'Usage {{ .container }}',
+                ),
+                Query(
+                  query:
+                      'sum(kube_pod_container_resource_requests{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", pod="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="cpu", container!="", container!="POD"}) by (container)',
+                  label: 'Requests {{ .container }}',
+                ),
+                Query(
+                  query:
+                      'sum(kube_pod_container_resource_limits{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", pod="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="cpu", container!="", container!="POD"}) by (container)',
+                  label: 'Limits {{ .container }}',
+                ),
+              ],
+            ),
+            Chart(
+              title: 'Memory Usage',
+              unit: 'MiB',
+              queries: [
+                Query(
+                  query:
+                      '(sum(container_memory_working_set_bytes{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", pod="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", container!="", container!="POD"}) by (container)) / 1024 / 1024',
+                  label: 'Usage {{ .container }}',
+                ),
+                Query(
+                  query:
+                      '(sum(kube_pod_container_resource_requests{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", pod="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="memory", container!="", container!="POD"}) by (container)) / 1024 / 1024',
+                  label: 'Requests {{ .container }}',
+                ),
+                Query(
+                  query:
+                      '(sum(kube_pod_container_resource_limits{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", pod="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="memory", container!="", container!="POD"}) by (container)) / 1024 / 1024',
+                  label: 'Limits {{ .container }}',
+                ),
+              ],
+            ),
+            Chart(
+              title: 'Network I/O',
+              unit: 'MiB',
+              queries: [
+                Query(
+                  query:
+                      'sum(rate(container_network_receive_bytes_total{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", pod="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}[2m])) by (pod) / 1024 / 1024',
+                  label: 'Received',
+                ),
+                Query(
+                  query:
+                      '-sum(rate(container_network_transmit_bytes_total{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", pod="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}[2m])) by (pod) / 1024 / 1024',
+                  label: 'Transmitted',
+                ),
+              ],
+            ),
+            Chart(
+              title: 'Restarts',
+              unit: '',
+              queries: [
+                Query(
+                  query:
+                      'sum(kube_pod_container_status_restarts_total{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", pod="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", container!="", container!="POD"}) by (container)',
+                  label: '{{ .container }}',
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );

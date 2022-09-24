@@ -6,6 +6,7 @@ import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
 
 class CronJobDetailsItemWidget extends StatelessWidget
     implements IDetailsItemWidget {
@@ -125,6 +126,11 @@ class CronJobDetailsItemWidget extends StatelessWidget
           namespace: cronJob.metadata?.namespace,
           selector:
               'fieldSelector=involvedObject.name=${cronJob.metadata?.name ?? ''}',
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        AppPrometheusMetricsWidget(
+          manifest: item,
+          defaultCharts: const [],
         ),
       ],
     );

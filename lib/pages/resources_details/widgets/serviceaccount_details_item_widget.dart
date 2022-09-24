@@ -6,6 +6,7 @@ import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
 import 'package:kubenav/widgets/app_vertical_list_simple_widget.dart';
 
 class ServiceAccountDetailsItemWidget extends StatelessWidget
@@ -85,6 +86,11 @@ class ServiceAccountDetailsItemWidget extends StatelessWidget
           namespace: item['metadata']['namespace'],
           selector:
               'fieldSelector=involvedObject.name=${item['metadata']['name']}',
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        AppPrometheusMetricsWidget(
+          manifest: item,
+          defaultCharts: const [],
         ),
       ],
     );

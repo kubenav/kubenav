@@ -13,13 +13,14 @@ import 'package:kubenav/widgets/app_actions_header_widget.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/app_error_widget.dart';
 import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
+import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
 
 class ResourcesDetails extends GetView {
   const ResourcesDetails({Key? key}) : super(key: key);
 
   /// [buildDetailsItem] is responsible for showing the correct details item for the selected resource. If we do not
   /// have a dedicated item for a resource (e.g. Custom Resources) we are showing the events for the resource.
-  Widget buildDetailsItem(
+  List<Widget> buildDetailsItem(
     String? title,
     String? resource,
     String? path,
@@ -34,17 +35,25 @@ class ResourcesDetails extends GetView {
         Resources.map[resource]!.resource == resource &&
         Resources.map[resource]!.path == path &&
         Resources.map[resource]!.buildDetailsItem != null) {
-      return Resources.map[resource]!.buildDetailsItem!(item);
+      return [Resources.map[resource]!.buildDetailsItem!(item)];
     }
 
-    return DetailsResourcesPreviewWidget(
-      title: Resources.map['events']!.title,
-      resource: Resources.map['events']!.resource,
-      path: Resources.map['events']!.path,
-      scope: Resources.map['events']!.scope,
-      namespace: item['metadata']['namespace'],
-      selector: 'fieldSelector=involvedObject.name=${item['metadata']['name']}',
-    );
+    return [
+      DetailsResourcesPreviewWidget(
+        title: Resources.map['events']!.title,
+        resource: Resources.map['events']!.resource,
+        path: Resources.map['events']!.path,
+        scope: Resources.map['events']!.scope,
+        namespace: item['metadata']['namespace'],
+        selector:
+            'fieldSelector=involvedObject.name=${item['metadata']['name']}',
+      ),
+      const SizedBox(height: Constants.spacingMiddle),
+      AppPrometheusMetricsWidget(
+        manifest: item,
+        defaultCharts: const [],
+      ),
+    ];
   }
 
   List<AppActionsHeaderModel> buildAdditionalActions(
@@ -330,7 +339,7 @@ class ResourcesDetails extends GetView {
                       item: controller.item,
                     ),
                     const SizedBox(height: Constants.spacingMiddle),
-                    buildDetailsItem(
+                    ...buildDetailsItem(
                       controller.title,
                       controller.resource,
                       controller.path,

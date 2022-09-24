@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_persistent_volume.dart';
+import 'package:kubenav/models/prometheus_model.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
 
 class PersistentVolumeDetailsItemWidget extends StatelessWidget
     implements IDetailsItemWidget {
@@ -80,6 +82,23 @@ class PersistentVolumeDetailsItemWidget extends StatelessWidget
           namespace: item['metadata']['namespace'],
           selector:
               'fieldSelector=involvedObject.name=${item['metadata']['name']}',
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        AppPrometheusMetricsWidget(
+          manifest: item,
+          defaultCharts: [
+            Chart(
+              title: 'Capacity',
+              unit: 'GiB',
+              queries: [
+                Query(
+                  query:
+                      'kube_persistentvolume_capacity_bytes{persistentvolume="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"} / 1024 / 1024 / 1024',
+                  label: 'Capacity',
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );

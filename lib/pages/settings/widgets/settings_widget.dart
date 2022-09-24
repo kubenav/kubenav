@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:kubenav/controllers/global_settings_controller.dart';
+import 'package:kubenav/pages/settings/widgets/settings_prometheus_widget.dart';
 import 'package:kubenav/pages/settings/widgets/settings_proxy_widget.dart';
 import 'package:kubenav/pages/settings/widgets/settings_timeout_widget.dart';
 import 'package:kubenav/utils/constants.dart';
@@ -254,6 +255,63 @@ class SettingsWidget extends StatelessWidget {
             flex: 1,
             child: Text(
               'Timeout',
+              style: noramlTextStyle(
+                context,
+              ),
+            ),
+          ),
+          Icon(
+            Icons.arrow_forward_ios,
+            color: Colors.grey[300],
+            size: 16,
+          ),
+        ],
+      ),
+    );
+
+    items.add(
+      AppVertialListSimpleModel(
+        onTap: () {
+          Get.bottomSheet(
+            BottomSheet(
+              onClosing: () {},
+              enableDrag: false,
+              builder: (builder) {
+                return SettingsPrometheusWidget(
+                  currentPrometheusEnabled:
+                      globalSettingsController.prometheusEnabled.value,
+                  currentPrometheusAddress:
+                      globalSettingsController.prometheusAddress.value,
+                  currentPrometheusNamespace:
+                      globalSettingsController.prometheusNamespace.value,
+                  currentPrometheusLabelSelector:
+                      globalSettingsController.prometheusLabelSelector.value,
+                  currentPrometheusContainer:
+                      globalSettingsController.prometheusContainer.value,
+                  currentPrometheusPort:
+                      globalSettingsController.prometheusPort.value,
+                  currentPrometheusUsername:
+                      globalSettingsController.prometheusUsername.value,
+                  currentPrometheusPassword:
+                      globalSettingsController.prometheusPassword.value,
+                  currentPrometheusToken:
+                      globalSettingsController.prometheusToken.value,
+                );
+              },
+            ),
+            isScrollControlled: true,
+          );
+        },
+        children: [
+          const Icon(
+            Icons.extension,
+            color: Constants.colorPrimary,
+          ),
+          const SizedBox(width: Constants.spacingSmall),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'Prometheus',
               style: noramlTextStyle(
                 context,
               ),

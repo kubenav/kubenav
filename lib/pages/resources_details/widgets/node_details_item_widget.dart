@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_node.dart';
+import 'package:kubenav/models/prometheus_model.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/home/widgets/metrics_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
 
 class NodeDetailsItemWidget extends StatelessWidget
     implements IDetailsItemWidget {
@@ -140,6 +142,80 @@ class NodeDetailsItemWidget extends StatelessWidget
           namespace: item['metadata']['namespace'],
           selector:
               'fieldSelector=involvedObject.name=${item['metadata']['name']}',
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        AppPrometheusMetricsWidget(
+          manifest: item,
+          defaultCharts: [
+            Chart(
+              title: 'CPU Usage',
+              unit: 'Cores',
+              queries: [
+                Query(
+                  query:
+                      'sum(rate(container_cpu_usage_seconds_total{node="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", container!="", container!="POD"}[2m]))',
+                  label: 'Usage',
+                ),
+                Query(
+                  query:
+                      'sum(kube_pod_container_resource_requests{node="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="cpu", container!="", container!="POD"})',
+                  label: 'Requests',
+                ),
+                Query(
+                  query:
+                      'sum(kube_pod_container_resource_limits{node="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="cpu", container!="", container!="POD"})',
+                  label: 'Limits',
+                ),
+                Query(
+                  query:
+                      'sum(kube_node_status_allocatable{node="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="cpu"})',
+                  label: 'Allocatable',
+                ),
+              ],
+            ),
+            Chart(
+              title: 'Memory Usage',
+              unit: 'GiB',
+              queries: [
+                Query(
+                  query:
+                      '(sum(container_memory_working_set_bytes{node="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", container!="", container!="POD"})) / 1024 / 1024 / 1024',
+                  label: 'Usage',
+                ),
+                Query(
+                  query:
+                      '(sum(kube_pod_container_resource_requests{node="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="memory", container!="", container!="POD"})) / 1024 / 1024 / 1024',
+                  label: 'Requests',
+                ),
+                Query(
+                  query:
+                      '(sum(kube_pod_container_resource_limits{node="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="memory", container!="", container!="POD"})) / 1024 / 1024 / 1024',
+                  label: 'Limits',
+                ),
+                Query(
+                  query:
+                      '(sum(kube_node_status_allocatable{node="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="memory"})) / 1024 / 1024 / 1024',
+                  label: 'Allocatable',
+                ),
+              ],
+            ),
+            Chart(
+              title: 'Pods',
+              unit: '',
+              queries: [
+                Query(
+                  query:
+                      'count(kube_pod_info{node="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"})',
+                  label: 'Current',
+                ),
+                Query(
+                  query:
+                      'sum(kube_node_status_allocatable{node="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="pods"})',
+                  label: 'Allocatable',
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );

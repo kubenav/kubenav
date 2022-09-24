@@ -7,6 +7,7 @@ import 'package:kubenav/pages/resources_details/widgets/details_resources_previe
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
 import 'package:kubenav/widgets/app_vertical_list_simple_widget.dart';
 
 class ClusterRoleDetailsItemWidget extends StatelessWidget
@@ -97,6 +98,11 @@ class ClusterRoleDetailsItemWidget extends StatelessWidget
           namespace: item['metadata']['namespace'],
           selector:
               'fieldSelector=involvedObject.name=${item['metadata']['name']}',
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        AppPrometheusMetricsWidget(
+          manifest: item,
+          defaultCharts: const [],
         ),
       ],
     );

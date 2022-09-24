@@ -88,6 +88,7 @@ void snackbar(
   );
 }
 
+/// [openUrl] opens the given [url] in the systems default browser.
 Future<void> openUrl(String url) async {
   var launchMode = LaunchMode.platformDefault;
 
@@ -99,4 +100,12 @@ Future<void> openUrl(String url) async {
     Uri.parse(url),
     mode: launchMode,
   );
+}
+
+String getMonospaceFontFamily() {
+  if (Platform.isIOS || Platform.isMacOS) {
+    return 'Courier';
+  }
+
+  return 'monospace';
 }

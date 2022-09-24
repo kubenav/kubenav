@@ -44,7 +44,7 @@ class SettingsTimeoutController extends GetxController {
     return null;
   }
 
-  void saveTimeout() async {
+  void saveTimeout() {
     final newTimeout = int.parse(timeout.text);
     globalSettingsController.timeout.value = newTimeout;
   }

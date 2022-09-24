@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -174,7 +173,7 @@ class ListCreateResourceWidget extends StatelessWidget {
                 enabled: true,
                 textStyle: TextStyle(
                   fontSize: 14,
-                  fontFamily: Platform.isIOS ? 'Courier' : 'monospace',
+                  fontFamily: getMonospaceFontFamily(),
                 ),
               ),
             ),

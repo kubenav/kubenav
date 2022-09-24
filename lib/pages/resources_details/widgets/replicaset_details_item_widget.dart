@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_replica_set.dart';
+import 'package:kubenav/models/prometheus_model.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
 
 class ReplicaSetDetailsItemWidget extends StatelessWidget
     implements IDetailsItemWidget {
@@ -88,6 +90,33 @@ class ReplicaSetDetailsItemWidget extends StatelessWidget
           namespace: replicaSet.metadata?.namespace,
           selector:
               'fieldSelector=involvedObject.name=${replicaSet.metadata?.name ?? ''}',
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        AppPrometheusMetricsWidget(
+          manifest: item,
+          defaultCharts: [
+            Chart(
+              title: 'Pods',
+              unit: '',
+              queries: [
+                Query(
+                  query:
+                      'sum(kube_replicaset_spec_replicas{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", replicaset="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"})',
+                  label: 'Desired',
+                ),
+                Query(
+                  query:
+                      'sum(kube_replicaset_status_replicas{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", replicaset="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"})',
+                  label: 'Current',
+                ),
+                Query(
+                  query:
+                      'sum(kube_replicaset_status_ready_replicas{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", replicaset="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"})',
+                  label: 'Ready',
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );

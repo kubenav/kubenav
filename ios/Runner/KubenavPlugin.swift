@@ -235,6 +235,24 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
+    } else if call.method == "prometheusGetData" {
+      if let args = call.arguments as? Dictionary<String, Any>,
+        let clusterServer = args["clusterServer"] as? String,
+        let clusterCertificateAuthorityData = args["clusterCertificateAuthorityData"] as? String,
+        let clusterInsecureSkipTLSVerify = args["clusterInsecureSkipTLSVerify"] as? Bool,
+        let userClientCertificateData = args["userClientCertificateData"] as? String,
+        let userClientKeyData = args["userClientKeyData"] as? String,
+        let userToken = args["userToken"] as? String,
+        let userUsername = args["userUsername"] as? String,
+        let userPassword = args["userPassword"] as? String,
+        let proxy = args["proxy"] as? String,
+        let timeout = args["timeout"] as? Int64,
+        let request = args["request"] as? String
+      {
+        prometheusGetData(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, request: request, result: result)
+      } else {
+        result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
+      }
     } else {
       result(FlutterMethodNotImplemented)
     }
@@ -407,6 +425,17 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     let data = KubenavOIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, refreshToken, &error)
     if error != nil {
       result(FlutterError(code: "OIDC_GET_ACCESS_TOKEN_FAILED", message: error?.localizedDescription ?? "", details: nil))
+    } else {
+      result(data)
+    }
+  }
+
+  private func prometheusGetData(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, request: String, result: FlutterResult) {
+    var error: NSError?
+
+    let data = KubenavPrometheusGetData(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, request, &error)
+    if error != nil {
+      result(FlutterError(code: "PROMETHEUS_GET_DATA_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
       result(data)
     }

@@ -13,6 +13,7 @@ import 'package:kubenav/controllers/global_settings_controller.dart';
 import 'package:kubenav/controllers/provider_config_controller.dart';
 import 'package:kubenav/models/cluster_model.dart';
 import 'package:kubenav/models/helm_model.dart';
+import 'package:kubenav/models/prometheus_model.dart';
 import 'package:kubenav/services/aws_service.dart';
 import 'package:kubenav/services/google_service.dart';
 import 'package:kubenav/services/oidc_service.dart';
@@ -963,6 +964,84 @@ class KubernetesService {
       Logger.log(
         'KubernetesService helmGetHistory',
         'Get Helm history failed',
+        err,
+      );
+      return Future.error(err);
+    }
+  }
+
+  /// [prometheusGetData]
+  Future<List<Metric>> prometheusGetData(Map<String, dynamic> manifest,
+      List<Query> queries, int timeStart, int timeEnd) async {
+    try {
+      final request = Request(
+        manifest: manifest,
+        prometheus: globalSettingsController.getPrometheusConfiguration(),
+        queries: queries,
+        timeStart: timeStart,
+        timeEnd: timeEnd,
+      ).toString();
+
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        final result = await KubenavFFI().prometheusGetData(
+          cluster.name,
+          globalSettingsController.proxy.value,
+          globalSettingsController.timeout.value,
+          request,
+        );
+        if (result == 'null') {
+          return [];
+        }
+
+        List<dynamic> jsonData = json.decode(result);
+        final metrics = <Metric>[];
+        for (var metric in jsonData) {
+          metrics.add(Metric.fromJson(metric));
+        }
+        return metrics;
+      } else {
+        final token = await _getAccessToken();
+
+        final String result = await platform.invokeMethod(
+          'prometheusGetData',
+          <String, dynamic>{
+            'clusterServer': cluster.clusterServer,
+            'clusterCertificateAuthorityData':
+                cluster.clusterCertificateAuthorityData,
+            'clusterInsecureSkipTLSVerify':
+                cluster.clusterInsecureSkipTLSVerify,
+            'userClientCertificateData': cluster.userClientCertificateData,
+            'userClientKeyData': cluster.userClientKeyData,
+            'userToken': token,
+            'userUsername': cluster.userUsername,
+            'userPassword': cluster.userPassword,
+            'proxy': globalSettingsController.proxy.value,
+            'timeout': globalSettingsController.timeout.value,
+            'request': request,
+          },
+        );
+
+        Logger.log(
+          'KubernetesService prometheusGetData',
+          'List Helm charts was ok',
+          result,
+        );
+
+        if (result == 'null') {
+          return [];
+        }
+
+        List<dynamic> jsonData = json.decode(result);
+        final metrics = <Metric>[];
+        for (var metric in jsonData) {
+          metrics.add(Metric.fromJson(metric));
+        }
+        return metrics;
+      }
+    } catch (err) {
+      Logger.log(
+        'KubernetesService prometheusGetData',
+        'List Helm charts failed',
         err,
       );
       return Future.error(err);

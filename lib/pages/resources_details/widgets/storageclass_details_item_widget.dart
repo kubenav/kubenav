@@ -5,6 +5,7 @@ import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
 
 class StorageClassDetailsItemWidget extends StatelessWidget
     implements IDetailsItemWidget {
@@ -83,6 +84,11 @@ class StorageClassDetailsItemWidget extends StatelessWidget
           namespace: item['metadata']['namespace'],
           selector:
               'fieldSelector=involvedObject.name=${item['metadata']['name']}',
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        AppPrometheusMetricsWidget(
+          manifest: item,
+          defaultCharts: const [],
         ),
       ],
     );

@@ -245,6 +245,24 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       } else {
         oidcGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, refreshToken, result)
       }
+    } else if (call.method == "prometheusGetData") {
+      val clusterServer = call.argument<String>("clusterServer")
+      val clusterCertificateAuthorityData = call.argument<String>("clusterCertificateAuthorityData")
+      val clusterInsecureSkipTLSVerify = call.argument<Boolean>("clusterInsecureSkipTLSVerify")
+      val userClientCertificateData = call.argument<String>("userClientCertificateData")
+      val userClientKeyData = call.argument<String>("userClientKeyData")
+      val userToken = call.argument<String>("userToken")
+      val userUsername = call.argument<String>("userUsername")
+      val userPassword = call.argument<String>("userPassword")
+      val proxy = call.argument<String>("proxy")
+      val timeout = call.argument<Number>("timeout")?.toLong()
+      val request = call.argument<String>("request")
+
+      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || request == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        prometheusGetData(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, request, result)
+      }
     } else {
       result.notImplemented()
     }
@@ -390,6 +408,15 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       result.success(data)
     } catch (e: Exception) {
       result.error("OIDC_GET_ACCESS_TOKEN_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun prometheusGetData(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, request: String, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.prometheusGetData(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, request)
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("PROMETHEUS_GET_DATA_FAILED", e.localizedMessage, null)
     }
   }
 }
