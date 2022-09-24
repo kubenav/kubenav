@@ -435,8 +435,8 @@ class AWSSSOProviderConfigWidget extends StatelessWidget {
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Constants.colorPrimary,
-                  onPrimary: Colors.white,
+                  backgroundColor: Constants.colorPrimary,
+                  foregroundColor: Colors.white,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
@@ -461,8 +461,8 @@ class AWSSSOProviderConfigWidget extends StatelessWidget {
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Constants.colorPrimary,
-                  onPrimary: Colors.white,
+                  backgroundColor: Constants.colorPrimary,
+                  foregroundColor: Colors.white,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
@@ -487,8 +487,8 @@ class AWSSSOProviderConfigWidget extends StatelessWidget {
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Constants.colorPrimary,
-                  onPrimary: Colors.white,
+                  backgroundColor: Constants.colorPrimary,
+                  foregroundColor: Colors.white,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(

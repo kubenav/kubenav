@@ -1,4 +1,4 @@
-import 'package:xterm/xterm.dart' as xterm;
+import 'package:kubenav/utils/terminal_backend.dart';
 
 /// [TerminalType] is a `enum`, which defines if a terminal is used to show logs or for connection to a container.
 enum TerminalType {
@@ -12,7 +12,7 @@ class Terminal {
   TerminalType type;
   String name;
   List<dynamic>? logs;
-  xterm.Terminal? terminal;
+  TerminalBackend? terminal;
 
   Terminal({
     required this.type,

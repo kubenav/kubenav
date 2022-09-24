@@ -24,6 +24,15 @@ go install golang.org/x/mobile/cmd/gomobile@latest
 gomobile init
 ```
 
+Flutter version (`flutter --version`):
+
+```
+Flutter 3.3.2 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision e3c29ec00c (10 days ago) • 2022-09-14 08:46:55 -0500
+Engine • revision a4ff2c53d8
+Tools • Dart 2.18.1 • DevTools 2.15.0
+```
+
 Create icons:
 
 - `flutter pub run flutter_launcher_icons:main`

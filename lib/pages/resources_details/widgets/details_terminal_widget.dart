@@ -3,8 +3,6 @@ import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:xterm/theme/terminal_theme.dart';
-import 'package:xterm/xterm.dart' as xterm;
 
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/controllers/global_settings_controller.dart';
@@ -98,42 +96,11 @@ class DetailsTerminalController extends GetxController {
           },
         );
 
-        TerminalBackend backend = TerminalBackend(channel: channel);
-        xterm.Terminal terminal = xterm.Terminal(
-          backend: backend,
-          maxLines: 10000,
-          theme: const TerminalTheme(
-            cursor: 0xffd8dee9,
-            selection: 0xff434c5ecc,
-            foreground: 0xffd8dee9,
-            background: 0xff2e3440,
-            black: 0xff3b4251,
-            red: 0xffbf6069,
-            green: 0xffa3be8b,
-            yellow: 0xffeacb8a,
-            blue: 0xff81a1c1,
-            magenta: 0xffb48dac,
-            cyan: 0xff88c0d0,
-            white: 0xffe5e9f0,
-            brightBlack: 0xff4c556a,
-            brightRed: 0xffbf6069,
-            brightGreen: 0xffa3be8b,
-            brightYellow: 0xffeacb8a,
-            brightBlue: 0xff81a1c1,
-            brightMagenta: 0xffb48dac,
-            brightCyan: 0xff8fbcbb,
-            brightWhite: 0xffeceef4,
-            searchHitBackground: 0xffeacb8a,
-            searchHitBackgroundCurrent: 0xffeacb8a,
-            searchHitForeground: 0xff2e3440,
-          ),
-        );
-
         terminalController.addTerminal(
           TerminalType.exec,
           container.value,
           null,
-          terminal,
+          TerminalBackend(channel),
         );
       } else {
         snackbar(

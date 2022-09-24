@@ -44,7 +44,10 @@ dependencies:
   flutter_launcher_icons: ^0.10.0
   import_sorter: ^4.6.0
   http: ^0.13.4
-  xterm: ^2.6.0
+  # xterm: ^3.2.7
+  xterm:
+    git:
+      url: https://github.com/TerminalStudio/xterm.dart
   web_socket_channel: ^2.1.0
   fl_chart: ^0.55.0
   file_picker: ^5.0.1

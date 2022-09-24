@@ -45,7 +45,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   file_picker: de36ba292d3aa84e0b930a7643e8fd4586e24b21
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   local_auth_ios: 0d333dde7780f669e66f19d2ff6005f3ea84008d
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e

@@ -126,7 +126,7 @@ func PrometheusGetData(restConfig *rest.Config, clientset *kubernetes.Clientset,
 		}
 
 		ctx := context.Background()
-		result, err := v1api.QueryRange(ctx, interpolatedQuery, r)
+		result, _, err := v1api.QueryRange(ctx, interpolatedQuery, r)
 		if err != nil {
 			return "", err
 		}
