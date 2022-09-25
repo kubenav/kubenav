@@ -1,8 +1,8 @@
-import 'dart:async';
 import 'dart:convert';
-import 'dart:io' show Platform;
+import 'dart:io';
 
 import 'package:web_socket_channel/io.dart';
+import 'package:xterm/core.dart' as xtermcore;
 import 'package:xterm/xterm.dart' as xterm;
 
 /// [TerminalData] is the format of the messages send over the WebSocket connection for a terminal. If contains an
@@ -26,67 +26,95 @@ class TerminalData {
         rows: json['Rows'],
         cols: json['Cols'],
       );
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData['Op'] = op;
+    jsonData['Data'] = data;
+    jsonData['Rows'] = rows;
+    jsonData['Cols'] = cols;
+    return jsonData;
+  }
+
+  @override
+  String toString() {
+    return json.encode(toJson());
+  }
 }
 
-/// [TerminalBackend] is the `TerminalBackend` implementation. It listens for messages on the WebSocket connection and
-/// writes all the receives messages to the terminal. It also sends the user input over the WebSocket connection to our
-/// internal http server and handles the resizing of the terminal.
+/// [TerminalBackend] contains the websocket connection and return the xterm terminal and the [terminalController] for
+/// our terminal. It listens for messages on the WebSocket connection and writes all the receives messages to the
+/// terminal. It also sends the user input over the WebSocket connection to our internal http server and handles the
+/// resizing of the terminal.
 ///
-/// When the terminal is closed we have to manually call `terminateBackend()`, to terminate the backend and to close the
-/// underlying WebSocket connection.
-class TerminalBackend extends xterm.TerminalBackend {
-  IOWebSocketChannel channel;
+/// When the terminal is closed we have to manually call `terminate()` to close the underlying WebSocket connection.
+class TerminalBackend {
+  late xterm.Terminal terminal;
+  late IOWebSocketChannel channel;
 
-  final _exitCodeCompleter = Completer<int>();
-  final _outStream = StreamController<String>();
+  TerminalBackend(IOWebSocketChannel c) {
+    channel = c;
 
-  TerminalBackend({
-    required this.channel,
-  });
+    terminal = xterm.Terminal(
+      maxLines: 10000,
+      platform: Platform.isAndroid
+          ? xtermcore.TerminalTargetPlatform.android
+          : Platform.isIOS
+              ? xtermcore.TerminalTargetPlatform.ios
+              : Platform.isMacOS
+                  ? xtermcore.TerminalTargetPlatform.macos
+                  : Platform.isLinux
+                      ? xtermcore.TerminalTargetPlatform.linux
+                      : Platform.isWindows
+                          ? xtermcore.TerminalTargetPlatform.windows
+                          : xtermcore.TerminalTargetPlatform.unknown,
+    );
 
-  void onWrite(String data) {
-    _outStream.sink.add(data);
+    channel.stream.listen(
+      (data) {
+        final parsedData = TerminalData.fromJson(json.decode(data));
+        terminal.write(parsedData.data);
+      },
+      onError: (error) {
+        terminal.write('Error: $error');
+      },
+      onDone: () {
+        terminal.write('The process exited');
+      },
+    );
+
+    terminal.onResize = (width, height, pixelWidth, pixelHeight) {
+      channel.sink.add(TerminalData(
+        op: 'resize',
+        data: '',
+        rows: height,
+        cols: width,
+      ).toString());
+
+      // channel.sink.add('{"Cols": $width, "Op": "resize", "Rows": $height}');
+    };
+
+    terminal.onOutput = (data) {
+      channel.sink.add(TerminalData(
+        op: 'stdin',
+        data: data,
+        rows: 0,
+        cols: 0,
+      ).toString());
+
+      // if (data == '\r') {
+      //   channel.sink.add('{"Data": "\\r", "Op": "stdin"}');
+      // } else if (data.codeUnitAt(0) == 27 && Platform.isIOS) {
+      //   // Here we are ignoring when the data is "27", because when we are on iOS this breaks the backspace support. It
+      //   // seems that when a user presses the backspace key it triggers the data two time. The first time it sends "27"
+      //   // and the second time "127" which is the correct code. So that we always ignore the first one.
+      // } else {
+      //   channel.sink.add('{"Data": "$data", "Op": "stdin"}');
+      // }
+    };
   }
 
-  @override
-  Future<int> get exitCode => _exitCodeCompleter.future;
-
-  @override
-  void init() {
-    channel.stream.listen((data) {
-      final parsedData = TerminalData.fromJson(json.decode(data));
-      onWrite(parsedData.data);
-    }, onError: (error) {
-      onWrite('Error: $error');
-    });
-  }
-
-  @override
-  Stream<String> get out => _outStream.stream;
-
-  @override
-  void resize(int width, int height, int pixelWidth, int pixelHeight) {
-    channel.sink.add('{"Cols": $width, "Op": "resize", "Rows": $height}');
-  }
-
-  @override
-  void write(String input) {
-    if (input == '\r') {
-      channel.sink.add('{"Data": "\\r", "Op": "stdin"}');
-    } else if (input.codeUnitAt(0) == 27 && Platform.isIOS) {
-      // Here we are ignoring when the input is "27", because when we are on iOS this breaks the backspace support. It
-      // seems that when a user presses the backspace key it triggers the input two time. The first time it sends "27"
-      // and the second time "127" which is the correct code. So that we always ignore the first one.
-    } else {
-      channel.sink.add('{"Data": "$input", "Op": "stdin"}');
-    }
-  }
-
-  @override
   void terminate() {
     channel.sink.close();
   }
-
-  @override
-  void ackProcessed() {}
 }

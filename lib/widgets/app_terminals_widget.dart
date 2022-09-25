@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:xterm/flutter.dart';
+import 'package:xterm/ui.dart' as xtermui;
 import 'package:xterm/xterm.dart' as xterm;
 
 import 'package:kubenav/controllers/terminal_controller.dart';
@@ -19,6 +19,32 @@ List<Color> colors = [
   const Color(0xffA3BE8C),
   const Color(0xff5E81AC),
 ];
+
+const xterm.TerminalTheme terminalTheme = xterm.TerminalTheme(
+  cursor: Color(0xffd8dee9),
+  selection: Color(0xff4c566a),
+  foreground: Color(0xffd8dee9),
+  background: Color(0xff2e3440),
+  black: Color(0xff3b4251),
+  red: Color(0xffbf6069),
+  green: Color(0xffa3be8b),
+  yellow: Color(0xffeacb8a),
+  blue: Color(0xff81a1c1),
+  magenta: Color(0xffb48dac),
+  cyan: Color(0xff88c0d0),
+  white: Color(0xffe5e9f0),
+  brightBlack: Color(0xff4c556a),
+  brightRed: Color(0xffbf6069),
+  brightGreen: Color(0xffa3be8b),
+  brightYellow: Color(0xffeacb8a),
+  brightBlue: Color(0xff81a1c1),
+  brightMagenta: Color(0xffb48dac),
+  brightCyan: Color(0xff8fbcbb),
+  brightWhite: Color(0xffeceef4),
+  searchHitBackground: Color(0xffeacb8a),
+  searchHitBackgroundCurrent: Color(0xffeacb8a),
+  searchHitForeground: Color(0xff2e3440),
+);
 
 Color getColor(int index) {
   return colors[index % colors.length];
@@ -181,14 +207,13 @@ class AppTerminalsWidget extends StatelessWidget {
                                   return terminal.value.type ==
                                           TerminalType.exec
                                       ? terminal.value.terminal != null
-                                          ? TerminalView(
-                                              terminal:
-                                                  terminal.value.terminal!,
-                                              style: xterm.TerminalStyle(
+                                          ? xtermui.TerminalView(
+                                              terminal.value.terminal!.terminal,
+                                              theme: terminalTheme,
+                                              textStyle: xterm.TerminalStyle(
                                                 fontSize: 14,
-                                                fontFamily: [
-                                                  getMonospaceFontFamily(),
-                                                ],
+                                                fontFamily:
+                                                    getMonospaceFontFamily(),
                                               ),
                                             )
                                           : Container()

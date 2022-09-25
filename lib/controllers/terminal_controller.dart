@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
-import 'package:xterm/xterm.dart' as xterm;
 
 import 'package:kubenav/models/terminal_model.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/terminal_backend.dart';
 import 'package:kubenav/widgets/app_terminals_widget.dart';
 
 /// The [TerminalController] is responsible for handling the terminals of a user. It holds a list of all existing
@@ -40,7 +40,7 @@ class TerminalController extends GetxController {
     TerminalType type,
     String name,
     List<dynamic>? logs,
-    xterm.Terminal? terminal,
+    TerminalBackend? terminal,
   ) {
     terminals.add(
       Terminal(
@@ -56,7 +56,7 @@ class TerminalController extends GetxController {
 
   void removeTerminal(BuildContext context, int index) {
     if (terminals[index].terminal != null) {
-      terminals[index].terminal!.terminateBackend();
+      terminals[index].terminal!.terminate();
     }
 
     terminals.removeAt(index);
