@@ -6,13 +6,13 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.1.3
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.1.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/containerservice/armcontainerservice v1.0.0
-	github.com/aws/aws-sdk-go v1.44.105
+	github.com/aws/aws-sdk-go v1.44.109
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/gorilla/websocket v1.5.0
 	github.com/prometheus/client_golang v1.13.0
 	github.com/prometheus/common v0.37.0
 	github.com/wI2L/jsondiff v0.2.0
-	golang.org/x/mobile v0.0.0-20220722155234-aaac322e2105
+	golang.org/x/mobile v0.0.0-20220928052126-fa6bcb076835
 	golang.org/x/oauth2 v0.0.0-20220909003341-f21342109be1
 	k8s.io/api v0.25.2
 	k8s.io/apimachinery v0.25.2
@@ -78,6 +78,7 @@ require (
 	golang.org/x/crypto v0.0.0-20220511200225-c6db032c6c88 // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220106191415-9b9b3d81d5e3 // indirect
 	golang.org/x/net v0.0.0-20220722155237-a158d28d115b // indirect
+	golang.org/x/sync v0.0.0-20220819030929-7fc1605a5dde // indirect
 	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f // indirect
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	golang.org/x/text v0.3.7 // indirect
