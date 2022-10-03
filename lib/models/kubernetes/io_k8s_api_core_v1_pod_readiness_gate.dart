@@ -4,11 +4,13 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
+import 'package:kubenav/models/kubernetes/helpers.dart';
 
 class IoK8sApiCoreV1PodReadinessGate {
   /// Returns a new [IoK8sApiCoreV1PodReadinessGate] instance.
@@ -16,8 +18,8 @@ class IoK8sApiCoreV1PodReadinessGate {
     required this.conditionType,
   });
 
-  /// ConditionType refers to a condition in the pod's condition list with matching type.  Possible enum values:  - `\"ContainersReady\"` indicates whether all containers in the pod are ready.  - `\"Initialized\"` means that all init containers in the pod have started successfully.  - `\"PodScheduled\"` represents status of the scheduling process for this pod.  - `\"Ready\"` means the pod is able to service requests and should be added to the load balancing pools of all matching services.
-  IoK8sApiCoreV1PodReadinessGateConditionTypeEnum conditionType;
+  /// ConditionType refers to a condition in the pod's condition list with matching type.
+  String conditionType;
 
   @override
   bool operator ==(Object other) =>
@@ -36,7 +38,7 @@ class IoK8sApiCoreV1PodReadinessGate {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'conditionType'] = conditionType;
+    json[r'conditionType'] = this.conditionType;
     return json;
   }
 
@@ -61,8 +63,7 @@ class IoK8sApiCoreV1PodReadinessGate {
       }());
 
       return IoK8sApiCoreV1PodReadinessGate(
-        conditionType: IoK8sApiCoreV1PodReadinessGateConditionTypeEnum.fromJson(
-            json[r'conditionType'])!,
+        conditionType: mapValueOfType<String>(json, r'conditionType')!,
       );
     }
     return null;
@@ -123,105 +124,4 @@ class IoK8sApiCoreV1PodReadinessGate {
   static const requiredKeys = <String>{
     'conditionType',
   };
-}
-
-/// ConditionType refers to a condition in the pod's condition list with matching type.  Possible enum values:  - `\"ContainersReady\"` indicates whether all containers in the pod are ready.  - `\"Initialized\"` means that all init containers in the pod have started successfully.  - `\"PodScheduled\"` represents status of the scheduling process for this pod.  - `\"Ready\"` means the pod is able to service requests and should be added to the load balancing pools of all matching services.
-class IoK8sApiCoreV1PodReadinessGateConditionTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1PodReadinessGateConditionTypeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const containersReady =
-      IoK8sApiCoreV1PodReadinessGateConditionTypeEnum._(r'ContainersReady');
-  static const initialized =
-      IoK8sApiCoreV1PodReadinessGateConditionTypeEnum._(r'Initialized');
-  static const podScheduled =
-      IoK8sApiCoreV1PodReadinessGateConditionTypeEnum._(r'PodScheduled');
-  static const ready =
-      IoK8sApiCoreV1PodReadinessGateConditionTypeEnum._(r'Ready');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1PodReadinessGateConditionTypeEnum].
-  static const values = <IoK8sApiCoreV1PodReadinessGateConditionTypeEnum>[
-    containersReady,
-    initialized,
-    podScheduled,
-    ready,
-  ];
-
-  static IoK8sApiCoreV1PodReadinessGateConditionTypeEnum? fromJson(
-          dynamic value) =>
-      IoK8sApiCoreV1PodReadinessGateConditionTypeEnumTypeTransformer()
-          .decode(value);
-
-  static List<IoK8sApiCoreV1PodReadinessGateConditionTypeEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1PodReadinessGateConditionTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value =
-            IoK8sApiCoreV1PodReadinessGateConditionTypeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1PodReadinessGateConditionTypeEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1PodReadinessGateConditionTypeEnum].
-class IoK8sApiCoreV1PodReadinessGateConditionTypeEnumTypeTransformer {
-  factory IoK8sApiCoreV1PodReadinessGateConditionTypeEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1PodReadinessGateConditionTypeEnumTypeTransformer
-              ._();
-
-  const IoK8sApiCoreV1PodReadinessGateConditionTypeEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1PodReadinessGateConditionTypeEnum data) =>
-      data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1PodReadinessGateConditionTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1PodReadinessGateConditionTypeEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'ContainersReady':
-          return IoK8sApiCoreV1PodReadinessGateConditionTypeEnum
-              .containersReady;
-        case r'Initialized':
-          return IoK8sApiCoreV1PodReadinessGateConditionTypeEnum.initialized;
-        case r'PodScheduled':
-          return IoK8sApiCoreV1PodReadinessGateConditionTypeEnum.podScheduled;
-        case r'Ready':
-          return IoK8sApiCoreV1PodReadinessGateConditionTypeEnum.ready;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1PodReadinessGateConditionTypeEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1PodReadinessGateConditionTypeEnumTypeTransformer?
-      _instance;
 }

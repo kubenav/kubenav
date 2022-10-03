@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -47,7 +48,7 @@ class IoK8sApimachineryPkgApisMetaV1ListMeta {
   ///
   String? resourceVersion;
 
-  /// selfLink is a URL representing this object. Populated by the system. Read-only.  DEPRECATED Kubernetes will stop propagating this field in 1.20 release and the field is planned to be removed in 1.21 release.
+  /// Deprecated: selfLink is a legacy read-only field that is no longer populated by the system.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -79,17 +80,25 @@ class IoK8sApimachineryPkgApisMetaV1ListMeta {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (continue_ != null) {
-      json[r'continue'] = continue_;
+    if (this.continue_ != null) {
+      json[r'continue'] = this.continue_;
+    } else {
+      json[r'continue'] = null;
     }
-    if (remainingItemCount != null) {
-      json[r'remainingItemCount'] = remainingItemCount;
+    if (this.remainingItemCount != null) {
+      json[r'remainingItemCount'] = this.remainingItemCount;
+    } else {
+      json[r'remainingItemCount'] = null;
     }
-    if (resourceVersion != null) {
-      json[r'resourceVersion'] = resourceVersion;
+    if (this.resourceVersion != null) {
+      json[r'resourceVersion'] = this.resourceVersion;
+    } else {
+      json[r'resourceVersion'] = null;
     }
-    if (selfLink != null) {
-      json[r'selfLink'] = selfLink;
+    if (this.selfLink != null) {
+      json[r'selfLink'] = this.selfLink;
+    } else {
+      json[r'selfLink'] = null;
     }
     return json;
   }

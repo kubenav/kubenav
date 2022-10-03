@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -37,8 +38,8 @@ class IoK8sApiCoreV1LimitRangeItem {
   /// Min usage constraints on this kind by resource name.
   Map<String, String> min;
 
-  /// Type of resource that this limit applies to.  Possible enum values:  - `\"Container\"` Limit that applies to all containers in a namespace  - `\"PersistentVolumeClaim\"` Limit that applies to all persistent volume claims in a namespace  - `\"Pod\"` Limit that applies to all pods in a namespace
-  IoK8sApiCoreV1LimitRangeItemTypeEnum type;
+  /// Type of resource that this limit applies to.
+  String type;
 
   @override
   bool operator ==(Object other) =>
@@ -67,12 +68,12 @@ class IoK8sApiCoreV1LimitRangeItem {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'default'] = default_;
-    json[r'defaultRequest'] = defaultRequest;
-    json[r'max'] = max;
-    json[r'maxLimitRequestRatio'] = maxLimitRequestRatio;
-    json[r'min'] = min;
-    json[r'type'] = type;
+    json[r'default'] = this.default_;
+    json[r'defaultRequest'] = this.defaultRequest;
+    json[r'max'] = this.max;
+    json[r'maxLimitRequestRatio'] = this.maxLimitRequestRatio;
+    json[r'min'] = this.min;
+    json[r'type'] = this.type;
     return json;
   }
 
@@ -105,7 +106,7 @@ class IoK8sApiCoreV1LimitRangeItem {
             mapCastOfType<String, String>(json, r'maxLimitRequestRatio') ??
                 const {},
         min: mapCastOfType<String, String>(json, r'min') ?? const {},
-        type: IoK8sApiCoreV1LimitRangeItemTypeEnum.fromJson(json[r'type'])!,
+        type: mapValueOfType<String>(json, r'type')!,
       );
     }
     return null;
@@ -166,90 +167,4 @@ class IoK8sApiCoreV1LimitRangeItem {
   static const requiredKeys = <String>{
     'type',
   };
-}
-
-/// Type of resource that this limit applies to.  Possible enum values:  - `\"Container\"` Limit that applies to all containers in a namespace  - `\"PersistentVolumeClaim\"` Limit that applies to all persistent volume claims in a namespace  - `\"Pod\"` Limit that applies to all pods in a namespace
-class IoK8sApiCoreV1LimitRangeItemTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1LimitRangeItemTypeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const container = IoK8sApiCoreV1LimitRangeItemTypeEnum._(r'Container');
-  static const persistentVolumeClaim =
-      IoK8sApiCoreV1LimitRangeItemTypeEnum._(r'PersistentVolumeClaim');
-  static const pod = IoK8sApiCoreV1LimitRangeItemTypeEnum._(r'Pod');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1LimitRangeItemTypeEnum].
-  static const values = <IoK8sApiCoreV1LimitRangeItemTypeEnum>[
-    container,
-    persistentVolumeClaim,
-    pod,
-  ];
-
-  static IoK8sApiCoreV1LimitRangeItemTypeEnum? fromJson(dynamic value) =>
-      IoK8sApiCoreV1LimitRangeItemTypeEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiCoreV1LimitRangeItemTypeEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1LimitRangeItemTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiCoreV1LimitRangeItemTypeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1LimitRangeItemTypeEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1LimitRangeItemTypeEnum].
-class IoK8sApiCoreV1LimitRangeItemTypeEnumTypeTransformer {
-  factory IoK8sApiCoreV1LimitRangeItemTypeEnumTypeTransformer() => _instance ??=
-      const IoK8sApiCoreV1LimitRangeItemTypeEnumTypeTransformer._();
-
-  const IoK8sApiCoreV1LimitRangeItemTypeEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1LimitRangeItemTypeEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1LimitRangeItemTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1LimitRangeItemTypeEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'Container':
-          return IoK8sApiCoreV1LimitRangeItemTypeEnum.container;
-        case r'PersistentVolumeClaim':
-          return IoK8sApiCoreV1LimitRangeItemTypeEnum.persistentVolumeClaim;
-        case r'Pod':
-          return IoK8sApiCoreV1LimitRangeItemTypeEnum.pod;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1LimitRangeItemTypeEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1LimitRangeItemTypeEnumTypeTransformer? _instance;
 }

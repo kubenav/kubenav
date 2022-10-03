@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -67,14 +68,20 @@ class IoK8sApiCoreV1EnvFromSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (configMapRef != null) {
-      json[r'configMapRef'] = configMapRef;
+    if (this.configMapRef != null) {
+      json[r'configMapRef'] = this.configMapRef;
+    } else {
+      json[r'configMapRef'] = null;
     }
-    if (prefix != null) {
-      json[r'prefix'] = prefix;
+    if (this.prefix != null) {
+      json[r'prefix'] = this.prefix;
+    } else {
+      json[r'prefix'] = null;
     }
-    if (secretRef != null) {
-      json[r'secretRef'] = secretRef;
+    if (this.secretRef != null) {
+      json[r'secretRef'] = this.secretRef;
+    } else {
+      json[r'secretRef'] = null;
     }
     return json;
   }

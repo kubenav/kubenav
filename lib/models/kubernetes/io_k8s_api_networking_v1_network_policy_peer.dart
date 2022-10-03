@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -65,14 +66,20 @@ class IoK8sApiNetworkingV1NetworkPolicyPeer {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (ipBlock != null) {
-      json[r'ipBlock'] = ipBlock;
+    if (this.ipBlock != null) {
+      json[r'ipBlock'] = this.ipBlock;
+    } else {
+      json[r'ipBlock'] = null;
     }
-    if (namespaceSelector != null) {
-      json[r'namespaceSelector'] = namespaceSelector;
+    if (this.namespaceSelector != null) {
+      json[r'namespaceSelector'] = this.namespaceSelector;
+    } else {
+      json[r'namespaceSelector'] = null;
     }
-    if (podSelector != null) {
-      json[r'podSelector'] = podSelector;
+    if (this.podSelector != null) {
+      json[r'podSelector'] = this.podSelector;
+    } else {
+      json[r'podSelector'] = null;
     }
     return json;
   }

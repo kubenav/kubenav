@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -54,11 +55,15 @@ class IoK8sApiNetworkingV1IngressBackend {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (resource != null) {
-      json[r'resource'] = resource;
+    if (this.resource != null) {
+      json[r'resource'] = this.resource;
+    } else {
+      json[r'resource'] = null;
     }
-    if (service != null) {
-      json[r'service'] = service;
+    if (this.service != null) {
+      json[r'service'] = this.service;
+    } else {
+      json[r'service'] = null;
     }
     return json;
   }

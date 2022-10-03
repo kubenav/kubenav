@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -115,26 +116,40 @@ class IoK8sApimachineryPkgApisMetaV1ManagedFieldsEntry {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (apiVersion != null) {
-      json[r'apiVersion'] = apiVersion;
+    if (this.apiVersion != null) {
+      json[r'apiVersion'] = this.apiVersion;
+    } else {
+      json[r'apiVersion'] = null;
     }
-    if (fieldsType != null) {
-      json[r'fieldsType'] = fieldsType;
+    if (this.fieldsType != null) {
+      json[r'fieldsType'] = this.fieldsType;
+    } else {
+      json[r'fieldsType'] = null;
     }
-    if (fieldsV1 != null) {
-      json[r'fieldsV1'] = fieldsV1;
+    if (this.fieldsV1 != null) {
+      json[r'fieldsV1'] = this.fieldsV1;
+    } else {
+      json[r'fieldsV1'] = null;
     }
-    if (manager != null) {
-      json[r'manager'] = manager;
+    if (this.manager != null) {
+      json[r'manager'] = this.manager;
+    } else {
+      json[r'manager'] = null;
     }
-    if (operation != null) {
-      json[r'operation'] = operation;
+    if (this.operation != null) {
+      json[r'operation'] = this.operation;
+    } else {
+      json[r'operation'] = null;
     }
-    if (subresource != null) {
-      json[r'subresource'] = subresource;
+    if (this.subresource != null) {
+      json[r'subresource'] = this.subresource;
+    } else {
+      json[r'subresource'] = null;
     }
-    if (time != null) {
-      json[r'time'] = time!.toUtc().toIso8601String();
+    if (this.time != null) {
+      json[r'time'] = this.time!.toUtc().toIso8601String();
+    } else {
+      json[r'time'] = null;
     }
     return json;
   }

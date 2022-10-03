@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -14,10 +15,20 @@ import 'package:kubenav/models/kubernetes/helpers.dart';
 class IoK8sApiAppsV1RollingUpdateStatefulSetStrategy {
   /// Returns a new [IoK8sApiAppsV1RollingUpdateStatefulSetStrategy] instance.
   IoK8sApiAppsV1RollingUpdateStatefulSetStrategy({
+    this.maxUnavailable,
     this.partition,
   });
 
-  /// Partition indicates the ordinal at which the StatefulSet should be partitioned. Default value is 0.
+  /// IntOrString is a type that can hold an int32 or a string.  When used in JSON or YAML marshalling and unmarshalling, it produces or consumes the inner type.  This allows you to have, for example, a JSON field that can accept a name or number.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  dynamic maxUnavailable;
+
+  /// Partition indicates the ordinal at which the StatefulSet should be partitioned for updates. During a rolling update, all pods from ordinal Replicas-1 to Partition are updated. All pods from ordinal Partition-1 to 0 remain untouched. This is helpful in being able to do a canary based deployment. The default value is 0.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -30,21 +41,30 @@ class IoK8sApiAppsV1RollingUpdateStatefulSetStrategy {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is IoK8sApiAppsV1RollingUpdateStatefulSetStrategy &&
+          other.maxUnavailable == maxUnavailable &&
           other.partition == partition;
 
   @override
   int get hashCode =>
       // ignore: unnecessary_parenthesis
+      (maxUnavailable == null ? 0 : maxUnavailable!.hashCode) +
       (partition == null ? 0 : partition!.hashCode);
 
   @override
   String toString() =>
-      'IoK8sApiAppsV1RollingUpdateStatefulSetStrategy[partition=$partition]';
+      'IoK8sApiAppsV1RollingUpdateStatefulSetStrategy[maxUnavailable=$maxUnavailable, partition=$partition]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (partition != null) {
-      json[r'partition'] = partition;
+    if (this.maxUnavailable != null) {
+      json[r'maxUnavailable'] = this.maxUnavailable;
+    } else {
+      json[r'maxUnavailable'] = null;
+    }
+    if (this.partition != null) {
+      json[r'partition'] = this.partition;
+    } else {
+      json[r'partition'] = null;
     }
     return json;
   }
@@ -71,6 +91,7 @@ class IoK8sApiAppsV1RollingUpdateStatefulSetStrategy {
       }());
 
       return IoK8sApiAppsV1RollingUpdateStatefulSetStrategy(
+        maxUnavailable: mapValueOfType<dynamic>(json, r'maxUnavailable'),
         partition: mapValueOfType<int>(json, r'partition'),
       );
     }

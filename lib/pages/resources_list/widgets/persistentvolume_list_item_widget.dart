@@ -37,7 +37,7 @@ class PersistentVolumeListItemWidget extends StatelessWidget
             : '-';
     final accessMode = pv?.spec?.accessModes.join(', ') ?? '-';
     final reclaimPolicy = pv?.spec?.persistentVolumeReclaimPolicy ?? '-';
-    final status = pv?.status?.phase?.value ?? '-';
+    final status = pv?.status?.phase ?? '-';
     final claim =
         '${pv?.spec?.claimRef?.namespace ?? '-'}/${pv?.spec?.claimRef?.name ?? '-'}';
     final storageClass = pv?.spec?.storageClassName ?? '-';

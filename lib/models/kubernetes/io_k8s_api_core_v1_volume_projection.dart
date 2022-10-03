@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -78,17 +79,25 @@ class IoK8sApiCoreV1VolumeProjection {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (configMap != null) {
-      json[r'configMap'] = configMap;
+    if (this.configMap != null) {
+      json[r'configMap'] = this.configMap;
+    } else {
+      json[r'configMap'] = null;
     }
-    if (downwardAPI != null) {
-      json[r'downwardAPI'] = downwardAPI;
+    if (this.downwardAPI != null) {
+      json[r'downwardAPI'] = this.downwardAPI;
+    } else {
+      json[r'downwardAPI'] = null;
     }
-    if (secret != null) {
-      json[r'secret'] = secret;
+    if (this.secret != null) {
+      json[r'secret'] = this.secret;
+    } else {
+      json[r'secret'] = null;
     }
-    if (serviceAccountToken != null) {
-      json[r'serviceAccountToken'] = serviceAccountToken;
+    if (this.serviceAccountToken != null) {
+      json[r'serviceAccountToken'] = this.serviceAccountToken;
+    } else {
+      json[r'serviceAccountToken'] = null;
     }
     return json;
   }

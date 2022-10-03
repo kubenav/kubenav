@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -67,13 +68,17 @@ class IoK8sApiAuthenticationV1UserInfo {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'extra'] = extra;
-    json[r'groups'] = groups;
-    if (uid != null) {
-      json[r'uid'] = uid;
+    json[r'extra'] = this.extra;
+    json[r'groups'] = this.groups;
+    if (this.uid != null) {
+      json[r'uid'] = this.uid;
+    } else {
+      json[r'uid'] = null;
     }
-    if (username != null) {
-      json[r'username'] = username;
+    if (this.username != null) {
+      json[r'username'] = this.username;
+    } else {
+      json[r'username'] = null;
     }
     return json;
   }

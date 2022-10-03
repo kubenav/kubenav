@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -70,7 +71,7 @@ class IoK8sApiCoreV1PersistentVolumeSpec {
     this.vsphereVolume,
   });
 
-  /// AccessModes contains all ways the volume can be mounted. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes
+  /// accessModes contains all ways the volume can be mounted. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes
   List<String> accessModes;
 
   ///
@@ -97,7 +98,7 @@ class IoK8sApiCoreV1PersistentVolumeSpec {
   ///
   IoK8sApiCoreV1AzureFilePersistentVolumeSource? azureFile;
 
-  /// A description of the persistent volume's resources and capacity. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity
+  /// capacity is the description of the persistent volume's resources and capacity. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity
   Map<String, String> capacity;
 
   ///
@@ -196,7 +197,7 @@ class IoK8sApiCoreV1PersistentVolumeSpec {
   ///
   IoK8sApiCoreV1LocalVolumeSource? local;
 
-  /// A list of mount options, e.g. [\"ro\", \"soft\"]. Not validated - mount will simply fail if one is invalid. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#mount-options
+  /// mountOptions is the list of mount options, e.g. [\"ro\", \"soft\"]. Not validated - mount will simply fail if one is invalid. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#mount-options
   List<String> mountOptions;
 
   ///
@@ -215,9 +216,14 @@ class IoK8sApiCoreV1PersistentVolumeSpec {
   ///
   IoK8sApiCoreV1VolumeNodeAffinity? nodeAffinity;
 
-  /// What happens to a persistent volume when released from its claim. Valid options are Retain (default for manually created PersistentVolumes), Delete (default for dynamically provisioned PersistentVolumes), and Recycle (deprecated). Recycle must be supported by the volume plugin underlying this PersistentVolume. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#reclaiming  Possible enum values:  - `\"Delete\"` means the volume will be deleted from Kubernetes on release from its claim. The volume plugin must support Deletion.  - `\"Recycle\"` means the volume will be recycled back into the pool of unbound persistent volumes on release from its claim. The volume plugin must support Recycling.  - `\"Retain\"` means the volume will be left in its current phase (Released) for manual reclamation by the administrator. The default policy is Retain.
-  IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum?
-      persistentVolumeReclaimPolicy;
+  /// persistentVolumeReclaimPolicy defines what happens to a persistent volume when released from its claim. Valid options are Retain (default for manually created PersistentVolumes), Delete (default for dynamically provisioned PersistentVolumes), and Recycle (deprecated). Recycle must be supported by the volume plugin underlying this PersistentVolume. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#reclaiming
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? persistentVolumeReclaimPolicy;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -259,7 +265,7 @@ class IoK8sApiCoreV1PersistentVolumeSpec {
   ///
   IoK8sApiCoreV1ScaleIOPersistentVolumeSource? scaleIO;
 
-  /// Name of StorageClass to which this persistent volume belongs. Empty value means that this volume does not belong to any StorageClass.
+  /// storageClassName is the name of StorageClass to which this persistent volume belongs. Empty value means that this volume does not belong to any StorageClass.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -371,89 +377,144 @@ class IoK8sApiCoreV1PersistentVolumeSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'accessModes'] = accessModes;
-    if (awsElasticBlockStore != null) {
-      json[r'awsElasticBlockStore'] = awsElasticBlockStore;
+    json[r'accessModes'] = this.accessModes;
+    if (this.awsElasticBlockStore != null) {
+      json[r'awsElasticBlockStore'] = this.awsElasticBlockStore;
+    } else {
+      json[r'awsElasticBlockStore'] = null;
     }
-    if (azureDisk != null) {
-      json[r'azureDisk'] = azureDisk;
+    if (this.azureDisk != null) {
+      json[r'azureDisk'] = this.azureDisk;
+    } else {
+      json[r'azureDisk'] = null;
     }
-    if (azureFile != null) {
-      json[r'azureFile'] = azureFile;
+    if (this.azureFile != null) {
+      json[r'azureFile'] = this.azureFile;
+    } else {
+      json[r'azureFile'] = null;
     }
-    json[r'capacity'] = capacity;
-    if (cephfs != null) {
-      json[r'cephfs'] = cephfs;
+    json[r'capacity'] = this.capacity;
+    if (this.cephfs != null) {
+      json[r'cephfs'] = this.cephfs;
+    } else {
+      json[r'cephfs'] = null;
     }
-    if (cinder != null) {
-      json[r'cinder'] = cinder;
+    if (this.cinder != null) {
+      json[r'cinder'] = this.cinder;
+    } else {
+      json[r'cinder'] = null;
     }
-    if (claimRef != null) {
-      json[r'claimRef'] = claimRef;
+    if (this.claimRef != null) {
+      json[r'claimRef'] = this.claimRef;
+    } else {
+      json[r'claimRef'] = null;
     }
-    if (csi != null) {
-      json[r'csi'] = csi;
+    if (this.csi != null) {
+      json[r'csi'] = this.csi;
+    } else {
+      json[r'csi'] = null;
     }
-    if (fc != null) {
-      json[r'fc'] = fc;
+    if (this.fc != null) {
+      json[r'fc'] = this.fc;
+    } else {
+      json[r'fc'] = null;
     }
-    if (flexVolume != null) {
-      json[r'flexVolume'] = flexVolume;
+    if (this.flexVolume != null) {
+      json[r'flexVolume'] = this.flexVolume;
+    } else {
+      json[r'flexVolume'] = null;
     }
-    if (flocker != null) {
-      json[r'flocker'] = flocker;
+    if (this.flocker != null) {
+      json[r'flocker'] = this.flocker;
+    } else {
+      json[r'flocker'] = null;
     }
-    if (gcePersistentDisk != null) {
-      json[r'gcePersistentDisk'] = gcePersistentDisk;
+    if (this.gcePersistentDisk != null) {
+      json[r'gcePersistentDisk'] = this.gcePersistentDisk;
+    } else {
+      json[r'gcePersistentDisk'] = null;
     }
-    if (glusterfs != null) {
-      json[r'glusterfs'] = glusterfs;
+    if (this.glusterfs != null) {
+      json[r'glusterfs'] = this.glusterfs;
+    } else {
+      json[r'glusterfs'] = null;
     }
-    if (hostPath != null) {
-      json[r'hostPath'] = hostPath;
+    if (this.hostPath != null) {
+      json[r'hostPath'] = this.hostPath;
+    } else {
+      json[r'hostPath'] = null;
     }
-    if (iscsi != null) {
-      json[r'iscsi'] = iscsi;
+    if (this.iscsi != null) {
+      json[r'iscsi'] = this.iscsi;
+    } else {
+      json[r'iscsi'] = null;
     }
-    if (local != null) {
-      json[r'local'] = local;
+    if (this.local != null) {
+      json[r'local'] = this.local;
+    } else {
+      json[r'local'] = null;
     }
-    json[r'mountOptions'] = mountOptions;
-    if (nfs != null) {
-      json[r'nfs'] = nfs;
+    json[r'mountOptions'] = this.mountOptions;
+    if (this.nfs != null) {
+      json[r'nfs'] = this.nfs;
+    } else {
+      json[r'nfs'] = null;
     }
-    if (nodeAffinity != null) {
-      json[r'nodeAffinity'] = nodeAffinity;
+    if (this.nodeAffinity != null) {
+      json[r'nodeAffinity'] = this.nodeAffinity;
+    } else {
+      json[r'nodeAffinity'] = null;
     }
-    if (persistentVolumeReclaimPolicy != null) {
-      json[r'persistentVolumeReclaimPolicy'] = persistentVolumeReclaimPolicy;
+    if (this.persistentVolumeReclaimPolicy != null) {
+      json[r'persistentVolumeReclaimPolicy'] =
+          this.persistentVolumeReclaimPolicy;
+    } else {
+      json[r'persistentVolumeReclaimPolicy'] = null;
     }
-    if (photonPersistentDisk != null) {
-      json[r'photonPersistentDisk'] = photonPersistentDisk;
+    if (this.photonPersistentDisk != null) {
+      json[r'photonPersistentDisk'] = this.photonPersistentDisk;
+    } else {
+      json[r'photonPersistentDisk'] = null;
     }
-    if (portworxVolume != null) {
-      json[r'portworxVolume'] = portworxVolume;
+    if (this.portworxVolume != null) {
+      json[r'portworxVolume'] = this.portworxVolume;
+    } else {
+      json[r'portworxVolume'] = null;
     }
-    if (quobyte != null) {
-      json[r'quobyte'] = quobyte;
+    if (this.quobyte != null) {
+      json[r'quobyte'] = this.quobyte;
+    } else {
+      json[r'quobyte'] = null;
     }
-    if (rbd != null) {
-      json[r'rbd'] = rbd;
+    if (this.rbd != null) {
+      json[r'rbd'] = this.rbd;
+    } else {
+      json[r'rbd'] = null;
     }
-    if (scaleIO != null) {
-      json[r'scaleIO'] = scaleIO;
+    if (this.scaleIO != null) {
+      json[r'scaleIO'] = this.scaleIO;
+    } else {
+      json[r'scaleIO'] = null;
     }
-    if (storageClassName != null) {
-      json[r'storageClassName'] = storageClassName;
+    if (this.storageClassName != null) {
+      json[r'storageClassName'] = this.storageClassName;
+    } else {
+      json[r'storageClassName'] = null;
     }
-    if (storageos != null) {
-      json[r'storageos'] = storageos;
+    if (this.storageos != null) {
+      json[r'storageos'] = this.storageos;
+    } else {
+      json[r'storageos'] = null;
     }
-    if (volumeMode != null) {
-      json[r'volumeMode'] = volumeMode;
+    if (this.volumeMode != null) {
+      json[r'volumeMode'] = this.volumeMode;
+    } else {
+      json[r'volumeMode'] = null;
     }
-    if (vsphereVolume != null) {
-      json[r'vsphereVolume'] = vsphereVolume;
+    if (this.vsphereVolume != null) {
+      json[r'vsphereVolume'] = this.vsphereVolume;
+    } else {
+      json[r'vsphereVolume'] = null;
     }
     return json;
   }
@@ -516,8 +577,7 @@ class IoK8sApiCoreV1PersistentVolumeSpec {
         nodeAffinity:
             IoK8sApiCoreV1VolumeNodeAffinity.fromJson(json[r'nodeAffinity']),
         persistentVolumeReclaimPolicy:
-            IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum
-                .fromJson(json[r'persistentVolumeReclaimPolicy']),
+            mapValueOfType<String>(json, r'persistentVolumeReclaimPolicy'),
         photonPersistentDisk:
             IoK8sApiCoreV1PhotonPersistentDiskVolumeSource.fromJson(
                 json[r'photonPersistentDisk']),
@@ -592,114 +652,4 @@ class IoK8sApiCoreV1PersistentVolumeSpec {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{};
-}
-
-/// What happens to a persistent volume when released from its claim. Valid options are Retain (default for manually created PersistentVolumes), Delete (default for dynamically provisioned PersistentVolumes), and Recycle (deprecated). Recycle must be supported by the volume plugin underlying this PersistentVolume. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#reclaiming  Possible enum values:  - `\"Delete\"` means the volume will be deleted from Kubernetes on release from its claim. The volume plugin must support Deletion.  - `\"Recycle\"` means the volume will be recycled back into the pool of unbound persistent volumes on release from its claim. The volume plugin must support Recycling.  - `\"Retain\"` means the volume will be left in its current phase (Released) for manual reclamation by the administrator. The default policy is Retain.
-class IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum._(
-      this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const delete =
-      IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum._(
-          r'Delete');
-  static const recycle =
-      IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum._(
-          r'Recycle');
-  static const retain =
-      IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum._(
-          r'Retain');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum].
-  static const values =
-      <IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum>[
-    delete,
-    recycle,
-    retain,
-  ];
-
-  static IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum?
-      fromJson(dynamic value) =>
-          IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnumTypeTransformer()
-              .decode(value);
-
-  static List<
-          IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum>?
-      listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result =
-        <IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value =
-            IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum
-                .fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum].
-class IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnumTypeTransformer {
-  factory IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnumTypeTransformer
-              ._();
-
-  const IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnumTypeTransformer._();
-
-  String encode(
-          IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum
-              data) =>
-      data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum? decode(
-      dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'Delete':
-          return IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum
-              .delete;
-        case r'Recycle':
-          return IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum
-              .recycle;
-        case r'Retain':
-          return IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnum
-              .retain;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1PersistentVolumeSpecPersistentVolumeReclaimPolicyEnumTypeTransformer?
-      _instance;
 }

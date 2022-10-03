@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -49,10 +50,12 @@ class IoK8sApiextensionsApiserverPkgApisApiextensionsV1WebhookConversion {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (clientConfig != null) {
-      json[r'clientConfig'] = clientConfig;
+    if (this.clientConfig != null) {
+      json[r'clientConfig'] = this.clientConfig;
+    } else {
+      json[r'clientConfig'] = null;
     }
-    json[r'conversionReviewVersions'] = conversionReviewVersions;
+    json[r'conversionReviewVersions'] = this.conversionReviewVersions;
     return json;
   }
 

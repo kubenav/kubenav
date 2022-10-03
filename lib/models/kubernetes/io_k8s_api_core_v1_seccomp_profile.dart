@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -27,8 +28,8 @@ class IoK8sApiCoreV1SeccompProfile {
   ///
   String? localhostProfile;
 
-  /// type indicates which kind of seccomp profile will be applied. Valid options are:  Localhost - a profile defined in a file on the node should be used. RuntimeDefault - the container runtime default profile should be used. Unconfined - no profile should be applied.  Possible enum values:  - `\"Localhost\"` indicates a profile defined in a file on the node should be used. The file's location relative to <kubelet-root-dir>/seccomp.  - `\"RuntimeDefault\"` represents the default container runtime seccomp profile.  - `\"Unconfined\"` indicates no seccomp profile is applied (A.K.A. unconfined).
-  IoK8sApiCoreV1SeccompProfileTypeEnum type;
+  /// type indicates which kind of seccomp profile will be applied. Valid options are:  Localhost - a profile defined in a file on the node should be used. RuntimeDefault - the container runtime default profile should be used. Unconfined - no profile should be applied.
+  String type;
 
   @override
   bool operator ==(Object other) =>
@@ -49,10 +50,12 @@ class IoK8sApiCoreV1SeccompProfile {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (localhostProfile != null) {
-      json[r'localhostProfile'] = localhostProfile;
+    if (this.localhostProfile != null) {
+      json[r'localhostProfile'] = this.localhostProfile;
+    } else {
+      json[r'localhostProfile'] = null;
     }
-    json[r'type'] = type;
+    json[r'type'] = this.type;
     return json;
   }
 
@@ -78,7 +81,7 @@ class IoK8sApiCoreV1SeccompProfile {
 
       return IoK8sApiCoreV1SeccompProfile(
         localhostProfile: mapValueOfType<String>(json, r'localhostProfile'),
-        type: IoK8sApiCoreV1SeccompProfileTypeEnum.fromJson(json[r'type'])!,
+        type: mapValueOfType<String>(json, r'type')!,
       );
     }
     return null;
@@ -139,91 +142,4 @@ class IoK8sApiCoreV1SeccompProfile {
   static const requiredKeys = <String>{
     'type',
   };
-}
-
-/// type indicates which kind of seccomp profile will be applied. Valid options are:  Localhost - a profile defined in a file on the node should be used. RuntimeDefault - the container runtime default profile should be used. Unconfined - no profile should be applied.  Possible enum values:  - `\"Localhost\"` indicates a profile defined in a file on the node should be used. The file's location relative to <kubelet-root-dir>/seccomp.  - `\"RuntimeDefault\"` represents the default container runtime seccomp profile.  - `\"Unconfined\"` indicates no seccomp profile is applied (A.K.A. unconfined).
-class IoK8sApiCoreV1SeccompProfileTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1SeccompProfileTypeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const localhost = IoK8sApiCoreV1SeccompProfileTypeEnum._(r'Localhost');
-  static const runtimeDefault =
-      IoK8sApiCoreV1SeccompProfileTypeEnum._(r'RuntimeDefault');
-  static const unconfined =
-      IoK8sApiCoreV1SeccompProfileTypeEnum._(r'Unconfined');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1SeccompProfileTypeEnum].
-  static const values = <IoK8sApiCoreV1SeccompProfileTypeEnum>[
-    localhost,
-    runtimeDefault,
-    unconfined,
-  ];
-
-  static IoK8sApiCoreV1SeccompProfileTypeEnum? fromJson(dynamic value) =>
-      IoK8sApiCoreV1SeccompProfileTypeEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiCoreV1SeccompProfileTypeEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1SeccompProfileTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiCoreV1SeccompProfileTypeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1SeccompProfileTypeEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1SeccompProfileTypeEnum].
-class IoK8sApiCoreV1SeccompProfileTypeEnumTypeTransformer {
-  factory IoK8sApiCoreV1SeccompProfileTypeEnumTypeTransformer() => _instance ??=
-      const IoK8sApiCoreV1SeccompProfileTypeEnumTypeTransformer._();
-
-  const IoK8sApiCoreV1SeccompProfileTypeEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1SeccompProfileTypeEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1SeccompProfileTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1SeccompProfileTypeEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'Localhost':
-          return IoK8sApiCoreV1SeccompProfileTypeEnum.localhost;
-        case r'RuntimeDefault':
-          return IoK8sApiCoreV1SeccompProfileTypeEnum.runtimeDefault;
-        case r'Unconfined':
-          return IoK8sApiCoreV1SeccompProfileTypeEnum.unconfined;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1SeccompProfileTypeEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1SeccompProfileTypeEnumTypeTransformer? _instance;
 }

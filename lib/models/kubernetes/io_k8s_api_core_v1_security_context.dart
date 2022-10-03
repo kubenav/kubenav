@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -165,38 +166,60 @@ class IoK8sApiCoreV1SecurityContext {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (allowPrivilegeEscalation != null) {
-      json[r'allowPrivilegeEscalation'] = allowPrivilegeEscalation;
+    if (this.allowPrivilegeEscalation != null) {
+      json[r'allowPrivilegeEscalation'] = this.allowPrivilegeEscalation;
+    } else {
+      json[r'allowPrivilegeEscalation'] = null;
     }
-    if (capabilities != null) {
-      json[r'capabilities'] = capabilities;
+    if (this.capabilities != null) {
+      json[r'capabilities'] = this.capabilities;
+    } else {
+      json[r'capabilities'] = null;
     }
-    if (privileged != null) {
-      json[r'privileged'] = privileged;
+    if (this.privileged != null) {
+      json[r'privileged'] = this.privileged;
+    } else {
+      json[r'privileged'] = null;
     }
-    if (procMount != null) {
-      json[r'procMount'] = procMount;
+    if (this.procMount != null) {
+      json[r'procMount'] = this.procMount;
+    } else {
+      json[r'procMount'] = null;
     }
-    if (readOnlyRootFilesystem != null) {
-      json[r'readOnlyRootFilesystem'] = readOnlyRootFilesystem;
+    if (this.readOnlyRootFilesystem != null) {
+      json[r'readOnlyRootFilesystem'] = this.readOnlyRootFilesystem;
+    } else {
+      json[r'readOnlyRootFilesystem'] = null;
     }
-    if (runAsGroup != null) {
-      json[r'runAsGroup'] = runAsGroup;
+    if (this.runAsGroup != null) {
+      json[r'runAsGroup'] = this.runAsGroup;
+    } else {
+      json[r'runAsGroup'] = null;
     }
-    if (runAsNonRoot != null) {
-      json[r'runAsNonRoot'] = runAsNonRoot;
+    if (this.runAsNonRoot != null) {
+      json[r'runAsNonRoot'] = this.runAsNonRoot;
+    } else {
+      json[r'runAsNonRoot'] = null;
     }
-    if (runAsUser != null) {
-      json[r'runAsUser'] = runAsUser;
+    if (this.runAsUser != null) {
+      json[r'runAsUser'] = this.runAsUser;
+    } else {
+      json[r'runAsUser'] = null;
     }
-    if (seLinuxOptions != null) {
-      json[r'seLinuxOptions'] = seLinuxOptions;
+    if (this.seLinuxOptions != null) {
+      json[r'seLinuxOptions'] = this.seLinuxOptions;
+    } else {
+      json[r'seLinuxOptions'] = null;
     }
-    if (seccompProfile != null) {
-      json[r'seccompProfile'] = seccompProfile;
+    if (this.seccompProfile != null) {
+      json[r'seccompProfile'] = this.seccompProfile;
+    } else {
+      json[r'seccompProfile'] = null;
     }
-    if (windowsOptions != null) {
-      json[r'windowsOptions'] = windowsOptions;
+    if (this.windowsOptions != null) {
+      json[r'windowsOptions'] = this.windowsOptions;
+    } else {
+      json[r'windowsOptions'] = null;
     }
     return json;
   }

@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -109,24 +110,36 @@ class IoK8sApimachineryPkgApisMetaV1DeleteOptions {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (apiVersion != null) {
-      json[r'apiVersion'] = apiVersion;
+    if (this.apiVersion != null) {
+      json[r'apiVersion'] = this.apiVersion;
+    } else {
+      json[r'apiVersion'] = null;
     }
-    json[r'dryRun'] = dryRun;
-    if (gracePeriodSeconds != null) {
-      json[r'gracePeriodSeconds'] = gracePeriodSeconds;
+    json[r'dryRun'] = this.dryRun;
+    if (this.gracePeriodSeconds != null) {
+      json[r'gracePeriodSeconds'] = this.gracePeriodSeconds;
+    } else {
+      json[r'gracePeriodSeconds'] = null;
     }
-    if (kind != null) {
-      json[r'kind'] = kind;
+    if (this.kind != null) {
+      json[r'kind'] = this.kind;
+    } else {
+      json[r'kind'] = null;
     }
-    if (orphanDependents != null) {
-      json[r'orphanDependents'] = orphanDependents;
+    if (this.orphanDependents != null) {
+      json[r'orphanDependents'] = this.orphanDependents;
+    } else {
+      json[r'orphanDependents'] = null;
     }
-    if (preconditions != null) {
-      json[r'preconditions'] = preconditions;
+    if (this.preconditions != null) {
+      json[r'preconditions'] = this.preconditions;
+    } else {
+      json[r'preconditions'] = null;
     }
-    if (propagationPolicy != null) {
-      json[r'propagationPolicy'] = propagationPolicy;
+    if (this.propagationPolicy != null) {
+      json[r'propagationPolicy'] = this.propagationPolicy;
+    } else {
+      json[r'propagationPolicy'] = null;
     }
     return json;
   }

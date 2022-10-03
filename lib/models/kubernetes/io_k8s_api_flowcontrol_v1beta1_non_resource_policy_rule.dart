@@ -4,11 +4,11 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
-
 
 class IoK8sApiFlowcontrolV1beta1NonResourcePolicyRule {
   /// Returns a new [IoK8sApiFlowcontrolV1beta1NonResourcePolicyRule] instance.
@@ -41,8 +41,8 @@ class IoK8sApiFlowcontrolV1beta1NonResourcePolicyRule {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'nonResourceURLs'] = nonResourceURLs;
-    json[r'verbs'] = verbs;
+    json[r'nonResourceURLs'] = this.nonResourceURLs;
+    json[r'verbs'] = this.verbs;
     return json;
   }
 

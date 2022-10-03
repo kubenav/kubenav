@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -46,8 +47,14 @@ class IoK8sApiCoreV1HTTPGetAction {
   /// IntOrString is a type that can hold an int32 or a string.  When used in JSON or YAML marshalling and unmarshalling, it produces or consumes the inner type.  This allows you to have, for example, a JSON field that can accept a name or number.
   dynamic port;
 
-  /// Scheme to use for connecting to the host. Defaults to HTTP.  Possible enum values:  - `\"HTTP\"` means that the scheme used will be http://  - `\"HTTPS\"` means that the scheme used will be https://
-  IoK8sApiCoreV1HTTPGetActionSchemeEnum? scheme;
+  /// Scheme to use for connecting to the host. Defaults to HTTP.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? scheme;
 
   @override
   bool operator ==(Object other) =>
@@ -74,16 +81,22 @@ class IoK8sApiCoreV1HTTPGetAction {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (host != null) {
-      json[r'host'] = host;
+    if (this.host != null) {
+      json[r'host'] = this.host;
+    } else {
+      json[r'host'] = null;
     }
-    json[r'httpHeaders'] = httpHeaders;
-    if (path != null) {
-      json[r'path'] = path;
+    json[r'httpHeaders'] = this.httpHeaders;
+    if (this.path != null) {
+      json[r'path'] = this.path;
+    } else {
+      json[r'path'] = null;
     }
-    json[r'port'] = port;
-    if (scheme != null) {
-      json[r'scheme'] = scheme;
+    json[r'port'] = this.port;
+    if (this.scheme != null) {
+      json[r'scheme'] = this.scheme;
+    } else {
+      json[r'scheme'] = null;
     }
     return json;
   }
@@ -114,8 +127,8 @@ class IoK8sApiCoreV1HTTPGetAction {
             IoK8sApiCoreV1HTTPHeader.listFromJson(json[r'httpHeaders']) ??
                 const [],
         path: mapValueOfType<String>(json, r'path'),
-        port: mapValueOfType<dynamic>(json, r'port')!,
-        scheme: IoK8sApiCoreV1HTTPGetActionSchemeEnum.fromJson(json[r'scheme']),
+        port: mapValueOfType<dynamic>(json, r'port'),
+        scheme: mapValueOfType<String>(json, r'scheme'),
       );
     }
     return null;
@@ -176,86 +189,4 @@ class IoK8sApiCoreV1HTTPGetAction {
   static const requiredKeys = <String>{
     'port',
   };
-}
-
-/// Scheme to use for connecting to the host. Defaults to HTTP.  Possible enum values:  - `\"HTTP\"` means that the scheme used will be http://  - `\"HTTPS\"` means that the scheme used will be https://
-class IoK8sApiCoreV1HTTPGetActionSchemeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1HTTPGetActionSchemeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const HTTP = IoK8sApiCoreV1HTTPGetActionSchemeEnum._(r'HTTP');
-  static const HTTPS = IoK8sApiCoreV1HTTPGetActionSchemeEnum._(r'HTTPS');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1HTTPGetActionSchemeEnum].
-  static const values = <IoK8sApiCoreV1HTTPGetActionSchemeEnum>[
-    HTTP,
-    HTTPS,
-  ];
-
-  static IoK8sApiCoreV1HTTPGetActionSchemeEnum? fromJson(dynamic value) =>
-      IoK8sApiCoreV1HTTPGetActionSchemeEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiCoreV1HTTPGetActionSchemeEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1HTTPGetActionSchemeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiCoreV1HTTPGetActionSchemeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1HTTPGetActionSchemeEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1HTTPGetActionSchemeEnum].
-class IoK8sApiCoreV1HTTPGetActionSchemeEnumTypeTransformer {
-  factory IoK8sApiCoreV1HTTPGetActionSchemeEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1HTTPGetActionSchemeEnumTypeTransformer._();
-
-  const IoK8sApiCoreV1HTTPGetActionSchemeEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1HTTPGetActionSchemeEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1HTTPGetActionSchemeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1HTTPGetActionSchemeEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'HTTP':
-          return IoK8sApiCoreV1HTTPGetActionSchemeEnum.HTTP;
-        case r'HTTPS':
-          return IoK8sApiCoreV1HTTPGetActionSchemeEnum.HTTPS;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1HTTPGetActionSchemeEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1HTTPGetActionSchemeEnumTypeTransformer? _instance;
 }

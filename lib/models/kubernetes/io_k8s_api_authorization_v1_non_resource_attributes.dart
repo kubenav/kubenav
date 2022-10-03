@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -54,11 +55,15 @@ class IoK8sApiAuthorizationV1NonResourceAttributes {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (path != null) {
-      json[r'path'] = path;
+    if (this.path != null) {
+      json[r'path'] = this.path;
+    } else {
+      json[r'path'] = null;
     }
-    if (verb != null) {
-      json[r'verb'] = verb;
+    if (this.verb != null) {
+      json[r'verb'] = this.verb;
+    } else {
+      json[r'verb'] = null;
     }
     return json;
   }

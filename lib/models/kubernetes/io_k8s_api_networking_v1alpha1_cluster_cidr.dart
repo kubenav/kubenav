@@ -4,24 +4,23 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1beta1_pod_disruption_budget_spec.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1beta1_pod_disruption_budget_status.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1alpha1_cluster_cidr_spec.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
 
-class IoK8sApiPolicyV1beta1PodDisruptionBudget {
-  /// Returns a new [IoK8sApiPolicyV1beta1PodDisruptionBudget] instance.
-  IoK8sApiPolicyV1beta1PodDisruptionBudget({
+class IoK8sApiNetworkingV1alpha1ClusterCIDR {
+  /// Returns a new [IoK8sApiNetworkingV1alpha1ClusterCIDR] instance.
+  IoK8sApiNetworkingV1alpha1ClusterCIDR({
     this.apiVersion,
     this.kind,
     this.metadata,
     this.spec,
-    this.status,
   });
 
   /// APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
@@ -56,25 +55,16 @@ class IoK8sApiPolicyV1beta1PodDisruptionBudget {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoK8sApiPolicyV1beta1PodDisruptionBudgetSpec? spec;
-
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  IoK8sApiPolicyV1beta1PodDisruptionBudgetStatus? status;
+  IoK8sApiNetworkingV1alpha1ClusterCIDRSpec? spec;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is IoK8sApiPolicyV1beta1PodDisruptionBudget &&
+      other is IoK8sApiNetworkingV1alpha1ClusterCIDR &&
           other.apiVersion == apiVersion &&
           other.kind == kind &&
           other.metadata == metadata &&
-          other.spec == spec &&
-          other.status == status;
+          other.spec == spec;
 
   @override
   int get hashCode =>
@@ -82,37 +72,41 @@ class IoK8sApiPolicyV1beta1PodDisruptionBudget {
       (apiVersion == null ? 0 : apiVersion!.hashCode) +
       (kind == null ? 0 : kind!.hashCode) +
       (metadata == null ? 0 : metadata!.hashCode) +
-      (spec == null ? 0 : spec!.hashCode) +
-      (status == null ? 0 : status!.hashCode);
+      (spec == null ? 0 : spec!.hashCode);
 
   @override
   String toString() =>
-      'IoK8sApiPolicyV1beta1PodDisruptionBudget[apiVersion=$apiVersion, kind=$kind, metadata=$metadata, spec=$spec, status=$status]';
+      'IoK8sApiNetworkingV1alpha1ClusterCIDR[apiVersion=$apiVersion, kind=$kind, metadata=$metadata, spec=$spec]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (apiVersion != null) {
-      json[r'apiVersion'] = apiVersion;
+    if (this.apiVersion != null) {
+      json[r'apiVersion'] = this.apiVersion;
+    } else {
+      json[r'apiVersion'] = null;
     }
-    if (kind != null) {
-      json[r'kind'] = kind;
+    if (this.kind != null) {
+      json[r'kind'] = this.kind;
+    } else {
+      json[r'kind'] = null;
     }
-    if (metadata != null) {
-      json[r'metadata'] = metadata;
+    if (this.metadata != null) {
+      json[r'metadata'] = this.metadata;
+    } else {
+      json[r'metadata'] = null;
     }
-    if (spec != null) {
-      json[r'spec'] = spec;
-    }
-    if (status != null) {
-      json[r'status'] = status;
+    if (this.spec != null) {
+      json[r'spec'] = this.spec;
+    } else {
+      json[r'spec'] = null;
     }
     return json;
   }
 
-  /// Returns a new [IoK8sApiPolicyV1beta1PodDisruptionBudget] instance and imports its values from
+  /// Returns a new [IoK8sApiNetworkingV1alpha1ClusterCIDR] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static IoK8sApiPolicyV1beta1PodDisruptionBudget? fromJson(dynamic value) {
+  static IoK8sApiNetworkingV1alpha1ClusterCIDR? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -122,35 +116,32 @@ class IoK8sApiPolicyV1beta1PodDisruptionBudget {
       assert(() {
         requiredKeys.forEach((key) {
           assert(json.containsKey(key),
-              'Required key "IoK8sApiPolicyV1beta1PodDisruptionBudget[$key]" is missing from JSON.');
+              'Required key "IoK8sApiNetworkingV1alpha1ClusterCIDR[$key]" is missing from JSON.');
           assert(json[key] != null,
-              'Required key "IoK8sApiPolicyV1beta1PodDisruptionBudget[$key]" has a null value in JSON.');
+              'Required key "IoK8sApiNetworkingV1alpha1ClusterCIDR[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return IoK8sApiPolicyV1beta1PodDisruptionBudget(
+      return IoK8sApiNetworkingV1alpha1ClusterCIDR(
         apiVersion: mapValueOfType<String>(json, r'apiVersion'),
         kind: mapValueOfType<String>(json, r'kind'),
         metadata: IoK8sApimachineryPkgApisMetaV1ObjectMeta.fromJson(
             json[r'metadata']),
-        spec: IoK8sApiPolicyV1beta1PodDisruptionBudgetSpec.fromJson(
-            json[r'spec']),
-        status: IoK8sApiPolicyV1beta1PodDisruptionBudgetStatus.fromJson(
-            json[r'status']),
+        spec: IoK8sApiNetworkingV1alpha1ClusterCIDRSpec.fromJson(json[r'spec']),
       );
     }
     return null;
   }
 
-  static List<IoK8sApiPolicyV1beta1PodDisruptionBudget>? listFromJson(
+  static List<IoK8sApiNetworkingV1alpha1ClusterCIDR>? listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final result = <IoK8sApiPolicyV1beta1PodDisruptionBudget>[];
+    final result = <IoK8sApiNetworkingV1alpha1ClusterCIDR>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = IoK8sApiPolicyV1beta1PodDisruptionBudget.fromJson(row);
+        final value = IoK8sApiNetworkingV1alpha1ClusterCIDR.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -159,14 +150,14 @@ class IoK8sApiPolicyV1beta1PodDisruptionBudget {
     return result.toList(growable: growable);
   }
 
-  static Map<String, IoK8sApiPolicyV1beta1PodDisruptionBudget> mapFromJson(
+  static Map<String, IoK8sApiNetworkingV1alpha1ClusterCIDR> mapFromJson(
       dynamic json) {
-    final map = <String, IoK8sApiPolicyV1beta1PodDisruptionBudget>{};
+    final map = <String, IoK8sApiNetworkingV1alpha1ClusterCIDR>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
         final value =
-            IoK8sApiPolicyV1beta1PodDisruptionBudget.fromJson(entry.value);
+            IoK8sApiNetworkingV1alpha1ClusterCIDR.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -175,17 +166,17 @@ class IoK8sApiPolicyV1beta1PodDisruptionBudget {
     return map;
   }
 
-  // maps a json object with a list of IoK8sApiPolicyV1beta1PodDisruptionBudget-objects as value to a dart map
-  static Map<String, List<IoK8sApiPolicyV1beta1PodDisruptionBudget>>
+  // maps a json object with a list of IoK8sApiNetworkingV1alpha1ClusterCIDR-objects as value to a dart map
+  static Map<String, List<IoK8sApiNetworkingV1alpha1ClusterCIDR>>
       mapListFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final map = <String, List<IoK8sApiPolicyV1beta1PodDisruptionBudget>>{};
+    final map = <String, List<IoK8sApiNetworkingV1alpha1ClusterCIDR>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = IoK8sApiPolicyV1beta1PodDisruptionBudget.listFromJson(
+        final value = IoK8sApiNetworkingV1alpha1ClusterCIDR.listFromJson(
           entry.value,
           growable: growable,
         );

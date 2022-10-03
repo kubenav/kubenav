@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -48,9 +49,9 @@ class IoK8sApiCoreV1EndpointSubset {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'addresses'] = addresses;
-    json[r'notReadyAddresses'] = notReadyAddresses;
-    json[r'ports'] = ports;
+    json[r'addresses'] = this.addresses;
+    json[r'notReadyAddresses'] = this.notReadyAddresses;
+    json[r'ports'] = this.ports;
     return json;
   }
 

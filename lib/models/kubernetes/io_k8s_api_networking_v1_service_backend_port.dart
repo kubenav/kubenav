@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -55,11 +56,15 @@ class IoK8sApiNetworkingV1ServiceBackendPort {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (name != null) {
-      json[r'name'] = name;
+    if (this.name != null) {
+      json[r'name'] = this.name;
+    } else {
+      json[r'name'] = null;
     }
-    if (number != null) {
-      json[r'number'] = number;
+    if (this.number != null) {
+      json[r'number'] = this.number;
+    } else {
+      json[r'number'] = null;
     }
     return json;
   }

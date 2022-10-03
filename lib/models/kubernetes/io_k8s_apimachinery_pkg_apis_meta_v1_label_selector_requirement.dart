@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -47,9 +48,9 @@ class IoK8sApimachineryPkgApisMetaV1LabelSelectorRequirement {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'key'] = key;
-    json[r'operator'] = operator_;
-    json[r'values'] = values;
+    json[r'key'] = this.key;
+    json[r'operator'] = this.operator_;
+    json[r'values'] = this.values;
     return json;
   }
 

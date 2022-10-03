@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -21,7 +22,7 @@ class IoK8sApiCoreV1FCVolumeSource {
     this.wwids = const [],
   });
 
-  /// Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.
+  /// fsType is the filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -30,7 +31,7 @@ class IoK8sApiCoreV1FCVolumeSource {
   ///
   String? fsType;
 
-  /// Optional: FC target lun number
+  /// lun is Optional: FC target lun number
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -39,7 +40,7 @@ class IoK8sApiCoreV1FCVolumeSource {
   ///
   int? lun;
 
-  /// Optional: Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
+  /// readOnly is Optional: Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -48,10 +49,10 @@ class IoK8sApiCoreV1FCVolumeSource {
   ///
   bool? readOnly;
 
-  /// Optional: FC target worldwide names (WWNs)
+  /// targetWWNs is Optional: FC target worldwide names (WWNs)
   List<String> targetWWNs;
 
-  /// Optional: FC volume world wide identifiers (wwids) Either wwids or combination of targetWWNs and lun must be set, but not both simultaneously.
+  /// wwids Optional: FC volume world wide identifiers (wwids) Either wwids or combination of targetWWNs and lun must be set, but not both simultaneously.
   List<String> wwids;
 
   @override
@@ -79,17 +80,23 @@ class IoK8sApiCoreV1FCVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (fsType != null) {
-      json[r'fsType'] = fsType;
+    if (this.fsType != null) {
+      json[r'fsType'] = this.fsType;
+    } else {
+      json[r'fsType'] = null;
     }
-    if (lun != null) {
-      json[r'lun'] = lun;
+    if (this.lun != null) {
+      json[r'lun'] = this.lun;
+    } else {
+      json[r'lun'] = null;
     }
-    if (readOnly != null) {
-      json[r'readOnly'] = readOnly;
+    if (this.readOnly != null) {
+      json[r'readOnly'] = this.readOnly;
+    } else {
+      json[r'readOnly'] = null;
     }
-    json[r'targetWWNs'] = targetWWNs;
-    json[r'wwids'] = wwids;
+    json[r'targetWWNs'] = this.targetWWNs;
+    json[r'wwids'] = this.wwids;
     return json;
   }
 

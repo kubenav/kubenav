@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -97,22 +98,32 @@ class IoK8sApiAutoscalingV2beta2MetricStatus {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (containerResource != null) {
-      json[r'containerResource'] = containerResource;
+    if (this.containerResource != null) {
+      json[r'containerResource'] = this.containerResource;
+    } else {
+      json[r'containerResource'] = null;
     }
-    if (external_ != null) {
-      json[r'external'] = external_;
+    if (this.external_ != null) {
+      json[r'external'] = this.external_;
+    } else {
+      json[r'external'] = null;
     }
-    if (object != null) {
-      json[r'object'] = object;
+    if (this.object != null) {
+      json[r'object'] = this.object;
+    } else {
+      json[r'object'] = null;
     }
-    if (pods != null) {
-      json[r'pods'] = pods;
+    if (this.pods != null) {
+      json[r'pods'] = this.pods;
+    } else {
+      json[r'pods'] = null;
     }
-    if (resource != null) {
-      json[r'resource'] = resource;
+    if (this.resource != null) {
+      json[r'resource'] = this.resource;
+    } else {
+      json[r'resource'] = null;
     }
-    json[r'type'] = type;
+    json[r'type'] = this.type;
     return json;
   }
 

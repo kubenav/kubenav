@@ -4,22 +4,23 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_node_v1alpha1_runtime_class_spec.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1alpha1_cluster_cidr.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_list_meta.dart';
 
-class IoK8sApiNodeV1alpha1RuntimeClass {
-  /// Returns a new [IoK8sApiNodeV1alpha1RuntimeClass] instance.
-  IoK8sApiNodeV1alpha1RuntimeClass({
+class IoK8sApiNetworkingV1alpha1ClusterCIDRList {
+  /// Returns a new [IoK8sApiNetworkingV1alpha1ClusterCIDRList] instance.
+  IoK8sApiNetworkingV1alpha1ClusterCIDRList({
     this.apiVersion,
+    this.items = const [],
     this.kind,
     this.metadata,
-    required this.spec,
   });
 
   /// APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
@@ -30,6 +31,9 @@ class IoK8sApiNodeV1alpha1RuntimeClass {
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
   String? apiVersion;
+
+  /// Items is the list of ClusterCIDRs.
+  List<IoK8sApiNetworkingV1alpha1ClusterCIDR> items;
 
   /// Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
   ///
@@ -46,50 +50,54 @@ class IoK8sApiNodeV1alpha1RuntimeClass {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoK8sApimachineryPkgApisMetaV1ObjectMeta? metadata;
-
-  IoK8sApiNodeV1alpha1RuntimeClassSpec spec;
+  IoK8sApimachineryPkgApisMetaV1ListMeta? metadata;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is IoK8sApiNodeV1alpha1RuntimeClass &&
+      other is IoK8sApiNetworkingV1alpha1ClusterCIDRList &&
           other.apiVersion == apiVersion &&
+          other.items == items &&
           other.kind == kind &&
-          other.metadata == metadata &&
-          other.spec == spec;
+          other.metadata == metadata;
 
   @override
   int get hashCode =>
       // ignore: unnecessary_parenthesis
       (apiVersion == null ? 0 : apiVersion!.hashCode) +
+      (items.hashCode) +
       (kind == null ? 0 : kind!.hashCode) +
-      (metadata == null ? 0 : metadata!.hashCode) +
-      (spec.hashCode);
+      (metadata == null ? 0 : metadata!.hashCode);
 
   @override
   String toString() =>
-      'IoK8sApiNodeV1alpha1RuntimeClass[apiVersion=$apiVersion, kind=$kind, metadata=$metadata, spec=$spec]';
+      'IoK8sApiNetworkingV1alpha1ClusterCIDRList[apiVersion=$apiVersion, items=$items, kind=$kind, metadata=$metadata]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (apiVersion != null) {
-      json[r'apiVersion'] = apiVersion;
+    if (this.apiVersion != null) {
+      json[r'apiVersion'] = this.apiVersion;
+    } else {
+      json[r'apiVersion'] = null;
     }
-    if (kind != null) {
-      json[r'kind'] = kind;
+    json[r'items'] = this.items;
+    if (this.kind != null) {
+      json[r'kind'] = this.kind;
+    } else {
+      json[r'kind'] = null;
     }
-    if (metadata != null) {
-      json[r'metadata'] = metadata;
+    if (this.metadata != null) {
+      json[r'metadata'] = this.metadata;
+    } else {
+      json[r'metadata'] = null;
     }
-    json[r'spec'] = spec;
     return json;
   }
 
-  /// Returns a new [IoK8sApiNodeV1alpha1RuntimeClass] instance and imports its values from
+  /// Returns a new [IoK8sApiNetworkingV1alpha1ClusterCIDRList] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static IoK8sApiNodeV1alpha1RuntimeClass? fromJson(dynamic value) {
+  static IoK8sApiNetworkingV1alpha1ClusterCIDRList? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -99,32 +107,33 @@ class IoK8sApiNodeV1alpha1RuntimeClass {
       assert(() {
         requiredKeys.forEach((key) {
           assert(json.containsKey(key),
-              'Required key "IoK8sApiNodeV1alpha1RuntimeClass[$key]" is missing from JSON.');
+              'Required key "IoK8sApiNetworkingV1alpha1ClusterCIDRList[$key]" is missing from JSON.');
           assert(json[key] != null,
-              'Required key "IoK8sApiNodeV1alpha1RuntimeClass[$key]" has a null value in JSON.');
+              'Required key "IoK8sApiNetworkingV1alpha1ClusterCIDRList[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return IoK8sApiNodeV1alpha1RuntimeClass(
+      return IoK8sApiNetworkingV1alpha1ClusterCIDRList(
         apiVersion: mapValueOfType<String>(json, r'apiVersion'),
+        items:
+            IoK8sApiNetworkingV1alpha1ClusterCIDR.listFromJson(json[r'items'])!,
         kind: mapValueOfType<String>(json, r'kind'),
-        metadata: IoK8sApimachineryPkgApisMetaV1ObjectMeta.fromJson(
-            json[r'metadata']),
-        spec: IoK8sApiNodeV1alpha1RuntimeClassSpec.fromJson(json[r'spec'])!,
+        metadata:
+            IoK8sApimachineryPkgApisMetaV1ListMeta.fromJson(json[r'metadata']),
       );
     }
     return null;
   }
 
-  static List<IoK8sApiNodeV1alpha1RuntimeClass>? listFromJson(
+  static List<IoK8sApiNetworkingV1alpha1ClusterCIDRList>? listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final result = <IoK8sApiNodeV1alpha1RuntimeClass>[];
+    final result = <IoK8sApiNetworkingV1alpha1ClusterCIDRList>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = IoK8sApiNodeV1alpha1RuntimeClass.fromJson(row);
+        final value = IoK8sApiNetworkingV1alpha1ClusterCIDRList.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -133,13 +142,14 @@ class IoK8sApiNodeV1alpha1RuntimeClass {
     return result.toList(growable: growable);
   }
 
-  static Map<String, IoK8sApiNodeV1alpha1RuntimeClass> mapFromJson(
+  static Map<String, IoK8sApiNetworkingV1alpha1ClusterCIDRList> mapFromJson(
       dynamic json) {
-    final map = <String, IoK8sApiNodeV1alpha1RuntimeClass>{};
+    final map = <String, IoK8sApiNetworkingV1alpha1ClusterCIDRList>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = IoK8sApiNodeV1alpha1RuntimeClass.fromJson(entry.value);
+        final value =
+            IoK8sApiNetworkingV1alpha1ClusterCIDRList.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -148,16 +158,17 @@ class IoK8sApiNodeV1alpha1RuntimeClass {
     return map;
   }
 
-  // maps a json object with a list of IoK8sApiNodeV1alpha1RuntimeClass-objects as value to a dart map
-  static Map<String, List<IoK8sApiNodeV1alpha1RuntimeClass>> mapListFromJson(
+  // maps a json object with a list of IoK8sApiNetworkingV1alpha1ClusterCIDRList-objects as value to a dart map
+  static Map<String, List<IoK8sApiNetworkingV1alpha1ClusterCIDRList>>
+      mapListFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final map = <String, List<IoK8sApiNodeV1alpha1RuntimeClass>>{};
+    final map = <String, List<IoK8sApiNetworkingV1alpha1ClusterCIDRList>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = IoK8sApiNodeV1alpha1RuntimeClass.listFromJson(
+        final value = IoK8sApiNetworkingV1alpha1ClusterCIDRList.listFromJson(
           entry.value,
           growable: growable,
         );
@@ -171,6 +182,6 @@ class IoK8sApiNodeV1alpha1RuntimeClass {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
-    'spec',
+    'items',
   };
 }

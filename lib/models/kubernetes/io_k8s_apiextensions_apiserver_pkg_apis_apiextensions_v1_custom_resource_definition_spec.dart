@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -83,16 +84,20 @@ class IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinitionS
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (conversion != null) {
-      json[r'conversion'] = conversion;
+    if (this.conversion != null) {
+      json[r'conversion'] = this.conversion;
+    } else {
+      json[r'conversion'] = null;
     }
-    json[r'group'] = group;
-    json[r'names'] = names;
-    if (preserveUnknownFields != null) {
-      json[r'preserveUnknownFields'] = preserveUnknownFields;
+    json[r'group'] = this.group;
+    json[r'names'] = this.names;
+    if (this.preserveUnknownFields != null) {
+      json[r'preserveUnknownFields'] = this.preserveUnknownFields;
+    } else {
+      json[r'preserveUnknownFields'] = null;
     }
-    json[r'scope'] = scope;
-    json[r'versions'] = versions;
+    json[r'scope'] = this.scope;
+    json[r'versions'] = this.versions;
     return json;
   }
 

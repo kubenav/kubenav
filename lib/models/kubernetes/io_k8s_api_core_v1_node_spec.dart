@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -104,22 +105,32 @@ class IoK8sApiCoreV1NodeSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (configSource != null) {
-      json[r'configSource'] = configSource;
+    if (this.configSource != null) {
+      json[r'configSource'] = this.configSource;
+    } else {
+      json[r'configSource'] = null;
     }
-    if (externalID != null) {
-      json[r'externalID'] = externalID;
+    if (this.externalID != null) {
+      json[r'externalID'] = this.externalID;
+    } else {
+      json[r'externalID'] = null;
     }
-    if (podCIDR != null) {
-      json[r'podCIDR'] = podCIDR;
+    if (this.podCIDR != null) {
+      json[r'podCIDR'] = this.podCIDR;
+    } else {
+      json[r'podCIDR'] = null;
     }
-    json[r'podCIDRs'] = podCIDRs;
-    if (providerID != null) {
-      json[r'providerID'] = providerID;
+    json[r'podCIDRs'] = this.podCIDRs;
+    if (this.providerID != null) {
+      json[r'providerID'] = this.providerID;
+    } else {
+      json[r'providerID'] = null;
     }
-    json[r'taints'] = taints;
-    if (unschedulable != null) {
-      json[r'unschedulable'] = unschedulable;
+    json[r'taints'] = this.taints;
+    if (this.unschedulable != null) {
+      json[r'unschedulable'] = this.unschedulable;
+    } else {
+      json[r'unschedulable'] = null;
     }
     return json;
   }

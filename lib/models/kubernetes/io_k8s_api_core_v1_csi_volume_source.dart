@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -22,10 +23,10 @@ class IoK8sApiCoreV1CSIVolumeSource {
     this.volumeAttributes = const {},
   });
 
-  /// Driver is the name of the CSI driver that handles this volume. Consult with your admin for the correct name as registered in the cluster.
+  /// driver is the name of the CSI driver that handles this volume. Consult with your admin for the correct name as registered in the cluster.
   String driver;
 
-  /// Filesystem type to mount. Ex. \"ext4\", \"xfs\", \"ntfs\". If not provided, the empty value is passed to the associated CSI driver which will determine the default filesystem to apply.
+  /// fsType to mount. Ex. \"ext4\", \"xfs\", \"ntfs\". If not provided, the empty value is passed to the associated CSI driver which will determine the default filesystem to apply.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -42,7 +43,7 @@ class IoK8sApiCoreV1CSIVolumeSource {
   ///
   IoK8sApiCoreV1LocalObjectReference? nodePublishSecretRef;
 
-  /// Specifies a read-only configuration for the volume. Defaults to false (read/write).
+  /// readOnly specifies a read-only configuration for the volume. Defaults to false (read/write).
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -51,7 +52,7 @@ class IoK8sApiCoreV1CSIVolumeSource {
   ///
   bool? readOnly;
 
-  /// VolumeAttributes stores driver-specific properties that are passed to the CSI driver. Consult your driver's documentation for supported values.
+  /// volumeAttributes stores driver-specific properties that are passed to the CSI driver. Consult your driver's documentation for supported values.
   Map<String, String> volumeAttributes;
 
   @override
@@ -79,17 +80,23 @@ class IoK8sApiCoreV1CSIVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'driver'] = driver;
-    if (fsType != null) {
-      json[r'fsType'] = fsType;
+    json[r'driver'] = this.driver;
+    if (this.fsType != null) {
+      json[r'fsType'] = this.fsType;
+    } else {
+      json[r'fsType'] = null;
     }
-    if (nodePublishSecretRef != null) {
-      json[r'nodePublishSecretRef'] = nodePublishSecretRef;
+    if (this.nodePublishSecretRef != null) {
+      json[r'nodePublishSecretRef'] = this.nodePublishSecretRef;
+    } else {
+      json[r'nodePublishSecretRef'] = null;
     }
-    if (readOnly != null) {
-      json[r'readOnly'] = readOnly;
+    if (this.readOnly != null) {
+      json[r'readOnly'] = this.readOnly;
+    } else {
+      json[r'readOnly'] = null;
     }
-    json[r'volumeAttributes'] = volumeAttributes;
+    json[r'volumeAttributes'] = this.volumeAttributes;
     return json;
   }
 

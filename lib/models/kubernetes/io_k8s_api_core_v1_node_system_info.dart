@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -32,7 +33,7 @@ class IoK8sApiCoreV1NodeSystemInfo {
   /// Boot ID reported by the node.
   String bootID;
 
-  /// ContainerRuntime Version reported by the node through runtime remote API (e.g. docker://1.5.0).
+  /// ContainerRuntime Version reported by the node through runtime remote API (e.g. containerd://1.4.2).
   String containerRuntimeVersion;
 
   /// Kernel Version reported by the node from 'uname -r' (e.g. 3.16.0-0.bpo.4-amd64).
@@ -91,16 +92,16 @@ class IoK8sApiCoreV1NodeSystemInfo {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'architecture'] = architecture;
-    json[r'bootID'] = bootID;
-    json[r'containerRuntimeVersion'] = containerRuntimeVersion;
-    json[r'kernelVersion'] = kernelVersion;
-    json[r'kubeProxyVersion'] = kubeProxyVersion;
-    json[r'kubeletVersion'] = kubeletVersion;
-    json[r'machineID'] = machineID;
-    json[r'operatingSystem'] = operatingSystem;
-    json[r'osImage'] = osImage;
-    json[r'systemUUID'] = systemUUID;
+    json[r'architecture'] = this.architecture;
+    json[r'bootID'] = this.bootID;
+    json[r'containerRuntimeVersion'] = this.containerRuntimeVersion;
+    json[r'kernelVersion'] = this.kernelVersion;
+    json[r'kubeProxyVersion'] = this.kubeProxyVersion;
+    json[r'kubeletVersion'] = this.kubeletVersion;
+    json[r'machineID'] = this.machineID;
+    json[r'operatingSystem'] = this.operatingSystem;
+    json[r'osImage'] = this.osImage;
+    json[r'systemUUID'] = this.systemUUID;
     return json;
   }
 

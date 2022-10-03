@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_autoscaling_v2beta1_horizontal_pod_autoscaler.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_autoscaling_v2_horizontal_pod_autoscaler.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_list/widgets/list_item_widget.dart';
 import 'package:kubenav/utils/resources/general.dart';
@@ -41,8 +41,7 @@ class HorizontalPodAutoscalerListItemWidget extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    final hpa =
-        IoK8sApiAutoscalingV2beta1HorizontalPodAutoscaler.fromJson(item);
+    final hpa = IoK8sApiAutoscalingV2HorizontalPodAutoscaler.fromJson(item);
     final age = getAge(hpa?.metadata?.creationTimestamp);
     final reference =
         '${hpa?.spec?.scaleTargetRef.kind ?? '-'}/${hpa?.spec?.scaleTargetRef.name ?? '-'}';

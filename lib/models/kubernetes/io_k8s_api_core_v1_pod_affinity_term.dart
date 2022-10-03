@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -37,7 +38,7 @@ class IoK8sApiCoreV1PodAffinityTerm {
   ///
   IoK8sApimachineryPkgApisMetaV1LabelSelector? namespaceSelector;
 
-  /// namespaces specifies a static list of namespace names that the term applies to. The term is applied to the union of the namespaces listed in this field and the ones selected by namespaceSelector. null or empty namespaces list and null namespaceSelector means \"this pod's namespace\"
+  /// namespaces specifies a static list of namespace names that the term applies to. The term is applied to the union of the namespaces listed in this field and the ones selected by namespaceSelector. null or empty namespaces list and null namespaceSelector means \"this pod's namespace\".
   List<String> namespaces;
 
   /// This pod should be co-located (affinity) or not co-located (anti-affinity) with the pods matching the labelSelector in the specified namespaces, where co-located is defined as running on a node whose value of the label with key topologyKey matches that of any node on which any of the selected pods is running. Empty topologyKey is not allowed.
@@ -66,14 +67,18 @@ class IoK8sApiCoreV1PodAffinityTerm {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (labelSelector != null) {
-      json[r'labelSelector'] = labelSelector;
+    if (this.labelSelector != null) {
+      json[r'labelSelector'] = this.labelSelector;
+    } else {
+      json[r'labelSelector'] = null;
     }
-    if (namespaceSelector != null) {
-      json[r'namespaceSelector'] = namespaceSelector;
+    if (this.namespaceSelector != null) {
+      json[r'namespaceSelector'] = this.namespaceSelector;
+    } else {
+      json[r'namespaceSelector'] = null;
     }
-    json[r'namespaces'] = namespaces;
-    json[r'topologyKey'] = topologyKey;
+    json[r'namespaces'] = this.namespaces;
+    json[r'topologyKey'] = this.topologyKey;
     return json;
   }
 

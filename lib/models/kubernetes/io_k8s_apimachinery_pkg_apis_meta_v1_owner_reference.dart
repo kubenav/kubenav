@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -25,7 +26,7 @@ class IoK8sApimachineryPkgApisMetaV1OwnerReference {
   /// API version of the referent.
   String apiVersion;
 
-  /// If true, AND if the owner has the \"foregroundDeletion\" finalizer, then the owner cannot be deleted from the key-value store until this reference is removed. Defaults to false. To set this field, a user needs \"delete\" permission of the owner, otherwise 422 (Unprocessable Entity) will be returned.
+  /// If true, AND if the owner has the \"foregroundDeletion\" finalizer, then the owner cannot be deleted from the key-value store until this reference is removed. See https://kubernetes.io/docs/concepts/architecture/garbage-collection/#foreground-deletion for how the garbage collector interacts with this field and enforces the foreground deletion. Defaults to false. To set this field, a user needs \"delete\" permission of the owner, otherwise 422 (Unprocessable Entity) will be returned.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -79,16 +80,20 @@ class IoK8sApimachineryPkgApisMetaV1OwnerReference {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'apiVersion'] = apiVersion;
-    if (blockOwnerDeletion != null) {
-      json[r'blockOwnerDeletion'] = blockOwnerDeletion;
+    json[r'apiVersion'] = this.apiVersion;
+    if (this.blockOwnerDeletion != null) {
+      json[r'blockOwnerDeletion'] = this.blockOwnerDeletion;
+    } else {
+      json[r'blockOwnerDeletion'] = null;
     }
-    if (controller != null) {
-      json[r'controller'] = controller;
+    if (this.controller != null) {
+      json[r'controller'] = this.controller;
+    } else {
+      json[r'controller'] = null;
     }
-    json[r'kind'] = kind;
-    json[r'name'] = name;
-    json[r'uid'] = uid;
+    json[r'kind'] = this.kind;
+    json[r'name'] = this.name;
+    json[r'uid'] = this.uid;
     return json;
   }
 

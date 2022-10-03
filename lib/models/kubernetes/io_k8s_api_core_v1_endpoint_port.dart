@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -20,7 +21,7 @@ class IoK8sApiCoreV1EndpointPort {
     this.protocol,
   });
 
-  /// The application protocol for this port. This field follows standard Kubernetes label syntax. Un-prefixed names are reserved for IANA standard service names (as per RFC-6335 and http://www.iana.org/assignments/service-names). Non-standard protocols should use prefixed names such as mycompany.com/my-custom-protocol.
+  /// The application protocol for this port. This field follows standard Kubernetes label syntax. Un-prefixed names are reserved for IANA standard service names (as per RFC-6335 and https://www.iana.org/assignments/service-names). Non-standard protocols should use prefixed names such as mycompany.com/my-custom-protocol.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -41,8 +42,14 @@ class IoK8sApiCoreV1EndpointPort {
   /// The port number of the endpoint.
   int port;
 
-  /// The IP protocol for this port. Must be UDP, TCP, or SCTP. Default is TCP.  Possible enum values:  - `\"SCTP\"` is the SCTP protocol.  - `\"TCP\"` is the TCP protocol.  - `\"UDP\"` is the UDP protocol.
-  IoK8sApiCoreV1EndpointPortProtocolEnum? protocol;
+  /// The IP protocol for this port. Must be UDP, TCP, or SCTP. Default is TCP.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? protocol;
 
   @override
   bool operator ==(Object other) =>
@@ -67,15 +74,21 @@ class IoK8sApiCoreV1EndpointPort {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (appProtocol != null) {
-      json[r'appProtocol'] = appProtocol;
+    if (this.appProtocol != null) {
+      json[r'appProtocol'] = this.appProtocol;
+    } else {
+      json[r'appProtocol'] = null;
     }
-    if (name != null) {
-      json[r'name'] = name;
+    if (this.name != null) {
+      json[r'name'] = this.name;
+    } else {
+      json[r'name'] = null;
     }
-    json[r'port'] = port;
-    if (protocol != null) {
-      json[r'protocol'] = protocol;
+    json[r'port'] = this.port;
+    if (this.protocol != null) {
+      json[r'protocol'] = this.protocol;
+    } else {
+      json[r'protocol'] = null;
     }
     return json;
   }
@@ -104,8 +117,7 @@ class IoK8sApiCoreV1EndpointPort {
         appProtocol: mapValueOfType<String>(json, r'appProtocol'),
         name: mapValueOfType<String>(json, r'name'),
         port: mapValueOfType<int>(json, r'port')!,
-        protocol:
-            IoK8sApiCoreV1EndpointPortProtocolEnum.fromJson(json[r'protocol']),
+        protocol: mapValueOfType<String>(json, r'protocol'),
       );
     }
     return null;
@@ -166,90 +178,4 @@ class IoK8sApiCoreV1EndpointPort {
   static const requiredKeys = <String>{
     'port',
   };
-}
-
-/// The IP protocol for this port. Must be UDP, TCP, or SCTP. Default is TCP.  Possible enum values:  - `\"SCTP\"` is the SCTP protocol.  - `\"TCP\"` is the TCP protocol.  - `\"UDP\"` is the UDP protocol.
-class IoK8sApiCoreV1EndpointPortProtocolEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1EndpointPortProtocolEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const SCTP = IoK8sApiCoreV1EndpointPortProtocolEnum._(r'SCTP');
-  static const TCP = IoK8sApiCoreV1EndpointPortProtocolEnum._(r'TCP');
-  static const UDP = IoK8sApiCoreV1EndpointPortProtocolEnum._(r'UDP');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1EndpointPortProtocolEnum].
-  static const values = <IoK8sApiCoreV1EndpointPortProtocolEnum>[
-    SCTP,
-    TCP,
-    UDP,
-  ];
-
-  static IoK8sApiCoreV1EndpointPortProtocolEnum? fromJson(dynamic value) =>
-      IoK8sApiCoreV1EndpointPortProtocolEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiCoreV1EndpointPortProtocolEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1EndpointPortProtocolEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiCoreV1EndpointPortProtocolEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1EndpointPortProtocolEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1EndpointPortProtocolEnum].
-class IoK8sApiCoreV1EndpointPortProtocolEnumTypeTransformer {
-  factory IoK8sApiCoreV1EndpointPortProtocolEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1EndpointPortProtocolEnumTypeTransformer._();
-
-  const IoK8sApiCoreV1EndpointPortProtocolEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1EndpointPortProtocolEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1EndpointPortProtocolEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1EndpointPortProtocolEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'SCTP':
-          return IoK8sApiCoreV1EndpointPortProtocolEnum.SCTP;
-        case r'TCP':
-          return IoK8sApiCoreV1EndpointPortProtocolEnum.TCP;
-        case r'UDP':
-          return IoK8sApiCoreV1EndpointPortProtocolEnum.UDP;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1EndpointPortProtocolEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1EndpointPortProtocolEnumTypeTransformer? _instance;
 }

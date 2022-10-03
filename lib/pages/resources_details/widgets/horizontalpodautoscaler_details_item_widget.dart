@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_autoscaling_v2beta1_horizontal_pod_autoscaler.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_autoscaling_v2_horizontal_pod_autoscaler.dart';
 import 'package:kubenav/models/prometheus_model.dart';
 import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
@@ -20,7 +20,7 @@ class HorizontalPodAutoscalerDetailsItemWidget extends StatelessWidget
   final dynamic item;
 
   List<Widget> buildReference(
-      IoK8sApiAutoscalingV2beta1HorizontalPodAutoscaler hpa) {
+      IoK8sApiAutoscalingV2HorizontalPodAutoscaler hpa) {
     if (hpa.spec!.scaleTargetRef.kind != 'Deployment' &&
         hpa.spec!.scaleTargetRef.kind != 'StatefulSet') {
       return [Container()];
@@ -42,8 +42,7 @@ class HorizontalPodAutoscalerDetailsItemWidget extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    final hpa =
-        IoK8sApiAutoscalingV2beta1HorizontalPodAutoscaler.fromJson(item);
+    final hpa = IoK8sApiAutoscalingV2HorizontalPodAutoscaler.fromJson(item);
 
     if (hpa == null || hpa.spec == null) {
       return Container();

@@ -4,52 +4,46 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
-import 'package:kubenav/models/kubernetes/helpers.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_pod_failure_policy_rule.dart';
 
-class IoK8sApiPolicyV1beta1IDRange {
-  /// Returns a new [IoK8sApiPolicyV1beta1IDRange] instance.
-  IoK8sApiPolicyV1beta1IDRange({
-    required this.max,
-    required this.min,
+class IoK8sApiBatchV1PodFailurePolicy {
+  /// Returns a new [IoK8sApiBatchV1PodFailurePolicy] instance.
+  IoK8sApiBatchV1PodFailurePolicy({
+    this.rules = const [],
   });
 
-  /// max is the end of the range, inclusive.
-  int max;
-
-  /// min is the start of the range, inclusive.
-  int min;
+  /// A list of pod failure policy rules. The rules are evaluated in order. Once a rule matches a Pod failure, the remaining of the rules are ignored. When no rule matches the Pod failure, the default handling applies - the counter of pod failures is incremented and it is checked against the backoffLimit. At most 20 elements are allowed.
+  List<IoK8sApiBatchV1PodFailurePolicyRule> rules;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is IoK8sApiPolicyV1beta1IDRange &&
-          other.max == max &&
-          other.min == min;
+      other is IoK8sApiBatchV1PodFailurePolicy && other.rules == rules;
 
   @override
   int get hashCode =>
       // ignore: unnecessary_parenthesis
-      (max.hashCode) + (min.hashCode);
+      (rules.hashCode);
 
   @override
-  String toString() => 'IoK8sApiPolicyV1beta1IDRange[max=$max, min=$min]';
+  String toString() => 'IoK8sApiBatchV1PodFailurePolicy[rules=$rules]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'max'] = max;
-    json[r'min'] = min;
+    json[r'rules'] = this.rules;
     return json;
   }
 
-  /// Returns a new [IoK8sApiPolicyV1beta1IDRange] instance and imports its values from
+  /// Returns a new [IoK8sApiBatchV1PodFailurePolicy] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static IoK8sApiPolicyV1beta1IDRange? fromJson(dynamic value) {
+  static IoK8sApiBatchV1PodFailurePolicy? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -59,29 +53,29 @@ class IoK8sApiPolicyV1beta1IDRange {
       assert(() {
         requiredKeys.forEach((key) {
           assert(json.containsKey(key),
-              'Required key "IoK8sApiPolicyV1beta1IDRange[$key]" is missing from JSON.');
+              'Required key "IoK8sApiBatchV1PodFailurePolicy[$key]" is missing from JSON.');
           assert(json[key] != null,
-              'Required key "IoK8sApiPolicyV1beta1IDRange[$key]" has a null value in JSON.');
+              'Required key "IoK8sApiBatchV1PodFailurePolicy[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return IoK8sApiPolicyV1beta1IDRange(
-        max: mapValueOfType<int>(json, r'max')!,
-        min: mapValueOfType<int>(json, r'min')!,
+      return IoK8sApiBatchV1PodFailurePolicy(
+        rules:
+            IoK8sApiBatchV1PodFailurePolicyRule.listFromJson(json[r'rules'])!,
       );
     }
     return null;
   }
 
-  static List<IoK8sApiPolicyV1beta1IDRange>? listFromJson(
+  static List<IoK8sApiBatchV1PodFailurePolicy>? listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final result = <IoK8sApiPolicyV1beta1IDRange>[];
+    final result = <IoK8sApiBatchV1PodFailurePolicy>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = IoK8sApiPolicyV1beta1IDRange.fromJson(row);
+        final value = IoK8sApiBatchV1PodFailurePolicy.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -90,12 +84,13 @@ class IoK8sApiPolicyV1beta1IDRange {
     return result.toList(growable: growable);
   }
 
-  static Map<String, IoK8sApiPolicyV1beta1IDRange> mapFromJson(dynamic json) {
-    final map = <String, IoK8sApiPolicyV1beta1IDRange>{};
+  static Map<String, IoK8sApiBatchV1PodFailurePolicy> mapFromJson(
+      dynamic json) {
+    final map = <String, IoK8sApiBatchV1PodFailurePolicy>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = IoK8sApiPolicyV1beta1IDRange.fromJson(entry.value);
+        final value = IoK8sApiBatchV1PodFailurePolicy.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -104,16 +99,16 @@ class IoK8sApiPolicyV1beta1IDRange {
     return map;
   }
 
-  // maps a json object with a list of IoK8sApiPolicyV1beta1IDRange-objects as value to a dart map
-  static Map<String, List<IoK8sApiPolicyV1beta1IDRange>> mapListFromJson(
+  // maps a json object with a list of IoK8sApiBatchV1PodFailurePolicy-objects as value to a dart map
+  static Map<String, List<IoK8sApiBatchV1PodFailurePolicy>> mapListFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final map = <String, List<IoK8sApiPolicyV1beta1IDRange>>{};
+    final map = <String, List<IoK8sApiBatchV1PodFailurePolicy>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = IoK8sApiPolicyV1beta1IDRange.listFromJson(
+        final value = IoK8sApiBatchV1PodFailurePolicy.listFromJson(
           entry.value,
           growable: growable,
         );
@@ -127,7 +122,6 @@ class IoK8sApiPolicyV1beta1IDRange {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
-    'max',
-    'min',
+    'rules',
   };
 }

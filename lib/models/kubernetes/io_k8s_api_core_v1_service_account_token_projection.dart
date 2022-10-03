@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -19,7 +20,7 @@ class IoK8sApiCoreV1ServiceAccountTokenProjection {
     required this.path,
   });
 
-  /// Audience is the intended audience of the token. A recipient of a token must identify itself with an identifier specified in the audience of the token, and otherwise should reject the token. The audience defaults to the identifier of the apiserver.
+  /// audience is the intended audience of the token. A recipient of a token must identify itself with an identifier specified in the audience of the token, and otherwise should reject the token. The audience defaults to the identifier of the apiserver.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -28,7 +29,7 @@ class IoK8sApiCoreV1ServiceAccountTokenProjection {
   ///
   String? audience;
 
-  /// ExpirationSeconds is the requested duration of validity of the service account token. As the token approaches expiration, the kubelet volume plugin will proactively rotate the service account token. The kubelet will start trying to rotate the token if the token is older than 80 percent of its time to live or if the token is older than 24 hours.Defaults to 1 hour and must be at least 10 minutes.
+  /// expirationSeconds is the requested duration of validity of the service account token. As the token approaches expiration, the kubelet volume plugin will proactively rotate the service account token. The kubelet will start trying to rotate the token if the token is older than 80 percent of its time to live or if the token is older than 24 hours.Defaults to 1 hour and must be at least 10 minutes.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -37,7 +38,7 @@ class IoK8sApiCoreV1ServiceAccountTokenProjection {
   ///
   int? expirationSeconds;
 
-  /// Path is the path relative to the mount point of the file to project the token into.
+  /// path is the path relative to the mount point of the file to project the token into.
   String path;
 
   @override
@@ -61,13 +62,17 @@ class IoK8sApiCoreV1ServiceAccountTokenProjection {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (audience != null) {
-      json[r'audience'] = audience;
+    if (this.audience != null) {
+      json[r'audience'] = this.audience;
+    } else {
+      json[r'audience'] = null;
     }
-    if (expirationSeconds != null) {
-      json[r'expirationSeconds'] = expirationSeconds;
+    if (this.expirationSeconds != null) {
+      json[r'expirationSeconds'] = this.expirationSeconds;
+    } else {
+      json[r'expirationSeconds'] = null;
     }
-    json[r'path'] = path;
+    json[r'path'] = this.path;
     return json;
   }
 

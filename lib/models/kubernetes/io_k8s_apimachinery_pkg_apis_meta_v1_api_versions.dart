@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -69,14 +70,18 @@ class IoK8sApimachineryPkgApisMetaV1APIVersions {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (apiVersion != null) {
-      json[r'apiVersion'] = apiVersion;
+    if (this.apiVersion != null) {
+      json[r'apiVersion'] = this.apiVersion;
+    } else {
+      json[r'apiVersion'] = null;
     }
-    if (kind != null) {
-      json[r'kind'] = kind;
+    if (this.kind != null) {
+      json[r'kind'] = this.kind;
+    } else {
+      json[r'kind'] = null;
     }
-    json[r'serverAddressByClientCIDRs'] = serverAddressByClientCIDRs;
-    json[r'versions'] = versions;
+    json[r'serverAddressByClientCIDRs'] = this.serverAddressByClientCIDRs;
+    json[r'versions'] = this.versions;
     return json;
   }
 

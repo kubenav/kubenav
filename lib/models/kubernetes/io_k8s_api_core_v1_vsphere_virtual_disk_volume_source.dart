@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -20,7 +21,7 @@ class IoK8sApiCoreV1VsphereVirtualDiskVolumeSource {
     required this.volumePath,
   });
 
-  /// Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.
+  /// fsType is filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -29,7 +30,7 @@ class IoK8sApiCoreV1VsphereVirtualDiskVolumeSource {
   ///
   String? fsType;
 
-  /// Storage Policy Based Management (SPBM) profile ID associated with the StoragePolicyName.
+  /// storagePolicyID is the storage Policy Based Management (SPBM) profile ID associated with the StoragePolicyName.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -38,7 +39,7 @@ class IoK8sApiCoreV1VsphereVirtualDiskVolumeSource {
   ///
   String? storagePolicyID;
 
-  /// Storage Policy Based Management (SPBM) profile name.
+  /// storagePolicyName is the storage Policy Based Management (SPBM) profile name.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -47,7 +48,7 @@ class IoK8sApiCoreV1VsphereVirtualDiskVolumeSource {
   ///
   String? storagePolicyName;
 
-  /// Path that identifies vSphere volume vmdk
+  /// volumePath is the path that identifies vSphere volume vmdk
   String volumePath;
 
   @override
@@ -73,16 +74,22 @@ class IoK8sApiCoreV1VsphereVirtualDiskVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (fsType != null) {
-      json[r'fsType'] = fsType;
+    if (this.fsType != null) {
+      json[r'fsType'] = this.fsType;
+    } else {
+      json[r'fsType'] = null;
     }
-    if (storagePolicyID != null) {
-      json[r'storagePolicyID'] = storagePolicyID;
+    if (this.storagePolicyID != null) {
+      json[r'storagePolicyID'] = this.storagePolicyID;
+    } else {
+      json[r'storagePolicyID'] = null;
     }
-    if (storagePolicyName != null) {
-      json[r'storagePolicyName'] = storagePolicyName;
+    if (this.storagePolicyName != null) {
+      json[r'storagePolicyName'] = this.storagePolicyName;
+    } else {
+      json[r'storagePolicyName'] = null;
     }
-    json[r'volumePath'] = volumePath;
+    json[r'volumePath'] = this.volumePath;
     return json;
   }
 

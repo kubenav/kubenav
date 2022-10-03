@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -23,22 +24,28 @@ class IoK8sApiCoreV1PersistentVolumeClaimStatus {
     this.resizeStatus,
   });
 
-  /// AccessModes contains the actual access modes the volume backing the PVC has. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1
+  /// accessModes contains the actual access modes the volume backing the PVC has. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1
   List<String> accessModes;
 
-  /// The storage resource within AllocatedResources tracks the capacity allocated to a PVC. It may be larger than the actual capacity when a volume expansion operation is requested. For storage quota, the larger value from allocatedResources and PVC.spec.resources is used. If allocatedResources is not set, PVC.spec.resources alone is used for quota calculation. If a volume expansion capacity request is lowered, allocatedResources is only lowered if there are no expansion operations in progress and if the actual volume capacity is equal or lower than the requested capacity. This is an alpha field and requires enabling RecoverVolumeExpansionFailure feature.
+  /// allocatedResources is the storage resource within AllocatedResources tracks the capacity allocated to a PVC. It may be larger than the actual capacity when a volume expansion operation is requested. For storage quota, the larger value from allocatedResources and PVC.spec.resources is used. If allocatedResources is not set, PVC.spec.resources alone is used for quota calculation. If a volume expansion capacity request is lowered, allocatedResources is only lowered if there are no expansion operations in progress and if the actual volume capacity is equal or lower than the requested capacity. This is an alpha field and requires enabling RecoverVolumeExpansionFailure feature.
   Map<String, String> allocatedResources;
 
-  /// Represents the actual resources of the underlying volume.
+  /// capacity represents the actual resources of the underlying volume.
   Map<String, String> capacity;
 
-  /// Current Condition of persistent volume claim. If underlying persistent volume is being resized then the Condition will be set to 'ResizeStarted'.
+  /// conditions is the current Condition of persistent volume claim. If underlying persistent volume is being resized then the Condition will be set to 'ResizeStarted'.
   List<IoK8sApiCoreV1PersistentVolumeClaimCondition> conditions;
 
-  /// Phase represents the current phase of PersistentVolumeClaim.  Possible enum values:  - `\"Bound\"` used for PersistentVolumeClaims that are bound  - `\"Lost\"` used for PersistentVolumeClaims that lost their underlying PersistentVolume. The claim was bound to a PersistentVolume and this volume does not exist any longer and all data on it was lost.  - `\"Pending\"` used for PersistentVolumeClaims that are not yet bound
-  IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum? phase;
+  /// phase represents the current phase of PersistentVolumeClaim.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? phase;
 
-  /// ResizeStatus stores status of resize operation. ResizeStatus is not set by default but when expansion is complete resizeStatus is set to empty string by resize controller or kubelet. This is an alpha field and requires enabling RecoverVolumeExpansionFailure feature.
+  /// resizeStatus stores status of resize operation. ResizeStatus is not set by default but when expansion is complete resizeStatus is set to empty string by resize controller or kubelet. This is an alpha field and requires enabling RecoverVolumeExpansionFailure feature.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -74,15 +81,19 @@ class IoK8sApiCoreV1PersistentVolumeClaimStatus {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'accessModes'] = accessModes;
-    json[r'allocatedResources'] = allocatedResources;
-    json[r'capacity'] = capacity;
-    json[r'conditions'] = conditions;
-    if (phase != null) {
-      json[r'phase'] = phase;
+    json[r'accessModes'] = this.accessModes;
+    json[r'allocatedResources'] = this.allocatedResources;
+    json[r'capacity'] = this.capacity;
+    json[r'conditions'] = this.conditions;
+    if (this.phase != null) {
+      json[r'phase'] = this.phase;
+    } else {
+      json[r'phase'] = null;
     }
-    if (resizeStatus != null) {
-      json[r'resizeStatus'] = resizeStatus;
+    if (this.resizeStatus != null) {
+      json[r'resizeStatus'] = this.resizeStatus;
+    } else {
+      json[r'resizeStatus'] = null;
     }
     return json;
   }
@@ -118,8 +129,7 @@ class IoK8sApiCoreV1PersistentVolumeClaimStatus {
         conditions: IoK8sApiCoreV1PersistentVolumeClaimCondition.listFromJson(
                 json[r'conditions']) ??
             const [],
-        phase: IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum.fromJson(
-            json[r'phase']),
+        phase: mapValueOfType<String>(json, r'phase'),
         resizeStatus: mapValueOfType<String>(json, r'resizeStatus'),
       );
     }
@@ -182,99 +192,4 @@ class IoK8sApiCoreV1PersistentVolumeClaimStatus {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{};
-}
-
-/// Phase represents the current phase of PersistentVolumeClaim.  Possible enum values:  - `\"Bound\"` used for PersistentVolumeClaims that are bound  - `\"Lost\"` used for PersistentVolumeClaims that lost their underlying PersistentVolume. The claim was bound to a PersistentVolume and this volume does not exist any longer and all data on it was lost.  - `\"Pending\"` used for PersistentVolumeClaims that are not yet bound
-class IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const bound =
-      IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum._(r'Bound');
-  static const lost =
-      IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum._(r'Lost');
-  static const pending =
-      IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum._(r'Pending');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum].
-  static const values = <IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum>[
-    bound,
-    lost,
-    pending,
-  ];
-
-  static IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum? fromJson(
-          dynamic value) =>
-      IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnumTypeTransformer()
-          .decode(value);
-
-  static List<IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value =
-            IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum].
-class IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnumTypeTransformer {
-  factory IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnumTypeTransformer
-              ._();
-
-  const IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum data) =>
-      data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'Bound':
-          return IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum.bound;
-        case r'Lost':
-          return IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum.lost;
-        case r'Pending':
-          return IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnum.pending;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1PersistentVolumeClaimStatusPhaseEnumTypeTransformer?
-      _instance;
 }

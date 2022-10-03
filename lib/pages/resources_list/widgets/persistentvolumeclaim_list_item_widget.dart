@@ -31,7 +31,7 @@ class PersistentVolumeClaimListItemWidget extends StatelessWidget
   Widget build(BuildContext context) {
     final pvc = IoK8sApiCoreV1PersistentVolumeClaim.fromJson(item);
     final age = getAge(pvc?.metadata?.creationTimestamp);
-    final status = pvc?.status?.phase?.value ?? '-';
+    final status = pvc?.status?.phase ?? '-';
     final volume = pvc?.spec?.volumeName ?? '-';
     final capacity = pvc?.status?.capacity['storage'] ?? '-';
     final accessMode = pvc?.spec?.accessModes.join(', ') ?? '-';

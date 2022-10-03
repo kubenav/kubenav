@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -19,7 +20,7 @@ class IoK8sApiCoreV1AzureFileVolumeSource {
     required this.shareName,
   });
 
-  /// Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
+  /// readOnly defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -28,10 +29,10 @@ class IoK8sApiCoreV1AzureFileVolumeSource {
   ///
   bool? readOnly;
 
-  /// the name of secret that contains Azure Storage Account Name and Key
+  /// secretName is the  name of secret that contains Azure Storage Account Name and Key
   String secretName;
 
-  /// Share Name
+  /// shareName is the azure share Name
   String shareName;
 
   @override
@@ -55,11 +56,13 @@ class IoK8sApiCoreV1AzureFileVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (readOnly != null) {
-      json[r'readOnly'] = readOnly;
+    if (this.readOnly != null) {
+      json[r'readOnly'] = this.readOnly;
+    } else {
+      json[r'readOnly'] = null;
     }
-    json[r'secretName'] = secretName;
-    json[r'shareName'] = shareName;
+    json[r'secretName'] = this.secretName;
+    json[r'shareName'] = this.shareName;
     return json;
   }
 

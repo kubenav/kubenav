@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -107,21 +108,29 @@ class IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinitionV
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'additionalPrinterColumns'] = additionalPrinterColumns;
-    if (deprecated != null) {
-      json[r'deprecated'] = deprecated;
+    json[r'additionalPrinterColumns'] = this.additionalPrinterColumns;
+    if (this.deprecated != null) {
+      json[r'deprecated'] = this.deprecated;
+    } else {
+      json[r'deprecated'] = null;
     }
-    if (deprecationWarning != null) {
-      json[r'deprecationWarning'] = deprecationWarning;
+    if (this.deprecationWarning != null) {
+      json[r'deprecationWarning'] = this.deprecationWarning;
+    } else {
+      json[r'deprecationWarning'] = null;
     }
-    json[r'name'] = name;
-    if (schema != null) {
-      json[r'schema'] = schema;
+    json[r'name'] = this.name;
+    if (this.schema != null) {
+      json[r'schema'] = this.schema;
+    } else {
+      json[r'schema'] = null;
     }
-    json[r'served'] = served;
-    json[r'storage'] = storage;
-    if (subresources != null) {
-      json[r'subresources'] = subresources;
+    json[r'served'] = this.served;
+    json[r'storage'] = this.storage;
+    if (this.subresources != null) {
+      json[r'subresources'] = this.subresources;
+    } else {
+      json[r'subresources'] = null;
     }
     return json;
   }

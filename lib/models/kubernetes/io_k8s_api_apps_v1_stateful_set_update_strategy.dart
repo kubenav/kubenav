@@ -4,11 +4,13 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
+import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_rolling_update_stateful_set_strategy.dart';
 
 class IoK8sApiAppsV1StatefulSetUpdateStrategy {
@@ -26,8 +28,14 @@ class IoK8sApiAppsV1StatefulSetUpdateStrategy {
   ///
   IoK8sApiAppsV1RollingUpdateStatefulSetStrategy? rollingUpdate;
 
-  /// Type indicates the type of the StatefulSetUpdateStrategy. Default is RollingUpdate.  Possible enum values:  - `\"OnDelete\"` triggers the legacy behavior. Version tracking and ordered rolling restarts are disabled. Pods are recreated from the StatefulSetSpec when they are manually deleted. When a scale operation is performed with this strategy,specification version indicated by the StatefulSet's currentRevision.  - `\"RollingUpdate\"` indicates that update will be applied to all Pods in the StatefulSet with respect to the StatefulSet ordering constraints. When a scale operation is performed with this strategy, new Pods will be created from the specification version indicated by the StatefulSet's updateRevision.
-  IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum? type;
+  /// Type indicates the type of the StatefulSetUpdateStrategy. Default is RollingUpdate.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? type;
 
   @override
   bool operator ==(Object other) =>
@@ -48,11 +56,15 @@ class IoK8sApiAppsV1StatefulSetUpdateStrategy {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (rollingUpdate != null) {
-      json[r'rollingUpdate'] = rollingUpdate;
+    if (this.rollingUpdate != null) {
+      json[r'rollingUpdate'] = this.rollingUpdate;
+    } else {
+      json[r'rollingUpdate'] = null;
     }
-    if (type != null) {
-      json[r'type'] = type;
+    if (this.type != null) {
+      json[r'type'] = this.type;
+    } else {
+      json[r'type'] = null;
     }
     return json;
   }
@@ -80,8 +92,7 @@ class IoK8sApiAppsV1StatefulSetUpdateStrategy {
       return IoK8sApiAppsV1StatefulSetUpdateStrategy(
         rollingUpdate: IoK8sApiAppsV1RollingUpdateStatefulSetStrategy.fromJson(
             json[r'rollingUpdate']),
-        type: IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum.fromJson(
-            json[r'type']),
+        type: mapValueOfType<String>(json, r'type'),
       );
     }
     return null;
@@ -143,94 +154,4 @@ class IoK8sApiAppsV1StatefulSetUpdateStrategy {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{};
-}
-
-/// Type indicates the type of the StatefulSetUpdateStrategy. Default is RollingUpdate.  Possible enum values:  - `\"OnDelete\"` triggers the legacy behavior. Version tracking and ordered rolling restarts are disabled. Pods are recreated from the StatefulSetSpec when they are manually deleted. When a scale operation is performed with this strategy,specification version indicated by the StatefulSet's currentRevision.  - `\"RollingUpdate\"` indicates that update will be applied to all Pods in the StatefulSet with respect to the StatefulSet ordering constraints. When a scale operation is performed with this strategy, new Pods will be created from the specification version indicated by the StatefulSet's updateRevision.
-class IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const onDelete =
-      IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum._(r'OnDelete');
-  static const rollingUpdate =
-      IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum._(r'RollingUpdate');
-
-  /// List of all possible values in this [enum][IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum].
-  static const values = <IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum>[
-    onDelete,
-    rollingUpdate,
-  ];
-
-  static IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum? fromJson(
-          dynamic value) =>
-      IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnumTypeTransformer()
-          .decode(value);
-
-  static List<IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value =
-            IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum].
-class IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnumTypeTransformer {
-  factory IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnumTypeTransformer
-              ._();
-
-  const IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnumTypeTransformer._();
-
-  String encode(IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum data) =>
-      data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'OnDelete':
-          return IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum.onDelete;
-        case r'RollingUpdate':
-          return IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnum.rollingUpdate;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnumTypeTransformer] instance.
-  static IoK8sApiAppsV1StatefulSetUpdateStrategyTypeEnumTypeTransformer?
-      _instance;
 }

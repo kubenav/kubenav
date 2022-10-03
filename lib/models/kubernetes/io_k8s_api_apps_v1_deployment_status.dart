@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -122,27 +123,41 @@ class IoK8sApiAppsV1DeploymentStatus {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (availableReplicas != null) {
-      json[r'availableReplicas'] = availableReplicas;
+    if (this.availableReplicas != null) {
+      json[r'availableReplicas'] = this.availableReplicas;
+    } else {
+      json[r'availableReplicas'] = null;
     }
-    if (collisionCount != null) {
-      json[r'collisionCount'] = collisionCount;
+    if (this.collisionCount != null) {
+      json[r'collisionCount'] = this.collisionCount;
+    } else {
+      json[r'collisionCount'] = null;
     }
-    json[r'conditions'] = conditions;
-    if (observedGeneration != null) {
-      json[r'observedGeneration'] = observedGeneration;
+    json[r'conditions'] = this.conditions;
+    if (this.observedGeneration != null) {
+      json[r'observedGeneration'] = this.observedGeneration;
+    } else {
+      json[r'observedGeneration'] = null;
     }
-    if (readyReplicas != null) {
-      json[r'readyReplicas'] = readyReplicas;
+    if (this.readyReplicas != null) {
+      json[r'readyReplicas'] = this.readyReplicas;
+    } else {
+      json[r'readyReplicas'] = null;
     }
-    if (replicas != null) {
-      json[r'replicas'] = replicas;
+    if (this.replicas != null) {
+      json[r'replicas'] = this.replicas;
+    } else {
+      json[r'replicas'] = null;
     }
-    if (unavailableReplicas != null) {
-      json[r'unavailableReplicas'] = unavailableReplicas;
+    if (this.unavailableReplicas != null) {
+      json[r'unavailableReplicas'] = this.unavailableReplicas;
+    } else {
+      json[r'unavailableReplicas'] = null;
     }
-    if (updatedReplicas != null) {
-      json[r'updatedReplicas'] = updatedReplicas;
+    if (this.updatedReplicas != null) {
+      json[r'updatedReplicas'] = this.updatedReplicas;
+    } else {
+      json[r'updatedReplicas'] = null;
     }
     return json;
   }

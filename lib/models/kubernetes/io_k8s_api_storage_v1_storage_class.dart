@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -128,27 +129,39 @@ class IoK8sApiStorageV1StorageClass {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (allowVolumeExpansion != null) {
-      json[r'allowVolumeExpansion'] = allowVolumeExpansion;
+    if (this.allowVolumeExpansion != null) {
+      json[r'allowVolumeExpansion'] = this.allowVolumeExpansion;
+    } else {
+      json[r'allowVolumeExpansion'] = null;
     }
-    json[r'allowedTopologies'] = allowedTopologies;
-    if (apiVersion != null) {
-      json[r'apiVersion'] = apiVersion;
+    json[r'allowedTopologies'] = this.allowedTopologies;
+    if (this.apiVersion != null) {
+      json[r'apiVersion'] = this.apiVersion;
+    } else {
+      json[r'apiVersion'] = null;
     }
-    if (kind != null) {
-      json[r'kind'] = kind;
+    if (this.kind != null) {
+      json[r'kind'] = this.kind;
+    } else {
+      json[r'kind'] = null;
     }
-    if (metadata != null) {
-      json[r'metadata'] = metadata;
+    if (this.metadata != null) {
+      json[r'metadata'] = this.metadata;
+    } else {
+      json[r'metadata'] = null;
     }
-    json[r'mountOptions'] = mountOptions;
-    json[r'parameters'] = parameters;
-    json[r'provisioner'] = provisioner;
-    if (reclaimPolicy != null) {
-      json[r'reclaimPolicy'] = reclaimPolicy;
+    json[r'mountOptions'] = this.mountOptions;
+    json[r'parameters'] = this.parameters;
+    json[r'provisioner'] = this.provisioner;
+    if (this.reclaimPolicy != null) {
+      json[r'reclaimPolicy'] = this.reclaimPolicy;
+    } else {
+      json[r'reclaimPolicy'] = null;
     }
-    if (volumeBindingMode != null) {
-      json[r'volumeBindingMode'] = volumeBindingMode;
+    if (this.volumeBindingMode != null) {
+      json[r'volumeBindingMode'] = this.volumeBindingMode;
+    } else {
+      json[r'volumeBindingMode'] = null;
     }
     return json;
   }

@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -109,21 +110,27 @@ class IoK8sApimachineryPkgApisMetaV1APIResource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'categories'] = categories;
-    if (group != null) {
-      json[r'group'] = group;
+    json[r'categories'] = this.categories;
+    if (this.group != null) {
+      json[r'group'] = this.group;
+    } else {
+      json[r'group'] = null;
     }
-    json[r'kind'] = kind;
-    json[r'name'] = name;
-    json[r'namespaced'] = namespaced;
-    json[r'shortNames'] = shortNames;
-    json[r'singularName'] = singularName;
-    if (storageVersionHash != null) {
-      json[r'storageVersionHash'] = storageVersionHash;
+    json[r'kind'] = this.kind;
+    json[r'name'] = this.name;
+    json[r'namespaced'] = this.namespaced;
+    json[r'shortNames'] = this.shortNames;
+    json[r'singularName'] = this.singularName;
+    if (this.storageVersionHash != null) {
+      json[r'storageVersionHash'] = this.storageVersionHash;
+    } else {
+      json[r'storageVersionHash'] = null;
     }
-    json[r'verbs'] = verbs;
-    if (version != null) {
-      json[r'version'] = version;
+    json[r'verbs'] = this.verbs;
+    if (this.version != null) {
+      json[r'version'] = this.version;
+    } else {
+      json[r'version'] = null;
     }
     return json;
   }

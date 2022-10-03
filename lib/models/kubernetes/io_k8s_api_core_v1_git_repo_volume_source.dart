@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -19,7 +20,7 @@ class IoK8sApiCoreV1GitRepoVolumeSource {
     this.revision,
   });
 
-  /// Target directory name. Must not contain or start with '..'.  If '.' is supplied, the volume directory will be the git repository.  Otherwise, if specified, the volume will contain the git repository in the subdirectory with the given name.
+  /// directory is the target directory name. Must not contain or start with '..'.  If '.' is supplied, the volume directory will be the git repository.  Otherwise, if specified, the volume will contain the git repository in the subdirectory with the given name.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -28,10 +29,10 @@ class IoK8sApiCoreV1GitRepoVolumeSource {
   ///
   String? directory;
 
-  /// Repository URL
+  /// repository is the URL
   String repository;
 
-  /// Commit hash for the specified revision.
+  /// revision is the commit hash for the specified revision.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -61,12 +62,16 @@ class IoK8sApiCoreV1GitRepoVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (directory != null) {
-      json[r'directory'] = directory;
+    if (this.directory != null) {
+      json[r'directory'] = this.directory;
+    } else {
+      json[r'directory'] = null;
     }
-    json[r'repository'] = repository;
-    if (revision != null) {
-      json[r'revision'] = revision;
+    json[r'repository'] = this.repository;
+    if (this.revision != null) {
+      json[r'revision'] = this.revision;
+    } else {
+      json[r'revision'] = null;
     }
     return json;
   }

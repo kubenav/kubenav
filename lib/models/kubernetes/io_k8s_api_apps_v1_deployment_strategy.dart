@@ -4,11 +4,13 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
+import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_rolling_update_deployment.dart';
 
 class IoK8sApiAppsV1DeploymentStrategy {
@@ -26,8 +28,14 @@ class IoK8sApiAppsV1DeploymentStrategy {
   ///
   IoK8sApiAppsV1RollingUpdateDeployment? rollingUpdate;
 
-  /// Type of deployment. Can be \"Recreate\" or \"RollingUpdate\". Default is RollingUpdate.  Possible enum values:  - `\"Recreate\"` Kill all existing pods before creating new ones.  - `\"RollingUpdate\"` Replace the old ReplicaSets by new one using rolling update i.e gradually scale down the old ReplicaSets and scale up the new one.
-  IoK8sApiAppsV1DeploymentStrategyTypeEnum? type;
+  /// Type of deployment. Can be \"Recreate\" or \"RollingUpdate\". Default is RollingUpdate.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? type;
 
   @override
   bool operator ==(Object other) =>
@@ -48,11 +56,15 @@ class IoK8sApiAppsV1DeploymentStrategy {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (rollingUpdate != null) {
-      json[r'rollingUpdate'] = rollingUpdate;
+    if (this.rollingUpdate != null) {
+      json[r'rollingUpdate'] = this.rollingUpdate;
+    } else {
+      json[r'rollingUpdate'] = null;
     }
-    if (type != null) {
-      json[r'type'] = type;
+    if (this.type != null) {
+      json[r'type'] = this.type;
+    } else {
+      json[r'type'] = null;
     }
     return json;
   }
@@ -80,7 +92,7 @@ class IoK8sApiAppsV1DeploymentStrategy {
       return IoK8sApiAppsV1DeploymentStrategy(
         rollingUpdate: IoK8sApiAppsV1RollingUpdateDeployment.fromJson(
             json[r'rollingUpdate']),
-        type: IoK8sApiAppsV1DeploymentStrategyTypeEnum.fromJson(json[r'type']),
+        type: mapValueOfType<String>(json, r'type'),
       );
     }
     return null;
@@ -140,88 +152,4 @@ class IoK8sApiAppsV1DeploymentStrategy {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{};
-}
-
-/// Type of deployment. Can be \"Recreate\" or \"RollingUpdate\". Default is RollingUpdate.  Possible enum values:  - `\"Recreate\"` Kill all existing pods before creating new ones.  - `\"RollingUpdate\"` Replace the old ReplicaSets by new one using rolling update i.e gradually scale down the old ReplicaSets and scale up the new one.
-class IoK8sApiAppsV1DeploymentStrategyTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiAppsV1DeploymentStrategyTypeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const recreate =
-      IoK8sApiAppsV1DeploymentStrategyTypeEnum._(r'Recreate');
-  static const rollingUpdate =
-      IoK8sApiAppsV1DeploymentStrategyTypeEnum._(r'RollingUpdate');
-
-  /// List of all possible values in this [enum][IoK8sApiAppsV1DeploymentStrategyTypeEnum].
-  static const values = <IoK8sApiAppsV1DeploymentStrategyTypeEnum>[
-    recreate,
-    rollingUpdate,
-  ];
-
-  static IoK8sApiAppsV1DeploymentStrategyTypeEnum? fromJson(dynamic value) =>
-      IoK8sApiAppsV1DeploymentStrategyTypeEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiAppsV1DeploymentStrategyTypeEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiAppsV1DeploymentStrategyTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiAppsV1DeploymentStrategyTypeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiAppsV1DeploymentStrategyTypeEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiAppsV1DeploymentStrategyTypeEnum].
-class IoK8sApiAppsV1DeploymentStrategyTypeEnumTypeTransformer {
-  factory IoK8sApiAppsV1DeploymentStrategyTypeEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiAppsV1DeploymentStrategyTypeEnumTypeTransformer._();
-
-  const IoK8sApiAppsV1DeploymentStrategyTypeEnumTypeTransformer._();
-
-  String encode(IoK8sApiAppsV1DeploymentStrategyTypeEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiAppsV1DeploymentStrategyTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiAppsV1DeploymentStrategyTypeEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'Recreate':
-          return IoK8sApiAppsV1DeploymentStrategyTypeEnum.recreate;
-        case r'RollingUpdate':
-          return IoK8sApiAppsV1DeploymentStrategyTypeEnum.rollingUpdate;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiAppsV1DeploymentStrategyTypeEnumTypeTransformer] instance.
-  static IoK8sApiAppsV1DeploymentStrategyTypeEnumTypeTransformer? _instance;
 }

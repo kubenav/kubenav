@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -98,21 +99,31 @@ class IoK8sApimachineryPkgApisMetaV1StatusDetails {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'causes'] = causes;
-    if (group != null) {
-      json[r'group'] = group;
+    json[r'causes'] = this.causes;
+    if (this.group != null) {
+      json[r'group'] = this.group;
+    } else {
+      json[r'group'] = null;
     }
-    if (kind != null) {
-      json[r'kind'] = kind;
+    if (this.kind != null) {
+      json[r'kind'] = this.kind;
+    } else {
+      json[r'kind'] = null;
     }
-    if (name != null) {
-      json[r'name'] = name;
+    if (this.name != null) {
+      json[r'name'] = this.name;
+    } else {
+      json[r'name'] = null;
     }
-    if (retryAfterSeconds != null) {
-      json[r'retryAfterSeconds'] = retryAfterSeconds;
+    if (this.retryAfterSeconds != null) {
+      json[r'retryAfterSeconds'] = this.retryAfterSeconds;
+    } else {
+      json[r'retryAfterSeconds'] = null;
     }
-    if (uid != null) {
-      json[r'uid'] = uid;
+    if (this.uid != null) {
+      json[r'uid'] = this.uid;
+    } else {
+      json[r'uid'] = null;
     }
     return json;
   }

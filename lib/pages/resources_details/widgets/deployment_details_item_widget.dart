@@ -52,7 +52,7 @@ class DeploymentDetailsItemWidget extends StatelessWidget
             ),
             DetailsItemModel(
               name: 'Update Strategy',
-              values: deployment.spec!.strategy?.type?.value ?? '-',
+              values: deployment.spec!.strategy?.type ?? '-',
             ),
             DetailsItemModel(
               name: 'Selector',

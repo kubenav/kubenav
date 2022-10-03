@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -79,17 +80,25 @@ class IoK8sApiCoreV1WindowsSecurityContextOptions {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (gmsaCredentialSpec != null) {
-      json[r'gmsaCredentialSpec'] = gmsaCredentialSpec;
+    if (this.gmsaCredentialSpec != null) {
+      json[r'gmsaCredentialSpec'] = this.gmsaCredentialSpec;
+    } else {
+      json[r'gmsaCredentialSpec'] = null;
     }
-    if (gmsaCredentialSpecName != null) {
-      json[r'gmsaCredentialSpecName'] = gmsaCredentialSpecName;
+    if (this.gmsaCredentialSpecName != null) {
+      json[r'gmsaCredentialSpecName'] = this.gmsaCredentialSpecName;
+    } else {
+      json[r'gmsaCredentialSpecName'] = null;
     }
-    if (hostProcess != null) {
-      json[r'hostProcess'] = hostProcess;
+    if (this.hostProcess != null) {
+      json[r'hostProcess'] = this.hostProcess;
+    } else {
+      json[r'hostProcess'] = null;
     }
-    if (runAsUserName != null) {
-      json[r'runAsUserName'] = runAsUserName;
+    if (this.runAsUserName != null) {
+      json[r'runAsUserName'] = this.runAsUserName;
+    } else {
+      json[r'runAsUserName'] = null;
     }
     return json;
   }

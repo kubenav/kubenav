@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -115,26 +116,40 @@ class IoK8sApiAuthorizationV1ResourceAttributes {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (group != null) {
-      json[r'group'] = group;
+    if (this.group != null) {
+      json[r'group'] = this.group;
+    } else {
+      json[r'group'] = null;
     }
-    if (name != null) {
-      json[r'name'] = name;
+    if (this.name != null) {
+      json[r'name'] = this.name;
+    } else {
+      json[r'name'] = null;
     }
-    if (namespace != null) {
-      json[r'namespace'] = namespace;
+    if (this.namespace != null) {
+      json[r'namespace'] = this.namespace;
+    } else {
+      json[r'namespace'] = null;
     }
-    if (resource != null) {
-      json[r'resource'] = resource;
+    if (this.resource != null) {
+      json[r'resource'] = this.resource;
+    } else {
+      json[r'resource'] = null;
     }
-    if (subresource != null) {
-      json[r'subresource'] = subresource;
+    if (this.subresource != null) {
+      json[r'subresource'] = this.subresource;
+    } else {
+      json[r'subresource'] = null;
     }
-    if (verb != null) {
-      json[r'verb'] = verb;
+    if (this.verb != null) {
+      json[r'verb'] = this.verb;
+    } else {
+      json[r'verb'] = null;
     }
-    if (version != null) {
-      json[r'version'] = version;
+    if (this.version != null) {
+      json[r'version'] = this.version;
+    } else {
+      json[r'version'] = null;
     }
     return json;
   }

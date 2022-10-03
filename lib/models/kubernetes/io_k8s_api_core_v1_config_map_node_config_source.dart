@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -73,14 +74,18 @@ class IoK8sApiCoreV1ConfigMapNodeConfigSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'kubeletConfigKey'] = kubeletConfigKey;
-    json[r'name'] = name;
-    json[r'namespace'] = namespace;
-    if (resourceVersion != null) {
-      json[r'resourceVersion'] = resourceVersion;
+    json[r'kubeletConfigKey'] = this.kubeletConfigKey;
+    json[r'name'] = this.name;
+    json[r'namespace'] = this.namespace;
+    if (this.resourceVersion != null) {
+      json[r'resourceVersion'] = this.resourceVersion;
+    } else {
+      json[r'resourceVersion'] = null;
     }
-    if (uid != null) {
-      json[r'uid'] = uid;
+    if (this.uid != null) {
+      json[r'uid'] = this.uid;
+    } else {
+      json[r'uid'] = null;
     }
     return json;
   }

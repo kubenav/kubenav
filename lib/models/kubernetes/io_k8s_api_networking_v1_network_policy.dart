@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -11,6 +12,7 @@
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_network_policy_spec.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_network_policy_status.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
 
 class IoK8sApiNetworkingV1NetworkPolicy {
@@ -20,6 +22,7 @@ class IoK8sApiNetworkingV1NetworkPolicy {
     this.kind,
     this.metadata,
     this.spec,
+    this.status,
   });
 
   /// APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
@@ -56,6 +59,14 @@ class IoK8sApiNetworkingV1NetworkPolicy {
   ///
   IoK8sApiNetworkingV1NetworkPolicySpec? spec;
 
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  IoK8sApiNetworkingV1NetworkPolicyStatus? status;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -63,7 +74,8 @@ class IoK8sApiNetworkingV1NetworkPolicy {
           other.apiVersion == apiVersion &&
           other.kind == kind &&
           other.metadata == metadata &&
-          other.spec == spec;
+          other.spec == spec &&
+          other.status == status;
 
   @override
   int get hashCode =>
@@ -71,25 +83,39 @@ class IoK8sApiNetworkingV1NetworkPolicy {
       (apiVersion == null ? 0 : apiVersion!.hashCode) +
       (kind == null ? 0 : kind!.hashCode) +
       (metadata == null ? 0 : metadata!.hashCode) +
-      (spec == null ? 0 : spec!.hashCode);
+      (spec == null ? 0 : spec!.hashCode) +
+      (status == null ? 0 : status!.hashCode);
 
   @override
   String toString() =>
-      'IoK8sApiNetworkingV1NetworkPolicy[apiVersion=$apiVersion, kind=$kind, metadata=$metadata, spec=$spec]';
+      'IoK8sApiNetworkingV1NetworkPolicy[apiVersion=$apiVersion, kind=$kind, metadata=$metadata, spec=$spec, status=$status]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (apiVersion != null) {
-      json[r'apiVersion'] = apiVersion;
+    if (this.apiVersion != null) {
+      json[r'apiVersion'] = this.apiVersion;
+    } else {
+      json[r'apiVersion'] = null;
     }
-    if (kind != null) {
-      json[r'kind'] = kind;
+    if (this.kind != null) {
+      json[r'kind'] = this.kind;
+    } else {
+      json[r'kind'] = null;
     }
-    if (metadata != null) {
-      json[r'metadata'] = metadata;
+    if (this.metadata != null) {
+      json[r'metadata'] = this.metadata;
+    } else {
+      json[r'metadata'] = null;
     }
-    if (spec != null) {
-      json[r'spec'] = spec;
+    if (this.spec != null) {
+      json[r'spec'] = this.spec;
+    } else {
+      json[r'spec'] = null;
+    }
+    if (this.status != null) {
+      json[r'status'] = this.status;
+    } else {
+      json[r'status'] = null;
     }
     return json;
   }
@@ -120,6 +146,8 @@ class IoK8sApiNetworkingV1NetworkPolicy {
         metadata: IoK8sApimachineryPkgApisMetaV1ObjectMeta.fromJson(
             json[r'metadata']),
         spec: IoK8sApiNetworkingV1NetworkPolicySpec.fromJson(json[r'spec']),
+        status:
+            IoK8sApiNetworkingV1NetworkPolicyStatus.fromJson(json[r'status']),
       );
     }
     return null;

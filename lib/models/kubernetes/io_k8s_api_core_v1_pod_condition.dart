@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -61,8 +62,8 @@ class IoK8sApiCoreV1PodCondition {
   /// Status is the status of the condition. Can be True, False, Unknown. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-conditions
   String status;
 
-  /// Type is the type of the condition. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-conditions  Possible enum values:  - `\"ContainersReady\"` indicates whether all containers in the pod are ready.  - `\"Initialized\"` means that all init containers in the pod have started successfully.  - `\"PodScheduled\"` represents status of the scheduling process for this pod.  - `\"Ready\"` means the pod is able to service requests and should be added to the load balancing pools of all matching services.
-  IoK8sApiCoreV1PodConditionTypeEnum type;
+  /// Type is the type of the condition. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-conditions
+  String type;
 
   @override
   bool operator ==(Object other) =>
@@ -91,21 +92,29 @@ class IoK8sApiCoreV1PodCondition {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (lastProbeTime != null) {
-      json[r'lastProbeTime'] = lastProbeTime!.toUtc().toIso8601String();
+    if (this.lastProbeTime != null) {
+      json[r'lastProbeTime'] = this.lastProbeTime!.toUtc().toIso8601String();
+    } else {
+      json[r'lastProbeTime'] = null;
     }
-    if (lastTransitionTime != null) {
+    if (this.lastTransitionTime != null) {
       json[r'lastTransitionTime'] =
-          lastTransitionTime!.toUtc().toIso8601String();
+          this.lastTransitionTime!.toUtc().toIso8601String();
+    } else {
+      json[r'lastTransitionTime'] = null;
     }
-    if (message != null) {
-      json[r'message'] = message;
+    if (this.message != null) {
+      json[r'message'] = this.message;
+    } else {
+      json[r'message'] = null;
     }
-    if (reason != null) {
-      json[r'reason'] = reason;
+    if (this.reason != null) {
+      json[r'reason'] = this.reason;
+    } else {
+      json[r'reason'] = null;
     }
-    json[r'status'] = status;
-    json[r'type'] = type;
+    json[r'status'] = this.status;
+    json[r'type'] = this.type;
     return json;
   }
 
@@ -135,7 +144,7 @@ class IoK8sApiCoreV1PodCondition {
         message: mapValueOfType<String>(json, r'message'),
         reason: mapValueOfType<String>(json, r'reason'),
         status: mapValueOfType<String>(json, r'status')!,
-        type: IoK8sApiCoreV1PodConditionTypeEnum.fromJson(json[r'type'])!,
+        type: mapValueOfType<String>(json, r'type')!,
       );
     }
     return null;
@@ -197,96 +206,4 @@ class IoK8sApiCoreV1PodCondition {
     'status',
     'type',
   };
-}
-
-/// Type is the type of the condition. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-conditions  Possible enum values:  - `\"ContainersReady\"` indicates whether all containers in the pod are ready.  - `\"Initialized\"` means that all init containers in the pod have started successfully.  - `\"PodScheduled\"` represents status of the scheduling process for this pod.  - `\"Ready\"` means the pod is able to service requests and should be added to the load balancing pools of all matching services.
-class IoK8sApiCoreV1PodConditionTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1PodConditionTypeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const containersReady =
-      IoK8sApiCoreV1PodConditionTypeEnum._(r'ContainersReady');
-  static const initialized =
-      IoK8sApiCoreV1PodConditionTypeEnum._(r'Initialized');
-  static const podScheduled =
-      IoK8sApiCoreV1PodConditionTypeEnum._(r'PodScheduled');
-  static const ready = IoK8sApiCoreV1PodConditionTypeEnum._(r'Ready');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1PodConditionTypeEnum].
-  static const values = <IoK8sApiCoreV1PodConditionTypeEnum>[
-    containersReady,
-    initialized,
-    podScheduled,
-    ready,
-  ];
-
-  static IoK8sApiCoreV1PodConditionTypeEnum? fromJson(dynamic value) =>
-      IoK8sApiCoreV1PodConditionTypeEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiCoreV1PodConditionTypeEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1PodConditionTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiCoreV1PodConditionTypeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1PodConditionTypeEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1PodConditionTypeEnum].
-class IoK8sApiCoreV1PodConditionTypeEnumTypeTransformer {
-  factory IoK8sApiCoreV1PodConditionTypeEnumTypeTransformer() =>
-      _instance ??= const IoK8sApiCoreV1PodConditionTypeEnumTypeTransformer._();
-
-  const IoK8sApiCoreV1PodConditionTypeEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1PodConditionTypeEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1PodConditionTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1PodConditionTypeEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'ContainersReady':
-          return IoK8sApiCoreV1PodConditionTypeEnum.containersReady;
-        case r'Initialized':
-          return IoK8sApiCoreV1PodConditionTypeEnum.initialized;
-        case r'PodScheduled':
-          return IoK8sApiCoreV1PodConditionTypeEnum.podScheduled;
-        case r'Ready':
-          return IoK8sApiCoreV1PodConditionTypeEnum.ready;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1PodConditionTypeEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1PodConditionTypeEnumTypeTransformer? _instance;
 }

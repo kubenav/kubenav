@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -70,13 +71,18 @@ class IoK8sApiAutoscalingV1HorizontalPodAutoscalerSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'maxReplicas'] = maxReplicas;
-    if (minReplicas != null) {
-      json[r'minReplicas'] = minReplicas;
+    json[r'maxReplicas'] = this.maxReplicas;
+    if (this.minReplicas != null) {
+      json[r'minReplicas'] = this.minReplicas;
+    } else {
+      json[r'minReplicas'] = null;
     }
-    json[r'scaleTargetRef'] = scaleTargetRef;
-    if (targetCPUUtilizationPercentage != null) {
-      json[r'targetCPUUtilizationPercentage'] = targetCPUUtilizationPercentage;
+    json[r'scaleTargetRef'] = this.scaleTargetRef;
+    if (this.targetCPUUtilizationPercentage != null) {
+      json[r'targetCPUUtilizationPercentage'] =
+          this.targetCPUUtilizationPercentage;
+    } else {
+      json[r'targetCPUUtilizationPercentage'] = null;
     }
     return json;
   }

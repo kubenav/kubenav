@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -92,20 +93,28 @@ class IoK8sApiCoreV1ReplicationControllerStatus {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (availableReplicas != null) {
-      json[r'availableReplicas'] = availableReplicas;
+    if (this.availableReplicas != null) {
+      json[r'availableReplicas'] = this.availableReplicas;
+    } else {
+      json[r'availableReplicas'] = null;
     }
-    json[r'conditions'] = conditions;
-    if (fullyLabeledReplicas != null) {
-      json[r'fullyLabeledReplicas'] = fullyLabeledReplicas;
+    json[r'conditions'] = this.conditions;
+    if (this.fullyLabeledReplicas != null) {
+      json[r'fullyLabeledReplicas'] = this.fullyLabeledReplicas;
+    } else {
+      json[r'fullyLabeledReplicas'] = null;
     }
-    if (observedGeneration != null) {
-      json[r'observedGeneration'] = observedGeneration;
+    if (this.observedGeneration != null) {
+      json[r'observedGeneration'] = this.observedGeneration;
+    } else {
+      json[r'observedGeneration'] = null;
     }
-    if (readyReplicas != null) {
-      json[r'readyReplicas'] = readyReplicas;
+    if (this.readyReplicas != null) {
+      json[r'readyReplicas'] = this.readyReplicas;
+    } else {
+      json[r'readyReplicas'] = null;
     }
-    json[r'replicas'] = replicas;
+    json[r'replicas'] = this.replicas;
     return json;
   }
 

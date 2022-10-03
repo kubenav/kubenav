@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -103,23 +104,33 @@ class IoK8sKubeAggregatorPkgApisApiregistrationV1APIServiceSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (caBundle != null) {
-      json[r'caBundle'] = caBundle;
+    if (this.caBundle != null) {
+      json[r'caBundle'] = this.caBundle;
+    } else {
+      json[r'caBundle'] = null;
     }
-    if (group != null) {
-      json[r'group'] = group;
+    if (this.group != null) {
+      json[r'group'] = this.group;
+    } else {
+      json[r'group'] = null;
     }
-    json[r'groupPriorityMinimum'] = groupPriorityMinimum;
-    if (insecureSkipTLSVerify != null) {
-      json[r'insecureSkipTLSVerify'] = insecureSkipTLSVerify;
+    json[r'groupPriorityMinimum'] = this.groupPriorityMinimum;
+    if (this.insecureSkipTLSVerify != null) {
+      json[r'insecureSkipTLSVerify'] = this.insecureSkipTLSVerify;
+    } else {
+      json[r'insecureSkipTLSVerify'] = null;
     }
-    if (service != null) {
-      json[r'service'] = service;
+    if (this.service != null) {
+      json[r'service'] = this.service;
+    } else {
+      json[r'service'] = null;
     }
-    if (version != null) {
-      json[r'version'] = version;
+    if (this.version != null) {
+      json[r'version'] = this.version;
+    } else {
+      json[r'version'] = null;
     }
-    json[r'versionPriority'] = versionPriority;
+    json[r'versionPriority'] = this.versionPriority;
     return json;
   }
 

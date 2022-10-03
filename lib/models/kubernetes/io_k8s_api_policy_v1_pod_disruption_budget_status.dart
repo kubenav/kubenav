@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -80,14 +81,16 @@ class IoK8sApiPolicyV1PodDisruptionBudgetStatus {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'conditions'] = conditions;
-    json[r'currentHealthy'] = currentHealthy;
-    json[r'desiredHealthy'] = desiredHealthy;
-    json[r'disruptedPods'] = disruptedPods;
-    json[r'disruptionsAllowed'] = disruptionsAllowed;
-    json[r'expectedPods'] = expectedPods;
-    if (observedGeneration != null) {
-      json[r'observedGeneration'] = observedGeneration;
+    json[r'conditions'] = this.conditions;
+    json[r'currentHealthy'] = this.currentHealthy;
+    json[r'desiredHealthy'] = this.desiredHealthy;
+    json[r'disruptedPods'] = this.disruptedPods;
+    json[r'disruptionsAllowed'] = this.disruptionsAllowed;
+    json[r'expectedPods'] = this.expectedPods;
+    if (this.observedGeneration != null) {
+      json[r'observedGeneration'] = this.observedGeneration;
+    } else {
+      json[r'observedGeneration'] = null;
     }
     return json;
   }

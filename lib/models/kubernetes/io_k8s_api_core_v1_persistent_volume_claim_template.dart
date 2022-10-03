@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -47,10 +48,12 @@ class IoK8sApiCoreV1PersistentVolumeClaimTemplate {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (metadata != null) {
-      json[r'metadata'] = metadata;
+    if (this.metadata != null) {
+      json[r'metadata'] = this.metadata;
+    } else {
+      json[r'metadata'] = null;
     }
-    json[r'spec'] = spec;
+    json[r'spec'] = this.spec;
     return json;
   }
 

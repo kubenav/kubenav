@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -73,15 +74,21 @@ class IoK8sApiAuthorizationV1SubjectAccessReviewStatus {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'allowed'] = allowed;
-    if (denied != null) {
-      json[r'denied'] = denied;
+    json[r'allowed'] = this.allowed;
+    if (this.denied != null) {
+      json[r'denied'] = this.denied;
+    } else {
+      json[r'denied'] = null;
     }
-    if (evaluationError != null) {
-      json[r'evaluationError'] = evaluationError;
+    if (this.evaluationError != null) {
+      json[r'evaluationError'] = this.evaluationError;
+    } else {
+      json[r'evaluationError'] = null;
     }
-    if (reason != null) {
-      json[r'reason'] = reason;
+    if (this.reason != null) {
+      json[r'reason'] = this.reason;
+    } else {
+      json[r'reason'] = null;
     }
     return json;
   }

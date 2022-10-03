@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -28,7 +29,7 @@ class IoK8sApiCoreV1ISCSIVolumeSource {
     required this.targetPortal,
   });
 
-  /// whether support iSCSI Discovery CHAP authentication
+  /// chapAuthDiscovery defines whether support iSCSI Discovery CHAP authentication
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -37,7 +38,7 @@ class IoK8sApiCoreV1ISCSIVolumeSource {
   ///
   bool? chapAuthDiscovery;
 
-  /// whether support iSCSI Session CHAP authentication
+  /// chapAuthSession defines whether support iSCSI Session CHAP authentication
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -46,7 +47,7 @@ class IoK8sApiCoreV1ISCSIVolumeSource {
   ///
   bool? chapAuthSession;
 
-  /// Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified. More info: https://kubernetes.io/docs/concepts/storage/volumes#iscsi
+  /// fsType is the filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified. More info: https://kubernetes.io/docs/concepts/storage/volumes#iscsi
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -55,7 +56,7 @@ class IoK8sApiCoreV1ISCSIVolumeSource {
   ///
   String? fsType;
 
-  /// Custom iSCSI Initiator Name. If initiatorName is specified with iscsiInterface simultaneously, new iSCSI interface <target portal>:<volume name> will be created for the connection.
+  /// initiatorName is the custom iSCSI Initiator Name. If initiatorName is specified with iscsiInterface simultaneously, new iSCSI interface <target portal>:<volume name> will be created for the connection.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -64,10 +65,10 @@ class IoK8sApiCoreV1ISCSIVolumeSource {
   ///
   String? initiatorName;
 
-  /// Target iSCSI Qualified Name.
+  /// iqn is the target iSCSI Qualified Name.
   String iqn;
 
-  /// iSCSI Interface Name that uses an iSCSI transport. Defaults to 'default' (tcp).
+  /// iscsiInterface is the interface Name that uses an iSCSI transport. Defaults to 'default' (tcp).
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -76,13 +77,13 @@ class IoK8sApiCoreV1ISCSIVolumeSource {
   ///
   String? iscsiInterface;
 
-  /// iSCSI Target Lun number.
+  /// lun represents iSCSI Target Lun number.
   int lun;
 
-  /// iSCSI Target Portal List. The portal is either an IP or ip_addr:port if the port is other than default (typically TCP ports 860 and 3260).
+  /// portals is the iSCSI Target Portal List. The portal is either an IP or ip_addr:port if the port is other than default (typically TCP ports 860 and 3260).
   List<String> portals;
 
-  /// ReadOnly here will force the ReadOnly setting in VolumeMounts. Defaults to false.
+  /// readOnly here will force the ReadOnly setting in VolumeMounts. Defaults to false.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -99,7 +100,7 @@ class IoK8sApiCoreV1ISCSIVolumeSource {
   ///
   IoK8sApiCoreV1LocalObjectReference? secretRef;
 
-  /// iSCSI Target Portal. The Portal is either an IP or ip_addr:port if the port is other than default (typically TCP ports 860 and 3260).
+  /// targetPortal is iSCSI Target Portal. The Portal is either an IP or ip_addr:port if the port is other than default (typically TCP ports 860 and 3260).
   String targetPortal;
 
   @override
@@ -139,31 +140,45 @@ class IoK8sApiCoreV1ISCSIVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (chapAuthDiscovery != null) {
-      json[r'chapAuthDiscovery'] = chapAuthDiscovery;
+    if (this.chapAuthDiscovery != null) {
+      json[r'chapAuthDiscovery'] = this.chapAuthDiscovery;
+    } else {
+      json[r'chapAuthDiscovery'] = null;
     }
-    if (chapAuthSession != null) {
-      json[r'chapAuthSession'] = chapAuthSession;
+    if (this.chapAuthSession != null) {
+      json[r'chapAuthSession'] = this.chapAuthSession;
+    } else {
+      json[r'chapAuthSession'] = null;
     }
-    if (fsType != null) {
-      json[r'fsType'] = fsType;
+    if (this.fsType != null) {
+      json[r'fsType'] = this.fsType;
+    } else {
+      json[r'fsType'] = null;
     }
-    if (initiatorName != null) {
-      json[r'initiatorName'] = initiatorName;
+    if (this.initiatorName != null) {
+      json[r'initiatorName'] = this.initiatorName;
+    } else {
+      json[r'initiatorName'] = null;
     }
-    json[r'iqn'] = iqn;
-    if (iscsiInterface != null) {
-      json[r'iscsiInterface'] = iscsiInterface;
+    json[r'iqn'] = this.iqn;
+    if (this.iscsiInterface != null) {
+      json[r'iscsiInterface'] = this.iscsiInterface;
+    } else {
+      json[r'iscsiInterface'] = null;
     }
-    json[r'lun'] = lun;
-    json[r'portals'] = portals;
-    if (readOnly != null) {
-      json[r'readOnly'] = readOnly;
+    json[r'lun'] = this.lun;
+    json[r'portals'] = this.portals;
+    if (this.readOnly != null) {
+      json[r'readOnly'] = this.readOnly;
+    } else {
+      json[r'readOnly'] = null;
     }
-    if (secretRef != null) {
-      json[r'secretRef'] = secretRef;
+    if (this.secretRef != null) {
+      json[r'secretRef'] = this.secretRef;
+    } else {
+      json[r'secretRef'] = null;
     }
-    json[r'targetPortal'] = targetPortal;
+    json[r'targetPortal'] = this.targetPortal;
     return json;
   }
 

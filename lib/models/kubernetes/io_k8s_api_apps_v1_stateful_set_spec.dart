@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -31,7 +32,7 @@ class IoK8sApiAppsV1StatefulSetSpec {
     this.volumeClaimTemplates = const [],
   });
 
-  /// Minimum number of seconds for which a newly created pod should be ready without any of its container crashing for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready) This is an alpha field and requires enabling StatefulSetMinReadySeconds feature gate.
+  /// Minimum number of seconds for which a newly created pod should be ready without any of its container crashing for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready)
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -49,8 +50,14 @@ class IoK8sApiAppsV1StatefulSetSpec {
   IoK8sApiAppsV1StatefulSetPersistentVolumeClaimRetentionPolicy?
       persistentVolumeClaimRetentionPolicy;
 
-  /// podManagementPolicy controls how pods are created during initial scale up, when replacing pods on nodes, or when scaling down. The default policy is `OrderedReady`, where pods are created in increasing order (pod-0, then pod-1, etc) and the controller will wait until each pod is ready before continuing. When scaling down, the pods are removed in the opposite order. The alternative policy is `Parallel` which will create pods in parallel to match the desired scale without waiting, and on scale down will delete all pods at once.  Possible enum values:  - `\"OrderedReady\"` will create pods in strictly increasing order on scale up and strictly decreasing order on scale down, progressing only when the previous pod is ready or terminated. At most one pod will be changed at any time.  - `\"Parallel\"` will create and delete pods as soon as the stateful set replica count is changed, and will not wait for pods to be ready or complete termination.
-  IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum? podManagementPolicy;
+  /// podManagementPolicy controls how pods are created during initial scale up, when replacing pods on nodes, or when scaling down. The default policy is `OrderedReady`, where pods are created in increasing order (pod-0, then pod-1, etc) and the controller will wait until each pod is ready before continuing. When scaling down, the pods are removed in the opposite order. The alternative policy is `Parallel` which will create pods in parallel to match the desired scale without waiting, and on scale down will delete all pods at once.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? podManagementPolicy;
 
   /// replicas is the desired number of replicas of the given Template. These are replicas in the sense that they are instantiations of the same Template, but individual replicas also have a consistent identity. If unspecified, defaults to 1.
   ///
@@ -126,29 +133,41 @@ class IoK8sApiAppsV1StatefulSetSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (minReadySeconds != null) {
-      json[r'minReadySeconds'] = minReadySeconds;
+    if (this.minReadySeconds != null) {
+      json[r'minReadySeconds'] = this.minReadySeconds;
+    } else {
+      json[r'minReadySeconds'] = null;
     }
-    if (persistentVolumeClaimRetentionPolicy != null) {
+    if (this.persistentVolumeClaimRetentionPolicy != null) {
       json[r'persistentVolumeClaimRetentionPolicy'] =
-          persistentVolumeClaimRetentionPolicy;
+          this.persistentVolumeClaimRetentionPolicy;
+    } else {
+      json[r'persistentVolumeClaimRetentionPolicy'] = null;
     }
-    if (podManagementPolicy != null) {
-      json[r'podManagementPolicy'] = podManagementPolicy;
+    if (this.podManagementPolicy != null) {
+      json[r'podManagementPolicy'] = this.podManagementPolicy;
+    } else {
+      json[r'podManagementPolicy'] = null;
     }
-    if (replicas != null) {
-      json[r'replicas'] = replicas;
+    if (this.replicas != null) {
+      json[r'replicas'] = this.replicas;
+    } else {
+      json[r'replicas'] = null;
     }
-    if (revisionHistoryLimit != null) {
-      json[r'revisionHistoryLimit'] = revisionHistoryLimit;
+    if (this.revisionHistoryLimit != null) {
+      json[r'revisionHistoryLimit'] = this.revisionHistoryLimit;
+    } else {
+      json[r'revisionHistoryLimit'] = null;
     }
-    json[r'selector'] = selector;
-    json[r'serviceName'] = serviceName;
-    json[r'template'] = template;
-    if (updateStrategy != null) {
-      json[r'updateStrategy'] = updateStrategy;
+    json[r'selector'] = this.selector;
+    json[r'serviceName'] = this.serviceName;
+    json[r'template'] = this.template;
+    if (this.updateStrategy != null) {
+      json[r'updateStrategy'] = this.updateStrategy;
+    } else {
+      json[r'updateStrategy'] = null;
     }
-    json[r'volumeClaimTemplates'] = volumeClaimTemplates;
+    json[r'volumeClaimTemplates'] = this.volumeClaimTemplates;
     return json;
   }
 
@@ -178,8 +197,7 @@ class IoK8sApiAppsV1StatefulSetSpec {
             IoK8sApiAppsV1StatefulSetPersistentVolumeClaimRetentionPolicy
                 .fromJson(json[r'persistentVolumeClaimRetentionPolicy']),
         podManagementPolicy:
-            IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum.fromJson(
-                json[r'podManagementPolicy']),
+            mapValueOfType<String>(json, r'podManagementPolicy'),
         replicas: mapValueOfType<int>(json, r'replicas'),
         revisionHistoryLimit:
             mapValueOfType<int>(json, r'revisionHistoryLimit'),
@@ -254,96 +272,4 @@ class IoK8sApiAppsV1StatefulSetSpec {
     'serviceName',
     'template',
   };
-}
-
-/// podManagementPolicy controls how pods are created during initial scale up, when replacing pods on nodes, or when scaling down. The default policy is `OrderedReady`, where pods are created in increasing order (pod-0, then pod-1, etc) and the controller will wait until each pod is ready before continuing. When scaling down, the pods are removed in the opposite order. The alternative policy is `Parallel` which will create pods in parallel to match the desired scale without waiting, and on scale down will delete all pods at once.  Possible enum values:  - `\"OrderedReady\"` will create pods in strictly increasing order on scale up and strictly decreasing order on scale down, progressing only when the previous pod is ready or terminated. At most one pod will be changed at any time.  - `\"Parallel\"` will create and delete pods as soon as the stateful set replica count is changed, and will not wait for pods to be ready or complete termination.
-class IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const orderedReady =
-      IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum._(r'OrderedReady');
-  static const parallel =
-      IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum._(r'Parallel');
-
-  /// List of all possible values in this [enum][IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum].
-  static const values = <IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum>[
-    orderedReady,
-    parallel,
-  ];
-
-  static IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum? fromJson(
-          dynamic value) =>
-      IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnumTypeTransformer()
-          .decode(value);
-
-  static List<IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum>?
-      listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value =
-            IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum].
-class IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnumTypeTransformer {
-  factory IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnumTypeTransformer
-              ._();
-
-  const IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnumTypeTransformer._();
-
-  String encode(IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum data) =>
-      data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'OrderedReady':
-          return IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum
-              .orderedReady;
-        case r'Parallel':
-          return IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnum.parallel;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnumTypeTransformer] instance.
-  static IoK8sApiAppsV1StatefulSetSpecPodManagementPolicyEnumTypeTransformer?
-      _instance;
 }

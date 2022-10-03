@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -19,6 +20,7 @@ class IoK8sApiCoreV1CSIPersistentVolumeSource {
     this.controllerPublishSecretRef,
     required this.driver,
     this.fsType,
+    this.nodeExpandSecretRef,
     this.nodePublishSecretRef,
     this.nodeStageSecretRef,
     this.readOnly,
@@ -42,10 +44,10 @@ class IoK8sApiCoreV1CSIPersistentVolumeSource {
   ///
   IoK8sApiCoreV1SecretReference? controllerPublishSecretRef;
 
-  /// Driver is the name of the driver to use for this volume. Required.
+  /// driver is the name of the driver to use for this volume. Required.
   String driver;
 
-  /// Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\".
+  /// fsType to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\".
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -53,6 +55,14 @@ class IoK8sApiCoreV1CSIPersistentVolumeSource {
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
   String? fsType;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  IoK8sApiCoreV1SecretReference? nodeExpandSecretRef;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -70,7 +80,7 @@ class IoK8sApiCoreV1CSIPersistentVolumeSource {
   ///
   IoK8sApiCoreV1SecretReference? nodeStageSecretRef;
 
-  /// Optional: The value to pass to ControllerPublishVolumeRequest. Defaults to false (read/write).
+  /// readOnly value to pass to ControllerPublishVolumeRequest. Defaults to false (read/write).
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -79,10 +89,10 @@ class IoK8sApiCoreV1CSIPersistentVolumeSource {
   ///
   bool? readOnly;
 
-  /// Attributes of the volume to publish.
+  /// volumeAttributes of the volume to publish.
   Map<String, String> volumeAttributes;
 
-  /// VolumeHandle is the unique volume name returned by the CSI volume plugin’s CreateVolume to refer to the volume on all subsequent calls. Required.
+  /// volumeHandle is the unique volume name returned by the CSI volume plugin’s CreateVolume to refer to the volume on all subsequent calls. Required.
   String volumeHandle;
 
   @override
@@ -93,6 +103,7 @@ class IoK8sApiCoreV1CSIPersistentVolumeSource {
           other.controllerPublishSecretRef == controllerPublishSecretRef &&
           other.driver == driver &&
           other.fsType == fsType &&
+          other.nodeExpandSecretRef == nodeExpandSecretRef &&
           other.nodePublishSecretRef == nodePublishSecretRef &&
           other.nodeStageSecretRef == nodeStageSecretRef &&
           other.readOnly == readOnly &&
@@ -110,6 +121,7 @@ class IoK8sApiCoreV1CSIPersistentVolumeSource {
           : controllerPublishSecretRef!.hashCode) +
       (driver.hashCode) +
       (fsType == null ? 0 : fsType!.hashCode) +
+      (nodeExpandSecretRef == null ? 0 : nodeExpandSecretRef!.hashCode) +
       (nodePublishSecretRef == null ? 0 : nodePublishSecretRef!.hashCode) +
       (nodeStageSecretRef == null ? 0 : nodeStageSecretRef!.hashCode) +
       (readOnly == null ? 0 : readOnly!.hashCode) +
@@ -118,31 +130,48 @@ class IoK8sApiCoreV1CSIPersistentVolumeSource {
 
   @override
   String toString() =>
-      'IoK8sApiCoreV1CSIPersistentVolumeSource[controllerExpandSecretRef=$controllerExpandSecretRef, controllerPublishSecretRef=$controllerPublishSecretRef, driver=$driver, fsType=$fsType, nodePublishSecretRef=$nodePublishSecretRef, nodeStageSecretRef=$nodeStageSecretRef, readOnly=$readOnly, volumeAttributes=$volumeAttributes, volumeHandle=$volumeHandle]';
+      'IoK8sApiCoreV1CSIPersistentVolumeSource[controllerExpandSecretRef=$controllerExpandSecretRef, controllerPublishSecretRef=$controllerPublishSecretRef, driver=$driver, fsType=$fsType, nodeExpandSecretRef=$nodeExpandSecretRef, nodePublishSecretRef=$nodePublishSecretRef, nodeStageSecretRef=$nodeStageSecretRef, readOnly=$readOnly, volumeAttributes=$volumeAttributes, volumeHandle=$volumeHandle]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (controllerExpandSecretRef != null) {
-      json[r'controllerExpandSecretRef'] = controllerExpandSecretRef;
+    if (this.controllerExpandSecretRef != null) {
+      json[r'controllerExpandSecretRef'] = this.controllerExpandSecretRef;
+    } else {
+      json[r'controllerExpandSecretRef'] = null;
     }
-    if (controllerPublishSecretRef != null) {
-      json[r'controllerPublishSecretRef'] = controllerPublishSecretRef;
+    if (this.controllerPublishSecretRef != null) {
+      json[r'controllerPublishSecretRef'] = this.controllerPublishSecretRef;
+    } else {
+      json[r'controllerPublishSecretRef'] = null;
     }
-    json[r'driver'] = driver;
-    if (fsType != null) {
-      json[r'fsType'] = fsType;
+    json[r'driver'] = this.driver;
+    if (this.fsType != null) {
+      json[r'fsType'] = this.fsType;
+    } else {
+      json[r'fsType'] = null;
     }
-    if (nodePublishSecretRef != null) {
-      json[r'nodePublishSecretRef'] = nodePublishSecretRef;
+    if (this.nodeExpandSecretRef != null) {
+      json[r'nodeExpandSecretRef'] = this.nodeExpandSecretRef;
+    } else {
+      json[r'nodeExpandSecretRef'] = null;
     }
-    if (nodeStageSecretRef != null) {
-      json[r'nodeStageSecretRef'] = nodeStageSecretRef;
+    if (this.nodePublishSecretRef != null) {
+      json[r'nodePublishSecretRef'] = this.nodePublishSecretRef;
+    } else {
+      json[r'nodePublishSecretRef'] = null;
     }
-    if (readOnly != null) {
-      json[r'readOnly'] = readOnly;
+    if (this.nodeStageSecretRef != null) {
+      json[r'nodeStageSecretRef'] = this.nodeStageSecretRef;
+    } else {
+      json[r'nodeStageSecretRef'] = null;
     }
-    json[r'volumeAttributes'] = volumeAttributes;
-    json[r'volumeHandle'] = volumeHandle;
+    if (this.readOnly != null) {
+      json[r'readOnly'] = this.readOnly;
+    } else {
+      json[r'readOnly'] = null;
+    }
+    json[r'volumeAttributes'] = this.volumeAttributes;
+    json[r'volumeHandle'] = this.volumeHandle;
     return json;
   }
 
@@ -173,6 +202,8 @@ class IoK8sApiCoreV1CSIPersistentVolumeSource {
             json[r'controllerPublishSecretRef']),
         driver: mapValueOfType<String>(json, r'driver')!,
         fsType: mapValueOfType<String>(json, r'fsType'),
+        nodeExpandSecretRef: IoK8sApiCoreV1SecretReference.fromJson(
+            json[r'nodeExpandSecretRef']),
         nodePublishSecretRef: IoK8sApiCoreV1SecretReference.fromJson(
             json[r'nodePublishSecretRef']),
         nodeStageSecretRef:

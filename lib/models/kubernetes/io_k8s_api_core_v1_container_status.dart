@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -26,7 +27,7 @@ class IoK8sApiCoreV1ContainerStatus {
     this.state,
   });
 
-  /// Container's ID in the format 'docker://<container_id>'.
+  /// Container's ID in the format '<type>://<container_id>'.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -108,22 +109,30 @@ class IoK8sApiCoreV1ContainerStatus {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (containerID != null) {
-      json[r'containerID'] = containerID;
+    if (this.containerID != null) {
+      json[r'containerID'] = this.containerID;
+    } else {
+      json[r'containerID'] = null;
     }
-    json[r'image'] = image;
-    json[r'imageID'] = imageID;
-    if (lastState != null) {
-      json[r'lastState'] = lastState;
+    json[r'image'] = this.image;
+    json[r'imageID'] = this.imageID;
+    if (this.lastState != null) {
+      json[r'lastState'] = this.lastState;
+    } else {
+      json[r'lastState'] = null;
     }
-    json[r'name'] = name;
-    json[r'ready'] = ready;
-    json[r'restartCount'] = restartCount;
-    if (started != null) {
-      json[r'started'] = started;
+    json[r'name'] = this.name;
+    json[r'ready'] = this.ready;
+    json[r'restartCount'] = this.restartCount;
+    if (this.started != null) {
+      json[r'started'] = this.started;
+    } else {
+      json[r'started'] = null;
     }
-    if (state != null) {
-      json[r'state'] = state;
+    if (this.state != null) {
+      json[r'state'] = this.state;
+    } else {
+      json[r'state'] = null;
     }
     return json;
   }

@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -27,7 +28,7 @@ class IoK8sApiCoreV1ScaleIOPersistentVolumeSource {
     this.volumeName,
   });
 
-  /// Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". Default is \"xfs\"
+  /// fsType is the filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". Default is \"xfs\"
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -36,10 +37,10 @@ class IoK8sApiCoreV1ScaleIOPersistentVolumeSource {
   ///
   String? fsType;
 
-  /// The host address of the ScaleIO API Gateway.
+  /// gateway is the host address of the ScaleIO API Gateway.
   String gateway;
 
-  /// The name of the ScaleIO Protection Domain for the configured storage.
+  /// protectionDomain is the name of the ScaleIO Protection Domain for the configured storage.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -48,7 +49,7 @@ class IoK8sApiCoreV1ScaleIOPersistentVolumeSource {
   ///
   String? protectionDomain;
 
-  /// Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
+  /// readOnly defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -59,7 +60,7 @@ class IoK8sApiCoreV1ScaleIOPersistentVolumeSource {
 
   IoK8sApiCoreV1SecretReference secretRef;
 
-  /// Flag to enable/disable SSL communication with Gateway, default false
+  /// sslEnabled is the flag to enable/disable SSL communication with Gateway, default false
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -68,7 +69,7 @@ class IoK8sApiCoreV1ScaleIOPersistentVolumeSource {
   ///
   bool? sslEnabled;
 
-  /// Indicates whether the storage for a volume should be ThickProvisioned or ThinProvisioned. Default is ThinProvisioned.
+  /// storageMode indicates whether the storage for a volume should be ThickProvisioned or ThinProvisioned. Default is ThinProvisioned.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -77,7 +78,7 @@ class IoK8sApiCoreV1ScaleIOPersistentVolumeSource {
   ///
   String? storageMode;
 
-  /// The ScaleIO Storage Pool associated with the protection domain.
+  /// storagePool is the ScaleIO Storage Pool associated with the protection domain.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -86,10 +87,10 @@ class IoK8sApiCoreV1ScaleIOPersistentVolumeSource {
   ///
   String? storagePool;
 
-  /// The name of the storage system as configured in ScaleIO.
+  /// system is the name of the storage system as configured in ScaleIO.
   String system;
 
-  /// The name of a volume already created in the ScaleIO system that is associated with this volume source.
+  /// volumeName is the name of a volume already created in the ScaleIO system that is associated with this volume source.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -133,29 +134,43 @@ class IoK8sApiCoreV1ScaleIOPersistentVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (fsType != null) {
-      json[r'fsType'] = fsType;
+    if (this.fsType != null) {
+      json[r'fsType'] = this.fsType;
+    } else {
+      json[r'fsType'] = null;
     }
-    json[r'gateway'] = gateway;
-    if (protectionDomain != null) {
-      json[r'protectionDomain'] = protectionDomain;
+    json[r'gateway'] = this.gateway;
+    if (this.protectionDomain != null) {
+      json[r'protectionDomain'] = this.protectionDomain;
+    } else {
+      json[r'protectionDomain'] = null;
     }
-    if (readOnly != null) {
-      json[r'readOnly'] = readOnly;
+    if (this.readOnly != null) {
+      json[r'readOnly'] = this.readOnly;
+    } else {
+      json[r'readOnly'] = null;
     }
-    json[r'secretRef'] = secretRef;
-    if (sslEnabled != null) {
-      json[r'sslEnabled'] = sslEnabled;
+    json[r'secretRef'] = this.secretRef;
+    if (this.sslEnabled != null) {
+      json[r'sslEnabled'] = this.sslEnabled;
+    } else {
+      json[r'sslEnabled'] = null;
     }
-    if (storageMode != null) {
-      json[r'storageMode'] = storageMode;
+    if (this.storageMode != null) {
+      json[r'storageMode'] = this.storageMode;
+    } else {
+      json[r'storageMode'] = null;
     }
-    if (storagePool != null) {
-      json[r'storagePool'] = storagePool;
+    if (this.storagePool != null) {
+      json[r'storagePool'] = this.storagePool;
+    } else {
+      json[r'storagePool'] = null;
     }
-    json[r'system'] = system;
-    if (volumeName != null) {
-      json[r'volumeName'] = volumeName;
+    json[r'system'] = this.system;
+    if (this.volumeName != null) {
+      json[r'volumeName'] = this.volumeName;
+    } else {
+      json[r'volumeName'] = null;
     }
     return json;
   }

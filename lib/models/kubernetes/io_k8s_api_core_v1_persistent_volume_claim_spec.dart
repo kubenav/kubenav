@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -27,7 +28,7 @@ class IoK8sApiCoreV1PersistentVolumeClaimSpec {
     this.volumeName,
   });
 
-  /// AccessModes contains the desired access modes the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1
+  /// accessModes contains the desired access modes the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1
   List<String> accessModes;
 
   ///
@@ -62,7 +63,7 @@ class IoK8sApiCoreV1PersistentVolumeClaimSpec {
   ///
   IoK8sApimachineryPkgApisMetaV1LabelSelector? selector;
 
-  /// Name of the StorageClass required by the claim. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1
+  /// storageClassName is the name of the StorageClass required by the claim. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -80,7 +81,7 @@ class IoK8sApiCoreV1PersistentVolumeClaimSpec {
   ///
   String? volumeMode;
 
-  /// VolumeName is the binding reference to the PersistentVolume backing this claim.
+  /// volumeName is the binding reference to the PersistentVolume backing this claim.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -120,27 +121,41 @@ class IoK8sApiCoreV1PersistentVolumeClaimSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'accessModes'] = accessModes;
-    if (dataSource != null) {
-      json[r'dataSource'] = dataSource;
+    json[r'accessModes'] = this.accessModes;
+    if (this.dataSource != null) {
+      json[r'dataSource'] = this.dataSource;
+    } else {
+      json[r'dataSource'] = null;
     }
-    if (dataSourceRef != null) {
-      json[r'dataSourceRef'] = dataSourceRef;
+    if (this.dataSourceRef != null) {
+      json[r'dataSourceRef'] = this.dataSourceRef;
+    } else {
+      json[r'dataSourceRef'] = null;
     }
-    if (resources != null) {
-      json[r'resources'] = resources;
+    if (this.resources != null) {
+      json[r'resources'] = this.resources;
+    } else {
+      json[r'resources'] = null;
     }
-    if (selector != null) {
-      json[r'selector'] = selector;
+    if (this.selector != null) {
+      json[r'selector'] = this.selector;
+    } else {
+      json[r'selector'] = null;
     }
-    if (storageClassName != null) {
-      json[r'storageClassName'] = storageClassName;
+    if (this.storageClassName != null) {
+      json[r'storageClassName'] = this.storageClassName;
+    } else {
+      json[r'storageClassName'] = null;
     }
-    if (volumeMode != null) {
-      json[r'volumeMode'] = volumeMode;
+    if (this.volumeMode != null) {
+      json[r'volumeMode'] = this.volumeMode;
+    } else {
+      json[r'volumeMode'] = null;
     }
-    if (volumeName != null) {
-      json[r'volumeName'] = volumeName;
+    if (this.volumeName != null) {
+      json[r'volumeName'] = this.volumeName;
+    } else {
+      json[r'volumeName'] = null;
     }
     return json;
   }

@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -25,8 +26,8 @@ class IoK8sApiDiscoveryV1EndpointSlice {
     this.ports = const [],
   });
 
-  /// addressType specifies the type of address carried by this EndpointSlice. All addresses in this slice must be the same type. This field is immutable after creation. The following address types are currently supported: * IPv4: Represents an IPv4 Address. * IPv6: Represents an IPv6 Address. * FQDN: Represents a Fully Qualified Domain Name.  Possible enum values:  - `\"FQDN\"` represents a FQDN.  - `\"IPv4\"` represents an IPv4 Address.  - `\"IPv6\"` represents an IPv6 Address.
-  IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum addressType;
+  /// addressType specifies the type of address carried by this EndpointSlice. All addresses in this slice must be the same type. This field is immutable after creation. The following address types are currently supported: * IPv4: Represents an IPv4 Address. * IPv6: Represents an IPv6 Address. * FQDN: Represents a Fully Qualified Domain Name.
+  String addressType;
 
   /// APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
   ///
@@ -87,18 +88,24 @@ class IoK8sApiDiscoveryV1EndpointSlice {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'addressType'] = addressType;
-    if (apiVersion != null) {
-      json[r'apiVersion'] = apiVersion;
+    json[r'addressType'] = this.addressType;
+    if (this.apiVersion != null) {
+      json[r'apiVersion'] = this.apiVersion;
+    } else {
+      json[r'apiVersion'] = null;
     }
-    json[r'endpoints'] = endpoints;
-    if (kind != null) {
-      json[r'kind'] = kind;
+    json[r'endpoints'] = this.endpoints;
+    if (this.kind != null) {
+      json[r'kind'] = this.kind;
+    } else {
+      json[r'kind'] = null;
     }
-    if (metadata != null) {
-      json[r'metadata'] = metadata;
+    if (this.metadata != null) {
+      json[r'metadata'] = this.metadata;
+    } else {
+      json[r'metadata'] = null;
     }
-    json[r'ports'] = ports;
+    json[r'ports'] = this.ports;
     return json;
   }
 
@@ -123,8 +130,7 @@ class IoK8sApiDiscoveryV1EndpointSlice {
       }());
 
       return IoK8sApiDiscoveryV1EndpointSlice(
-        addressType: IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum.fromJson(
-            json[r'addressType'])!,
+        addressType: mapValueOfType<String>(json, r'addressType')!,
         apiVersion: mapValueOfType<String>(json, r'apiVersion'),
         endpoints:
             IoK8sApiDiscoveryV1Endpoint.listFromJson(json[r'endpoints'])!,
@@ -195,99 +201,4 @@ class IoK8sApiDiscoveryV1EndpointSlice {
     'addressType',
     'endpoints',
   };
-}
-
-/// addressType specifies the type of address carried by this EndpointSlice. All addresses in this slice must be the same type. This field is immutable after creation. The following address types are currently supported: * IPv4: Represents an IPv4 Address. * IPv6: Represents an IPv6 Address. * FQDN: Represents a Fully Qualified Domain Name.  Possible enum values:  - `\"FQDN\"` represents a FQDN.  - `\"IPv4\"` represents an IPv4 Address.  - `\"IPv6\"` represents an IPv6 Address.
-class IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const FQDN =
-      IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum._(r'FQDN');
-  static const iPv4 =
-      IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum._(r'IPv4');
-  static const iPv6 =
-      IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum._(r'IPv6');
-
-  /// List of all possible values in this [enum][IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum].
-  static const values = <IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum>[
-    FQDN,
-    iPv4,
-    iPv6,
-  ];
-
-  static IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum? fromJson(
-          dynamic value) =>
-      IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnumTypeTransformer()
-          .decode(value);
-
-  static List<IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value =
-            IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum].
-class IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnumTypeTransformer {
-  factory IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnumTypeTransformer
-              ._();
-
-  const IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnumTypeTransformer._();
-
-  String encode(IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum data) =>
-      data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'FQDN':
-          return IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum.FQDN;
-        case r'IPv4':
-          return IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum.iPv4;
-        case r'IPv6':
-          return IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnum.iPv6;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnumTypeTransformer] instance.
-  static IoK8sApiDiscoveryV1EndpointSliceAddressTypeEnumTypeTransformer?
-      _instance;
 }

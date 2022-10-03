@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -69,14 +70,18 @@ class IoK8sApiFlowcontrolV1beta2FlowSchemaSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (distinguisherMethod != null) {
-      json[r'distinguisherMethod'] = distinguisherMethod;
+    if (this.distinguisherMethod != null) {
+      json[r'distinguisherMethod'] = this.distinguisherMethod;
+    } else {
+      json[r'distinguisherMethod'] = null;
     }
-    if (matchingPrecedence != null) {
-      json[r'matchingPrecedence'] = matchingPrecedence;
+    if (this.matchingPrecedence != null) {
+      json[r'matchingPrecedence'] = this.matchingPrecedence;
+    } else {
+      json[r'matchingPrecedence'] = null;
     }
-    json[r'priorityLevelConfiguration'] = priorityLevelConfiguration;
-    json[r'rules'] = rules;
+    json[r'priorityLevelConfiguration'] = this.priorityLevelConfiguration;
+    json[r'rules'] = this.rules;
     return json;
   }
 

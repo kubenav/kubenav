@@ -201,7 +201,7 @@ class PodDetailsItemWidget extends StatelessWidget
               values: ports != null
                   ? ports
                       .map((port) =>
-                          '${port.containerName}: ${port.port.containerPort}${port.port.protocol != null ? '/${port.port.protocol!.value}' : ''}${port.port.name != null ? ' (${port.port.name})' : ''}')
+                          '${port.containerName}: ${port.port.containerPort}${port.port.protocol != null ? '/${port.port.protocol}' : ''}${port.port.name != null ? ' (${port.port.name})' : ''}')
                       .toList()
                   : '-',
               onTap: (index) {

@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -22,8 +23,8 @@ class IoK8sApiCoreV1NodeSelectorRequirement {
   /// The label key that the selector applies to.
   String key;
 
-  /// Represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists, DoesNotExist. Gt, and Lt.  Possible enum values:  - `\"DoesNotExist\"`  - `\"Exists\"`  - `\"Gt\"`  - `\"In\"`  - `\"Lt\"`  - `\"NotIn\"`
-  IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum operator_;
+  /// Represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists, DoesNotExist. Gt, and Lt.
+  String operator_;
 
   /// An array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. If the operator is Gt or Lt, the values array must have a single element, which will be interpreted as an integer. This array is replaced during a strategic merge patch.
   List<String> values;
@@ -47,9 +48,9 @@ class IoK8sApiCoreV1NodeSelectorRequirement {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'key'] = key;
-    json[r'operator'] = operator_;
-    json[r'values'] = values;
+    json[r'key'] = this.key;
+    json[r'operator'] = this.operator_;
+    json[r'values'] = this.values;
     return json;
   }
 
@@ -75,8 +76,7 @@ class IoK8sApiCoreV1NodeSelectorRequirement {
 
       return IoK8sApiCoreV1NodeSelectorRequirement(
         key: mapValueOfType<String>(json, r'key')!,
-        operator_: IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum.fromJson(
-            json[r'operator'])!,
+        operator_: mapValueOfType<String>(json, r'operator')!,
         values: json[r'values'] is List
             ? (json[r'values'] as List).cast<String>()
             : const [],
@@ -144,111 +144,4 @@ class IoK8sApiCoreV1NodeSelectorRequirement {
     'key',
     'operator',
   };
-}
-
-/// Represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists, DoesNotExist. Gt, and Lt.  Possible enum values:  - `\"DoesNotExist\"`  - `\"Exists\"`  - `\"Gt\"`  - `\"In\"`  - `\"Lt\"`  - `\"NotIn\"`
-class IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const doesNotExist =
-      IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum._(r'DoesNotExist');
-  static const exists =
-      IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum._(r'Exists');
-  static const gt = IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum._(r'Gt');
-  static const in_ = IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum._(r'In');
-  static const lt = IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum._(r'Lt');
-  static const notIn =
-      IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum._(r'NotIn');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum].
-  static const values = <IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum>[
-    doesNotExist,
-    exists,
-    gt,
-    in_,
-    lt,
-    notIn,
-  ];
-
-  static IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum? fromJson(
-          dynamic value) =>
-      IoK8sApiCoreV1NodeSelectorRequirementOperatorEnumTypeTransformer()
-          .decode(value);
-
-  static List<IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value =
-            IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum].
-class IoK8sApiCoreV1NodeSelectorRequirementOperatorEnumTypeTransformer {
-  factory IoK8sApiCoreV1NodeSelectorRequirementOperatorEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1NodeSelectorRequirementOperatorEnumTypeTransformer
-              ._();
-
-  const IoK8sApiCoreV1NodeSelectorRequirementOperatorEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum data) =>
-      data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'DoesNotExist':
-          return IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum.doesNotExist;
-        case r'Exists':
-          return IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum.exists;
-        case r'Gt':
-          return IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum.gt;
-        case r'In':
-          return IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum.in_;
-        case r'Lt':
-          return IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum.lt;
-        case r'NotIn':
-          return IoK8sApiCoreV1NodeSelectorRequirementOperatorEnum.notIn;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1NodeSelectorRequirementOperatorEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1NodeSelectorRequirementOperatorEnumTypeTransformer?
-      _instance;
 }

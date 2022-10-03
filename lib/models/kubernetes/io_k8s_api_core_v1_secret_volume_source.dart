@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -21,7 +22,7 @@ class IoK8sApiCoreV1SecretVolumeSource {
     this.secretName,
   });
 
-  /// Optional: mode bits used to set permissions on created files by default. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. Defaults to 0644. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
+  /// defaultMode is Optional: mode bits used to set permissions on created files by default. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. Defaults to 0644. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -30,10 +31,10 @@ class IoK8sApiCoreV1SecretVolumeSource {
   ///
   int? defaultMode;
 
-  /// If unspecified, each key-value pair in the Data field of the referenced Secret will be projected into the volume as a file whose name is the key and content is the value. If specified, the listed keys will be projected into the specified paths, and unlisted keys will not be present. If a key is specified which is not present in the Secret, the volume setup will error unless it is marked optional. Paths must be relative and may not contain the '..' path or start with '..'.
+  /// items If unspecified, each key-value pair in the Data field of the referenced Secret will be projected into the volume as a file whose name is the key and content is the value. If specified, the listed keys will be projected into the specified paths, and unlisted keys will not be present. If a key is specified which is not present in the Secret, the volume setup will error unless it is marked optional. Paths must be relative and may not contain the '..' path or start with '..'.
   List<IoK8sApiCoreV1KeyToPath> items;
 
-  /// Specify whether the Secret or its keys must be defined
+  /// optional field specify whether the Secret or its keys must be defined
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -42,7 +43,7 @@ class IoK8sApiCoreV1SecretVolumeSource {
   ///
   bool? optional;
 
-  /// Name of the secret in the pod's namespace to use. More info: https://kubernetes.io/docs/concepts/storage/volumes#secret
+  /// secretName is the name of the secret in the pod's namespace to use. More info: https://kubernetes.io/docs/concepts/storage/volumes#secret
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -74,15 +75,21 @@ class IoK8sApiCoreV1SecretVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (defaultMode != null) {
-      json[r'defaultMode'] = defaultMode;
+    if (this.defaultMode != null) {
+      json[r'defaultMode'] = this.defaultMode;
+    } else {
+      json[r'defaultMode'] = null;
     }
-    json[r'items'] = items;
-    if (optional != null) {
-      json[r'optional'] = optional;
+    json[r'items'] = this.items;
+    if (this.optional != null) {
+      json[r'optional'] = this.optional;
+    } else {
+      json[r'optional'] = null;
     }
-    if (secretName != null) {
-      json[r'secretName'] = secretName;
+    if (this.secretName != null) {
+      json[r'secretName'] = this.secretName;
+    } else {
+      json[r'secretName'] = null;
     }
     return json;
   }

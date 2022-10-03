@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -154,35 +155,56 @@ class IoK8sApiCoreV1Probe {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (exec != null) {
-      json[r'exec'] = exec;
+    if (this.exec != null) {
+      json[r'exec'] = this.exec;
+    } else {
+      json[r'exec'] = null;
     }
-    if (failureThreshold != null) {
-      json[r'failureThreshold'] = failureThreshold;
+    if (this.failureThreshold != null) {
+      json[r'failureThreshold'] = this.failureThreshold;
+    } else {
+      json[r'failureThreshold'] = null;
     }
-    if (grpc != null) {
-      json[r'grpc'] = grpc;
+    if (this.grpc != null) {
+      json[r'grpc'] = this.grpc;
+    } else {
+      json[r'grpc'] = null;
     }
-    if (httpGet != null) {
-      json[r'httpGet'] = httpGet;
+    if (this.httpGet != null) {
+      json[r'httpGet'] = this.httpGet;
+    } else {
+      json[r'httpGet'] = null;
     }
-    if (initialDelaySeconds != null) {
-      json[r'initialDelaySeconds'] = initialDelaySeconds;
+    if (this.initialDelaySeconds != null) {
+      json[r'initialDelaySeconds'] = this.initialDelaySeconds;
+    } else {
+      json[r'initialDelaySeconds'] = null;
     }
-    if (periodSeconds != null) {
-      json[r'periodSeconds'] = periodSeconds;
+    if (this.periodSeconds != null) {
+      json[r'periodSeconds'] = this.periodSeconds;
+    } else {
+      json[r'periodSeconds'] = null;
     }
-    if (successThreshold != null) {
-      json[r'successThreshold'] = successThreshold;
+    if (this.successThreshold != null) {
+      json[r'successThreshold'] = this.successThreshold;
+    } else {
+      json[r'successThreshold'] = null;
     }
-    if (tcpSocket != null) {
-      json[r'tcpSocket'] = tcpSocket;
+    if (this.tcpSocket != null) {
+      json[r'tcpSocket'] = this.tcpSocket;
+    } else {
+      json[r'tcpSocket'] = null;
     }
-    if (terminationGracePeriodSeconds != null) {
-      json[r'terminationGracePeriodSeconds'] = terminationGracePeriodSeconds;
+    if (this.terminationGracePeriodSeconds != null) {
+      json[r'terminationGracePeriodSeconds'] =
+          this.terminationGracePeriodSeconds;
+    } else {
+      json[r'terminationGracePeriodSeconds'] = null;
     }
-    if (timeoutSeconds != null) {
-      json[r'timeoutSeconds'] = timeoutSeconds;
+    if (this.timeoutSeconds != null) {
+      json[r'timeoutSeconds'] = this.timeoutSeconds;
+    } else {
+      json[r'timeoutSeconds'] = null;
     }
     return json;
   }

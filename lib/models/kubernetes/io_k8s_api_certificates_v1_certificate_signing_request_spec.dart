@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -24,7 +25,7 @@ class IoK8sApiCertificatesV1CertificateSigningRequestSpec {
     this.username,
   });
 
-  /// expirationSeconds is the requested duration of validity of the issued certificate. The certificate signer may issue a certificate with a different validity duration so a client must check the delta between the notBefore and and notAfter fields in the issued certificate to determine the actual duration.  The v1.22+ in-tree implementations of the well-known Kubernetes signers will honor this field as long as the requested duration is not greater than the maximum duration they will honor per the --cluster-signing-duration CLI flag to the Kubernetes controller manager.  Certificate signers may not honor this field for various reasons:    1. Old signer that is unaware of the field (such as the in-tree      implementations prior to v1.22)   2. Signer whose configured maximum is shorter than the requested duration   3. Signer whose configured minimum is longer than the requested duration  The minimum valid value for expirationSeconds is 600, i.e. 10 minutes.  As of v1.22, this field is beta and is controlled via the CSRDuration feature gate.
+  /// expirationSeconds is the requested duration of validity of the issued certificate. The certificate signer may issue a certificate with a different validity duration so a client must check the delta between the notBefore and and notAfter fields in the issued certificate to determine the actual duration.  The v1.22+ in-tree implementations of the well-known Kubernetes signers will honor this field as long as the requested duration is not greater than the maximum duration they will honor per the --cluster-signing-duration CLI flag to the Kubernetes controller manager.  Certificate signers may not honor this field for various reasons:    1. Old signer that is unaware of the field (such as the in-tree      implementations prior to v1.22)   2. Signer whose configured maximum is shorter than the requested duration   3. Signer whose configured minimum is longer than the requested duration  The minimum valid value for expirationSeconds is 600, i.e. 10 minutes.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -97,19 +98,25 @@ class IoK8sApiCertificatesV1CertificateSigningRequestSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (expirationSeconds != null) {
-      json[r'expirationSeconds'] = expirationSeconds;
+    if (this.expirationSeconds != null) {
+      json[r'expirationSeconds'] = this.expirationSeconds;
+    } else {
+      json[r'expirationSeconds'] = null;
     }
-    json[r'extra'] = extra;
-    json[r'groups'] = groups;
-    json[r'request'] = request;
-    json[r'signerName'] = signerName;
-    if (uid != null) {
-      json[r'uid'] = uid;
+    json[r'extra'] = this.extra;
+    json[r'groups'] = this.groups;
+    json[r'request'] = this.request;
+    json[r'signerName'] = this.signerName;
+    if (this.uid != null) {
+      json[r'uid'] = this.uid;
+    } else {
+      json[r'uid'] = null;
     }
-    json[r'usages'] = usages;
-    if (username != null) {
-      json[r'username'] = username;
+    json[r'usages'] = this.usages;
+    if (this.username != null) {
+      json[r'username'] = this.username;
+    } else {
+      json[r'username'] = null;
     }
     return json;
   }

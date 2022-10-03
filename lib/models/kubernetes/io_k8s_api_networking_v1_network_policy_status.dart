@@ -4,47 +4,48 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_discovery_v1beta1_for_zone.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
 
-class IoK8sApiDiscoveryV1beta1EndpointHints {
-  /// Returns a new [IoK8sApiDiscoveryV1beta1EndpointHints] instance.
-  IoK8sApiDiscoveryV1beta1EndpointHints({
-    this.forZones = const [],
+class IoK8sApiNetworkingV1NetworkPolicyStatus {
+  /// Returns a new [IoK8sApiNetworkingV1NetworkPolicyStatus] instance.
+  IoK8sApiNetworkingV1NetworkPolicyStatus({
+    this.conditions = const [],
   });
 
-  /// forZones indicates the zone(s) this endpoint should be consumed by to enable topology aware routing. May contain a maximum of 8 entries.
-  List<IoK8sApiDiscoveryV1beta1ForZone> forZones;
+  /// Conditions holds an array of metav1.Condition that describe the state of the NetworkPolicy. Current service state
+  List<IoK8sApimachineryPkgApisMetaV1Condition> conditions;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is IoK8sApiDiscoveryV1beta1EndpointHints &&
-          other.forZones == forZones;
+      other is IoK8sApiNetworkingV1NetworkPolicyStatus &&
+          other.conditions == conditions;
 
   @override
   int get hashCode =>
       // ignore: unnecessary_parenthesis
-      (forZones.hashCode);
+      (conditions.hashCode);
 
   @override
   String toString() =>
-      'IoK8sApiDiscoveryV1beta1EndpointHints[forZones=$forZones]';
+      'IoK8sApiNetworkingV1NetworkPolicyStatus[conditions=$conditions]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'forZones'] = forZones;
+    json[r'conditions'] = this.conditions;
     return json;
   }
 
-  /// Returns a new [IoK8sApiDiscoveryV1beta1EndpointHints] instance and imports its values from
+  /// Returns a new [IoK8sApiNetworkingV1NetworkPolicyStatus] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static IoK8sApiDiscoveryV1beta1EndpointHints? fromJson(dynamic value) {
+  static IoK8sApiNetworkingV1NetworkPolicyStatus? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -54,30 +55,30 @@ class IoK8sApiDiscoveryV1beta1EndpointHints {
       assert(() {
         requiredKeys.forEach((key) {
           assert(json.containsKey(key),
-              'Required key "IoK8sApiDiscoveryV1beta1EndpointHints[$key]" is missing from JSON.');
+              'Required key "IoK8sApiNetworkingV1NetworkPolicyStatus[$key]" is missing from JSON.');
           assert(json[key] != null,
-              'Required key "IoK8sApiDiscoveryV1beta1EndpointHints[$key]" has a null value in JSON.');
+              'Required key "IoK8sApiNetworkingV1NetworkPolicyStatus[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return IoK8sApiDiscoveryV1beta1EndpointHints(
-        forZones:
-            IoK8sApiDiscoveryV1beta1ForZone.listFromJson(json[r'forZones']) ??
-                const [],
+      return IoK8sApiNetworkingV1NetworkPolicyStatus(
+        conditions: IoK8sApimachineryPkgApisMetaV1Condition.listFromJson(
+                json[r'conditions']) ??
+            const [],
       );
     }
     return null;
   }
 
-  static List<IoK8sApiDiscoveryV1beta1EndpointHints>? listFromJson(
+  static List<IoK8sApiNetworkingV1NetworkPolicyStatus>? listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final result = <IoK8sApiDiscoveryV1beta1EndpointHints>[];
+    final result = <IoK8sApiNetworkingV1NetworkPolicyStatus>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = IoK8sApiDiscoveryV1beta1EndpointHints.fromJson(row);
+        final value = IoK8sApiNetworkingV1NetworkPolicyStatus.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -86,14 +87,14 @@ class IoK8sApiDiscoveryV1beta1EndpointHints {
     return result.toList(growable: growable);
   }
 
-  static Map<String, IoK8sApiDiscoveryV1beta1EndpointHints> mapFromJson(
+  static Map<String, IoK8sApiNetworkingV1NetworkPolicyStatus> mapFromJson(
       dynamic json) {
-    final map = <String, IoK8sApiDiscoveryV1beta1EndpointHints>{};
+    final map = <String, IoK8sApiNetworkingV1NetworkPolicyStatus>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
         final value =
-            IoK8sApiDiscoveryV1beta1EndpointHints.fromJson(entry.value);
+            IoK8sApiNetworkingV1NetworkPolicyStatus.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -102,17 +103,17 @@ class IoK8sApiDiscoveryV1beta1EndpointHints {
     return map;
   }
 
-  // maps a json object with a list of IoK8sApiDiscoveryV1beta1EndpointHints-objects as value to a dart map
-  static Map<String, List<IoK8sApiDiscoveryV1beta1EndpointHints>>
+  // maps a json object with a list of IoK8sApiNetworkingV1NetworkPolicyStatus-objects as value to a dart map
+  static Map<String, List<IoK8sApiNetworkingV1NetworkPolicyStatus>>
       mapListFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final map = <String, List<IoK8sApiDiscoveryV1beta1EndpointHints>>{};
+    final map = <String, List<IoK8sApiNetworkingV1NetworkPolicyStatus>>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = IoK8sApiDiscoveryV1beta1EndpointHints.listFromJson(
+        final value = IoK8sApiNetworkingV1NetworkPolicyStatus.listFromJson(
           entry.value,
           growable: growable,
         );

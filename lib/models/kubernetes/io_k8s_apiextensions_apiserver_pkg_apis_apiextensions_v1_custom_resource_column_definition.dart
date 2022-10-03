@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -85,18 +86,24 @@ class IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceColumnDefin
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (description != null) {
-      json[r'description'] = description;
+    if (this.description != null) {
+      json[r'description'] = this.description;
+    } else {
+      json[r'description'] = null;
     }
-    if (format != null) {
-      json[r'format'] = format;
+    if (this.format != null) {
+      json[r'format'] = this.format;
+    } else {
+      json[r'format'] = null;
     }
-    json[r'jsonPath'] = jsonPath;
-    json[r'name'] = name;
-    if (priority != null) {
-      json[r'priority'] = priority;
+    json[r'jsonPath'] = this.jsonPath;
+    json[r'name'] = this.name;
+    if (this.priority != null) {
+      json[r'priority'] = this.priority;
+    } else {
+      json[r'priority'] = null;
     }
-    json[r'type'] = type;
+    json[r'type'] = this.type;
     return json;
   }
 

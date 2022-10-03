@@ -46,7 +46,7 @@ String getStatusText(IoK8sApiCoreV1Pod? pod) {
     return '-';
   }
 
-  final phase = pod.status?.phase?.value ?? 'Unknown';
+  final phase = pod.status?.phase ?? 'Unknown';
   var reason = pod.status?.reason ?? '';
 
   if (pod.status?.containerStatuses != null) {
@@ -110,7 +110,7 @@ Status getStatus(IoK8sApiCoreV1Pod? pod) {
     return Status.warning;
   }
 
-  final phase = pod.status?.phase?.value ?? 'Unknown';
+  final phase = pod.status?.phase ?? 'Unknown';
 
   if (phase == 'Running' || phase == 'Succeeded') {
     return Status.success;
@@ -194,7 +194,7 @@ List<String> getProbe(IoK8sApiCoreV1Probe probe) {
 
   if (probe.httpGet != null) {
     list.add(
-        '${probe.httpGet!.scheme?.value.toLowerCase()}://${probe.httpGet!.host ?? 'localhost'}:${probe.httpGet!.port}${probe.httpGet!.path}');
+        '${probe.httpGet!.scheme?.toLowerCase()}://${probe.httpGet!.host ?? 'localhost'}:${probe.httpGet!.port}${probe.httpGet!.path}');
   }
 
   if (probe.initialDelaySeconds != null) {

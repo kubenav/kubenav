@@ -4,11 +4,13 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
+import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_namespace_condition.dart';
 
 class IoK8sApiCoreV1NamespaceStatus {
@@ -21,8 +23,14 @@ class IoK8sApiCoreV1NamespaceStatus {
   /// Represents the latest available observations of a namespace's current state.
   List<IoK8sApiCoreV1NamespaceCondition> conditions;
 
-  /// Phase is the current lifecycle phase of the namespace. More info: https://kubernetes.io/docs/tasks/administer-cluster/namespaces/  Possible enum values:  - `\"Active\"` means the namespace is available for use in the system  - `\"Terminating\"` means the namespace is undergoing graceful termination
-  IoK8sApiCoreV1NamespaceStatusPhaseEnum? phase;
+  /// Phase is the current lifecycle phase of the namespace. More info: https://kubernetes.io/docs/tasks/administer-cluster/namespaces/
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? phase;
 
   @override
   bool operator ==(Object other) =>
@@ -42,9 +50,11 @@ class IoK8sApiCoreV1NamespaceStatus {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'conditions'] = conditions;
-    if (phase != null) {
-      json[r'phase'] = phase;
+    json[r'conditions'] = this.conditions;
+    if (this.phase != null) {
+      json[r'phase'] = this.phase;
+    } else {
+      json[r'phase'] = null;
     }
     return json;
   }
@@ -73,7 +83,7 @@ class IoK8sApiCoreV1NamespaceStatus {
         conditions: IoK8sApiCoreV1NamespaceCondition.listFromJson(
                 json[r'conditions']) ??
             const [],
-        phase: IoK8sApiCoreV1NamespaceStatusPhaseEnum.fromJson(json[r'phase']),
+        phase: mapValueOfType<String>(json, r'phase'),
       );
     }
     return null;
@@ -132,87 +142,4 @@ class IoK8sApiCoreV1NamespaceStatus {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{};
-}
-
-/// Phase is the current lifecycle phase of the namespace. More info: https://kubernetes.io/docs/tasks/administer-cluster/namespaces/  Possible enum values:  - `\"Active\"` means the namespace is available for use in the system  - `\"Terminating\"` means the namespace is undergoing graceful termination
-class IoK8sApiCoreV1NamespaceStatusPhaseEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1NamespaceStatusPhaseEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const active = IoK8sApiCoreV1NamespaceStatusPhaseEnum._(r'Active');
-  static const terminating =
-      IoK8sApiCoreV1NamespaceStatusPhaseEnum._(r'Terminating');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1NamespaceStatusPhaseEnum].
-  static const values = <IoK8sApiCoreV1NamespaceStatusPhaseEnum>[
-    active,
-    terminating,
-  ];
-
-  static IoK8sApiCoreV1NamespaceStatusPhaseEnum? fromJson(dynamic value) =>
-      IoK8sApiCoreV1NamespaceStatusPhaseEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiCoreV1NamespaceStatusPhaseEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1NamespaceStatusPhaseEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiCoreV1NamespaceStatusPhaseEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1NamespaceStatusPhaseEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1NamespaceStatusPhaseEnum].
-class IoK8sApiCoreV1NamespaceStatusPhaseEnumTypeTransformer {
-  factory IoK8sApiCoreV1NamespaceStatusPhaseEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1NamespaceStatusPhaseEnumTypeTransformer._();
-
-  const IoK8sApiCoreV1NamespaceStatusPhaseEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1NamespaceStatusPhaseEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1NamespaceStatusPhaseEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1NamespaceStatusPhaseEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'Active':
-          return IoK8sApiCoreV1NamespaceStatusPhaseEnum.active;
-        case r'Terminating':
-          return IoK8sApiCoreV1NamespaceStatusPhaseEnum.terminating;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1NamespaceStatusPhaseEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1NamespaceStatusPhaseEnumTypeTransformer? _instance;
 }

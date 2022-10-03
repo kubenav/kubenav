@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -19,7 +20,7 @@ class IoK8sApiNetworkingV1NetworkPolicyPort {
     this.protocol,
   });
 
-  /// If set, indicates that the range of ports from port to endPort, inclusive, should be allowed by the policy. This field cannot be defined if the port field is not defined or if the port field is defined as a named (string) port. The endPort must be equal or greater than port. This feature is in Beta state and is enabled by default. It can be disabled using the Feature Gate \"NetworkPolicyEndPort\".
+  /// If set, indicates that the range of ports from port to endPort, inclusive, should be allowed by the policy. This field cannot be defined if the port field is not defined or if the port field is defined as a named (string) port. The endPort must be equal or greater than port.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -67,14 +68,20 @@ class IoK8sApiNetworkingV1NetworkPolicyPort {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (endPort != null) {
-      json[r'endPort'] = endPort;
+    if (this.endPort != null) {
+      json[r'endPort'] = this.endPort;
+    } else {
+      json[r'endPort'] = null;
     }
-    if (port != null) {
-      json[r'port'] = port;
+    if (this.port != null) {
+      json[r'port'] = this.port;
+    } else {
+      json[r'port'] = null;
     }
-    if (protocol != null) {
-      json[r'protocol'] = protocol;
+    if (this.protocol != null) {
+      json[r'protocol'] = this.protocol;
+    } else {
+      json[r'protocol'] = null;
     }
     return json;
   }

@@ -92,8 +92,7 @@ class NodeDetailsItemWidget extends StatelessWidget
               name: 'Status',
               values: node.status!.conditions
                   .where((condition) => condition.status == 'True')
-                  .where((condition) => condition.type != null)
-                  .map((condition) => condition.type?.value ?? '-')
+                  .map((condition) => condition.type)
                   .toList(),
             ),
             DetailsItemModel(

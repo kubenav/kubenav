@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -91,20 +92,30 @@ class IoK8sApiCoordinationV1LeaseSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (acquireTime != null) {
-      json[r'acquireTime'] = acquireTime!.toUtc().toIso8601String();
+    if (this.acquireTime != null) {
+      json[r'acquireTime'] = this.acquireTime!.toUtc().toIso8601String();
+    } else {
+      json[r'acquireTime'] = null;
     }
-    if (holderIdentity != null) {
-      json[r'holderIdentity'] = holderIdentity;
+    if (this.holderIdentity != null) {
+      json[r'holderIdentity'] = this.holderIdentity;
+    } else {
+      json[r'holderIdentity'] = null;
     }
-    if (leaseDurationSeconds != null) {
-      json[r'leaseDurationSeconds'] = leaseDurationSeconds;
+    if (this.leaseDurationSeconds != null) {
+      json[r'leaseDurationSeconds'] = this.leaseDurationSeconds;
+    } else {
+      json[r'leaseDurationSeconds'] = null;
     }
-    if (leaseTransitions != null) {
-      json[r'leaseTransitions'] = leaseTransitions;
+    if (this.leaseTransitions != null) {
+      json[r'leaseTransitions'] = this.leaseTransitions;
+    } else {
+      json[r'leaseTransitions'] = null;
     }
-    if (renewTime != null) {
-      json[r'renewTime'] = renewTime!.toUtc().toIso8601String();
+    if (this.renewTime != null) {
+      json[r'renewTime'] = this.renewTime!.toUtc().toIso8601String();
+    } else {
+      json[r'renewTime'] = null;
     }
     return json;
   }
