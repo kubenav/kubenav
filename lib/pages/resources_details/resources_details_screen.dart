@@ -13,7 +13,7 @@ import 'package:kubenav/widgets/app_actions_header_widget.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/app_error_widget.dart';
 import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
-import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
+import 'package:kubenav/widgets/app_prometheus_charts_widget.dart';
 
 class ResourcesDetails extends GetView {
   const ResourcesDetails({Key? key}) : super(key: key);
@@ -49,7 +49,7 @@ class ResourcesDetails extends GetView {
             'fieldSelector=involvedObject.name=${item['metadata']['name']}',
       ),
       const SizedBox(height: Constants.spacingMiddle),
-      AppPrometheusMetricsWidget(
+      AppPrometheusChartsWidget(
         manifest: item,
         defaultCharts: const [],
       ),

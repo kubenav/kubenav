@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import 'package:kubenav/models/helm_model.dart';
-import 'package:kubenav/pages/plugins/pages/helm_list/helm_list_controller.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_config_map.dart';
+import 'package:kubenav/pages/plugins/pages/prometheus_list/prometheus_list_controller.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
-import 'package:kubenav/utils/resources/general.dart';
 import 'package:kubenav/widgets/app_actions_header_widget.dart';
 import 'package:kubenav/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/app_error_widget.dart';
 import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
 
-class HelmList extends GetView {
-  const HelmList({Key? key}) : super(key: key);
+class PrometheusList extends GetView {
+  const PrometheusList({Key? key}) : super(key: key);
 
-  Widget buildItem(BuildContext context, Release release) {
+  Widget buildItem(BuildContext context, IoK8sApiCoreV1ConfigMap configMap) {
     return Container(
       margin: const EdgeInsets.only(
         bottom: Constants.spacingMiddle,
@@ -39,7 +38,7 @@ class HelmList extends GetView {
       child: InkWell(
         onTap: () {
           Get.toNamed(
-            '/plugins/helm/details?name=${release.name}&namespace=${release.namespace}&version=${release.version}',
+            '/plugins/prometheus/details?name=${configMap.metadata?.name}&namespace=${configMap.metadata?.namespace}',
           );
         },
         child: Row(
@@ -50,7 +49,7 @@ class HelmList extends GetView {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    Characters(release.name ?? '')
+                    Characters(configMap.metadata?.name ?? '')
                         .replaceAll(Characters(''), Characters('\u{200B}'))
                         .toString(),
                     maxLines: 1,
@@ -64,17 +63,8 @@ class HelmList extends GetView {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        Characters('Namespace: ${release.namespace}')
-                            .replaceAll(Characters(''), Characters('\u{200B}'))
-                            .toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                      ),
-                      Text(
-                        Characters('Revision: ${release.version}')
+                        Characters(
+                                'Namespace: ${configMap.metadata?.namespace ?? ''}')
                             .replaceAll(Characters(''), Characters('\u{200B}'))
                             .toString(),
                         overflow: TextOverflow.ellipsis,
@@ -85,38 +75,7 @@ class HelmList extends GetView {
                       ),
                       Text(
                         Characters(
-                                'Updated: ${formatTime(DateTime.parse(release.info?.lastDeployed ?? ''))}')
-                            .replaceAll(Characters(''), Characters('\u{200B}'))
-                            .toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                      ),
-                      Text(
-                        Characters('Status: ${release.info?.status}')
-                            .replaceAll(Characters(''), Characters('\u{200B}'))
-                            .toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                      ),
-                      Text(
-                        Characters('Chart: ${release.chart?.metadata?.version}')
-                            .replaceAll(Characters(''), Characters('\u{200B}'))
-                            .toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                      ),
-                      Text(
-                        Characters(
-                                'App Version: ${release.chart?.metadata?.appVersion}')
+                                'Description: ${configMap.data.containsKey('description') ? configMap.data['description'] : ''}')
                             .replaceAll(Characters(''), Characters('\u{200B}'))
                             .toString(),
                         overflow: TextOverflow.ellipsis,
@@ -138,8 +97,8 @@ class HelmList extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    HelmListController controller = Get.put(
-      HelmListController(),
+    PrometheusListController controller = Get.put(
+      PrometheusListController(),
     );
 
     return Scaffold(
@@ -156,7 +115,7 @@ class HelmList extends GetView {
         title: Column(
           children: [
             Text(
-              Characters('Helm Charts')
+              Characters('Prometheus Dashboards')
                   .replaceAll(Characters(''), Characters('\u{200B}'))
                   .toString(),
               textAlign: TextAlign.center,
@@ -222,9 +181,9 @@ class HelmList extends GetView {
                           padding:
                               const EdgeInsets.all(Constants.spacingMiddle),
                           child: AppErrorWidget(
-                            message: 'Could not load Helm charts',
+                            message: 'Could not load dashboards',
                             details: controller.error.value,
-                            icon: 'assets/plugins/image108x108/helm.png',
+                            icon: 'assets/plugins/image108x108/prometheus.png',
                           ),
                         ),
                       ),
@@ -240,7 +199,7 @@ class HelmList extends GetView {
                           title: 'Refresh',
                           icon: Icons.refresh,
                           onTap: () {
-                            controller.getHelmCharts();
+                            controller.getDashboards();
                           },
                         ),
                       ],

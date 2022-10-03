@@ -20,5 +20,4 @@ library-linux:
 
 .PHONY: library-windows
 library-windows:
-	mkdir -p tmp
 	GOOS=windows GOARCH=amd64 CGO_ENABLED=1 go build -buildmode c-shared -o windows/kubenav.dll github.com/kubenav/kubenav/cmd/desktop

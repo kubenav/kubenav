@@ -17,7 +17,7 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/resources/pods.dart';
-import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
+import 'package:kubenav/widgets/app_prometheus_charts_widget.dart';
 
 class PodDetailsItemController extends GetxController {
   ClusterController clusterController = Get.find();
@@ -274,7 +274,7 @@ class PodDetailsItemWidget extends StatelessWidget
               'fieldSelector=involvedObject.name=${pod.metadata?.name ?? ''}',
         ),
         const SizedBox(height: Constants.spacingMiddle),
-        AppPrometheusMetricsWidget(
+        AppPrometheusChartsWidget(
           manifest: item,
           defaultCharts: [
             Chart(

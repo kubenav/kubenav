@@ -347,7 +347,7 @@ class KubenavFFI {
 
     if (receiveData.startsWith('{"error":')) {
       Map<String, dynamic> jsonData = json.decode(receiveData);
-      Future.error(jsonData['error']);
+      return Future.error(jsonData['error']);
     }
 
     return receiveData;
@@ -418,7 +418,7 @@ class KubenavFFI {
 
     if (receiveData.startsWith('{"error":')) {
       Map<String, dynamic> jsonData = json.decode(receiveData);
-      Future.error(jsonData['error']);
+      return Future.error(jsonData['error']);
     }
 
     return receiveData;
@@ -484,7 +484,7 @@ class KubenavFFI {
 
     if (receiveData.startsWith('{"error":')) {
       Map<String, dynamic> jsonData = json.decode(receiveData);
-      Future.error(jsonData['error']);
+      return Future.error(jsonData['error']);
     }
 
     return receiveData;
@@ -536,7 +536,7 @@ class KubenavFFI {
 
     if (receiveData.startsWith('{"error":')) {
       Map<String, dynamic> jsonData = json.decode(receiveData);
-      Future.error(jsonData['error']);
+      return Future.error(jsonData['error']);
     }
 
     return receiveData;
@@ -593,7 +593,7 @@ class KubenavFFI {
 
     if (receiveData.startsWith('{"error":')) {
       Map<String, dynamic> jsonData = json.decode(receiveData);
-      Future.error(jsonData['error']);
+      return Future.error(jsonData['error']);
     }
 
     return receiveData;
@@ -655,7 +655,7 @@ class KubenavFFI {
 
     if (receiveData.startsWith('{"error":')) {
       Map<String, dynamic> jsonData = json.decode(receiveData);
-      Future.error(jsonData['error']);
+      return Future.error(jsonData['error']);
     }
 
     return receiveData;
@@ -715,7 +715,7 @@ class KubenavFFI {
 
     if (receiveData.startsWith('{"error":')) {
       Map<String, dynamic> jsonData = json.decode(receiveData);
-      Future.error(jsonData['error']);
+      return Future.error(jsonData['error']);
     }
 
     return receiveData;
@@ -773,7 +773,7 @@ class KubenavFFI {
 
     if (receiveData.startsWith('{"error":')) {
       Map<String, dynamic> jsonData = json.decode(receiveData);
-      Future.error(jsonData['error']);
+      return Future.error(jsonData['error']);
     }
 
     return receiveData;

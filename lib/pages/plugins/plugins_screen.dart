@@ -78,6 +78,58 @@ class Plugins extends GetView<PluginsController> {
                     ),
                   ],
                 ),
+                AppVertialListSimpleModel(
+                  onTap: () {
+                    Get.toNamed(
+                      '/plugins/prometheus/list',
+                    );
+                  },
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Constants.colorPrimary,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(Constants.sizeBorderRadius),
+                        ),
+                      ),
+                      height: 54,
+                      width: 54,
+                      child: Image.asset(
+                          'assets/plugins/image42x42/prometheus.png'),
+                    ),
+                    const SizedBox(width: Constants.spacingSmall),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Prometheus',
+                            style: primaryTextStyle(
+                              context,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            'From metrics to insight: Power your metrics and alerting with the leading open-source monitoring solution.',
+                            style: secondaryTextStyle(
+                              context,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: Constants.spacingSmall),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey[300],
+                      size: 24,
+                    ),
+                  ],
+                ),
               ],
             ),
           ],

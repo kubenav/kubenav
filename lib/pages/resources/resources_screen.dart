@@ -174,7 +174,6 @@ class Resources extends GetView<ResourcesController> {
         actions: [
           IconButton(
             icon: const Icon(CustomIcons.clusters),
-            tooltip: 'Select active cluster',
             onPressed: () {
               controller.showClusters();
             },

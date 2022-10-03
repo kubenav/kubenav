@@ -110,7 +110,6 @@ class ResourcesList extends GetView {
             ? [
                 IconButton(
                   icon: const Icon(CustomIcons.namespaces),
-                  tooltip: 'Select active namespace',
                   onPressed: () {
                     controller.showNamespaces();
                   },

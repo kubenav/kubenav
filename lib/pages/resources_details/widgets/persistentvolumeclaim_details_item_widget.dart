@@ -6,7 +6,7 @@ import 'package:kubenav/models/resource_model.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
-import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
+import 'package:kubenav/widgets/app_prometheus_charts_widget.dart';
 
 class PersistentVolumeClaimDetailsItemWidget extends StatelessWidget
     implements IDetailsItemWidget {
@@ -91,7 +91,7 @@ class PersistentVolumeClaimDetailsItemWidget extends StatelessWidget
               'fieldSelector=involvedObject.name=${item['metadata']['name']}',
         ),
         const SizedBox(height: Constants.spacingMiddle),
-        AppPrometheusMetricsWidget(
+        AppPrometheusChartsWidget(
           manifest: item,
           defaultCharts: [
             Chart(

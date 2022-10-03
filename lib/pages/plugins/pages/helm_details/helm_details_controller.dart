@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 
-import 'package:kubenav/controllers/bookmark_controller.dart';
 import 'package:kubenav/controllers/cluster_controller.dart';
 import 'package:kubenav/models/helm_model.dart';
 import 'package:kubenav/pages/plugins/pages/helm_details/widgets/details_values_widget.dart';
@@ -11,7 +10,6 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/logger.dart';
 
 class HelmDetailsController extends GetxController {
-  BookmarkController bookmarkController = Get.find();
   ClusterController clusterController = Get.find();
 
   String? name;

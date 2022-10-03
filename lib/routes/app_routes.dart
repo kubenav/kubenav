@@ -11,6 +11,8 @@ class Routes {
   static const plugins = '/plugins';
   static const pluginsHelmList = '/plugins/helm/list';
   static const pluginsHelmDetails = '/plugins/helm/details';
+  static const pluginsPrometheusList = '/plugins/prometheus/list';
+  static const pluginsPrometheusDetails = '/plugins/prometheus/details';
   static const settings = '/settings/';
   static const settingsClusters = '/settings/clusters';
   static const settingsProviders = '/settings/providers';

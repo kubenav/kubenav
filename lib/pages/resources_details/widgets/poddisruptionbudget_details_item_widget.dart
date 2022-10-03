@@ -7,7 +7,7 @@ import 'package:kubenav/pages/resources_details/widgets/details_item_widget.dart
 import 'package:kubenav/pages/resources_details/widgets/details_resources_preview_widget.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources/general.dart';
-import 'package:kubenav/widgets/app_prometheus_metrics_widget.dart';
+import 'package:kubenav/widgets/app_prometheus_charts_widget.dart';
 
 class PodDisruptionBudgetDetailsItemWidget extends StatelessWidget
     implements IDetailsItemWidget {
@@ -96,7 +96,7 @@ class PodDisruptionBudgetDetailsItemWidget extends StatelessWidget
               'fieldSelector=involvedObject.name=${item['metadata']['name']}',
         ),
         const SizedBox(height: Constants.spacingMiddle),
-        AppPrometheusMetricsWidget(
+        AppPrometheusChartsWidget(
           manifest: item,
           defaultCharts: [
             Chart(

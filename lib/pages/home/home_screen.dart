@@ -89,7 +89,6 @@ class Home extends GetView<HomeController> {
         actions: [
           IconButton(
             icon: const Icon(CustomIcons.clusters),
-            tooltip: 'Select active cluster',
             onPressed: () {
               controller.showClusters();
             },

@@ -10,6 +10,8 @@ import 'package:kubenav/pages/namespaces/namespaces_binding.dart';
 import 'package:kubenav/pages/namespaces/namespaces_screen.dart';
 import 'package:kubenav/pages/plugins/pages/helm_details/helm_details_screen.dart';
 import 'package:kubenav/pages/plugins/pages/helm_list/helm_list_screen.dart';
+import 'package:kubenav/pages/plugins/pages/prometheus_details/prometheus_details_screen.dart';
+import 'package:kubenav/pages/plugins/pages/prometheus_list/prometheus_list_screen.dart';
 import 'package:kubenav/pages/plugins/plugins_binding.dart';
 import 'package:kubenav/pages/plugins/plugins_screen.dart';
 import 'package:kubenav/pages/providers/providers_binding.dart';
@@ -71,6 +73,14 @@ abstract class AppPages {
     GetPage(
       name: Routes.pluginsHelmList,
       page: () => const HelmList(),
+    ),
+    GetPage(
+      name: Routes.pluginsPrometheusList,
+      page: () => const PrometheusList(),
+    ),
+    GetPage(
+      name: Routes.pluginsPrometheusDetails,
+      page: () => const PrometheusDetails(),
     ),
     GetPage(
       name: Routes.pluginsHelmDetails,

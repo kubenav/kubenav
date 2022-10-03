@@ -139,7 +139,26 @@ class AppPrometheusChartWidget extends StatelessWidget {
                     child: LineChart(
                       LineChartData(
                         minY: 0,
-                        lineTouchData: LineTouchData(enabled: false),
+                        lineTouchData: LineTouchData(
+                          enabled: true,
+                          handleBuiltInTouches: true,
+                          touchTooltipData: LineTouchTooltipData(
+                            tooltipBgColor: Colors.black,
+                            getTooltipItems: (touchedSpots) {
+                              return touchedSpots
+                                  .map((LineBarSpot touchedSpot) {
+                                return LineTooltipItem(
+                                  '${controller.metrics[touchedSpot.barIndex].label}: ${touchedSpot.y.toStringAsFixed(6)} $unit',
+                                  const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 14,
+                                  ),
+                                );
+                              }).toList();
+                            },
+                          ),
+                        ),
                         clipData: FlClipData.all(),
                         lineBarsData: controller.metrics
                             .map((e) => LineChartBarData(
@@ -241,9 +260,11 @@ class AppPrometheusChartWidget extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              e.data != null && e.data!.isNotEmpty
-                                  ? '${e.data![e.data!.length - 1].y} $unit'
-                                  : '-',
+                              e.data != null &&
+                                      e.data!.isNotEmpty &&
+                                      e.data![e.data!.length - 1].y != null
+                                  ? '${e.data![e.data!.length - 1].y!.toStringAsFixed(4)} $unit'
+                                  : '',
                               style: secondaryTextStyle(
                                 context,
                               ),

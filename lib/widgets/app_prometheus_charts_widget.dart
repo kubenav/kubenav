@@ -14,7 +14,7 @@ import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/app_prometheus_chart_widget.dart';
 import 'package:kubenav/widgets/app_time_range_selector_widget.dart';
 
-class AppPrometheusMetricsController extends GetxController {
+class AppPrometheusChartsController extends GetxController {
   GlobalSettingsController globalSettingsController = Get.find();
 
   Time time = Time(
@@ -25,7 +25,7 @@ class AppPrometheusMetricsController extends GetxController {
   Map<String, dynamic> manifest;
   List<Chart> defaultCharts;
 
-  AppPrometheusMetricsController({
+  AppPrometheusChartsController({
     required this.manifest,
     required this.defaultCharts,
   });
@@ -51,9 +51,11 @@ class AppPrometheusMetricsController extends GetxController {
         if (manifest.containsKey('metadata') &&
             manifest['metadata'].containsKey('annotations') &&
             manifest['metadata']['annotations']
-                .containsKey('kubenav.io/prometheus')) {
+                .containsKey('kubenav.io/prometheus') &&
+            manifest['metadata']['annotations']['kubenav.io/prometheus'] !=
+                'dashboard') {
           Logger.log(
-            'AppPrometheusMetricsController getCharts',
+            'AppPrometheusChartsController getCharts',
             'Manifest contains kubenav.io/prometheus annotation',
             manifest['metadata']['annotations']['kubenav.io/prometheus'],
           );
@@ -81,8 +83,8 @@ class AppPrometheusMetricsController extends GetxController {
   }
 }
 
-class AppPrometheusMetricsWidget extends StatelessWidget {
-  const AppPrometheusMetricsWidget({
+class AppPrometheusChartsWidget extends StatelessWidget {
+  const AppPrometheusChartsWidget({
     Key? key,
     required this.manifest,
     required this.defaultCharts,
@@ -93,8 +95,8 @@ class AppPrometheusMetricsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppPrometheusMetricsController controller = Get.put(
-      AppPrometheusMetricsController(
+    AppPrometheusChartsController controller = Get.put(
+      AppPrometheusChartsController(
         manifest: manifest,
         defaultCharts: defaultCharts,
       ),

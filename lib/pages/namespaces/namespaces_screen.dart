@@ -67,7 +67,6 @@ class Namespaces extends GetView<NamespacesController> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            tooltip: 'Add namespace',
             onPressed: () {
               controller.addNamespace();
             },
