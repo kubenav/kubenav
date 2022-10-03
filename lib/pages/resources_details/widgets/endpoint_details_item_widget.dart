@@ -41,7 +41,7 @@ class EndpointDetailsItemWidget extends StatelessWidget
               name: 'Ports',
               values: endpoint.subsets[i].ports
                   .map((port) =>
-                      '${port.port}${port.protocol != null ? '/${port.protocol!.value}' : ''}${port.name != null ? ' (${port.name})' : ''}')
+                      '${port.port}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''}')
                   .toList(),
             ),
           ],

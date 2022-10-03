@@ -64,7 +64,7 @@ class PersistentVolumeDetailsItemWidget extends StatelessWidget
           details: [
             DetailsItemModel(
               name: 'Status',
-              values: pv.status!.phase?.value ?? '-',
+              values: pv.status!.phase ?? '-',
             ),
             DetailsItemModel(
               name: 'Claim',

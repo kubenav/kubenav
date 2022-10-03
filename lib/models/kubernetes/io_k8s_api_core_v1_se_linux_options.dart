@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -79,17 +80,25 @@ class IoK8sApiCoreV1SELinuxOptions {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (level != null) {
-      json[r'level'] = level;
+    if (this.level != null) {
+      json[r'level'] = this.level;
+    } else {
+      json[r'level'] = null;
     }
-    if (role != null) {
-      json[r'role'] = role;
+    if (this.role != null) {
+      json[r'role'] = this.role;
+    } else {
+      json[r'role'] = null;
     }
-    if (type != null) {
-      json[r'type'] = type;
+    if (this.type != null) {
+      json[r'type'] = this.type;
+    } else {
+      json[r'type'] = null;
     }
-    if (user != null) {
-      json[r'user'] = user;
+    if (this.user != null) {
+      json[r'user'] = this.user;
+    } else {
+      json[r'user'] = null;
     }
     return json;
   }

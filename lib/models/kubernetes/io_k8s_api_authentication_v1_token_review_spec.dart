@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -48,9 +49,11 @@ class IoK8sApiAuthenticationV1TokenReviewSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'audiences'] = audiences;
-    if (token != null) {
-      json[r'token'] = token;
+    json[r'audiences'] = this.audiences;
+    if (this.token != null) {
+      json[r'token'] = this.token;
+    } else {
+      json[r'token'] = null;
     }
     return json;
   }

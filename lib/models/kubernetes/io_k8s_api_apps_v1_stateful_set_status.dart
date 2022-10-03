@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -15,7 +16,7 @@ import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_stateful_set_condit
 class IoK8sApiAppsV1StatefulSetStatus {
   /// Returns a new [IoK8sApiAppsV1StatefulSetStatus] instance.
   IoK8sApiAppsV1StatefulSetStatus({
-    required this.availableReplicas,
+    this.availableReplicas,
     this.collisionCount,
     this.conditions = const [],
     this.currentReplicas,
@@ -27,7 +28,13 @@ class IoK8sApiAppsV1StatefulSetStatus {
     this.updatedReplicas,
   });
 
-  /// Total number of available pods (ready for at least minReadySeconds) targeted by this statefulset. This is a beta field and enabled/disabled by StatefulSetMinReadySeconds feature gate.
+  /// Total number of available pods (ready for at least minReadySeconds) targeted by this statefulset.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
   int? availableReplicas;
 
   /// collisionCount is the count of hash collisions for the StatefulSet. The StatefulSet controller uses this field as a collision avoidance mechanism when it needs to create the name for the newest ControllerRevision.
@@ -134,31 +141,47 @@ class IoK8sApiAppsV1StatefulSetStatus {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (availableReplicas != null) {
-      json[r'availableReplicas'] = availableReplicas;
+    if (this.availableReplicas != null) {
+      json[r'availableReplicas'] = this.availableReplicas;
+    } else {
+      json[r'availableReplicas'] = null;
     }
-    if (collisionCount != null) {
-      json[r'collisionCount'] = collisionCount;
+    if (this.collisionCount != null) {
+      json[r'collisionCount'] = this.collisionCount;
+    } else {
+      json[r'collisionCount'] = null;
     }
-    json[r'conditions'] = conditions;
-    if (currentReplicas != null) {
-      json[r'currentReplicas'] = currentReplicas;
+    json[r'conditions'] = this.conditions;
+    if (this.currentReplicas != null) {
+      json[r'currentReplicas'] = this.currentReplicas;
+    } else {
+      json[r'currentReplicas'] = null;
     }
-    if (currentRevision != null) {
-      json[r'currentRevision'] = currentRevision;
+    if (this.currentRevision != null) {
+      json[r'currentRevision'] = this.currentRevision;
+    } else {
+      json[r'currentRevision'] = null;
     }
-    if (observedGeneration != null) {
-      json[r'observedGeneration'] = observedGeneration;
+    if (this.observedGeneration != null) {
+      json[r'observedGeneration'] = this.observedGeneration;
+    } else {
+      json[r'observedGeneration'] = null;
     }
-    if (readyReplicas != null) {
-      json[r'readyReplicas'] = readyReplicas;
+    if (this.readyReplicas != null) {
+      json[r'readyReplicas'] = this.readyReplicas;
+    } else {
+      json[r'readyReplicas'] = null;
     }
-    json[r'replicas'] = replicas;
-    if (updateRevision != null) {
-      json[r'updateRevision'] = updateRevision;
+    json[r'replicas'] = this.replicas;
+    if (this.updateRevision != null) {
+      json[r'updateRevision'] = this.updateRevision;
+    } else {
+      json[r'updateRevision'] = null;
     }
-    if (updatedReplicas != null) {
-      json[r'updatedReplicas'] = updatedReplicas;
+    if (this.updatedReplicas != null) {
+      json[r'updatedReplicas'] = this.updatedReplicas;
+    } else {
+      json[r'updatedReplicas'] = null;
     }
     return json;
   }

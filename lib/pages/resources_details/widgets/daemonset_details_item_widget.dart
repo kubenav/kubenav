@@ -40,7 +40,7 @@ class DaemonSetDetailsItemWidget extends StatelessWidget
             ),
             DetailsItemModel(
               name: 'Update Strategy',
-              values: daemonSet.spec!.updateStrategy?.type?.value ?? '-',
+              values: daemonSet.spec!.updateStrategy?.type ?? '-',
             ),
             DetailsItemModel(
               name: 'Selector',

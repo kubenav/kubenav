@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -22,7 +23,7 @@ class IoK8sApiCoreV1QuobyteVolumeSource {
     required this.volume,
   });
 
-  /// Group to map volume access to Default is no group
+  /// group to map volume access to Default is no group
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -31,7 +32,7 @@ class IoK8sApiCoreV1QuobyteVolumeSource {
   ///
   String? group;
 
-  /// ReadOnly here will force the Quobyte volume to be mounted with read-only permissions. Defaults to false.
+  /// readOnly here will force the Quobyte volume to be mounted with read-only permissions. Defaults to false.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -40,10 +41,10 @@ class IoK8sApiCoreV1QuobyteVolumeSource {
   ///
   bool? readOnly;
 
-  /// Registry represents a single or multiple Quobyte Registry services specified as a string as host:port pair (multiple entries are separated with commas) which acts as the central registry for volumes
+  /// registry represents a single or multiple Quobyte Registry services specified as a string as host:port pair (multiple entries are separated with commas) which acts as the central registry for volumes
   String registry;
 
-  /// Tenant owning the given Quobyte volume in the Backend Used with dynamically provisioned Quobyte volumes, value is set by the plugin
+  /// tenant owning the given Quobyte volume in the Backend Used with dynamically provisioned Quobyte volumes, value is set by the plugin
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -52,7 +53,7 @@ class IoK8sApiCoreV1QuobyteVolumeSource {
   ///
   String? tenant;
 
-  /// User to map volume access to Defaults to serivceaccount user
+  /// user to map volume access to Defaults to serivceaccount user
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -61,7 +62,7 @@ class IoK8sApiCoreV1QuobyteVolumeSource {
   ///
   String? user;
 
-  /// Volume is a string that references an already created Quobyte volume by name.
+  /// volume is a string that references an already created Quobyte volume by name.
   String volume;
 
   @override
@@ -91,20 +92,28 @@ class IoK8sApiCoreV1QuobyteVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (group != null) {
-      json[r'group'] = group;
+    if (this.group != null) {
+      json[r'group'] = this.group;
+    } else {
+      json[r'group'] = null;
     }
-    if (readOnly != null) {
-      json[r'readOnly'] = readOnly;
+    if (this.readOnly != null) {
+      json[r'readOnly'] = this.readOnly;
+    } else {
+      json[r'readOnly'] = null;
     }
-    json[r'registry'] = registry;
-    if (tenant != null) {
-      json[r'tenant'] = tenant;
+    json[r'registry'] = this.registry;
+    if (this.tenant != null) {
+      json[r'tenant'] = this.tenant;
+    } else {
+      json[r'tenant'] = null;
     }
-    if (user != null) {
-      json[r'user'] = user;
+    if (this.user != null) {
+      json[r'user'] = this.user;
+    } else {
+      json[r'user'] = null;
     }
-    json[r'volume'] = volume;
+    json[r'volume'] = this.volume;
     return json;
   }
 

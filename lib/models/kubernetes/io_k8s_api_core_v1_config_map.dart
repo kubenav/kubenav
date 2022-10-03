@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -91,19 +92,27 @@ class IoK8sApiCoreV1ConfigMap {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (apiVersion != null) {
-      json[r'apiVersion'] = apiVersion;
+    if (this.apiVersion != null) {
+      json[r'apiVersion'] = this.apiVersion;
+    } else {
+      json[r'apiVersion'] = null;
     }
-    json[r'binaryData'] = binaryData;
-    json[r'data'] = data;
-    if (immutable != null) {
-      json[r'immutable'] = immutable;
+    json[r'binaryData'] = this.binaryData;
+    json[r'data'] = this.data;
+    if (this.immutable != null) {
+      json[r'immutable'] = this.immutable;
+    } else {
+      json[r'immutable'] = null;
     }
-    if (kind != null) {
-      json[r'kind'] = kind;
+    if (this.kind != null) {
+      json[r'kind'] = this.kind;
+    } else {
+      json[r'kind'] = null;
     }
-    if (metadata != null) {
-      json[r'metadata'] = metadata;
+    if (this.metadata != null) {
+      json[r'metadata'] = this.metadata;
+    } else {
+      json[r'metadata'] = null;
     }
     return json;
   }

@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -55,11 +56,15 @@ class IoK8sApiAppsV1StatefulSetPersistentVolumeClaimRetentionPolicy {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (whenDeleted != null) {
-      json[r'whenDeleted'] = whenDeleted;
+    if (this.whenDeleted != null) {
+      json[r'whenDeleted'] = this.whenDeleted;
+    } else {
+      json[r'whenDeleted'] = null;
     }
-    if (whenScaled != null) {
-      json[r'whenScaled'] = whenScaled;
+    if (this.whenScaled != null) {
+      json[r'whenScaled'] = this.whenScaled;
+    } else {
+      json[r'whenScaled'] = null;
     }
     return json;
   }

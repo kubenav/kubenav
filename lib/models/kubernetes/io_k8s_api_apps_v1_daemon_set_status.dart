@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -122,25 +123,35 @@ class IoK8sApiAppsV1DaemonSetStatus {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (collisionCount != null) {
-      json[r'collisionCount'] = collisionCount;
+    if (this.collisionCount != null) {
+      json[r'collisionCount'] = this.collisionCount;
+    } else {
+      json[r'collisionCount'] = null;
     }
-    json[r'conditions'] = conditions;
-    json[r'currentNumberScheduled'] = currentNumberScheduled;
-    json[r'desiredNumberScheduled'] = desiredNumberScheduled;
-    if (numberAvailable != null) {
-      json[r'numberAvailable'] = numberAvailable;
+    json[r'conditions'] = this.conditions;
+    json[r'currentNumberScheduled'] = this.currentNumberScheduled;
+    json[r'desiredNumberScheduled'] = this.desiredNumberScheduled;
+    if (this.numberAvailable != null) {
+      json[r'numberAvailable'] = this.numberAvailable;
+    } else {
+      json[r'numberAvailable'] = null;
     }
-    json[r'numberMisscheduled'] = numberMisscheduled;
-    json[r'numberReady'] = numberReady;
-    if (numberUnavailable != null) {
-      json[r'numberUnavailable'] = numberUnavailable;
+    json[r'numberMisscheduled'] = this.numberMisscheduled;
+    json[r'numberReady'] = this.numberReady;
+    if (this.numberUnavailable != null) {
+      json[r'numberUnavailable'] = this.numberUnavailable;
+    } else {
+      json[r'numberUnavailable'] = null;
     }
-    if (observedGeneration != null) {
-      json[r'observedGeneration'] = observedGeneration;
+    if (this.observedGeneration != null) {
+      json[r'observedGeneration'] = this.observedGeneration;
+    } else {
+      json[r'observedGeneration'] = null;
     }
-    if (updatedNumberScheduled != null) {
-      json[r'updatedNumberScheduled'] = updatedNumberScheduled;
+    if (this.updatedNumberScheduled != null) {
+      json[r'updatedNumberScheduled'] = this.updatedNumberScheduled;
+    } else {
+      json[r'updatedNumberScheduled'] = null;
     }
     return json;
   }

@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -55,11 +56,13 @@ class IoK8sApiNetworkingV1HTTPIngressPath {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'backend'] = backend;
-    if (path != null) {
-      json[r'path'] = path;
+    json[r'backend'] = this.backend;
+    if (this.path != null) {
+      json[r'path'] = this.path;
+    } else {
+      json[r'path'] = null;
     }
-    json[r'pathType'] = pathType;
+    json[r'pathType'] = this.pathType;
     return json;
   }
 

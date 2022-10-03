@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -22,7 +23,7 @@ class IoK8sApiCoreV1AzureDiskVolumeSource {
     this.readOnly,
   });
 
-  /// Host Caching mode: None, Read Only, Read Write.
+  /// cachingMode is the Host Caching mode: None, Read Only, Read Write.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -31,13 +32,13 @@ class IoK8sApiCoreV1AzureDiskVolumeSource {
   ///
   String? cachingMode;
 
-  /// The Name of the data disk in the blob storage
+  /// diskName is the Name of the data disk in the blob storage
   String diskName;
 
-  /// The URI the data disk in the blob storage
+  /// diskURI is the URI of data disk in the blob storage
   String diskURI;
 
-  /// Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.
+  /// fsType is Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -46,7 +47,7 @@ class IoK8sApiCoreV1AzureDiskVolumeSource {
   ///
   String? fsType;
 
-  /// Expected values Shared: multiple blob disks per storage account  Dedicated: single blob disk per storage account  Managed: azure managed data disk (only in managed availability set). defaults to shared
+  /// kind expected values are Shared: multiple blob disks per storage account  Dedicated: single blob disk per storage account  Managed: azure managed data disk (only in managed availability set). defaults to shared
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -55,7 +56,7 @@ class IoK8sApiCoreV1AzureDiskVolumeSource {
   ///
   String? kind;
 
-  /// Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
+  /// readOnly Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -91,19 +92,27 @@ class IoK8sApiCoreV1AzureDiskVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (cachingMode != null) {
-      json[r'cachingMode'] = cachingMode;
+    if (this.cachingMode != null) {
+      json[r'cachingMode'] = this.cachingMode;
+    } else {
+      json[r'cachingMode'] = null;
     }
-    json[r'diskName'] = diskName;
-    json[r'diskURI'] = diskURI;
-    if (fsType != null) {
-      json[r'fsType'] = fsType;
+    json[r'diskName'] = this.diskName;
+    json[r'diskURI'] = this.diskURI;
+    if (this.fsType != null) {
+      json[r'fsType'] = this.fsType;
+    } else {
+      json[r'fsType'] = null;
     }
-    if (kind != null) {
-      json[r'kind'] = kind;
+    if (this.kind != null) {
+      json[r'kind'] = this.kind;
+    } else {
+      json[r'kind'] = null;
     }
-    if (readOnly != null) {
-      json[r'readOnly'] = readOnly;
+    if (this.readOnly != null) {
+      json[r'readOnly'] = this.readOnly;
+    } else {
+      json[r'readOnly'] = null;
     }
     return json;
   }

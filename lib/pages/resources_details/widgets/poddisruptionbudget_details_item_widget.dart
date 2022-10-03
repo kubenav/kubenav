@@ -45,7 +45,7 @@ class PodDisruptionBudgetDetailsItemWidget extends StatelessWidget
               values: pdb.spec!.minAvailable ?? '-',
             ),
             DetailsItemModel(
-              name: 'Max. Available',
+              name: 'Max. Unavailable',
               values: pdb.spec!.maxUnavailable ?? '-',
             ),
           ],

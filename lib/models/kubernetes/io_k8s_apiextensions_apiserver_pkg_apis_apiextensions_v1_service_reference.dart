@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -67,13 +68,17 @@ class IoK8sApiextensionsApiserverPkgApisApiextensionsV1ServiceReference {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'name'] = name;
-    json[r'namespace'] = namespace;
-    if (path != null) {
-      json[r'path'] = path;
+    json[r'name'] = this.name;
+    json[r'namespace'] = this.namespace;
+    if (this.path != null) {
+      json[r'path'] = this.path;
+    } else {
+      json[r'path'] = null;
     }
-    if (port != null) {
-      json[r'port'] = port;
+    if (this.port != null) {
+      json[r'port'] = this.port;
+    } else {
+      json[r'port'] = null;
     }
     return json;
   }

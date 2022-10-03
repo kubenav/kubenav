@@ -30,14 +30,14 @@ class ServiceListItemWidget extends StatelessWidget implements IListItemWidget {
   Widget build(BuildContext context) {
     final service = IoK8sApiCoreV1Service.fromJson(item);
     final age = getAge(service?.metadata?.creationTimestamp);
-    final type = service?.spec?.type?.value ?? '-';
+    final type = service?.spec?.type ?? '-';
     final clusterIP = service?.spec?.clusterIP ?? '-';
     final externalIP = service?.status?.loadBalancer?.ingress
         .map((ingress) => ingress.ip)
         .toList();
     final ports = service?.spec?.ports
         .map((port) =>
-            '${port.port}${port.protocol != null ? '/${port.protocol!.value}' : ''} (${port.name ?? ''}${port.appProtocol != null ? '/${port.appProtocol}' : ''})')
+            '${port.port}${port.protocol != null ? '/${port.protocol}' : ''} (${port.name ?? ''}${port.appProtocol != null ? '/${port.appProtocol}' : ''})')
         .toList();
 
     return ListItemWidget(

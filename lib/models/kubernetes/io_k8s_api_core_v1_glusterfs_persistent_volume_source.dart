@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -20,10 +21,10 @@ class IoK8sApiCoreV1GlusterfsPersistentVolumeSource {
     this.readOnly,
   });
 
-  /// EndpointsName is the endpoint name that details Glusterfs topology. More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod
+  /// endpoints is the endpoint name that details Glusterfs topology. More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod
   String endpoints;
 
-  /// EndpointsNamespace is the namespace that contains Glusterfs endpoint. If this field is empty, the EndpointNamespace defaults to the same namespace as the bound PVC. More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod
+  /// endpointsNamespace is the namespace that contains Glusterfs endpoint. If this field is empty, the EndpointNamespace defaults to the same namespace as the bound PVC. More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -32,10 +33,10 @@ class IoK8sApiCoreV1GlusterfsPersistentVolumeSource {
   ///
   String? endpointsNamespace;
 
-  /// Path is the Glusterfs volume path. More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod
+  /// path is the Glusterfs volume path. More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod
   String path;
 
-  /// ReadOnly here will force the Glusterfs volume to be mounted with read-only permissions. Defaults to false. More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod
+  /// readOnly here will force the Glusterfs volume to be mounted with read-only permissions. Defaults to false. More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -67,13 +68,17 @@ class IoK8sApiCoreV1GlusterfsPersistentVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'endpoints'] = endpoints;
-    if (endpointsNamespace != null) {
-      json[r'endpointsNamespace'] = endpointsNamespace;
+    json[r'endpoints'] = this.endpoints;
+    if (this.endpointsNamespace != null) {
+      json[r'endpointsNamespace'] = this.endpointsNamespace;
+    } else {
+      json[r'endpointsNamespace'] = null;
     }
-    json[r'path'] = path;
-    if (readOnly != null) {
-      json[r'readOnly'] = readOnly;
+    json[r'path'] = this.path;
+    if (this.readOnly != null) {
+      json[r'readOnly'] = this.readOnly;
+    } else {
+      json[r'readOnly'] = null;
     }
     return json;
   }

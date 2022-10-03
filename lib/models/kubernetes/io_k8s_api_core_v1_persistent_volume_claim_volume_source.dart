@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -18,10 +19,10 @@ class IoK8sApiCoreV1PersistentVolumeClaimVolumeSource {
     this.readOnly,
   });
 
-  /// ClaimName is the name of a PersistentVolumeClaim in the same namespace as the pod using this volume. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims
+  /// claimName is the name of a PersistentVolumeClaim in the same namespace as the pod using this volume. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims
   String claimName;
 
-  /// Will force the ReadOnly setting in VolumeMounts. Default false.
+  /// readOnly Will force the ReadOnly setting in VolumeMounts. Default false.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -48,9 +49,11 @@ class IoK8sApiCoreV1PersistentVolumeClaimVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'claimName'] = claimName;
-    if (readOnly != null) {
-      json[r'readOnly'] = readOnly;
+    json[r'claimName'] = this.claimName;
+    if (this.readOnly != null) {
+      json[r'readOnly'] = this.readOnly;
+    } else {
+      json[r'readOnly'] = null;
     }
     return json;
   }

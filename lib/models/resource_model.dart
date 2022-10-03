@@ -18,7 +18,6 @@ import 'package:kubenav/pages/resources_details/widgets/persistentvolume_details
 import 'package:kubenav/pages/resources_details/widgets/persistentvolumeclaim_details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/pod_details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/poddisruptionbudget_details_item_widget.dart';
-import 'package:kubenav/pages/resources_details/widgets/podsecuritypolicy_details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/replicaset_details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/role_details_item_widget.dart';
 import 'package:kubenav/pages/resources_details/widgets/rolebinding_details_item_widget.dart';
@@ -44,7 +43,6 @@ import 'package:kubenav/pages/resources_list/widgets/persistentvolume_list_item_
 import 'package:kubenav/pages/resources_list/widgets/persistentvolumeclaim_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/pod_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/poddisruptionbudget_list_item_widget.dart';
-import 'package:kubenav/pages/resources_list/widgets/podsecuritypolicy_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/replicaset_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/rolebinding_list_item_widget.dart';
 import 'package:kubenav/pages/resources_list/widgets/secret_list_item_widget.dart';
@@ -141,7 +139,7 @@ abstract class Resources {
       title: 'CronJobs',
       description: 'A CronJob creates Jobs on a repeating schedule.',
       resource: 'cronjobs',
-      path: '/apis/batch/v1beta1',
+      path: '/apis/batch/v1',
       scope: ResourceScope.namespaced,
       template:
           '{"apiVersion":"batch/v1","kind":"CronJob","metadata":{"name":"","namespace":""},"spec":{"schedule":"5 4 * * *","suspend":false,"successfulJobsHistoryLimit":1,"failedJobsHistoryLimit":1,"jobTemplate":{"spec":{"backoffLimit":0,"template":{"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}}}',
@@ -360,7 +358,7 @@ abstract class Resources {
       description:
           'A HorizontalPodAutoscaler automatically updates a workload resource, with the aim of automatically scaling the workload to match demand.',
       resource: 'horizontalpodautoscalers',
-      path: '/apis/autoscaling/v2beta1',
+      path: '/apis/autoscaling/v2',
       scope: ResourceScope.namespaced,
       template: '',
       buildListItem: (
@@ -547,7 +545,7 @@ abstract class Resources {
       description:
           'PDBs provide a way to limit the number of concurrent disruptions that your application experiences.',
       resource: 'poddisruptionbudgets',
-      path: '/apis/policy/v1beta1',
+      path: '/apis/policy/v1',
       scope: ResourceScope.namespaced,
       template: '',
       buildListItem: (
@@ -814,33 +812,6 @@ abstract class Resources {
         metrics: metrics,
       ),
       buildDetailsItem: (dynamic item) => NodeDetailsItemWidget(item: item),
-    ),
-    'podsecuritypolicies': Resource(
-      resourceType: ResourceType.cluster,
-      title: 'PodSecurityPolicies',
-      description:
-          'PodSecurityPolicies enable fine-grained authorization of pod creation and updates.',
-      resource: 'podsecuritypolicies',
-      path: '/apis/policy/v1beta1',
-      scope: ResourceScope.cluster,
-      template: '',
-      buildListItem: (
-        String? title,
-        String? resource,
-        String? path,
-        ResourceScope? scope,
-        dynamic item,
-        dynamic metrics,
-      ) =>
-          PodSecurityPolicyListItemWidget(
-        title: title,
-        resource: resource,
-        path: path,
-        scope: scope,
-        item: item,
-      ),
-      buildDetailsItem: (dynamic item) =>
-          PodSecurityPolicyDetailsItemWidget(item: item),
     ),
   };
 }

@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -18,7 +19,7 @@ class IoK8sApiCoreV1PhotonPersistentDiskVolumeSource {
     required this.pdID,
   });
 
-  /// Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.
+  /// fsType is the filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -27,7 +28,7 @@ class IoK8sApiCoreV1PhotonPersistentDiskVolumeSource {
   ///
   String? fsType;
 
-  /// ID that identifies Photon Controller persistent disk
+  /// pdID is the ID that identifies Photon Controller persistent disk
   String pdID;
 
   @override
@@ -48,10 +49,12 @@ class IoK8sApiCoreV1PhotonPersistentDiskVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (fsType != null) {
-      json[r'fsType'] = fsType;
+    if (this.fsType != null) {
+      json[r'fsType'] = this.fsType;
+    } else {
+      json[r'fsType'] = null;
     }
-    json[r'pdID'] = pdID;
+    json[r'pdID'] = this.pdID;
     return json;
   }
 

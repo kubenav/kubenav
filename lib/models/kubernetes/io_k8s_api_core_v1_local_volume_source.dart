@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -18,7 +19,7 @@ class IoK8sApiCoreV1LocalVolumeSource {
     required this.path,
   });
 
-  /// Filesystem type to mount. It applies only when the Path is a block device. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". The default value is to auto-select a filesystem if unspecified.
+  /// fsType is the filesystem type to mount. It applies only when the Path is a block device. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". The default value is to auto-select a filesystem if unspecified.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -27,7 +28,7 @@ class IoK8sApiCoreV1LocalVolumeSource {
   ///
   String? fsType;
 
-  /// The full path to the volume on the node. It can be either a directory or block device (disk, partition, ...).
+  /// path of the full path to the volume on the node. It can be either a directory or block device (disk, partition, ...).
   String path;
 
   @override
@@ -48,10 +49,12 @@ class IoK8sApiCoreV1LocalVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (fsType != null) {
-      json[r'fsType'] = fsType;
+    if (this.fsType != null) {
+      json[r'fsType'] = this.fsType;
+    } else {
+      json[r'fsType'] = null;
     }
-    json[r'path'] = path;
+    json[r'path'] = this.path;
     return json;
   }
 

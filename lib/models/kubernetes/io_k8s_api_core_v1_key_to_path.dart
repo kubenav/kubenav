@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -19,10 +20,10 @@ class IoK8sApiCoreV1KeyToPath {
     required this.path,
   });
 
-  /// The key to project.
+  /// key is the key to project.
   String key;
 
-  /// Optional: mode bits used to set permissions on this file. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
+  /// mode is Optional: mode bits used to set permissions on this file. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -31,7 +32,7 @@ class IoK8sApiCoreV1KeyToPath {
   ///
   int? mode;
 
-  /// The relative path of the file to map the key to. May not be an absolute path. May not contain the path element '..'. May not start with the string '..'.
+  /// path is the relative path of the file to map the key to. May not be an absolute path. May not contain the path element '..'. May not start with the string '..'.
   String path;
 
   @override
@@ -53,11 +54,13 @@ class IoK8sApiCoreV1KeyToPath {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'key'] = key;
-    if (mode != null) {
-      json[r'mode'] = mode;
+    json[r'key'] = this.key;
+    if (this.mode != null) {
+      json[r'mode'] = this.mode;
+    } else {
+      json[r'mode'] = null;
     }
-    json[r'path'] = path;
+    json[r'path'] = this.path;
     return json;
   }
 

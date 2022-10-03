@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -21,8 +22,8 @@ class IoK8sApiCoreV1NodeAddress {
   /// The node address.
   String address;
 
-  /// Node address type, one of Hostname, ExternalIP or InternalIP.  Possible enum values:  - `\"ExternalDNS\"` identifies a DNS name which resolves to an IP address which has the characteristics of a NodeExternalIP. The IP it resolves to may or may not be a listed NodeExternalIP address.  - `\"ExternalIP\"` identifies an IP address which is, in some way, intended to be more usable from outside the cluster then an internal IP, though no specific semantics are defined. It may be a globally routable IP, though it is not required to be. External IPs may be assigned directly to an interface on the node, like a NodeInternalIP, or alternatively, packets sent to the external IP may be NAT'ed to an internal node IP rather than being delivered directly (making the IP less efficient for node-to-node traffic than a NodeInternalIP).  - `\"Hostname\"` identifies a name of the node. Although every node can be assumed to have a NodeAddress of this type, its exact syntax and semantics are not defined, and are not consistent between different clusters.  - `\"InternalDNS\"` identifies a DNS name which resolves to an IP address which has the characteristics of a NodeInternalIP. The IP it resolves to may or may not be a listed NodeInternalIP address.  - `\"InternalIP\"` identifies an IP address which is assigned to one of the node's network interfaces. Every node should have at least one address of this type. An internal IP is normally expected to be reachable from every other node, but may not be visible to hosts outside the cluster. By default it is assumed that kube-apiserver can reach node internal IPs, though it is possible to configure clusters where this is not the case. NodeInternalIP is the default type of node IP, and does not necessarily imply that the IP is ONLY reachable internally. If a node has multiple internal IPs, no specific semantics are assigned to the additional IPs.
-  IoK8sApiCoreV1NodeAddressTypeEnum type;
+  /// Node address type, one of Hostname, ExternalIP or InternalIP.
+  String type;
 
   @override
   bool operator ==(Object other) =>
@@ -42,8 +43,8 @@ class IoK8sApiCoreV1NodeAddress {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'address'] = address;
-    json[r'type'] = type;
+    json[r'address'] = this.address;
+    json[r'type'] = this.type;
     return json;
   }
 
@@ -69,7 +70,7 @@ class IoK8sApiCoreV1NodeAddress {
 
       return IoK8sApiCoreV1NodeAddress(
         address: mapValueOfType<String>(json, r'address')!,
-        type: IoK8sApiCoreV1NodeAddressTypeEnum.fromJson(json[r'type'])!,
+        type: mapValueOfType<String>(json, r'type')!,
       );
     }
     return null;
@@ -131,99 +132,4 @@ class IoK8sApiCoreV1NodeAddress {
     'address',
     'type',
   };
-}
-
-/// Node address type, one of Hostname, ExternalIP or InternalIP.  Possible enum values:  - `\"ExternalDNS\"` identifies a DNS name which resolves to an IP address which has the characteristics of a NodeExternalIP. The IP it resolves to may or may not be a listed NodeExternalIP address.  - `\"ExternalIP\"` identifies an IP address which is, in some way, intended to be more usable from outside the cluster then an internal IP, though no specific semantics are defined. It may be a globally routable IP, though it is not required to be. External IPs may be assigned directly to an interface on the node, like a NodeInternalIP, or alternatively, packets sent to the external IP may be NAT'ed to an internal node IP rather than being delivered directly (making the IP less efficient for node-to-node traffic than a NodeInternalIP).  - `\"Hostname\"` identifies a name of the node. Although every node can be assumed to have a NodeAddress of this type, its exact syntax and semantics are not defined, and are not consistent between different clusters.  - `\"InternalDNS\"` identifies a DNS name which resolves to an IP address which has the characteristics of a NodeInternalIP. The IP it resolves to may or may not be a listed NodeInternalIP address.  - `\"InternalIP\"` identifies an IP address which is assigned to one of the node's network interfaces. Every node should have at least one address of this type. An internal IP is normally expected to be reachable from every other node, but may not be visible to hosts outside the cluster. By default it is assumed that kube-apiserver can reach node internal IPs, though it is possible to configure clusters where this is not the case. NodeInternalIP is the default type of node IP, and does not necessarily imply that the IP is ONLY reachable internally. If a node has multiple internal IPs, no specific semantics are assigned to the additional IPs.
-class IoK8sApiCoreV1NodeAddressTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1NodeAddressTypeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const externalDNS =
-      IoK8sApiCoreV1NodeAddressTypeEnum._(r'ExternalDNS');
-  static const externalIP = IoK8sApiCoreV1NodeAddressTypeEnum._(r'ExternalIP');
-  static const hostname = IoK8sApiCoreV1NodeAddressTypeEnum._(r'Hostname');
-  static const internalDNS =
-      IoK8sApiCoreV1NodeAddressTypeEnum._(r'InternalDNS');
-  static const internalIP = IoK8sApiCoreV1NodeAddressTypeEnum._(r'InternalIP');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1NodeAddressTypeEnum].
-  static const values = <IoK8sApiCoreV1NodeAddressTypeEnum>[
-    externalDNS,
-    externalIP,
-    hostname,
-    internalDNS,
-    internalIP,
-  ];
-
-  static IoK8sApiCoreV1NodeAddressTypeEnum? fromJson(dynamic value) =>
-      IoK8sApiCoreV1NodeAddressTypeEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiCoreV1NodeAddressTypeEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1NodeAddressTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiCoreV1NodeAddressTypeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1NodeAddressTypeEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1NodeAddressTypeEnum].
-class IoK8sApiCoreV1NodeAddressTypeEnumTypeTransformer {
-  factory IoK8sApiCoreV1NodeAddressTypeEnumTypeTransformer() =>
-      _instance ??= const IoK8sApiCoreV1NodeAddressTypeEnumTypeTransformer._();
-
-  const IoK8sApiCoreV1NodeAddressTypeEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1NodeAddressTypeEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1NodeAddressTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1NodeAddressTypeEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'ExternalDNS':
-          return IoK8sApiCoreV1NodeAddressTypeEnum.externalDNS;
-        case r'ExternalIP':
-          return IoK8sApiCoreV1NodeAddressTypeEnum.externalIP;
-        case r'Hostname':
-          return IoK8sApiCoreV1NodeAddressTypeEnum.hostname;
-        case r'InternalDNS':
-          return IoK8sApiCoreV1NodeAddressTypeEnum.internalDNS;
-        case r'InternalIP':
-          return IoK8sApiCoreV1NodeAddressTypeEnum.internalIP;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1NodeAddressTypeEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1NodeAddressTypeEnumTypeTransformer? _instance;
 }

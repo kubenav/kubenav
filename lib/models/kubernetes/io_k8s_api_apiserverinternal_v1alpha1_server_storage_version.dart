@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -61,12 +62,16 @@ class IoK8sApiApiserverinternalV1alpha1ServerStorageVersion {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (apiServerID != null) {
-      json[r'apiServerID'] = apiServerID;
+    if (this.apiServerID != null) {
+      json[r'apiServerID'] = this.apiServerID;
+    } else {
+      json[r'apiServerID'] = null;
     }
-    json[r'decodableVersions'] = decodableVersions;
-    if (encodingVersion != null) {
-      json[r'encodingVersion'] = encodingVersion;
+    json[r'decodableVersions'] = this.decodableVersions;
+    if (this.encodingVersion != null) {
+      json[r'encodingVersion'] = this.encodingVersion;
+    } else {
+      json[r'encodingVersion'] = null;
     }
     return json;
   }

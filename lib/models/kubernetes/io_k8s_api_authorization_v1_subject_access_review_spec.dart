@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -91,19 +92,27 @@ class IoK8sApiAuthorizationV1SubjectAccessReviewSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'extra'] = extra;
-    json[r'groups'] = groups;
-    if (nonResourceAttributes != null) {
-      json[r'nonResourceAttributes'] = nonResourceAttributes;
+    json[r'extra'] = this.extra;
+    json[r'groups'] = this.groups;
+    if (this.nonResourceAttributes != null) {
+      json[r'nonResourceAttributes'] = this.nonResourceAttributes;
+    } else {
+      json[r'nonResourceAttributes'] = null;
     }
-    if (resourceAttributes != null) {
-      json[r'resourceAttributes'] = resourceAttributes;
+    if (this.resourceAttributes != null) {
+      json[r'resourceAttributes'] = this.resourceAttributes;
+    } else {
+      json[r'resourceAttributes'] = null;
     }
-    if (uid != null) {
-      json[r'uid'] = uid;
+    if (this.uid != null) {
+      json[r'uid'] = this.uid;
+    } else {
+      json[r'uid'] = null;
     }
-    if (user != null) {
-      json[r'user'] = user;
+    if (this.user != null) {
+      json[r'user'] = this.user;
+    } else {
+      json[r'user'] = null;
     }
     return json;
   }

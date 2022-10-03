@@ -101,7 +101,7 @@ class DetailsContainerWidget extends StatelessWidget {
               ),
               DetailsItemModel(
                 name: 'Image Pull Policy',
-                values: container.imagePullPolicy?.value ?? '-',
+                values: container.imagePullPolicy ?? '-',
               ),
               DetailsItemModel(
                 name: 'Command',
@@ -116,7 +116,7 @@ class DetailsContainerWidget extends StatelessWidget {
                 values: container.ports.isNotEmpty
                     ? container.ports
                         .map((port) =>
-                            '${port.containerPort}${port.hostPort != null ? '/${port.hostPort}' : ''}${port.protocol != null ? '/${port.protocol!.value}' : ''}${port.name != null ? ' (${port.name})' : ''}')
+                            '${port.containerPort}${port.hostPort != null ? '/${port.hostPort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''}')
                         .toList()
                     : '-',
               ),

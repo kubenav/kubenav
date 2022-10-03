@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -68,14 +69,18 @@ class IoK8sApimachineryPkgApisMetaV1APIResourceList {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (apiVersion != null) {
-      json[r'apiVersion'] = apiVersion;
+    if (this.apiVersion != null) {
+      json[r'apiVersion'] = this.apiVersion;
+    } else {
+      json[r'apiVersion'] = null;
     }
-    json[r'groupVersion'] = groupVersion;
-    if (kind != null) {
-      json[r'kind'] = kind;
+    json[r'groupVersion'] = this.groupVersion;
+    if (this.kind != null) {
+      json[r'kind'] = this.kind;
+    } else {
+      json[r'kind'] = null;
     }
-    json[r'resources'] = resources;
+    json[r'resources'] = this.resources;
     return json;
   }
 

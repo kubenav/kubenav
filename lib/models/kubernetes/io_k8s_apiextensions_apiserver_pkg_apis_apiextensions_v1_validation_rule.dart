@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -48,10 +49,12 @@ class IoK8sApiextensionsApiserverPkgApisApiextensionsV1ValidationRule {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (message != null) {
-      json[r'message'] = message;
+    if (this.message != null) {
+      json[r'message'] = this.message;
+    } else {
+      json[r'message'] = null;
     }
-    json[r'rule'] = rule;
+    json[r'rule'] = this.rule;
     return json;
   }
 

@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -38,6 +39,7 @@ class IoK8sApiCoreV1PodSpec {
     this.hostIPC,
     this.hostNetwork,
     this.hostPID,
+    this.hostUsers,
     this.hostname,
     this.imagePullSecrets = const [],
     this.initContainers = const [],
@@ -101,8 +103,14 @@ class IoK8sApiCoreV1PodSpec {
   ///
   IoK8sApiCoreV1PodDNSConfig? dnsConfig;
 
-  /// Set DNS policy for the pod. Defaults to \"ClusterFirst\". Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst', 'Default' or 'None'. DNS parameters given in DNSConfig will be merged with the policy selected with DNSPolicy. To have DNS options set along with hostNetwork, you have to specify DNS policy explicitly to 'ClusterFirstWithHostNet'.  Possible enum values:  - `\"ClusterFirst\"` indicates that the pod should use cluster DNS first unless hostNetwork is true, if it is available, then fall back on the default (as determined by kubelet) DNS settings.  - `\"ClusterFirstWithHostNet\"` indicates that the pod should use cluster DNS first, if it is available, then fall back on the default (as determined by kubelet) DNS settings.  - `\"Default\"` indicates that the pod should use the default (as determined by kubelet) DNS settings.  - `\"None\"` indicates that the pod should use empty DNS settings. DNS parameters such as nameservers and search paths should be defined via DNSConfig.
-  IoK8sApiCoreV1PodSpecDnsPolicyEnum? dnsPolicy;
+  /// Set DNS policy for the pod. Defaults to \"ClusterFirst\". Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst', 'Default' or 'None'. DNS parameters given in DNSConfig will be merged with the policy selected with DNSPolicy. To have DNS options set along with hostNetwork, you have to specify DNS policy explicitly to 'ClusterFirstWithHostNet'.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? dnsPolicy;
 
   /// EnableServiceLinks indicates whether information about services should be injected into pod's environment variables, matching the syntax of Docker links. Optional: Defaults to true.
   ///
@@ -113,7 +121,7 @@ class IoK8sApiCoreV1PodSpec {
   ///
   bool? enableServiceLinks;
 
-  /// List of ephemeral containers run in this pod. Ephemeral containers may be run in an existing pod to perform user-initiated actions such as debugging. This list cannot be specified when creating a pod, and it cannot be modified by updating the pod spec. In order to add an ephemeral container to an existing pod, use the pod's ephemeralcontainers subresource. This field is beta-level and available on clusters that haven't disabled the EphemeralContainers feature gate.
+  /// List of ephemeral containers run in this pod. Ephemeral containers may be run in an existing pod to perform user-initiated actions such as debugging. This list cannot be specified when creating a pod, and it cannot be modified by updating the pod spec. In order to add an ephemeral container to an existing pod, use the pod's ephemeralcontainers subresource.
   List<IoK8sApiCoreV1EphemeralContainer> ephemeralContainers;
 
   /// HostAliases is an optional list of hosts and IPs that will be injected into the pod's hosts file if specified. This is only valid for non-hostNetwork pods.
@@ -146,6 +154,15 @@ class IoK8sApiCoreV1PodSpec {
   ///
   bool? hostPID;
 
+  /// Use the host's user namespace. Optional: Default to true. If set to true or not present, the pod will be run in the host user namespace, useful for when the pod needs a feature only available to the host user namespace, such as loading a kernel module with CAP_SYS_MODULE. When set to false, a new userns is created for the pod. Setting false is useful for mitigating container breakout vulnerabilities even allowing users to run their containers as root without actually having root privileges on the host. This field is alpha-level and is only honored by servers that enable the UserNamespacesSupport feature.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  bool? hostUsers;
+
   /// Specifies the hostname of the Pod If not specified, the pod's hostname will be set to a system-defined value.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -155,7 +172,7 @@ class IoK8sApiCoreV1PodSpec {
   ///
   String? hostname;
 
-  /// ImagePullSecrets is an optional list of references to secrets in the same namespace to use for pulling any of the images used by this PodSpec. If specified, these secrets will be passed to individual puller implementations for them to use. For example, in the case of docker, only DockerConfig type secrets are honored. More info: https://kubernetes.io/docs/concepts/containers/images#specifying-imagepullsecrets-on-a-pod
+  /// ImagePullSecrets is an optional list of references to secrets in the same namespace to use for pulling any of the images used by this PodSpec. If specified, these secrets will be passed to individual puller implementations for them to use. More info: https://kubernetes.io/docs/concepts/containers/images#specifying-imagepullsecrets-on-a-pod
   List<IoK8sApiCoreV1LocalObjectReference> imagePullSecrets;
 
   /// List of initialization containers belonging to the pod. Init containers are executed in order prior to containers being started. If any init container fails, the pod is considered to have failed and is handled according to its restartPolicy. The name for an init container or normal container must be unique among all containers. Init containers may not have Lifecycle actions, Readiness probes, Liveness probes, or Startup probes. The resourceRequirements of an init container are taken into account during scheduling by finding the highest request/limit for each resource type, and then using the max of of that value or the sum of the normal containers. Limits are applied to init containers in a similar fashion. Init containers cannot currently be added or removed. Cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
@@ -181,10 +198,10 @@ class IoK8sApiCoreV1PodSpec {
   ///
   IoK8sApiCoreV1PodOS? os;
 
-  /// Overhead represents the resource overhead associated with running a pod for a given RuntimeClass. This field will be autopopulated at admission time by the RuntimeClass admission controller. If the RuntimeClass admission controller is enabled, overhead must not be set in Pod create requests. The RuntimeClass admission controller will reject Pod create requests which have the overhead already set. If RuntimeClass is configured and selected in the PodSpec, Overhead will be set to the value defined in the corresponding RuntimeClass, otherwise it will remain unset and treated as zero. More info: https://git.k8s.io/enhancements/keps/sig-node/688-pod-overhead/README.md This field is beta-level as of Kubernetes v1.18, and is only honored by servers that enable the PodOverhead feature.
+  /// Overhead represents the resource overhead associated with running a pod for a given RuntimeClass. This field will be autopopulated at admission time by the RuntimeClass admission controller. If the RuntimeClass admission controller is enabled, overhead must not be set in Pod create requests. The RuntimeClass admission controller will reject Pod create requests which have the overhead already set. If RuntimeClass is configured and selected in the PodSpec, Overhead will be set to the value defined in the corresponding RuntimeClass, otherwise it will remain unset and treated as zero. More info: https://git.k8s.io/enhancements/keps/sig-node/688-pod-overhead/README.md
   Map<String, String> overhead;
 
-  /// PreemptionPolicy is the Policy for preempting pods with lower priority. One of Never, PreemptLowerPriority. Defaults to PreemptLowerPriority if unset. This field is beta-level, gated by the NonPreemptingPriority feature-gate.
+  /// PreemptionPolicy is the Policy for preempting pods with lower priority. One of Never, PreemptLowerPriority. Defaults to PreemptLowerPriority if unset.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -214,10 +231,16 @@ class IoK8sApiCoreV1PodSpec {
   /// If specified, all readiness gates will be evaluated for pod readiness. A pod is ready when all its containers are ready AND all conditions specified in the readiness gates have status equal to \"True\" More info: https://git.k8s.io/enhancements/keps/sig-network/580-pod-readiness-gates
   List<IoK8sApiCoreV1PodReadinessGate> readinessGates;
 
-  /// Restart policy for all containers within the pod. One of Always, OnFailure, Never. Default to Always. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy  Possible enum values:  - `\"Always\"`  - `\"Never\"`  - `\"OnFailure\"`
-  IoK8sApiCoreV1PodSpecRestartPolicyEnum? restartPolicy;
+  /// Restart policy for all containers within the pod. One of Always, OnFailure, Never. Default to Always. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? restartPolicy;
 
-  /// RuntimeClassName refers to a RuntimeClass object in the node.k8s.io group, which should be used to run this pod.  If no RuntimeClass resource matches the named class, the pod will not be run. If unset or empty, the \"legacy\" RuntimeClass will be used, which is an implicit class with an empty definition that uses the default runtime handler. More info: https://git.k8s.io/enhancements/keps/sig-node/585-runtime-class This is a beta feature as of Kubernetes v1.14.
+  /// RuntimeClassName refers to a RuntimeClass object in the node.k8s.io group, which should be used to run this pod.  If no RuntimeClass resource matches the named class, the pod will not be run. If unset or empty, the \"legacy\" RuntimeClass will be used, which is an implicit class with an empty definition that uses the default runtime handler. More info: https://git.k8s.io/enhancements/keps/sig-node/585-runtime-class
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -322,6 +345,7 @@ class IoK8sApiCoreV1PodSpec {
           other.hostIPC == hostIPC &&
           other.hostNetwork == hostNetwork &&
           other.hostPID == hostPID &&
+          other.hostUsers == hostUsers &&
           other.hostname == hostname &&
           other.imagePullSecrets == imagePullSecrets &&
           other.initContainers == initContainers &&
@@ -365,6 +389,7 @@ class IoK8sApiCoreV1PodSpec {
       (hostIPC == null ? 0 : hostIPC!.hashCode) +
       (hostNetwork == null ? 0 : hostNetwork!.hashCode) +
       (hostPID == null ? 0 : hostPID!.hashCode) +
+      (hostUsers == null ? 0 : hostUsers!.hashCode) +
       (hostname == null ? 0 : hostname!.hashCode) +
       (imagePullSecrets.hashCode) +
       (initContainers.hashCode) +
@@ -394,96 +419,152 @@ class IoK8sApiCoreV1PodSpec {
 
   @override
   String toString() =>
-      'IoK8sApiCoreV1PodSpec[activeDeadlineSeconds=$activeDeadlineSeconds, affinity=$affinity, automountServiceAccountToken=$automountServiceAccountToken, containers=$containers, dnsConfig=$dnsConfig, dnsPolicy=$dnsPolicy, enableServiceLinks=$enableServiceLinks, ephemeralContainers=$ephemeralContainers, hostAliases=$hostAliases, hostIPC=$hostIPC, hostNetwork=$hostNetwork, hostPID=$hostPID, hostname=$hostname, imagePullSecrets=$imagePullSecrets, initContainers=$initContainers, nodeName=$nodeName, nodeSelector=$nodeSelector, os=$os, overhead=$overhead, preemptionPolicy=$preemptionPolicy, priority=$priority, priorityClassName=$priorityClassName, readinessGates=$readinessGates, restartPolicy=$restartPolicy, runtimeClassName=$runtimeClassName, schedulerName=$schedulerName, securityContext=$securityContext, serviceAccount=$serviceAccount, serviceAccountName=$serviceAccountName, setHostnameAsFQDN=$setHostnameAsFQDN, shareProcessNamespace=$shareProcessNamespace, subdomain=$subdomain, terminationGracePeriodSeconds=$terminationGracePeriodSeconds, tolerations=$tolerations, topologySpreadConstraints=$topologySpreadConstraints, volumes=$volumes]';
+      'IoK8sApiCoreV1PodSpec[activeDeadlineSeconds=$activeDeadlineSeconds, affinity=$affinity, automountServiceAccountToken=$automountServiceAccountToken, containers=$containers, dnsConfig=$dnsConfig, dnsPolicy=$dnsPolicy, enableServiceLinks=$enableServiceLinks, ephemeralContainers=$ephemeralContainers, hostAliases=$hostAliases, hostIPC=$hostIPC, hostNetwork=$hostNetwork, hostPID=$hostPID, hostUsers=$hostUsers, hostname=$hostname, imagePullSecrets=$imagePullSecrets, initContainers=$initContainers, nodeName=$nodeName, nodeSelector=$nodeSelector, os=$os, overhead=$overhead, preemptionPolicy=$preemptionPolicy, priority=$priority, priorityClassName=$priorityClassName, readinessGates=$readinessGates, restartPolicy=$restartPolicy, runtimeClassName=$runtimeClassName, schedulerName=$schedulerName, securityContext=$securityContext, serviceAccount=$serviceAccount, serviceAccountName=$serviceAccountName, setHostnameAsFQDN=$setHostnameAsFQDN, shareProcessNamespace=$shareProcessNamespace, subdomain=$subdomain, terminationGracePeriodSeconds=$terminationGracePeriodSeconds, tolerations=$tolerations, topologySpreadConstraints=$topologySpreadConstraints, volumes=$volumes]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (activeDeadlineSeconds != null) {
-      json[r'activeDeadlineSeconds'] = activeDeadlineSeconds;
+    if (this.activeDeadlineSeconds != null) {
+      json[r'activeDeadlineSeconds'] = this.activeDeadlineSeconds;
+    } else {
+      json[r'activeDeadlineSeconds'] = null;
     }
-    if (affinity != null) {
-      json[r'affinity'] = affinity;
+    if (this.affinity != null) {
+      json[r'affinity'] = this.affinity;
+    } else {
+      json[r'affinity'] = null;
     }
-    if (automountServiceAccountToken != null) {
-      json[r'automountServiceAccountToken'] = automountServiceAccountToken;
+    if (this.automountServiceAccountToken != null) {
+      json[r'automountServiceAccountToken'] = this.automountServiceAccountToken;
+    } else {
+      json[r'automountServiceAccountToken'] = null;
     }
-    json[r'containers'] = containers;
-    if (dnsConfig != null) {
-      json[r'dnsConfig'] = dnsConfig;
+    json[r'containers'] = this.containers;
+    if (this.dnsConfig != null) {
+      json[r'dnsConfig'] = this.dnsConfig;
+    } else {
+      json[r'dnsConfig'] = null;
     }
-    if (dnsPolicy != null) {
-      json[r'dnsPolicy'] = dnsPolicy;
+    if (this.dnsPolicy != null) {
+      json[r'dnsPolicy'] = this.dnsPolicy;
+    } else {
+      json[r'dnsPolicy'] = null;
     }
-    if (enableServiceLinks != null) {
-      json[r'enableServiceLinks'] = enableServiceLinks;
+    if (this.enableServiceLinks != null) {
+      json[r'enableServiceLinks'] = this.enableServiceLinks;
+    } else {
+      json[r'enableServiceLinks'] = null;
     }
-    json[r'ephemeralContainers'] = ephemeralContainers;
-    json[r'hostAliases'] = hostAliases;
-    if (hostIPC != null) {
-      json[r'hostIPC'] = hostIPC;
+    json[r'ephemeralContainers'] = this.ephemeralContainers;
+    json[r'hostAliases'] = this.hostAliases;
+    if (this.hostIPC != null) {
+      json[r'hostIPC'] = this.hostIPC;
+    } else {
+      json[r'hostIPC'] = null;
     }
-    if (hostNetwork != null) {
-      json[r'hostNetwork'] = hostNetwork;
+    if (this.hostNetwork != null) {
+      json[r'hostNetwork'] = this.hostNetwork;
+    } else {
+      json[r'hostNetwork'] = null;
     }
-    if (hostPID != null) {
-      json[r'hostPID'] = hostPID;
+    if (this.hostPID != null) {
+      json[r'hostPID'] = this.hostPID;
+    } else {
+      json[r'hostPID'] = null;
     }
-    if (hostname != null) {
-      json[r'hostname'] = hostname;
+    if (this.hostUsers != null) {
+      json[r'hostUsers'] = this.hostUsers;
+    } else {
+      json[r'hostUsers'] = null;
     }
-    json[r'imagePullSecrets'] = imagePullSecrets;
-    json[r'initContainers'] = initContainers;
-    if (nodeName != null) {
-      json[r'nodeName'] = nodeName;
+    if (this.hostname != null) {
+      json[r'hostname'] = this.hostname;
+    } else {
+      json[r'hostname'] = null;
     }
-    json[r'nodeSelector'] = nodeSelector;
-    if (os != null) {
-      json[r'os'] = os;
+    json[r'imagePullSecrets'] = this.imagePullSecrets;
+    json[r'initContainers'] = this.initContainers;
+    if (this.nodeName != null) {
+      json[r'nodeName'] = this.nodeName;
+    } else {
+      json[r'nodeName'] = null;
     }
-    json[r'overhead'] = overhead;
-    if (preemptionPolicy != null) {
-      json[r'preemptionPolicy'] = preemptionPolicy;
+    json[r'nodeSelector'] = this.nodeSelector;
+    if (this.os != null) {
+      json[r'os'] = this.os;
+    } else {
+      json[r'os'] = null;
     }
-    if (priority != null) {
-      json[r'priority'] = priority;
+    json[r'overhead'] = this.overhead;
+    if (this.preemptionPolicy != null) {
+      json[r'preemptionPolicy'] = this.preemptionPolicy;
+    } else {
+      json[r'preemptionPolicy'] = null;
     }
-    if (priorityClassName != null) {
-      json[r'priorityClassName'] = priorityClassName;
+    if (this.priority != null) {
+      json[r'priority'] = this.priority;
+    } else {
+      json[r'priority'] = null;
     }
-    json[r'readinessGates'] = readinessGates;
-    if (restartPolicy != null) {
-      json[r'restartPolicy'] = restartPolicy;
+    if (this.priorityClassName != null) {
+      json[r'priorityClassName'] = this.priorityClassName;
+    } else {
+      json[r'priorityClassName'] = null;
     }
-    if (runtimeClassName != null) {
-      json[r'runtimeClassName'] = runtimeClassName;
+    json[r'readinessGates'] = this.readinessGates;
+    if (this.restartPolicy != null) {
+      json[r'restartPolicy'] = this.restartPolicy;
+    } else {
+      json[r'restartPolicy'] = null;
     }
-    if (schedulerName != null) {
-      json[r'schedulerName'] = schedulerName;
+    if (this.runtimeClassName != null) {
+      json[r'runtimeClassName'] = this.runtimeClassName;
+    } else {
+      json[r'runtimeClassName'] = null;
     }
-    if (securityContext != null) {
-      json[r'securityContext'] = securityContext;
+    if (this.schedulerName != null) {
+      json[r'schedulerName'] = this.schedulerName;
+    } else {
+      json[r'schedulerName'] = null;
     }
-    if (serviceAccount != null) {
-      json[r'serviceAccount'] = serviceAccount;
+    if (this.securityContext != null) {
+      json[r'securityContext'] = this.securityContext;
+    } else {
+      json[r'securityContext'] = null;
     }
-    if (serviceAccountName != null) {
-      json[r'serviceAccountName'] = serviceAccountName;
+    if (this.serviceAccount != null) {
+      json[r'serviceAccount'] = this.serviceAccount;
+    } else {
+      json[r'serviceAccount'] = null;
     }
-    if (setHostnameAsFQDN != null) {
-      json[r'setHostnameAsFQDN'] = setHostnameAsFQDN;
+    if (this.serviceAccountName != null) {
+      json[r'serviceAccountName'] = this.serviceAccountName;
+    } else {
+      json[r'serviceAccountName'] = null;
     }
-    if (shareProcessNamespace != null) {
-      json[r'shareProcessNamespace'] = shareProcessNamespace;
+    if (this.setHostnameAsFQDN != null) {
+      json[r'setHostnameAsFQDN'] = this.setHostnameAsFQDN;
+    } else {
+      json[r'setHostnameAsFQDN'] = null;
     }
-    if (subdomain != null) {
-      json[r'subdomain'] = subdomain;
+    if (this.shareProcessNamespace != null) {
+      json[r'shareProcessNamespace'] = this.shareProcessNamespace;
+    } else {
+      json[r'shareProcessNamespace'] = null;
     }
-    if (terminationGracePeriodSeconds != null) {
-      json[r'terminationGracePeriodSeconds'] = terminationGracePeriodSeconds;
+    if (this.subdomain != null) {
+      json[r'subdomain'] = this.subdomain;
+    } else {
+      json[r'subdomain'] = null;
     }
-    json[r'tolerations'] = tolerations;
-    json[r'topologySpreadConstraints'] = topologySpreadConstraints;
-    json[r'volumes'] = volumes;
+    if (this.terminationGracePeriodSeconds != null) {
+      json[r'terminationGracePeriodSeconds'] =
+          this.terminationGracePeriodSeconds;
+    } else {
+      json[r'terminationGracePeriodSeconds'] = null;
+    }
+    json[r'tolerations'] = this.tolerations;
+    json[r'topologySpreadConstraints'] = this.topologySpreadConstraints;
+    json[r'volumes'] = this.volumes;
     return json;
   }
 
@@ -515,8 +596,7 @@ class IoK8sApiCoreV1PodSpec {
             mapValueOfType<bool>(json, r'automountServiceAccountToken'),
         containers: IoK8sApiCoreV1Container.listFromJson(json[r'containers'])!,
         dnsConfig: IoK8sApiCoreV1PodDNSConfig.fromJson(json[r'dnsConfig']),
-        dnsPolicy:
-            IoK8sApiCoreV1PodSpecDnsPolicyEnum.fromJson(json[r'dnsPolicy']),
+        dnsPolicy: mapValueOfType<String>(json, r'dnsPolicy'),
         enableServiceLinks: mapValueOfType<bool>(json, r'enableServiceLinks'),
         ephemeralContainers: IoK8sApiCoreV1EphemeralContainer.listFromJson(
                 json[r'ephemeralContainers']) ??
@@ -527,6 +607,7 @@ class IoK8sApiCoreV1PodSpec {
         hostIPC: mapValueOfType<bool>(json, r'hostIPC'),
         hostNetwork: mapValueOfType<bool>(json, r'hostNetwork'),
         hostPID: mapValueOfType<bool>(json, r'hostPID'),
+        hostUsers: mapValueOfType<bool>(json, r'hostUsers'),
         hostname: mapValueOfType<String>(json, r'hostname'),
         imagePullSecrets: IoK8sApiCoreV1LocalObjectReference.listFromJson(
                 json[r'imagePullSecrets']) ??
@@ -545,8 +626,7 @@ class IoK8sApiCoreV1PodSpec {
         readinessGates: IoK8sApiCoreV1PodReadinessGate.listFromJson(
                 json[r'readinessGates']) ??
             const [],
-        restartPolicy: IoK8sApiCoreV1PodSpecRestartPolicyEnum.fromJson(
-            json[r'restartPolicy']),
+        restartPolicy: mapValueOfType<String>(json, r'restartPolicy'),
         runtimeClassName: mapValueOfType<String>(json, r'runtimeClassName'),
         schedulerName: mapValueOfType<String>(json, r'schedulerName'),
         securityContext:
@@ -628,182 +708,4 @@ class IoK8sApiCoreV1PodSpec {
   static const requiredKeys = <String>{
     'containers',
   };
-}
-
-/// Set DNS policy for the pod. Defaults to \"ClusterFirst\". Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst', 'Default' or 'None'. DNS parameters given in DNSConfig will be merged with the policy selected with DNSPolicy. To have DNS options set along with hostNetwork, you have to specify DNS policy explicitly to 'ClusterFirstWithHostNet'.  Possible enum values:  - `\"ClusterFirst\"` indicates that the pod should use cluster DNS first unless hostNetwork is true, if it is available, then fall back on the default (as determined by kubelet) DNS settings.  - `\"ClusterFirstWithHostNet\"` indicates that the pod should use cluster DNS first, if it is available, then fall back on the default (as determined by kubelet) DNS settings.  - `\"Default\"` indicates that the pod should use the default (as determined by kubelet) DNS settings.  - `\"None\"` indicates that the pod should use empty DNS settings. DNS parameters such as nameservers and search paths should be defined via DNSConfig.
-class IoK8sApiCoreV1PodSpecDnsPolicyEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1PodSpecDnsPolicyEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const clusterFirst =
-      IoK8sApiCoreV1PodSpecDnsPolicyEnum._(r'ClusterFirst');
-  static const clusterFirstWithHostNet =
-      IoK8sApiCoreV1PodSpecDnsPolicyEnum._(r'ClusterFirstWithHostNet');
-  static const default_ = IoK8sApiCoreV1PodSpecDnsPolicyEnum._(r'Default');
-  static const none = IoK8sApiCoreV1PodSpecDnsPolicyEnum._(r'None');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1PodSpecDnsPolicyEnum].
-  static const values = <IoK8sApiCoreV1PodSpecDnsPolicyEnum>[
-    clusterFirst,
-    clusterFirstWithHostNet,
-    default_,
-    none,
-  ];
-
-  static IoK8sApiCoreV1PodSpecDnsPolicyEnum? fromJson(dynamic value) =>
-      IoK8sApiCoreV1PodSpecDnsPolicyEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiCoreV1PodSpecDnsPolicyEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1PodSpecDnsPolicyEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiCoreV1PodSpecDnsPolicyEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1PodSpecDnsPolicyEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1PodSpecDnsPolicyEnum].
-class IoK8sApiCoreV1PodSpecDnsPolicyEnumTypeTransformer {
-  factory IoK8sApiCoreV1PodSpecDnsPolicyEnumTypeTransformer() =>
-      _instance ??= const IoK8sApiCoreV1PodSpecDnsPolicyEnumTypeTransformer._();
-
-  const IoK8sApiCoreV1PodSpecDnsPolicyEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1PodSpecDnsPolicyEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1PodSpecDnsPolicyEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1PodSpecDnsPolicyEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'ClusterFirst':
-          return IoK8sApiCoreV1PodSpecDnsPolicyEnum.clusterFirst;
-        case r'ClusterFirstWithHostNet':
-          return IoK8sApiCoreV1PodSpecDnsPolicyEnum.clusterFirstWithHostNet;
-        case r'Default':
-          return IoK8sApiCoreV1PodSpecDnsPolicyEnum.default_;
-        case r'None':
-          return IoK8sApiCoreV1PodSpecDnsPolicyEnum.none;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1PodSpecDnsPolicyEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1PodSpecDnsPolicyEnumTypeTransformer? _instance;
-}
-
-/// Restart policy for all containers within the pod. One of Always, OnFailure, Never. Default to Always. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy  Possible enum values:  - `\"Always\"`  - `\"Never\"`  - `\"OnFailure\"`
-class IoK8sApiCoreV1PodSpecRestartPolicyEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1PodSpecRestartPolicyEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const always = IoK8sApiCoreV1PodSpecRestartPolicyEnum._(r'Always');
-  static const never = IoK8sApiCoreV1PodSpecRestartPolicyEnum._(r'Never');
-  static const onFailure =
-      IoK8sApiCoreV1PodSpecRestartPolicyEnum._(r'OnFailure');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1PodSpecRestartPolicyEnum].
-  static const values = <IoK8sApiCoreV1PodSpecRestartPolicyEnum>[
-    always,
-    never,
-    onFailure,
-  ];
-
-  static IoK8sApiCoreV1PodSpecRestartPolicyEnum? fromJson(dynamic value) =>
-      IoK8sApiCoreV1PodSpecRestartPolicyEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiCoreV1PodSpecRestartPolicyEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1PodSpecRestartPolicyEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiCoreV1PodSpecRestartPolicyEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1PodSpecRestartPolicyEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1PodSpecRestartPolicyEnum].
-class IoK8sApiCoreV1PodSpecRestartPolicyEnumTypeTransformer {
-  factory IoK8sApiCoreV1PodSpecRestartPolicyEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1PodSpecRestartPolicyEnumTypeTransformer._();
-
-  const IoK8sApiCoreV1PodSpecRestartPolicyEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1PodSpecRestartPolicyEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1PodSpecRestartPolicyEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1PodSpecRestartPolicyEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'Always':
-          return IoK8sApiCoreV1PodSpecRestartPolicyEnum.always;
-        case r'Never':
-          return IoK8sApiCoreV1PodSpecRestartPolicyEnum.never;
-        case r'OnFailure':
-          return IoK8sApiCoreV1PodSpecRestartPolicyEnum.onFailure;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1PodSpecRestartPolicyEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1PodSpecRestartPolicyEnumTypeTransformer? _instance;
 }

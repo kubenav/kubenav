@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -91,19 +92,27 @@ class IoK8sApiCoreV1VolumeMount {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'mountPath'] = mountPath;
-    if (mountPropagation != null) {
-      json[r'mountPropagation'] = mountPropagation;
+    json[r'mountPath'] = this.mountPath;
+    if (this.mountPropagation != null) {
+      json[r'mountPropagation'] = this.mountPropagation;
+    } else {
+      json[r'mountPropagation'] = null;
     }
-    json[r'name'] = name;
-    if (readOnly != null) {
-      json[r'readOnly'] = readOnly;
+    json[r'name'] = this.name;
+    if (this.readOnly != null) {
+      json[r'readOnly'] = this.readOnly;
+    } else {
+      json[r'readOnly'] = null;
     }
-    if (subPath != null) {
-      json[r'subPath'] = subPath;
+    if (this.subPath != null) {
+      json[r'subPath'] = this.subPath;
+    } else {
+      json[r'subPath'] = null;
     }
-    if (subPathExpr != null) {
-      json[r'subPathExpr'] = subPathExpr;
+    if (this.subPathExpr != null) {
+      json[r'subPathExpr'] = this.subPathExpr;
+    } else {
+      json[r'subPathExpr'] = null;
     }
     return json;
   }

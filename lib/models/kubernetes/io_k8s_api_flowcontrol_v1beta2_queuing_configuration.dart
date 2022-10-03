@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -67,14 +68,20 @@ class IoK8sApiFlowcontrolV1beta2QueuingConfiguration {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (handSize != null) {
-      json[r'handSize'] = handSize;
+    if (this.handSize != null) {
+      json[r'handSize'] = this.handSize;
+    } else {
+      json[r'handSize'] = null;
     }
-    if (queueLengthLimit != null) {
-      json[r'queueLengthLimit'] = queueLengthLimit;
+    if (this.queueLengthLimit != null) {
+      json[r'queueLengthLimit'] = this.queueLengthLimit;
+    } else {
+      json[r'queueLengthLimit'] = null;
     }
-    if (queues != null) {
-      json[r'queues'] = queues;
+    if (this.queues != null) {
+      json[r'queues'] = this.queues;
+    } else {
+      json[r'queues'] = null;
     }
     return json;
   }

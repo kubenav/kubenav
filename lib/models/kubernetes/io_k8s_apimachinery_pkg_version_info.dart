@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -76,15 +77,15 @@ class IoK8sApimachineryPkgVersionInfo {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'buildDate'] = buildDate;
-    json[r'compiler'] = compiler;
-    json[r'gitCommit'] = gitCommit;
-    json[r'gitTreeState'] = gitTreeState;
-    json[r'gitVersion'] = gitVersion;
-    json[r'goVersion'] = goVersion;
-    json[r'major'] = major;
-    json[r'minor'] = minor;
-    json[r'platform'] = platform;
+    json[r'buildDate'] = this.buildDate;
+    json[r'compiler'] = this.compiler;
+    json[r'gitCommit'] = this.gitCommit;
+    json[r'gitTreeState'] = this.gitTreeState;
+    json[r'gitVersion'] = this.gitVersion;
+    json[r'goVersion'] = this.goVersion;
+    json[r'major'] = this.major;
+    json[r'minor'] = this.minor;
+    json[r'platform'] = this.platform;
     return json;
   }
 

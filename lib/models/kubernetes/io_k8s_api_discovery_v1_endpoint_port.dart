@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -20,7 +21,7 @@ class IoK8sApiDiscoveryV1EndpointPort {
     this.protocol,
   });
 
-  /// The application protocol for this port. This field follows standard Kubernetes label syntax. Un-prefixed names are reserved for IANA standard service names (as per RFC-6335 and http://www.iana.org/assignments/service-names). Non-standard protocols should use prefixed names such as mycompany.com/my-custom-protocol.
+  /// The application protocol for this port. This field follows standard Kubernetes label syntax. Un-prefixed names are reserved for IANA standard service names (as per RFC-6335 and https://www.iana.org/assignments/service-names). Non-standard protocols should use prefixed names such as mycompany.com/my-custom-protocol.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -79,17 +80,25 @@ class IoK8sApiDiscoveryV1EndpointPort {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (appProtocol != null) {
-      json[r'appProtocol'] = appProtocol;
+    if (this.appProtocol != null) {
+      json[r'appProtocol'] = this.appProtocol;
+    } else {
+      json[r'appProtocol'] = null;
     }
-    if (name != null) {
-      json[r'name'] = name;
+    if (this.name != null) {
+      json[r'name'] = this.name;
+    } else {
+      json[r'name'] = null;
     }
-    if (port != null) {
-      json[r'port'] = port;
+    if (this.port != null) {
+      json[r'port'] = this.port;
+    } else {
+      json[r'port'] = null;
     }
-    if (protocol != null) {
-      json[r'protocol'] = protocol;
+    if (this.protocol != null) {
+      json[r'protocol'] = this.protocol;
+    } else {
+      json[r'protocol'] = null;
     }
     return json;
   }

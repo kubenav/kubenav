@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -22,10 +23,17 @@ class IoK8sApiBatchV1CronJobSpec {
     this.startingDeadlineSeconds,
     this.successfulJobsHistoryLimit,
     this.suspend,
+    this.timeZone,
   });
 
-  /// Specifies how to treat concurrent executions of a Job. Valid values are: - \"Allow\" (default): allows CronJobs to run concurrently; - \"Forbid\": forbids concurrent runs, skipping next run if previous run hasn't finished yet; - \"Replace\": cancels currently running job and replaces it with a new one  Possible enum values:  - `\"Allow\"` allows CronJobs to run concurrently.  - `\"Forbid\"` forbids concurrent runs, skipping next run if previous hasn't finished yet.  - `\"Replace\"` cancels currently running job and replaces it with a new one.
-  IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum? concurrencyPolicy;
+  /// Specifies how to treat concurrent executions of a Job. Valid values are: - \"Allow\" (default): allows CronJobs to run concurrently; - \"Forbid\": forbids concurrent runs, skipping next run if previous run hasn't finished yet; - \"Replace\": cancels currently running job and replaces it with a new one
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? concurrencyPolicy;
 
   /// The number of failed finished jobs to retain. Value must be non-negative integer. Defaults to 1.
   ///
@@ -68,6 +76,15 @@ class IoK8sApiBatchV1CronJobSpec {
   ///
   bool? suspend;
 
+  /// The time zone name for the given schedule, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones. If not specified, this will default to the time zone of the kube-controller-manager process. The set of valid time zone names and the time zone offset is loaded from the system-wide time zone database by the API server during CronJob validation and the controller manager during execution. If no system-wide time zone database can be found a bundled version of the database is used instead. If the time zone name becomes invalid during the lifetime of a CronJob or due to a change in host configuration, the controller will stop creating new new Jobs and will create a system event with the reason UnknownTimeZone. More information can be found in https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#time-zones This is beta field and must be enabled via the `CronJobTimeZone` feature gate.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? timeZone;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -78,7 +95,8 @@ class IoK8sApiBatchV1CronJobSpec {
           other.schedule == schedule &&
           other.startingDeadlineSeconds == startingDeadlineSeconds &&
           other.successfulJobsHistoryLimit == successfulJobsHistoryLimit &&
-          other.suspend == suspend;
+          other.suspend == suspend &&
+          other.timeZone == timeZone;
 
   @override
   int get hashCode =>
@@ -93,30 +111,46 @@ class IoK8sApiBatchV1CronJobSpec {
       (successfulJobsHistoryLimit == null
           ? 0
           : successfulJobsHistoryLimit!.hashCode) +
-      (suspend == null ? 0 : suspend!.hashCode);
+      (suspend == null ? 0 : suspend!.hashCode) +
+      (timeZone == null ? 0 : timeZone!.hashCode);
 
   @override
   String toString() =>
-      'IoK8sApiBatchV1CronJobSpec[concurrencyPolicy=$concurrencyPolicy, failedJobsHistoryLimit=$failedJobsHistoryLimit, jobTemplate=$jobTemplate, schedule=$schedule, startingDeadlineSeconds=$startingDeadlineSeconds, successfulJobsHistoryLimit=$successfulJobsHistoryLimit, suspend=$suspend]';
+      'IoK8sApiBatchV1CronJobSpec[concurrencyPolicy=$concurrencyPolicy, failedJobsHistoryLimit=$failedJobsHistoryLimit, jobTemplate=$jobTemplate, schedule=$schedule, startingDeadlineSeconds=$startingDeadlineSeconds, successfulJobsHistoryLimit=$successfulJobsHistoryLimit, suspend=$suspend, timeZone=$timeZone]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (concurrencyPolicy != null) {
-      json[r'concurrencyPolicy'] = concurrencyPolicy;
+    if (this.concurrencyPolicy != null) {
+      json[r'concurrencyPolicy'] = this.concurrencyPolicy;
+    } else {
+      json[r'concurrencyPolicy'] = null;
     }
-    if (failedJobsHistoryLimit != null) {
-      json[r'failedJobsHistoryLimit'] = failedJobsHistoryLimit;
+    if (this.failedJobsHistoryLimit != null) {
+      json[r'failedJobsHistoryLimit'] = this.failedJobsHistoryLimit;
+    } else {
+      json[r'failedJobsHistoryLimit'] = null;
     }
-    json[r'jobTemplate'] = jobTemplate;
-    json[r'schedule'] = schedule;
-    if (startingDeadlineSeconds != null) {
-      json[r'startingDeadlineSeconds'] = startingDeadlineSeconds;
+    json[r'jobTemplate'] = this.jobTemplate;
+    json[r'schedule'] = this.schedule;
+    if (this.startingDeadlineSeconds != null) {
+      json[r'startingDeadlineSeconds'] = this.startingDeadlineSeconds;
+    } else {
+      json[r'startingDeadlineSeconds'] = null;
     }
-    if (successfulJobsHistoryLimit != null) {
-      json[r'successfulJobsHistoryLimit'] = successfulJobsHistoryLimit;
+    if (this.successfulJobsHistoryLimit != null) {
+      json[r'successfulJobsHistoryLimit'] = this.successfulJobsHistoryLimit;
+    } else {
+      json[r'successfulJobsHistoryLimit'] = null;
     }
-    if (suspend != null) {
-      json[r'suspend'] = suspend;
+    if (this.suspend != null) {
+      json[r'suspend'] = this.suspend;
+    } else {
+      json[r'suspend'] = null;
+    }
+    if (this.timeZone != null) {
+      json[r'timeZone'] = this.timeZone;
+    } else {
+      json[r'timeZone'] = null;
     }
     return json;
   }
@@ -142,9 +176,7 @@ class IoK8sApiBatchV1CronJobSpec {
       }());
 
       return IoK8sApiBatchV1CronJobSpec(
-        concurrencyPolicy:
-            IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum.fromJson(
-                json[r'concurrencyPolicy']),
+        concurrencyPolicy: mapValueOfType<String>(json, r'concurrencyPolicy'),
         failedJobsHistoryLimit:
             mapValueOfType<int>(json, r'failedJobsHistoryLimit'),
         jobTemplate:
@@ -155,6 +187,7 @@ class IoK8sApiBatchV1CronJobSpec {
         successfulJobsHistoryLimit:
             mapValueOfType<int>(json, r'successfulJobsHistoryLimit'),
         suspend: mapValueOfType<bool>(json, r'suspend'),
+        timeZone: mapValueOfType<String>(json, r'timeZone'),
       );
     }
     return null;
@@ -216,99 +249,4 @@ class IoK8sApiBatchV1CronJobSpec {
     'jobTemplate',
     'schedule',
   };
-}
-
-/// Specifies how to treat concurrent executions of a Job. Valid values are: - \"Allow\" (default): allows CronJobs to run concurrently; - \"Forbid\": forbids concurrent runs, skipping next run if previous run hasn't finished yet; - \"Replace\": cancels currently running job and replaces it with a new one  Possible enum values:  - `\"Allow\"` allows CronJobs to run concurrently.  - `\"Forbid\"` forbids concurrent runs, skipping next run if previous hasn't finished yet.  - `\"Replace\"` cancels currently running job and replaces it with a new one.
-class IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const allow =
-      IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum._(r'Allow');
-  static const forbid =
-      IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum._(r'Forbid');
-  static const replace =
-      IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum._(r'Replace');
-
-  /// List of all possible values in this [enum][IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum].
-  static const values = <IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum>[
-    allow,
-    forbid,
-    replace,
-  ];
-
-  static IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum? fromJson(
-          dynamic value) =>
-      IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnumTypeTransformer()
-          .decode(value);
-
-  static List<IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value =
-            IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum].
-class IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnumTypeTransformer {
-  factory IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnumTypeTransformer
-              ._();
-
-  const IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnumTypeTransformer._();
-
-  String encode(IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum data) =>
-      data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'Allow':
-          return IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum.allow;
-        case r'Forbid':
-          return IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum.forbid;
-        case r'Replace':
-          return IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnum.replace;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnumTypeTransformer] instance.
-  static IoK8sApiBatchV1CronJobSpecConcurrencyPolicyEnumTypeTransformer?
-      _instance;
 }

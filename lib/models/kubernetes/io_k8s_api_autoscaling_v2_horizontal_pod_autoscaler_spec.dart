@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -74,15 +75,19 @@ class IoK8sApiAutoscalingV2HorizontalPodAutoscalerSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (behavior != null) {
-      json[r'behavior'] = behavior;
+    if (this.behavior != null) {
+      json[r'behavior'] = this.behavior;
+    } else {
+      json[r'behavior'] = null;
     }
-    json[r'maxReplicas'] = maxReplicas;
-    json[r'metrics'] = metrics;
-    if (minReplicas != null) {
-      json[r'minReplicas'] = minReplicas;
+    json[r'maxReplicas'] = this.maxReplicas;
+    json[r'metrics'] = this.metrics;
+    if (this.minReplicas != null) {
+      json[r'minReplicas'] = this.minReplicas;
+    } else {
+      json[r'minReplicas'] = null;
     }
-    json[r'scaleTargetRef'] = scaleTargetRef;
+    json[r'scaleTargetRef'] = this.scaleTargetRef;
     return json;
   }
 

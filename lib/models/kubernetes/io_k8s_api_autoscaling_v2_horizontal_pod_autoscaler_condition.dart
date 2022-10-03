@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -79,18 +80,24 @@ class IoK8sApiAutoscalingV2HorizontalPodAutoscalerCondition {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (lastTransitionTime != null) {
+    if (this.lastTransitionTime != null) {
       json[r'lastTransitionTime'] =
-          lastTransitionTime!.toUtc().toIso8601String();
+          this.lastTransitionTime!.toUtc().toIso8601String();
+    } else {
+      json[r'lastTransitionTime'] = null;
     }
-    if (message != null) {
-      json[r'message'] = message;
+    if (this.message != null) {
+      json[r'message'] = this.message;
+    } else {
+      json[r'message'] = null;
     }
-    if (reason != null) {
-      json[r'reason'] = reason;
+    if (this.reason != null) {
+      json[r'reason'] = this.reason;
+    } else {
+      json[r'reason'] = null;
     }
-    json[r'status'] = status;
-    json[r'type'] = type;
+    json[r'status'] = this.status;
+    json[r'type'] = this.type;
     return json;
   }
 

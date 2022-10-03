@@ -31,7 +31,7 @@ class NamespaceListItemWidget extends StatelessWidget
   Widget build(BuildContext context) {
     final namespace = IoK8sApiCoreV1Namespace.fromJson(item);
     final age = getAge(namespace?.metadata?.creationTimestamp);
-    final status = namespace?.status?.phase?.value ?? '-';
+    final status = namespace?.status?.phase ?? '-';
 
     return ListItemWidget(
       title: title,

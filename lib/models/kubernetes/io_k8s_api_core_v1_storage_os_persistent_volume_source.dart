@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -22,7 +23,7 @@ class IoK8sApiCoreV1StorageOSPersistentVolumeSource {
     this.volumeNamespace,
   });
 
-  /// Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.
+  /// fsType is the filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -31,7 +32,7 @@ class IoK8sApiCoreV1StorageOSPersistentVolumeSource {
   ///
   String? fsType;
 
-  /// Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
+  /// readOnly defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -48,7 +49,7 @@ class IoK8sApiCoreV1StorageOSPersistentVolumeSource {
   ///
   IoK8sApiCoreV1ObjectReference? secretRef;
 
-  /// VolumeName is the human-readable name of the StorageOS volume.  Volume names are only unique within a namespace.
+  /// volumeName is the human-readable name of the StorageOS volume.  Volume names are only unique within a namespace.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -57,7 +58,7 @@ class IoK8sApiCoreV1StorageOSPersistentVolumeSource {
   ///
   String? volumeName;
 
-  /// VolumeNamespace specifies the scope of the volume within StorageOS.  If no namespace is specified then the Pod's namespace will be used.  This allows the Kubernetes name scoping to be mirrored within StorageOS for tighter integration. Set VolumeName to any name to override the default behaviour. Set to \"default\" if you are not using namespaces within StorageOS. Namespaces that do not pre-exist within StorageOS will be created.
+  /// volumeNamespace specifies the scope of the volume within StorageOS.  If no namespace is specified then the Pod's namespace will be used.  This allows the Kubernetes name scoping to be mirrored within StorageOS for tighter integration. Set VolumeName to any name to override the default behaviour. Set to \"default\" if you are not using namespaces within StorageOS. Namespaces that do not pre-exist within StorageOS will be created.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -91,20 +92,30 @@ class IoK8sApiCoreV1StorageOSPersistentVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (fsType != null) {
-      json[r'fsType'] = fsType;
+    if (this.fsType != null) {
+      json[r'fsType'] = this.fsType;
+    } else {
+      json[r'fsType'] = null;
     }
-    if (readOnly != null) {
-      json[r'readOnly'] = readOnly;
+    if (this.readOnly != null) {
+      json[r'readOnly'] = this.readOnly;
+    } else {
+      json[r'readOnly'] = null;
     }
-    if (secretRef != null) {
-      json[r'secretRef'] = secretRef;
+    if (this.secretRef != null) {
+      json[r'secretRef'] = this.secretRef;
+    } else {
+      json[r'secretRef'] = null;
     }
-    if (volumeName != null) {
-      json[r'volumeName'] = volumeName;
+    if (this.volumeName != null) {
+      json[r'volumeName'] = this.volumeName;
+    } else {
+      json[r'volumeName'] = null;
     }
-    if (volumeNamespace != null) {
-      json[r'volumeNamespace'] = volumeNamespace;
+    if (this.volumeNamespace != null) {
+      json[r'volumeNamespace'] = this.volumeNamespace;
+    } else {
+      json[r'volumeNamespace'] = null;
     }
     return json;
   }

@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -66,13 +67,17 @@ class IoK8sApiStorageV1VolumeAttachmentStatus {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (attachError != null) {
-      json[r'attachError'] = attachError;
+    if (this.attachError != null) {
+      json[r'attachError'] = this.attachError;
+    } else {
+      json[r'attachError'] = null;
     }
-    json[r'attached'] = attached;
-    json[r'attachmentMetadata'] = attachmentMetadata;
-    if (detachError != null) {
-      json[r'detachError'] = detachError;
+    json[r'attached'] = this.attached;
+    json[r'attachmentMetadata'] = this.attachmentMetadata;
+    if (this.detachError != null) {
+      json[r'detachError'] = this.detachError;
+    } else {
+      json[r'detachError'] = null;
     }
     return json;
   }

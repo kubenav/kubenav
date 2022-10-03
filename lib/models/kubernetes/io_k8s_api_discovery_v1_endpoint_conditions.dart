@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -67,14 +68,20 @@ class IoK8sApiDiscoveryV1EndpointConditions {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (ready != null) {
-      json[r'ready'] = ready;
+    if (this.ready != null) {
+      json[r'ready'] = this.ready;
+    } else {
+      json[r'ready'] = null;
     }
-    if (serving != null) {
-      json[r'serving'] = serving;
+    if (this.serving != null) {
+      json[r'serving'] = this.serving;
+    } else {
+      json[r'serving'] = null;
     }
-    if (terminating != null) {
-      json[r'terminating'] = terminating;
+    if (this.terminating != null) {
+      json[r'terminating'] = this.terminating;
+    } else {
+      json[r'terminating'] = null;
     }
     return json;
   }

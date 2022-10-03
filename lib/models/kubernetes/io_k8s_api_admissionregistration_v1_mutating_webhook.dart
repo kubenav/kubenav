@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -133,28 +134,40 @@ class IoK8sApiAdmissionregistrationV1MutatingWebhook {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'admissionReviewVersions'] = admissionReviewVersions;
-    json[r'clientConfig'] = clientConfig;
-    if (failurePolicy != null) {
-      json[r'failurePolicy'] = failurePolicy;
+    json[r'admissionReviewVersions'] = this.admissionReviewVersions;
+    json[r'clientConfig'] = this.clientConfig;
+    if (this.failurePolicy != null) {
+      json[r'failurePolicy'] = this.failurePolicy;
+    } else {
+      json[r'failurePolicy'] = null;
     }
-    if (matchPolicy != null) {
-      json[r'matchPolicy'] = matchPolicy;
+    if (this.matchPolicy != null) {
+      json[r'matchPolicy'] = this.matchPolicy;
+    } else {
+      json[r'matchPolicy'] = null;
     }
-    json[r'name'] = name;
-    if (namespaceSelector != null) {
-      json[r'namespaceSelector'] = namespaceSelector;
+    json[r'name'] = this.name;
+    if (this.namespaceSelector != null) {
+      json[r'namespaceSelector'] = this.namespaceSelector;
+    } else {
+      json[r'namespaceSelector'] = null;
     }
-    if (objectSelector != null) {
-      json[r'objectSelector'] = objectSelector;
+    if (this.objectSelector != null) {
+      json[r'objectSelector'] = this.objectSelector;
+    } else {
+      json[r'objectSelector'] = null;
     }
-    if (reinvocationPolicy != null) {
-      json[r'reinvocationPolicy'] = reinvocationPolicy;
+    if (this.reinvocationPolicy != null) {
+      json[r'reinvocationPolicy'] = this.reinvocationPolicy;
+    } else {
+      json[r'reinvocationPolicy'] = null;
     }
-    json[r'rules'] = rules;
-    json[r'sideEffects'] = sideEffects;
-    if (timeoutSeconds != null) {
-      json[r'timeoutSeconds'] = timeoutSeconds;
+    json[r'rules'] = this.rules;
+    json[r'sideEffects'] = this.sideEffects;
+    if (this.timeoutSeconds != null) {
+      json[r'timeoutSeconds'] = this.timeoutSeconds;
+    } else {
+      json[r'timeoutSeconds'] = null;
     }
     return json;
   }

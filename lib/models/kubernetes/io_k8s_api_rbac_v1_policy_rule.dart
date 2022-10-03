@@ -4,11 +4,11 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
-
 
 class IoK8sApiRbacV1PolicyRule {
   /// Returns a new [IoK8sApiRbacV1PolicyRule] instance.
@@ -20,7 +20,7 @@ class IoK8sApiRbacV1PolicyRule {
     this.verbs = const [],
   });
 
-  /// APIGroups is the name of the APIGroup that contains the resources.  If multiple API groups are specified, any action requested against one of the enumerated resources in any API group will be allowed.
+  /// APIGroups is the name of the APIGroup that contains the resources.  If multiple API groups are specified, any action requested against one of the enumerated resources in any API group will be allowed. \"\" represents the core API group and \"*\" represents all API groups.
   List<String> apiGroups;
 
   /// NonResourceURLs is a set of partial urls that a user should have access to.  *s are allowed, but only as the full, final step in the path Since non-resource URLs are not namespaced, this field is only applicable for ClusterRoles referenced from a ClusterRoleBinding. Rules can either apply to API resources (such as \"pods\" or \"secrets\") or non-resource URL paths (such as \"/api\"),  but not both.
@@ -60,11 +60,11 @@ class IoK8sApiRbacV1PolicyRule {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'apiGroups'] = apiGroups;
-    json[r'nonResourceURLs'] = nonResourceURLs;
-    json[r'resourceNames'] = resourceNames;
-    json[r'resources'] = resources;
-    json[r'verbs'] = verbs;
+    json[r'apiGroups'] = this.apiGroups;
+    json[r'nonResourceURLs'] = this.nonResourceURLs;
+    json[r'resourceNames'] = this.resourceNames;
+    json[r'resources'] = this.resources;
+    json[r'verbs'] = this.verbs;
     return json;
   }
 

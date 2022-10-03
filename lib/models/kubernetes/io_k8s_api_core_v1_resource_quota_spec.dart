@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -55,11 +56,13 @@ class IoK8sApiCoreV1ResourceQuotaSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'hard'] = hard;
-    if (scopeSelector != null) {
-      json[r'scopeSelector'] = scopeSelector;
+    json[r'hard'] = this.hard;
+    if (this.scopeSelector != null) {
+      json[r'scopeSelector'] = this.scopeSelector;
+    } else {
+      json[r'scopeSelector'] = null;
     }
-    json[r'scopes'] = scopes;
+    json[r'scopes'] = this.scopes;
     return json;
   }
 

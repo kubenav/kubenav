@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -66,14 +67,20 @@ class IoK8sApiCoreV1LifecycleHandler {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (exec != null) {
-      json[r'exec'] = exec;
+    if (this.exec != null) {
+      json[r'exec'] = this.exec;
+    } else {
+      json[r'exec'] = null;
     }
-    if (httpGet != null) {
-      json[r'httpGet'] = httpGet;
+    if (this.httpGet != null) {
+      json[r'httpGet'] = this.httpGet;
+    } else {
+      json[r'httpGet'] = null;
     }
-    if (tcpSocket != null) {
-      json[r'tcpSocket'] = tcpSocket;
+    if (this.tcpSocket != null) {
+      json[r'tcpSocket'] = this.tcpSocket;
+    } else {
+      json[r'tcpSocket'] = null;
     }
     return json;
   }

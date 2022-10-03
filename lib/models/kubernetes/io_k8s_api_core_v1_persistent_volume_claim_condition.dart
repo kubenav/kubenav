@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -40,7 +41,7 @@ class IoK8sApiCoreV1PersistentVolumeClaimCondition {
   ///
   DateTime? lastTransitionTime;
 
-  /// Human-readable message indicating details about last transition.
+  /// message is the human-readable message indicating details about last transition.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -49,7 +50,7 @@ class IoK8sApiCoreV1PersistentVolumeClaimCondition {
   ///
   String? message;
 
-  /// Unique, this should be a short, machine understandable string that gives the reason for condition's last transition. If it reports \"ResizeStarted\" that means the underlying persistent volume is being resized.
+  /// reason is a unique, this should be a short, machine understandable string that gives the reason for condition's last transition. If it reports \"ResizeStarted\" that means the underlying persistent volume is being resized.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -60,8 +61,7 @@ class IoK8sApiCoreV1PersistentVolumeClaimCondition {
 
   String status;
 
-  ///    Possible enum values:  - `\"FileSystemResizePending\"` - controller resize is finished and a file system resize is pending on node  - `\"Resizing\"` - a user trigger resize of pvc has been started
-  IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum type;
+  String type;
 
   @override
   bool operator ==(Object other) =>
@@ -90,21 +90,29 @@ class IoK8sApiCoreV1PersistentVolumeClaimCondition {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (lastProbeTime != null) {
-      json[r'lastProbeTime'] = lastProbeTime!.toUtc().toIso8601String();
+    if (this.lastProbeTime != null) {
+      json[r'lastProbeTime'] = this.lastProbeTime!.toUtc().toIso8601String();
+    } else {
+      json[r'lastProbeTime'] = null;
     }
-    if (lastTransitionTime != null) {
+    if (this.lastTransitionTime != null) {
       json[r'lastTransitionTime'] =
-          lastTransitionTime!.toUtc().toIso8601String();
+          this.lastTransitionTime!.toUtc().toIso8601String();
+    } else {
+      json[r'lastTransitionTime'] = null;
     }
-    if (message != null) {
-      json[r'message'] = message;
+    if (this.message != null) {
+      json[r'message'] = this.message;
+    } else {
+      json[r'message'] = null;
     }
-    if (reason != null) {
-      json[r'reason'] = reason;
+    if (this.reason != null) {
+      json[r'reason'] = this.reason;
+    } else {
+      json[r'reason'] = null;
     }
-    json[r'status'] = status;
-    json[r'type'] = type;
+    json[r'status'] = this.status;
+    json[r'type'] = this.type;
     return json;
   }
 
@@ -134,8 +142,7 @@ class IoK8sApiCoreV1PersistentVolumeClaimCondition {
         message: mapValueOfType<String>(json, r'message'),
         reason: mapValueOfType<String>(json, r'reason'),
         status: mapValueOfType<String>(json, r'status')!,
-        type: IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum.fromJson(
-            json[r'type'])!,
+        type: mapValueOfType<String>(json, r'type')!,
       );
     }
     return null;
@@ -201,97 +208,4 @@ class IoK8sApiCoreV1PersistentVolumeClaimCondition {
     'status',
     'type',
   };
-}
-
-///    Possible enum values:  - `\"FileSystemResizePending\"` - controller resize is finished and a file system resize is pending on node  - `\"Resizing\"` - a user trigger resize of pvc has been started
-class IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const fileSystemResizePending =
-      IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum._(
-          r'FileSystemResizePending');
-  static const resizing =
-      IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum._(r'Resizing');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum].
-  static const values = <IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum>[
-    fileSystemResizePending,
-    resizing,
-  ];
-
-  static IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum? fromJson(
-          dynamic value) =>
-      IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnumTypeTransformer()
-          .decode(value);
-
-  static List<IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum>?
-      listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value =
-            IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum].
-class IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnumTypeTransformer {
-  factory IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnumTypeTransformer
-              ._();
-
-  const IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum data) =>
-      data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'FileSystemResizePending':
-          return IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum
-              .fileSystemResizePending;
-        case r'Resizing':
-          return IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnum.resizing;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1PersistentVolumeClaimConditionTypeEnumTypeTransformer?
-      _instance;
 }

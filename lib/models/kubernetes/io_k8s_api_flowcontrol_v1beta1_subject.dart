@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -73,15 +74,21 @@ class IoK8sApiFlowcontrolV1beta1Subject {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (group != null) {
-      json[r'group'] = group;
+    if (this.group != null) {
+      json[r'group'] = this.group;
+    } else {
+      json[r'group'] = null;
     }
-    json[r'kind'] = kind;
-    if (serviceAccount != null) {
-      json[r'serviceAccount'] = serviceAccount;
+    json[r'kind'] = this.kind;
+    if (this.serviceAccount != null) {
+      json[r'serviceAccount'] = this.serviceAccount;
+    } else {
+      json[r'serviceAccount'] = null;
     }
-    if (user != null) {
-      json[r'user'] = user;
+    if (this.user != null) {
+      json[r'user'] = this.user;
+    } else {
+      json[r'user'] = null;
     }
     return json;
   }

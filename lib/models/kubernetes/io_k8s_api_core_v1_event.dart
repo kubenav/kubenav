@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -222,52 +223,82 @@ class IoK8sApiCoreV1Event {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (action != null) {
-      json[r'action'] = action;
+    if (this.action != null) {
+      json[r'action'] = this.action;
+    } else {
+      json[r'action'] = null;
     }
-    if (apiVersion != null) {
-      json[r'apiVersion'] = apiVersion;
+    if (this.apiVersion != null) {
+      json[r'apiVersion'] = this.apiVersion;
+    } else {
+      json[r'apiVersion'] = null;
     }
-    if (count != null) {
-      json[r'count'] = count;
+    if (this.count != null) {
+      json[r'count'] = this.count;
+    } else {
+      json[r'count'] = null;
     }
-    if (eventTime != null) {
-      json[r'eventTime'] = eventTime!.toUtc().toIso8601String();
+    if (this.eventTime != null) {
+      json[r'eventTime'] = this.eventTime!.toUtc().toIso8601String();
+    } else {
+      json[r'eventTime'] = null;
     }
-    if (firstTimestamp != null) {
-      json[r'firstTimestamp'] = firstTimestamp!.toUtc().toIso8601String();
+    if (this.firstTimestamp != null) {
+      json[r'firstTimestamp'] = this.firstTimestamp!.toUtc().toIso8601String();
+    } else {
+      json[r'firstTimestamp'] = null;
     }
-    json[r'involvedObject'] = involvedObject;
-    if (kind != null) {
-      json[r'kind'] = kind;
+    json[r'involvedObject'] = this.involvedObject;
+    if (this.kind != null) {
+      json[r'kind'] = this.kind;
+    } else {
+      json[r'kind'] = null;
     }
-    if (lastTimestamp != null) {
-      json[r'lastTimestamp'] = lastTimestamp!.toUtc().toIso8601String();
+    if (this.lastTimestamp != null) {
+      json[r'lastTimestamp'] = this.lastTimestamp!.toUtc().toIso8601String();
+    } else {
+      json[r'lastTimestamp'] = null;
     }
-    if (message != null) {
-      json[r'message'] = message;
+    if (this.message != null) {
+      json[r'message'] = this.message;
+    } else {
+      json[r'message'] = null;
     }
-    json[r'metadata'] = metadata;
-    if (reason != null) {
-      json[r'reason'] = reason;
+    json[r'metadata'] = this.metadata;
+    if (this.reason != null) {
+      json[r'reason'] = this.reason;
+    } else {
+      json[r'reason'] = null;
     }
-    if (related != null) {
-      json[r'related'] = related;
+    if (this.related != null) {
+      json[r'related'] = this.related;
+    } else {
+      json[r'related'] = null;
     }
-    if (reportingComponent != null) {
-      json[r'reportingComponent'] = reportingComponent;
+    if (this.reportingComponent != null) {
+      json[r'reportingComponent'] = this.reportingComponent;
+    } else {
+      json[r'reportingComponent'] = null;
     }
-    if (reportingInstance != null) {
-      json[r'reportingInstance'] = reportingInstance;
+    if (this.reportingInstance != null) {
+      json[r'reportingInstance'] = this.reportingInstance;
+    } else {
+      json[r'reportingInstance'] = null;
     }
-    if (series != null) {
-      json[r'series'] = series;
+    if (this.series != null) {
+      json[r'series'] = this.series;
+    } else {
+      json[r'series'] = null;
     }
-    if (source_ != null) {
-      json[r'source'] = source_;
+    if (this.source_ != null) {
+      json[r'source'] = this.source_;
+    } else {
+      json[r'source'] = null;
     }
-    if (type != null) {
-      json[r'type'] = type;
+    if (this.type != null) {
+      json[r'type'] = this.type;
+    } else {
+      json[r'type'] = null;
     }
     return json;
   }

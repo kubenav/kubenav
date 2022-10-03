@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -117,26 +118,38 @@ class IoK8sApiAppsV1DeploymentSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (minReadySeconds != null) {
-      json[r'minReadySeconds'] = minReadySeconds;
+    if (this.minReadySeconds != null) {
+      json[r'minReadySeconds'] = this.minReadySeconds;
+    } else {
+      json[r'minReadySeconds'] = null;
     }
-    if (paused != null) {
-      json[r'paused'] = paused;
+    if (this.paused != null) {
+      json[r'paused'] = this.paused;
+    } else {
+      json[r'paused'] = null;
     }
-    if (progressDeadlineSeconds != null) {
-      json[r'progressDeadlineSeconds'] = progressDeadlineSeconds;
+    if (this.progressDeadlineSeconds != null) {
+      json[r'progressDeadlineSeconds'] = this.progressDeadlineSeconds;
+    } else {
+      json[r'progressDeadlineSeconds'] = null;
     }
-    if (replicas != null) {
-      json[r'replicas'] = replicas;
+    if (this.replicas != null) {
+      json[r'replicas'] = this.replicas;
+    } else {
+      json[r'replicas'] = null;
     }
-    if (revisionHistoryLimit != null) {
-      json[r'revisionHistoryLimit'] = revisionHistoryLimit;
+    if (this.revisionHistoryLimit != null) {
+      json[r'revisionHistoryLimit'] = this.revisionHistoryLimit;
+    } else {
+      json[r'revisionHistoryLimit'] = null;
     }
-    json[r'selector'] = selector;
-    if (strategy != null) {
-      json[r'strategy'] = strategy;
+    json[r'selector'] = this.selector;
+    if (this.strategy != null) {
+      json[r'strategy'] = this.strategy;
+    } else {
+      json[r'strategy'] = null;
     }
-    json[r'template'] = template;
+    json[r'template'] = this.template;
     return json;
   }
 

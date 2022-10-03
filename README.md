@@ -33,6 +33,15 @@ Engine • revision a4ff2c53d8
 Tools • Dart 2.18.1 • DevTools 2.15.0
 ```
 
+Create Kubernetes Resources_
+
+```sh
+docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli generate \
+  -i https://raw.githubusercontent.com/kubernetes/kubernetes/v1.25.0/api/openapi-spec/swagger.json \
+  -g dart \
+  -o /local/out/dart
+```
+
 Create icons:
 
 - `flutter pub run flutter_launcher_icons:main`

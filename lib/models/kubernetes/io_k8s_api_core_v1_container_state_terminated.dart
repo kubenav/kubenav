@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -23,7 +24,7 @@ class IoK8sApiCoreV1ContainerStateTerminated {
     this.startedAt,
   });
 
-  /// Container's ID in the format 'docker://<container_id>'
+  /// Container's ID in the format '<type>://<container_id>'
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -109,24 +110,36 @@ class IoK8sApiCoreV1ContainerStateTerminated {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (containerID != null) {
-      json[r'containerID'] = containerID;
+    if (this.containerID != null) {
+      json[r'containerID'] = this.containerID;
+    } else {
+      json[r'containerID'] = null;
     }
-    json[r'exitCode'] = exitCode;
-    if (finishedAt != null) {
-      json[r'finishedAt'] = finishedAt!.toUtc().toIso8601String();
+    json[r'exitCode'] = this.exitCode;
+    if (this.finishedAt != null) {
+      json[r'finishedAt'] = this.finishedAt!.toUtc().toIso8601String();
+    } else {
+      json[r'finishedAt'] = null;
     }
-    if (message != null) {
-      json[r'message'] = message;
+    if (this.message != null) {
+      json[r'message'] = this.message;
+    } else {
+      json[r'message'] = null;
     }
-    if (reason != null) {
-      json[r'reason'] = reason;
+    if (this.reason != null) {
+      json[r'reason'] = this.reason;
+    } else {
+      json[r'reason'] = null;
     }
-    if (signal != null) {
-      json[r'signal'] = signal;
+    if (this.signal != null) {
+      json[r'signal'] = this.signal;
+    } else {
+      json[r'signal'] = null;
     }
-    if (startedAt != null) {
-      json[r'startedAt'] = startedAt!.toUtc().toIso8601String();
+    if (this.startedAt != null) {
+      json[r'startedAt'] = this.startedAt!.toUtc().toIso8601String();
+    } else {
+      json[r'startedAt'] = null;
     }
     return json;
   }

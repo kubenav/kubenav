@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -73,15 +74,21 @@ class IoK8sApiCoreV1DownwardAPIVolumeFile {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (fieldRef != null) {
-      json[r'fieldRef'] = fieldRef;
+    if (this.fieldRef != null) {
+      json[r'fieldRef'] = this.fieldRef;
+    } else {
+      json[r'fieldRef'] = null;
     }
-    if (mode != null) {
-      json[r'mode'] = mode;
+    if (this.mode != null) {
+      json[r'mode'] = this.mode;
+    } else {
+      json[r'mode'] = null;
     }
-    json[r'path'] = path;
-    if (resourceFieldRef != null) {
-      json[r'resourceFieldRef'] = resourceFieldRef;
+    json[r'path'] = this.path;
+    if (this.resourceFieldRef != null) {
+      json[r'resourceFieldRef'] = this.resourceFieldRef;
+    } else {
+      json[r'resourceFieldRef'] = null;
     }
     return json;
   }

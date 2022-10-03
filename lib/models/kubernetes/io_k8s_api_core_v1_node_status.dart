@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -73,8 +74,14 @@ class IoK8sApiCoreV1NodeStatus {
   ///
   IoK8sApiCoreV1NodeSystemInfo? nodeInfo;
 
-  /// NodePhase is the recently observed lifecycle phase of the node. More info: https://kubernetes.io/docs/concepts/nodes/node/#phase The field is never populated, and now is deprecated.  Possible enum values:  - `\"Pending\"` means the node has been created/added by the system, but not configured.  - `\"Running\"` means the node has been configured and has Kubernetes components running.  - `\"Terminated\"` means the node has been removed from the cluster.
-  IoK8sApiCoreV1NodeStatusPhaseEnum? phase;
+  /// NodePhase is the recently observed lifecycle phase of the node. More info: https://kubernetes.io/docs/concepts/nodes/node/#phase The field is never populated, and now is deprecated.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? phase;
 
   /// List of volumes that are attached to the node.
   List<IoK8sApiCoreV1AttachedVolume> volumesAttached;
@@ -119,25 +126,33 @@ class IoK8sApiCoreV1NodeStatus {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'addresses'] = addresses;
-    json[r'allocatable'] = allocatable;
-    json[r'capacity'] = capacity;
-    json[r'conditions'] = conditions;
-    if (config != null) {
-      json[r'config'] = config;
+    json[r'addresses'] = this.addresses;
+    json[r'allocatable'] = this.allocatable;
+    json[r'capacity'] = this.capacity;
+    json[r'conditions'] = this.conditions;
+    if (this.config != null) {
+      json[r'config'] = this.config;
+    } else {
+      json[r'config'] = null;
     }
-    if (daemonEndpoints != null) {
-      json[r'daemonEndpoints'] = daemonEndpoints;
+    if (this.daemonEndpoints != null) {
+      json[r'daemonEndpoints'] = this.daemonEndpoints;
+    } else {
+      json[r'daemonEndpoints'] = null;
     }
-    json[r'images'] = images;
-    if (nodeInfo != null) {
-      json[r'nodeInfo'] = nodeInfo;
+    json[r'images'] = this.images;
+    if (this.nodeInfo != null) {
+      json[r'nodeInfo'] = this.nodeInfo;
+    } else {
+      json[r'nodeInfo'] = null;
     }
-    if (phase != null) {
-      json[r'phase'] = phase;
+    if (this.phase != null) {
+      json[r'phase'] = this.phase;
+    } else {
+      json[r'phase'] = null;
     }
-    json[r'volumesAttached'] = volumesAttached;
-    json[r'volumesInUse'] = volumesInUse;
+    json[r'volumesAttached'] = this.volumesAttached;
+    json[r'volumesInUse'] = this.volumesInUse;
     return json;
   }
 
@@ -176,7 +191,7 @@ class IoK8sApiCoreV1NodeStatus {
         images: IoK8sApiCoreV1ContainerImage.listFromJson(json[r'images']) ??
             const [],
         nodeInfo: IoK8sApiCoreV1NodeSystemInfo.fromJson(json[r'nodeInfo']),
-        phase: IoK8sApiCoreV1NodeStatusPhaseEnum.fromJson(json[r'phase']),
+        phase: mapValueOfType<String>(json, r'phase'),
         volumesAttached: IoK8sApiCoreV1AttachedVolume.listFromJson(
                 json[r'volumesAttached']) ??
             const [],
@@ -241,89 +256,4 @@ class IoK8sApiCoreV1NodeStatus {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{};
-}
-
-/// NodePhase is the recently observed lifecycle phase of the node. More info: https://kubernetes.io/docs/concepts/nodes/node/#phase The field is never populated, and now is deprecated.  Possible enum values:  - `\"Pending\"` means the node has been created/added by the system, but not configured.  - `\"Running\"` means the node has been configured and has Kubernetes components running.  - `\"Terminated\"` means the node has been removed from the cluster.
-class IoK8sApiCoreV1NodeStatusPhaseEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1NodeStatusPhaseEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const pending = IoK8sApiCoreV1NodeStatusPhaseEnum._(r'Pending');
-  static const running = IoK8sApiCoreV1NodeStatusPhaseEnum._(r'Running');
-  static const terminated = IoK8sApiCoreV1NodeStatusPhaseEnum._(r'Terminated');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1NodeStatusPhaseEnum].
-  static const values = <IoK8sApiCoreV1NodeStatusPhaseEnum>[
-    pending,
-    running,
-    terminated,
-  ];
-
-  static IoK8sApiCoreV1NodeStatusPhaseEnum? fromJson(dynamic value) =>
-      IoK8sApiCoreV1NodeStatusPhaseEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiCoreV1NodeStatusPhaseEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1NodeStatusPhaseEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiCoreV1NodeStatusPhaseEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1NodeStatusPhaseEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1NodeStatusPhaseEnum].
-class IoK8sApiCoreV1NodeStatusPhaseEnumTypeTransformer {
-  factory IoK8sApiCoreV1NodeStatusPhaseEnumTypeTransformer() =>
-      _instance ??= const IoK8sApiCoreV1NodeStatusPhaseEnumTypeTransformer._();
-
-  const IoK8sApiCoreV1NodeStatusPhaseEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1NodeStatusPhaseEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1NodeStatusPhaseEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1NodeStatusPhaseEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'Pending':
-          return IoK8sApiCoreV1NodeStatusPhaseEnum.pending;
-        case r'Running':
-          return IoK8sApiCoreV1NodeStatusPhaseEnum.running;
-        case r'Terminated':
-          return IoK8sApiCoreV1NodeStatusPhaseEnum.terminated;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1NodeStatusPhaseEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1NodeStatusPhaseEnumTypeTransformer? _instance;
 }

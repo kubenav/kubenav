@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -18,7 +19,7 @@ class IoK8sApiCoreV1SecretReference {
     this.namespace,
   });
 
-  /// Name is unique within a namespace to reference a secret resource.
+  /// name is unique within a namespace to reference a secret resource.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -27,7 +28,7 @@ class IoK8sApiCoreV1SecretReference {
   ///
   String? name;
 
-  /// Namespace defines the space within which the secret name must be unique.
+  /// namespace defines the space within which the secret name must be unique.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -55,11 +56,15 @@ class IoK8sApiCoreV1SecretReference {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (name != null) {
-      json[r'name'] = name;
+    if (this.name != null) {
+      json[r'name'] = this.name;
+    } else {
+      json[r'name'] = null;
     }
-    if (namespace != null) {
-      json[r'namespace'] = namespace;
+    if (this.namespace != null) {
+      json[r'namespace'] = this.namespace;
+    } else {
+      json[r'namespace'] = null;
     }
     return json;
   }

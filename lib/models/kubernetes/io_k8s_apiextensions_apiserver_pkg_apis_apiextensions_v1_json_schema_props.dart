@@ -4,6 +4,8 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
+// ignore_for_file: dead_null_aware_expression
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -474,117 +476,184 @@ class IoK8sApiextensionsApiserverPkgApisApiextensionsV1JSONSchemaProps {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (dollarRef != null) {
-      json[r'$ref'] = dollarRef;
+    if (this.dollarRef != null) {
+      json[r'$ref'] = this.dollarRef;
+    } else {
+      json[r'$ref'] = null;
     }
-    if (dollarSchema != null) {
-      json[r'$schema'] = dollarSchema;
+    if (this.dollarSchema != null) {
+      json[r'$schema'] = this.dollarSchema;
+    } else {
+      json[r'$schema'] = null;
     }
-    if (additionalItems != null) {
-      json[r'additionalItems'] = additionalItems;
+    if (this.additionalItems != null) {
+      json[r'additionalItems'] = this.additionalItems;
+    } else {
+      json[r'additionalItems'] = null;
     }
-    if (additionalProperties != null) {
-      json[r'additionalProperties'] = additionalProperties;
+    if (this.additionalProperties != null) {
+      json[r'additionalProperties'] = this.additionalProperties;
+    } else {
+      json[r'additionalProperties'] = null;
     }
-    json[r'allOf'] = allOf;
-    json[r'anyOf'] = anyOf;
-    if (default_ != null) {
-      json[r'default'] = default_;
+    json[r'allOf'] = this.allOf;
+    json[r'anyOf'] = this.anyOf;
+    if (this.default_ != null) {
+      json[r'default'] = this.default_;
+    } else {
+      json[r'default'] = null;
     }
-    json[r'definitions'] = definitions;
-    json[r'dependencies'] = dependencies;
-    if (description != null) {
-      json[r'description'] = description;
+    json[r'definitions'] = this.definitions;
+    json[r'dependencies'] = this.dependencies;
+    if (this.description != null) {
+      json[r'description'] = this.description;
+    } else {
+      json[r'description'] = null;
     }
-    json[r'enum'] = enum_;
-    if (example != null) {
-      json[r'example'] = example;
+    json[r'enum'] = this.enum_;
+    if (this.example != null) {
+      json[r'example'] = this.example;
+    } else {
+      json[r'example'] = null;
     }
-    if (exclusiveMaximum != null) {
-      json[r'exclusiveMaximum'] = exclusiveMaximum;
+    if (this.exclusiveMaximum != null) {
+      json[r'exclusiveMaximum'] = this.exclusiveMaximum;
+    } else {
+      json[r'exclusiveMaximum'] = null;
     }
-    if (exclusiveMinimum != null) {
-      json[r'exclusiveMinimum'] = exclusiveMinimum;
+    if (this.exclusiveMinimum != null) {
+      json[r'exclusiveMinimum'] = this.exclusiveMinimum;
+    } else {
+      json[r'exclusiveMinimum'] = null;
     }
-    if (externalDocs != null) {
-      json[r'externalDocs'] = externalDocs;
+    if (this.externalDocs != null) {
+      json[r'externalDocs'] = this.externalDocs;
+    } else {
+      json[r'externalDocs'] = null;
     }
-    if (format != null) {
-      json[r'format'] = format;
+    if (this.format != null) {
+      json[r'format'] = this.format;
+    } else {
+      json[r'format'] = null;
     }
-    if (id != null) {
-      json[r'id'] = id;
+    if (this.id != null) {
+      json[r'id'] = this.id;
+    } else {
+      json[r'id'] = null;
     }
-    if (items != null) {
-      json[r'items'] = items;
+    if (this.items != null) {
+      json[r'items'] = this.items;
+    } else {
+      json[r'items'] = null;
     }
-    if (maxItems != null) {
-      json[r'maxItems'] = maxItems;
+    if (this.maxItems != null) {
+      json[r'maxItems'] = this.maxItems;
+    } else {
+      json[r'maxItems'] = null;
     }
-    if (maxLength != null) {
-      json[r'maxLength'] = maxLength;
+    if (this.maxLength != null) {
+      json[r'maxLength'] = this.maxLength;
+    } else {
+      json[r'maxLength'] = null;
     }
-    if (maxProperties != null) {
-      json[r'maxProperties'] = maxProperties;
+    if (this.maxProperties != null) {
+      json[r'maxProperties'] = this.maxProperties;
+    } else {
+      json[r'maxProperties'] = null;
     }
-    if (maximum != null) {
-      json[r'maximum'] = maximum;
+    if (this.maximum != null) {
+      json[r'maximum'] = this.maximum;
+    } else {
+      json[r'maximum'] = null;
     }
-    if (minItems != null) {
-      json[r'minItems'] = minItems;
+    if (this.minItems != null) {
+      json[r'minItems'] = this.minItems;
+    } else {
+      json[r'minItems'] = null;
     }
-    if (minLength != null) {
-      json[r'minLength'] = minLength;
+    if (this.minLength != null) {
+      json[r'minLength'] = this.minLength;
+    } else {
+      json[r'minLength'] = null;
     }
-    if (minProperties != null) {
-      json[r'minProperties'] = minProperties;
+    if (this.minProperties != null) {
+      json[r'minProperties'] = this.minProperties;
+    } else {
+      json[r'minProperties'] = null;
     }
-    if (minimum != null) {
-      json[r'minimum'] = minimum;
+    if (this.minimum != null) {
+      json[r'minimum'] = this.minimum;
+    } else {
+      json[r'minimum'] = null;
     }
-    if (multipleOf != null) {
-      json[r'multipleOf'] = multipleOf;
+    if (this.multipleOf != null) {
+      json[r'multipleOf'] = this.multipleOf;
+    } else {
+      json[r'multipleOf'] = null;
     }
-    if (not != null) {
-      json[r'not'] = not;
+    if (this.not != null) {
+      json[r'not'] = this.not;
+    } else {
+      json[r'not'] = null;
     }
-    if (nullable != null) {
-      json[r'nullable'] = nullable;
+    if (this.nullable != null) {
+      json[r'nullable'] = this.nullable;
+    } else {
+      json[r'nullable'] = null;
     }
-    json[r'oneOf'] = oneOf;
-    if (pattern != null) {
-      json[r'pattern'] = pattern;
+    json[r'oneOf'] = this.oneOf;
+    if (this.pattern != null) {
+      json[r'pattern'] = this.pattern;
+    } else {
+      json[r'pattern'] = null;
     }
-    json[r'patternProperties'] = patternProperties;
-    json[r'properties'] = properties;
-    json[r'required'] = required_;
-    if (title != null) {
-      json[r'title'] = title;
+    json[r'patternProperties'] = this.patternProperties;
+    json[r'properties'] = this.properties;
+    json[r'required'] = this.required_;
+    if (this.title != null) {
+      json[r'title'] = this.title;
+    } else {
+      json[r'title'] = null;
     }
-    if (type != null) {
-      json[r'type'] = type;
+    if (this.type != null) {
+      json[r'type'] = this.type;
+    } else {
+      json[r'type'] = null;
     }
-    if (uniqueItems != null) {
-      json[r'uniqueItems'] = uniqueItems;
+    if (this.uniqueItems != null) {
+      json[r'uniqueItems'] = this.uniqueItems;
+    } else {
+      json[r'uniqueItems'] = null;
     }
-    if (xKubernetesEmbeddedResource != null) {
-      json[r'x-kubernetes-embedded-resource'] = xKubernetesEmbeddedResource;
+    if (this.xKubernetesEmbeddedResource != null) {
+      json[r'x-kubernetes-embedded-resource'] =
+          this.xKubernetesEmbeddedResource;
+    } else {
+      json[r'x-kubernetes-embedded-resource'] = null;
     }
-    if (xKubernetesIntOrString != null) {
-      json[r'x-kubernetes-int-or-string'] = xKubernetesIntOrString;
+    if (this.xKubernetesIntOrString != null) {
+      json[r'x-kubernetes-int-or-string'] = this.xKubernetesIntOrString;
+    } else {
+      json[r'x-kubernetes-int-or-string'] = null;
     }
-    json[r'x-kubernetes-list-map-keys'] = xKubernetesListMapKeys;
-    if (xKubernetesListType != null) {
-      json[r'x-kubernetes-list-type'] = xKubernetesListType;
+    json[r'x-kubernetes-list-map-keys'] = this.xKubernetesListMapKeys;
+    if (this.xKubernetesListType != null) {
+      json[r'x-kubernetes-list-type'] = this.xKubernetesListType;
+    } else {
+      json[r'x-kubernetes-list-type'] = null;
     }
-    if (xKubernetesMapType != null) {
-      json[r'x-kubernetes-map-type'] = xKubernetesMapType;
+    if (this.xKubernetesMapType != null) {
+      json[r'x-kubernetes-map-type'] = this.xKubernetesMapType;
+    } else {
+      json[r'x-kubernetes-map-type'] = null;
     }
-    if (xKubernetesPreserveUnknownFields != null) {
+    if (this.xKubernetesPreserveUnknownFields != null) {
       json[r'x-kubernetes-preserve-unknown-fields'] =
-          xKubernetesPreserveUnknownFields;
+          this.xKubernetesPreserveUnknownFields;
+    } else {
+      json[r'x-kubernetes-preserve-unknown-fields'] = null;
     }
-    json[r'x-kubernetes-validations'] = xKubernetesValidations;
+    json[r'x-kubernetes-validations'] = this.xKubernetesValidations;
     return json;
   }
 
@@ -622,14 +691,12 @@ class IoK8sApiextensionsApiserverPkgApisApiextensionsV1JSONSchemaProps {
                 .listFromJson(json[r'anyOf']) ??
             const [],
         default_: mapValueOfType<Object>(json, r'default'),
-        definitions: mapValueOfType<
-                    Map<String,
-                        IoK8sApiextensionsApiserverPkgApisApiextensionsV1JSONSchemaProps>>(
-                json, r'definitions') ??
-            const {},
-        dependencies:
-            mapValueOfType<Map<String, Object>>(json, r'dependencies') ??
+        definitions:
+            IoK8sApiextensionsApiserverPkgApisApiextensionsV1JSONSchemaProps
+                    .mapFromJson(json[r'definitions']) ??
                 const {},
+        dependencies:
+            mapCastOfType<String, Object>(json, r'dependencies') ?? const {},
         description: mapValueOfType<String>(json, r'description'),
         enum_: const [],
         example: mapValueOfType<Object>(json, r'example'),
@@ -657,16 +724,14 @@ class IoK8sApiextensionsApiserverPkgApisApiextensionsV1JSONSchemaProps {
                 .listFromJson(json[r'oneOf']) ??
             const [],
         pattern: mapValueOfType<String>(json, r'pattern'),
-        patternProperties: mapValueOfType<
-                    Map<String,
-                        IoK8sApiextensionsApiserverPkgApisApiextensionsV1JSONSchemaProps>>(
-                json, r'patternProperties') ??
-            const {},
-        properties: mapValueOfType<
-                    Map<String,
-                        IoK8sApiextensionsApiserverPkgApisApiextensionsV1JSONSchemaProps>>(
-                json, r'properties') ??
-            const {},
+        patternProperties:
+            IoK8sApiextensionsApiserverPkgApisApiextensionsV1JSONSchemaProps
+                    .mapFromJson(json[r'patternProperties']) ??
+                const {},
+        properties:
+            IoK8sApiextensionsApiserverPkgApisApiextensionsV1JSONSchemaProps
+                    .mapFromJson(json[r'properties']) ??
+                const {},
         required_: json[r'required'] is List
             ? (json[r'required'] as List).cast<String>()
             : const [],

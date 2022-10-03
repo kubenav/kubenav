@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -61,8 +62,8 @@ class IoK8sApiCertificatesV1CertificateSigningRequestCondition {
   /// status of the condition, one of True, False, Unknown. Approved, Denied, and Failed conditions may not be \"False\" or \"Unknown\".
   String status;
 
-  /// type of the condition. Known conditions are \"Approved\", \"Denied\", and \"Failed\".  An \"Approved\" condition is added via the /approval subresource, indicating the request was approved and should be issued by the signer.  A \"Denied\" condition is added via the /approval subresource, indicating the request was denied and should not be issued by the signer.  A \"Failed\" condition is added via the /status subresource, indicating the signer failed to issue the certificate.  Approved and Denied conditions are mutually exclusive. Approved, Denied, and Failed conditions cannot be removed once added.  Only one condition of a given type is allowed.  Possible enum values:  - `\"Approved\"` Approved indicates the request was approved and should be issued by the signer.  - `\"Denied\"` Denied indicates the request was denied and should not be issued by the signer.  - `\"Failed\"` Failed indicates the signer failed to issue the certificate.
-  IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum type;
+  /// type of the condition. Known conditions are \"Approved\", \"Denied\", and \"Failed\".  An \"Approved\" condition is added via the /approval subresource, indicating the request was approved and should be issued by the signer.  A \"Denied\" condition is added via the /approval subresource, indicating the request was denied and should not be issued by the signer.  A \"Failed\" condition is added via the /status subresource, indicating the signer failed to issue the certificate.  Approved and Denied conditions are mutually exclusive. Approved, Denied, and Failed conditions cannot be removed once added.  Only one condition of a given type is allowed.
+  String type;
 
   @override
   bool operator ==(Object other) =>
@@ -91,21 +92,29 @@ class IoK8sApiCertificatesV1CertificateSigningRequestCondition {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (lastTransitionTime != null) {
+    if (this.lastTransitionTime != null) {
       json[r'lastTransitionTime'] =
-          lastTransitionTime!.toUtc().toIso8601String();
+          this.lastTransitionTime!.toUtc().toIso8601String();
+    } else {
+      json[r'lastTransitionTime'] = null;
     }
-    if (lastUpdateTime != null) {
-      json[r'lastUpdateTime'] = lastUpdateTime!.toUtc().toIso8601String();
+    if (this.lastUpdateTime != null) {
+      json[r'lastUpdateTime'] = this.lastUpdateTime!.toUtc().toIso8601String();
+    } else {
+      json[r'lastUpdateTime'] = null;
     }
-    if (message != null) {
-      json[r'message'] = message;
+    if (this.message != null) {
+      json[r'message'] = this.message;
+    } else {
+      json[r'message'] = null;
     }
-    if (reason != null) {
-      json[r'reason'] = reason;
+    if (this.reason != null) {
+      json[r'reason'] = this.reason;
+    } else {
+      json[r'reason'] = null;
     }
-    json[r'status'] = status;
-    json[r'type'] = type;
+    json[r'status'] = this.status;
+    json[r'type'] = this.type;
     return json;
   }
 
@@ -136,8 +145,7 @@ class IoK8sApiCertificatesV1CertificateSigningRequestCondition {
         message: mapValueOfType<String>(json, r'message'),
         reason: mapValueOfType<String>(json, r'reason'),
         status: mapValueOfType<String>(json, r'status')!,
-        type: IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum
-            .fromJson(json[r'type'])!,
+        type: mapValueOfType<String>(json, r'type')!,
       );
     }
     return null;
@@ -210,113 +218,4 @@ class IoK8sApiCertificatesV1CertificateSigningRequestCondition {
     'status',
     'type',
   };
-}
-
-/// type of the condition. Known conditions are \"Approved\", \"Denied\", and \"Failed\".  An \"Approved\" condition is added via the /approval subresource, indicating the request was approved and should be issued by the signer.  A \"Denied\" condition is added via the /approval subresource, indicating the request was denied and should not be issued by the signer.  A \"Failed\" condition is added via the /status subresource, indicating the signer failed to issue the certificate.  Approved and Denied conditions are mutually exclusive. Approved, Denied, and Failed conditions cannot be removed once added.  Only one condition of a given type is allowed.  Possible enum values:  - `\"Approved\"` Approved indicates the request was approved and should be issued by the signer.  - `\"Denied\"` Denied indicates the request was denied and should not be issued by the signer.  - `\"Failed\"` Failed indicates the signer failed to issue the certificate.
-class IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum._(
-      this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const approved =
-      IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum._(
-          r'Approved');
-  static const denied =
-      IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum._(
-          r'Denied');
-  static const failed =
-      IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum._(
-          r'Failed');
-
-  /// List of all possible values in this [enum][IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum].
-  static const values =
-      <IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum>[
-    approved,
-    denied,
-    failed,
-  ];
-
-  static IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum? fromJson(
-          dynamic value) =>
-      IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnumTypeTransformer()
-          .decode(value);
-
-  static List<IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum>?
-      listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result =
-        <IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value =
-            IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum
-                .fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum].
-class IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnumTypeTransformer {
-  factory IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnumTypeTransformer
-              ._();
-
-  const IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnumTypeTransformer._();
-
-  String encode(
-          IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum
-              data) =>
-      data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum? decode(
-      dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'Approved':
-          return IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum
-              .approved;
-        case r'Denied':
-          return IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum
-              .denied;
-        case r'Failed':
-          return IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnum
-              .failed;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnumTypeTransformer] instance.
-  static IoK8sApiCertificatesV1CertificateSigningRequestConditionTypeEnumTypeTransformer?
-      _instance;
 }

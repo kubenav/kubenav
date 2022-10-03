@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -219,7 +220,7 @@ class IoK8sApiCoreV1Volume {
   ///
   IoK8sApiCoreV1ISCSIVolumeSource? iscsi;
 
-  /// Volume's name. Must be a DNS_LABEL and unique within the pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+  /// name of the volume. Must be a DNS_LABEL and unique within the pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
   String name;
 
   ///
@@ -385,93 +386,151 @@ class IoK8sApiCoreV1Volume {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (awsElasticBlockStore != null) {
-      json[r'awsElasticBlockStore'] = awsElasticBlockStore;
+    if (this.awsElasticBlockStore != null) {
+      json[r'awsElasticBlockStore'] = this.awsElasticBlockStore;
+    } else {
+      json[r'awsElasticBlockStore'] = null;
     }
-    if (azureDisk != null) {
-      json[r'azureDisk'] = azureDisk;
+    if (this.azureDisk != null) {
+      json[r'azureDisk'] = this.azureDisk;
+    } else {
+      json[r'azureDisk'] = null;
     }
-    if (azureFile != null) {
-      json[r'azureFile'] = azureFile;
+    if (this.azureFile != null) {
+      json[r'azureFile'] = this.azureFile;
+    } else {
+      json[r'azureFile'] = null;
     }
-    if (cephfs != null) {
-      json[r'cephfs'] = cephfs;
+    if (this.cephfs != null) {
+      json[r'cephfs'] = this.cephfs;
+    } else {
+      json[r'cephfs'] = null;
     }
-    if (cinder != null) {
-      json[r'cinder'] = cinder;
+    if (this.cinder != null) {
+      json[r'cinder'] = this.cinder;
+    } else {
+      json[r'cinder'] = null;
     }
-    if (configMap != null) {
-      json[r'configMap'] = configMap;
+    if (this.configMap != null) {
+      json[r'configMap'] = this.configMap;
+    } else {
+      json[r'configMap'] = null;
     }
-    if (csi != null) {
-      json[r'csi'] = csi;
+    if (this.csi != null) {
+      json[r'csi'] = this.csi;
+    } else {
+      json[r'csi'] = null;
     }
-    if (downwardAPI != null) {
-      json[r'downwardAPI'] = downwardAPI;
+    if (this.downwardAPI != null) {
+      json[r'downwardAPI'] = this.downwardAPI;
+    } else {
+      json[r'downwardAPI'] = null;
     }
-    if (emptyDir != null) {
-      json[r'emptyDir'] = emptyDir;
+    if (this.emptyDir != null) {
+      json[r'emptyDir'] = this.emptyDir;
+    } else {
+      json[r'emptyDir'] = null;
     }
-    if (ephemeral != null) {
-      json[r'ephemeral'] = ephemeral;
+    if (this.ephemeral != null) {
+      json[r'ephemeral'] = this.ephemeral;
+    } else {
+      json[r'ephemeral'] = null;
     }
-    if (fc != null) {
-      json[r'fc'] = fc;
+    if (this.fc != null) {
+      json[r'fc'] = this.fc;
+    } else {
+      json[r'fc'] = null;
     }
-    if (flexVolume != null) {
-      json[r'flexVolume'] = flexVolume;
+    if (this.flexVolume != null) {
+      json[r'flexVolume'] = this.flexVolume;
+    } else {
+      json[r'flexVolume'] = null;
     }
-    if (flocker != null) {
-      json[r'flocker'] = flocker;
+    if (this.flocker != null) {
+      json[r'flocker'] = this.flocker;
+    } else {
+      json[r'flocker'] = null;
     }
-    if (gcePersistentDisk != null) {
-      json[r'gcePersistentDisk'] = gcePersistentDisk;
+    if (this.gcePersistentDisk != null) {
+      json[r'gcePersistentDisk'] = this.gcePersistentDisk;
+    } else {
+      json[r'gcePersistentDisk'] = null;
     }
-    if (gitRepo != null) {
-      json[r'gitRepo'] = gitRepo;
+    if (this.gitRepo != null) {
+      json[r'gitRepo'] = this.gitRepo;
+    } else {
+      json[r'gitRepo'] = null;
     }
-    if (glusterfs != null) {
-      json[r'glusterfs'] = glusterfs;
+    if (this.glusterfs != null) {
+      json[r'glusterfs'] = this.glusterfs;
+    } else {
+      json[r'glusterfs'] = null;
     }
-    if (hostPath != null) {
-      json[r'hostPath'] = hostPath;
+    if (this.hostPath != null) {
+      json[r'hostPath'] = this.hostPath;
+    } else {
+      json[r'hostPath'] = null;
     }
-    if (iscsi != null) {
-      json[r'iscsi'] = iscsi;
+    if (this.iscsi != null) {
+      json[r'iscsi'] = this.iscsi;
+    } else {
+      json[r'iscsi'] = null;
     }
-    json[r'name'] = name;
-    if (nfs != null) {
-      json[r'nfs'] = nfs;
+    json[r'name'] = this.name;
+    if (this.nfs != null) {
+      json[r'nfs'] = this.nfs;
+    } else {
+      json[r'nfs'] = null;
     }
-    if (persistentVolumeClaim != null) {
-      json[r'persistentVolumeClaim'] = persistentVolumeClaim;
+    if (this.persistentVolumeClaim != null) {
+      json[r'persistentVolumeClaim'] = this.persistentVolumeClaim;
+    } else {
+      json[r'persistentVolumeClaim'] = null;
     }
-    if (photonPersistentDisk != null) {
-      json[r'photonPersistentDisk'] = photonPersistentDisk;
+    if (this.photonPersistentDisk != null) {
+      json[r'photonPersistentDisk'] = this.photonPersistentDisk;
+    } else {
+      json[r'photonPersistentDisk'] = null;
     }
-    if (portworxVolume != null) {
-      json[r'portworxVolume'] = portworxVolume;
+    if (this.portworxVolume != null) {
+      json[r'portworxVolume'] = this.portworxVolume;
+    } else {
+      json[r'portworxVolume'] = null;
     }
-    if (projected != null) {
-      json[r'projected'] = projected;
+    if (this.projected != null) {
+      json[r'projected'] = this.projected;
+    } else {
+      json[r'projected'] = null;
     }
-    if (quobyte != null) {
-      json[r'quobyte'] = quobyte;
+    if (this.quobyte != null) {
+      json[r'quobyte'] = this.quobyte;
+    } else {
+      json[r'quobyte'] = null;
     }
-    if (rbd != null) {
-      json[r'rbd'] = rbd;
+    if (this.rbd != null) {
+      json[r'rbd'] = this.rbd;
+    } else {
+      json[r'rbd'] = null;
     }
-    if (scaleIO != null) {
-      json[r'scaleIO'] = scaleIO;
+    if (this.scaleIO != null) {
+      json[r'scaleIO'] = this.scaleIO;
+    } else {
+      json[r'scaleIO'] = null;
     }
-    if (secret != null) {
-      json[r'secret'] = secret;
+    if (this.secret != null) {
+      json[r'secret'] = this.secret;
+    } else {
+      json[r'secret'] = null;
     }
-    if (storageos != null) {
-      json[r'storageos'] = storageos;
+    if (this.storageos != null) {
+      json[r'storageos'] = this.storageos;
+    } else {
+      json[r'storageos'] = null;
     }
-    if (vsphereVolume != null) {
-      json[r'vsphereVolume'] = vsphereVolume;
+    if (this.vsphereVolume != null) {
+      json[r'vsphereVolume'] = this.vsphereVolume;
+    } else {
+      json[r'vsphereVolume'] = null;
     }
     return json;
   }

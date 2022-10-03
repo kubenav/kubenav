@@ -39,22 +39,22 @@ class ServiceDetailsItemWidget extends StatelessWidget
             ),
             DetailsItemModel(
               name: 'Type',
-              values: service.spec!.type?.value ?? '-',
+              values: service.spec!.type ?? '-',
             ),
             DetailsItemModel(
               name: 'Ports',
               values: service.spec!.ports
                   .map((port) =>
-                      '${port.port}${port.nodePort != null ? '/${port.nodePort}' : ''}${port.protocol != null ? '/${port.protocol!.value}' : ''}${port.name != null ? ' (${port.name})' : ''} -> ${port.targetPort}')
+                      '${port.port}${port.nodePort != null ? '/${port.nodePort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''} -> ${port.targetPort}')
                   .toList(),
             ),
             DetailsItemModel(
               name: 'Session Affinity',
-              values: service.spec!.sessionAffinity?.value ?? '-',
+              values: service.spec!.sessionAffinity ?? '-',
             ),
             DetailsItemModel(
               name: 'External Traffic Policy',
-              values: service.spec!.externalTrafficPolicy?.value ?? '-',
+              values: service.spec!.externalTrafficPolicy ?? '-',
             ),
           ],
         ),

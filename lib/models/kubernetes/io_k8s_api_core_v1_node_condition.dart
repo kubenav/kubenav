@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -19,7 +20,7 @@ class IoK8sApiCoreV1NodeCondition {
     this.message,
     this.reason,
     required this.status,
-    this.type,
+    required this.type,
   });
 
   /// Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
@@ -61,8 +62,8 @@ class IoK8sApiCoreV1NodeCondition {
   /// Status of the condition, one of True, False, Unknown.
   String status;
 
-  /// Type of node condition.  Possible enum values:  - `\"DiskPressure\"` means the kubelet is under pressure due to insufficient available disk.  - `\"MemoryPressure\"` means the kubelet is under pressure due to insufficient available memory.  - `\"NetworkUnavailable\"` means that network for the node is not correctly configured.  - `\"PIDPressure\"` means the kubelet is under pressure due to insufficient available PID.  - `\"Ready\"` means kubelet is healthy and ready to accept pods.
-  IoK8sApiCoreV1NodeConditionTypeEnum? type;
+  /// Type of node condition.
+  String type;
 
   @override
   bool operator ==(Object other) =>
@@ -91,23 +92,30 @@ class IoK8sApiCoreV1NodeCondition {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (lastHeartbeatTime != null) {
-      json[r'lastHeartbeatTime'] = lastHeartbeatTime!.toUtc().toIso8601String();
+    if (this.lastHeartbeatTime != null) {
+      json[r'lastHeartbeatTime'] =
+          this.lastHeartbeatTime!.toUtc().toIso8601String();
+    } else {
+      json[r'lastHeartbeatTime'] = null;
     }
-    if (lastTransitionTime != null) {
+    if (this.lastTransitionTime != null) {
       json[r'lastTransitionTime'] =
-          lastTransitionTime!.toUtc().toIso8601String();
+          this.lastTransitionTime!.toUtc().toIso8601String();
+    } else {
+      json[r'lastTransitionTime'] = null;
     }
-    if (message != null) {
-      json[r'message'] = message;
+    if (this.message != null) {
+      json[r'message'] = this.message;
+    } else {
+      json[r'message'] = null;
     }
-    if (reason != null) {
-      json[r'reason'] = reason;
+    if (this.reason != null) {
+      json[r'reason'] = this.reason;
+    } else {
+      json[r'reason'] = null;
     }
-    json[r'status'] = status;
-    if (type != null) {
-      json[r'type'] = type;
-    }
+    json[r'status'] = this.status;
+    json[r'type'] = this.type;
     return json;
   }
 
@@ -137,7 +145,7 @@ class IoK8sApiCoreV1NodeCondition {
         message: mapValueOfType<String>(json, r'message'),
         reason: mapValueOfType<String>(json, r'reason'),
         status: mapValueOfType<String>(json, r'status')!,
-        type: IoK8sApiCoreV1NodeConditionTypeEnum.fromJson(json[r'type']),
+        type: mapValueOfType<String>(json, r'type')!,
       );
     }
     return null;
@@ -197,102 +205,6 @@ class IoK8sApiCoreV1NodeCondition {
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
     'status',
+    'type',
   };
-}
-
-/// Type of node condition.  Possible enum values:  - `\"DiskPressure\"` means the kubelet is under pressure due to insufficient available disk.  - `\"MemoryPressure\"` means the kubelet is under pressure due to insufficient available memory.  - `\"NetworkUnavailable\"` means that network for the node is not correctly configured.  - `\"PIDPressure\"` means the kubelet is under pressure due to insufficient available PID.  - `\"Ready\"` means kubelet is healthy and ready to accept pods.
-class IoK8sApiCoreV1NodeConditionTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1NodeConditionTypeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const diskPressure =
-      IoK8sApiCoreV1NodeConditionTypeEnum._(r'DiskPressure');
-  static const memoryPressure =
-      IoK8sApiCoreV1NodeConditionTypeEnum._(r'MemoryPressure');
-  static const networkUnavailable =
-      IoK8sApiCoreV1NodeConditionTypeEnum._(r'NetworkUnavailable');
-  static const pIDPressure =
-      IoK8sApiCoreV1NodeConditionTypeEnum._(r'PIDPressure');
-  static const ready = IoK8sApiCoreV1NodeConditionTypeEnum._(r'Ready');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1NodeConditionTypeEnum].
-  static const values = <IoK8sApiCoreV1NodeConditionTypeEnum>[
-    diskPressure,
-    memoryPressure,
-    networkUnavailable,
-    pIDPressure,
-    ready,
-  ];
-
-  static IoK8sApiCoreV1NodeConditionTypeEnum? fromJson(dynamic value) =>
-      IoK8sApiCoreV1NodeConditionTypeEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiCoreV1NodeConditionTypeEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1NodeConditionTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiCoreV1NodeConditionTypeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1NodeConditionTypeEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1NodeConditionTypeEnum].
-class IoK8sApiCoreV1NodeConditionTypeEnumTypeTransformer {
-  factory IoK8sApiCoreV1NodeConditionTypeEnumTypeTransformer() => _instance ??=
-      const IoK8sApiCoreV1NodeConditionTypeEnumTypeTransformer._();
-
-  const IoK8sApiCoreV1NodeConditionTypeEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1NodeConditionTypeEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1NodeConditionTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1NodeConditionTypeEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'DiskPressure':
-          return IoK8sApiCoreV1NodeConditionTypeEnum.diskPressure;
-        case r'MemoryPressure':
-          return IoK8sApiCoreV1NodeConditionTypeEnum.memoryPressure;
-        case r'NetworkUnavailable':
-          return IoK8sApiCoreV1NodeConditionTypeEnum.networkUnavailable;
-        case r'PIDPressure':
-          return IoK8sApiCoreV1NodeConditionTypeEnum.pIDPressure;
-        case r'Ready':
-          return IoK8sApiCoreV1NodeConditionTypeEnum.ready;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1NodeConditionTypeEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1NodeConditionTypeEnumTypeTransformer? _instance;
 }

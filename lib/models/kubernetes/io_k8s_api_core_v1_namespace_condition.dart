@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -49,8 +50,8 @@ class IoK8sApiCoreV1NamespaceCondition {
   /// Status of the condition, one of True, False, Unknown.
   String status;
 
-  /// Type of namespace controller condition.  Possible enum values:  - `\"NamespaceContentRemaining\"` contains information about resources remaining in a namespace.  - `\"NamespaceDeletionContentFailure\"` contains information about namespace deleter errors during deletion of resources.  - `\"NamespaceDeletionDiscoveryFailure\"` contains information about namespace deleter errors during resource discovery.  - `\"NamespaceDeletionGroupVersionParsingFailure\"` contains information about namespace deleter errors parsing GV for legacy types.  - `\"NamespaceFinalizersRemaining\"` contains information about which finalizers are on resources remaining in a namespace.
-  IoK8sApiCoreV1NamespaceConditionTypeEnum type;
+  /// Type of namespace controller condition.
+  String type;
 
   @override
   bool operator ==(Object other) =>
@@ -77,18 +78,24 @@ class IoK8sApiCoreV1NamespaceCondition {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (lastTransitionTime != null) {
+    if (this.lastTransitionTime != null) {
       json[r'lastTransitionTime'] =
-          lastTransitionTime!.toUtc().toIso8601String();
+          this.lastTransitionTime!.toUtc().toIso8601String();
+    } else {
+      json[r'lastTransitionTime'] = null;
     }
-    if (message != null) {
-      json[r'message'] = message;
+    if (this.message != null) {
+      json[r'message'] = this.message;
+    } else {
+      json[r'message'] = null;
     }
-    if (reason != null) {
-      json[r'reason'] = reason;
+    if (this.reason != null) {
+      json[r'reason'] = this.reason;
+    } else {
+      json[r'reason'] = null;
     }
-    json[r'status'] = status;
-    json[r'type'] = type;
+    json[r'status'] = this.status;
+    json[r'type'] = this.type;
     return json;
   }
 
@@ -117,7 +124,7 @@ class IoK8sApiCoreV1NamespaceCondition {
         message: mapValueOfType<String>(json, r'message'),
         reason: mapValueOfType<String>(json, r'reason'),
         status: mapValueOfType<String>(json, r'status')!,
-        type: IoK8sApiCoreV1NamespaceConditionTypeEnum.fromJson(json[r'type'])!,
+        type: mapValueOfType<String>(json, r'type')!,
       );
     }
     return null;
@@ -180,112 +187,4 @@ class IoK8sApiCoreV1NamespaceCondition {
     'status',
     'type',
   };
-}
-
-/// Type of namespace controller condition.  Possible enum values:  - `\"NamespaceContentRemaining\"` contains information about resources remaining in a namespace.  - `\"NamespaceDeletionContentFailure\"` contains information about namespace deleter errors during deletion of resources.  - `\"NamespaceDeletionDiscoveryFailure\"` contains information about namespace deleter errors during resource discovery.  - `\"NamespaceDeletionGroupVersionParsingFailure\"` contains information about namespace deleter errors parsing GV for legacy types.  - `\"NamespaceFinalizersRemaining\"` contains information about which finalizers are on resources remaining in a namespace.
-class IoK8sApiCoreV1NamespaceConditionTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1NamespaceConditionTypeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const namespaceContentRemaining =
-      IoK8sApiCoreV1NamespaceConditionTypeEnum._(r'NamespaceContentRemaining');
-  static const namespaceDeletionContentFailure =
-      IoK8sApiCoreV1NamespaceConditionTypeEnum._(
-          r'NamespaceDeletionContentFailure');
-  static const namespaceDeletionDiscoveryFailure =
-      IoK8sApiCoreV1NamespaceConditionTypeEnum._(
-          r'NamespaceDeletionDiscoveryFailure');
-  static const namespaceDeletionGroupVersionParsingFailure =
-      IoK8sApiCoreV1NamespaceConditionTypeEnum._(
-          r'NamespaceDeletionGroupVersionParsingFailure');
-  static const namespaceFinalizersRemaining =
-      IoK8sApiCoreV1NamespaceConditionTypeEnum._(
-          r'NamespaceFinalizersRemaining');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1NamespaceConditionTypeEnum].
-  static const values = <IoK8sApiCoreV1NamespaceConditionTypeEnum>[
-    namespaceContentRemaining,
-    namespaceDeletionContentFailure,
-    namespaceDeletionDiscoveryFailure,
-    namespaceDeletionGroupVersionParsingFailure,
-    namespaceFinalizersRemaining,
-  ];
-
-  static IoK8sApiCoreV1NamespaceConditionTypeEnum? fromJson(dynamic value) =>
-      IoK8sApiCoreV1NamespaceConditionTypeEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiCoreV1NamespaceConditionTypeEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1NamespaceConditionTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiCoreV1NamespaceConditionTypeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1NamespaceConditionTypeEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1NamespaceConditionTypeEnum].
-class IoK8sApiCoreV1NamespaceConditionTypeEnumTypeTransformer {
-  factory IoK8sApiCoreV1NamespaceConditionTypeEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1NamespaceConditionTypeEnumTypeTransformer._();
-
-  const IoK8sApiCoreV1NamespaceConditionTypeEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1NamespaceConditionTypeEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1NamespaceConditionTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1NamespaceConditionTypeEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'NamespaceContentRemaining':
-          return IoK8sApiCoreV1NamespaceConditionTypeEnum
-              .namespaceContentRemaining;
-        case r'NamespaceDeletionContentFailure':
-          return IoK8sApiCoreV1NamespaceConditionTypeEnum
-              .namespaceDeletionContentFailure;
-        case r'NamespaceDeletionDiscoveryFailure':
-          return IoK8sApiCoreV1NamespaceConditionTypeEnum
-              .namespaceDeletionDiscoveryFailure;
-        case r'NamespaceDeletionGroupVersionParsingFailure':
-          return IoK8sApiCoreV1NamespaceConditionTypeEnum
-              .namespaceDeletionGroupVersionParsingFailure;
-        case r'NamespaceFinalizersRemaining':
-          return IoK8sApiCoreV1NamespaceConditionTypeEnum
-              .namespaceFinalizersRemaining;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1NamespaceConditionTypeEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1NamespaceConditionTypeEnumTypeTransformer? _instance;
 }

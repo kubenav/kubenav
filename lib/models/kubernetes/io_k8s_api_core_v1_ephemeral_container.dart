@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -48,10 +49,10 @@ class IoK8sApiCoreV1EphemeralContainer {
     this.workingDir,
   });
 
-  /// Arguments to the entrypoint. The docker image's CMD is used if this is not provided. Variable references $(VAR_NAME) are expanded using the container's environment. If a variable cannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced to a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. \"$$(VAR_NAME)\" will produce the string literal \"$(VAR_NAME)\". Escaped references will never be expanded, regardless of whether the variable exists or not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell
+  /// Arguments to the entrypoint. The image's CMD is used if this is not provided. Variable references $(VAR_NAME) are expanded using the container's environment. If a variable cannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced to a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. \"$$(VAR_NAME)\" will produce the string literal \"$(VAR_NAME)\". Escaped references will never be expanded, regardless of whether the variable exists or not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell
   List<String> args;
 
-  /// Entrypoint array. Not executed within a shell. The docker image's ENTRYPOINT is used if this is not provided. Variable references $(VAR_NAME) are expanded using the container's environment. If a variable cannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced to a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. \"$$(VAR_NAME)\" will produce the string literal \"$(VAR_NAME)\". Escaped references will never be expanded, regardless of whether the variable exists or not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell
+  /// Entrypoint array. Not executed within a shell. The image's ENTRYPOINT is used if this is not provided. Variable references $(VAR_NAME) are expanded using the container's environment. If a variable cannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced to a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. \"$$(VAR_NAME)\" will produce the string literal \"$(VAR_NAME)\". Escaped references will never be expanded, regardless of whether the variable exists or not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell
   List<String> command;
 
   /// List of environment variables to set in the container. Cannot be updated.
@@ -60,7 +61,7 @@ class IoK8sApiCoreV1EphemeralContainer {
   /// List of sources to populate environment variables in the container. The keys defined within a source must be a C_IDENTIFIER. All invalid keys will be reported as an event when the container is starting. When a key exists in multiple sources, the value associated with the last source will take precedence. Values defined by an Env with a duplicate key will take precedence. Cannot be updated.
   List<IoK8sApiCoreV1EnvFromSource> envFrom;
 
-  /// Docker image name. More info: https://kubernetes.io/docs/concepts/containers/images
+  /// Container image name. More info: https://kubernetes.io/docs/concepts/containers/images
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -69,8 +70,14 @@ class IoK8sApiCoreV1EphemeralContainer {
   ///
   String? image;
 
-  /// Image pull policy. One of Always, Never, IfNotPresent. Defaults to Always if :latest tag is specified, or IfNotPresent otherwise. Cannot be updated. More info: https://kubernetes.io/docs/concepts/containers/images#updating-images  Possible enum values:  - `\"Always\"` means that kubelet always attempts to pull the latest image. Container will fail If the pull fails.  - `\"IfNotPresent\"` means that kubelet pulls if the image isn't present on disk. Container will fail if the image isn't present and the pull fails.  - `\"Never\"` means that kubelet never pulls an image, but only uses a local image. Container will fail if the image isn't present
-  IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum? imagePullPolicy;
+  /// Image pull policy. One of Always, Never, IfNotPresent. Defaults to Always if :latest tag is specified, or IfNotPresent otherwise. Cannot be updated. More info: https://kubernetes.io/docs/concepts/containers/images#updating-images
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? imagePullPolicy;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -162,9 +169,14 @@ class IoK8sApiCoreV1EphemeralContainer {
   ///
   String? terminationMessagePath;
 
-  /// Indicate how the termination message should be populated. File will use the contents of terminationMessagePath to populate the container status message on both success and failure. FallbackToLogsOnError will use the last chunk of container log output if the termination message file is empty and the container exited with an error. The log output is limited to 2048 bytes or 80 lines, whichever is smaller. Defaults to File. Cannot be updated.  Possible enum values:  - `\"FallbackToLogsOnError\"` will read the most recent contents of the container logs for the container status message when the container exits with an error and the terminationMessagePath has no contents.  - `\"File\"` is the default behavior and will set the container status message to the contents of the container's terminationMessagePath when the container exits.
-  IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum?
-      terminationMessagePolicy;
+  /// Indicate how the termination message should be populated. File will use the contents of terminationMessagePath to populate the container status message on both success and failure. FallbackToLogsOnError will use the last chunk of container log output if the termination message file is empty and the container exited with an error. The log output is limited to 2048 bytes or 80 lines, whichever is smaller. Defaults to File. Cannot be updated.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? terminationMessagePolicy;
 
   /// Whether this container should allocate a TTY for itself, also requires 'stdin' to be true. Default is false.
   ///
@@ -253,58 +265,88 @@ class IoK8sApiCoreV1EphemeralContainer {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'args'] = args;
-    json[r'command'] = command;
-    json[r'env'] = env;
-    json[r'envFrom'] = envFrom;
-    if (image != null) {
-      json[r'image'] = image;
+    json[r'args'] = this.args;
+    json[r'command'] = this.command;
+    json[r'env'] = this.env;
+    json[r'envFrom'] = this.envFrom;
+    if (this.image != null) {
+      json[r'image'] = this.image;
+    } else {
+      json[r'image'] = null;
     }
-    if (imagePullPolicy != null) {
-      json[r'imagePullPolicy'] = imagePullPolicy;
+    if (this.imagePullPolicy != null) {
+      json[r'imagePullPolicy'] = this.imagePullPolicy;
+    } else {
+      json[r'imagePullPolicy'] = null;
     }
-    if (lifecycle != null) {
-      json[r'lifecycle'] = lifecycle;
+    if (this.lifecycle != null) {
+      json[r'lifecycle'] = this.lifecycle;
+    } else {
+      json[r'lifecycle'] = null;
     }
-    if (livenessProbe != null) {
-      json[r'livenessProbe'] = livenessProbe;
+    if (this.livenessProbe != null) {
+      json[r'livenessProbe'] = this.livenessProbe;
+    } else {
+      json[r'livenessProbe'] = null;
     }
-    json[r'name'] = name;
-    json[r'ports'] = ports;
-    if (readinessProbe != null) {
-      json[r'readinessProbe'] = readinessProbe;
+    json[r'name'] = this.name;
+    json[r'ports'] = this.ports;
+    if (this.readinessProbe != null) {
+      json[r'readinessProbe'] = this.readinessProbe;
+    } else {
+      json[r'readinessProbe'] = null;
     }
-    if (resources != null) {
-      json[r'resources'] = resources;
+    if (this.resources != null) {
+      json[r'resources'] = this.resources;
+    } else {
+      json[r'resources'] = null;
     }
-    if (securityContext != null) {
-      json[r'securityContext'] = securityContext;
+    if (this.securityContext != null) {
+      json[r'securityContext'] = this.securityContext;
+    } else {
+      json[r'securityContext'] = null;
     }
-    if (startupProbe != null) {
-      json[r'startupProbe'] = startupProbe;
+    if (this.startupProbe != null) {
+      json[r'startupProbe'] = this.startupProbe;
+    } else {
+      json[r'startupProbe'] = null;
     }
-    if (stdin != null) {
-      json[r'stdin'] = stdin;
+    if (this.stdin != null) {
+      json[r'stdin'] = this.stdin;
+    } else {
+      json[r'stdin'] = null;
     }
-    if (stdinOnce != null) {
-      json[r'stdinOnce'] = stdinOnce;
+    if (this.stdinOnce != null) {
+      json[r'stdinOnce'] = this.stdinOnce;
+    } else {
+      json[r'stdinOnce'] = null;
     }
-    if (targetContainerName != null) {
-      json[r'targetContainerName'] = targetContainerName;
+    if (this.targetContainerName != null) {
+      json[r'targetContainerName'] = this.targetContainerName;
+    } else {
+      json[r'targetContainerName'] = null;
     }
-    if (terminationMessagePath != null) {
-      json[r'terminationMessagePath'] = terminationMessagePath;
+    if (this.terminationMessagePath != null) {
+      json[r'terminationMessagePath'] = this.terminationMessagePath;
+    } else {
+      json[r'terminationMessagePath'] = null;
     }
-    if (terminationMessagePolicy != null) {
-      json[r'terminationMessagePolicy'] = terminationMessagePolicy;
+    if (this.terminationMessagePolicy != null) {
+      json[r'terminationMessagePolicy'] = this.terminationMessagePolicy;
+    } else {
+      json[r'terminationMessagePolicy'] = null;
     }
-    if (tty != null) {
-      json[r'tty'] = tty;
+    if (this.tty != null) {
+      json[r'tty'] = this.tty;
+    } else {
+      json[r'tty'] = null;
     }
-    json[r'volumeDevices'] = volumeDevices;
-    json[r'volumeMounts'] = volumeMounts;
-    if (workingDir != null) {
-      json[r'workingDir'] = workingDir;
+    json[r'volumeDevices'] = this.volumeDevices;
+    json[r'volumeMounts'] = this.volumeMounts;
+    if (this.workingDir != null) {
+      json[r'workingDir'] = this.workingDir;
+    } else {
+      json[r'workingDir'] = null;
     }
     return json;
   }
@@ -340,9 +382,7 @@ class IoK8sApiCoreV1EphemeralContainer {
         envFrom: IoK8sApiCoreV1EnvFromSource.listFromJson(json[r'envFrom']) ??
             const [],
         image: mapValueOfType<String>(json, r'image'),
-        imagePullPolicy:
-            IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum.fromJson(
-                json[r'imagePullPolicy']),
+        imagePullPolicy: mapValueOfType<String>(json, r'imagePullPolicy'),
         lifecycle: IoK8sApiCoreV1Lifecycle.fromJson(json[r'lifecycle']),
         livenessProbe: IoK8sApiCoreV1Probe.fromJson(json[r'livenessProbe']),
         name: mapValueOfType<String>(json, r'name')!,
@@ -361,8 +401,7 @@ class IoK8sApiCoreV1EphemeralContainer {
         terminationMessagePath:
             mapValueOfType<String>(json, r'terminationMessagePath'),
         terminationMessagePolicy:
-            IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum
-                .fromJson(json[r'terminationMessagePolicy']),
+            mapValueOfType<String>(json, r'terminationMessagePolicy'),
         tty: mapValueOfType<bool>(json, r'tty'),
         volumeDevices:
             IoK8sApiCoreV1VolumeDevice.listFromJson(json[r'volumeDevices']) ??
@@ -432,201 +471,4 @@ class IoK8sApiCoreV1EphemeralContainer {
   static const requiredKeys = <String>{
     'name',
   };
-}
-
-/// Image pull policy. One of Always, Never, IfNotPresent. Defaults to Always if :latest tag is specified, or IfNotPresent otherwise. Cannot be updated. More info: https://kubernetes.io/docs/concepts/containers/images#updating-images  Possible enum values:  - `\"Always\"` means that kubelet always attempts to pull the latest image. Container will fail If the pull fails.  - `\"IfNotPresent\"` means that kubelet pulls if the image isn't present on disk. Container will fail if the image isn't present and the pull fails.  - `\"Never\"` means that kubelet never pulls an image, but only uses a local image. Container will fail if the image isn't present
-class IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const always =
-      IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum._(r'Always');
-  static const ifNotPresent =
-      IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum._(r'IfNotPresent');
-  static const never =
-      IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum._(r'Never');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum].
-  static const values = <IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum>[
-    always,
-    ifNotPresent,
-    never,
-  ];
-
-  static IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum? fromJson(
-          dynamic value) =>
-      IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnumTypeTransformer()
-          .decode(value);
-
-  static List<IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum>?
-      listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value =
-            IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum].
-class IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnumTypeTransformer {
-  factory IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnumTypeTransformer
-              ._();
-
-  const IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum data) =>
-      data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'Always':
-          return IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum.always;
-        case r'IfNotPresent':
-          return IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum
-              .ifNotPresent;
-        case r'Never':
-          return IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnum.never;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1EphemeralContainerImagePullPolicyEnumTypeTransformer?
-      _instance;
-}
-
-/// Indicate how the termination message should be populated. File will use the contents of terminationMessagePath to populate the container status message on both success and failure. FallbackToLogsOnError will use the last chunk of container log output if the termination message file is empty and the container exited with an error. The log output is limited to 2048 bytes or 80 lines, whichever is smaller. Defaults to File. Cannot be updated.  Possible enum values:  - `\"FallbackToLogsOnError\"` will read the most recent contents of the container logs for the container status message when the container exits with an error and the terminationMessagePath has no contents.  - `\"File\"` is the default behavior and will set the container status message to the contents of the container's terminationMessagePath when the container exits.
-class IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum._(
-      this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const fallbackToLogsOnError =
-      IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum._(
-          r'FallbackToLogsOnError');
-  static const file =
-      IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum._(r'File');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum].
-  static const values =
-      <IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum>[
-    fallbackToLogsOnError,
-    file,
-  ];
-
-  static IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum? fromJson(
-          dynamic value) =>
-      IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnumTypeTransformer()
-          .decode(value);
-
-  static List<IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum>?
-      listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result =
-        <IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value =
-            IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum
-                .fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum].
-class IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnumTypeTransformer {
-  factory IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnumTypeTransformer
-              ._();
-
-  const IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnumTypeTransformer._();
-
-  String encode(
-          IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum data) =>
-      data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum? decode(
-      dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'FallbackToLogsOnError':
-          return IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum
-              .fallbackToLogsOnError;
-        case r'File':
-          return IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnum
-              .file;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1EphemeralContainerTerminationMessagePolicyEnumTypeTransformer?
-      _instance;
 }

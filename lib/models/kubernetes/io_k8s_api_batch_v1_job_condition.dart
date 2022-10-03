@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -61,8 +62,8 @@ class IoK8sApiBatchV1JobCondition {
   /// Status of the condition, one of True, False, Unknown.
   String status;
 
-  /// Type of job condition, Complete or Failed.  Possible enum values:  - `\"Complete\"` means the job has completed its execution.  - `\"Failed\"` means the job has failed its execution.  - `\"Suspended\"` means the job has been suspended.
-  IoK8sApiBatchV1JobConditionTypeEnum type;
+  /// Type of job condition, Complete or Failed.
+  String type;
 
   @override
   bool operator ==(Object other) =>
@@ -91,21 +92,29 @@ class IoK8sApiBatchV1JobCondition {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (lastProbeTime != null) {
-      json[r'lastProbeTime'] = lastProbeTime!.toUtc().toIso8601String();
+    if (this.lastProbeTime != null) {
+      json[r'lastProbeTime'] = this.lastProbeTime!.toUtc().toIso8601String();
+    } else {
+      json[r'lastProbeTime'] = null;
     }
-    if (lastTransitionTime != null) {
+    if (this.lastTransitionTime != null) {
       json[r'lastTransitionTime'] =
-          lastTransitionTime!.toUtc().toIso8601String();
+          this.lastTransitionTime!.toUtc().toIso8601String();
+    } else {
+      json[r'lastTransitionTime'] = null;
     }
-    if (message != null) {
-      json[r'message'] = message;
+    if (this.message != null) {
+      json[r'message'] = this.message;
+    } else {
+      json[r'message'] = null;
     }
-    if (reason != null) {
-      json[r'reason'] = reason;
+    if (this.reason != null) {
+      json[r'reason'] = this.reason;
+    } else {
+      json[r'reason'] = null;
     }
-    json[r'status'] = status;
-    json[r'type'] = type;
+    json[r'status'] = this.status;
+    json[r'type'] = this.type;
     return json;
   }
 
@@ -135,7 +144,7 @@ class IoK8sApiBatchV1JobCondition {
         message: mapValueOfType<String>(json, r'message'),
         reason: mapValueOfType<String>(json, r'reason'),
         status: mapValueOfType<String>(json, r'status')!,
-        type: IoK8sApiBatchV1JobConditionTypeEnum.fromJson(json[r'type'])!,
+        type: mapValueOfType<String>(json, r'type')!,
       );
     }
     return null;
@@ -197,89 +206,4 @@ class IoK8sApiBatchV1JobCondition {
     'status',
     'type',
   };
-}
-
-/// Type of job condition, Complete or Failed.  Possible enum values:  - `\"Complete\"` means the job has completed its execution.  - `\"Failed\"` means the job has failed its execution.  - `\"Suspended\"` means the job has been suspended.
-class IoK8sApiBatchV1JobConditionTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiBatchV1JobConditionTypeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const complete = IoK8sApiBatchV1JobConditionTypeEnum._(r'Complete');
-  static const failed = IoK8sApiBatchV1JobConditionTypeEnum._(r'Failed');
-  static const suspended = IoK8sApiBatchV1JobConditionTypeEnum._(r'Suspended');
-
-  /// List of all possible values in this [enum][IoK8sApiBatchV1JobConditionTypeEnum].
-  static const values = <IoK8sApiBatchV1JobConditionTypeEnum>[
-    complete,
-    failed,
-    suspended,
-  ];
-
-  static IoK8sApiBatchV1JobConditionTypeEnum? fromJson(dynamic value) =>
-      IoK8sApiBatchV1JobConditionTypeEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiBatchV1JobConditionTypeEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiBatchV1JobConditionTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiBatchV1JobConditionTypeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiBatchV1JobConditionTypeEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiBatchV1JobConditionTypeEnum].
-class IoK8sApiBatchV1JobConditionTypeEnumTypeTransformer {
-  factory IoK8sApiBatchV1JobConditionTypeEnumTypeTransformer() => _instance ??=
-      const IoK8sApiBatchV1JobConditionTypeEnumTypeTransformer._();
-
-  const IoK8sApiBatchV1JobConditionTypeEnumTypeTransformer._();
-
-  String encode(IoK8sApiBatchV1JobConditionTypeEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiBatchV1JobConditionTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiBatchV1JobConditionTypeEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'Complete':
-          return IoK8sApiBatchV1JobConditionTypeEnum.complete;
-        case r'Failed':
-          return IoK8sApiBatchV1JobConditionTypeEnum.failed;
-        case r'Suspended':
-          return IoK8sApiBatchV1JobConditionTypeEnum.suspended;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiBatchV1JobConditionTypeEnumTypeTransformer] instance.
-  static IoK8sApiBatchV1JobConditionTypeEnumTypeTransformer? _instance;
 }

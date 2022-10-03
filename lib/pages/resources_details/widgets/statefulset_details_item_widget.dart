@@ -48,7 +48,7 @@ class StatefulSetDetailsItemWidget extends StatelessWidget
             ),
             DetailsItemModel(
               name: 'Update Strategy',
-              values: statefulSet.spec!.updateStrategy?.type?.value ?? '-',
+              values: statefulSet.spec!.updateStrategy?.type ?? '-',
             ),
             DetailsItemModel(
               name: 'Service Name',

@@ -35,7 +35,7 @@ class NamespaceDetailsItemWidget extends StatelessWidget
               name: 'Phase',
               values:
                   namespace.status != null && namespace.status!.phase != null
-                      ? namespace.status!.phase!.value
+                      ? namespace.status!.phase
                       : '-',
             ),
           ],

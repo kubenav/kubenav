@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -66,7 +67,7 @@ class IoK8sApiBatchV1JobStatus {
   ///
   int? failed;
 
-  /// The number of pods which have a Ready condition.  This field is alpha-level. The job controller populates the field when the feature gate JobReadyPods is enabled (disabled by default).
+  /// The number of pods which have a Ready condition.  This field is beta-level. The job controller populates the field when the feature gate JobReadyPods is enabled (enabled by default).
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -134,30 +135,46 @@ class IoK8sApiBatchV1JobStatus {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (active != null) {
-      json[r'active'] = active;
+    if (this.active != null) {
+      json[r'active'] = this.active;
+    } else {
+      json[r'active'] = null;
     }
-    if (completedIndexes != null) {
-      json[r'completedIndexes'] = completedIndexes;
+    if (this.completedIndexes != null) {
+      json[r'completedIndexes'] = this.completedIndexes;
+    } else {
+      json[r'completedIndexes'] = null;
     }
-    if (completionTime != null) {
-      json[r'completionTime'] = completionTime!.toUtc().toIso8601String();
+    if (this.completionTime != null) {
+      json[r'completionTime'] = this.completionTime!.toUtc().toIso8601String();
+    } else {
+      json[r'completionTime'] = null;
     }
-    json[r'conditions'] = conditions;
-    if (failed != null) {
-      json[r'failed'] = failed;
+    json[r'conditions'] = this.conditions;
+    if (this.failed != null) {
+      json[r'failed'] = this.failed;
+    } else {
+      json[r'failed'] = null;
     }
-    if (ready != null) {
-      json[r'ready'] = ready;
+    if (this.ready != null) {
+      json[r'ready'] = this.ready;
+    } else {
+      json[r'ready'] = null;
     }
-    if (startTime != null) {
-      json[r'startTime'] = startTime!.toUtc().toIso8601String();
+    if (this.startTime != null) {
+      json[r'startTime'] = this.startTime!.toUtc().toIso8601String();
+    } else {
+      json[r'startTime'] = null;
     }
-    if (succeeded != null) {
-      json[r'succeeded'] = succeeded;
+    if (this.succeeded != null) {
+      json[r'succeeded'] = this.succeeded;
+    } else {
+      json[r'succeeded'] = null;
     }
-    if (uncountedTerminatedPods != null) {
-      json[r'uncountedTerminatedPods'] = uncountedTerminatedPods;
+    if (this.uncountedTerminatedPods != null) {
+      json[r'uncountedTerminatedPods'] = this.uncountedTerminatedPods;
+    } else {
+      json[r'uncountedTerminatedPods'] = null;
     }
     return json;
   }

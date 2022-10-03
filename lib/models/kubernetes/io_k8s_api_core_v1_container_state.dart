@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -66,14 +67,20 @@ class IoK8sApiCoreV1ContainerState {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (running != null) {
-      json[r'running'] = running;
+    if (this.running != null) {
+      json[r'running'] = this.running;
+    } else {
+      json[r'running'] = null;
     }
-    if (terminated != null) {
-      json[r'terminated'] = terminated;
+    if (this.terminated != null) {
+      json[r'terminated'] = this.terminated;
+    } else {
+      json[r'terminated'] = null;
     }
-    if (waiting != null) {
-      json[r'waiting'] = waiting;
+    if (this.waiting != null) {
+      json[r'waiting'] = this.waiting;
+    } else {
+      json[r'waiting'] = null;
     }
     return json;
   }

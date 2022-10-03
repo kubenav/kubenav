@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -25,7 +26,7 @@ class IoK8sApiCoreV1RBDVolumeSource {
     this.user,
   });
 
-  /// Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified. More info: https://kubernetes.io/docs/concepts/storage/volumes#rbd
+  /// fsType is the filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified. More info: https://kubernetes.io/docs/concepts/storage/volumes#rbd
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -34,10 +35,10 @@ class IoK8sApiCoreV1RBDVolumeSource {
   ///
   String? fsType;
 
-  /// The rados image name. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
+  /// image is the rados image name. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
   String image;
 
-  /// Keyring is the path to key ring for RBDUser. Default is /etc/ceph/keyring. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
+  /// keyring is the path to key ring for RBDUser. Default is /etc/ceph/keyring. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -46,10 +47,10 @@ class IoK8sApiCoreV1RBDVolumeSource {
   ///
   String? keyring;
 
-  /// A collection of Ceph monitors. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
+  /// monitors is a collection of Ceph monitors. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
   List<String> monitors;
 
-  /// The rados pool name. Default is rbd. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
+  /// pool is the rados pool name. Default is rbd. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -58,7 +59,7 @@ class IoK8sApiCoreV1RBDVolumeSource {
   ///
   String? pool;
 
-  /// ReadOnly here will force the ReadOnly setting in VolumeMounts. Defaults to false. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
+  /// readOnly here will force the ReadOnly setting in VolumeMounts. Defaults to false. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -75,7 +76,7 @@ class IoK8sApiCoreV1RBDVolumeSource {
   ///
   IoK8sApiCoreV1LocalObjectReference? secretRef;
 
-  /// The rados user name. Default is admin. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
+  /// user is the rados user name. Default is admin. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -115,25 +116,37 @@ class IoK8sApiCoreV1RBDVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (fsType != null) {
-      json[r'fsType'] = fsType;
+    if (this.fsType != null) {
+      json[r'fsType'] = this.fsType;
+    } else {
+      json[r'fsType'] = null;
     }
-    json[r'image'] = image;
-    if (keyring != null) {
-      json[r'keyring'] = keyring;
+    json[r'image'] = this.image;
+    if (this.keyring != null) {
+      json[r'keyring'] = this.keyring;
+    } else {
+      json[r'keyring'] = null;
     }
-    json[r'monitors'] = monitors;
-    if (pool != null) {
-      json[r'pool'] = pool;
+    json[r'monitors'] = this.monitors;
+    if (this.pool != null) {
+      json[r'pool'] = this.pool;
+    } else {
+      json[r'pool'] = null;
     }
-    if (readOnly != null) {
-      json[r'readOnly'] = readOnly;
+    if (this.readOnly != null) {
+      json[r'readOnly'] = this.readOnly;
+    } else {
+      json[r'readOnly'] = null;
     }
-    if (secretRef != null) {
-      json[r'secretRef'] = secretRef;
+    if (this.secretRef != null) {
+      json[r'secretRef'] = this.secretRef;
+    } else {
+      json[r'secretRef'] = null;
     }
-    if (user != null) {
-      json[r'user'] = user;
+    if (this.user != null) {
+      json[r'user'] = this.user;
+    } else {
+      json[r'user'] = null;
     }
     return json;
   }

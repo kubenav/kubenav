@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -21,7 +22,7 @@ class IoK8sApiCoreV1CinderPersistentVolumeSource {
     required this.volumeID,
   });
 
-  /// Filesystem type to mount. Must be a filesystem type supported by the host operating system. Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified. More info: https://examples.k8s.io/mysql-cinder-pd/README.md
+  /// fsType Filesystem type to mount. Must be a filesystem type supported by the host operating system. Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified. More info: https://examples.k8s.io/mysql-cinder-pd/README.md
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -30,7 +31,7 @@ class IoK8sApiCoreV1CinderPersistentVolumeSource {
   ///
   String? fsType;
 
-  /// Optional: Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts. More info: https://examples.k8s.io/mysql-cinder-pd/README.md
+  /// readOnly is Optional: Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts. More info: https://examples.k8s.io/mysql-cinder-pd/README.md
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -47,7 +48,7 @@ class IoK8sApiCoreV1CinderPersistentVolumeSource {
   ///
   IoK8sApiCoreV1SecretReference? secretRef;
 
-  /// volume id used to identify the volume in cinder. More info: https://examples.k8s.io/mysql-cinder-pd/README.md
+  /// volumeID used to identify the volume in cinder. More info: https://examples.k8s.io/mysql-cinder-pd/README.md
   String volumeID;
 
   @override
@@ -73,16 +74,22 @@ class IoK8sApiCoreV1CinderPersistentVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (fsType != null) {
-      json[r'fsType'] = fsType;
+    if (this.fsType != null) {
+      json[r'fsType'] = this.fsType;
+    } else {
+      json[r'fsType'] = null;
     }
-    if (readOnly != null) {
-      json[r'readOnly'] = readOnly;
+    if (this.readOnly != null) {
+      json[r'readOnly'] = this.readOnly;
+    } else {
+      json[r'readOnly'] = null;
     }
-    if (secretRef != null) {
-      json[r'secretRef'] = secretRef;
+    if (this.secretRef != null) {
+      json[r'secretRef'] = this.secretRef;
+    } else {
+      json[r'secretRef'] = null;
     }
-    json[r'volumeID'] = volumeID;
+    json[r'volumeID'] = this.volumeID;
     return json;
   }
 

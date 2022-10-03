@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -18,7 +19,7 @@ class IoK8sApiCoreV1FlockerVolumeSource {
     this.datasetUUID,
   });
 
-  /// Name of the dataset stored as metadata -> name on the dataset for Flocker should be considered as deprecated
+  /// datasetName is Name of the dataset stored as metadata -> name on the dataset for Flocker should be considered as deprecated
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -27,7 +28,7 @@ class IoK8sApiCoreV1FlockerVolumeSource {
   ///
   String? datasetName;
 
-  /// UUID of the dataset. This is unique identifier of a Flocker dataset
+  /// datasetUUID is the UUID of the dataset. This is unique identifier of a Flocker dataset
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -55,11 +56,15 @@ class IoK8sApiCoreV1FlockerVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (datasetName != null) {
-      json[r'datasetName'] = datasetName;
+    if (this.datasetName != null) {
+      json[r'datasetName'] = this.datasetName;
+    } else {
+      json[r'datasetName'] = null;
     }
-    if (datasetUUID != null) {
-      json[r'datasetUUID'] = datasetUUID;
+    if (this.datasetUUID != null) {
+      json[r'datasetUUID'] = this.datasetUUID;
+    } else {
+      json[r'datasetUUID'] = null;
     }
     return json;
   }

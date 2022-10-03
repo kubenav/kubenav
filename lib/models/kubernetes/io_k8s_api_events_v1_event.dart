@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -232,56 +233,88 @@ class IoK8sApiEventsV1Event {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (action != null) {
-      json[r'action'] = action;
+    if (this.action != null) {
+      json[r'action'] = this.action;
+    } else {
+      json[r'action'] = null;
     }
-    if (apiVersion != null) {
-      json[r'apiVersion'] = apiVersion;
+    if (this.apiVersion != null) {
+      json[r'apiVersion'] = this.apiVersion;
+    } else {
+      json[r'apiVersion'] = null;
     }
-    if (deprecatedCount != null) {
-      json[r'deprecatedCount'] = deprecatedCount;
+    if (this.deprecatedCount != null) {
+      json[r'deprecatedCount'] = this.deprecatedCount;
+    } else {
+      json[r'deprecatedCount'] = null;
     }
-    if (deprecatedFirstTimestamp != null) {
+    if (this.deprecatedFirstTimestamp != null) {
       json[r'deprecatedFirstTimestamp'] =
-          deprecatedFirstTimestamp!.toUtc().toIso8601String();
+          this.deprecatedFirstTimestamp!.toUtc().toIso8601String();
+    } else {
+      json[r'deprecatedFirstTimestamp'] = null;
     }
-    if (deprecatedLastTimestamp != null) {
+    if (this.deprecatedLastTimestamp != null) {
       json[r'deprecatedLastTimestamp'] =
-          deprecatedLastTimestamp!.toUtc().toIso8601String();
+          this.deprecatedLastTimestamp!.toUtc().toIso8601String();
+    } else {
+      json[r'deprecatedLastTimestamp'] = null;
     }
-    if (deprecatedSource != null) {
-      json[r'deprecatedSource'] = deprecatedSource;
+    if (this.deprecatedSource != null) {
+      json[r'deprecatedSource'] = this.deprecatedSource;
+    } else {
+      json[r'deprecatedSource'] = null;
     }
-    json[r'eventTime'] = eventTime.toUtc().toIso8601String();
-    if (kind != null) {
-      json[r'kind'] = kind;
+    json[r'eventTime'] = this.eventTime.toUtc().toIso8601String();
+    if (this.kind != null) {
+      json[r'kind'] = this.kind;
+    } else {
+      json[r'kind'] = null;
     }
-    if (metadata != null) {
-      json[r'metadata'] = metadata;
+    if (this.metadata != null) {
+      json[r'metadata'] = this.metadata;
+    } else {
+      json[r'metadata'] = null;
     }
-    if (note != null) {
-      json[r'note'] = note;
+    if (this.note != null) {
+      json[r'note'] = this.note;
+    } else {
+      json[r'note'] = null;
     }
-    if (reason != null) {
-      json[r'reason'] = reason;
+    if (this.reason != null) {
+      json[r'reason'] = this.reason;
+    } else {
+      json[r'reason'] = null;
     }
-    if (regarding != null) {
-      json[r'regarding'] = regarding;
+    if (this.regarding != null) {
+      json[r'regarding'] = this.regarding;
+    } else {
+      json[r'regarding'] = null;
     }
-    if (related != null) {
-      json[r'related'] = related;
+    if (this.related != null) {
+      json[r'related'] = this.related;
+    } else {
+      json[r'related'] = null;
     }
-    if (reportingController != null) {
-      json[r'reportingController'] = reportingController;
+    if (this.reportingController != null) {
+      json[r'reportingController'] = this.reportingController;
+    } else {
+      json[r'reportingController'] = null;
     }
-    if (reportingInstance != null) {
-      json[r'reportingInstance'] = reportingInstance;
+    if (this.reportingInstance != null) {
+      json[r'reportingInstance'] = this.reportingInstance;
+    } else {
+      json[r'reportingInstance'] = null;
     }
-    if (series != null) {
-      json[r'series'] = series;
+    if (this.series != null) {
+      json[r'series'] = this.series;
+    } else {
+      json[r'series'] = null;
     }
-    if (type != null) {
-      json[r'type'] = type;
+    if (this.type != null) {
+      json[r'type'] = this.type;
+    } else {
+      json[r'type'] = null;
     }
     return json;
   }

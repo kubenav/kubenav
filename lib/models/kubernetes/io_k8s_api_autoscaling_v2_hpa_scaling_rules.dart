@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -64,12 +65,16 @@ class IoK8sApiAutoscalingV2HPAScalingRules {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'policies'] = policies;
-    if (selectPolicy != null) {
-      json[r'selectPolicy'] = selectPolicy;
+    json[r'policies'] = this.policies;
+    if (this.selectPolicy != null) {
+      json[r'selectPolicy'] = this.selectPolicy;
+    } else {
+      json[r'selectPolicy'] = null;
     }
-    if (stabilizationWindowSeconds != null) {
-      json[r'stabilizationWindowSeconds'] = stabilizationWindowSeconds;
+    if (this.stabilizationWindowSeconds != null) {
+      json[r'stabilizationWindowSeconds'] = this.stabilizationWindowSeconds;
+    } else {
+      json[r'stabilizationWindowSeconds'] = null;
     }
     return json;
   }

@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -62,13 +63,17 @@ class IoK8sApiCoreV1LoadBalancerIngress {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (hostname != null) {
-      json[r'hostname'] = hostname;
+    if (this.hostname != null) {
+      json[r'hostname'] = this.hostname;
+    } else {
+      json[r'hostname'] = null;
     }
-    if (ip != null) {
-      json[r'ip'] = ip;
+    if (this.ip != null) {
+      json[r'ip'] = this.ip;
+    } else {
+      json[r'ip'] = null;
     }
-    json[r'ports'] = ports;
+    json[r'ports'] = this.ports;
     return json;
   }
 

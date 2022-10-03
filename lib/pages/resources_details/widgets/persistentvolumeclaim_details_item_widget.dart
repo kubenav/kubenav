@@ -64,7 +64,7 @@ class PersistentVolumeClaimDetailsItemWidget extends StatelessWidget
           details: [
             DetailsItemModel(
               name: 'Status',
-              values: pvc.status!.phase?.value ?? '-',
+              values: pvc.status!.phase ?? '-',
             ),
             DetailsItemModel(
               name: 'Access Modes',

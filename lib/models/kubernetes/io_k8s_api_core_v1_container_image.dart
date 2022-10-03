@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -18,7 +19,7 @@ class IoK8sApiCoreV1ContainerImage {
     this.sizeBytes,
   });
 
-  /// Names by which this image is known. e.g. [\"k8s.gcr.io/hyperkube:v1.0.7\", \"dockerhub.io/google_containers/hyperkube:v1.0.7\"]
+  /// Names by which this image is known. e.g. [\"kubernetes.example/hyperkube:v1.0.7\", \"cloud-vendor.registry.example/cloud-vendor/hyperkube:v1.0.7\"]
   List<String> names;
 
   /// The size of the image in bytes.
@@ -48,9 +49,11 @@ class IoK8sApiCoreV1ContainerImage {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'names'] = names;
-    if (sizeBytes != null) {
-      json[r'sizeBytes'] = sizeBytes;
+    json[r'names'] = this.names;
+    if (this.sizeBytes != null) {
+      json[r'sizeBytes'] = this.sizeBytes;
+    } else {
+      json[r'sizeBytes'] = null;
     }
     return json;
   }

@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -19,10 +20,10 @@ class IoK8sApiCoreV1NFSVolumeSource {
     required this.server,
   });
 
-  /// Path that is exported by the NFS server. More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs
+  /// path that is exported by the NFS server. More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs
   String path;
 
-  /// ReadOnly here will force the NFS export to be mounted with read-only permissions. Defaults to false. More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs
+  /// readOnly here will force the NFS export to be mounted with read-only permissions. Defaults to false. More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -31,7 +32,7 @@ class IoK8sApiCoreV1NFSVolumeSource {
   ///
   bool? readOnly;
 
-  /// Server is the hostname or IP address of the NFS server. More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs
+  /// server is the hostname or IP address of the NFS server. More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs
   String server;
 
   @override
@@ -55,11 +56,13 @@ class IoK8sApiCoreV1NFSVolumeSource {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'path'] = path;
-    if (readOnly != null) {
-      json[r'readOnly'] = readOnly;
+    json[r'path'] = this.path;
+    if (this.readOnly != null) {
+      json[r'readOnly'] = this.readOnly;
+    } else {
+      json[r'readOnly'] = null;
     }
-    json[r'server'] = server;
+    json[r'server'] = this.server;
     return json;
   }
 

@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -79,16 +80,22 @@ class IoK8sApiAppsV1DaemonSetSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (minReadySeconds != null) {
-      json[r'minReadySeconds'] = minReadySeconds;
+    if (this.minReadySeconds != null) {
+      json[r'minReadySeconds'] = this.minReadySeconds;
+    } else {
+      json[r'minReadySeconds'] = null;
     }
-    if (revisionHistoryLimit != null) {
-      json[r'revisionHistoryLimit'] = revisionHistoryLimit;
+    if (this.revisionHistoryLimit != null) {
+      json[r'revisionHistoryLimit'] = this.revisionHistoryLimit;
+    } else {
+      json[r'revisionHistoryLimit'] = null;
     }
-    json[r'selector'] = selector;
-    json[r'template'] = template;
-    if (updateStrategy != null) {
-      json[r'updateStrategy'] = updateStrategy;
+    json[r'selector'] = this.selector;
+    json[r'template'] = this.template;
+    if (this.updateStrategy != null) {
+      json[r'updateStrategy'] = this.updateStrategy;
+    } else {
+      json[r'updateStrategy'] = null;
     }
     return json;
   }

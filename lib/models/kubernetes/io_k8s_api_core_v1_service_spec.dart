@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -37,7 +38,7 @@ class IoK8sApiCoreV1ServiceSpec {
     this.type,
   });
 
-  /// allocateLoadBalancerNodePorts defines if NodePorts will be automatically allocated for services with type LoadBalancer.  Default is \"true\". It may be set to \"false\" if the cluster load-balancer does not rely on NodePorts.  If the caller requests specific NodePorts (by specifying a value), those requests will be respected, regardless of this field. This field may only be set for services with type LoadBalancer and will be cleared if the type is changed to any other type. This field is beta-level and is only honored by servers that enable the ServiceLBNodePortControl feature.
+  /// allocateLoadBalancerNodePorts defines if NodePorts will be automatically allocated for services with type LoadBalancer.  Default is \"true\". It may be set to \"false\" if the cluster load-balancer does not rely on NodePorts.  If the caller requests specific NodePorts (by specifying a value), those requests will be respected, regardless of this field. This field may only be set for services with type LoadBalancer and will be cleared if the type is changed to any other type.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -70,10 +71,16 @@ class IoK8sApiCoreV1ServiceSpec {
   ///
   String? externalName;
 
-  /// externalTrafficPolicy denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints. \"Local\" preserves the client source IP and avoids a second hop for LoadBalancer and Nodeport type services, but risks potentially imbalanced traffic spreading. \"Cluster\" obscures the client source IP and may cause a second hop to another node, but should have good overall load-spreading.  Possible enum values:  - `\"Cluster\"` specifies node-global (legacy) behavior.  - `\"Local\"` specifies node-local endpoints behavior.
-  IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum? externalTrafficPolicy;
+  /// externalTrafficPolicy describes how nodes distribute service traffic they receive on one of the Service's \"externally-facing\" addresses (NodePorts, ExternalIPs, and LoadBalancer IPs). If set to \"Local\", the proxy will configure the service in a way that assumes that external load balancers will take care of balancing the service traffic between nodes, and so each node will deliver traffic only to the node-local endpoints of the service, without masquerading the client source IP. (Traffic mistakenly sent to a node with no endpoints will be dropped.) The default value, \"Cluster\", uses the standard behavior of routing to all endpoints evenly (possibly modified by topology and other features). Note that traffic sent to an External IP or LoadBalancer IP from within the cluster will always get \"Cluster\" semantics, but clients sending to a NodePort from within the cluster may need to take traffic policy into account when picking a node.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? externalTrafficPolicy;
 
-  /// healthCheckNodePort specifies the healthcheck nodePort for the service. This only applies when type is set to LoadBalancer and externalTrafficPolicy is set to Local. If a value is specified, is in-range, and is not in use, it will be used.  If not specified, a value will be automatically allocated.  External systems (e.g. load-balancers) can use this port to determine if a given node holds endpoints for this service or not.  If this field is specified when creating a Service which does not need it, creation will fail. This field will be wiped when updating a Service to no longer need it (e.g. changing type).
+  /// healthCheckNodePort specifies the healthcheck nodePort for the service. This only applies when type is set to LoadBalancer and externalTrafficPolicy is set to Local. If a value is specified, is in-range, and is not in use, it will be used.  If not specified, a value will be automatically allocated.  External systems (e.g. load-balancers) can use this port to determine if a given node holds endpoints for this service or not.  If this field is specified when creating a Service which does not need it, creation will fail. This field will be wiped when updating a Service to no longer need it (e.g. changing type). This field cannot be updated once set.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -82,7 +89,7 @@ class IoK8sApiCoreV1ServiceSpec {
   ///
   int? healthCheckNodePort;
 
-  /// InternalTrafficPolicy specifies if the cluster internal traffic should be routed to all endpoints or node-local endpoints only. \"Cluster\" routes internal traffic to a Service to all endpoints. \"Local\" routes traffic to node-local endpoints only, traffic is dropped if no node-local endpoints are ready. The default value is \"Cluster\".
+  /// InternalTrafficPolicy describes how nodes distribute service traffic they receive on the ClusterIP. If set to \"Local\", the proxy will assume that pods only want to talk to endpoints of the service on the same node as the pod, dropping the traffic if there are no local endpoints. The default value, \"Cluster\", uses the standard behavior of routing to all endpoints evenly (possibly modified by topology and other features).
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -112,7 +119,7 @@ class IoK8sApiCoreV1ServiceSpec {
   ///
   String? loadBalancerClass;
 
-  /// Only applies to Service Type: LoadBalancer LoadBalancer will get created with the IP specified in this field. This feature depends on whether the underlying cloud-provider supports specifying the loadBalancerIP when a load balancer is created. This field will be ignored if the cloud-provider does not support the feature.
+  /// Only applies to Service Type: LoadBalancer. This feature depends on whether the underlying cloud-provider supports specifying the loadBalancerIP when a load balancer is created. This field will be ignored if the cloud-provider does not support the feature. Deprecated: This field was under-specified and its meaning varies across implementations, and it cannot support dual-stack. As of Kubernetes v1.24, users are encouraged to use implementation-specific annotations when available. This field may be removed in a future API version.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -139,8 +146,14 @@ class IoK8sApiCoreV1ServiceSpec {
   /// Route service traffic to pods with label keys and values matching this selector. If empty or not present, the service is assumed to have an external process managing its endpoints, which Kubernetes will not modify. Only applies to types ClusterIP, NodePort, and LoadBalancer. Ignored if type is ExternalName. More info: https://kubernetes.io/docs/concepts/services-networking/service/
   Map<String, String> selector;
 
-  /// Supports \"ClientIP\" and \"None\". Used to maintain session affinity. Enable client IP based session affinity. Must be ClientIP or None. Defaults to None. More info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies  Possible enum values:  - `\"ClientIP\"` is the Client IP based.  - `\"None\"` - no session affinity.
-  IoK8sApiCoreV1ServiceSpecSessionAffinityEnum? sessionAffinity;
+  /// Supports \"ClientIP\" and \"None\". Used to maintain session affinity. Enable client IP based session affinity. Must be ClientIP or None. Defaults to None. More info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? sessionAffinity;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -150,8 +163,14 @@ class IoK8sApiCoreV1ServiceSpec {
   ///
   IoK8sApiCoreV1SessionAffinityConfig? sessionAffinityConfig;
 
-  /// type determines how the Service is exposed. Defaults to ClusterIP. Valid options are ExternalName, ClusterIP, NodePort, and LoadBalancer. \"ClusterIP\" allocates a cluster-internal IP address for load-balancing to endpoints. Endpoints are determined by the selector or if that is not specified, by manual construction of an Endpoints object or EndpointSlice objects. If clusterIP is \"None\", no virtual IP is allocated and the endpoints are published as a set of endpoints rather than a virtual IP. \"NodePort\" builds on ClusterIP and allocates a port on every node which routes to the same endpoints as the clusterIP. \"LoadBalancer\" builds on NodePort and creates an external load-balancer (if supported in the current cloud) which routes to the same endpoints as the clusterIP. \"ExternalName\" aliases this service to the specified externalName. Several other fields do not apply to ExternalName services. More info: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types  Possible enum values:  - `\"ClusterIP\"` means a service will only be accessible inside the cluster, via the cluster IP.  - `\"ExternalName\"` means a service consists of only a reference to an external name that kubedns or equivalent will return as a CNAME record, with no exposing or proxying of any pods involved.  - `\"LoadBalancer\"` means a service will be exposed via an external load balancer (if the cloud provider supports it), in addition to 'NodePort' type.  - `\"NodePort\"` means a service will be exposed on one port of every node, in addition to 'ClusterIP' type.
-  IoK8sApiCoreV1ServiceSpecTypeEnum? type;
+  /// type determines how the Service is exposed. Defaults to ClusterIP. Valid options are ExternalName, ClusterIP, NodePort, and LoadBalancer. \"ClusterIP\" allocates a cluster-internal IP address for load-balancing to endpoints. Endpoints are determined by the selector or if that is not specified, by manual construction of an Endpoints object or EndpointSlice objects. If clusterIP is \"None\", no virtual IP is allocated and the endpoints are published as a set of endpoints rather than a virtual IP. \"NodePort\" builds on ClusterIP and allocates a port on every node which routes to the same endpoints as the clusterIP. \"LoadBalancer\" builds on NodePort and creates an external load-balancer (if supported in the current cloud) which routes to the same endpoints as the clusterIP. \"ExternalName\" aliases this service to the specified externalName. Several other fields do not apply to ExternalName services. More info: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? type;
 
   @override
   bool operator ==(Object other) =>
@@ -211,50 +230,77 @@ class IoK8sApiCoreV1ServiceSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (allocateLoadBalancerNodePorts != null) {
-      json[r'allocateLoadBalancerNodePorts'] = allocateLoadBalancerNodePorts;
+    if (this.allocateLoadBalancerNodePorts != null) {
+      json[r'allocateLoadBalancerNodePorts'] =
+          this.allocateLoadBalancerNodePorts;
+    } else {
+      json[r'allocateLoadBalancerNodePorts'] = null;
     }
-    if (clusterIP != null) {
-      json[r'clusterIP'] = clusterIP;
+    if (this.clusterIP != null) {
+      json[r'clusterIP'] = this.clusterIP;
+    } else {
+      json[r'clusterIP'] = null;
     }
-    json[r'clusterIPs'] = clusterIPs;
-    json[r'externalIPs'] = externalIPs;
-    if (externalName != null) {
-      json[r'externalName'] = externalName;
+    json[r'clusterIPs'] = this.clusterIPs;
+    json[r'externalIPs'] = this.externalIPs;
+    if (this.externalName != null) {
+      json[r'externalName'] = this.externalName;
+    } else {
+      json[r'externalName'] = null;
     }
-    if (externalTrafficPolicy != null) {
-      json[r'externalTrafficPolicy'] = externalTrafficPolicy;
+    if (this.externalTrafficPolicy != null) {
+      json[r'externalTrafficPolicy'] = this.externalTrafficPolicy;
+    } else {
+      json[r'externalTrafficPolicy'] = null;
     }
-    if (healthCheckNodePort != null) {
-      json[r'healthCheckNodePort'] = healthCheckNodePort;
+    if (this.healthCheckNodePort != null) {
+      json[r'healthCheckNodePort'] = this.healthCheckNodePort;
+    } else {
+      json[r'healthCheckNodePort'] = null;
     }
-    if (internalTrafficPolicy != null) {
-      json[r'internalTrafficPolicy'] = internalTrafficPolicy;
+    if (this.internalTrafficPolicy != null) {
+      json[r'internalTrafficPolicy'] = this.internalTrafficPolicy;
+    } else {
+      json[r'internalTrafficPolicy'] = null;
     }
-    json[r'ipFamilies'] = ipFamilies;
-    if (ipFamilyPolicy != null) {
-      json[r'ipFamilyPolicy'] = ipFamilyPolicy;
+    json[r'ipFamilies'] = this.ipFamilies;
+    if (this.ipFamilyPolicy != null) {
+      json[r'ipFamilyPolicy'] = this.ipFamilyPolicy;
+    } else {
+      json[r'ipFamilyPolicy'] = null;
     }
-    if (loadBalancerClass != null) {
-      json[r'loadBalancerClass'] = loadBalancerClass;
+    if (this.loadBalancerClass != null) {
+      json[r'loadBalancerClass'] = this.loadBalancerClass;
+    } else {
+      json[r'loadBalancerClass'] = null;
     }
-    if (loadBalancerIP != null) {
-      json[r'loadBalancerIP'] = loadBalancerIP;
+    if (this.loadBalancerIP != null) {
+      json[r'loadBalancerIP'] = this.loadBalancerIP;
+    } else {
+      json[r'loadBalancerIP'] = null;
     }
-    json[r'loadBalancerSourceRanges'] = loadBalancerSourceRanges;
-    json[r'ports'] = ports;
-    if (publishNotReadyAddresses != null) {
-      json[r'publishNotReadyAddresses'] = publishNotReadyAddresses;
+    json[r'loadBalancerSourceRanges'] = this.loadBalancerSourceRanges;
+    json[r'ports'] = this.ports;
+    if (this.publishNotReadyAddresses != null) {
+      json[r'publishNotReadyAddresses'] = this.publishNotReadyAddresses;
+    } else {
+      json[r'publishNotReadyAddresses'] = null;
     }
-    json[r'selector'] = selector;
-    if (sessionAffinity != null) {
-      json[r'sessionAffinity'] = sessionAffinity;
+    json[r'selector'] = this.selector;
+    if (this.sessionAffinity != null) {
+      json[r'sessionAffinity'] = this.sessionAffinity;
+    } else {
+      json[r'sessionAffinity'] = null;
     }
-    if (sessionAffinityConfig != null) {
-      json[r'sessionAffinityConfig'] = sessionAffinityConfig;
+    if (this.sessionAffinityConfig != null) {
+      json[r'sessionAffinityConfig'] = this.sessionAffinityConfig;
+    } else {
+      json[r'sessionAffinityConfig'] = null;
     }
-    if (type != null) {
-      json[r'type'] = type;
+    if (this.type != null) {
+      json[r'type'] = this.type;
+    } else {
+      json[r'type'] = null;
     }
     return json;
   }
@@ -291,8 +337,7 @@ class IoK8sApiCoreV1ServiceSpec {
             : const [],
         externalName: mapValueOfType<String>(json, r'externalName'),
         externalTrafficPolicy:
-            IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum.fromJson(
-                json[r'externalTrafficPolicy']),
+            mapValueOfType<String>(json, r'externalTrafficPolicy'),
         healthCheckNodePort: mapValueOfType<int>(json, r'healthCheckNodePort'),
         internalTrafficPolicy:
             mapValueOfType<String>(json, r'internalTrafficPolicy'),
@@ -310,11 +355,10 @@ class IoK8sApiCoreV1ServiceSpec {
         publishNotReadyAddresses:
             mapValueOfType<bool>(json, r'publishNotReadyAddresses'),
         selector: mapCastOfType<String, String>(json, r'selector') ?? const {},
-        sessionAffinity: IoK8sApiCoreV1ServiceSpecSessionAffinityEnum.fromJson(
-            json[r'sessionAffinity']),
+        sessionAffinity: mapValueOfType<String>(json, r'sessionAffinity'),
         sessionAffinityConfig: IoK8sApiCoreV1SessionAffinityConfig.fromJson(
             json[r'sessionAffinityConfig']),
-        type: IoK8sApiCoreV1ServiceSpecTypeEnum.fromJson(json[r'type']),
+        type: mapValueOfType<String>(json, r'type'),
       );
     }
     return null;
@@ -373,272 +417,4 @@ class IoK8sApiCoreV1ServiceSpec {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{};
-}
-
-/// externalTrafficPolicy denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints. \"Local\" preserves the client source IP and avoids a second hop for LoadBalancer and Nodeport type services, but risks potentially imbalanced traffic spreading. \"Cluster\" obscures the client source IP and may cause a second hop to another node, but should have good overall load-spreading.  Possible enum values:  - `\"Cluster\"` specifies node-global (legacy) behavior.  - `\"Local\"` specifies node-local endpoints behavior.
-class IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const cluster =
-      IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum._(r'Cluster');
-  static const local =
-      IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum._(r'Local');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum].
-  static const values = <IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum>[
-    cluster,
-    local,
-  ];
-
-  static IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum? fromJson(
-          dynamic value) =>
-      IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnumTypeTransformer()
-          .decode(value);
-
-  static List<IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value =
-            IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum].
-class IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnumTypeTransformer {
-  factory IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnumTypeTransformer
-              ._();
-
-  const IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum data) =>
-      data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'Cluster':
-          return IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum.cluster;
-        case r'Local':
-          return IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnum.local;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1ServiceSpecExternalTrafficPolicyEnumTypeTransformer?
-      _instance;
-}
-
-/// Supports \"ClientIP\" and \"None\". Used to maintain session affinity. Enable client IP based session affinity. Must be ClientIP or None. Defaults to None. More info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies  Possible enum values:  - `\"ClientIP\"` is the Client IP based.  - `\"None\"` - no session affinity.
-class IoK8sApiCoreV1ServiceSpecSessionAffinityEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1ServiceSpecSessionAffinityEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const clientIP =
-      IoK8sApiCoreV1ServiceSpecSessionAffinityEnum._(r'ClientIP');
-  static const none = IoK8sApiCoreV1ServiceSpecSessionAffinityEnum._(r'None');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1ServiceSpecSessionAffinityEnum].
-  static const values = <IoK8sApiCoreV1ServiceSpecSessionAffinityEnum>[
-    clientIP,
-    none,
-  ];
-
-  static IoK8sApiCoreV1ServiceSpecSessionAffinityEnum? fromJson(
-          dynamic value) =>
-      IoK8sApiCoreV1ServiceSpecSessionAffinityEnumTypeTransformer()
-          .decode(value);
-
-  static List<IoK8sApiCoreV1ServiceSpecSessionAffinityEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1ServiceSpecSessionAffinityEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value =
-            IoK8sApiCoreV1ServiceSpecSessionAffinityEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1ServiceSpecSessionAffinityEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1ServiceSpecSessionAffinityEnum].
-class IoK8sApiCoreV1ServiceSpecSessionAffinityEnumTypeTransformer {
-  factory IoK8sApiCoreV1ServiceSpecSessionAffinityEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1ServiceSpecSessionAffinityEnumTypeTransformer._();
-
-  const IoK8sApiCoreV1ServiceSpecSessionAffinityEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1ServiceSpecSessionAffinityEnum data) =>
-      data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1ServiceSpecSessionAffinityEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1ServiceSpecSessionAffinityEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'ClientIP':
-          return IoK8sApiCoreV1ServiceSpecSessionAffinityEnum.clientIP;
-        case r'None':
-          return IoK8sApiCoreV1ServiceSpecSessionAffinityEnum.none;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1ServiceSpecSessionAffinityEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1ServiceSpecSessionAffinityEnumTypeTransformer? _instance;
-}
-
-/// type determines how the Service is exposed. Defaults to ClusterIP. Valid options are ExternalName, ClusterIP, NodePort, and LoadBalancer. \"ClusterIP\" allocates a cluster-internal IP address for load-balancing to endpoints. Endpoints are determined by the selector or if that is not specified, by manual construction of an Endpoints object or EndpointSlice objects. If clusterIP is \"None\", no virtual IP is allocated and the endpoints are published as a set of endpoints rather than a virtual IP. \"NodePort\" builds on ClusterIP and allocates a port on every node which routes to the same endpoints as the clusterIP. \"LoadBalancer\" builds on NodePort and creates an external load-balancer (if supported in the current cloud) which routes to the same endpoints as the clusterIP. \"ExternalName\" aliases this service to the specified externalName. Several other fields do not apply to ExternalName services. More info: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types  Possible enum values:  - `\"ClusterIP\"` means a service will only be accessible inside the cluster, via the cluster IP.  - `\"ExternalName\"` means a service consists of only a reference to an external name that kubedns or equivalent will return as a CNAME record, with no exposing or proxying of any pods involved.  - `\"LoadBalancer\"` means a service will be exposed via an external load balancer (if the cloud provider supports it), in addition to 'NodePort' type.  - `\"NodePort\"` means a service will be exposed on one port of every node, in addition to 'ClusterIP' type.
-class IoK8sApiCoreV1ServiceSpecTypeEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1ServiceSpecTypeEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const clusterIP = IoK8sApiCoreV1ServiceSpecTypeEnum._(r'ClusterIP');
-  static const externalName =
-      IoK8sApiCoreV1ServiceSpecTypeEnum._(r'ExternalName');
-  static const loadBalancer =
-      IoK8sApiCoreV1ServiceSpecTypeEnum._(r'LoadBalancer');
-  static const nodePort = IoK8sApiCoreV1ServiceSpecTypeEnum._(r'NodePort');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1ServiceSpecTypeEnum].
-  static const values = <IoK8sApiCoreV1ServiceSpecTypeEnum>[
-    clusterIP,
-    externalName,
-    loadBalancer,
-    nodePort,
-  ];
-
-  static IoK8sApiCoreV1ServiceSpecTypeEnum? fromJson(dynamic value) =>
-      IoK8sApiCoreV1ServiceSpecTypeEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiCoreV1ServiceSpecTypeEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1ServiceSpecTypeEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiCoreV1ServiceSpecTypeEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1ServiceSpecTypeEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1ServiceSpecTypeEnum].
-class IoK8sApiCoreV1ServiceSpecTypeEnumTypeTransformer {
-  factory IoK8sApiCoreV1ServiceSpecTypeEnumTypeTransformer() =>
-      _instance ??= const IoK8sApiCoreV1ServiceSpecTypeEnumTypeTransformer._();
-
-  const IoK8sApiCoreV1ServiceSpecTypeEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1ServiceSpecTypeEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1ServiceSpecTypeEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1ServiceSpecTypeEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'ClusterIP':
-          return IoK8sApiCoreV1ServiceSpecTypeEnum.clusterIP;
-        case r'ExternalName':
-          return IoK8sApiCoreV1ServiceSpecTypeEnum.externalName;
-        case r'LoadBalancer':
-          return IoK8sApiCoreV1ServiceSpecTypeEnum.loadBalancer;
-        case r'NodePort':
-          return IoK8sApiCoreV1ServiceSpecTypeEnum.nodePort;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1ServiceSpecTypeEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1ServiceSpecTypeEnumTypeTransformer? _instance;
 }

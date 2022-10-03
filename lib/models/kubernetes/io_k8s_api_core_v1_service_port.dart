@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -22,7 +23,7 @@ class IoK8sApiCoreV1ServicePort {
     this.targetPort,
   });
 
-  /// The application protocol for this port. This field follows standard Kubernetes label syntax. Un-prefixed names are reserved for IANA standard service names (as per RFC-6335 and http://www.iana.org/assignments/service-names). Non-standard protocols should use prefixed names such as mycompany.com/my-custom-protocol.
+  /// The application protocol for this port. This field follows standard Kubernetes label syntax. Un-prefixed names are reserved for IANA standard service names (as per RFC-6335 and https://www.iana.org/assignments/service-names). Non-standard protocols should use prefixed names such as mycompany.com/my-custom-protocol.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -52,8 +53,14 @@ class IoK8sApiCoreV1ServicePort {
   /// The port that will be exposed by this service.
   int port;
 
-  /// The IP protocol for this port. Supports \"TCP\", \"UDP\", and \"SCTP\". Default is TCP.  Possible enum values:  - `\"SCTP\"` is the SCTP protocol.  - `\"TCP\"` is the TCP protocol.  - `\"UDP\"` is the UDP protocol.
-  IoK8sApiCoreV1ServicePortProtocolEnum? protocol;
+  /// The IP protocol for this port. Supports \"TCP\", \"UDP\", and \"SCTP\". Default is TCP.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? protocol;
 
   /// IntOrString is a type that can hold an int32 or a string.  When used in JSON or YAML marshalling and unmarshalling, it produces or consumes the inner type.  This allows you to have, for example, a JSON field that can accept a name or number.
   ///
@@ -91,21 +98,31 @@ class IoK8sApiCoreV1ServicePort {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (appProtocol != null) {
-      json[r'appProtocol'] = appProtocol;
+    if (this.appProtocol != null) {
+      json[r'appProtocol'] = this.appProtocol;
+    } else {
+      json[r'appProtocol'] = null;
     }
-    if (name != null) {
-      json[r'name'] = name;
+    if (this.name != null) {
+      json[r'name'] = this.name;
+    } else {
+      json[r'name'] = null;
     }
-    if (nodePort != null) {
-      json[r'nodePort'] = nodePort;
+    if (this.nodePort != null) {
+      json[r'nodePort'] = this.nodePort;
+    } else {
+      json[r'nodePort'] = null;
     }
-    json[r'port'] = port;
-    if (protocol != null) {
-      json[r'protocol'] = protocol;
+    json[r'port'] = this.port;
+    if (this.protocol != null) {
+      json[r'protocol'] = this.protocol;
+    } else {
+      json[r'protocol'] = null;
     }
-    if (targetPort != null) {
-      json[r'targetPort'] = targetPort;
+    if (this.targetPort != null) {
+      json[r'targetPort'] = this.targetPort;
+    } else {
+      json[r'targetPort'] = null;
     }
     return json;
   }
@@ -135,8 +152,7 @@ class IoK8sApiCoreV1ServicePort {
         name: mapValueOfType<String>(json, r'name'),
         nodePort: mapValueOfType<int>(json, r'nodePort'),
         port: mapValueOfType<int>(json, r'port')!,
-        protocol:
-            IoK8sApiCoreV1ServicePortProtocolEnum.fromJson(json[r'protocol']),
+        protocol: mapValueOfType<String>(json, r'protocol'),
         targetPort: mapValueOfType<dynamic>(json, r'targetPort'),
       );
     }
@@ -198,90 +214,4 @@ class IoK8sApiCoreV1ServicePort {
   static const requiredKeys = <String>{
     'port',
   };
-}
-
-/// The IP protocol for this port. Supports \"TCP\", \"UDP\", and \"SCTP\". Default is TCP.  Possible enum values:  - `\"SCTP\"` is the SCTP protocol.  - `\"TCP\"` is the TCP protocol.  - `\"UDP\"` is the UDP protocol.
-class IoK8sApiCoreV1ServicePortProtocolEnum {
-  /// Instantiate a new enum with the provided [value].
-  const IoK8sApiCoreV1ServicePortProtocolEnum._(this.value);
-
-  /// The underlying value of this enum member.
-  final String value;
-
-  @override
-  String toString() => value;
-
-  String toJson() => value;
-
-  static const SCTP = IoK8sApiCoreV1ServicePortProtocolEnum._(r'SCTP');
-  static const TCP = IoK8sApiCoreV1ServicePortProtocolEnum._(r'TCP');
-  static const UDP = IoK8sApiCoreV1ServicePortProtocolEnum._(r'UDP');
-
-  /// List of all possible values in this [enum][IoK8sApiCoreV1ServicePortProtocolEnum].
-  static const values = <IoK8sApiCoreV1ServicePortProtocolEnum>[
-    SCTP,
-    TCP,
-    UDP,
-  ];
-
-  static IoK8sApiCoreV1ServicePortProtocolEnum? fromJson(dynamic value) =>
-      IoK8sApiCoreV1ServicePortProtocolEnumTypeTransformer().decode(value);
-
-  static List<IoK8sApiCoreV1ServicePortProtocolEnum>? listFromJson(
-    dynamic json, {
-    bool growable = false,
-  }) {
-    final result = <IoK8sApiCoreV1ServicePortProtocolEnum>[];
-    if (json is List && json.isNotEmpty) {
-      for (final row in json) {
-        final value = IoK8sApiCoreV1ServicePortProtocolEnum.fromJson(row);
-        if (value != null) {
-          result.add(value);
-        }
-      }
-    }
-    return result.toList(growable: growable);
-  }
-}
-
-/// Transformation class that can [encode] an instance of [IoK8sApiCoreV1ServicePortProtocolEnum] to String,
-/// and [decode] dynamic data back to [IoK8sApiCoreV1ServicePortProtocolEnum].
-class IoK8sApiCoreV1ServicePortProtocolEnumTypeTransformer {
-  factory IoK8sApiCoreV1ServicePortProtocolEnumTypeTransformer() =>
-      _instance ??=
-          const IoK8sApiCoreV1ServicePortProtocolEnumTypeTransformer._();
-
-  const IoK8sApiCoreV1ServicePortProtocolEnumTypeTransformer._();
-
-  String encode(IoK8sApiCoreV1ServicePortProtocolEnum data) => data.value;
-
-  /// Decodes a [dynamic value][data] to a IoK8sApiCoreV1ServicePortProtocolEnum.
-  ///
-  /// If [allowNull] is true and the [dynamic value][data] cannot be decoded successfully,
-  /// then null is returned. However, if [allowNull] is false and the [dynamic value][data]
-  /// cannot be decoded successfully, then an [UnimplementedError] is thrown.
-  ///
-  /// The [allowNull] is very handy when an API changes and a new enum value is added or removed,
-  /// and users are still using an old app with the old code.
-  IoK8sApiCoreV1ServicePortProtocolEnum? decode(dynamic data,
-      {bool allowNull = true}) {
-    if (data != null) {
-      switch (data.toString()) {
-        case r'SCTP':
-          return IoK8sApiCoreV1ServicePortProtocolEnum.SCTP;
-        case r'TCP':
-          return IoK8sApiCoreV1ServicePortProtocolEnum.TCP;
-        case r'UDP':
-          return IoK8sApiCoreV1ServicePortProtocolEnum.UDP;
-        default:
-          if (!allowNull) {
-            throw ArgumentError('Unknown enum value to decode: $data');
-          }
-      }
-    }
-    return null;
-  }
-
-  /// Singleton [IoK8sApiCoreV1ServicePortProtocolEnumTypeTransformer] instance.
-  static IoK8sApiCoreV1ServicePortProtocolEnumTypeTransformer? _instance;
 }

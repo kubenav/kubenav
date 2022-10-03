@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -27,7 +28,7 @@ class IoK8sApiDiscoveryV1Endpoint {
     this.zone,
   });
 
-  /// addresses of this endpoint. The contents of this field are interpreted according to the corresponding EndpointSlice addressType field. Consumers must handle different types of addresses in the context of their own capabilities. This must contain at least one address but no more than 100.
+  /// addresses of this endpoint. The contents of this field are interpreted according to the corresponding EndpointSlice addressType field. Consumers must handle different types of addresses in the context of their own capabilities. This must contain at least one address but no more than 100. These are all assumed to be fungible and clients may choose to only use the first element. Refer to: https://issue.k8s.io/106267
   List<String> addresses;
 
   ///
@@ -58,7 +59,7 @@ class IoK8sApiDiscoveryV1Endpoint {
   ///
   String? hostname;
 
-  /// nodeName represents the name of the Node hosting this endpoint. This can be used to determine endpoints local to a Node. This field can be enabled with the EndpointSliceNodeName feature gate.
+  /// nodeName represents the name of the Node hosting this endpoint. This can be used to determine endpoints local to a Node.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -115,25 +116,37 @@ class IoK8sApiDiscoveryV1Endpoint {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'addresses'] = addresses;
-    if (conditions != null) {
-      json[r'conditions'] = conditions;
+    json[r'addresses'] = this.addresses;
+    if (this.conditions != null) {
+      json[r'conditions'] = this.conditions;
+    } else {
+      json[r'conditions'] = null;
     }
-    json[r'deprecatedTopology'] = deprecatedTopology;
-    if (hints != null) {
-      json[r'hints'] = hints;
+    json[r'deprecatedTopology'] = this.deprecatedTopology;
+    if (this.hints != null) {
+      json[r'hints'] = this.hints;
+    } else {
+      json[r'hints'] = null;
     }
-    if (hostname != null) {
-      json[r'hostname'] = hostname;
+    if (this.hostname != null) {
+      json[r'hostname'] = this.hostname;
+    } else {
+      json[r'hostname'] = null;
     }
-    if (nodeName != null) {
-      json[r'nodeName'] = nodeName;
+    if (this.nodeName != null) {
+      json[r'nodeName'] = this.nodeName;
+    } else {
+      json[r'nodeName'] = null;
     }
-    if (targetRef != null) {
-      json[r'targetRef'] = targetRef;
+    if (this.targetRef != null) {
+      json[r'targetRef'] = this.targetRef;
+    } else {
+      json[r'targetRef'] = null;
     }
-    if (zone != null) {
-      json[r'zone'] = zone;
+    if (this.zone != null) {
+      json[r'zone'] = this.zone;
+    } else {
+      json[r'zone'] = null;
     }
     return json;
   }

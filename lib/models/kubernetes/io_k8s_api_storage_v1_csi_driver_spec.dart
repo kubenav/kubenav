@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -19,6 +20,7 @@ class IoK8sApiStorageV1CSIDriverSpec {
     this.fsGroupPolicy,
     this.podInfoOnMount,
     this.requiresRepublish,
+    this.seLinuxMount,
     this.storageCapacity,
     this.tokenRequests = const [],
     this.volumeLifecycleModes = const [],
@@ -60,7 +62,16 @@ class IoK8sApiStorageV1CSIDriverSpec {
   ///
   bool? requiresRepublish;
 
-  /// If set to true, storageCapacity indicates that the CSI volume driver wants pod scheduling to consider the storage capacity that the driver deployment will report by creating CSIStorageCapacity objects with capacity information.  The check can be enabled immediately when deploying a driver. In that case, provisioning new volumes with late binding will pause until the driver deployment has published some suitable CSIStorageCapacity object.  Alternatively, the driver can be deployed with the field unset or false and it can be flipped later when storage capacity information has been published.  This field was immutable in Kubernetes <= 1.22 and now is mutable.  This is a beta field and only available when the CSIStorageCapacity feature is enabled. The default is false.
+  /// SELinuxMount specifies if the CSI driver supports \"-o context\" mount option.  When \"true\", the CSI driver must ensure that all volumes provided by this CSI driver can be mounted separately with different `-o context` options. This is typical for storage backends that provide volumes as filesystems on block devices or as independent shared volumes. Kubernetes will call NodeStage / NodePublish with \"-o context=xyz\" mount option when mounting a ReadWriteOncePod volume used in Pod that has explicitly set SELinux context. In the future, it may be expanded to other volume AccessModes. In any case, Kubernetes will ensure that the volume is mounted only with a single SELinux context.  When \"false\", Kubernetes won't pass any special SELinux mount options to the driver. This is typical for volumes that represent subdirectories of a bigger shared filesystem.  Default is \"false\".
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  bool? seLinuxMount;
+
+  /// If set to true, storageCapacity indicates that the CSI volume driver wants pod scheduling to consider the storage capacity that the driver deployment will report by creating CSIStorageCapacity objects with capacity information.  The check can be enabled immediately when deploying a driver. In that case, provisioning new volumes with late binding will pause until the driver deployment has published some suitable CSIStorageCapacity object.  Alternatively, the driver can be deployed with the field unset or false and it can be flipped later when storage capacity information has been published.  This field was immutable in Kubernetes <= 1.22 and now is mutable.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -83,6 +94,7 @@ class IoK8sApiStorageV1CSIDriverSpec {
           other.fsGroupPolicy == fsGroupPolicy &&
           other.podInfoOnMount == podInfoOnMount &&
           other.requiresRepublish == requiresRepublish &&
+          other.seLinuxMount == seLinuxMount &&
           other.storageCapacity == storageCapacity &&
           other.tokenRequests == tokenRequests &&
           other.volumeLifecycleModes == volumeLifecycleModes;
@@ -94,33 +106,49 @@ class IoK8sApiStorageV1CSIDriverSpec {
       (fsGroupPolicy == null ? 0 : fsGroupPolicy!.hashCode) +
       (podInfoOnMount == null ? 0 : podInfoOnMount!.hashCode) +
       (requiresRepublish == null ? 0 : requiresRepublish!.hashCode) +
+      (seLinuxMount == null ? 0 : seLinuxMount!.hashCode) +
       (storageCapacity == null ? 0 : storageCapacity!.hashCode) +
       (tokenRequests.hashCode) +
       (volumeLifecycleModes.hashCode);
 
   @override
   String toString() =>
-      'IoK8sApiStorageV1CSIDriverSpec[attachRequired=$attachRequired, fsGroupPolicy=$fsGroupPolicy, podInfoOnMount=$podInfoOnMount, requiresRepublish=$requiresRepublish, storageCapacity=$storageCapacity, tokenRequests=$tokenRequests, volumeLifecycleModes=$volumeLifecycleModes]';
+      'IoK8sApiStorageV1CSIDriverSpec[attachRequired=$attachRequired, fsGroupPolicy=$fsGroupPolicy, podInfoOnMount=$podInfoOnMount, requiresRepublish=$requiresRepublish, seLinuxMount=$seLinuxMount, storageCapacity=$storageCapacity, tokenRequests=$tokenRequests, volumeLifecycleModes=$volumeLifecycleModes]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (attachRequired != null) {
-      json[r'attachRequired'] = attachRequired;
+    if (this.attachRequired != null) {
+      json[r'attachRequired'] = this.attachRequired;
+    } else {
+      json[r'attachRequired'] = null;
     }
-    if (fsGroupPolicy != null) {
-      json[r'fsGroupPolicy'] = fsGroupPolicy;
+    if (this.fsGroupPolicy != null) {
+      json[r'fsGroupPolicy'] = this.fsGroupPolicy;
+    } else {
+      json[r'fsGroupPolicy'] = null;
     }
-    if (podInfoOnMount != null) {
-      json[r'podInfoOnMount'] = podInfoOnMount;
+    if (this.podInfoOnMount != null) {
+      json[r'podInfoOnMount'] = this.podInfoOnMount;
+    } else {
+      json[r'podInfoOnMount'] = null;
     }
-    if (requiresRepublish != null) {
-      json[r'requiresRepublish'] = requiresRepublish;
+    if (this.requiresRepublish != null) {
+      json[r'requiresRepublish'] = this.requiresRepublish;
+    } else {
+      json[r'requiresRepublish'] = null;
     }
-    if (storageCapacity != null) {
-      json[r'storageCapacity'] = storageCapacity;
+    if (this.seLinuxMount != null) {
+      json[r'seLinuxMount'] = this.seLinuxMount;
+    } else {
+      json[r'seLinuxMount'] = null;
     }
-    json[r'tokenRequests'] = tokenRequests;
-    json[r'volumeLifecycleModes'] = volumeLifecycleModes;
+    if (this.storageCapacity != null) {
+      json[r'storageCapacity'] = this.storageCapacity;
+    } else {
+      json[r'storageCapacity'] = null;
+    }
+    json[r'tokenRequests'] = this.tokenRequests;
+    json[r'volumeLifecycleModes'] = this.volumeLifecycleModes;
     return json;
   }
 
@@ -149,6 +177,7 @@ class IoK8sApiStorageV1CSIDriverSpec {
         fsGroupPolicy: mapValueOfType<String>(json, r'fsGroupPolicy'),
         podInfoOnMount: mapValueOfType<bool>(json, r'podInfoOnMount'),
         requiresRepublish: mapValueOfType<bool>(json, r'requiresRepublish'),
+        seLinuxMount: mapValueOfType<bool>(json, r'seLinuxMount'),
         storageCapacity: mapValueOfType<bool>(json, r'storageCapacity'),
         tokenRequests: IoK8sApiStorageV1TokenRequest.listFromJson(
                 json[r'tokenRequests']) ??

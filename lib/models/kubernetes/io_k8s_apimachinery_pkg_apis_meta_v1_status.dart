@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -127,29 +128,45 @@ class IoK8sApimachineryPkgApisMetaV1Status {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (apiVersion != null) {
-      json[r'apiVersion'] = apiVersion;
+    if (this.apiVersion != null) {
+      json[r'apiVersion'] = this.apiVersion;
+    } else {
+      json[r'apiVersion'] = null;
     }
-    if (code != null) {
-      json[r'code'] = code;
+    if (this.code != null) {
+      json[r'code'] = this.code;
+    } else {
+      json[r'code'] = null;
     }
-    if (details != null) {
-      json[r'details'] = details;
+    if (this.details != null) {
+      json[r'details'] = this.details;
+    } else {
+      json[r'details'] = null;
     }
-    if (kind != null) {
-      json[r'kind'] = kind;
+    if (this.kind != null) {
+      json[r'kind'] = this.kind;
+    } else {
+      json[r'kind'] = null;
     }
-    if (message != null) {
-      json[r'message'] = message;
+    if (this.message != null) {
+      json[r'message'] = this.message;
+    } else {
+      json[r'message'] = null;
     }
-    if (metadata != null) {
-      json[r'metadata'] = metadata;
+    if (this.metadata != null) {
+      json[r'metadata'] = this.metadata;
+    } else {
+      json[r'metadata'] = null;
     }
-    if (reason != null) {
-      json[r'reason'] = reason;
+    if (this.reason != null) {
+      json[r'reason'] = this.reason;
+    } else {
+      json[r'reason'] = null;
     }
-    if (status != null) {
-      json[r'status'] = status;
+    if (this.status != null) {
+      json[r'status'] = this.status;
+    } else {
+      json[r'status'] = null;
     }
     return json;
   }

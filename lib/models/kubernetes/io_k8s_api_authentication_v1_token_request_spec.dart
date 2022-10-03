@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -20,7 +21,7 @@ class IoK8sApiAuthenticationV1TokenRequestSpec {
     this.expirationSeconds,
   });
 
-  /// Audiences are the intendend audiences of the token. A recipient of a token must identitfy themself with an identifier in the list of audiences of the token, and otherwise should reject the token. A token issued for multiple audiences may be used to authenticate against any of the audiences listed but implies a high degree of trust between the target audiences.
+  /// Audiences are the intendend audiences of the token. A recipient of a token must identify themself with an identifier in the list of audiences of the token, and otherwise should reject the token. A token issued for multiple audiences may be used to authenticate against any of the audiences listed but implies a high degree of trust between the target audiences.
   List<String> audiences;
 
   ///
@@ -61,12 +62,16 @@ class IoK8sApiAuthenticationV1TokenRequestSpec {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'audiences'] = audiences;
-    if (boundObjectRef != null) {
-      json[r'boundObjectRef'] = boundObjectRef;
+    json[r'audiences'] = this.audiences;
+    if (this.boundObjectRef != null) {
+      json[r'boundObjectRef'] = this.boundObjectRef;
+    } else {
+      json[r'boundObjectRef'] = null;
     }
-    if (expirationSeconds != null) {
-      json[r'expirationSeconds'] = expirationSeconds;
+    if (this.expirationSeconds != null) {
+      json[r'expirationSeconds'] = this.expirationSeconds;
+    } else {
+      json[r'expirationSeconds'] = null;
     }
     return json;
   }

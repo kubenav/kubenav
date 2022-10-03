@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -47,9 +48,9 @@ class IoK8sApiRbacV1RoleRef {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'apiGroup'] = apiGroup;
-    json[r'kind'] = kind;
-    json[r'name'] = name;
+    json[r'apiGroup'] = this.apiGroup;
+    json[r'kind'] = this.kind;
+    json[r'name'] = this.name;
     return json;
   }
 

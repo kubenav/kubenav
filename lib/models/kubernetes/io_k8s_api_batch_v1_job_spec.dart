@@ -4,12 +4,14 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_pod_failure_policy.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod_template_spec.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_label_selector.dart';
 
@@ -22,6 +24,7 @@ class IoK8sApiBatchV1JobSpec {
     this.completions,
     this.manualSelector,
     this.parallelism,
+    this.podFailurePolicy,
     this.selector,
     this.suspend,
     required this.template,
@@ -46,7 +49,7 @@ class IoK8sApiBatchV1JobSpec {
   ///
   int? backoffLimit;
 
-  /// CompletionMode specifies how Pod completions are tracked. It can be `NonIndexed` (default) or `Indexed`.  `NonIndexed` means that the Job is considered complete when there have been .spec.completions successfully completed Pods. Each Pod completion is homologous to each other.  `Indexed` means that the Pods of a Job get an associated completion index from 0 to (.spec.completions - 1), available in the annotation batch.kubernetes.io/job-completion-index. The Job is considered complete when there is one successfully completed Pod for each index. When value is `Indexed`, .spec.completions must be specified and `.spec.parallelism` must be less than or equal to 10^5. In addition, The Pod name takes the form `$(job-name)-$(index)-$(random-string)`, the Pod hostname takes the form `$(job-name)-$(index)`.  This field is beta-level. More completion modes can be added in the future. If the Job controller observes a mode that it doesn't recognize, the controller skips updates for the Job.
+  /// CompletionMode specifies how Pod completions are tracked. It can be `NonIndexed` (default) or `Indexed`.  `NonIndexed` means that the Job is considered complete when there have been .spec.completions successfully completed Pods. Each Pod completion is homologous to each other.  `Indexed` means that the Pods of a Job get an associated completion index from 0 to (.spec.completions - 1), available in the annotation batch.kubernetes.io/job-completion-index. The Job is considered complete when there is one successfully completed Pod for each index. When value is `Indexed`, .spec.completions must be specified and `.spec.parallelism` must be less than or equal to 10^5. In addition, The Pod name takes the form `$(job-name)-$(index)-$(random-string)`, the Pod hostname takes the form `$(job-name)-$(index)`.  More completion modes can be added in the future. If the Job controller observes a mode that it doesn't recognize, which is possible during upgrades due to version skew, the controller skips updates for the Job.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -88,9 +91,17 @@ class IoK8sApiBatchV1JobSpec {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
+  IoK8sApiBatchV1PodFailurePolicy? podFailurePolicy;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
   IoK8sApimachineryPkgApisMetaV1LabelSelector? selector;
 
-  /// Suspend specifies whether the Job controller should create Pods or not. If a Job is created with suspend set to true, no Pods are created by the Job controller. If a Job is suspended after creation (i.e. the flag goes from false to true), the Job controller will delete all active Pods associated with this Job. Users must design their workload to gracefully handle this. Suspending a Job will reset the StartTime field of the Job, effectively resetting the ActiveDeadlineSeconds timer too. Defaults to false.  This field is beta-level, gated by SuspendJob feature flag (enabled by default).
+  /// Suspend specifies whether the Job controller should create Pods or not. If a Job is created with suspend set to true, no Pods are created by the Job controller. If a Job is suspended after creation (i.e. the flag goes from false to true), the Job controller will delete all active Pods associated with this Job. Users must design their workload to gracefully handle this. Suspending a Job will reset the StartTime field of the Job, effectively resetting the ActiveDeadlineSeconds timer too. Defaults to false.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -120,6 +131,7 @@ class IoK8sApiBatchV1JobSpec {
           other.completions == completions &&
           other.manualSelector == manualSelector &&
           other.parallelism == parallelism &&
+          other.podFailurePolicy == podFailurePolicy &&
           other.selector == selector &&
           other.suspend == suspend &&
           other.template == template &&
@@ -134,6 +146,7 @@ class IoK8sApiBatchV1JobSpec {
       (completions == null ? 0 : completions!.hashCode) +
       (manualSelector == null ? 0 : manualSelector!.hashCode) +
       (parallelism == null ? 0 : parallelism!.hashCode) +
+      (podFailurePolicy == null ? 0 : podFailurePolicy!.hashCode) +
       (selector == null ? 0 : selector!.hashCode) +
       (suspend == null ? 0 : suspend!.hashCode) +
       (template.hashCode) +
@@ -141,37 +154,60 @@ class IoK8sApiBatchV1JobSpec {
 
   @override
   String toString() =>
-      'IoK8sApiBatchV1JobSpec[activeDeadlineSeconds=$activeDeadlineSeconds, backoffLimit=$backoffLimit, completionMode=$completionMode, completions=$completions, manualSelector=$manualSelector, parallelism=$parallelism, selector=$selector, suspend=$suspend, template=$template, ttlSecondsAfterFinished=$ttlSecondsAfterFinished]';
+      'IoK8sApiBatchV1JobSpec[activeDeadlineSeconds=$activeDeadlineSeconds, backoffLimit=$backoffLimit, completionMode=$completionMode, completions=$completions, manualSelector=$manualSelector, parallelism=$parallelism, podFailurePolicy=$podFailurePolicy, selector=$selector, suspend=$suspend, template=$template, ttlSecondsAfterFinished=$ttlSecondsAfterFinished]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (activeDeadlineSeconds != null) {
-      json[r'activeDeadlineSeconds'] = activeDeadlineSeconds;
+    if (this.activeDeadlineSeconds != null) {
+      json[r'activeDeadlineSeconds'] = this.activeDeadlineSeconds;
+    } else {
+      json[r'activeDeadlineSeconds'] = null;
     }
-    if (backoffLimit != null) {
-      json[r'backoffLimit'] = backoffLimit;
+    if (this.backoffLimit != null) {
+      json[r'backoffLimit'] = this.backoffLimit;
+    } else {
+      json[r'backoffLimit'] = null;
     }
-    if (completionMode != null) {
-      json[r'completionMode'] = completionMode;
+    if (this.completionMode != null) {
+      json[r'completionMode'] = this.completionMode;
+    } else {
+      json[r'completionMode'] = null;
     }
-    if (completions != null) {
-      json[r'completions'] = completions;
+    if (this.completions != null) {
+      json[r'completions'] = this.completions;
+    } else {
+      json[r'completions'] = null;
     }
-    if (manualSelector != null) {
-      json[r'manualSelector'] = manualSelector;
+    if (this.manualSelector != null) {
+      json[r'manualSelector'] = this.manualSelector;
+    } else {
+      json[r'manualSelector'] = null;
     }
-    if (parallelism != null) {
-      json[r'parallelism'] = parallelism;
+    if (this.parallelism != null) {
+      json[r'parallelism'] = this.parallelism;
+    } else {
+      json[r'parallelism'] = null;
     }
-    if (selector != null) {
-      json[r'selector'] = selector;
+    if (this.podFailurePolicy != null) {
+      json[r'podFailurePolicy'] = this.podFailurePolicy;
+    } else {
+      json[r'podFailurePolicy'] = null;
     }
-    if (suspend != null) {
-      json[r'suspend'] = suspend;
+    if (this.selector != null) {
+      json[r'selector'] = this.selector;
+    } else {
+      json[r'selector'] = null;
     }
-    json[r'template'] = template;
-    if (ttlSecondsAfterFinished != null) {
-      json[r'ttlSecondsAfterFinished'] = ttlSecondsAfterFinished;
+    if (this.suspend != null) {
+      json[r'suspend'] = this.suspend;
+    } else {
+      json[r'suspend'] = null;
+    }
+    json[r'template'] = this.template;
+    if (this.ttlSecondsAfterFinished != null) {
+      json[r'ttlSecondsAfterFinished'] = this.ttlSecondsAfterFinished;
+    } else {
+      json[r'ttlSecondsAfterFinished'] = null;
     }
     return json;
   }
@@ -204,6 +240,8 @@ class IoK8sApiBatchV1JobSpec {
         completions: mapValueOfType<int>(json, r'completions'),
         manualSelector: mapValueOfType<bool>(json, r'manualSelector'),
         parallelism: mapValueOfType<int>(json, r'parallelism'),
+        podFailurePolicy:
+            IoK8sApiBatchV1PodFailurePolicy.fromJson(json[r'podFailurePolicy']),
         selector: IoK8sApimachineryPkgApisMetaV1LabelSelector.fromJson(
             json[r'selector']),
         suspend: mapValueOfType<bool>(json, r'suspend'),

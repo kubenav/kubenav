@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -67,13 +68,15 @@ class IoK8sApiFlowcontrolV1beta2ResourcePolicyRule {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'apiGroups'] = apiGroups;
-    if (clusterScope != null) {
-      json[r'clusterScope'] = clusterScope;
+    json[r'apiGroups'] = this.apiGroups;
+    if (this.clusterScope != null) {
+      json[r'clusterScope'] = this.clusterScope;
+    } else {
+      json[r'clusterScope'] = null;
     }
-    json[r'namespaces'] = namespaces;
-    json[r'resources'] = resources;
-    json[r'verbs'] = verbs;
+    json[r'namespaces'] = this.namespaces;
+    json[r'resources'] = this.resources;
+    json[r'verbs'] = this.verbs;
     return json;
   }
 

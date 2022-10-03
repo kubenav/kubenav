@@ -4,6 +4,7 @@
 // @dart=2.12
 
 // ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
@@ -68,7 +69,7 @@ class IoK8sApiSchedulingV1PriorityClass {
   ///
   IoK8sApimachineryPkgApisMetaV1ObjectMeta? metadata;
 
-  /// PreemptionPolicy is the Policy for preempting pods with lower priority. One of Never, PreemptLowerPriority. Defaults to PreemptLowerPriority if unset. This field is beta-level, gated by the NonPreemptingPriority feature-gate.
+  /// PreemptionPolicy is the Policy for preempting pods with lower priority. One of Never, PreemptLowerPriority. Defaults to PreemptLowerPriority if unset.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -109,25 +110,37 @@ class IoK8sApiSchedulingV1PriorityClass {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (apiVersion != null) {
-      json[r'apiVersion'] = apiVersion;
+    if (this.apiVersion != null) {
+      json[r'apiVersion'] = this.apiVersion;
+    } else {
+      json[r'apiVersion'] = null;
     }
-    if (description != null) {
-      json[r'description'] = description;
+    if (this.description != null) {
+      json[r'description'] = this.description;
+    } else {
+      json[r'description'] = null;
     }
-    if (globalDefault != null) {
-      json[r'globalDefault'] = globalDefault;
+    if (this.globalDefault != null) {
+      json[r'globalDefault'] = this.globalDefault;
+    } else {
+      json[r'globalDefault'] = null;
     }
-    if (kind != null) {
-      json[r'kind'] = kind;
+    if (this.kind != null) {
+      json[r'kind'] = this.kind;
+    } else {
+      json[r'kind'] = null;
     }
-    if (metadata != null) {
-      json[r'metadata'] = metadata;
+    if (this.metadata != null) {
+      json[r'metadata'] = this.metadata;
+    } else {
+      json[r'metadata'] = null;
     }
-    if (preemptionPolicy != null) {
-      json[r'preemptionPolicy'] = preemptionPolicy;
+    if (this.preemptionPolicy != null) {
+      json[r'preemptionPolicy'] = this.preemptionPolicy;
+    } else {
+      json[r'preemptionPolicy'] = null;
     }
-    json[r'value'] = value;
+    json[r'value'] = this.value;
     return json;
   }
 
