@@ -1,0 +1,29 @@
+name-template: "$RESOLVED_VERSION"
+tag-template: "$RESOLVED_VERSION"
+version-template: "v$MAJOR.$MINOR.$PATCH"
+categories:
+  - title: "Added"
+    labels:
+      - "changelog: added"
+  - title: "Fixed"
+    labels:
+      - "changelog: fixed"
+  - title: "Changed"
+    labels:
+      - "changelog: changed"
+version-resolver:
+  minor:
+    labels:
+      - "changelog: added"
+      - "changelog: changed"
+  patch:
+    labels:
+      - "changelog: fixed"
+  default: patch
+category-template: "### $TITLE"
+change-template: '- #$NUMBER: $TITLE @$AUTHOR'
+template: |
+  $CHANGES
+replacers:
+  - search: ':warning:'
+    replace: ':warning: _Breaking change:_ :warning:'
