@@ -147,9 +147,9 @@ import_sorter:
 
 flutter_native_splash:
   color: "#326CE5"
-  image: assets/splash.png
+  image: assets/_images/splash-screen/splash.png
   android_12:
-    image: assets/android12splash.png
+    image: assets/_images/splash-screen/android12splash.png
     color: "#326CE5"
     icon_background_color: "#326CE5"
   fullscreen: true

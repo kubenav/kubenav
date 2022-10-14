@@ -85,7 +85,7 @@ class AppPrometheusChartWidget extends StatelessWidget {
 
     return AppBottomSheetWidget(
       title: title,
-      subtitle: 'Unit $unit',
+      subtitle: 'Unit: $unit',
       icon: Icons.area_chart,
       onClosePressed: () {
         finish(context);

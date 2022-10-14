@@ -338,24 +338,7 @@ class MetricWidget extends StatelessWidget {
           return ListView(
             shrinkWrap: false,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: Constants.spacingMiddle,
-                  left: Constants.spacingExtraSmall,
-                  right: Constants.spacingExtraSmall,
-                  bottom: Constants.spacingMiddle,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        texts[metricType]!['title']!,
-                        style: primaryTextStyle(context, size: 18),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              const SizedBox(height: Constants.spacingMiddle),
               Container(
                 margin: const EdgeInsets.only(
                   left: Constants.spacingExtraSmall,

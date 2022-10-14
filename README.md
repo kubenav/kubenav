@@ -1,83 +1,39 @@
-# kubenav
+<div align="center">
+  <img src="assets/_images/repo/github-readme-logo.png" width="200" />
+  <br><br>
 
-A new Flutter project.
+  **kubenav** is the navigator for your **Kubernetes** clusters right in your pocket. kubenav is a **mobile and desktop** app to manage Kubernetes clusters and to get an overview of the status of your Kubernetes resources.
 
-## Getting Started
+  <p>
+    <a href="https://apps.apple.com/us/app/kubenav/id1494512160" target="_blank"><img src="assets/_images/repo/badge-app-store.png" height="50"></a>
+    <a href="https://play.google.com/store/apps/details?id=io.kubenav.kubenav" target="_blank"><img src="assets/_images/repo/badge-google-play.png" height="50"></a>
+    <a href="https://github.com/kubenav/kubenav/releases" target="_self"><img src="assets/_images/repo/badge-desktop.png" height="50"></a>
+  </p>
 
-This project is a starting point for a Flutter application.
+  <img src="assets/_images/repo/github-screenshot.png" width="100%" />
+</div>
 
-A few resources to get you started if this is your first Flutter project:
+kubenav is a mobile and desktop app to manage Kubernetes clusters. The app provides an overview of all resources in a Kubernetes cluster, including current status information for workloads. The details view for resources provides additional information. It is possible to view logs and events or to get a shell into a container. You can also edit and delete resources or scale your workloads within the app.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+The app is developed using [Flutter](https://flutter.dev) and [Go](https://go.dev). For more information you can read through our [contribution guidelines](https://github.com/kubenav/kubenav/blob/master/CONTRIBUTING.md) for development.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Features
 
-## Contributing
+- **Available for mobile, desktop and web:** kubenav provides the same experience for mobile, desktop and web, with nearly 100% code sharing.
+- **Manage Resources:** All major resources like Deployments, StatefulSets, DaemonSets, Pods, etc. are supported.
+- **Custom Resource Definitions:** View all Custom Resource Definitions and mange Custom Resources.
+- **Modify Resources:** Edit and delete all available resources or scale your Deployments, StatefulSets, DaemonSets.
+- **Filter and Search:** Filter the resources by Namespace and find them by their name.
+- **Status Information:** Fast overview of the status of workloads and detailed information including Events.
+- **Resource Usage:** View the requests, limits and current usage of Pods and Containers.
+- **Logs:** View the logs of a container or stream the logs in realtime.
+- **Terminal:** Get a shell into a container, right from your phone.
+- **Manage multiple Clusters:** Add multiple clusters via `kubeconfig` or your preferred Cloud Provider, including Google, AWS and Azure.
+- **Port-Forwarding:** Create a port-forwarding connection to one of your Pods and open the served page in your browser.
+- **Prometheus Integration:** kubenav allows you to view your Prometheus metrics directly in the dashboard and to build your own dashboards via the Prometheus plugin.
 
-Go mobile:
+## Usage
 
-```sh
-go install golang.org/x/mobile/cmd/gomobile@latest
-gomobile init
-```
+The mobile version of kubenav can be downloaded from the [App Store](https://apps.apple.com/us/app/kubenav/id1494512160) or [Google Play](https://play.google.com/store/apps/details?id=io.kubenav.kubenav). The desktop version for macOS, Linux and Windows can be downloaded from the [release page](https://github.com/kubenav/kubenav/releases).
 
-Flutter version (`flutter --version`):
-
-```
-Flutter 3.3.2 • channel stable • https://github.com/flutter/flutter.git
-Framework • revision e3c29ec00c (10 days ago) • 2022-09-14 08:46:55 -0500
-Engine • revision a4ff2c53d8
-Tools • Dart 2.18.1 • DevTools 2.15.0
-```
-
-Create Kubernetes Resources_
-
-```sh
-docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli generate \
-  -i https://raw.githubusercontent.com/kubernetes/kubernetes/v1.25.0/api/openapi-spec/swagger.json \
-  -g dart \
-  -o /local/out/dart
-```
-
-Create icons:
-
-- `flutter pub run flutter_launcher_icons:main`
-
-Generate splash screen:
-
-- `flutter pub run flutter_native_splash:create`
-
-Sort imports:
-
-- `flutter pub run import_sorter:main`
-
-Build for testing on native device:
-
-- `flutter run --release`
-
-Create a new release:
-
-- Create a file `/android/key.properties`
-
-```
-storePassword=
-keyPassword=
-keyAlias=upload
-storeFile=
-```
-
-- Update the `version` key in the `pubspec.yaml` file
-
-- Run `make bindings-android` and `make bindings-ios` to build the Go code
-
-- Delete old builds `rm -rf build`
-
-- Build the app: `flutter build appbundle`
-- Updload the build from `/build/app/outputs/bundle/release/app-release.aab` to https://play.google.com/apps/publish
-
-- Build the app: `flutter build ipa`
-- Open the `/build/ios/archive/Runner.xcarchive` file in Xcode then click **Validate App** and **Distribute App**
-- Open https://appstoreconnect.apple.com
+For testing new features and faster feedback, we provide a **beta version** via [Apple Testflight](https://testflight.apple.com/join/RQUFGkHi) and [Google Play](https://play.google.com/apps/testing/io.kubenav.kubenav). For the desktop version we are building the app **on each PR**. The binaries are then uploaded as artifacts in the [GitHub Action](https://github.com/kubenav/kubenav/actions/workflows/continuous-delivery.yaml).

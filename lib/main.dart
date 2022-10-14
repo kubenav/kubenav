@@ -63,6 +63,7 @@ class App extends StatelessWidget {
         theme: lightTheme,
         darkTheme: darkTheme,
         themeMode: ThemeMode.system,
+        debugShowCheckedModeBanner: false,
         initialRoute: globalSettingsController.isAuthenticationEnabled.value
             ? Routes.login
             : Routes.home,
