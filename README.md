@@ -15,7 +15,7 @@
 
 kubenav is a mobile and desktop app to manage Kubernetes clusters. The app provides an overview of all resources in a Kubernetes cluster, including current status information for workloads. The details view for resources provides additional information. It is possible to view logs and events or to get a shell into a container. You can also edit and delete resources or scale your workloads within the app.
 
-The app is developed using [Flutter](https://flutter.dev) and [Go](https://go.dev). For more information you can read through our [contribution guidelines](https://github.com/kubenav/kubenav/blob/master/CONTRIBUTING.md) for development.
+The app is developed using [Flutter](https://flutter.dev) and [Go](https://go.dev). For more information you can read through our [contribution guidelines](https://github.com/kubenav/kubenav/blob/main/CONTRIBUTING.md) for development.
 
 ## Features
 
