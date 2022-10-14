@@ -13,6 +13,4 @@ kubenav is a mobile, desktop and web app to manage Kubernetes clusters. The app 
   <li><b>Manage multiple Clusters:</b> Add multiple clusters via `kubeconfig` or your preferred Cloud Provider, including Google, AWS and Azure.</li>
   <li><b>Port-Forwarding:</b> Create a port-forwarding connection to one of your Pods and open the served page in your browser.</li>
   <li><b>Prometheus Integration:</b> kubenav allows you to view your Prometheus metrics directly in the dashboard and to build your own dashboards via the Prometheus plugin.</li>
-  <li><b>Elasticsearch Integration:</b> Discover your logs with the Elasticsearch plugin.</li>
-  <li><b>Jaeger Integration:</b> Analyze your traces with the Jaeger plugin.</li>
 </ul>
