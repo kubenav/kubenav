@@ -17,4 +17,5 @@ class Routes {
   static const settingsClusters = '/settings/clusters';
   static const settingsProviders = '/settings/providers';
   static const settingsNamespaces = '/settings/namespaces';
+  static const settingsHelp = '/settings/help';
 }

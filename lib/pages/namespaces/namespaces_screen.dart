@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -11,8 +13,27 @@ import 'package:kubenav/widgets/app_floating_action_buttons_widget.dart';
 class Namespaces extends GetView<NamespacesController> {
   const Namespaces({Key? key}) : super(key: key);
 
+  /// [_proxyDecorator] is used to highlight the cluster which is currently draged by the user.
+  Widget _proxyDecorator(BuildContext context, Widget child, int index,
+      Animation<double> animation) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (BuildContext context, Widget? child) {
+        final double animValue = Curves.easeInOut.transform(animation.value);
+        final double elevation = lerpDouble(0, 6, animValue)!;
+        return Material(
+          elevation: elevation,
+          shadowColor: Theme.of(context).shadowColor,
+          child: child,
+        );
+      },
+      child: child,
+    );
+  }
+
   Widget buildNamespace(BuildContext context, int index) {
     return Container(
+      key: Key('$index'),
       margin: const EdgeInsets.only(
         bottom: Constants.spacingMiddle,
       ),
@@ -87,11 +108,29 @@ class Namespaces extends GetView<NamespacesController> {
               ),
               child: Obx(
                 () {
-                  return Column(
-                    children: List.generate(
-                      controller.globalSettingsController.namespaces.length,
-                      (index) => buildNamespace(context, index),
-                    ),
+                  return ReorderableListView.builder(
+                    shrinkWrap: true,
+                    buildDefaultDragHandles: false,
+                    physics: const NeverScrollableScrollPhysics(),
+                    onReorder: (int start, int current) {
+                      controller.globalSettingsController
+                          .reorderNamespaces(start, current);
+                    },
+                    proxyDecorator: (Widget child, int index,
+                            Animation<double> animation) =>
+                        _proxyDecorator(context, child, index, animation),
+                    itemCount:
+                        controller.globalSettingsController.namespaces.length,
+                    itemBuilder: (
+                      context,
+                      index,
+                    ) {
+                      return ReorderableDragStartListener(
+                        key: Key('$index'),
+                        index: index,
+                        child: buildNamespace(context, index),
+                      );
+                    },
                   );
                 },
               ),

@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import 'package:kubenav/pages/clusters/clusters_binding.dart';
 import 'package:kubenav/pages/clusters/clusters_screen.dart';
+import 'package:kubenav/pages/help/help_binding.dart';
+import 'package:kubenav/pages/help/help_screen.dart';
 import 'package:kubenav/pages/home/home_binding.dart';
 import 'package:kubenav/pages/home/home_screen.dart';
 import 'package:kubenav/pages/login/login_binding.dart';
@@ -105,6 +107,11 @@ abstract class AppPages {
       name: Routes.settingsNamespaces,
       page: () => const Namespaces(),
       binding: NamespacesBinding(),
+    ),
+    GetPage(
+      name: Routes.settingsHelp,
+      page: () => const Help(),
+      binding: HelpBinding(),
     ),
   ];
 }

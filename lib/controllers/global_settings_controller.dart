@@ -241,4 +241,28 @@ class GlobalSettingsController extends GetxController {
       'token': prometheusToken.value,
     };
   }
+
+  /// [reorderNamespaces] can be used to change the order of the namespaces (e.g. via ReorderableListView).
+  ///
+  /// We have to check if the user drags a namespace from top to bottom ([start] is lower then [current]) or from the
+  /// bottom to the top ([start] is greater then [current]), to apply a different logic for the reordering.
+  void reorderNamespaces(int start, int current) {
+    if (start < current) {
+      int end = current - 1;
+      String startItem = namespaces[start];
+      int i = 0;
+      int local = start;
+      do {
+        namespaces[local] = namespaces[++local];
+        i++;
+      } while (i < end - start);
+      namespaces[end] = startItem;
+    } else if (start > current) {
+      String startItem = namespaces[start];
+      for (int i = start; i > current; i--) {
+        namespaces[i] = namespaces[i - 1];
+      }
+      namespaces[current] = startItem;
+    }
+  }
 }
