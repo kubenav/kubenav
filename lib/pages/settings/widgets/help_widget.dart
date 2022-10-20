@@ -52,6 +52,32 @@ class HelpWidget extends StatelessWidget {
             ),
           ],
         ),
+        AppVertialListSimpleModel(
+          onTap: () {
+            Get.toNamed('/settings/help');
+          },
+          children: [
+            const Icon(
+              Icons.help,
+              color: Constants.colorPrimary,
+            ),
+            const SizedBox(width: Constants.spacingSmall),
+            Expanded(
+              flex: 1,
+              child: Text(
+                'Help',
+                style: noramlTextStyle(
+                  context,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.grey[300],
+              size: 16,
+            ),
+          ],
+        ),
       ],
     );
   }

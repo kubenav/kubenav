@@ -62,6 +62,7 @@ dependencies:
       path: plugins/window_size
   ffi: ^2.0.1
   flutter_native_splash: ^2.2.9
+  flutter_markdown: ^0.6.12
 
 dev_dependencies:
   flutter_test:
@@ -91,6 +92,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/general/
+    - assets/help/
     - assets/plugins/image42x42/
     - assets/plugins/image54x54/
     - assets/plugins/image108x108/

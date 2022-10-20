@@ -36,7 +36,9 @@ class Logger extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                 vertical: 8,
               ),
-              child: Text(_Log.list.map((e) => e.toString()).join('\n\n')),
+              child: SelectableText(
+                _Log.list.map((e) => e.toString()).join('\n\n'),
+              ),
             ),
           ],
         ),
