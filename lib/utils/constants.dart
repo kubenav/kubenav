@@ -25,8 +25,8 @@ class Constants {
   static const opacityLight = 0.75;
   static const opacityHeavy = 0.25;
 
-  static const googleRedirectURI = 'https://kubenav.io/google.html';
-  static const oidcRedirectURI = 'https://kubenav.io/oidcv4.html';
+  static const googleRedirectURI = 'https://kubenav.io/auth/google.html';
+  static const oidcRedirectURI = 'https://kubenav.io/auth/oidc.html';
 }
 
 ThemeData lightTheme = ThemeData(
