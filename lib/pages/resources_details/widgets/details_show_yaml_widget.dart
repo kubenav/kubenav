@@ -30,7 +30,6 @@ class DetailsShowYamlController extends GetxController {
       text: '',
       language:
           globalSettingsController.editorFormat.value == 'json' ? json : yaml,
-      theme: nordTheme,
     );
     prettifyYAML();
 
@@ -124,12 +123,15 @@ class DetailsShowYamlWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                 vertical: 8,
               ),
-              child: CodeField(
-                controller: controller.codeController!,
-                enabled: false,
-                textStyle: TextStyle(
-                  fontSize: 14,
-                  fontFamily: getMonospaceFontFamily(),
+              child: CodeTheme(
+                data: const CodeThemeData(styles: nordTheme),
+                child: CodeField(
+                  controller: controller.codeController!,
+                  enabled: false,
+                  textStyle: TextStyle(
+                    fontSize: 14,
+                    fontFamily: getMonospaceFontFamily(),
+                  ),
                 ),
               ),
             ),

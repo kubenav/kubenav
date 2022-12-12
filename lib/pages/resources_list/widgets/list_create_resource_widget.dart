@@ -41,7 +41,6 @@ class ListCreateResourceController extends GetxController {
       language: globalSettingsController.editorFormat.value == 'json'
           ? highlight_json.json
           : highlight_yaml.yaml,
-      theme: nordTheme,
     );
     prettifyYAML();
 
@@ -168,12 +167,15 @@ class ListCreateResourceWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                 vertical: 8,
               ),
-              child: CodeField(
-                controller: controller.codeController!,
-                enabled: true,
-                textStyle: TextStyle(
-                  fontSize: 14,
-                  fontFamily: getMonospaceFontFamily(),
+              child: CodeTheme(
+                data: const CodeThemeData(styles: nordTheme),
+                child: CodeField(
+                  controller: controller.codeController!,
+                  enabled: true,
+                  textStyle: TextStyle(
+                    fontSize: 14,
+                    fontFamily: getMonospaceFontFamily(),
+                  ),
                 ),
               ),
             ),
