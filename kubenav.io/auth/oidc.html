@@ -48,8 +48,11 @@
   <script type="text/javascript">
     function copyCodeToClipboard() {
       const params = new URLSearchParams(window.location.search);
-      navigator.clipboard.writeText(params.get("code"));
-      alert("Code was copied to clipboard");
+      navigator.clipboard.writeText(params.get("code")).then(() => {
+        alert("Code was copied to clipboard");
+      }).catch(() => {
+        alert("Something went wrong");
+      });
     }
   </script>
 </body>
