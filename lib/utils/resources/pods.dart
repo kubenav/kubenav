@@ -1,11 +1,11 @@
-import 'package:kubenav/models/kubernetes-extensions/pod_metrics.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_port.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_state.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_env_var_source.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_probe.dart';
-import 'package:kubenav/pages/resources_list/widgets/list_item_widget.dart';
+import 'package:kubenav/models/kubernetes_extensions/pod_metrics.dart';
 import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/widgets/resources/list/list_item.dart';
 
 /// [getRestarts] returns the number of container restarts for a [pod]. The number of restarts is the sum of all restarts
 /// from the init conatainers and containers.

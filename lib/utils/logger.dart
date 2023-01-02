@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:kubenav/utils/helpers.dart';
-import 'package:kubenav/widgets/app_bottom_sheet_widget.dart';
+import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
-/// [Logger] is our custom log implementation, which allows us to log messages to the console and to access the logs via
-/// the app. So that a user can share the logs when he encountered a problem within the app.
+/// [Logger] is our custom log implementation, which allows us to log messages
+/// to the console and to access the logs via the app. So that a user can share
+/// the logs when he encountered a problem within the app.
 class Logger extends StatelessWidget {
   const Logger({Key? key}) : super(key: key);
 
@@ -15,20 +15,21 @@ class Logger extends StatelessWidget {
       title: 'Logs',
       subtitle: 'Debug logs for kubenav',
       icon: Icons.subject,
-      onClosePressed: () {
-        finish(context);
+      closePressed: () {
+        Navigator.pop(context);
       },
       actionText: 'Copy',
-      onActionPressed: () {
+      actionPressed: () {
         Clipboard.setData(
           ClipboardData(
             text: _Log.list.map((e) => e.toString()).join('\n\n'),
           ),
         );
-        finish(context);
+        Navigator.pop(context);
       },
+      actionIsLoading: false,
       child: Form(
-        key: const Key('settings/license'),
+        key: const Key('settings/logs'),
         child: ListView(
           shrinkWrap: false,
           children: [
