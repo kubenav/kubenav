@@ -25,6 +25,11 @@ class Constants {
   static const opacityLight = 0.75;
   static const opacityHeavy = 0.25;
 
+  static const pageIndexHome = 0;
+  static const pageIndexResources = 1;
+  static const pageIndexPlugins = 2;
+  static const pageIndexSettings = 3;
+
   static const googleRedirectURI = 'https://kubenav.io/auth/google.html';
   static const oidcRedirectURI = 'https://kubenav.io/auth/oidc.html';
 }
@@ -102,75 +107,75 @@ ThemeData lightTheme = ThemeData(
   ),
 );
 
-ThemeData darkTheme = ThemeData(
-  brightness: Brightness.dark,
-  primaryColor: Constants.colorPrimary,
-  canvasColor: Colors.black,
-  appBarTheme: const AppBarTheme(
-    backgroundColor: Color(0xff326ce5),
-    foregroundColor: Colors.white,
-    elevation: 0,
-  ),
-  cardColor: Colors.black,
-  inputDecorationTheme: const InputDecorationTheme(
-    floatingLabelStyle: TextStyle(
-      color: Constants.colorPrimary,
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(
-        style: BorderStyle.solid,
-        color: Constants.colorPrimary,
-      ),
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(
-        style: BorderStyle.solid,
-        color: Color(0xFFD1CFCC),
-      ),
-    ),
-    labelStyle: TextStyle(
-      color: Color(0xFFD1CFCC),
-    ),
-  ),
-  textSelectionTheme: TextSelectionThemeData(
-    cursorColor: Constants.colorPrimary,
-    selectionColor: Constants.colorPrimary.withOpacity(0.25),
-    selectionHandleColor: Constants.colorPrimary,
-  ),
-  shadowColor: Colors.grey.withOpacity(0.4),
-  textTheme: const TextTheme(
-    displayLarge: TextStyle(
-      color: Color(0xFFD1CFCC),
-    ),
-    displayMedium: TextStyle(
-      color: Color(0xFFD1CFCC),
-    ),
-    displaySmall: TextStyle(
-      color: Color(0xFF8A8A8A),
-    ),
-    bodyLarge: TextStyle(
-      color: Color(0xFFD1CFCC),
-    ),
-    bodyMedium: TextStyle(
-      color: Color(0xFFD1CFCC),
-    ),
-    bodySmall: TextStyle(
-      color: Color(0xFFD1CFCC),
-    ),
-    titleLarge: TextStyle(
-      color: Color(0xFFD1CFCC),
-    ),
-    titleMedium: TextStyle(
-      color: Color(0xFFD1CFCC),
-    ),
-    titleSmall: TextStyle(
-      color: Color(0xFFD1CFCC),
-    ),
-  ),
-  bottomSheetTheme: BottomSheetThemeData(
-    backgroundColor: Colors.black,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-    ),
-  ),
-);
+// ThemeData darkTheme = ThemeData(
+//   brightness: Brightness.dark,
+//   primaryColor: Constants.colorPrimary,
+//   canvasColor: Colors.black,
+//   appBarTheme: const AppBarTheme(
+//     backgroundColor: Color(0xff326ce5),
+//     foregroundColor: Colors.white,
+//     elevation: 0,
+//   ),
+//   cardColor: Colors.black,
+//   inputDecorationTheme: const InputDecorationTheme(
+//     floatingLabelStyle: TextStyle(
+//       color: Constants.colorPrimary,
+//     ),
+//     focusedBorder: OutlineInputBorder(
+//       borderSide: BorderSide(
+//         style: BorderStyle.solid,
+//         color: Constants.colorPrimary,
+//       ),
+//     ),
+//     enabledBorder: OutlineInputBorder(
+//       borderSide: BorderSide(
+//         style: BorderStyle.solid,
+//         color: Color(0xFFD1CFCC),
+//       ),
+//     ),
+//     labelStyle: TextStyle(
+//       color: Color(0xFFD1CFCC),
+//     ),
+//   ),
+//   textSelectionTheme: TextSelectionThemeData(
+//     cursorColor: Constants.colorPrimary,
+//     selectionColor: Constants.colorPrimary.withOpacity(0.25),
+//     selectionHandleColor: Constants.colorPrimary,
+//   ),
+//   shadowColor: Colors.grey.withOpacity(0.4),
+//   textTheme: const TextTheme(
+//     displayLarge: TextStyle(
+//       color: Color(0xFFD1CFCC),
+//     ),
+//     displayMedium: TextStyle(
+//       color: Color(0xFFD1CFCC),
+//     ),
+//     displaySmall: TextStyle(
+//       color: Color(0xFF8A8A8A),
+//     ),
+//     bodyLarge: TextStyle(
+//       color: Color(0xFFD1CFCC),
+//     ),
+//     bodyMedium: TextStyle(
+//       color: Color(0xFFD1CFCC),
+//     ),
+//     bodySmall: TextStyle(
+//       color: Color(0xFFD1CFCC),
+//     ),
+//     titleLarge: TextStyle(
+//       color: Color(0xFFD1CFCC),
+//     ),
+//     titleMedium: TextStyle(
+//       color: Color(0xFFD1CFCC),
+//     ),
+//     titleSmall: TextStyle(
+//       color: Color(0xFFD1CFCC),
+//     ),
+//   ),
+//   bottomSheetTheme: BottomSheetThemeData(
+//     backgroundColor: Colors.black,
+//     shape: RoundedRectangleBorder(
+//       borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
+//     ),
+//   ),
+// );

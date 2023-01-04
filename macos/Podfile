@@ -36,5 +36,14 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_macos_build_settings(target)
+    # Required to fix the following warnings:
+    #   app/macos/Pods/Pods.xcodeproj: warning: The macOS deployment target 'MACOSX_DEPLOYMENT_TARGET' is set to 10.11,
+    #   but the range of supported deployment target versions is 10.13 to 13.0.99.
+    #   (in target 'PLUGIN_NAME' from project 'Pods')
+    #
+    # See: https://levelup.gitconnected.com/how-to-fix-your-flutter-macos-target-mismatch-bc55424b7c77
+    target.build_configurations.each do |config|
+      config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = '12.0'
+    end
   end
 end

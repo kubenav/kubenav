@@ -4,232 +4,45 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:jwt_decode/jwt_decode.dart';
 
-import 'package:kubenav/controllers/cluster_controller.dart';
-import 'package:kubenav/controllers/global_settings_controller.dart';
-import 'package:kubenav/controllers/provider_config_controller.dart';
-import 'package:kubenav/models/cluster_model.dart';
-import 'package:kubenav/models/helm_model.dart';
-import 'package:kubenav/models/prometheus_model.dart';
-import 'package:kubenav/services/aws_service.dart';
-import 'package:kubenav/services/google_service.dart';
-import 'package:kubenav/services/oidc_service.dart';
-import 'package:kubenav/utils/constants.dart';
-import 'package:kubenav/utils/ffi.dart';
+import 'package:kubenav/models/cluster.dart';
+import 'package:kubenav/models/plugins/helm.dart';
+import 'package:kubenav/models/plugins/prometheus.dart';
+import 'package:kubenav/services/kubenav_desktop.dart';
+import 'package:kubenav/services/kubenav_mobile.dart';
 import 'package:kubenav/utils/logger.dart';
 
-/// [KubernetesService] implements a service to interactiv with the Kubernetes functions from our Go code. The
-/// implementation details of each Go function can be found in the `cmd/kubenav/kubernetes.go` file.
+/// [KubernetesService] implements a service to interactiv with the Kubernetes
+/// functions from our Go code. The implementation details of each Go function
+/// can be found in the `cmd/kubenav/kubernetes.go` file.
 ///
-/// To use the [KubernetesService] a user must provide a Kubernetes [cluster] during the initialization of the service.
+/// To use the [KubernetesService] a user must provide a Kubernetes [cluster]
+/// during the initialization of the service.
 class KubernetesService {
-  GlobalSettingsController globalSettingsController = Get.find();
-  ClusterController clusterController = Get.find();
-  ProviderConfigController providerConfigController = Get.find();
-
   static const platform = MethodChannel('kubenav.io');
+
   Cluster cluster;
+  String proxy;
+  int timeout;
 
   KubernetesService({
     required this.cluster,
+    required this.proxy,
+    required this.timeout,
   });
 
-  /// [_getAccessToken] is our internal function for the [KubernetesService] to get a valid access token to access the
-  /// Kubernetes API. The logic for the different providers is as follows:
-  ///
-  /// - `aws`: Check if the token is expired or empty -> get a new access token and set the token for the current
-  ///   cluster (the token is valid for 10 minutes)
-  /// - For all other providers we are using the token saved in the cluster configuration
-  Future<String> _getAccessToken() async {
-    try {
-      final tokenExpireTimestamp =
-          DateTime.fromMicrosecondsSinceEpoch(cluster.userTokenExpireTimestamp);
-
-      if (cluster.provider == 'aws' &&
-          (tokenExpireTimestamp.isBefore(DateTime.now()) ||
-              cluster.userToken == '')) {
-        final providerConfig =
-            providerConfigController.getConfig(cluster.providerConfig);
-        if (providerConfig != null && providerConfig.aws != null) {
-          final token = await AWSService().getToken(
-            providerConfig.aws!.accessKeyID,
-            providerConfig.aws!.secretKey,
-            providerConfig.aws!.region,
-            providerConfig.aws!.sessionToken,
-            cluster.providerConfigInternal,
-          );
-          clusterController.setNewToken(
-            cluster.name,
-            token,
-            DateTime.now()
-                .add(const Duration(minutes: 10))
-                .microsecondsSinceEpoch,
-          );
-          return token;
-        } else {
-          Future.error('could not get access token');
-        }
-      } else if (cluster.provider == 'awssso' &&
-          (tokenExpireTimestamp.isBefore(DateTime.now()) ||
-              cluster.userToken == '')) {
-        final providerConfig =
-            providerConfigController.getConfig(cluster.providerConfig);
-        if (providerConfig != null && providerConfig.awssso != null) {
-          if (providerConfig.awssso!.ssoConfig.client!.clientSecretExpiresAt! *
-                  1000 <
-              DateTime.now().millisecondsSinceEpoch) {
-            Future.error(
-                'client secret is expired, you have to re-start the sso flow');
-          }
-
-          final credentials = await AWSService().getSSOToken(
-            providerConfig.awssso!.accountID,
-            providerConfig.awssso!.roleName,
-            providerConfig.awssso!.ssoRegion,
-            providerConfig.awssso!.ssoConfig.client!.clientId!,
-            providerConfig.awssso!.ssoConfig.client!.clientSecret!,
-            providerConfig.awssso!.ssoConfig.device!.deviceCode!,
-            providerConfig.awssso!.ssoCredentials.accessToken!,
-            providerConfig.awssso!.ssoCredentials.accessTokenExpire!,
-          );
-
-          Logger.log(
-            'KubernetesService _getAccessToken',
-            'getSSOToken',
-            credentials,
-          );
-
-          providerConfig.awssso!.ssoCredentials = credentials;
-          providerConfigController.editConfigByName(
-            providerConfig.name,
-            providerConfig,
-          );
-
-          final token = await AWSService().getToken(
-            credentials.accessKeyId!,
-            credentials.secretAccessKey!,
-            providerConfig.awssso!.region,
-            credentials.sessionToken!,
-            cluster.providerConfigInternal,
-          );
-
-          Logger.log(
-            'KubernetesService _getAccessToken',
-            'getToken',
-            credentials,
-          );
-
-          clusterController.setNewToken(
-            cluster.name,
-            token,
-            DateTime.now()
-                .add(const Duration(minutes: 10))
-                .microsecondsSinceEpoch,
-          );
-          return token;
-        } else {
-          Future.error('could not get access token');
-        }
-      } else if (cluster.provider == 'google') {
-        final providerConfig =
-            providerConfigController.getConfig(cluster.providerConfig);
-
-        if (DateTime.fromMillisecondsSinceEpoch(
-                providerConfig!.google!.accessTokenExpires)
-            .isBefore(DateTime.now())) {
-          final googleTokens = await GoogleService().getTokensFromRefreshToken(
-            providerConfig.google!.clientID,
-            providerConfig.google!.clientSecret,
-            providerConfig.google!.refreshToken,
-          );
-
-          Logger.log(
-            'KubernetesService _getAccessToken',
-            'getToken',
-            googleTokens,
-          );
-
-          final expires = DateTime.now().millisecondsSinceEpoch +
-              googleTokens.expiresIn! * 1000;
-          providerConfig.google!.accessToken = googleTokens.accessToken!;
-          providerConfig.google!.accessTokenExpires = expires;
-
-          providerConfigController.editConfigByName(
-            providerConfig.name,
-            providerConfig,
-          );
-
-          return googleTokens.accessToken!;
-        } else {
-          return providerConfig.google!.accessToken;
-        }
-      } else if (cluster.provider == 'oidc') {
-        final providerConfig =
-            providerConfigController.getConfig(cluster.providerConfig);
-
-        DateTime? expiryDate = Jwt.getExpiryDate(providerConfig!.oidc!.idToken);
-
-        if (expiryDate != null && expiryDate.isBefore(DateTime.now())) {
-          final oidcResponse = await OIDCService().getAccessToken(
-            providerConfig.oidc!.discoveryURL,
-            providerConfig.oidc!.clientID,
-            providerConfig.oidc!.clientSecret,
-            providerConfig.oidc!.certificateAuthority,
-            providerConfig.oidc!.scopes,
-            Constants.oidcRedirectURI,
-            providerConfig.oidc!.refreshToken,
-          );
-
-          Logger.log(
-            'KubernetesService _getAccessToken',
-            'getToken',
-            oidcResponse,
-          );
-
-          if (oidcResponse.idToken != null) {
-            providerConfig.oidc!.idToken = oidcResponse.idToken!;
-          }
-
-          if (oidcResponse.refreshToken != null &&
-              oidcResponse.refreshToken != '') {
-            providerConfig.oidc!.refreshToken = oidcResponse.refreshToken!;
-          }
-
-          providerConfigController.editConfigByName(
-            providerConfig.name,
-            providerConfig,
-          );
-
-          return oidcResponse.idToken!;
-        } else {
-          return providerConfig.oidc!.idToken;
-        }
-      }
-
-      return cluster.userToken;
-    } catch (err) {
-      Logger.log(
-        'KubernetesService _getAccessToken',
-        'Could not get access token',
-        err,
-      );
-      return Future.error(err);
-    }
-  }
-
-  /// [checkHealth] can be used to check the health of a Kubernetes cluster. The health of a cluster can be checked by
-  /// calling the `/readyz` endpoint of the cluster. If the cluster is healthy it should return 200, if it isn't healthy
-  /// it returns an other response code.
+  /// [checkHealth] can be used to check the health of a Kubernetes cluster. The
+  /// health of a cluster can be checked by calling the `/readyz` endpoint of
+  /// the cluster. If the cluster is healthy it should return 200, if it isn't
+  /// healthy it returns an other response code.
   Future<bool> checkHealth() async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        final result = await KubenavFFI().kubernetesRequest(
+        final result = await KubenavDesktop().kubernetesRequest(
           cluster.name,
-          globalSettingsController.proxy.value,
-          globalSettingsController.timeout.value,
+          proxy,
+          timeout,
           'GET',
           '/readyz',
           '',
@@ -239,35 +52,18 @@ class KubernetesService {
         }
         return false;
       } else {
-        final token = await _getAccessToken();
-
-        final String result = await platform.invokeMethod(
-          'kubernetesRequest',
-          <String, dynamic>{
-            'clusterServer': cluster.clusterServer,
-            'clusterCertificateAuthorityData':
-                cluster.clusterCertificateAuthorityData,
-            'clusterInsecureSkipTLSVerify':
-                cluster.clusterInsecureSkipTLSVerify,
-            'userClientCertificateData': cluster.userClientCertificateData,
-            'userClientKeyData': cluster.userClientKeyData,
-            'userToken': token,
-            'userUsername': cluster.userUsername,
-            'userPassword': cluster.userPassword,
-            'proxy': globalSettingsController.proxy.value,
-            'timeout': globalSettingsController.timeout.value,
-            'requestMethod': 'GET',
-            'requestURL': '/readyz',
-            'requestBody': '',
-          },
+        final result = await KubenavMobile().kubernetesRequest(
+          cluster,
+          proxy,
+          timeout,
+          'GET',
+          '/readyz',
+          '',
         );
-
-        Logger.log(
-          'KubernetesService checkHealth',
-          'Health check was ok',
-          result,
-        );
-        return true;
+        if (result == 'ok') {
+          return true;
+        }
+        return false;
       }
     } catch (err) {
       Logger.log(
@@ -275,56 +71,36 @@ class KubernetesService {
         'Health check failed',
         err,
       );
-      return Future.error(err);
+      rethrow;
     }
   }
 
-  /// [getRequest] can be used to run a get request against a Kubernetes cluster. For that a user can pass in the [url],
-  /// which should be called, the function then returns an error or a json object of the response from the Kubernetes
-  /// API.
+  /// [getRequest] can be used to run a get request against a Kubernetes
+  /// cluster. For that a user can pass in the [url], which should be called,
+  /// the function then returns an error or a json object of the response from
+  /// the Kubernetes API.
   Future<Map<String, dynamic>> getRequest(String url) async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        final result = await KubenavFFI().kubernetesRequest(
+        final result = await KubenavDesktop().kubernetesRequest(
           cluster.name,
-          globalSettingsController.proxy.value,
-          globalSettingsController.timeout.value,
+          proxy,
+          timeout,
           'GET',
           url,
           '',
         );
         return json.decode(result);
       } else {
-        final token = await _getAccessToken();
-
-        final String result = await platform.invokeMethod(
-          'kubernetesRequest',
-          <String, dynamic>{
-            'clusterServer': cluster.clusterServer,
-            'clusterCertificateAuthorityData':
-                cluster.clusterCertificateAuthorityData,
-            'clusterInsecureSkipTLSVerify':
-                cluster.clusterInsecureSkipTLSVerify,
-            'userClientCertificateData': cluster.userClientCertificateData,
-            'userClientKeyData': cluster.userClientKeyData,
-            'userToken': token,
-            'userUsername': cluster.userUsername,
-            'userPassword': cluster.userPassword,
-            'proxy': globalSettingsController.proxy.value,
-            'timeout': globalSettingsController.timeout.value,
-            'requestMethod': 'GET',
-            'requestURL': url,
-            'requestBody': '',
-          },
+        final result = await KubenavMobile().kubernetesRequest(
+          cluster,
+          proxy,
+          timeout,
+          'GET',
+          url,
+          '',
         );
-
-        Logger.log(
-          'KubernetesService getRequest',
-          'Get request was ok',
-          result,
-        );
-        Map<String, dynamic> jsonData = json.decode(result);
-        return jsonData;
+        return json.decode(result);
       }
     } catch (err) {
       Logger.log(
@@ -332,53 +108,35 @@ class KubernetesService {
         'Get request failed',
         err,
       );
-      return Future.error(err);
+      rethrow;
     }
   }
 
-  /// [deleteRequest] can be used to run a delete request against a Kubernetes cluster. Besides the [url] of the
-  /// resource, which should be deleted, we can also pass a [body] to the function. E.g. the body can be used to force
-  /// delete a resource. The function doesn't return anything, expect an error in case there was one.
+  /// [deleteRequest] can be used to run a delete request against a Kubernetes
+  /// cluster. Besides the [url] of the resource, which should be deleted, we
+  /// can also pass a [body] to the function. E.g. the body can be used to force
+  /// delete a resource. The function doesn't return anything, expect an error
+  /// in case there was one.
   Future<void> deleteRequest(String url, String? body) async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        await KubenavFFI().kubernetesRequest(
+        await KubenavDesktop().kubernetesRequest(
           cluster.name,
-          globalSettingsController.proxy.value,
-          globalSettingsController.timeout.value,
+          proxy,
+          timeout,
           'DELETE',
           url,
           body ?? '',
         );
         return;
       } else {
-        final token = await _getAccessToken();
-
-        final String result = await platform.invokeMethod(
-          'kubernetesRequest',
-          <String, dynamic>{
-            'clusterServer': cluster.clusterServer,
-            'clusterCertificateAuthorityData':
-                cluster.clusterCertificateAuthorityData,
-            'clusterInsecureSkipTLSVerify':
-                cluster.clusterInsecureSkipTLSVerify,
-            'userClientCertificateData': cluster.userClientCertificateData,
-            'userClientKeyData': cluster.userClientKeyData,
-            'userToken': token,
-            'userUsername': cluster.userUsername,
-            'userPassword': cluster.userPassword,
-            'proxy': globalSettingsController.proxy.value,
-            'timeout': globalSettingsController.timeout.value,
-            'requestMethod': 'DELETE',
-            'requestURL': url,
-            'requestBody': body ?? '',
-          },
-        );
-
-        Logger.log(
-          'KubernetesService deleteRequest',
-          'Delete request was ok',
-          result,
+        await KubenavMobile().kubernetesRequest(
+          cluster,
+          proxy,
+          timeout,
+          'DELETE',
+          url,
+          body ?? '',
         );
         return;
       }
@@ -388,52 +146,34 @@ class KubernetesService {
         'Delete request failed',
         err,
       );
-      return Future.error(err);
+      rethrow;
     }
   }
 
-  /// [patchRequest] can be used to run a patch request against a Kubernetes cluster. Besides the [url] of the resource,
-  /// which should be patched, we also have to pass a [body] to the function. The [body] must be a valid json patch.
+  /// [patchRequest] can be used to run a patch request against a Kubernetes
+  /// cluster. Besides the [url] of the resource, which should be patched, we
+  /// also have to pass a [body] to the function. The [body] must be a valid
+  /// json patch.
   Future<void> patchRequest(String url, String body) async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        await KubenavFFI().kubernetesRequest(
+        await KubenavDesktop().kubernetesRequest(
           cluster.name,
-          globalSettingsController.proxy.value,
-          globalSettingsController.timeout.value,
+          proxy,
+          timeout,
           'PATCH',
           url,
           body,
         );
         return;
       } else {
-        final token = await _getAccessToken();
-
-        final String result = await platform.invokeMethod(
-          'kubernetesRequest',
-          <String, dynamic>{
-            'clusterServer': cluster.clusterServer,
-            'clusterCertificateAuthorityData':
-                cluster.clusterCertificateAuthorityData,
-            'clusterInsecureSkipTLSVerify':
-                cluster.clusterInsecureSkipTLSVerify,
-            'userClientCertificateData': cluster.userClientCertificateData,
-            'userClientKeyData': cluster.userClientKeyData,
-            'userToken': token,
-            'userUsername': cluster.userUsername,
-            'userPassword': cluster.userPassword,
-            'proxy': globalSettingsController.proxy.value,
-            'timeout': globalSettingsController.timeout.value,
-            'requestMethod': 'PATCH',
-            'requestURL': url,
-            'requestBody': body,
-          },
-        );
-
-        Logger.log(
-          'KubernetesService patchRequest',
-          'Patch request was ok',
-          result,
+        await KubenavMobile().kubernetesRequest(
+          cluster,
+          proxy,
+          timeout,
+          'PATCH',
+          url,
+          body,
         );
         return;
       }
@@ -443,53 +183,34 @@ class KubernetesService {
         'Patch request failed',
         err,
       );
-      return Future.error(err);
+      rethrow;
     }
   }
 
-  /// [postRequest] can be used to run a post request against a Kubernetes cluster. Besides the [url] of the resource,
-  /// which should be created, we also have to pass a [body] to the function. The [body] must be contain the Kubernetes
-  /// manifest which should be created.
+  /// [postRequest] can be used to run a post request against a Kubernetes
+  /// cluster. Besides the [url] of the resource, which should be created, we
+  /// also have to pass a [body] to the function. The [body] must be contain the
+  /// Kubernetes manifest which should be created.
   Future<void> postRequest(String url, String body) async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        await KubenavFFI().kubernetesRequest(
+        await KubenavDesktop().kubernetesRequest(
           cluster.name,
-          globalSettingsController.proxy.value,
-          globalSettingsController.timeout.value,
+          proxy,
+          timeout,
           'POST',
           url,
           body,
         );
         return;
       } else {
-        final token = await _getAccessToken();
-
-        final String result = await platform.invokeMethod(
-          'kubernetesRequest',
-          <String, dynamic>{
-            'clusterServer': cluster.clusterServer,
-            'clusterCertificateAuthorityData':
-                cluster.clusterCertificateAuthorityData,
-            'clusterInsecureSkipTLSVerify':
-                cluster.clusterInsecureSkipTLSVerify,
-            'userClientCertificateData': cluster.userClientCertificateData,
-            'userClientKeyData': cluster.userClientKeyData,
-            'userToken': token,
-            'userUsername': cluster.userUsername,
-            'userPassword': cluster.userPassword,
-            'proxy': globalSettingsController.proxy.value,
-            'timeout': globalSettingsController.timeout.value,
-            'requestMethod': 'POST',
-            'requestURL': url,
-            'requestBody': body,
-          },
-        );
-
-        Logger.log(
-          'KubernetesService postRequest',
-          'Post request was ok',
-          result,
+        await KubenavMobile().kubernetesRequest(
+          cluster,
+          proxy,
+          timeout,
+          'POST',
+          url,
+          body,
         );
         return;
       }
@@ -499,12 +220,13 @@ class KubernetesService {
         'Post request failed',
         err,
       );
-      return Future.error(err);
+      rethrow;
     }
   }
 
-  /// [getLogs] returns the logs for a list of pods (containers). The pod names are must be provided via the [names]
-  /// argument, which should be a commans separated list of pod names.
+  /// [getLogs] returns the logs for a list of pods (containers). The pod names
+  /// are must be provided via the [names] argument, which should be a commans
+  /// separated list of pod names.
   Future<List<dynamic>> getLogs(
     String names,
     String namespace,
@@ -515,10 +237,10 @@ class KubernetesService {
   ) async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        final result = await KubenavFFI().kubernetesGetLogs(
+        final result = await KubenavDesktop().kubernetesGetLogs(
           cluster.name,
-          globalSettingsController.proxy.value,
-          globalSettingsController.timeout.value,
+          proxy,
+          timeout,
           names,
           namespace,
           container,
@@ -529,36 +251,16 @@ class KubernetesService {
         Map<String, dynamic> jsonData = json.decode(result);
         return jsonData['logs'] ?? [];
       } else {
-        final token = await _getAccessToken();
-
-        final String result = await platform.invokeMethod(
-          'kubernetesGetLogs',
-          <String, dynamic>{
-            'clusterServer': cluster.clusterServer,
-            'clusterCertificateAuthorityData':
-                cluster.clusterCertificateAuthorityData,
-            'clusterInsecureSkipTLSVerify':
-                cluster.clusterInsecureSkipTLSVerify,
-            'userClientCertificateData': cluster.userClientCertificateData,
-            'userClientKeyData': cluster.userClientKeyData,
-            'userToken': token,
-            'userUsername': cluster.userUsername,
-            'userPassword': cluster.userPassword,
-            'proxy': globalSettingsController.proxy.value,
-            'timeout': globalSettingsController.timeout.value,
-            'names': names,
-            'namespace': namespace,
-            'container': container,
-            'since': since,
-            'filter': filter,
-            'previous': previous,
-          },
-        );
-
-        Logger.log(
-          'KubernetesService getLogs',
-          'Get logs request was ok',
-          result,
+        final result = await KubenavMobile().kubernetesGetLogs(
+          cluster,
+          proxy,
+          timeout,
+          names,
+          namespace,
+          container,
+          since,
+          filter,
+          previous,
         );
         Map<String, dynamic> jsonData = json.decode(result);
         return jsonData['logs'] ?? [];
@@ -569,16 +271,17 @@ class KubernetesService {
         'Get logs request failed',
         err,
       );
-      return Future.error(err);
+      rethrow;
     }
   }
 
-  /// [startServer] starts the internal Go server, which is responsible for features like port forwarding and getting a
-  /// shell in a container.
+  /// [startServer] starts the internal Go server, which is responsible for
+  /// features like port forwarding and getting a shell in a container.
   ///
-  /// To start the server we call the `kubernetesStartServer` method, after that we are waiting 3 seconds and check if
-  /// the server is healthy. This is necessary, because we directly return when the server is started and we do not have
-  /// the chance to wait if the server is really started.
+  /// To start the server we call the `kubernetesStartServer` method, after that
+  /// we are waiting 3 seconds and check if the server is healthy. This is
+  /// necessary, because we directly return when the server is started and we do
+  /// not have the chance to wait if the server is really started.
   Future<bool> startServer() async {
     try {
       final isServerHealthy = await _checkServerHealth();
@@ -586,16 +289,11 @@ class KubernetesService {
         return true;
       } else {
         if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-          await KubenavFFI().kubernetesStartServer();
+          await KubenavDesktop().kubernetesStartServer();
           await Future.delayed(const Duration(seconds: 3));
           return await _checkServerHealth();
         } else {
-          await platform.invokeMethod('kubernetesStartServer');
-          Logger.log(
-            'KubernetesService startServer',
-            'Internal http server was started',
-          );
-
+          await KubenavMobile().kubernetesStartServer();
           await Future.delayed(const Duration(seconds: 3));
           return await _checkServerHealth();
         }
@@ -606,15 +304,16 @@ class KubernetesService {
         'Could not start server',
         err,
       );
-      return Future.error(err);
+      rethrow;
     }
   }
 
-  /// [_checkServerHealth] is an internal helper funtion, which checks if our internal http server is healthy. If this
-  /// is the case the function returns `true`. If the server is unhealthy it returns `false`.
+  /// [_checkServerHealth] is an internal helper funtion, which checks if our
+  /// internal http server is healthy. If this is the case the function returns
+  /// `true`. If the server is unhealthy it returns `false`.
   ///
-  /// The function can be used to determine if the internal http server must be started or if he was started
-  /// successfully.
+  /// The function can be used to determine if the internal http server must be
+  /// started or if he was started successfully.
   Future<bool> _checkServerHealth() async {
     try {
       final response = await http.get(
@@ -641,13 +340,12 @@ class KubernetesService {
     }
   }
 
-  /// [portForwarding] creates a new port forwarding session to the remote port of the given Pod name, by using the
-  /// `portforwarding` endpoint of the internal http server.
+  /// [portForwarding] creates a new port forwarding session to the remote port
+  /// of the given Pod name, by using the `portforwarding` endpoint of the
+  /// internal http server.
   Future<Map<String, dynamic>> portForwarding(
       String name, String namespace, int port) async {
     try {
-      final token = await _getAccessToken();
-
       final response = await http.post(
         Uri.parse('http://localhost:14122/portforwarding'),
         headers: {
@@ -661,11 +359,11 @@ class KubernetesService {
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
           'userClientCertificateData': cluster.userClientCertificateData,
           'userClientKeyData': cluster.userClientKeyData,
-          'userToken': token,
+          'userToken': cluster.userToken,
           'userUsername': cluster.userUsername,
           'userPassword': cluster.userPassword,
-          'proxy': globalSettingsController.proxy.value,
-          'timeout': globalSettingsController.timeout.value,
+          'proxy': proxy,
+          'timeout': timeout,
           'podName': name,
           'podNamespace': namespace,
           'podPort': port,
@@ -688,7 +386,7 @@ class KubernetesService {
           'Port forwarding failed with status code ${response.statusCode}',
           jsonData,
         );
-        return Future.error(jsonData);
+        throw Exception(jsonData);
       }
     } catch (err) {
       Logger.log(
@@ -696,13 +394,14 @@ class KubernetesService {
         'An error was returned while establishing the port forwarding connection',
         err,
       );
-      return Future.error(err);
+      rethrow;
     }
   }
 
-  /// [deletePortForwardingSession] deletes a port forwarding session by the given id. This just deletes the session in
-  /// our internal http server. The user must take care of the deliting the session also on the client side by calling
-  /// the `removeSession` of the `PortForwardingController`.
+  /// [deletePortForwardingSession] deletes a port forwarding session by the
+  /// given id. This just deletes the session in our internal http server. The
+  /// user must take care of the deliting the session also on the client side by
+  /// calling the `removeSession` of the `PortForwardingController`.
   Future<void> deletePortForwardingSession(String sessionID) async {
     try {
       final response = await http.delete(
@@ -724,7 +423,7 @@ class KubernetesService {
           'Deleting the port forwarding session failed with response code ${response.statusCode}',
           jsonData,
         );
-        return Future.error(jsonData);
+        throw Exception(jsonData);
       }
     } catch (err) {
       Logger.log(
@@ -732,12 +431,13 @@ class KubernetesService {
         'An error was returned while deleting the port forwarding connection',
         err,
       );
-      return Future.error(err);
+      rethrow;
     }
   }
 
-  /// [getPortForwardingSession] returns a list of session from our internal http server, which can be used to replace
-  /// the current list of sessions hold by the `PortForwardingController`.
+  /// [getPortForwardingSession] returns a list of session from our internal
+  /// http server, which can be used to replace the current list of sessions
+  /// hold by the `PortForwardingController`.
   Future<Map<String, dynamic>> getPortForwardingSession() async {
     try {
       final response = await http.get(
@@ -754,7 +454,7 @@ class KubernetesService {
           'Could not sessions, with response code ${response.statusCode}',
           jsonData,
         );
-        return Future.error(jsonData);
+        throw Exception(jsonData);
       }
     } catch (err) {
       Logger.log(
@@ -762,18 +462,18 @@ class KubernetesService {
         'An error was returned while returning port forwarding sessions',
         err,
       );
-      return Future.error(err);
+      rethrow;
     }
   }
 
-  /// [helmListCharts]
+  /// [helmListCharts] lists all Helm charts in the provided namespace.
   Future<List<Release>> helmListCharts(String namespace) async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        final result = await KubenavFFI().helmListCharts(
+        final result = await KubenavDesktop().helmListCharts(
           cluster.name,
-          globalSettingsController.proxy.value,
-          globalSettingsController.timeout.value,
+          proxy,
+          timeout,
           namespace,
         );
         if (result == 'null') {
@@ -787,33 +487,12 @@ class KubernetesService {
         }
         return releases;
       } else {
-        final token = await _getAccessToken();
-
-        final String result = await platform.invokeMethod(
-          'helmListCharts',
-          <String, dynamic>{
-            'clusterServer': cluster.clusterServer,
-            'clusterCertificateAuthorityData':
-                cluster.clusterCertificateAuthorityData,
-            'clusterInsecureSkipTLSVerify':
-                cluster.clusterInsecureSkipTLSVerify,
-            'userClientCertificateData': cluster.userClientCertificateData,
-            'userClientKeyData': cluster.userClientKeyData,
-            'userToken': token,
-            'userUsername': cluster.userUsername,
-            'userPassword': cluster.userPassword,
-            'proxy': globalSettingsController.proxy.value,
-            'timeout': globalSettingsController.timeout.value,
-            'namespace': namespace,
-          },
+        final result = await KubenavMobile().helmListCharts(
+          cluster,
+          proxy,
+          timeout,
+          namespace,
         );
-
-        Logger.log(
-          'KubernetesService helmListCharts',
-          'List Helm charts was ok',
-          result,
-        );
-
         if (result == 'null') {
           return [];
         }
@@ -831,11 +510,12 @@ class KubernetesService {
         'List Helm charts failed',
         err,
       );
-      return Future.error(err);
+      rethrow;
     }
   }
 
-  /// [helmGetChart]
+  /// [helmGetChart] retruns the provided [version] for a Helm chart with the
+  /// provided [name] in the provided [namespace].
   Future<Release> helmGetChart(
     String namespace,
     String name,
@@ -843,45 +523,24 @@ class KubernetesService {
   ) async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        final result = await KubenavFFI().helmGetChart(
+        final result = await KubenavDesktop().helmGetChart(
           cluster.name,
-          globalSettingsController.proxy.value,
-          globalSettingsController.timeout.value,
+          proxy,
+          timeout,
           namespace,
           name,
           version,
         );
         return Release.fromJson(json.decode(result));
       } else {
-        final token = await _getAccessToken();
-
-        final String result = await platform.invokeMethod(
-          'helmGetChart',
-          <String, dynamic>{
-            'clusterServer': cluster.clusterServer,
-            'clusterCertificateAuthorityData':
-                cluster.clusterCertificateAuthorityData,
-            'clusterInsecureSkipTLSVerify':
-                cluster.clusterInsecureSkipTLSVerify,
-            'userClientCertificateData': cluster.userClientCertificateData,
-            'userClientKeyData': cluster.userClientKeyData,
-            'userToken': token,
-            'userUsername': cluster.userUsername,
-            'userPassword': cluster.userPassword,
-            'proxy': globalSettingsController.proxy.value,
-            'timeout': globalSettingsController.timeout.value,
-            'namespace': namespace,
-            'name': name,
-            'version': version,
-          },
+        final result = await KubenavMobile().helmGetChart(
+          cluster,
+          proxy,
+          timeout,
+          namespace,
+          name,
+          version,
         );
-
-        Logger.log(
-          'KubernetesService helmGetChart',
-          'Get Helm chart was ok',
-          result,
-        );
-
         Map<String, dynamic> jsonData = json.decode(result);
         Release release = Release.fromJson(jsonData);
         return release;
@@ -892,21 +551,22 @@ class KubernetesService {
         'Get Helm chart failed',
         err,
       );
-      return Future.error(err);
+      rethrow;
     }
   }
 
-  /// [helmGetHistory]
+  /// [helmGetHistory] returns the history for the Helm chart with the provided
+  /// [name] and [namespace].
   Future<List<Release>> helmGetHistory(
     String namespace,
     String name,
   ) async {
     try {
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        final result = await KubenavFFI().helmGetHistory(
+        final result = await KubenavDesktop().helmGetHistory(
           cluster.name,
-          globalSettingsController.proxy.value,
-          globalSettingsController.timeout.value,
+          proxy,
+          timeout,
           namespace,
           name,
         );
@@ -921,34 +581,13 @@ class KubernetesService {
         }
         return releases;
       } else {
-        final token = await _getAccessToken();
-
-        final String result = await platform.invokeMethod(
-          'helmGetHistory',
-          <String, dynamic>{
-            'clusterServer': cluster.clusterServer,
-            'clusterCertificateAuthorityData':
-                cluster.clusterCertificateAuthorityData,
-            'clusterInsecureSkipTLSVerify':
-                cluster.clusterInsecureSkipTLSVerify,
-            'userClientCertificateData': cluster.userClientCertificateData,
-            'userClientKeyData': cluster.userClientKeyData,
-            'userToken': token,
-            'userUsername': cluster.userUsername,
-            'userPassword': cluster.userPassword,
-            'proxy': globalSettingsController.proxy.value,
-            'timeout': globalSettingsController.timeout.value,
-            'namespace': namespace,
-            'name': name,
-          },
+        final result = await KubenavMobile().helmGetHistory(
+          cluster,
+          proxy,
+          timeout,
+          namespace,
+          name,
         );
-
-        Logger.log(
-          'KubernetesService helmGetHistory',
-          'Get Helm history was ok',
-          result,
-        );
-
         if (result == 'null') {
           return [];
         }
@@ -966,27 +605,33 @@ class KubernetesService {
         'Get Helm history failed',
         err,
       );
-      return Future.error(err);
+      rethrow;
     }
   }
 
-  /// [prometheusGetData]
-  Future<List<Metric>> prometheusGetData(Map<String, dynamic> manifest,
-      List<Query> queries, int timeStart, int timeEnd) async {
+  /// [prometheusGetData] returns the data for a PromQL query, which can be used
+  /// to render a chart for the query.
+  Future<List<Metric>> prometheusGetData(
+    Map<String, dynamic> prometheus,
+    Map<String, dynamic> manifest,
+    List<Query> queries,
+    int timeStart,
+    int timeEnd,
+  ) async {
     try {
       final request = Request(
+        prometheus: prometheus,
         manifest: manifest,
-        prometheus: globalSettingsController.getPrometheusConfiguration(),
         queries: queries,
         timeStart: timeStart,
         timeEnd: timeEnd,
       ).toString();
 
       if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        final result = await KubenavFFI().prometheusGetData(
+        final result = await KubenavDesktop().prometheusGetData(
           cluster.name,
-          globalSettingsController.proxy.value,
-          globalSettingsController.timeout.value,
+          proxy,
+          timeout,
           request,
         );
         if (result == 'null') {
@@ -1000,33 +645,12 @@ class KubernetesService {
         }
         return metrics;
       } else {
-        final token = await _getAccessToken();
-
-        final String result = await platform.invokeMethod(
-          'prometheusGetData',
-          <String, dynamic>{
-            'clusterServer': cluster.clusterServer,
-            'clusterCertificateAuthorityData':
-                cluster.clusterCertificateAuthorityData,
-            'clusterInsecureSkipTLSVerify':
-                cluster.clusterInsecureSkipTLSVerify,
-            'userClientCertificateData': cluster.userClientCertificateData,
-            'userClientKeyData': cluster.userClientKeyData,
-            'userToken': token,
-            'userUsername': cluster.userUsername,
-            'userPassword': cluster.userPassword,
-            'proxy': globalSettingsController.proxy.value,
-            'timeout': globalSettingsController.timeout.value,
-            'request': request,
-          },
+        final result = await KubenavMobile().prometheusGetData(
+          cluster,
+          proxy,
+          timeout,
+          request,
         );
-
-        Logger.log(
-          'KubernetesService prometheusGetData',
-          'List Helm charts was ok',
-          result,
-        );
-
         if (result == 'null') {
           return [];
         }
@@ -1044,7 +668,7 @@ class KubernetesService {
         'List Helm charts failed',
         err,
       );
-      return Future.error(err);
+      rethrow;
     }
   }
 }
