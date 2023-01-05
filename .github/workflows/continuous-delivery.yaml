@@ -18,18 +18,21 @@ jobs:
       # be found on the following sites:
       #   - https://localazy.com/blog/how-to-automatically-sign-macos-apps-using-github-actions
       #   - https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development
-      - name: Install the Apple Certificate
+      - name: Install the Apple Certificate and Provisioning Profile
         env:
           MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
           MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
           MACOS_KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
+          MACOS_PROVISION_PROFILE: ${{ secrets.MACOS_PROVISION_PROFILE }}
         run: |
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/98ce131d-65df-440f-9c38-8bfa094c55dc.provisionprofile
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
-          # import certificate from secrets
+          # import certificate and provisioning profile from secrets
           echo -n "$MACOS_CERTIFICATE" | base64 --decode --output $CERTIFICATE_PATH
+          echo -n "$MACOS_PROVISION_PROFILE" | base64 --decode --output $PP_PATH
 
           # create temporary keychain
           security create-keychain -p "$MACOS_KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
@@ -42,6 +45,10 @@ jobs:
 
           # check that certificate was added
           security find-identity -v
+
+          # apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
       - name: Setup Go
         uses: actions/setup-go@v3
@@ -108,12 +115,14 @@ jobs:
         with:
           files: build/macos/Build/Products/Release/kubenav-macos-universal.zip
 
-      - name: Clean up Keychain and AuthKey for Notarization Service
+      - name: Clean up Keychain, provisioning profile and AuthKey for Notarization Service
         if: ${{ always() }}
         env:
           MACOS_ASC_API_KEY: ${{ secrets.MACOS_ASC_API_KEY }}
         run: |
+          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
+          rm -rf ~/Library/MobileDevice/Provisioning\ Profiles/98ce131d-65df-440f-9c38-8bfa094c55dc.provisionprofile
           rm -rf ~/.appstoreconnect/private_keys/AuthKey_${MACOS_ASC_API_KEY}.p8
 
   linux:
