@@ -2,22 +2,20 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:kubenav/models/resource.dart';
 import 'package:kubenav/utils/logger.dart';
+import 'package:kubenav/utils/storage.dart';
 
 class BookmarksRepository with ChangeNotifier {
-  final _secureStorage = const FlutterSecureStorage();
   List<Bookmark> _bookmarks = [];
 
   List<Bookmark> get bookmarks => _bookmarks;
 
   Future<void> _save() async {
     try {
-      await _secureStorage.write(
-        key: 'kubenav-bookmarks',
-        value: json.encode(_bookmarks.map((e) => e.toJson()).toList()),
+      await Storage().write(
+        'kubenav-bookmarks',
+        json.encode(_bookmarks.map((e) => e.toJson()).toList()),
       );
     } catch (err) {
       Logger.log(
@@ -30,7 +28,7 @@ class BookmarksRepository with ChangeNotifier {
 
   Future<void> init() async {
     try {
-      final data = await _secureStorage.read(key: 'kubenav-bookmarks');
+      final data = await Storage().read('kubenav-bookmarks');
       if (data != null) {
         _bookmarks = List<Bookmark>.from(
             json.decode(data).map((e) => Bookmark.fromJson(e)));
