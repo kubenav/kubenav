@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kubenav/widgets/resources/details/details_item_additional_printer_columns.dart';
 
 import 'package:provider/provider.dart';
 
@@ -15,6 +14,7 @@ import 'package:kubenav/widgets/resources/details/details_create_job.dart';
 import 'package:kubenav/widgets/resources/details/details_delete_resource.dart';
 import 'package:kubenav/widgets/resources/details/details_edit_resource.dart';
 import 'package:kubenav/widgets/resources/details/details_get_logs.dart';
+import 'package:kubenav/widgets/resources/details/details_item_additional_printer_columns.dart';
 import 'package:kubenav/widgets/resources/details/details_item_conditions.dart';
 import 'package:kubenav/widgets/resources/details/details_item_metadata.dart';
 import 'package:kubenav/widgets/resources/details/details_live_metrics_containers.dart';

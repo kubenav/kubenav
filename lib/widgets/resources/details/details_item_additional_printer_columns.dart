@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kubenav/models/resource.dart';
 
+import 'package:kubenav/models/resource.dart';
 import 'package:kubenav/utils/resources/general.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/resources/details/details_item.dart';

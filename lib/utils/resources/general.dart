@@ -1,7 +1,8 @@
+import 'package:json_path/json_path.dart';
+
 import 'package:kubenav/models/kubernetes/io_k8s_api_rbac_v1_policy_rule.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_label_selector.dart';
 import 'package:kubenav/models/resource.dart';
-import 'package:json_path/json_path.dart';
 
 /// [getAge] returns the age of a Kubernetes resources in a human readable format. This is mostly used to dertermine the
 /// age of a resource via the `metadata.creationTimestamp` field. If the given [timestamp] is `null` we return a dash as
