@@ -38,7 +38,7 @@ class BookmarksRepository with ChangeNotifier {
       notifyListeners();
     } catch (err) {
       Logger.log(
-        'BookmarksRepository _init',
+        'BookmarksRepository init',
         'Could not load bookmarks',
         err,
       );
