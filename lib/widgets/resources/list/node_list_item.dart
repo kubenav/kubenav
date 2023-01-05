@@ -13,6 +13,7 @@ class NodeListItem extends StatelessWidget implements IListItemWidget {
     required this.resource,
     required this.path,
     required this.scope,
+    required this.additionalPrinterColumns,
     required this.item,
     required this.metrics,
   }) : super(key: key);
@@ -25,6 +26,8 @@ class NodeListItem extends StatelessWidget implements IListItemWidget {
   final String path;
   @override
   final ResourceScope scope;
+  @override
+  final List<AdditionalPrinterColumns> additionalPrinterColumns;
   @override
   final dynamic item;
   final dynamic metrics;
@@ -59,6 +62,7 @@ class NodeListItem extends StatelessWidget implements IListItemWidget {
       resource: resource,
       path: path,
       scope: scope,
+      additionalPrinterColumns: additionalPrinterColumns,
       name: node?.metadata?.name ?? '',
       namespace: null,
       info: info,

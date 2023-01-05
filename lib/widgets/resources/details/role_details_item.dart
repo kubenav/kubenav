@@ -95,6 +95,8 @@ class RoleDetailsItem extends StatelessWidget implements IDetailsItemWidget {
           resource: Resources.map['events']!.resource,
           path: Resources.map['events']!.path,
           scope: Resources.map['events']!.scope,
+          additionalPrinterColumns:
+              Resources.map['events']!.additionalPrinterColumns,
           namespace: item['metadata']['namespace'],
           selector:
               'fieldSelector=involvedObject.name=${item['metadata']['name']}',

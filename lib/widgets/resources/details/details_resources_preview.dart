@@ -42,6 +42,7 @@ class DetailsResourcesPreview extends StatefulWidget {
     required this.resource,
     required this.path,
     required this.scope,
+    required this.additionalPrinterColumns,
     required this.namespace,
     required this.selector,
     this.filter,
@@ -51,6 +52,7 @@ class DetailsResourcesPreview extends StatefulWidget {
   final String resource;
   final String path;
   final ResourceScope scope;
+  final List<AdditionalPrinterColumns> additionalPrinterColumns;
   final String? namespace;
   final String selector;
   final List<dynamic> Function(List<dynamic> items)? filter;
@@ -264,6 +266,8 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
                         resource: widget.resource,
                         path: widget.path,
                         scope: widget.scope,
+                        additionalPrinterColumns:
+                            widget.additionalPrinterColumns,
                         name: snapshot.data![index]['metadata']?['name'],
                         namespace: snapshot.data![index]['metadata']
                             ?['namespace'],
@@ -286,6 +290,7 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
                     resource: widget.resource,
                     path: widget.path,
                     scope: widget.scope,
+                    additionalPrinterColumns: widget.additionalPrinterColumns,
                     namespace: widget.selector
                             .startsWith('fieldSelector=spec.nodeName=')
                         ? null

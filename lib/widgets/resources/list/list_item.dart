@@ -19,13 +19,15 @@ abstract class IListItemWidget {
     required this.resource,
     required this.path,
     required this.scope,
+    required this.additionalPrinterColumns,
     required this.item,
   });
 
-  final String? title;
-  final String? resource;
-  final String? path;
-  final ResourceScope? scope;
+  final String title;
+  final String resource;
+  final String path;
+  final ResourceScope scope;
+  final List<AdditionalPrinterColumns> additionalPrinterColumns;
   final dynamic item;
 }
 
@@ -36,6 +38,7 @@ class ListItemWidget extends StatelessWidget {
     required this.resource,
     required this.path,
     required this.scope,
+    required this.additionalPrinterColumns,
     required this.name,
     required this.namespace,
     required this.info,
@@ -47,6 +50,7 @@ class ListItemWidget extends StatelessWidget {
   final String resource;
   final String path;
   final ResourceScope scope;
+  final List<AdditionalPrinterColumns> additionalPrinterColumns;
   final String name;
   final String? namespace;
   final List<String> info;
@@ -125,6 +129,7 @@ class ListItemWidget extends StatelessWidget {
               resource: resource,
               path: path,
               scope: scope,
+              additionalPrinterColumns: additionalPrinterColumns,
               name: name,
               namespace: namespace,
             ),

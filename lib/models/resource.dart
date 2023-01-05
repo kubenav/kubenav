@@ -95,6 +95,42 @@ ResourceScope getResourceScopeFromString(String? scope) {
   return ResourceScope.cluster;
 }
 
+/// [AdditionalPrinterColumns] adds additional columns from a manifest file to
+/// a resource, which should be rendered within the list / details view for a
+/// resource. This is similar to the [IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceColumnDefinition]
+/// type and mainly used to render some custom fields for CRDs.
+class AdditionalPrinterColumns {
+  String description;
+  String jsonPath;
+  String name;
+  String type;
+
+  AdditionalPrinterColumns({
+    required this.description,
+    required this.jsonPath,
+    required this.name,
+    required this.type,
+  });
+
+  factory AdditionalPrinterColumns.fromJson(Map<String, dynamic> data) {
+    return AdditionalPrinterColumns(
+      description: data['description'],
+      jsonPath: data['jsonPath'],
+      name: data['name'],
+      type: data['type'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'description': description,
+      'jsonPath': jsonPath,
+      'name': name,
+      'type': type,
+    };
+  }
+}
+
 /// A [Resource] represents a single Kubernetes resource. Each resource must
 /// contain a [resourceType], a human readable [title], a [description] and the
 /// [resource], [path] and [scope] so the corresponding Kubernetes manifests can
@@ -114,12 +150,14 @@ class Resource {
   String resource;
   String path;
   ResourceScope scope;
+  List<AdditionalPrinterColumns> additionalPrinterColumns;
   String template;
   Widget Function(
     String title,
     String resource,
     String path,
     ResourceScope scope,
+    List<AdditionalPrinterColumns> additionalPrinterColumns,
     dynamic item,
     dynamic metrics,
   )? buildListItem;
@@ -133,6 +171,7 @@ class Resource {
     required this.path,
     required this.scope,
     required this.template,
+    required this.additionalPrinterColumns,
     this.buildListItem,
     this.buildDetailsItem,
   });
@@ -151,6 +190,7 @@ abstract class Resources {
       resource: 'cronjobs',
       path: '/apis/batch/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template:
           '{"apiVersion":"batch/v1","kind":"CronJob","metadata":{"name":"","namespace":""},"spec":{"schedule":"5 4 * * *","suspend":false,"successfulJobsHistoryLimit":1,"failedJobsHistoryLimit":1,"jobTemplate":{"spec":{"backoffLimit":0,"template":{"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}}}',
       buildListItem: (
@@ -158,6 +198,7 @@ abstract class Resources {
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -166,6 +207,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => CronJobDetailsItem(item: item),
@@ -178,6 +220,7 @@ abstract class Resources {
       resource: 'daemonsets',
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template:
           '{"apiVersion":"apps/v1","kind":"DaemonSet","metadata":{"name":"","namespace":""},"spec":{"selector":{"matchLabels":{"app":"nginx"}},"template":{"metadata":{"labels":{"app":"nginx"}},"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}',
       buildListItem: (
@@ -185,6 +228,7 @@ abstract class Resources {
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -193,6 +237,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => DaemonSetDetailsItem(item: item),
@@ -205,6 +250,7 @@ abstract class Resources {
       resource: 'deployments',
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template:
           '{"apiVersion":"apps/v1","kind":"Deployment","metadata":{"name":"","namespace":""},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"nginx"}},"template":{"metadata":{"labels":{"app":"nginx"}},"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}',
       buildListItem: (
@@ -212,6 +258,7 @@ abstract class Resources {
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -220,6 +267,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => DeploymentDetailsItem(item: item),
@@ -232,6 +280,7 @@ abstract class Resources {
       resource: 'jobs',
       path: '/apis/batch/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template:
           '{"apiVersion":"batch/v1","kind":"Job","metadata":{"name":"","namespace":""},"spec":{"backoffLimit":0,"completions":1,"parallelism":1,"template":{"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}',
       buildListItem: (
@@ -239,6 +288,7 @@ abstract class Resources {
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -247,6 +297,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => JobDetailsItem(item: item),
@@ -259,6 +310,7 @@ abstract class Resources {
       resource: 'pods',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template:
           '{"apiVersion":"v1","kind":"Pod","metadata":{"name":"","namespace":""},"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}',
       buildListItem: (
@@ -266,6 +318,7 @@ abstract class Resources {
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -274,6 +327,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
         metrics: metrics,
       ),
@@ -287,12 +341,14 @@ abstract class Resources {
       resource: 'replicasets',
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -301,6 +357,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => ReplicaSetDetailsItem(item: item),
@@ -313,6 +370,7 @@ abstract class Resources {
       resource: 'statefulsets',
       path: '/apis/apps/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template:
           '{"apiVersion":"apps/v1","kind":"StatefulSet","metadata":{"name":"","namespace":""},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"nginx"}},"serviceName":"nginx","template":{"metadata":{"labels":{"app":"nginx"},"name":"nginx"},"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}',
       buildListItem: (
@@ -320,6 +378,7 @@ abstract class Resources {
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -328,6 +387,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => StatefulSetDetailsItem(item: item),
@@ -340,12 +400,14 @@ abstract class Resources {
       resource: 'endpoints',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -354,6 +416,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => EndpointDetailsItem(item: item),
@@ -366,12 +429,14 @@ abstract class Resources {
       resource: 'horizontalpodautoscalers',
       path: '/apis/autoscaling/v2',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -380,6 +445,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) =>
@@ -393,12 +459,14 @@ abstract class Resources {
       resource: 'ingresses',
       path: '/apis/networking.k8s.io/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -407,6 +475,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => IngressDetailsItem(item: item),
@@ -419,12 +488,14 @@ abstract class Resources {
       resource: 'networkpolicies',
       path: '/apis/networking.k8s.io/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -433,6 +504,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => NetworkPolicyDetailsItem(item: item),
@@ -445,12 +517,14 @@ abstract class Resources {
       resource: 'services',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -459,6 +533,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => ServiceDetailsItem(item: item),
@@ -471,12 +546,14 @@ abstract class Resources {
       resource: 'configmaps',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -485,6 +562,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => ConfigMapDetailsItem(item: item),
@@ -497,12 +575,14 @@ abstract class Resources {
       resource: 'persistentvolumes',
       path: '/api/v1',
       scope: ResourceScope.cluster,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -511,6 +591,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) =>
@@ -524,12 +605,14 @@ abstract class Resources {
       resource: 'persistentvolumeclaims',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -538,6 +621,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) =>
@@ -551,12 +635,14 @@ abstract class Resources {
       resource: 'poddisruptionbudgets',
       path: '/apis/policy/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -565,6 +651,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) =>
@@ -578,12 +665,14 @@ abstract class Resources {
       resource: 'secrets',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -592,6 +681,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => SecretDetailsItem(item: item),
@@ -604,12 +694,14 @@ abstract class Resources {
       resource: 'serviceaccounts',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -618,6 +710,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => ServiceAccountDetailsItem(item: item),
@@ -630,12 +723,14 @@ abstract class Resources {
       resource: 'storageclasses',
       path: '/apis/storage.k8s.io/v1',
       scope: ResourceScope.cluster,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -644,6 +739,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => StorageClassDetailsItem(item: item),
@@ -656,6 +752,7 @@ abstract class Resources {
       resource: 'clusterroles',
       path: '/apis/rbac.authorization.k8s.io/v1',
       scope: ResourceScope.cluster,
+      additionalPrinterColumns: [],
       template: '',
       buildDetailsItem: (dynamic item) => ClusterRoleDetailsItem(item: item),
     ),
@@ -667,12 +764,14 @@ abstract class Resources {
       resource: 'clusterrolebindings',
       path: '/apis/rbac.authorization.k8s.io/v1',
       scope: ResourceScope.cluster,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -681,6 +780,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) =>
@@ -694,6 +794,7 @@ abstract class Resources {
       resource: 'roles',
       path: '/apis/rbac.authorization.k8s.io/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template: '',
       buildDetailsItem: (dynamic item) => RoleDetailsItem(item: item),
     ),
@@ -705,12 +806,14 @@ abstract class Resources {
       resource: 'rolebindings',
       path: '/apis/rbac.authorization.k8s.io/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -719,6 +822,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => RoleBindingDetailsItem(item: item),
@@ -731,12 +835,14 @@ abstract class Resources {
       resource: 'events',
       path: '/api/v1',
       scope: ResourceScope.namespaced,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -745,6 +851,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => EventDetailsItem(item: item),
@@ -756,6 +863,7 @@ abstract class Resources {
       resource: 'customresourcedefinitions',
       path: '/apis/apiextensions.k8s.io/v1',
       scope: ResourceScope.cluster,
+      additionalPrinterColumns: [],
       template: '',
     ),
     'namespaces': Resource(
@@ -766,6 +874,7 @@ abstract class Resources {
       resource: 'namespaces',
       path: '/api/v1',
       scope: ResourceScope.cluster,
+      additionalPrinterColumns: [],
       template:
           '{"apiVersion":"v1","kind":"Namespace","metadata":{"name":"nginx"}}',
       buildListItem: (
@@ -773,6 +882,7 @@ abstract class Resources {
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -781,6 +891,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
       ),
       buildDetailsItem: (dynamic item) => NamespaceDetailsItem(item: item),
@@ -793,12 +904,14 @@ abstract class Resources {
       resource: 'nodes',
       path: '/api/v1',
       scope: ResourceScope.cluster,
+      additionalPrinterColumns: [],
       template: '',
       buildListItem: (
         String title,
         String resource,
         String path,
         ResourceScope scope,
+        List<AdditionalPrinterColumns> additionalPrinterColumns,
         dynamic item,
         dynamic metrics,
       ) =>
@@ -807,6 +920,7 @@ abstract class Resources {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         item: item,
         metrics: metrics,
       ),

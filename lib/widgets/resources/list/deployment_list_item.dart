@@ -13,6 +13,7 @@ class DeploymentListItem extends StatelessWidget implements IListItemWidget {
     required this.path,
     required this.scope,
     required this.item,
+    required this.additionalPrinterColumns,
   }) : super(key: key);
 
   @override
@@ -23,6 +24,8 @@ class DeploymentListItem extends StatelessWidget implements IListItemWidget {
   final String path;
   @override
   final ResourceScope scope;
+  @override
+  final List<AdditionalPrinterColumns> additionalPrinterColumns;
   @override
   final dynamic item;
 
@@ -61,6 +64,7 @@ class DeploymentListItem extends StatelessWidget implements IListItemWidget {
       resource: resource,
       path: path,
       scope: scope,
+      additionalPrinterColumns: additionalPrinterColumns,
       name: deplyoment?.metadata?.name ?? '',
       namespace: deplyoment?.metadata?.namespace,
       info: info,

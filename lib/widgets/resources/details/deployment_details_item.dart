@@ -94,6 +94,8 @@ class DeploymentDetailsItem extends StatelessWidget
           resource: Resources.map['pods']!.resource,
           path: Resources.map['pods']!.path,
           scope: Resources.map['pods']!.scope,
+          additionalPrinterColumns:
+              Resources.map['pods']!.additionalPrinterColumns,
           namespace: deployment.metadata?.namespace,
           selector: getSelector(deployment.spec?.selector),
         ),
@@ -103,6 +105,8 @@ class DeploymentDetailsItem extends StatelessWidget
           resource: Resources.map['events']!.resource,
           path: Resources.map['events']!.path,
           scope: Resources.map['events']!.scope,
+          additionalPrinterColumns:
+              Resources.map['events']!.additionalPrinterColumns,
           namespace: deployment.metadata?.namespace,
           selector:
               'fieldSelector=involvedObject.name=${deployment.metadata?.name ?? ''}',

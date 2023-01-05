@@ -46,6 +46,8 @@ class NamespaceDetailsItem extends StatelessWidget
           resource: Resources.map['cronjobs']!.resource,
           path: Resources.map['cronjobs']!.path,
           scope: Resources.map['cronjobs']!.scope,
+          additionalPrinterColumns:
+              Resources.map['cronjobs']!.additionalPrinterColumns,
           namespace: item['metadata']['name'],
           selector: '',
         ),
@@ -55,6 +57,8 @@ class NamespaceDetailsItem extends StatelessWidget
           resource: Resources.map['deployments']!.resource,
           path: Resources.map['deployments']!.path,
           scope: Resources.map['deployments']!.scope,
+          additionalPrinterColumns:
+              Resources.map['deployments']!.additionalPrinterColumns,
           namespace: item['metadata']['name'],
           selector: '',
         ),
@@ -64,6 +68,8 @@ class NamespaceDetailsItem extends StatelessWidget
           resource: Resources.map['pods']!.resource,
           path: Resources.map['pods']!.path,
           scope: Resources.map['pods']!.scope,
+          additionalPrinterColumns:
+              Resources.map['pods']!.additionalPrinterColumns,
           namespace: item['metadata']['name'],
           selector: '',
         ),
@@ -73,6 +79,8 @@ class NamespaceDetailsItem extends StatelessWidget
           resource: Resources.map['statefulsets']!.resource,
           path: Resources.map['statefulsets']!.path,
           scope: Resources.map['statefulsets']!.scope,
+          additionalPrinterColumns:
+              Resources.map['statefulsets']!.additionalPrinterColumns,
           namespace: item['metadata']['name'],
           selector: '',
         ),
@@ -82,6 +90,8 @@ class NamespaceDetailsItem extends StatelessWidget
           resource: Resources.map['events']!.resource,
           path: Resources.map['events']!.path,
           scope: Resources.map['events']!.scope,
+          additionalPrinterColumns:
+              Resources.map['events']!.additionalPrinterColumns,
           namespace: item['metadata']['name'],
           selector:
               'fieldSelector=involvedObject.name=${item['metadata']['name']}',

@@ -57,6 +57,8 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
               resource: bookmarksRepository.bookmarks[index].resource,
               path: bookmarksRepository.bookmarks[index].path,
               scope: bookmarksRepository.bookmarks[index].scope,
+              additionalPrinterColumns:
+                  bookmarksRepository.bookmarks[index].additionalPrinterColumns,
               namespace: bookmarksRepository.bookmarks[index].namespace,
               selector: null,
             ),
@@ -82,6 +84,8 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
               resource: bookmarksRepository.bookmarks[index].resource,
               path: bookmarksRepository.bookmarks[index].path,
               scope: bookmarksRepository.bookmarks[index].scope,
+              additionalPrinterColumns:
+                  bookmarksRepository.bookmarks[index].additionalPrinterColumns,
               name: bookmarksRepository.bookmarks[index].name!,
               namespace: bookmarksRepository.bookmarks[index].namespace,
             ),

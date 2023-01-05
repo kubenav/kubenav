@@ -82,6 +82,8 @@ class PodDisruptionBudgetDetailsItem extends StatelessWidget
           resource: Resources.map['pods']!.resource,
           path: Resources.map['pods']!.path,
           scope: Resources.map['pods']!.scope,
+          additionalPrinterColumns:
+              Resources.map['pods']!.additionalPrinterColumns,
           namespace: item['metadata']['namespace'],
           selector: getSelector(pdb.spec!.selector),
         ),
@@ -91,6 +93,8 @@ class PodDisruptionBudgetDetailsItem extends StatelessWidget
           resource: Resources.map['events']!.resource,
           path: Resources.map['events']!.path,
           scope: Resources.map['events']!.scope,
+          additionalPrinterColumns:
+              Resources.map['events']!.additionalPrinterColumns,
           namespace: item['metadata']['namespace'],
           selector:
               'fieldSelector=involvedObject.name=${item['metadata']['name']}',

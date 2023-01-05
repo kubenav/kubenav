@@ -32,6 +32,7 @@ class HorizontalPodAutoscalerDetailsItem extends StatelessWidget
         resource: '${hpa.spec!.scaleTargetRef.kind.toLowerCase()}s',
         path: '/apis/${hpa.spec!.scaleTargetRef.apiVersion}',
         scope: ResourceScope.namespaced,
+        additionalPrinterColumns: const [],
         namespace: item['metadata']['namespace'],
         selector:
             'fieldSelector=metadata.name=${hpa.spec!.scaleTargetRef.name}',
@@ -93,6 +94,8 @@ class HorizontalPodAutoscalerDetailsItem extends StatelessWidget
           resource: Resources.map['events']!.resource,
           path: Resources.map['events']!.path,
           scope: Resources.map['events']!.scope,
+          additionalPrinterColumns:
+              Resources.map['events']!.additionalPrinterColumns,
           namespace: item['metadata']['namespace'],
           selector:
               'fieldSelector=involvedObject.name=${item['metadata']['name']}',
