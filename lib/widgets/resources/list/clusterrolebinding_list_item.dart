@@ -14,6 +14,7 @@ class ClusterRoleBindingListItem extends StatelessWidget
     required this.path,
     required this.scope,
     required this.item,
+    required this.additionalPrinterColumns,
   }) : super(key: key);
 
   @override
@@ -24,6 +25,8 @@ class ClusterRoleBindingListItem extends StatelessWidget
   final String path;
   @override
   final ResourceScope scope;
+  @override
+  final List<AdditionalPrinterColumns> additionalPrinterColumns;
   @override
   final dynamic item;
 
@@ -39,6 +42,7 @@ class ClusterRoleBindingListItem extends StatelessWidget
       resource: resource,
       path: path,
       scope: scope,
+      additionalPrinterColumns: additionalPrinterColumns,
       name: clusterRoleBinding?.metadata?.name ?? '',
       namespace: null,
       info: [

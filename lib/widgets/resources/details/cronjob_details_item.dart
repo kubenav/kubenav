@@ -101,6 +101,8 @@ class CronJobDetailsItem extends StatelessWidget implements IDetailsItemWidget {
           resource: Resources.map['jobs']!.resource,
           path: Resources.map['jobs']!.path,
           scope: Resources.map['jobs']!.scope,
+          additionalPrinterColumns:
+              Resources.map['jobs']!.additionalPrinterColumns,
           namespace: cronJob.metadata?.namespace,
           selector: '',
           filter: (items) {
@@ -122,6 +124,8 @@ class CronJobDetailsItem extends StatelessWidget implements IDetailsItemWidget {
           resource: Resources.map['events']!.resource,
           path: Resources.map['events']!.path,
           scope: Resources.map['events']!.scope,
+          additionalPrinterColumns:
+              Resources.map['events']!.additionalPrinterColumns,
           namespace: cronJob.metadata?.namespace,
           selector:
               'fieldSelector=involvedObject.name=${cronJob.metadata?.name ?? ''}',

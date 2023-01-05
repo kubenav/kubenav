@@ -69,16 +69,28 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
       final List<Resource> resources = [];
       for (final crd in crds.items) {
         for (final version in crd.spec.versions) {
-          resources.add(Resource(
-            resourceType: ResourceType.cluster,
-            title: crd.spec.names.kind,
-            description: '${crd.spec.group}/${version.name}',
-            resource: crd.spec.names.plural,
-            path: '/apis/${crd.spec.group}/${version.name}',
-            scope: getResourceScopeFromString(crd.spec.scope),
-            template: '',
-            buildDetailsItem: (dynamic item) => const Text('test'),
-          ));
+          resources.add(
+            Resource(
+              resourceType: ResourceType.cluster,
+              title: crd.spec.names.kind,
+              description: '${crd.spec.group}/${version.name}',
+              resource: crd.spec.names.plural,
+              path: '/apis/${crd.spec.group}/${version.name}',
+              scope: getResourceScopeFromString(crd.spec.scope),
+              template: '',
+              additionalPrinterColumns: version.additionalPrinterColumns
+                  .where((e) => e.priority == null || e.priority == 0)
+                  .map(
+                    (e) => AdditionalPrinterColumns(
+                      description: e.description ?? '',
+                      jsonPath: e.jsonPath,
+                      name: e.name,
+                      type: e.type,
+                    ),
+                  )
+                  .toList(),
+            ),
+          );
         }
       }
       return resources;
@@ -136,6 +148,7 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
               scope: resource.scope,
               namespace: null,
               selector: null,
+              additionalPrinterColumns: resource.additionalPrinterColumns,
             ),
           );
         },

@@ -130,6 +130,8 @@ class NodeDetailsItem extends StatelessWidget implements IDetailsItemWidget {
           resource: Resources.map['pods']!.resource,
           path: Resources.map['pods']!.path,
           scope: Resources.map['pods']!.scope,
+          additionalPrinterColumns:
+              Resources.map['pods']!.additionalPrinterColumns,
           namespace: null,
           selector: 'fieldSelector=spec.nodeName=${item['metadata']['name']}',
         ),
@@ -139,6 +141,8 @@ class NodeDetailsItem extends StatelessWidget implements IDetailsItemWidget {
           resource: Resources.map['events']!.resource,
           path: Resources.map['events']!.path,
           scope: Resources.map['events']!.scope,
+          additionalPrinterColumns:
+              Resources.map['events']!.additionalPrinterColumns,
           namespace: item['metadata']['namespace'],
           selector:
               'fieldSelector=involvedObject.name=${item['metadata']['name']}',

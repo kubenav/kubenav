@@ -267,6 +267,8 @@ class _PodDetailsItemState extends State<PodDetailsItem> {
           resource: Resources.map['events']!.resource,
           path: Resources.map['events']!.path,
           scope: Resources.map['events']!.scope,
+          additionalPrinterColumns:
+              Resources.map['events']!.additionalPrinterColumns,
           namespace: pod.metadata?.namespace,
           selector:
               'fieldSelector=involvedObject.name=${pod.metadata?.name ?? ''}',

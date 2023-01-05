@@ -77,6 +77,8 @@ class JobDetailsItem extends StatelessWidget implements IDetailsItemWidget {
           resource: Resources.map['pods']!.resource,
           path: Resources.map['pods']!.path,
           scope: Resources.map['pods']!.scope,
+          additionalPrinterColumns:
+              Resources.map['pods']!.additionalPrinterColumns,
           namespace: job.metadata?.namespace,
           selector: getSelector(job.spec!.selector),
         ),
@@ -86,6 +88,8 @@ class JobDetailsItem extends StatelessWidget implements IDetailsItemWidget {
           resource: Resources.map['events']!.resource,
           path: Resources.map['events']!.path,
           scope: Resources.map['events']!.scope,
+          additionalPrinterColumns:
+              Resources.map['events']!.additionalPrinterColumns,
           namespace: job.metadata?.namespace,
           selector:
               'fieldSelector=involvedObject.name=${job.metadata?.name ?? ''}',

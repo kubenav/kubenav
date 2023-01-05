@@ -52,6 +52,7 @@ class BookmarksRepository with ChangeNotifier {
     String resource,
     String path,
     ResourceScope scope,
+    List<AdditionalPrinterColumns> additionalPrinterColumns,
     String? name,
     String? namespace,
   ) async {
@@ -63,6 +64,7 @@ class BookmarksRepository with ChangeNotifier {
         resource: resource,
         path: path,
         scope: scope,
+        additionalPrinterColumns: additionalPrinterColumns,
         name: name,
         namespace: namespace,
       ),
@@ -174,6 +176,7 @@ class Bookmark {
   String resource;
   String path;
   ResourceScope scope;
+  List<AdditionalPrinterColumns> additionalPrinterColumns;
   String? name;
   String? namespace;
 
@@ -184,6 +187,7 @@ class Bookmark {
     required this.resource,
     required this.path,
     required this.scope,
+    required this.additionalPrinterColumns,
     required this.name,
     required this.namespace,
   });
@@ -196,6 +200,11 @@ class Bookmark {
       resource: data['resource'],
       path: data['path'],
       scope: getResourceScopeFromString(data['scope']),
+      additionalPrinterColumns: data.containsKey('additionalPrinterColumns') &&
+              data['additionalPrinterColumns'] != null
+          ? List<AdditionalPrinterColumns>.from(data['additionalPrinterColumns']
+              .map((v) => AdditionalPrinterColumns.fromJson(v)))
+          : [],
       name: data.containsKey('name') && data['name'] != null
           ? data['name']
           : null,
@@ -213,6 +222,8 @@ class Bookmark {
       'resource': resource,
       'path': path,
       'scope': scope.toShortString(),
+      'additionalPrinterColumns':
+          additionalPrinterColumns.map((e) => e.toJson()).toList(),
       'name': name,
       'namespace': namespace,
     };

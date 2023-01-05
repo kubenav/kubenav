@@ -44,6 +44,7 @@ dependencies:
   flutter_secure_storage: ^7.0.1
   highlight: ^0.7.0
   http: ^0.13.4
+  json_path: ^0.4.2
   jwt_decode: ^0.3.1
   local_auth: ^2.1.2
   package_info_plus: ^3.0.2

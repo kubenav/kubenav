@@ -46,6 +46,7 @@ class ResourcesList extends StatefulWidget {
     required this.resource,
     required this.path,
     required this.scope,
+    required this.additionalPrinterColumns,
     required this.namespace,
     required this.selector,
   });
@@ -54,6 +55,7 @@ class ResourcesList extends StatefulWidget {
   final String resource;
   final String path;
   final ResourceScope scope;
+  final List<AdditionalPrinterColumns> additionalPrinterColumns;
   final String? namespace;
   final String? selector;
 
@@ -162,6 +164,7 @@ class _ResourcesListState extends State<ResourcesList> {
     String resource,
     String path,
     ResourceScope scope,
+    List<AdditionalPrinterColumns> additionalPrinterColumns,
     dynamic item,
     dynamic metrics,
   ) {
@@ -174,6 +177,7 @@ class _ResourcesListState extends State<ResourcesList> {
         resource,
         path,
         scope,
+        additionalPrinterColumns,
         item,
         metrics,
       );
@@ -184,6 +188,7 @@ class _ResourcesListState extends State<ResourcesList> {
       resource: resource,
       path: path,
       scope: scope,
+      additionalPrinterColumns: additionalPrinterColumns,
       item: item,
     );
   }
@@ -481,6 +486,7 @@ class _ResourcesListState extends State<ResourcesList> {
                                     widget.resource,
                                     widget.path,
                                     widget.scope,
+                                    widget.additionalPrinterColumns,
                                     null,
                                     clustersRepository
                                         .getCluster(
@@ -514,6 +520,7 @@ class _ResourcesListState extends State<ResourcesList> {
                                 widget.resource,
                                 widget.path,
                                 widget.scope,
+                                widget.additionalPrinterColumns,
                                 _getFilteredItems(snapshot.data!.items)[index],
                                 snapshot.data!.metrics,
                               );

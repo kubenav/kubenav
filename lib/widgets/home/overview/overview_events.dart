@@ -93,6 +93,8 @@ class _OverviewEventsState extends State<OverviewEvents> {
       resource: Resources.map['events']!.resource,
       path: Resources.map['events']!.path,
       scope: Resources.map['events']!.scope,
+      additionalPrinterColumns:
+          Resources.map['events']!.additionalPrinterColumns,
       name: event.metadata.name ?? '',
       namespace: event.metadata.namespace,
       info: info,

@@ -48,6 +48,7 @@ class Resources extends StatelessWidget {
                       scope: value.scope,
                       namespace: null,
                       selector: null,
+                      additionalPrinterColumns: value.additionalPrinterColumns,
                     ),
                   );
                 }

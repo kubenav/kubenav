@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kubenav/widgets/resources/details/details_item_additional_printer_columns.dart';
 
 import 'package:provider/provider.dart';
 
@@ -41,6 +42,7 @@ class ResourcesDetails extends StatefulWidget {
     required this.resource,
     required this.path,
     required this.scope,
+    required this.additionalPrinterColumns,
     required this.name,
     required this.namespace,
   }) : super(key: key);
@@ -49,6 +51,7 @@ class ResourcesDetails extends StatefulWidget {
   final String resource;
   final String path;
   final ResourceScope scope;
+  final List<AdditionalPrinterColumns> additionalPrinterColumns;
   final String name;
   final String? namespace;
 
@@ -109,6 +112,8 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
         resource: Resources.map['events']!.resource,
         path: Resources.map['events']!.path,
         scope: Resources.map['events']!.scope,
+        additionalPrinterColumns:
+            Resources.map['events']!.additionalPrinterColumns,
         namespace: item['metadata']['namespace'],
         selector:
             'fieldSelector=involvedObject.name=${item['metadata']['name']}',
@@ -468,6 +473,7 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
                                     widget.resource,
                                     widget.path,
                                     widget.scope,
+                                    widget.additionalPrinterColumns,
                                     widget.name,
                                     widget.namespace,
                                   );
@@ -485,6 +491,11 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
                           ],
                         ),
                         DetailsItemMetadata(
+                          item: snapshot.data,
+                        ),
+                        DetailsItemAdditionalPrinterColumns(
+                          additionalPrinterColumns:
+                              widget.additionalPrinterColumns,
                           item: snapshot.data,
                         ),
                         DetailsItemConditions(

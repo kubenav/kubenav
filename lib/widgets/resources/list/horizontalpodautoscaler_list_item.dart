@@ -14,6 +14,7 @@ class HorizontalPodAutoscalerListItem extends StatelessWidget
     required this.path,
     required this.scope,
     required this.item,
+    required this.additionalPrinterColumns,
   }) : super(key: key);
 
   @override
@@ -24,6 +25,8 @@ class HorizontalPodAutoscalerListItem extends StatelessWidget
   final String path;
   @override
   final ResourceScope scope;
+  @override
+  final List<AdditionalPrinterColumns> additionalPrinterColumns;
   @override
   final dynamic item;
 
@@ -54,6 +57,7 @@ class HorizontalPodAutoscalerListItem extends StatelessWidget
       resource: resource,
       path: path,
       scope: scope,
+      additionalPrinterColumns: additionalPrinterColumns,
       name: hpa?.metadata?.name ?? '',
       namespace: hpa?.metadata?.namespace,
       info: [
