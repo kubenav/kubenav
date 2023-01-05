@@ -112,7 +112,26 @@ Status getStatus(IoK8sApiCoreV1Pod? pod) {
 
   final phase = pod.status?.phase ?? 'Unknown';
 
-  if (phase == 'Running' || phase == 'Succeeded') {
+  if (phase == 'Running') {
+    final shouldReady = (pod.spec?.containers.length ?? 0) +
+        (pod.spec?.initContainers.length ?? 0);
+    final isReady = (pod.status?.containerStatuses
+                .where((containerStatus) => containerStatus.ready)
+                .length ??
+            0) +
+        (pod.status?.initContainerStatuses
+                .where((initContainerStatuses) => initContainerStatuses.ready)
+                .length ??
+            0);
+
+    if (shouldReady != isReady) {
+      return Status.danger;
+    }
+
+    return Status.success;
+  }
+
+  if (phase == 'Succeeded') {
     return Status.success;
   }
 
