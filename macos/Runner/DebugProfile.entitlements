@@ -4,9 +4,5 @@
 <dict>
 	<key>com.apple.security.cs.allow-jit</key>
 	<true/>
-	<key>keychain-access-groups</key>
-	<array>
-		<string>$(AppIdentifierPrefix)io.kubenav.kubenav</string>
-	</array>
 </dict>
 </plist>
