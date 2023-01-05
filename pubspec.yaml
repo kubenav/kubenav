@@ -41,7 +41,12 @@ dependencies:
   flutter_highlight: ^0.7.0
   flutter_markdown: ^0.6.12
   flutter_native_splash: ^2.2.9
-  flutter_secure_storage: ^7.0.1
+  # flutter_secure_storage: ^7.0.1
+  flutter_secure_storage:
+    git:
+      url: https://github.com/kubenav/flutter_secure_storage
+      path: flutter_secure_storage
+      ref: kubenav
   highlight: ^0.7.0
   http: ^0.13.4
   json_path: ^0.4.2
@@ -50,6 +55,7 @@ dependencies:
   package_info_plus: ^3.0.2
   path_provider: ^2.0.9
   provider: ^6.0.4
+  shared_preferences: ^2.0.15
   url_launcher: ^6.0.20
   uuid: ^3.0.7
   web_socket_channel: ^2.1.0

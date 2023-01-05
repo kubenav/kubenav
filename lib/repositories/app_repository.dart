@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:kubenav/utils/storage.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
 
 import 'package:kubenav/utils/constants.dart';
@@ -19,7 +19,6 @@ import 'package:kubenav/utils/logger.dart';
 /// The settings of the user are stored via the Flutter Secure Storage package
 /// and must be loaded by calling the [init] function as early as possible.
 class AppRepository with ChangeNotifier {
-  final _secureStorage = const FlutterSecureStorage();
   int _currentPageIndex = Constants.pageIndexHome;
   bool _isAuthenticated = false;
   AppRepositorySettings _settings = AppRepositorySettings.fromDefault();
@@ -40,9 +39,9 @@ class AppRepository with ChangeNotifier {
   /// and should be callled every time the user changes his app settings.
   Future<void> _save() async {
     try {
-      await _secureStorage.write(
-        key: 'kubenav-settings',
-        value: json.encode(_settings.toJson()),
+      await Storage().write(
+        'kubenav-settings',
+        json.encode(_settings.toJson()),
       );
     } catch (err) {
       Logger.log(
@@ -62,7 +61,7 @@ class AppRepository with ChangeNotifier {
   /// authenticated before he can continue using the app.
   Future<void> init() async {
     try {
-      final data = await _secureStorage.read(key: 'kubenav-settings');
+      final data = await Storage().read('kubenav-settings');
       if (data != null) {
         _settings = AppRepositorySettings.fromJson(json.decode(data));
       }

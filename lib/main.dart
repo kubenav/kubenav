@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:kubenav/utils/storage.dart';
 import 'package:provider/provider.dart';
 import 'package:window_size/window_size.dart';
 
@@ -28,7 +29,8 @@ void main() async {
     setWindowMaxSize(Size.infinite);
   }
 
-  FlutterNativeSplash.remove();
+  await Storage().init();
+
   runApp(const App());
 }
 

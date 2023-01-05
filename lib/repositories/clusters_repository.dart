@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 
 import 'package:kubenav/models/cluster.dart';
@@ -14,6 +13,7 @@ import 'package:kubenav/services/providers/google_service.dart';
 import 'package:kubenav/services/providers/oidc_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
+import 'package:kubenav/utils/storage.dart';
 
 /// The [ClustersRepository] contains all the users configured [clusters],
 /// [providers] and the users [activeClusterId]. The repository is initialized
@@ -21,7 +21,6 @@ import 'package:kubenav/utils/logger.dart';
 /// to it. Each time a user modifys an entry in the repository all subscribed
 /// widgets are notified and we [_save] the changes back to our storage backend.
 class ClustersRepository with ChangeNotifier {
-  final _secureStorage = const FlutterSecureStorage();
   List<Cluster> _clusters = [];
   List<ClusterProvider> _providers = [];
   String _activeClusterId = '';
@@ -44,9 +43,9 @@ class ClustersRepository with ChangeNotifier {
           'ClustersRepository _save',
           'Call save function',
         );
-        await _secureStorage.write(
-          key: 'kubenavClustersRepository',
-          value: json.encode(
+        await Storage().write(
+          'kubenavClustersRepository',
+          json.encode(
             ClustersRepositoryStorage(
               clusters: _clusters,
               providers: _providers,
@@ -95,8 +94,7 @@ class ClustersRepository with ChangeNotifier {
         /// provider configs in the secure storage. If we found saved clusters
         /// we also set the active cluster to the one which was saved in an
         /// older session.
-        final storedData =
-            await _secureStorage.read(key: 'kubenavClustersRepository');
+        final storedData = await Storage().read('kubenavClustersRepository');
         if (storedData != null) {
           final parsedStoredData =
               ClustersRepositoryStorage.fromJson(json.decode(storedData));
