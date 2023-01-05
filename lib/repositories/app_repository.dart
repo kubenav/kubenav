@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:kubenav/utils/storage.dart';
 
 import 'package:local_auth/local_auth.dart';
 
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
+import 'package:kubenav/utils/storage.dart';
 
 /// The [AppRepository] is responsible for managing the users app settings and
 /// some global values for the current user session, like the active tab for the
