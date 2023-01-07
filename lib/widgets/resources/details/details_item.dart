@@ -58,19 +58,17 @@ class DetailsItemWidget extends StatelessWidget {
         child: Wrap(
           children: List.generate(
             values.length,
-            (index) => InkWell(
-              onTap: () {
-                if (onTap != null) {
-                  onTap(index);
-                } else {
-                  showSnackbar(context, name, values[index]);
-                }
-              },
-              child: Container(
-                margin: const EdgeInsets.all(Constants.spacingExtraSmall),
-                child: Chip(
-                  label: Text(values[index]),
-                ),
+            (index) => Container(
+              margin: const EdgeInsets.all(Constants.spacingExtraSmall),
+              child: ActionChip(
+                onPressed: () {
+                  if (onTap != null) {
+                    onTap(index);
+                  } else {
+                    showSnackbar(context, name, values[index]);
+                  }
+                },
+                label: Text(values[index]),
               ),
             ),
           ),
@@ -78,24 +76,31 @@ class DetailsItemWidget extends StatelessWidget {
       );
     }
 
-    return Flexible(
-      child: InkWell(
-        onTap: () {
-          if (onTap != null) {
-            onTap(-1);
-          }
-        },
-        child: Text(
-          values.toString(),
-          softWrap: true,
-          style: onTap != null
-              ? TextStyle(
+    if (onTap != null) {
+      return Flexible(
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              onTap(-1);
+            },
+            child: Text(values.toString(),
+                softWrap: true,
+                style: TextStyle(
                   color: theme(context).colorTextPrimary,
                   decoration: TextDecoration.underline,
-                )
-              : TextStyle(
-                  color: theme(context).colorTextPrimary,
-                ),
+                )),
+          ),
+        ),
+      );
+    }
+
+    return Flexible(
+      child: Text(
+        values.toString(),
+        softWrap: true,
+        style: TextStyle(
+          color: theme(context).colorTextPrimary,
         ),
       ),
     );

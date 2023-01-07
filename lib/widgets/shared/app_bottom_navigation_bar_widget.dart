@@ -44,9 +44,8 @@ class AppBottomNavigationBarWidget extends StatelessWidget {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       backgroundColor: theme(context).colorPrimary,
-      selectedItemColor: Theme.of(context).appBarTheme.foregroundColor,
-      unselectedItemColor:
-          Theme.of(context).appBarTheme.foregroundColor?.withOpacity(0.60),
+      selectedItemColor: theme(context).colorOnPrimary,
+      unselectedItemColor: theme(context).colorOnPrimary.withOpacity(0.60),
       selectedFontSize: 14,
       unselectedFontSize: 14,
       currentIndex: appRepository.currentPageIndex,

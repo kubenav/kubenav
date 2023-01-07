@@ -72,14 +72,12 @@ class AppActionsWidget extends StatelessWidget {
             if (index == actions.length - 1) {
               return Wrap(
                 children: [
-                  InkWell(
+                  ListTile(
                     onTap: actions[index].onTap,
-                    child: ListTile(
-                      title: Text(
-                        actions[index].title,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: actions[index].color),
-                      ),
+                    title: Text(
+                      actions[index].title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: actions[index].color),
                     ),
                   ),
                   const Divider(
@@ -89,14 +87,12 @@ class AppActionsWidget extends StatelessWidget {
                 ],
               );
             } else {
-              return InkWell(
+              return ListTile(
                 onTap: actions[index].onTap,
-                child: ListTile(
-                  title: Text(
-                    actions[index].title,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: actions[index].color),
-                  ),
+                title: Text(
+                  actions[index].title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: actions[index].color),
                 ),
               );
             }

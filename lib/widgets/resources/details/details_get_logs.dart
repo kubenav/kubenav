@@ -213,10 +213,7 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
                         child: Text(
                           value,
                           style: TextStyle(
-                            color: Theme.of(context)
-                                .textTheme
-                                .displayMedium!
-                                .color,
+                            color: theme(context).colorTextPrimary,
                           ),
                         ),
                       );
@@ -262,10 +259,7 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
                         child: Text(
                           value,
                           style: TextStyle(
-                            color: Theme.of(context)
-                                .textTheme
-                                .displayMedium!
-                                .color,
+                            color: theme(context).colorTextPrimary,
                           ),
                         ),
                       );

@@ -132,38 +132,41 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
                   style: primaryTextStyle(context, size: 18),
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  showModal(
-                    context,
-                    AppTimeRangeSelectorWidget(
-                      time: _time,
-                      selectTime: (Time time) {
-                        setState(() {
-                          _time = time;
-                        });
-                      },
-                    ),
-                  );
-                },
-                child: Wrap(
-                  children: [
-                    Icon(
-                      Icons.schedule,
-                      color: theme(context).colorPrimary,
-                      size: 16,
-                    ),
-                    const SizedBox(width: Constants.spacingExtraSmall),
-                    Text(
-                      'Time Range',
-                      style: secondaryTextStyle(
-                        context,
-                        color: theme(context).colorPrimary,
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {
+                    showModal(
+                      context,
+                      AppTimeRangeSelectorWidget(
+                        time: _time,
+                        selectTime: (Time time) {
+                          setState(() {
+                            _time = time;
+                          });
+                        },
                       ),
-                    ),
-                  ],
+                    );
+                  },
+                  child: Wrap(
+                    children: [
+                      Icon(
+                        Icons.schedule,
+                        color: theme(context).colorPrimary,
+                        size: 16,
+                      ),
+                      const SizedBox(width: Constants.spacingExtraSmall),
+                      Text(
+                        'Time Range',
+                        style: secondaryTextStyle(
+                          context,
+                          color: theme(context).colorPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ),

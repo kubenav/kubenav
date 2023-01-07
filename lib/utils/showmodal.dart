@@ -58,13 +58,6 @@ void showSnackbar(BuildContext context, String title, String message) {
           ),
         ],
       ),
-      action: SnackBarAction(
-        label: 'Dissmiss',
-        textColor: theme(context).colorMessageForeground,
-        onPressed: () {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
     ),
   );
 }

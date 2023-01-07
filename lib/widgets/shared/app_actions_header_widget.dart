@@ -75,33 +75,40 @@ class AppActionsHeaderWidget extends StatelessWidget {
           spacing: Constants.spacingSmall,
           children: actions.map(
             (action) {
-              return InkWell(
-                onTap: action.onTap,
-                child: Container(
-                  constraints: BoxConstraints(
-                    minWidth: MediaQuery.of(context).size.width * 0.25,
-                  ),
-                  padding: const EdgeInsets.only(
-                    top: Constants.spacingMiddle,
-                    bottom: Constants.spacingMiddle,
-                  ),
-                  child: Column(
-                    children: [
-                      Icon(
-                        action.icon,
-                        color: theme(context).colorPrimary,
-                        size: 28,
+              return Container(
+                constraints: BoxConstraints(
+                  minWidth: MediaQuery.of(context).size.width * 0.25,
+                ),
+                padding: const EdgeInsets.only(
+                  top: Constants.spacingMiddle,
+                  bottom: Constants.spacingMiddle,
+                ),
+                child: Column(
+                  children: [
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: action.onTap,
+                        child: Column(
+                          children: [
+                            Icon(
+                              action.icon,
+                              color: theme(context).colorPrimary,
+                              size: 28,
+                            ),
+                            const SizedBox(
+                              height: Constants.spacingSmall,
+                            ),
+                            Text(
+                              action.title,
+                              style: primaryTextStyle(context, size: 12),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(
-                        height: Constants.spacingSmall,
-                      ),
-                      Text(
-                        action.title,
-                        style: primaryTextStyle(context, size: 12),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               );
             },
