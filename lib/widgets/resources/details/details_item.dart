@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
@@ -62,7 +63,7 @@ class DetailsItemWidget extends StatelessWidget {
                 if (onTap != null) {
                   onTap(index);
                 } else {
-                  showSnackbar(name, values[index]);
+                  showSnackbar(context, name, values[index]);
                 }
               },
               child: Container(
@@ -89,11 +90,11 @@ class DetailsItemWidget extends StatelessWidget {
           softWrap: true,
           style: onTap != null
               ? TextStyle(
-                  color: Theme.of(context).textTheme.displayMedium!.color,
+                  color: theme(context).colorTextPrimary,
                   decoration: TextDecoration.underline,
                 )
               : TextStyle(
-                  color: Theme.of(context).textTheme.displayMedium!.color,
+                  color: theme(context).colorTextPrimary,
                 ),
         ),
       ),
@@ -140,13 +141,13 @@ class DetailsItemWidget extends StatelessWidget {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Theme.of(context).shadowColor,
+                color: theme(context).colorShadow,
                 blurRadius: Constants.sizeBorderBlurRadius,
                 spreadRadius: Constants.sizeBorderSpreadRadius,
                 offset: const Offset(0.0, 0.0),
               ),
             ],
-            color: Theme.of(context).cardColor,
+            color: theme(context).colorCard,
             borderRadius: const BorderRadius.all(
               Radius.circular(Constants.sizeBorderRadius),
             ),

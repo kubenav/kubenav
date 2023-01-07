@@ -87,11 +87,12 @@ class _DetailsRestartResourceState extends State<DetailsRestartResource> {
       setState(() {
         _isLoading = false;
       });
-      showSnackbar(
-        'Resource is restarted',
-        'The resource ${widget.name} in namespace ${widget.namespace} is restarted',
-      );
       if (mounted) {
+        showSnackbar(
+          context,
+          'Resource is restarted',
+          'The resource ${widget.name} in namespace ${widget.namespace} is restarted',
+        );
         Navigator.pop(context);
       }
     } on PlatformException catch (err) {
@@ -104,6 +105,7 @@ class _DetailsRestartResourceState extends State<DetailsRestartResource> {
         _isLoading = false;
       });
       showSnackbar(
+        context,
         'Could not restart resource',
         'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
       );
@@ -117,6 +119,7 @@ class _DetailsRestartResourceState extends State<DetailsRestartResource> {
         _isLoading = false;
       });
       showSnackbar(
+        context,
         'Could not restart resource',
         err.toString(),
       );

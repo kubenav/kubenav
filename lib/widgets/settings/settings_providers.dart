@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
@@ -35,13 +36,13 @@ class SettingsProviders extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).shadowColor,
+            color: theme(context).colorShadow,
             blurRadius: Constants.sizeBorderBlurRadius,
             spreadRadius: Constants.sizeBorderSpreadRadius,
             offset: const Offset(0.0, 0.0),
           ),
         ],
-        color: Theme.of(context).cardColor,
+        color: theme(context).colorCard,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),
@@ -53,9 +54,9 @@ class SettingsProviders extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              decoration: const BoxDecoration(
-                color: Constants.colorPrimary,
-                borderRadius: BorderRadius.all(
+              decoration: BoxDecoration(
+                color: theme(context).colorPrimary,
+                borderRadius: const BorderRadius.all(
                   Radius.circular(Constants.sizeBorderRadius),
                 ),
               ),
@@ -112,6 +113,10 @@ class SettingsProviders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ThemeRepository>(
+      context,
+      listen: true,
+    );
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,

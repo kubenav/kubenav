@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_secret.dart';
 import 'package:kubenav/models/resource.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
@@ -89,9 +90,9 @@ class SecretDetailsItem extends StatelessWidget implements IDetailsItemWidget {
                   },
                   children: [
                     Container(
-                      decoration: const BoxDecoration(
-                        color: Constants.colorPrimary,
-                        borderRadius: BorderRadius.all(
+                      decoration: BoxDecoration(
+                        color: theme(context).colorPrimary,
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),
                       ),

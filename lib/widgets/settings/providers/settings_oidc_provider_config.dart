@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/providers/oidc_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -77,6 +78,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         err,
       );
       showSnackbar(
+        context,
         'Could not generate and open sign in url',
         err.toString(),
       );
@@ -205,6 +207,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           _isLoading = false;
         });
         showSnackbar(
+          context,
           'Could not save provider configuration',
           err.toString(),
         );
@@ -348,7 +351,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                     value: _pkceMethod,
                     underline: Container(
                       height: 2,
-                      color: Constants.colorPrimary,
+                      color: theme(context).colorPrimary,
                     ),
                     onChanged: (String? newValue) {
                       setState(() {
@@ -431,7 +434,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Constants.colorPrimary,
+                  backgroundColor: theme(context).colorPrimary,
                   foregroundColor: Colors.white,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(

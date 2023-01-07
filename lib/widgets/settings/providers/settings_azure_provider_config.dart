@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_azure.dart';
@@ -104,6 +105,7 @@ class _SettingsAzureProviderState extends State<SettingsAzureProvider> {
         _isLoading = false;
       });
       showSnackbar(
+        context,
         'Could not save provider configuration',
         err.toString(),
       );
@@ -248,7 +250,7 @@ class _SettingsAzureProviderState extends State<SettingsAzureProvider> {
                 children: [
                   const Text('Admin'),
                   Switch(
-                    activeColor: Constants.colorPrimary,
+                    activeColor: theme(context).colorPrimary,
                     onChanged: (val) {
                       setState(() {
                         _isAdmin = !_isAdmin;

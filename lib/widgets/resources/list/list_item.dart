@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/resource.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
@@ -57,7 +58,7 @@ class ListItemWidget extends StatelessWidget {
   final Status status;
   final void Function()? onTap;
 
-  Widget buildStatus() {
+  Widget buildStatus(BuildContext context) {
     if (status != Status.undefined) {
       return Wrap(
         children: [
@@ -66,10 +67,10 @@ class ListItemWidget extends StatelessWidget {
             Icons.radio_button_checked,
             size: 24,
             color: status == Status.success
-                ? Constants.colorSuccess
+                ? theme(context).colorSuccess
                 : status == Status.danger
-                    ? Constants.colorDanger
-                    : Constants.colorWarning,
+                    ? theme(context).colorDanger
+                    : theme(context).colorWarning,
           ),
         ],
       );
@@ -109,13 +110,13 @@ class ListItemWidget extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).shadowColor,
+            color: theme(context).colorShadow,
             blurRadius: Constants.sizeBorderBlurRadius,
             spreadRadius: Constants.sizeBorderSpreadRadius,
             offset: const Offset(0.0, 0.0),
           ),
         ],
-        color: Theme.of(context).cardColor,
+        color: theme(context).colorCard,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),
@@ -156,7 +157,7 @@ class ListItemWidget extends StatelessWidget {
                 ],
               ),
             ),
-            buildStatus(),
+            buildStatus(context),
           ],
         ),
       ),

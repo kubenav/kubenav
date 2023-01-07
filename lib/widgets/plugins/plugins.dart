@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -42,9 +43,9 @@ class Plugins extends StatelessWidget {
             },
             children: [
               Container(
-                decoration: const BoxDecoration(
-                  color: Constants.colorPrimary,
-                  borderRadius: BorderRadius.all(
+                decoration: BoxDecoration(
+                  color: theme(context).colorPrimary,
+                  borderRadius: const BorderRadius.all(
                     Radius.circular(Constants.sizeBorderRadius),
                   ),
                 ),
@@ -91,9 +92,9 @@ class Plugins extends StatelessWidget {
             },
             children: [
               Container(
-                decoration: const BoxDecoration(
-                  color: Constants.colorPrimary,
-                  borderRadius: BorderRadius.all(
+                decoration: BoxDecoration(
+                  color: theme(context).colorPrimary,
+                  borderRadius: const BorderRadius.all(
                     Radius.circular(Constants.sizeBorderRadius),
                   ),
                 ),
@@ -141,6 +142,10 @@ class Plugins extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ThemeRepository>(
+      context,
+      listen: true,
+    );
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,

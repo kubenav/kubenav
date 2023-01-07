@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 
 /// [Action] defines the structure of a single action for the
@@ -13,7 +14,7 @@ class AppActionsWidgetAction {
 
   AppActionsWidgetAction({
     required this.title,
-    this.color = Constants.colorPrimary,
+    required this.color,
     required this.onTap,
   });
 }
@@ -59,7 +60,7 @@ class AppActionsWidget extends StatelessWidget {
           right: Constants.spacingMiddle,
         ),
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
+          color: theme(context).colorCard,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),

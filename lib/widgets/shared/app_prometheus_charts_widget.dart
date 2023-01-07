@@ -8,6 +8,7 @@ import 'package:yaml/yaml.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/models/plugins/time.dart';
 import 'package:kubenav/repositories/app_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
@@ -147,9 +148,9 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
                 },
                 child: Wrap(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.schedule,
-                      color: Constants.colorPrimary,
+                      color: theme(context).colorPrimary,
                       size: 16,
                     ),
                     const SizedBox(width: Constants.spacingExtraSmall),
@@ -157,7 +158,7 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
                       'Time Range',
                       style: secondaryTextStyle(
                         context,
-                        color: Constants.colorPrimary,
+                        color: theme(context).colorPrimary,
                       ),
                     ),
                   ],
@@ -182,13 +183,13 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Theme.of(context).shadowColor,
+                      color: theme(context).colorShadow,
                       blurRadius: Constants.sizeBorderBlurRadius,
                       spreadRadius: Constants.sizeBorderSpreadRadius,
                       offset: const Offset(0.0, 0.0),
                     ),
                   ],
-                  color: Theme.of(context).cardColor,
+                  color: theme(context).colorCard,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(Constants.sizeBorderRadius),
                   ),

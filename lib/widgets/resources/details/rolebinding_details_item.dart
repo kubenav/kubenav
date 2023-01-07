@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_rbac_v1_role_binding.dart';
 import 'package:kubenav/models/resource.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/resources/details/details_item.dart';
@@ -46,9 +47,9 @@ class RoleBindingDetailsItem extends StatelessWidget
                 (subject) => AppVertialListSimpleModel(
                   children: [
                     Container(
-                      decoration: const BoxDecoration(
-                        color: Constants.colorPrimary,
-                        borderRadius: BorderRadius.all(
+                      decoration: BoxDecoration(
+                        color: theme(context).colorPrimary,
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),
                       ),

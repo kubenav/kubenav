@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/navigate.dart';
@@ -42,7 +43,7 @@ class AppBottomNavigationBarWidget extends StatelessWidget {
 
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: Constants.colorPrimary,
+      backgroundColor: theme(context).colorPrimary,
       selectedItemColor: Theme.of(context).appBarTheme.foregroundColor,
       unselectedItemColor:
           Theme.of(context).appBarTheme.foregroundColor?.withOpacity(0.60),

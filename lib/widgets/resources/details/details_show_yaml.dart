@@ -98,11 +98,12 @@ class _DetailsShowYamlState extends State<DetailsShowYaml> {
       setState(() {
         _isLoading = false;
       });
-      showSnackbar(
-        'Manifest was exported',
-        'The manifest was exported as $name.yaml',
-      );
       if (mounted) {
+        showSnackbar(
+          context,
+          'Manifest was exported',
+          'The manifest was exported as $name.yaml',
+        );
         Navigator.pop(context);
       }
     } catch (err) {
@@ -115,6 +116,7 @@ class _DetailsShowYamlState extends State<DetailsShowYaml> {
         _isLoading = false;
       });
       showSnackbar(
+        context,
         'Could not export manifest',
         err.toString(),
       );

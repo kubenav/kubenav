@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -72,14 +74,19 @@ class _SettingsInfoState extends State<SettingsInfo> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ThemeRepository>(
+      context,
+      listen: true,
+    );
+
     return AppVertialListSimpleWidget(
       title: 'Info',
       items: [
         AppVertialListSimpleModel(
           children: [
-            const Icon(
+            Icon(
               CustomIcons.version,
-              color: Constants.colorPrimary,
+              color: theme(context).colorPrimary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -98,9 +105,9 @@ class _SettingsInfoState extends State<SettingsInfo> {
                 left: 6,
                 right: 6,
               ),
-              decoration: const BoxDecoration(
-                color: Constants.colorPrimary,
-                borderRadius: BorderRadius.all(
+              decoration: BoxDecoration(
+                color: theme(context).colorPrimary,
+                borderRadius: const BorderRadius.all(
                   Radius.circular(Constants.sizeBorderRadius),
                 ),
               ),
@@ -162,9 +169,9 @@ class _SettingsInfoState extends State<SettingsInfo> {
             );
           },
           children: [
-            const Icon(
+            Icon(
               CustomIcons.license,
-              color: Constants.colorPrimary,
+              color: theme(context).colorPrimary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -188,9 +195,9 @@ class _SettingsInfoState extends State<SettingsInfo> {
             openUrl('https://kubenav.io');
           },
           children: [
-            const Icon(
+            Icon(
               CustomIcons.browser,
-              color: Constants.colorPrimary,
+              color: theme(context).colorPrimary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -214,9 +221,9 @@ class _SettingsInfoState extends State<SettingsInfo> {
             openUrl('https://github.com/kubenav/kubenav');
           },
           children: [
-            const Icon(
+            Icon(
               CustomIcons.github,
-              color: Constants.colorPrimary,
+              color: theme(context).colorPrimary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -240,9 +247,9 @@ class _SettingsInfoState extends State<SettingsInfo> {
             openUrl('https://twitter.com/kubenav');
           },
           children: [
-            const Icon(
+            Icon(
               CustomIcons.twitter,
-              color: Constants.colorPrimary,
+              color: theme(context).colorPrimary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 
 import 'package:provider/provider.dart';
 
@@ -115,6 +116,10 @@ class HomeOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ThemeRepository>(
+      context,
+      listen: true,
+    );
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,

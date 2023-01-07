@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_status.dart';
 import 'package:kubenav/models/kubernetes_extensions/pod_metrics.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources/general.dart';
@@ -203,6 +204,7 @@ class DetailsContainer extends StatelessWidget {
                   (env) => AppVertialListSimpleModel(
                     onTap: () {
                       showSnackbar(
+                        context,
                         env.name,
                         env.value != null
                             ? env.value!
@@ -213,9 +215,9 @@ class DetailsContainer extends StatelessWidget {
                     },
                     children: [
                       Container(
-                        decoration: const BoxDecoration(
-                          color: Constants.colorPrimary,
-                          borderRadius: BorderRadius.all(
+                        decoration: BoxDecoration(
+                          color: theme(context).colorPrimary,
+                          borderRadius: const BorderRadius.all(
                             Radius.circular(Constants.sizeBorderRadius),
                           ),
                         ),
@@ -273,15 +275,16 @@ class DetailsContainer extends StatelessWidget {
                   (volumeMount) => AppVertialListSimpleModel(
                     onTap: () {
                       showSnackbar(
+                        context,
                         volumeMount.name,
                         'Path: ${volumeMount.mountPath}\nSub-Path: ${volumeMount.subPath ?? '-'}\nReadonly: ${volumeMount.readOnly == true ? 'True' : 'False'}',
                       );
                     },
                     children: [
                       Container(
-                        decoration: const BoxDecoration(
-                          color: Constants.colorPrimary,
-                          borderRadius: BorderRadius.all(
+                        decoration: BoxDecoration(
+                          color: theme(context).colorPrimary,
+                          borderRadius: const BorderRadius.all(
                             Radius.circular(Constants.sizeBorderRadius),
                           ),
                         ),

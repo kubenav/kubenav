@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:kubenav/models/plugins/helm.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -207,6 +208,10 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ThemeRepository>(
+      context,
+      listen: true,
+    );
     Provider.of<ClustersRepository>(
       context,
       listen: true,
@@ -259,11 +264,12 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
+                      children: [
                         Padding(
-                          padding: EdgeInsets.all(Constants.spacingMiddle),
+                          padding:
+                              const EdgeInsets.all(Constants.spacingMiddle),
                           child: CircularProgressIndicator(
-                            color: Constants.colorPrimary,
+                            color: theme(context).colorPrimary,
                           ),
                         ),
                       ],
@@ -332,13 +338,13 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                 return Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
+                                  children: [
                                     Padding(
-                                      padding: EdgeInsets.all(
+                                      padding: const EdgeInsets.all(
                                         Constants.spacingMiddle,
                                       ),
                                       child: CircularProgressIndicator(
-                                        color: Constants.colorPrimary,
+                                        color: theme(context).colorPrimary,
                                       ),
                                     ),
                                   ],

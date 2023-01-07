@@ -10,6 +10,7 @@ import 'package:yaml/yaml.dart';
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/models/kubernetes_extensions/kubeconfig.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
@@ -108,11 +109,12 @@ class _SettingsAddClusterKubeconfigState
         setState(() {
           _isLoadingAddCluster = false;
         });
-        showSnackbar(
-          'Clusters were added',
-          '$count clusters were added',
-        );
         if (mounted) {
+          showSnackbar(
+            context,
+            'Clusters were added',
+            '$count clusters were added',
+          );
           Navigator.pop(context);
         }
       } catch (err) {
@@ -120,6 +122,7 @@ class _SettingsAddClusterKubeconfigState
           _isLoadingAddCluster = false;
         });
         showSnackbar(
+          context,
           'Could not add clusters',
           err.toString(),
         );
@@ -158,7 +161,7 @@ class _SettingsAddClusterKubeconfigState
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Constants.colorPrimary,
+                  backgroundColor: theme(context).colorPrimary,
                   foregroundColor: Colors.white,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(

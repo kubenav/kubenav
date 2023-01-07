@@ -15,7 +15,7 @@ class DetailsItemAdditionalPrinterColumns extends StatelessWidget {
   final List<AdditionalPrinterColumns> additionalPrinterColumns;
   final dynamic item;
 
-  List<DetailsItemModel> _buildDetailsItems() {
+  List<DetailsItemModel> _buildDetailsItems(BuildContext context) {
     List<DetailsItemModel> detailsItems = [];
 
     for (final additionalPrinterColumn in additionalPrinterColumns) {
@@ -32,6 +32,7 @@ class DetailsItemAdditionalPrinterColumns extends StatelessWidget {
               ? null
               : (index) {
                   showSnackbar(
+                    context,
                     '${additionalPrinterColumn.name}: $value',
                     additionalPrinterColumn.description,
                   );
@@ -51,7 +52,7 @@ class DetailsItemAdditionalPrinterColumns extends StatelessWidget {
 
     return DetailsItemWidget(
       title: 'Additional Information',
-      details: _buildDetailsItems(),
+      details: _buildDetailsItems(context),
     );
   }
 }

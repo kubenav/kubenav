@@ -6,6 +6,7 @@ import 'package:web_socket_channel/io.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/terminal_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
@@ -105,11 +106,12 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
             );
           }
         } else {
-          showSnackbar(
-            'Could not create terminal',
-            'The internal http server is unhealthy',
-          );
           setState(() {
+            showSnackbar(
+              context,
+              'Could not create terminal',
+              'The internal http server is unhealthy',
+            );
             _isLoading = false;
           });
         }
@@ -120,6 +122,7 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
           err,
         );
         showSnackbar(
+          context,
           'Could not get create terminal',
           err.toString(),
         );
@@ -191,7 +194,7 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
                     value: _container,
                     underline: Container(
                       height: 2,
-                      color: Constants.colorPrimary,
+                      color: theme(context).colorPrimary,
                     ),
                     onChanged: (String? value) {
                       setState(() {
@@ -229,7 +232,7 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
                     value: _shell,
                     underline: Container(
                       height: 2,
-                      color: Constants.colorPrimary,
+                      color: theme(context).colorPrimary,
                     ),
                     onChanged: (String? value) {
                       _shell = value ?? 'sh';

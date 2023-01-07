@@ -7,6 +7,7 @@ import 'package:kubenav/models/resource.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/bookmarks_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/showmodal.dart';
@@ -283,11 +284,15 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
 
   @override
   Widget build(BuildContext context) {
-    ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
+    Provider.of<ThemeRepository>(
       context,
       listen: true,
     );
     AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: true,
+    );
+    ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,
     );
@@ -339,11 +344,14 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
+                      children: [
                         Padding(
-                          padding: EdgeInsets.all(Constants.spacingMiddle),
+                          padding: const EdgeInsets.all(
+                            Constants.spacingMiddle,
+                          ),
                           child: CircularProgressIndicator(
-                              color: Constants.colorPrimary),
+                            color: theme(context).colorPrimary,
+                          ),
                         ),
                       ],
                     );

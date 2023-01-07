@@ -2,6 +2,9 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -21,6 +24,11 @@ class SettingsSponsor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ThemeRepository>(
+      context,
+      listen: true,
+    );
+
     if (Platform.isIOS) {
       return Container();
     }
@@ -33,9 +41,9 @@ class SettingsSponsor extends StatelessWidget {
             openUrl('https://github.com/sponsors/ricoberger');
           },
           children: [
-            const Icon(
+            Icon(
               CustomIcons.github,
-              color: Constants.colorPrimary,
+              color: theme(context).colorPrimary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -59,9 +67,9 @@ class SettingsSponsor extends StatelessWidget {
             openUrl('https://www.paypal.com/paypalme/ricoberger');
           },
           children: [
-            const Icon(
+            Icon(
               CustomIcons.paypal,
-              color: Constants.colorPrimary,
+              color: theme(context).colorPrimary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(

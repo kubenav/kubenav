@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
@@ -39,7 +41,7 @@ class SettingsClusters extends StatelessWidget {
         final double elevation = lerpDouble(0, 6, animValue)!;
         return Material(
           elevation: elevation,
-          shadowColor: Theme.of(context).shadowColor,
+          shadowColor: theme(context).colorShadow,
           child: child,
         );
       },
@@ -80,8 +82,43 @@ class SettingsClusters extends StatelessWidget {
     }
   }
 
+  /// [buildProviders] is used to display a list with all providers. When the
+  /// user clicks on one of the shown providers, we display a modal bottom
+  /// sheet, which can be used to add a cluster using the selected provider.
+  ///
+  /// This widget is only displayed on iOS and Android, because we automatically
+  /// add all clusters from the users Kubeconfig file in "~/.kube/config" in the
+  /// desktop version.
+  Widget buildProviders(BuildContext context) {
+    if (Platform.isAndroid || Platform.isIOS) {
+      return AppHorizontalListCardsWidget(
+        title: 'Add Cluster',
+        cards: List.generate(
+          ClusterProviderType.values.length,
+          (index) => AppHorizontalListCardsModel(
+            title: ClusterProviderType.values[index].title(),
+            subtitle: [ClusterProviderType.values[index].subtitle()],
+            image: ClusterProviderType.values[index].image250x140(),
+            onTap: () {
+              _showAddClusterBottomSheet(
+                context,
+                ClusterProviderType.values[index],
+              );
+            },
+          ),
+        ),
+      );
+    }
+
+    return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
+    Provider.of<ThemeRepository>(
+      context,
+      listen: true,
+    );
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,
@@ -99,26 +136,8 @@ class SettingsClusters extends StatelessWidget {
           children: [
             const SizedBox(height: Constants.spacingSmall),
 
-            /// Display a list with all providers. When the user clicks on one
-            /// of the shown providers, we display a modal bottom sheet, which
-            /// can be used to add a cluster using the selected provider.
-            AppHorizontalListCardsWidget(
-              title: 'Add Cluster',
-              cards: List.generate(
-                ClusterProviderType.values.length,
-                (index) => AppHorizontalListCardsModel(
-                  title: ClusterProviderType.values[index].title(),
-                  subtitle: [ClusterProviderType.values[index].subtitle()],
-                  image: ClusterProviderType.values[index].image250x140(),
-                  onTap: () {
-                    _showAddClusterBottomSheet(
-                      context,
-                      ClusterProviderType.values[index],
-                    );
-                  },
-                ),
-              ),
-            ),
+            buildProviders(context),
+
             Padding(
               padding: const EdgeInsets.all(
                 Constants.spacingMiddle,

@@ -6,6 +6,7 @@ import 'package:kubenav/models/resource.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/bookmarks_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
@@ -203,6 +204,10 @@ class _ResourcesListState extends State<ResourcesList> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ThemeRepository>(
+      context,
+      listen: true,
+    );
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,
@@ -308,11 +313,13 @@ class _ResourcesListState extends State<ResourcesList> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
+                      children: [
                         Padding(
-                          padding: EdgeInsets.all(Constants.spacingMiddle),
+                          padding: const EdgeInsets.all(
+                            Constants.spacingMiddle,
+                          ),
                           child: CircularProgressIndicator(
-                            color: Constants.colorPrimary,
+                            color: theme(context).colorPrimary,
                           ),
                         ),
                       ],
@@ -358,7 +365,7 @@ class _ResourcesListState extends State<ResourcesList> {
                             left: Constants.spacingMiddle,
                             right: Constants.spacingMiddle,
                           ),
-                          color: Constants.colorPrimary,
+                          color: theme(context).colorPrimary,
                           child: TextField(
                             onSubmitted: (value) {
                               setState(() {

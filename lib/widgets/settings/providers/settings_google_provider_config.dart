@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/providers/google_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -54,6 +55,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
         err,
       );
       showSnackbar(
+        context,
         'Could not open sign in url',
         err.toString(),
       );
@@ -139,6 +141,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
         _isLoading = false;
       });
       showSnackbar(
+        context,
         'Could not save provider configuration',
         err.toString(),
       );
@@ -242,7 +245,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Constants.colorPrimary,
+                  backgroundColor: theme(context).colorPrimary,
                   foregroundColor: Colors.white,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(

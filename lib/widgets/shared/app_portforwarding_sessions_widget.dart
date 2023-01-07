@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/portforwarding_repository.dart';
-import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/shared/app_actions_widget.dart';
@@ -32,7 +32,7 @@ class AppPortForwardingSessionsWidget extends StatelessWidget {
         (index) => AppActionsWidgetAction(
           title:
               '${portForwardingRepository.sessions[index].name} ${portForwardingRepository.sessions[index].remotePort}:${portForwardingRepository.sessions[index].localPort}',
-          color: Constants.colorPrimary,
+          color: theme(context).colorPrimary,
           onTap: () {
             Navigator.pop(context);
             showActions(
@@ -105,6 +105,7 @@ class _AppPortForwardingSessionWidgetState
       }
     } catch (err) {
       showSnackbar(
+        context,
         'Port Forwarding Session was not deleted',
         err.toString(),
       );
@@ -123,7 +124,7 @@ class _AppPortForwardingSessionWidgetState
       actions: [
         AppActionsWidgetAction(
           title: 'Open',
-          color: Constants.colorPrimary,
+          color: theme(context).colorPrimary,
           onTap: () {
             Navigator.pop(context);
             openUrl(
@@ -133,7 +134,7 @@ class _AppPortForwardingSessionWidgetState
         ),
         AppActionsWidgetAction(
           title: 'Copy',
-          color: Constants.colorPrimary,
+          color: theme(context).colorPrimary,
           onTap: () {
             Navigator.pop(context);
             Clipboard.setData(
@@ -146,7 +147,7 @@ class _AppPortForwardingSessionWidgetState
         ),
         AppActionsWidgetAction(
           title: 'Delete',
-          color: Constants.colorDanger,
+          color: theme(context).colorDanger,
           onTap: () {
             _deleteSession();
           },

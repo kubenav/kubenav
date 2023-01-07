@@ -11,6 +11,7 @@ import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
 import 'package:kubenav/models/resource.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -210,8 +211,8 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
           case ConnectionState.waiting:
             return buildContainer(
               context,
-              const CircularProgressIndicator(
-                color: Constants.colorPrimary,
+              CircularProgressIndicator(
+                color: theme(context).colorPrimary,
               ),
             );
           default:

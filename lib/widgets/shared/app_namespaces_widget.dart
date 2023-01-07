@@ -6,6 +6,7 @@ import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_namespace.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_namespace_list.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
@@ -76,6 +77,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
       }
     } catch (err) {
       showSnackbar(
+        context,
         'Namespace was not changed',
         err.toString(),
       );
@@ -120,13 +122,13 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).shadowColor,
+              color: theme(context).colorShadow,
               blurRadius: Constants.sizeBorderBlurRadius,
               spreadRadius: Constants.sizeBorderSpreadRadius,
               offset: const Offset(0.0, 0.0),
             ),
           ],
-          color: Theme.of(context).cardColor,
+          color: theme(context).colorCard,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
@@ -145,7 +147,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                     ? Icons.radio_button_checked
                     : Icons.radio_button_unchecked,
                 size: 24,
-                color: Constants.colorPrimary,
+                color: theme(context).colorPrimary,
               ),
               const SizedBox(width: Constants.spacingSmall),
               Expanded(
@@ -178,13 +180,13 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: Theme.of(context).shadowColor,
+                  color: theme(context).colorShadow,
                   blurRadius: Constants.sizeBorderBlurRadius,
                   spreadRadius: Constants.sizeBorderSpreadRadius,
                   offset: const Offset(0.0, 0.0),
                 ),
               ],
-              color: Theme.of(context).cardColor,
+              color: theme(context).colorCard,
               borderRadius: const BorderRadius.all(
                 Radius.circular(Constants.sizeBorderRadius),
               ),
@@ -203,7 +205,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                         ? Icons.radio_button_checked
                         : Icons.radio_button_unchecked,
                     size: 24,
-                    color: Constants.colorPrimary,
+                    color: theme(context).colorPrimary,
                   ),
                   const SizedBox(width: Constants.spacingSmall),
                   Expanded(
@@ -276,9 +278,9 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
               return ListView(
                 children: [
                   ..._buildFavoriteNamespace(context),
-                  const Center(
+                  Center(
                     child: CircularProgressIndicator(
-                      color: Constants.colorPrimary,
+                      color: theme(context).colorPrimary,
                     ),
                   ),
                 ],
@@ -320,13 +322,13 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                              color: Theme.of(context).shadowColor,
+                              color: theme(context).colorShadow,
                               blurRadius: Constants.sizeBorderBlurRadius,
                               spreadRadius: Constants.sizeBorderSpreadRadius,
                               offset: const Offset(0.0, 0.0),
                             ),
                           ],
-                          color: Theme.of(context).cardColor,
+                          color: theme(context).colorCard,
                           borderRadius: const BorderRadius.all(
                             Radius.circular(Constants.sizeBorderRadius),
                           ),
@@ -347,7 +349,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                                     ? Icons.radio_button_checked
                                     : Icons.radio_button_unchecked,
                                 size: 24,
-                                color: Constants.colorPrimary,
+                                color: theme(context).colorPrimary,
                               ),
                               const SizedBox(width: Constants.spacingSmall),
                               Expanded(

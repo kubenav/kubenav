@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/bookmarks_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
@@ -40,7 +41,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
         final double elevation = lerpDouble(0, 6, animValue)!;
         return Material(
           elevation: elevation,
-          shadowColor: Theme.of(context).shadowColor,
+          shadowColor: theme(context).colorShadow,
           child: child,
         );
       },
@@ -119,6 +120,10 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ThemeRepository>(
+      context,
+      listen: true,
+    );
     BookmarksRepository bookmarksRepository = Provider.of<BookmarksRepository>(
       context,
       listen: true,
@@ -171,13 +176,13 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color: Theme.of(context).shadowColor,
+                            color: theme(context).colorShadow,
                             blurRadius: Constants.sizeBorderBlurRadius,
                             spreadRadius: Constants.sizeBorderSpreadRadius,
                             offset: const Offset(0.0, 0.0),
                           ),
                         ],
-                        color: Theme.of(context).cardColor,
+                        color: theme(context).colorCard,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),

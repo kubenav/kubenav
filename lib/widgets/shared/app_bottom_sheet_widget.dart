@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 
@@ -36,7 +37,7 @@ class AppBottomSheetWidget extends StatelessWidget {
   /// [_buildIcon] creates the icon container for the bottom sheet header. The
   /// [icon] parameter for the widget could be of type `String` or `IconData`
   /// to also allow images from the assets folder as icons.
-  Widget _buildIcon(dynamic icon) {
+  Widget _buildIcon(BuildContext context, dynamic icon) {
     if (icon is String) {
       return Container(
         margin: const EdgeInsets.only(
@@ -45,9 +46,9 @@ class AppBottomSheetWidget extends StatelessWidget {
         padding: const EdgeInsets.all(
           Constants.spacingExtraSmall,
         ),
-        decoration: const BoxDecoration(
-          color: Constants.colorPrimary,
-          borderRadius: BorderRadius.all(
+        decoration: BoxDecoration(
+          color: theme(context).colorPrimary,
+          borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
         ),
@@ -71,9 +72,9 @@ class AppBottomSheetWidget extends StatelessWidget {
         padding: const EdgeInsets.all(
           Constants.spacingExtraSmall,
         ),
-        decoration: const BoxDecoration(
-          color: Constants.colorPrimary,
-          borderRadius: BorderRadius.all(
+        decoration: BoxDecoration(
+          color: theme(context).colorPrimary,
+          borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
         ),
@@ -92,11 +93,12 @@ class AppBottomSheetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.75,
-        color: Colors.transparent,
-        child: Container(
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.75,
+      color: Colors.transparent,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Container(
           padding: const EdgeInsets.only(
             left: Constants.spacingMiddle,
             right: Constants.spacingMiddle,
@@ -116,7 +118,7 @@ class AppBottomSheetWidget extends StatelessWidget {
                     Flexible(
                       child: Row(
                         children: [
-                          _buildIcon(icon),
+                          _buildIcon(context, icon),
                           Flexible(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -175,7 +177,7 @@ class AppBottomSheetWidget extends StatelessWidget {
                 ),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Constants.colorPrimary,
+                    backgroundColor: theme(context).colorPrimary,
                     foregroundColor: Colors.white,
                     minimumSize: const Size.fromHeight(40),
                     shape: RoundedRectangleBorder(

@@ -9,6 +9,7 @@ import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
 import 'package:kubenav/models/kubernetes_extensions/pod_metrics.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -238,20 +239,20 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
         length: 2,
         child: Column(
           children: [
-            const ClipRRect(
-              borderRadius: BorderRadius.all(
+            ClipRRect(
+              borderRadius: const BorderRadius.all(
                 Radius.circular(Constants.sizeBorderRadius),
               ),
               child: TabBar(
                 isScrollable: false,
                 labelColor: Colors.white,
-                unselectedLabelColor: Constants.colorPrimary,
+                unselectedLabelColor: theme(context).colorPrimary,
                 labelPadding: EdgeInsets.zero,
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicator: BoxDecoration(
-                  color: Constants.colorPrimary,
+                  color: theme(context).colorPrimary,
                 ),
-                tabs: [
+                tabs: const [
                   Tab(text: 'CPU'),
                   Tab(text: 'Memory'),
                 ],
@@ -273,13 +274,13 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color: Theme.of(context).shadowColor,
+                            color: theme(context).colorShadow,
                             blurRadius: Constants.sizeBorderBlurRadius,
                             spreadRadius: Constants.sizeBorderSpreadRadius,
                             offset: const Offset(0.0, 0.0),
                           ),
                         ],
-                        color: Theme.of(context).cardColor,
+                        color: theme(context).colorCard,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),
@@ -295,19 +296,21 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                 lineTouchData: LineTouchData(enabled: false),
                                 clipData: FlClipData.all(),
                                 lineBarsData: _containerMetrics.entries
-                                    .map((e) => LineChartBarData(
-                                          spots: e.value.cpu,
-                                          dotData: FlDotData(
-                                            show: false,
-                                          ),
-                                          color: e.key == 'Requests'
-                                              ? Constants.colorWarning
-                                              : e.key == 'Limits'
-                                                  ? Constants.colorDanger
-                                                  : Constants.colorPrimary,
-                                          barWidth: 4,
-                                          isCurved: false,
-                                        ))
+                                    .map(
+                                      (e) => LineChartBarData(
+                                        spots: e.value.cpu,
+                                        dotData: FlDotData(
+                                          show: false,
+                                        ),
+                                        color: e.key == 'Requests'
+                                            ? theme(context).colorWarning
+                                            : e.key == 'Limits'
+                                                ? theme(context).colorDanger
+                                                : theme(context).colorPrimary,
+                                        barWidth: 4,
+                                        isCurved: false,
+                                      ),
+                                    )
                                     .toList(),
                                 titlesData: FlTitlesData(
                                   show: true,
@@ -367,14 +370,14 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                   show: true,
                                   getDrawingHorizontalLine: (value) {
                                     return FlLine(
-                                      color: Constants.colorTextSecondary,
+                                      color: theme(context).colorTextSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );
                                   },
                                   getDrawingVerticalLine: (value) {
                                     return FlLine(
-                                      color: Constants.colorTextSecondary,
+                                      color: theme(context).colorTextSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );
@@ -428,13 +431,13 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color: Theme.of(context).shadowColor,
+                            color: theme(context).colorShadow,
                             blurRadius: Constants.sizeBorderBlurRadius,
                             spreadRadius: Constants.sizeBorderSpreadRadius,
                             offset: const Offset(0.0, 0.0),
                           ),
                         ],
-                        color: Theme.of(context).cardColor,
+                        color: theme(context).colorCard,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),
@@ -456,10 +459,10 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                             show: false,
                                           ),
                                           color: e.key == 'Requests'
-                                              ? Constants.colorWarning
+                                              ? theme(context).colorWarning
                                               : e.key == 'Limits'
-                                                  ? Constants.colorDanger
-                                                  : Constants.colorPrimary,
+                                                  ? theme(context).colorDanger
+                                                  : theme(context).colorPrimary,
                                           barWidth: 4,
                                           isCurved: false,
                                         ))
@@ -522,14 +525,14 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                   show: true,
                                   getDrawingHorizontalLine: (value) {
                                     return FlLine(
-                                      color: Constants.colorTextSecondary,
+                                      color: theme(context).colorTextSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );
                                   },
                                   getDrawingVerticalLine: (value) {
                                     return FlLine(
-                                      color: Constants.colorTextSecondary,
+                                      color: theme(context).colorTextSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );

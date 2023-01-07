@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 
 import 'package:kubenav/utils/constants.dart';
-
-final GlobalKey<ScaffoldMessengerState> snackbarKey =
-    GlobalKey<ScaffoldMessengerState>();
 
 void showModal(BuildContext context, Widget widget) {
   showModalBottomSheet(
@@ -31,18 +29,41 @@ void showActions(BuildContext context, Widget widget) {
   );
 }
 
-void showSnackbar(String title, String message) {
-  snackbarKey.currentState?.showSnackBar(
+void showSnackbar(BuildContext context, String title, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 3),
+      backgroundColor: theme(context).colorMessageBackground,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          Constants.sizeBorderRadius,
+        ),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title),
-          Text(message),
+          Text(
+            title,
+            style: TextStyle(
+              color: theme(context).colorMessageForeground,
+            ),
+          ),
+          Text(
+            message,
+            style: TextStyle(
+              color: theme(context).colorMessageForeground,
+            ),
+          ),
         ],
+      ),
+      action: SnackBarAction(
+        label: 'Dissmiss',
+        textColor: theme(context).colorMessageForeground,
+        onPressed: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
       ),
     ),
   );

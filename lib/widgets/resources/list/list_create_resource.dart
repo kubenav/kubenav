@@ -134,13 +134,14 @@ class _ListCreateResourceState extends State<ListCreateResource> {
       setState(() {
         _isLoading = false;
       });
-      showSnackbar(
-        'Resource was created',
-        namespace != null && namespace != ''
-            ? 'The resource $name in namespace $namespace was created'
-            : 'The resource $name was created',
-      );
       if (mounted) {
+        showSnackbar(
+          context,
+          'Resource was created',
+          namespace != null && namespace != ''
+              ? 'The resource $name in namespace $namespace was created'
+              : 'The resource $name was created',
+        );
         Navigator.pop(context);
       }
     } on PlatformException catch (err) {
@@ -153,6 +154,7 @@ class _ListCreateResourceState extends State<ListCreateResource> {
         _isLoading = false;
       });
       showSnackbar(
+        context,
         'Could not create resource',
         'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
       );
@@ -166,6 +168,7 @@ class _ListCreateResourceState extends State<ListCreateResource> {
         _isLoading = false;
       });
       showSnackbar(
+        context,
         'Could not create resource',
         err.toString(),
       );

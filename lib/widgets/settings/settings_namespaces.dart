@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
@@ -32,7 +33,7 @@ class SettingsNamespaces extends StatelessWidget {
         final double elevation = lerpDouble(0, 6, animValue)!;
         return Material(
           elevation: elevation,
-          shadowColor: Theme.of(context).shadowColor,
+          shadowColor: theme(context).colorShadow,
           child: child,
         );
       },
@@ -59,13 +60,13 @@ class SettingsNamespaces extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).shadowColor,
+            color: theme(context).colorShadow,
             blurRadius: Constants.sizeBorderBlurRadius,
             spreadRadius: Constants.sizeBorderSpreadRadius,
             offset: const Offset(0.0, 0.0),
           ),
         ],
-        color: Theme.of(context).cardColor,
+        color: theme(context).colorCard,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),
@@ -103,6 +104,10 @@ class SettingsNamespaces extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ThemeRepository>(
+      context,
+      listen: true,
+    );
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: true,
