@@ -94,34 +94,37 @@ class Settings extends StatelessWidget {
                   Radius.circular(Constants.sizeBorderRadius),
                 ),
               ),
-              child: InkWell(
-                onTap: () {
-                  clustersRepository.setActiveCluster(
-                    clustersRepository.clusters[index].id,
-                  );
-                },
-                child: Row(
-                  children: [
-                    Icon(
-                      clustersRepository.clusters[index].id ==
-                              clustersRepository.activeClusterId
-                          ? Icons.radio_button_checked
-                          : Icons.radio_button_unchecked,
-                      size: 24,
-                      color: theme(context).colorPrimary,
-                    ),
-                    const SizedBox(width: Constants.spacingSmall),
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        clustersRepository.clusters[index].name,
-                        style: noramlTextStyle(
-                          context,
-                        ),
-                        overflow: TextOverflow.ellipsis,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {
+                    clustersRepository.setActiveCluster(
+                      clustersRepository.clusters[index].id,
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        clustersRepository.clusters[index].id ==
+                                clustersRepository.activeClusterId
+                            ? Icons.radio_button_checked
+                            : Icons.radio_button_unchecked,
+                        size: 24,
+                        color: theme(context).colorPrimary,
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: Constants.spacingSmall),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          clustersRepository.clusters[index].name,
+                          style: noramlTextStyle(
+                            context,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -148,26 +151,31 @@ class Settings extends StatelessWidget {
             flex: 1,
             child: Text('Clusters', style: primaryTextStyle(context, size: 18)),
           ),
-          InkWell(
-            onTap: () {
-              navigate(context, const SettingsClusters());
-            },
-            child: Wrap(
-              children: [
-                Text('View all',
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () {
+                navigate(context, const SettingsClusters());
+              },
+              child: Wrap(
+                children: [
+                  Text(
+                    'View all',
                     style: secondaryTextStyle(
                       context,
                       color: theme(context).colorPrimary,
-                    )),
-                const SizedBox(width: Constants.spacingExtraSmall),
-                Icon(
-                  Icons.keyboard_arrow_right,
-                  color: theme(context).colorPrimary,
-                  size: 16,
-                ),
-              ],
+                    ),
+                  ),
+                  const SizedBox(width: Constants.spacingExtraSmall),
+                  Icon(
+                    Icons.keyboard_arrow_right,
+                    color: theme(context).colorPrimary,
+                    size: 16,
+                  ),
+                ],
+              ),
             ),
-          )
+          ),
         ],
       ),
     );

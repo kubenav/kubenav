@@ -250,10 +250,7 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
                         child: Text(
                           value,
                           style: TextStyle(
-                            color: Theme.of(context)
-                                .textTheme
-                                .displayMedium!
-                                .color,
+                            color: theme(context).colorTextPrimary,
                           ),
                         ),
                       );

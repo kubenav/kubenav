@@ -80,44 +80,48 @@ class DetailsItemConditions extends StatelessWidget {
                             Radius.circular(Constants.sizeBorderRadius),
                           ),
                         ),
-                        child: InkWell(
-                          onTap: () {
-                            final age = item['status']['conditions'][index]
-                                        ['lastTransitionTime'] !=
-                                    null
-                                ? getAge(DateTime.parse(item['status']
-                                        ['conditions'][index]
-                                    ['lastTransitionTime']))
-                                : '-';
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {
+                              final age = item['status']['conditions'][index]
+                                          ['lastTransitionTime'] !=
+                                      null
+                                  ? getAge(DateTime.parse(item['status']
+                                          ['conditions'][index]
+                                      ['lastTransitionTime']))
+                                  : '-';
 
-                            showSnackbar(
-                              context,
-                              item['status']['conditions'][index]['type'],
-                              'Status: ${item['status']['conditions'][index]['status']}\nAge: $age\nReason: ${item['status']['conditions'][index]['reason'] ?? '-'}\nMessage: ${item['status']['conditions'][index]['message'] ?? '-'}',
-                            );
-                          },
-                          child: Row(
-                            children: [
-                              Icon(
-                                item['status']['conditions'][index]['status'] ==
-                                        'True'
-                                    ? Icons.radio_button_checked
-                                    : Icons.radio_button_unchecked,
-                                size: 24,
-                                color: theme(context).colorPrimary,
-                              ),
-                              const SizedBox(width: Constants.spacingSmall),
-                              Expanded(
-                                flex: 1,
-                                child: Text(
-                                  item['status']['conditions'][index]['type'],
-                                  style: noramlTextStyle(
-                                    context,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
+                              showSnackbar(
+                                context,
+                                item['status']['conditions'][index]['type'],
+                                'Status: ${item['status']['conditions'][index]['status']}\nAge: $age\nReason: ${item['status']['conditions'][index]['reason'] ?? '-'}\nMessage: ${item['status']['conditions'][index]['message'] ?? '-'}',
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                Icon(
+                                  item['status']['conditions'][index]
+                                              ['status'] ==
+                                          'True'
+                                      ? Icons.radio_button_checked
+                                      : Icons.radio_button_unchecked,
+                                  size: 24,
+                                  color: theme(context).colorPrimary,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: Constants.spacingSmall),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    item['status']['conditions'][index]['type'],
+                                    style: noramlTextStyle(
+                                      context,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );

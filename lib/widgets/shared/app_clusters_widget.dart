@@ -78,35 +78,38 @@ class _AppClustersWidgetState extends State<AppClustersWidget> {
                 Radius.circular(Constants.sizeBorderRadius),
               ),
             ),
-            child: InkWell(
-              onTap: () {
-                setActiveCluster(
-                  context,
-                  clustersRepository.clusters[index].id,
-                );
-              },
-              child: Row(
-                children: [
-                  Icon(
-                    clustersRepository.clusters[index].id ==
-                            clustersRepository.activeClusterId
-                        ? Icons.radio_button_checked
-                        : Icons.radio_button_unchecked,
-                    size: 24,
-                    color: theme(context).colorPrimary,
-                  ),
-                  const SizedBox(width: Constants.spacingSmall),
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      clustersRepository.clusters[index].name,
-                      style: noramlTextStyle(
-                        context,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  setActiveCluster(
+                    context,
+                    clustersRepository.clusters[index].id,
+                  );
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      clustersRepository.clusters[index].id ==
+                              clustersRepository.activeClusterId
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_unchecked,
+                      size: 24,
+                      color: theme(context).colorPrimary,
                     ),
-                  ),
-                ],
+                    const SizedBox(width: Constants.spacingSmall),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        clustersRepository.clusters[index].name,
+                        style: noramlTextStyle(
+                          context,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

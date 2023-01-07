@@ -367,10 +367,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                         child: Text(
                           value,
                           style: TextStyle(
-                            color: Theme.of(context)
-                                .textTheme
-                                .displayMedium!
-                                .color,
+                            color: theme(context).colorTextPrimary,
                           ),
                         ),
                       );

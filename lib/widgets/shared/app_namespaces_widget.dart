@@ -133,34 +133,37 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
             Radius.circular(Constants.sizeBorderRadius),
           ),
         ),
-        child: InkWell(
-          onTap: () {
-            _changeNamespace(context, '');
-          },
-          child: Row(
-            children: [
-              Icon(
-                clustersRepository
-                            .getCluster(clustersRepository.activeClusterId)!
-                            .namespace ==
-                        ''
-                    ? Icons.radio_button_checked
-                    : Icons.radio_button_unchecked,
-                size: 24,
-                color: theme(context).colorPrimary,
-              ),
-              const SizedBox(width: Constants.spacingSmall),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  'All Namespaces',
-                  style: noramlTextStyle(
-                    context,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              _changeNamespace(context, '');
+            },
+            child: Row(
+              children: [
+                Icon(
+                  clustersRepository
+                              .getCluster(clustersRepository.activeClusterId)!
+                              .namespace ==
+                          ''
+                      ? Icons.radio_button_checked
+                      : Icons.radio_button_unchecked,
+                  size: 24,
+                  color: theme(context).colorPrimary,
                 ),
-              ),
-            ],
+                const SizedBox(width: Constants.spacingSmall),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    'All Namespaces',
+                    style: noramlTextStyle(
+                      context,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -191,34 +194,38 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                 Radius.circular(Constants.sizeBorderRadius),
               ),
             ),
-            child: InkWell(
-              onTap: () {
-                _changeNamespace(context, name);
-              },
-              child: Row(
-                children: [
-                  Icon(
-                    name ==
-                            clustersRepository
-                                .getCluster(clustersRepository.activeClusterId)!
-                                .namespace
-                        ? Icons.radio_button_checked
-                        : Icons.radio_button_unchecked,
-                    size: 24,
-                    color: theme(context).colorPrimary,
-                  ),
-                  const SizedBox(width: Constants.spacingSmall),
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      name,
-                      style: noramlTextStyle(
-                        context,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  _changeNamespace(context, name);
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      name ==
+                              clustersRepository
+                                  .getCluster(
+                                      clustersRepository.activeClusterId)!
+                                  .namespace
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_unchecked,
+                      size: 24,
+                      color: theme(context).colorPrimary,
                     ),
-                  ),
-                ],
+                    const SizedBox(width: Constants.spacingSmall),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        name,
+                        style: noramlTextStyle(
+                          context,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -333,36 +340,39 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                             Radius.circular(Constants.sizeBorderRadius),
                           ),
                         ),
-                        child: InkWell(
-                          onTap: () {
-                            _changeNamespace(context, name ?? 'default');
-                          },
-                          child: Row(
-                            children: [
-                              Icon(
-                                name != null &&
-                                        name ==
-                                            clustersRepository
-                                                .getCluster(clustersRepository
-                                                    .activeClusterId)!
-                                                .namespace
-                                    ? Icons.radio_button_checked
-                                    : Icons.radio_button_unchecked,
-                                size: 24,
-                                color: theme(context).colorPrimary,
-                              ),
-                              const SizedBox(width: Constants.spacingSmall),
-                              Expanded(
-                                flex: 1,
-                                child: Text(
-                                  name ?? '',
-                                  style: noramlTextStyle(
-                                    context,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {
+                              _changeNamespace(context, name ?? 'default');
+                            },
+                            child: Row(
+                              children: [
+                                Icon(
+                                  name != null &&
+                                          name ==
+                                              clustersRepository
+                                                  .getCluster(clustersRepository
+                                                      .activeClusterId)!
+                                                  .namespace
+                                      ? Icons.radio_button_checked
+                                      : Icons.radio_button_unchecked,
+                                  size: 24,
+                                  color: theme(context).colorPrimary,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: Constants.spacingSmall),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    name ?? '',
+                                    style: noramlTextStyle(
+                                      context,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
