@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/settings/providers/settings_aws_provider_config.dart';
 import 'package:kubenav/widgets/settings/providers/settings_awssso_provider_config.dart';
@@ -81,6 +81,7 @@ class _SettingsProviderActionsState extends State<SettingsProviderActions> {
       if (mounted) {
         Navigator.pop(context);
         showSnackbar(
+          context,
           'Provider deleted',
           'The provider ${widget.provider.name} was deleted',
         );
@@ -89,6 +90,7 @@ class _SettingsProviderActionsState extends State<SettingsProviderActions> {
       if (mounted) {
         Navigator.pop(context);
         showSnackbar(
+          context,
           'Provider was not deleted',
           err.toString(),
         );
@@ -102,6 +104,7 @@ class _SettingsProviderActionsState extends State<SettingsProviderActions> {
       actions: [
         AppActionsWidgetAction(
           title: 'Edit',
+          color: theme(context).colorPrimary,
           onTap: () {
             Navigator.pop(context);
             showModal(context, buildProviderModal());
@@ -109,7 +112,7 @@ class _SettingsProviderActionsState extends State<SettingsProviderActions> {
         ),
         AppActionsWidgetAction(
           title: 'Delete',
-          color: Constants.colorDanger,
+          color: theme(context).colorDanger,
           onTap: () {
             deleteProvider(context);
           },

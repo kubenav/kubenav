@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_aws.dart';
@@ -101,6 +102,7 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
         _isLoading = false;
       });
       showSnackbar(
+        context,
         'Could not save provider configuration',
         err.toString(),
       );
@@ -211,7 +213,7 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
                     value: _region,
                     underline: Container(
                       height: 2,
-                      color: Constants.colorPrimary,
+                      color: theme(context).colorPrimary,
                     ),
                     onChanged: (String? newValue) {
                       setState(() {

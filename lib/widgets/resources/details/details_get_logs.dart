@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/terminal_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
@@ -121,6 +122,7 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
           err,
         );
         showSnackbar(
+          context,
           'Could not get logs',
           err.toString(),
         );
@@ -198,7 +200,7 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
                     value: _container,
                     underline: Container(
                       height: 2,
-                      color: Constants.colorPrimary,
+                      color: theme(context).colorPrimary,
                     ),
                     onChanged: (String? value) {
                       setState(() {
@@ -236,7 +238,7 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
                     value: _since,
                     underline: Container(
                       height: 2,
-                      color: Constants.colorPrimary,
+                      color: theme(context).colorPrimary,
                     ),
                     onChanged: (String? value) {
                       setState(() {
@@ -298,7 +300,7 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
                 children: [
                   const Text('Previous'),
                   Switch(
-                    activeColor: Constants.colorPrimary,
+                    activeColor: theme(context).colorPrimary,
                     onChanged: (value) {
                       setState(() {
                         _previous = !_previous;

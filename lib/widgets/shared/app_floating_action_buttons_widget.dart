@@ -6,6 +6,7 @@ import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/portforwarding_repository.dart';
 import 'package:kubenav/repositories/terminal_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/shared/app_portforwarding_sessions_widget.dart';
@@ -61,6 +62,7 @@ class _AppFloatingActionButtonsWidgetState
       }
     } catch (err) {
       showSnackbar(
+        context,
         'Port Forwarding Session could not be shown',
         err.toString(),
       );
@@ -88,7 +90,7 @@ class _AppFloatingActionButtonsWidgetState
       floatingActionButtons.add(
         FloatingActionButton(
           heroTag: 'terminal',
-          backgroundColor: Constants.colorPrimary,
+          backgroundColor: theme(context).colorPrimary,
           onPressed: () {
             showModal(
               context,
@@ -107,7 +109,7 @@ class _AppFloatingActionButtonsWidgetState
       floatingActionButtons.add(
         FloatingActionButton(
           heroTag: 'portforwarding',
-          backgroundColor: Constants.colorPrimary,
+          backgroundColor: theme(context).colorPrimary,
           onPressed: () {
             _showPortForwardingSessions();
           },

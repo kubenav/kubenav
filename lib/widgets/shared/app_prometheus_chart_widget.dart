@@ -7,6 +7,7 @@ import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/models/plugins/time.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -107,9 +108,10 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                 children: [
                   Expanded(
                     child: Wrap(
-                      children: const [
+                      children: [
                         CircularProgressIndicator(
-                            color: Constants.colorPrimary),
+                          color: theme(context).colorPrimary,
+                        ),
                       ],
                     ),
                   ),
@@ -148,13 +150,13 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: Theme.of(context).shadowColor,
+                          color: theme(context).colorShadow,
                           blurRadius: Constants.sizeBorderBlurRadius,
                           spreadRadius: Constants.sizeBorderSpreadRadius,
                           offset: const Offset(0.0, 0.0),
                         ),
                       ],
-                      color: Theme.of(context).cardColor,
+                      color: theme(context).colorCard,
                       borderRadius: const BorderRadius.all(
                         Radius.circular(Constants.sizeBorderRadius),
                       ),
@@ -171,14 +173,17 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                 enabled: true,
                                 handleBuiltInTouches: true,
                                 touchTooltipData: LineTouchTooltipData(
-                                  tooltipBgColor: Colors.black,
+                                  tooltipBgColor: theme(
+                                    context,
+                                  ).colorMessageBackground,
                                   getTooltipItems: (touchedSpots) {
                                     return touchedSpots
                                         .map((LineBarSpot touchedSpot) {
                                       return LineTooltipItem(
                                         '${snapshot.data![touchedSpot.barIndex].label}: ${touchedSpot.y.toStringAsFixed(6)} ${widget.unit}',
-                                        const TextStyle(
-                                          color: Colors.white,
+                                        TextStyle(
+                                          color: theme(context)
+                                              .colorMessageForeground,
                                           fontWeight: FontWeight.normal,
                                           fontSize: 14,
                                         ),
@@ -194,7 +199,7 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                         dotData: FlDotData(
                                           show: false,
                                         ),
-                                        color: Constants.colorPrimary,
+                                        color: theme(context).colorPrimary,
                                         barWidth: 4,
                                         isCurved: false,
                                       ))
@@ -260,14 +265,14 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                 show: true,
                                 getDrawingHorizontalLine: (value) {
                                   return FlLine(
-                                    color: Constants.colorTextSecondary,
+                                    color: theme(context).colorTextSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );
                                 },
                                 getDrawingVerticalLine: (value) {
                                   return FlLine(
-                                    color: Constants.colorTextSecondary,
+                                    color: theme(context).colorTextSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -66,13 +67,13 @@ class _AppClustersWidgetState extends State<AppClustersWidget> {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: Theme.of(context).shadowColor,
+                  color: theme(context).colorShadow,
                   blurRadius: Constants.sizeBorderBlurRadius,
                   spreadRadius: Constants.sizeBorderSpreadRadius,
                   offset: const Offset(0.0, 0.0),
                 ),
               ],
-              color: Theme.of(context).cardColor,
+              color: theme(context).colorCard,
               borderRadius: const BorderRadius.all(
                 Radius.circular(Constants.sizeBorderRadius),
               ),
@@ -92,7 +93,7 @@ class _AppClustersWidgetState extends State<AppClustersWidget> {
                         ? Icons.radio_button_checked
                         : Icons.radio_button_unchecked,
                     size: 24,
-                    color: Constants.colorPrimary,
+                    color: theme(context).colorPrimary,
                   ),
                   const SizedBox(width: Constants.spacingSmall),
                   Expanded(

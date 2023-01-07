@@ -5,6 +5,7 @@ import 'package:xterm/ui.dart' as xtermui;
 import 'package:xterm/xterm.dart' as xterm;
 
 import 'package:kubenav/repositories/terminal_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 
@@ -96,9 +97,9 @@ class AppTerminalsWidget extends StatelessWidget {
                             padding: const EdgeInsets.all(
                               Constants.spacingExtraSmall,
                             ),
-                            decoration: const BoxDecoration(
-                              color: Constants.colorPrimary,
-                              borderRadius: BorderRadius.all(
+                            decoration: BoxDecoration(
+                              color: theme(context).colorPrimary,
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(
                                   Constants.sizeBorderRadius,
                                 ),
@@ -170,10 +171,10 @@ class AppTerminalsWidget extends StatelessWidget {
                         child: TabBar(
                           isScrollable: true,
                           labelColor: Colors.white,
-                          unselectedLabelColor: Constants.colorPrimary,
+                          unselectedLabelColor: theme(context).colorPrimary,
                           indicatorSize: TabBarIndicatorSize.tab,
-                          indicator: const BoxDecoration(
-                            color: Constants.colorPrimary,
+                          indicator: BoxDecoration(
+                            color: theme(context).colorPrimary,
                           ),
                           tabs:
                               terminalRepository.terminals.asMap().entries.map(

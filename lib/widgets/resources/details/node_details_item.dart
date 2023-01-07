@@ -116,6 +116,7 @@ class NodeDetailsItem extends StatelessWidget implements IDetailsItemWidget {
                   values: allocatable.value,
                   onTap: (index) {
                     showSnackbar(
+                      context,
                       allocatable.key,
                       'Allocatable: ${allocatable.value}\nCapacity: ${node.status!.capacity.containsKey(allocatable.key) ? node.status!.capacity[allocatable.key] : '-'}',
                     );

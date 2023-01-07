@@ -100,6 +100,7 @@ class _SettingsDigitalOceanProviderState
         _isLoading = false;
       });
       showSnackbar(
+        context,
         'Could not save provider configuration',
         err.toString(),
       );

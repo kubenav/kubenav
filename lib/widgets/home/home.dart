@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/bookmarks_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/widgets/home/home_overview.dart';
 
 /// The [Home] is the first widget which is displayed when a user opens the app.
@@ -24,6 +25,10 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ThemeRepository themeRepository = Provider.of<ThemeRepository>(
+        context,
+        listen: false,
+      );
       AppRepository appRepository = Provider.of<AppRepository>(
         context,
         listen: false,
@@ -39,10 +44,12 @@ class _HomeState extends State<Home> {
       );
 
       if (!appRepository.isAuthenticated) {
-        appRepository.init().then((value) {
-          clustersRepository.init().then((value) {
-            bookmarksRepository.init().then((value) {
-              FlutterNativeSplash.remove();
+        themeRepository.init().then((value) {
+          appRepository.init().then((value) {
+            clustersRepository.init().then((value) {
+              bookmarksRepository.init().then((value) {
+                FlutterNativeSplash.remove();
+              });
             });
           });
         });

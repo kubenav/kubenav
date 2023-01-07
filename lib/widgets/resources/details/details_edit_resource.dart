@@ -133,13 +133,14 @@ class _DetailsEditResourceState extends State<DetailsEditResource> {
         setState(() {
           _isLoading = false;
         });
-        showSnackbar(
-          'Resource was saved',
-          widget.namespace == null
-              ? 'The changes for the resource ${widget.name} are saved'
-              : 'The changes for the resource ${widget.name} in namespace ${widget.namespace} are saved',
-        );
         if (mounted) {
+          showSnackbar(
+            context,
+            'Resource was saved',
+            widget.namespace == null
+                ? 'The changes for the resource ${widget.name} are saved'
+                : 'The changes for the resource ${widget.name} in namespace ${widget.namespace} are saved',
+          );
           Navigator.pop(context);
         }
       }
@@ -153,6 +154,7 @@ class _DetailsEditResourceState extends State<DetailsEditResource> {
         _isLoading = false;
       });
       showSnackbar(
+        context,
         'Could not save resource',
         err.toString(),
       );

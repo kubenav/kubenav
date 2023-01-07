@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 import 'package:kubenav/models/cluster.dart';
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/providers/google_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -131,6 +132,7 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
         _isLoadingAddCluster = false;
       });
       showSnackbar(
+        context,
         'Could not add clusters',
         err.toString(),
       );
@@ -148,8 +150,10 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
         children: [
           Expanded(
             child: Wrap(
-              children: const [
-                CircularProgressIndicator(color: Constants.colorPrimary),
+              children: [
+                CircularProgressIndicator(
+                  color: theme(context).colorPrimary,
+                ),
               ],
             ),
           ),
@@ -191,13 +195,13 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).shadowColor,
+                    color: theme(context).colorShadow,
                     blurRadius: Constants.sizeBorderBlurRadius,
                     spreadRadius: Constants.sizeBorderSpreadRadius,
                     offset: const Offset(0.0, 0.0),
                   ),
                 ],
-                color: Theme.of(context).cardColor,
+                color: theme(context).colorCard,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(Constants.sizeBorderRadius),
                 ),
@@ -207,7 +211,7 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
                   Checkbox(
                     checkColor: Colors.white,
                     fillColor: MaterialStateProperty.all(
-                      Constants.colorPrimary,
+                      theme(context).colorPrimary,
                     ),
                     value: _selectedClusters
                             .where((c) => c.name == _clusters[index].name)

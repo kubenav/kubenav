@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/plugins/time.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
@@ -117,13 +118,13 @@ class _AppTimeRangeSelectorWidgetState
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Theme.of(context).shadowColor,
+                      color: theme(context).colorShadow,
                       blurRadius: Constants.sizeBorderBlurRadius,
                       spreadRadius: Constants.sizeBorderSpreadRadius,
                       offset: const Offset(0.0, 0.0),
                     ),
                   ],
-                  color: Theme.of(context).cardColor,
+                  color: theme(context).colorCard,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(Constants.sizeBorderRadius),
                   ),
@@ -141,7 +142,7 @@ class _AppTimeRangeSelectorWidgetState
                             ? Icons.radio_button_checked
                             : Icons.radio_button_unchecked,
                         size: 24,
-                        color: Constants.colorPrimary,
+                        color: theme(context).colorPrimary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(

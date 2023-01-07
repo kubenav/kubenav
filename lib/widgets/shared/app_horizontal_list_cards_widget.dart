@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 
@@ -79,12 +80,15 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
           children: [
             Text(
               moreText,
-              style: secondaryTextStyle(context, color: Constants.colorPrimary),
+              style: secondaryTextStyle(
+                context,
+                color: theme(context).colorPrimary,
+              ),
             ),
             const SizedBox(width: Constants.spacingExtraSmall),
             Icon(
               moreIcon,
-              color: Constants.colorPrimary,
+              color: theme(context).colorPrimary,
               size: 16,
             ),
           ],
@@ -165,13 +169,13 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Theme.of(context).shadowColor,
+                      color: theme(context).colorShadow,
                       blurRadius: Constants.sizeBorderBlurRadius,
                       spreadRadius: Constants.sizeBorderSpreadRadius,
                       offset: const Offset(0.0, 0.0),
                     ),
                   ],
-                  color: Theme.of(context).cardColor,
+                  color: theme(context).colorCard,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(Constants.sizeBorderRadius),
                   ),
@@ -182,9 +186,9 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        decoration: const BoxDecoration(
-                          color: Constants.colorPrimary,
-                          borderRadius: BorderRadius.only(
+                        decoration: BoxDecoration(
+                          color: theme(context).colorPrimary,
+                          borderRadius: const BorderRadius.only(
                             topLeft:
                                 Radius.circular(Constants.sizeBorderRadius),
                             topRight:

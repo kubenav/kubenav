@@ -6,6 +6,7 @@ import 'package:kubenav/models/kubernetes/io_k8s_apiextensions_apiserver_pkg_api
 import 'package:kubenav/models/resource.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -126,13 +127,13 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).shadowColor,
+            color: theme(context).colorShadow,
             blurRadius: Constants.sizeBorderBlurRadius,
             spreadRadius: Constants.sizeBorderSpreadRadius,
             offset: const Offset(0.0, 0.0),
           ),
         ],
-        color: Theme.of(context).cardColor,
+        color: theme(context).colorCard,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),
@@ -198,6 +199,10 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ThemeRepository>(
+      context,
+      listen: true,
+    );
     Provider.of<ClustersRepository>(
       context,
       listen: true,
@@ -250,11 +255,13 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
+                      children: [
                         Padding(
-                          padding: EdgeInsets.all(Constants.spacingMiddle),
+                          padding: const EdgeInsets.all(
+                            Constants.spacingMiddle,
+                          ),
                           child: CircularProgressIndicator(
-                            color: Constants.colorPrimary,
+                            color: theme(context).colorPrimary,
                           ),
                         ),
                       ],
@@ -292,7 +299,7 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                             left: Constants.spacingMiddle,
                             right: Constants.spacingMiddle,
                           ),
-                          color: Constants.colorPrimary,
+                          color: theme(context).colorPrimary,
                           child: TextField(
                             onSubmitted: (value) {
                               setState(() {

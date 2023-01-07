@@ -229,16 +229,6 @@ class AppRepository with ChangeNotifier {
     } catch (_) {}
   }
 
-  /// [toogleDarkMode] enables / disables the dark mode of the app depending on
-  /// the current dark mode setting.
-  Future<void> toogleDarkMode() async {
-    try {
-      _settings.isDarkTheme = !_settings.isDarkTheme;
-      await _save();
-      notifyListeners();
-    } catch (_) {}
-  }
-
   /// [setEditorFormat] sets the editor format to the provided [value]. The
   /// editor format can be `yaml` or `json`. By default all manifests in a code
   /// editor are displayed as `yaml` documents.
@@ -287,7 +277,6 @@ class AppRepository with ChangeNotifier {
 class AppRepositorySettings {
   List<String> namespaces;
   bool isAuthenticationEnabled;
-  bool isDarkTheme;
   String editorFormat;
   String proxy;
   int timeout;
@@ -296,7 +285,6 @@ class AppRepositorySettings {
   AppRepositorySettings({
     required this.namespaces,
     required this.isAuthenticationEnabled,
-    required this.isDarkTheme,
     required this.editorFormat,
     required this.proxy,
     required this.timeout,
@@ -307,7 +295,6 @@ class AppRepositorySettings {
     return AppRepositorySettings(
       namespaces: [],
       isAuthenticationEnabled: false,
-      isDarkTheme: false,
       editorFormat: 'yaml',
       proxy: '',
       timeout: 0,
@@ -324,10 +311,6 @@ class AppRepositorySettings {
               data['isAuthenticationEnabled'] != null
           ? data['isAuthenticationEnabled']
           : false,
-      isDarkTheme:
-          data.containsKey('isDarkTheme') && data['isDarkTheme'] != null
-              ? data['isDarkTheme']
-              : false,
       editorFormat:
           data.containsKey('editorFormat') && data['editorFormat'] != null
               ? data['editorFormat']
@@ -348,7 +331,6 @@ class AppRepositorySettings {
     return {
       'namespaces': json.encode(namespaces),
       'isAuthenticationEnabled': isAuthenticationEnabled,
-      'isDarkTheme': isDarkTheme,
       'editorFormat': editorFormat,
       'proxy': proxy,
       'timeout': timeout,

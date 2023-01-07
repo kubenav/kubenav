@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:kubenav/models/plugins/helm.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
@@ -72,13 +73,13 @@ class _PluginHelmListState extends State<PluginHelmList> {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).shadowColor,
+            color: theme(context).colorShadow,
             blurRadius: Constants.sizeBorderBlurRadius,
             spreadRadius: Constants.sizeBorderSpreadRadius,
             offset: const Offset(0.0, 0.0),
           ),
         ],
-        color: Theme.of(context).cardColor,
+        color: theme(context).colorCard,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),
@@ -198,6 +199,10 @@ class _PluginHelmListState extends State<PluginHelmList> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ThemeRepository>(
+      context,
+      listen: true,
+    );
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,
@@ -269,11 +274,12 @@ class _PluginHelmListState extends State<PluginHelmList> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
+                      children: [
                         Padding(
-                          padding: EdgeInsets.all(Constants.spacingMiddle),
+                          padding:
+                              const EdgeInsets.all(Constants.spacingMiddle),
                           child: CircularProgressIndicator(
-                            color: Constants.colorPrimary,
+                            color: theme(context).colorPrimary,
                           ),
                         ),
                       ],

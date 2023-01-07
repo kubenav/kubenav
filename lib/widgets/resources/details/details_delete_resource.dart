@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
@@ -78,13 +79,14 @@ class _DetailsDeleteResourceState extends State<DetailsDeleteResource> {
       setState(() {
         _isLoading = false;
       });
-      showSnackbar(
-        'Resource is deleted',
-        widget.namespace == null
-            ? 'The resource ${widget.name} is deleted'
-            : 'The resource ${widget.name} in namespace ${widget.namespace} is deleted',
-      );
       if (mounted) {
+        showSnackbar(
+          context,
+          'Resource is deleted',
+          widget.namespace == null
+              ? 'The resource ${widget.name} is deleted'
+              : 'The resource ${widget.name} in namespace ${widget.namespace} is deleted',
+        );
         Navigator.pop(context);
       }
     } on PlatformException catch (err) {
@@ -97,6 +99,7 @@ class _DetailsDeleteResourceState extends State<DetailsDeleteResource> {
         _isLoading = false;
       });
       showSnackbar(
+        context,
         'Could not delete resource',
         'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
       );
@@ -110,6 +113,7 @@ class _DetailsDeleteResourceState extends State<DetailsDeleteResource> {
         _isLoading = false;
       });
       showSnackbar(
+        context,
         'Could not delete resource',
         err.toString(),
       );
@@ -156,7 +160,7 @@ class _DetailsDeleteResourceState extends State<DetailsDeleteResource> {
                 children: [
                   const Text('Force'),
                   Switch(
-                    activeColor: Constants.colorPrimary,
+                    activeColor: theme(context).colorPrimary,
                     onChanged: (value) {
                       setState(() {
                         _force = !_force;

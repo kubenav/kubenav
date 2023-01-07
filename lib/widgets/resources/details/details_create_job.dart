@@ -94,11 +94,12 @@ class _DetailsCreateJobState extends State<DetailsCreateJob> {
       setState(() {
         _isLoading = false;
       });
-      showSnackbar(
-        'Job was created',
-        'The Job $jobName for CronJob ${widget.name} in namespace ${widget.namespace} was created',
-      );
       if (mounted) {
+        showSnackbar(
+          context,
+          'Job was created',
+          'The Job $jobName for CronJob ${widget.name} in namespace ${widget.namespace} was created',
+        );
         Navigator.pop(context);
       }
     } on PlatformException catch (err) {
@@ -111,6 +112,7 @@ class _DetailsCreateJobState extends State<DetailsCreateJob> {
         _isLoading = false;
       });
       showSnackbar(
+        context,
         'Could not create Job',
         'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
       );
@@ -124,6 +126,7 @@ class _DetailsCreateJobState extends State<DetailsCreateJob> {
         _isLoading = false;
       });
       showSnackbar(
+        context,
         'Could not create Job',
         err.toString(),
       );

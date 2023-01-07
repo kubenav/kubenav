@@ -9,6 +9,7 @@ import 'package:kubenav/models/resource.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/portforwarding_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
@@ -98,6 +99,7 @@ class _PodDetailsItemState extends State<PodDetailsItem> {
     );
 
     showSnackbar(
+      context,
       'Port Forwarding',
       'Session is created ...',
     );
@@ -119,12 +121,16 @@ class _PodDetailsItemState extends State<PodDetailsItem> {
         containerPort,
       );
 
-      showSnackbar(
-        'Port Forwarding',
-        'Session was created',
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Port Forwarding',
+          'Session was created',
+        );
+      }
     } catch (err) {
       showSnackbar(
+        context,
         'Could not create session',
         err.toString(),
       );
@@ -247,8 +253,8 @@ class _PodDetailsItemState extends State<PodDetailsItem> {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
               case ConnectionState.waiting:
-                return const CircularProgressIndicator(
-                  color: Constants.colorPrimary,
+                return CircularProgressIndicator(
+                  color: theme(context).colorPrimary,
                 );
               default:
                 return DetailsContainers(

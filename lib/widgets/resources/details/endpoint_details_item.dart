@@ -19,7 +19,10 @@ class EndpointDetailsItem extends StatelessWidget
   @override
   final dynamic item;
 
-  List<Widget> buildSubsets(IoK8sApiCoreV1Endpoints endpoint) {
+  List<Widget> buildSubsets(
+    BuildContext context,
+    IoK8sApiCoreV1Endpoints endpoint,
+  ) {
     final List<Widget> ruleWidgets = [];
 
     for (var i = 0; i < endpoint.subsets.length; i++) {
@@ -35,6 +38,7 @@ class EndpointDetailsItem extends StatelessWidget
                     .toList(),
                 onTap: (index) {
                   showSnackbar(
+                    context,
                     endpoint.subsets[i].addresses[i].ip,
                     'Hostname: ${endpoint.subsets[i].addresses[i].hostname ?? '-'}\nNode Name: ${endpoint.subsets[i].addresses[i].nodeName ?? '-'}\nTarget: ${endpoint.subsets[i].addresses[i].targetRef != null ? '${endpoint.subsets[i].addresses[i].targetRef!.kind ?? '-'}/${endpoint.subsets[i].addresses[i].targetRef!.name ?? '-'}' : '-'}',
                   );
@@ -67,7 +71,7 @@ class EndpointDetailsItem extends StatelessWidget
 
     return Column(
       children: [
-        ...buildSubsets(endpoint),
+        ...buildSubsets(context, endpoint),
         DetailsResourcesPreview(
           title: Resources.map['events']!.title,
           resource: Resources.map['events']!.resource,

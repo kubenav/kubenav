@@ -6,6 +6,7 @@ import 'package:kubenav/models/cluster.dart';
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -95,13 +96,13 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).shadowColor,
+            color: theme(context).colorShadow,
             blurRadius: Constants.sizeBorderBlurRadius,
             spreadRadius: Constants.sizeBorderSpreadRadius,
             offset: const Offset(0.0, 0.0),
           ),
         ],
-        color: Theme.of(context).cardColor,
+        color: theme(context).colorCard,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),
@@ -150,8 +151,9 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
                       ? Icons.radio_button_checked
                       : Icons.radio_button_unchecked,
                   size: 24,
-                  color:
-                      statusOk ? Constants.colorSuccess : Constants.colorDanger,
+                  color: statusOk
+                      ? theme(context).colorSuccess
+                      : theme(context).colorDanger,
                 ),
               ],
             ),

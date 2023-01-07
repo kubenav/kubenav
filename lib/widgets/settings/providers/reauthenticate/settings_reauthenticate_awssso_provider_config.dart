@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/providers/aws_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -40,10 +41,13 @@ class _SettingsReauthenticateAWSSSOState
       setState(() {
         _awsSSOConfig = ssoConfig;
       });
-      showSnackbar(
-        'Sing in completed',
-        'You can now click on the verify button',
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Sing in completed',
+          'You can now click on the verify button',
+        );
+      }
     } catch (err) {
       Logger.log(
         'SettingsReauthenticateAWSSSO _startSSOFlow',
@@ -51,6 +55,7 @@ class _SettingsReauthenticateAWSSSOState
         err,
       );
       showSnackbar(
+        context,
         'Could not get SSO configuration',
         err.toString(),
       );
@@ -70,6 +75,7 @@ class _SettingsReauthenticateAWSSSOState
         err,
       );
       showSnackbar(
+        context,
         'Could not verify device',
         err.toString(),
       );
@@ -108,10 +114,13 @@ class _SettingsReauthenticateAWSSSOState
       _provider!.awssso!.ssoCredentials = _awsSSOCredentials;
       await clustersRepository.editProvider(_provider!);
 
-      showSnackbar(
-        'Provider configuration saved',
-        'Refresh the view to use the new credentials',
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Provider configuration saved',
+          'Refresh the view to use the new credentials',
+        );
+      }
     } catch (err) {
       Logger.log(
         'SettingsReauthenticateAWSSSO _startSSOFlow',
@@ -119,6 +128,7 @@ class _SettingsReauthenticateAWSSSOState
         err,
       );
       showSnackbar(
+        context,
         'Could not get SSO credentials',
         err.toString(),
       );
@@ -156,7 +166,7 @@ class _SettingsReauthenticateAWSSSOState
           ),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Constants.colorPrimary,
+              backgroundColor: theme(context).colorPrimary,
               foregroundColor: Colors.white,
               minimumSize: const Size.fromHeight(40),
               shape: RoundedRectangleBorder(
@@ -183,7 +193,7 @@ class _SettingsReauthenticateAWSSSOState
           ),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Constants.colorPrimary,
+              backgroundColor: theme(context).colorPrimary,
               foregroundColor: Colors.white,
               minimumSize: const Size.fromHeight(40),
               shape: RoundedRectangleBorder(
@@ -210,7 +220,7 @@ class _SettingsReauthenticateAWSSSOState
           ),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Constants.colorPrimary,
+              backgroundColor: theme(context).colorPrimary,
               foregroundColor: Colors.white,
               minimumSize: const Size.fromHeight(40),
               shape: RoundedRectangleBorder(

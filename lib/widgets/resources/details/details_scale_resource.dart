@@ -99,11 +99,12 @@ class _DetailsScaleResourceState extends State<DetailsScaleResource> {
         setState(() {
           _isLoading = false;
         });
-        showSnackbar(
-          'Resource is scaled',
-          'The resource ${widget.name} in namespace ${widget.namespace} is scaled',
-        );
         if (mounted) {
+          showSnackbar(
+            context,
+            'Resource is scaled',
+            'The resource ${widget.name} in namespace ${widget.namespace} is scaled',
+          );
           Navigator.pop(context);
         }
       } on PlatformException catch (err) {
@@ -116,6 +117,7 @@ class _DetailsScaleResourceState extends State<DetailsScaleResource> {
           _isLoading = false;
         });
         showSnackbar(
+          context,
           'Could not scale resource',
           'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
         );
@@ -129,6 +131,7 @@ class _DetailsScaleResourceState extends State<DetailsScaleResource> {
           _isLoading = false;
         });
         showSnackbar(
+          context,
           'Could not scale resource',
           err.toString(),
         );

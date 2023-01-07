@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 import 'package:kubenav/models/cluster.dart';
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/providers/aws_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -136,6 +137,7 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
         _isLoadingAddCluster = false;
       });
       showSnackbar(
+        context,
         'Could not add clusters',
         err.toString(),
       );
@@ -154,8 +156,10 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
         children: [
           Expanded(
             child: Wrap(
-              children: const [
-                CircularProgressIndicator(color: Constants.colorPrimary),
+              children: [
+                CircularProgressIndicator(
+                  color: theme(context).colorPrimary,
+                ),
               ],
             ),
           ),
@@ -197,13 +201,13 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).shadowColor,
+                    color: theme(context).colorShadow,
                     blurRadius: Constants.sizeBorderBlurRadius,
                     spreadRadius: Constants.sizeBorderSpreadRadius,
                     offset: const Offset(0.0, 0.0),
                   ),
                 ],
-                color: Theme.of(context).cardColor,
+                color: theme(context).colorCard,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(Constants.sizeBorderRadius),
                 ),
@@ -213,7 +217,7 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
                   Checkbox(
                     checkColor: Colors.white,
                     fillColor: MaterialStateProperty.all(
-                      Constants.colorPrimary,
+                      theme(context).colorPrimary,
                     ),
                     value: _selectedClusters
                             .where((c) => c.name == _clusters[index].name)

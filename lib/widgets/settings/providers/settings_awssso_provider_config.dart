@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/providers/aws_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -63,10 +64,13 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
       setState(() {
         _awsSSOConfig = ssoConfig;
       });
-      showSnackbar(
-        'Sing in completed',
-        'You can now click on the verify button',
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Sing in completed',
+          'You can now click on the verify button',
+        );
+      }
     } catch (err) {
       Logger.log(
         'SettingsAWSSSOProvider _startSSOFlow',
@@ -74,6 +78,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
         err,
       );
       showSnackbar(
+        context,
         'Could not get SSO configuration',
         err.toString(),
       );
@@ -91,6 +96,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
         err,
       );
       showSnackbar(
+        context,
         'Could not verify device',
         err.toString(),
       );
@@ -118,10 +124,13 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
       setState(() {
         _awsSSOCredentials = ssoCredentials;
       });
-      showSnackbar(
-        'Credentials are created',
-        'You can now click on the save button',
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Credentials are created',
+          'You can now click on the save button',
+        );
+      }
     } catch (err) {
       Logger.log(
         'SettingsAWSSSOProvider _getSSOCredentials',
@@ -129,6 +138,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
         err,
       );
       showSnackbar(
+        context,
         'Could not get SSO credentials',
         err.toString(),
       );
@@ -201,6 +211,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
         _isLoading = false;
       });
       showSnackbar(
+        context,
         'Could not add provider configuration',
         err.toString(),
       );
@@ -329,7 +340,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                     value: _ssoRegion,
                     underline: Container(
                       height: 2,
-                      color: Constants.colorPrimary,
+                      color: theme(context).colorPrimary,
                     ),
                     onChanged: (String? newValue) {
                       setState(() {
@@ -391,7 +402,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                     value: _region,
                     underline: Container(
                       height: 2,
-                      color: Constants.colorPrimary,
+                      color: theme(context).colorPrimary,
                     ),
                     onChanged: (String? newValue) {
                       setState(() {
@@ -446,7 +457,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Constants.colorPrimary,
+                  backgroundColor: theme(context).colorPrimary,
                   foregroundColor: Colors.white,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(
@@ -472,7 +483,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Constants.colorPrimary,
+                  backgroundColor: theme(context).colorPrimary,
                   foregroundColor: Colors.white,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(
@@ -498,7 +509,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Constants.colorPrimary,
+                  backgroundColor: theme(context).colorPrimary,
                   foregroundColor: Colors.white,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(

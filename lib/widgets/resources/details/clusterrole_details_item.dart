@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_rbac_v1_cluster_role.dart';
 import 'package:kubenav/models/resource.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources/general.dart';
@@ -40,15 +41,16 @@ class ClusterRoleDetailsItem extends StatelessWidget
                 (rule) => AppVertialListSimpleModel(
                   onTap: () {
                     showSnackbar(
+                      context,
                       rule.resource,
                       'Non-Resource URLs: ${rule.nonResourceURLs.isNotEmpty ? rule.nonResourceURLs.join(', ') : '-'}\nResource Names: ${rule.resourceNames.isNotEmpty ? rule.resourceNames.join(', ') : '-'}\nVerbs: ${rule.verbs.isNotEmpty ? rule.verbs.join(', ') : '-'}',
                     );
                   },
                   children: [
                     Container(
-                      decoration: const BoxDecoration(
-                        color: Constants.colorPrimary,
-                        borderRadius: BorderRadius.all(
+                      decoration: BoxDecoration(
+                        color: theme(context).colorPrimary,
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),
                       ),

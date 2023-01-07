@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -50,6 +51,11 @@ class Settings extends StatelessWidget {
       return const AppNoClustersWidget();
     }
 
+    int maxClusters = 6;
+    if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
+      maxClusters = 12;
+    }
+
     return Container(
       padding: const EdgeInsets.only(
         left: Constants.spacingMiddle,
@@ -62,9 +68,9 @@ class Settings extends StatelessWidget {
         childAspectRatio: 0.25,
         mainAxisSpacing: 16.0,
         children: List.generate(
-          clustersRepository.clusters.length <= 6
+          clustersRepository.clusters.length <= maxClusters
               ? clustersRepository.clusters.length
-              : 6,
+              : maxClusters,
           (index) {
             return Container(
               margin: const EdgeInsets.only(
@@ -77,13 +83,13 @@ class Settings extends StatelessWidget {
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).shadowColor,
+                    color: theme(context).colorShadow,
                     blurRadius: Constants.sizeBorderBlurRadius,
                     spreadRadius: Constants.sizeBorderSpreadRadius,
                     offset: const Offset(0.0, 0.0),
                   ),
                 ],
-                color: Theme.of(context).cardColor,
+                color: theme(context).colorCard,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(Constants.sizeBorderRadius),
                 ),
@@ -102,7 +108,7 @@ class Settings extends StatelessWidget {
                           ? Icons.radio_button_checked
                           : Icons.radio_button_unchecked,
                       size: 24,
-                      color: Constants.colorPrimary,
+                      color: theme(context).colorPrimary,
                     ),
                     const SizedBox(width: Constants.spacingSmall),
                     Expanded(
@@ -128,51 +134,43 @@ class Settings extends StatelessWidget {
   /// [_buildViewAllClusters] displays the title for the clusters section and
   /// a "View all" button, which can be used by the user to go to the clusters
   /// page, where a user can add more clusters or reorder his existing clusters.
-  ///
-  /// Since the clusters are automatically added in the desktop version, this
-  /// widget is only displayed on Android and iOS.
   Widget _buildViewAllClusters(BuildContext context) {
-    if (Platform.isAndroid || Platform.isIOS) {
-      return Padding(
-        padding: const EdgeInsets.only(
-          top: Constants.spacingMiddle,
-          left: Constants.spacingMiddle,
-          right: Constants.spacingMiddle,
-          bottom: Constants.spacingSmall,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child:
-                  Text('Clusters', style: primaryTextStyle(context, size: 18)),
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: Constants.spacingMiddle,
+        left: Constants.spacingMiddle,
+        right: Constants.spacingMiddle,
+        bottom: Constants.spacingSmall,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Text('Clusters', style: primaryTextStyle(context, size: 18)),
+          ),
+          InkWell(
+            onTap: () {
+              navigate(context, const SettingsClusters());
+            },
+            child: Wrap(
+              children: [
+                Text('View all',
+                    style: secondaryTextStyle(
+                      context,
+                      color: theme(context).colorPrimary,
+                    )),
+                const SizedBox(width: Constants.spacingExtraSmall),
+                Icon(
+                  Icons.keyboard_arrow_right,
+                  color: theme(context).colorPrimary,
+                  size: 16,
+                ),
+              ],
             ),
-            InkWell(
-              onTap: () {
-                navigate(context, const SettingsClusters());
-              },
-              child: Wrap(
-                children: [
-                  Text('View all',
-                      style: secondaryTextStyle(
-                        context,
-                        color: Constants.colorPrimary,
-                      )),
-                  const SizedBox(width: Constants.spacingExtraSmall),
-                  const Icon(
-                    Icons.keyboard_arrow_right,
-                    color: Constants.colorPrimary,
-                    size: 16,
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      );
-    }
-
-    return Container();
+          )
+        ],
+      ),
+    );
   }
 
   Future<void> _toogleAuthentication(BuildContext context) async {
@@ -185,6 +183,7 @@ class Settings extends StatelessWidget {
       await appRepository.toogleAuthentication();
     } catch (err) {
       showSnackbar(
+        context,
         'Could not enabled authentication',
         err.toString(),
       );
@@ -197,6 +196,10 @@ class Settings extends StatelessWidget {
   /// version of the app or to modify the appearance of the app or to configure
   /// additional settings for plugins.
   List<AppVertialListSimpleModel> buildSettings(BuildContext context) {
+    ThemeRepository themeRepository = Provider.of<ThemeRepository>(
+      context,
+      listen: false,
+    );
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: false,
@@ -211,9 +214,9 @@ class Settings extends StatelessWidget {
             navigate(context, const SettingsProviders());
           },
           children: [
-            const Icon(
+            Icon(
               CustomIcons.kubernetes,
-              color: Constants.colorPrimary,
+              color: theme(context).colorPrimary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -244,9 +247,9 @@ class Settings extends StatelessWidget {
           );
         },
         children: [
-          const Icon(
+          Icon(
             CustomIcons.namespaces,
-            color: Constants.colorPrimary,
+            color: theme(context).colorPrimary,
           ),
           const SizedBox(width: Constants.spacingSmall),
           Expanded(
@@ -271,9 +274,9 @@ class Settings extends StatelessWidget {
       items.add(
         AppVertialListSimpleModel(
           children: [
-            const Icon(
+            Icon(
               Icons.fingerprint,
-              color: Constants.colorPrimary,
+              color: theme(context).colorPrimary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -286,7 +289,7 @@ class Settings extends StatelessWidget {
               ),
             ),
             Switch(
-              activeColor: Constants.colorPrimary,
+              activeColor: theme(context).colorPrimary,
               onChanged: (value) {
                 _toogleAuthentication(context);
               },
@@ -300,26 +303,40 @@ class Settings extends StatelessWidget {
     items.add(
       AppVertialListSimpleModel(
         children: [
-          const Icon(
-            Icons.dark_mode,
-            color: Constants.colorPrimary,
+          Icon(
+            Icons.code,
+            color: theme(context).colorPrimary,
           ),
           const SizedBox(width: Constants.spacingSmall),
           Expanded(
             flex: 1,
             child: Text(
-              'Dark Mode',
+              'Theme',
               style: noramlTextStyle(
                 context,
               ),
             ),
           ),
-          Switch(
-            activeColor: Constants.colorPrimary,
-            onChanged: (value) {
-              appRepository.toogleDarkMode();
+          DropdownButton(
+            value: themeRepository.themeName,
+            underline: Container(
+              height: 2,
+              color: theme(context).colorPrimary,
+            ),
+            onChanged: (ThemeName? value) {
+              themeRepository.setThemeName(value ?? ThemeName.light);
             },
-            value: appRepository.settings.isDarkTheme,
+            items: ThemeName.values.map((value) {
+              return DropdownMenuItem(
+                value: value,
+                child: Text(
+                  value.toShortString(),
+                  style: TextStyle(
+                    color: theme(context).colorTextPrimary,
+                  ),
+                ),
+              );
+            }).toList(),
           ),
         ],
       ),
@@ -328,9 +345,9 @@ class Settings extends StatelessWidget {
     items.add(
       AppVertialListSimpleModel(
         children: [
-          const Icon(
+          Icon(
             Icons.code,
-            color: Constants.colorPrimary,
+            color: theme(context).colorPrimary,
           ),
           const SizedBox(width: Constants.spacingSmall),
           Expanded(
@@ -346,7 +363,7 @@ class Settings extends StatelessWidget {
             value: appRepository.settings.editorFormat,
             underline: Container(
               height: 2,
-              color: Constants.colorPrimary,
+              color: theme(context).colorPrimary,
             ),
             onChanged: (String? newValue) {
               appRepository.setEditorFormat(newValue ?? 'yaml');
@@ -360,7 +377,7 @@ class Settings extends StatelessWidget {
                 child: Text(
                   value,
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.displayMedium!.color,
+                    color: theme(context).colorTextPrimary,
                   ),
                 ),
               );
@@ -381,9 +398,9 @@ class Settings extends StatelessWidget {
           );
         },
         children: [
-          const Icon(
+          Icon(
             Icons.http,
-            color: Constants.colorPrimary,
+            color: theme(context).colorPrimary,
           ),
           const SizedBox(width: Constants.spacingSmall),
           Expanded(
@@ -415,9 +432,9 @@ class Settings extends StatelessWidget {
           );
         },
         children: [
-          const Icon(
+          Icon(
             Icons.schedule,
-            color: Constants.colorPrimary,
+            color: theme(context).colorPrimary,
           ),
           const SizedBox(width: Constants.spacingSmall),
           Expanded(
@@ -449,9 +466,9 @@ class Settings extends StatelessWidget {
           );
         },
         children: [
-          const Icon(
+          Icon(
             Icons.extension,
-            color: Constants.colorPrimary,
+            color: theme(context).colorPrimary,
           ),
           const SizedBox(width: Constants.spacingSmall),
           Expanded(
@@ -490,9 +507,9 @@ class Settings extends StatelessWidget {
             );
           },
           children: [
-            const Icon(
+            Icon(
               Icons.subject,
-              color: Constants.colorPrimary,
+              color: theme(context).colorPrimary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -519,9 +536,9 @@ class Settings extends StatelessWidget {
             );
           },
           children: [
-            const Icon(
+            Icon(
               Icons.help,
-              color: Constants.colorPrimary,
+              color: theme(context).colorPrimary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -546,11 +563,15 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ClustersRepository>(
+    Provider.of<ThemeRepository>(
       context,
       listen: true,
     );
     Provider.of<AppRepository>(
+      context,
+      listen: true,
+    );
+    Provider.of<ClustersRepository>(
       context,
       listen: true,
     );

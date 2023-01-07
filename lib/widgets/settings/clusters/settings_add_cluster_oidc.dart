@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 import 'package:kubenav/models/cluster.dart';
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
@@ -90,6 +91,7 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
         if (mounted) {
           Navigator.pop(context);
           showSnackbar(
+            context,
             'Cluster added',
             'The cluster ${cluster.name} was added',
           );
@@ -100,6 +102,7 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
         _isLoadingAddCluster = false;
       });
       showSnackbar(
+        context,
         'Could not add cluster',
         err.toString(),
       );
@@ -185,7 +188,7 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
                 children: [
                   const Text('Insecure Skip TLS Verify'),
                   Switch(
-                    activeColor: Constants.colorPrimary,
+                    activeColor: theme(context).colorPrimary,
                     onChanged: (value) {
                       setState(() {
                         _clusterInsecureSkipTLSVerify =

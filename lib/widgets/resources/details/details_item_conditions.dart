@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources/general.dart';
@@ -68,13 +69,13 @@ class DetailsItemConditions extends StatelessWidget {
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                              color: Theme.of(context).shadowColor,
+                              color: theme(context).colorShadow,
                               blurRadius: Constants.sizeBorderBlurRadius,
                               spreadRadius: Constants.sizeBorderSpreadRadius,
                               offset: const Offset(0.0, 0.0),
                             ),
                           ],
-                          color: Theme.of(context).cardColor,
+                          color: theme(context).colorCard,
                           borderRadius: const BorderRadius.all(
                             Radius.circular(Constants.sizeBorderRadius),
                           ),
@@ -90,6 +91,7 @@ class DetailsItemConditions extends StatelessWidget {
                                 : '-';
 
                             showSnackbar(
+                              context,
                               item['status']['conditions'][index]['type'],
                               'Status: ${item['status']['conditions'][index]['status']}\nAge: $age\nReason: ${item['status']['conditions'][index]['reason'] ?? '-'}\nMessage: ${item['status']['conditions'][index]['message'] ?? '-'}',
                             );
@@ -102,7 +104,7 @@ class DetailsItemConditions extends StatelessWidget {
                                     ? Icons.radio_button_checked
                                     : Icons.radio_button_unchecked,
                                 size: 24,
-                                color: Constants.colorPrimary,
+                                color: theme(context).colorPrimary,
                               ),
                               const SizedBox(width: Constants.spacingSmall),
                               Expanded(

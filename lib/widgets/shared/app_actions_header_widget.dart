@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 
@@ -42,7 +43,7 @@ class AppActionsHeaderWidget extends StatelessWidget {
         bottom: Constants.spacingExtraLarge,
       ),
       decoration: BoxDecoration(
-        color: Constants.colorPrimary,
+        color: theme(context).colorPrimary,
         borderRadius: BorderRadius.vertical(
           bottom: Radius.elliptical(MediaQuery.of(context).size.width, 80.0),
         ),
@@ -57,13 +58,13 @@ class AppActionsHeaderWidget extends StatelessWidget {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).shadowColor,
+              color: theme(context).colorShadow,
               blurRadius: Constants.sizeBorderBlurRadius,
               spreadRadius: Constants.sizeBorderSpreadRadius,
               offset: const Offset(0.0, 0.0),
             ),
           ],
-          color: Theme.of(context).cardColor,
+          color: theme(context).colorCard,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
@@ -88,7 +89,7 @@ class AppActionsHeaderWidget extends StatelessWidget {
                     children: [
                       Icon(
                         action.icon,
-                        color: Constants.colorPrimary,
+                        color: theme(context).colorPrimary,
                         size: 28,
                       ),
                       const SizedBox(

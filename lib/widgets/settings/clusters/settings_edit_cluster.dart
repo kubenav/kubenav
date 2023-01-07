@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/cluster.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
@@ -90,6 +91,7 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
         });
         if (mounted) {
           showSnackbar(
+            context,
             'Changes were saved',
             'The cluster ${_nameController.text} was saved',
           );
@@ -101,6 +103,7 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
         _isLoadingAddCluster = false;
       });
       showSnackbar(
+        context,
         'Could not save cluster',
         err.toString(),
       );
@@ -217,7 +220,7 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
                 children: [
                   const Text('Insecure Skip TLS Verify'),
                   Switch(
-                    activeColor: Constants.colorPrimary,
+                    activeColor: theme(context).colorPrimary,
                     onChanged: (value) {
                       setState(() {
                         _clusterInsecureSkipTLSVerify =

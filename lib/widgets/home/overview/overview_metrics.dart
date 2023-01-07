@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
-import 'package:kubenav/widgets/home/overview/metric_widget.dart';
+import 'package:kubenav/widgets/home/overview/overview_metric.dart';
 
 /// The [OverviewMetrics] widget shows three icons, one for the CPU, one for the
 /// Memory and one for the Pod metrics. A user can then click on one of the
@@ -38,13 +39,13 @@ class OverviewMetrics extends StatelessWidget {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).shadowColor,
+              color: theme(context).colorShadow,
               blurRadius: Constants.sizeBorderBlurRadius,
               spreadRadius: Constants.sizeBorderSpreadRadius,
               offset: const Offset(0.0, 0.0),
             ),
           ],
-          color: Theme.of(context).cardColor,
+          color: theme(context).colorCard,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
@@ -53,7 +54,7 @@ class OverviewMetrics extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: Constants.colorPrimary,
+              color: theme(context).colorPrimary,
               size: 64,
             ),
             const SizedBox(height: Constants.spacingSmall),

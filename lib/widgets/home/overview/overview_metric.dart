@@ -8,6 +8,7 @@ import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod_list.dart';
 import 'package:kubenav/models/kubernetes_extensions/node_metrics.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -315,9 +316,10 @@ class _OverviewMetricState extends State<OverviewMetric> {
                 children: [
                   Expanded(
                     child: Wrap(
-                      children: const [
+                      children: [
                         CircularProgressIndicator(
-                            color: Constants.colorPrimary),
+                          color: theme(context).colorPrimary,
+                        ),
                       ],
                     ),
                   ),
@@ -376,13 +378,13 @@ class _OverviewMetricState extends State<OverviewMetric> {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: Theme.of(context).shadowColor,
+                          color: theme(context).colorShadow,
                           blurRadius: Constants.sizeBorderBlurRadius,
                           spreadRadius: Constants.sizeBorderSpreadRadius,
                           offset: const Offset(0.0, 0.0),
                         ),
                       ],
-                      color: Theme.of(context).cardColor,
+                      color: theme(context).colorCard,
                       borderRadius: const BorderRadius.all(
                         Radius.circular(Constants.sizeBorderRadius),
                       ),
@@ -404,10 +406,11 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                           .metrics[widget.metricType]!
                                           .allocatable
                                           .toDouble(),
-                                      color: Constants.colorPrimary,
+                                      color: theme(context).colorPrimary,
                                       width: 25,
-                                      borderRadius:
-                                          const BorderRadius.all(Radius.zero),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.zero,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -418,10 +421,11 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                       toY: snapshot.data![0]
                                           .metrics[widget.metricType]!.usage
                                           .toDouble(),
-                                      color: Constants.colorPrimary,
+                                      color: theme(context).colorPrimary,
                                       width: 25,
-                                      borderRadius:
-                                          const BorderRadius.all(Radius.zero),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.zero,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -432,10 +436,11 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                       toY: snapshot.data![0]
                                           .metrics[widget.metricType]!.requests
                                           .toDouble(),
-                                      color: Constants.colorPrimary,
+                                      color: theme(context).colorPrimary,
                                       width: 25,
-                                      borderRadius:
-                                          const BorderRadius.all(Radius.zero),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.zero,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -446,17 +451,19 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                       toY: snapshot.data![0]
                                           .metrics[widget.metricType]!.limits
                                           .toDouble(),
-                                      color: Constants.colorPrimary,
+                                      color: theme(context).colorPrimary,
                                       width: 25,
-                                      borderRadius:
-                                          const BorderRadius.all(Radius.zero),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.zero,
+                                      ),
                                     ),
                                   ],
                                 ),
                               ],
                               barTouchData: BarTouchData(
                                 touchTooltipData: BarTouchTooltipData(
-                                  tooltipBgColor: Colors.black,
+                                  tooltipBgColor:
+                                      theme(context).colorMessageBackground,
                                   getTooltipItem:
                                       (group, groupIndex, rod, rodIndex) {
                                     String label;
@@ -479,16 +486,18 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                     }
                                     return BarTooltipItem(
                                       '$label\n',
-                                      const TextStyle(
-                                        color: Colors.white,
+                                      TextStyle(
+                                        color: theme(context)
+                                            .colorMessageForeground,
                                         fontWeight: FontWeight.normal,
                                         fontSize: 14,
                                       ),
                                       children: [
                                         TextSpan(
                                           text: formatValue(rod.toY),
-                                          style: const TextStyle(
-                                            color: Colors.white,
+                                          style: TextStyle(
+                                            color: theme(context)
+                                                .colorMessageForeground,
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal,
                                           ),
@@ -551,14 +560,14 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                 show: true,
                                 getDrawingHorizontalLine: (value) {
                                   return FlLine(
-                                    color: Constants.colorTextSecondary,
+                                    color: theme(context).colorTextSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );
                                 },
                                 getDrawingVerticalLine: (value) {
                                   return FlLine(
-                                    color: Constants.colorTextSecondary,
+                                    color: theme(context).colorTextSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );
