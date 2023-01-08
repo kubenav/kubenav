@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_svg/svg.dart';
+
 import 'package:kubenav/models/kubernetes/io_k8s_api_rbac_v1_cluster_role_binding.dart';
 import 'package:kubenav/models/resource.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
@@ -56,8 +58,12 @@ class ClusterRoleBindingDetailsItem extends StatelessWidget
                       ),
                       height: 54,
                       width: 54,
-                      child: Image.asset(
-                        'assets/resources/image42x42/clusterrolebindings.png',
+                      padding: const EdgeInsets.all(
+                        Constants.spacingIcon54x54,
+                      ),
+                      child: SvgPicture.asset(
+                        'assets/resources/clusterrolebindings.svg',
+                        color: theme(context).colorOnPrimary,
                       ),
                     ),
                     const SizedBox(width: Constants.spacingSmall),

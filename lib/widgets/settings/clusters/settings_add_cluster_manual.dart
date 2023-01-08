@@ -132,7 +132,7 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
     return AppBottomSheetWidget(
       title: ClusterProviderType.manual.title(),
       subtitle: ClusterProviderType.manual.subtitle(),
-      icon: ClusterProviderType.manual.image54x54(),
+      icon: ClusterProviderType.manual.icon(),
       closePressed: () {
         Navigator.pop(context);
       },

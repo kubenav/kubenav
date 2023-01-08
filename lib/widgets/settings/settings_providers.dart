@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
@@ -62,8 +63,12 @@ class SettingsProviders extends StatelessWidget {
               ),
               height: 54,
               width: 54,
-              child: Image.asset(
-                provider.type!.image42x42(),
+              padding: const EdgeInsets.all(
+                Constants.spacingIcon54x54,
+              ),
+              child: SvgPicture.asset(
+                provider.type!.icon(),
+                color: theme(context).colorOnPrimary,
               ),
             ),
             const SizedBox(width: Constants.spacingSmall),

@@ -90,7 +90,7 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
     return AppBottomSheetWidget(
       title: 'Prometheus',
       subtitle: 'Prometheus configuration',
-      icon: 'assets/plugins/image54x54/prometheus.png',
+      icon: 'assets/plugins/prometheus.svg',
       closePressed: () {
         Navigator.pop(context);
       },

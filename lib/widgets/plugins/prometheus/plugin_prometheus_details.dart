@@ -194,8 +194,7 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
                               child: AppErrorWidget(
                                 message: 'Could not load dashboard',
                                 details: snapshot.error.toString(),
-                                icon:
-                                    'assets/plugins/image108x108/prometheus.png',
+                                icon: 'assets/plugins/prometheus.svg',
                               ),
                             ),
                           ),

@@ -128,7 +128,7 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                           AppErrorWidget(
                             message: 'Could not load metrics',
                             details: snapshot.error.toString(),
-                            icon: 'assets/plugins/image108x108/prometheus.png',
+                            icon: 'assets/plugins/prometheus.svg',
                           ),
                         ],
                       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/clusters_repository.dart';
@@ -51,7 +52,13 @@ class Plugins extends StatelessWidget {
                 ),
                 height: 54,
                 width: 54,
-                child: Image.asset('assets/plugins/image42x42/helm.png'),
+                padding: const EdgeInsets.all(
+                  Constants.spacingIcon54x54,
+                ),
+                child: SvgPicture.asset(
+                  'assets/plugins/helm.svg',
+                  color: theme(context).colorOnPrimary,
+                ),
               ),
               const SizedBox(width: Constants.spacingSmall),
               Expanded(
@@ -100,7 +107,8 @@ class Plugins extends StatelessWidget {
                 ),
                 height: 54,
                 width: 54,
-                child: Image.asset('assets/plugins/image42x42/prometheus.png'),
+                padding: const EdgeInsets.all(Constants.spacingIcon54x54),
+                child: SvgPicture.asset('assets/plugins/prometheus.svg'),
               ),
               const SizedBox(width: Constants.spacingSmall),
               Expanded(

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/storage.dart';
-import 'package:provider/provider.dart';
 
 /// [theme] is a helper function which returns the [ThemeSettings] for the users
 /// currently selected team.

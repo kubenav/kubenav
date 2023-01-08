@@ -171,7 +171,7 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
                 AppErrorWidget(
                   message: 'Could not load clusters',
                   details: _error,
-                  icon: ClusterProviderType.google.image250x140(),
+                  icon: ClusterProviderType.google.icon(),
                 ),
               ],
             ),
@@ -264,7 +264,7 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
     return AppBottomSheetWidget(
       title: ClusterProviderType.google.title(),
       subtitle: ClusterProviderType.google.subtitle(),
-      icon: ClusterProviderType.google.image54x54(),
+      icon: ClusterProviderType.google.icon(),
       closePressed: () {
         Navigator.pop(context);
       },

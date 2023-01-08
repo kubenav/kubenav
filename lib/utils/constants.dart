@@ -15,6 +15,8 @@ class Constants {
   static const spacingLarge = 24.0;
   static const spacingExtraLarge = 32.0;
 
+  static const spacingIcon54x54 = 6.0;
+
   static const opacityLight = 0.75;
   static const opacityHeavy = 0.25;
 

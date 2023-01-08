@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_svg/svg.dart';
+
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
@@ -28,20 +30,23 @@ class AppErrorWidget extends StatelessWidget {
   /// for the widget could be of type `String` or `IconData` to also allow
   /// images from the assets folder as icons. If the icon is null, we use a
   /// default one.
-  Widget buildIcon(dynamic icon) {
+  Widget buildIcon(BuildContext context, dynamic icon) {
     if (icon is String) {
-      return Image.asset(icon);
+      return SvgPicture.asset(
+        icon,
+        color: theme(context).colorOnPrimary,
+      );
     } else if (icon is IconData) {
       return Icon(
         icon,
-        color: Colors.white,
+        color: theme(context).colorOnPrimary,
         size: 108,
       );
     }
 
-    return const Icon(
+    return Icon(
       CustomIcons.kubenav,
-      color: Colors.white,
+      color: theme(context).colorOnPrimary,
       size: 108,
     );
   }
@@ -88,7 +93,8 @@ class AppErrorWidget extends StatelessWidget {
             ),
             height: 140,
             width: MediaQuery.of(context).size.width,
-            child: buildIcon(icon),
+            padding: const EdgeInsets.all(Constants.spacingMiddle),
+            child: buildIcon(context, icon),
           ),
           const SizedBox(height: Constants.spacingSmall),
           Padding(

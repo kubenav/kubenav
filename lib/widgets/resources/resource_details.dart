@@ -369,7 +369,7 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
                                 message: 'Could not load ${widget.title}',
                                 details: snapshot.error.toString(),
                                 icon: Resources.map.containsKey(widget.resource)
-                                    ? 'assets/resources/image108x108/${widget.resource}.png'
+                                    ? 'assets/resources/${widget.resource}.svg'
                                     : null,
                               ),
                             ),

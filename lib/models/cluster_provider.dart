@@ -410,78 +410,27 @@ extension ClusterProviderTypeExtension on ClusterProviderType {
     }
   }
 
-  /// [image42x42] returns the an image for the [ClusterProviderType] enum value
-  /// with an resolution of 42 x 42 pixels.
-  String image42x42() {
+  /// [icon] returns the a icon for the [ClusterProviderType] enum value.
+  String icon() {
     switch (this) {
       case ClusterProviderType.kubeconfig:
-        return 'assets/provider/image42x42/kubeconfig42x42.png';
+        return 'assets/providers/kubeconfig.svg';
       case ClusterProviderType.google:
-        return 'assets/provider/image42x42/google42x42.png';
+        return 'assets/providers/google.svg';
       case ClusterProviderType.aws:
-        return 'assets/provider/image42x42/aws42x42.png';
+        return 'assets/providers/aws.svg';
       case ClusterProviderType.awssso:
-        return 'assets/provider/image42x42/aws42x42.png';
+        return 'assets/providers/aws.svg';
       case ClusterProviderType.azure:
-        return 'assets/provider/image42x42/azure42x42.png';
+        return 'assets/providers/azure.svg';
       case ClusterProviderType.oidc:
-        return 'assets/provider/image42x42/oidc42x42.png';
+        return 'assets/providers/oidc.svg';
       case ClusterProviderType.digitalocean:
-        return 'assets/provider/image42x42/digitalocean42x42.png';
+        return 'assets/providers/digitalocean.svg';
       case ClusterProviderType.manual:
-        return 'assets/provider/image42x42/manual42x42.png';
+        return 'assets/providers/manual.svg';
       default:
-        return 'assets/provider/image42x42/manual42x42.png';
-    }
-  }
-
-  /// [image54x54] returns the an image for the [ClusterProviderType] enum value
-  /// with an resolution of 54 x 54 pixels.
-  String image54x54() {
-    switch (this) {
-      case ClusterProviderType.kubeconfig:
-        return 'assets/provider/image54x54/kubeconfig54x54.png';
-      case ClusterProviderType.google:
-        return 'assets/provider/image54x54/google54x54.png';
-      case ClusterProviderType.aws:
-        return 'assets/provider/image54x54/aws54x54.png';
-      case ClusterProviderType.awssso:
-        return 'assets/provider/image54x54/aws54x54.png';
-      case ClusterProviderType.azure:
-        return 'assets/provider/image54x54/azure54x54.png';
-      case ClusterProviderType.oidc:
-        return 'assets/provider/image54x54/oidc54x54.png';
-      case ClusterProviderType.digitalocean:
-        return 'assets/provider/image54x54/digitalocean54x54.png';
-      case ClusterProviderType.manual:
-        return 'assets/provider/image54x54/manual54x54.png';
-      default:
-        return 'assets/provider/image54x54/manual54x54.png';
-    }
-  }
-
-  /// [image250x140] returns the an image for the [ClusterProviderType] enum value
-  /// with an resolution of 250 x 140 pixels.
-  String image250x140() {
-    switch (this) {
-      case ClusterProviderType.kubeconfig:
-        return 'assets/provider/image250x140/kubeconfig250x140.png';
-      case ClusterProviderType.google:
-        return 'assets/provider/image250x140/google250x140.png';
-      case ClusterProviderType.aws:
-        return 'assets/provider/image250x140/aws250x140.png';
-      case ClusterProviderType.awssso:
-        return 'assets/provider/image250x140/aws250x140.png';
-      case ClusterProviderType.azure:
-        return 'assets/provider/image250x140/azure250x140.png';
-      case ClusterProviderType.oidc:
-        return 'assets/provider/image250x140/oidc250x140.png';
-      case ClusterProviderType.digitalocean:
-        return 'assets/provider/image250x140/digitalocean250x140.png';
-      case ClusterProviderType.manual:
-        return 'assets/provider/image250x140/manual250x140.png';
-      default:
-        return 'assets/provider/image250x140/manual250x140.png';
+        return 'assets/providers/manual.svg';
     }
   }
 }

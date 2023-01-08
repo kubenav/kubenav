@@ -181,7 +181,7 @@ class _SettingsAddClusterDigitalOceanState
                 AppErrorWidget(
                   message: 'Could not load clusters',
                   details: _error,
-                  icon: ClusterProviderType.digitalocean.image250x140(),
+                  icon: ClusterProviderType.digitalocean.icon(),
                 ),
               ],
             ),
@@ -274,7 +274,7 @@ class _SettingsAddClusterDigitalOceanState
     return AppBottomSheetWidget(
       title: ClusterProviderType.digitalocean.title(),
       subtitle: ClusterProviderType.digitalocean.subtitle(),
-      icon: ClusterProviderType.digitalocean.image54x54(),
+      icon: ClusterProviderType.digitalocean.icon(),
       closePressed: () {
         Navigator.pop(context);
       },

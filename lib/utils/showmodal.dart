@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 
 void showModal(BuildContext context, Widget widget) {

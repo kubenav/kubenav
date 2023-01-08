@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -206,11 +208,18 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                                 Radius.circular(Constants.sizeBorderRadius),
                           ),
                           clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: Image.asset(
-                            cards[index].image,
-                            height: 140,
+                          child: Container(
+                            padding: const EdgeInsets.all(
+                              Constants.spacingMiddle,
+                            ),
                             width: 250,
-                            fit: cards[index].imageFit,
+                            height: 140,
+                            child: Center(
+                              child: SvgPicture.asset(
+                                cards[index].image,
+                                color: theme(context).colorOnPrimary,
+                              ),
+                            ),
                           ),
                         ),
                       ),

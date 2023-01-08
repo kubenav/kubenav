@@ -128,7 +128,7 @@ class _SettingsDigitalOceanProviderState
     return AppBottomSheetWidget(
       title: ClusterProviderType.digitalocean.title(),
       subtitle: ClusterProviderType.digitalocean.subtitle(),
-      icon: ClusterProviderType.digitalocean.image54x54(),
+      icon: ClusterProviderType.digitalocean.icon(),
       closePressed: () {
         Navigator.pop(context);
       },

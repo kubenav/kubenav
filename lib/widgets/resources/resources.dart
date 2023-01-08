@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/resource.dart' as resource_model;
@@ -64,7 +65,13 @@ class Resources extends StatelessWidget {
                   ),
                   height: 54,
                   width: 54,
-                  child: Image.asset('assets/resources/image42x42/$key.png'),
+                  padding: const EdgeInsets.all(
+                    Constants.spacingIcon54x54,
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/resources/$key.svg',
+                    color: theme(context).colorOnPrimary,
+                  ),
                 ),
                 const SizedBox(width: Constants.spacingSmall),
                 Expanded(
