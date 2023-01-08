@@ -348,6 +348,7 @@ class AppRepositorySettingsPrometheus {
   String labelSelector;
   String container;
   int port;
+  String path;
   String username;
   String password;
   String token;
@@ -359,6 +360,7 @@ class AppRepositorySettingsPrometheus {
     required this.labelSelector,
     required this.container,
     required this.port,
+    required this.path,
     required this.username,
     required this.password,
     required this.token,
@@ -372,6 +374,7 @@ class AppRepositorySettingsPrometheus {
       labelSelector: 'app=prometheus',
       container: 'prometheus',
       port: 9090,
+      path: '',
       username: '',
       password: '',
       token: '',
@@ -399,6 +402,8 @@ class AppRepositorySettingsPrometheus {
       port: data.containsKey('port') && data['port'] != null
           ? data['port']
           : 9090,
+      path:
+          data.containsKey('path') && data['path'] != null ? data['path'] : '',
       username: data.containsKey('username') && data['username'] != null
           ? data['username']
           : '',
@@ -419,6 +424,7 @@ class AppRepositorySettingsPrometheus {
       'labelSelector': labelSelector,
       'container': container,
       'port': port,
+      'path': path,
       'username': username,
       'password': password,
       'token': token,

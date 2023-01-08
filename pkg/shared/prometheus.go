@@ -33,6 +33,7 @@ type prometheus struct {
 	LabelSelector string `json:"labelSelector"`
 	Container     string `json:"container"`
 	Port          int64  `json:"port"`
+	Path          string `json:"path"`
 	Username      string `json:"username"`
 	Password      string `json:"password"`
 	Token         string `json:"token"`
@@ -77,7 +78,7 @@ func PrometheusGetData(restConfig *rest.Config, clientset *kubernetes.Clientset,
 			}
 		}()
 
-		requestData.Prometheus.Address = fmt.Sprintf("http://localhost:%d", pf.LocalPort)
+		requestData.Prometheus.Address = fmt.Sprintf("http://localhost:%d%s", pf.LocalPort, requestData.Prometheus.Path)
 	}
 
 	// Create a Prometheus client with the user specified credentials. As address for the Prometheus instance we are
