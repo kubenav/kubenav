@@ -312,6 +312,36 @@ class Settings extends StatelessWidget {
       AppVertialListSimpleModel(
         children: [
           Icon(
+            CustomIcons.clusters,
+            color: theme(context).colorPrimary,
+          ),
+          const SizedBox(width: Constants.spacingSmall),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'Show Cluster on Start',
+              style: noramlTextStyle(
+                context,
+              ),
+            ),
+          ),
+          Switch(
+            activeColor: theme(context).colorPrimary,
+            onChanged: (value) {
+              appRepository.setIsShowClustersOnStart(
+                !appRepository.settings.isShowClustersOnStart,
+              );
+            },
+            value: appRepository.settings.isShowClustersOnStart,
+          ),
+        ],
+      ),
+    );
+
+    items.add(
+      AppVertialListSimpleModel(
+        children: [
+          Icon(
             Icons.code,
             color: theme(context).colorPrimary,
           ),

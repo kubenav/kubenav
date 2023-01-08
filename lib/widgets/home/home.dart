@@ -7,6 +7,7 @@ import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/bookmarks_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
+import 'package:kubenav/widgets/home/home_clusters.dart';
 import 'package:kubenav/widgets/home/home_overview.dart';
 
 /// The [Home] is the first widget which is displayed when a user opens the app.
@@ -59,6 +60,23 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    /// When a user selected the show clusters on start option in the settings
+    /// we will show the [HomeClusters] widget instead of the normal
+    /// [HomeOverview] widget on the home screen, to allow the user to select an
+    /// active cluster before he continues.
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: true,
+    );
+    ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
+      context,
+      listen: true,
+    );
+
+    if (appRepository.showClusters && clustersRepository.clusters.isNotEmpty) {
+      return const HomeClusters();
+    }
+
     return const HomeOverview();
   }
 }

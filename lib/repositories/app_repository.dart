@@ -21,10 +21,12 @@ import 'package:kubenav/utils/storage.dart';
 class AppRepository with ChangeNotifier {
   int _currentPageIndex = Constants.pageIndexHome;
   bool _isAuthenticated = false;
+  bool _showClusters = true;
   AppRepositorySettings _settings = AppRepositorySettings.fromDefault();
 
   int get currentPageIndex => _currentPageIndex;
   bool get isAuthenticated => _isAuthenticated;
+  bool get showClusters => _showClusters;
   AppRepositorySettings get settings => _settings;
 
   /// [setCurrentPageIndex] sets the [_currentPageIndex] value to the provided
@@ -59,6 +61,10 @@ class AppRepository with ChangeNotifier {
   /// When the user has enabled the authentication via Face ID / Touch ID it
   /// will also call the [authenticate] function to ensure that the user is
   /// authenticated before he can continue using the app.
+  ///
+  /// When a user did not enabled the [_settings.isShowClustersOnStart] option
+  /// we set the [_showClusters] option to false, to directly show the overview
+  /// page and not the clusters page on the home screen.
   Future<void> init() async {
     try {
       final data = await Storage().read('kubenav-settings');
@@ -72,6 +78,10 @@ class AppRepository with ChangeNotifier {
         _isAuthenticated = true;
       } else {
         _isAuthenticated = true;
+      }
+
+      if (!_settings.isShowClustersOnStart) {
+        _showClusters = false;
       }
 
       notifyListeners();
@@ -270,6 +280,35 @@ class AppRepository with ChangeNotifier {
       notifyListeners();
     } catch (_) {}
   }
+
+  /// [setIsShowClustersOnStart] sets the [_settings.isShowClustersOnStart]
+  /// option to the provided [value]. The [_settings.isShowClustersOnStart]
+  /// controlls if we display the [HomeOverview] widget or the [HomeClusters]
+  /// widget when the app is started.
+  ///
+  /// When the value is toggled we also set the [_showClusters] value to `false`
+  /// to no show the [HomeClusters] widget when the user goes back to the home
+  /// page (This could happen if the option is enabled during startup, but the
+  /// user hasn't added any clusters yet).
+  Future<void> setIsShowClustersOnStart(bool value) async {
+    try {
+      _settings.isShowClustersOnStart = value;
+      _showClusters = false;
+      await _save();
+      notifyListeners();
+    } catch (_) {}
+  }
+
+  /// [disableShowClusters] sets the [_showClusters] property to `false`, so
+  /// that the [HomeClusters] widget is not shown again. The widget is only
+  /// shown when [_showClusters] is `true` and the list of clusters is not
+  /// empty.
+  Future<void> disableShowClusters() async {
+    try {
+      _showClusters = false;
+      notifyListeners();
+    } catch (_) {}
+  }
 }
 
 /// The [AppRepositorySettings] model represents all the app settings which can
@@ -277,6 +316,7 @@ class AppRepository with ChangeNotifier {
 class AppRepositorySettings {
   List<String> namespaces;
   bool isAuthenticationEnabled;
+  bool isShowClustersOnStart;
   String editorFormat;
   String proxy;
   int timeout;
@@ -285,6 +325,7 @@ class AppRepositorySettings {
   AppRepositorySettings({
     required this.namespaces,
     required this.isAuthenticationEnabled,
+    required this.isShowClustersOnStart,
     required this.editorFormat,
     required this.proxy,
     required this.timeout,
@@ -295,6 +336,7 @@ class AppRepositorySettings {
     return AppRepositorySettings(
       namespaces: [],
       isAuthenticationEnabled: false,
+      isShowClustersOnStart: false,
       editorFormat: 'yaml',
       proxy: '',
       timeout: 0,
@@ -310,6 +352,10 @@ class AppRepositorySettings {
       isAuthenticationEnabled: data.containsKey('isAuthenticationEnabled') &&
               data['isAuthenticationEnabled'] != null
           ? data['isAuthenticationEnabled']
+          : false,
+      isShowClustersOnStart: data.containsKey('isShowClustersOnStart') &&
+              data['isShowClustersOnStart'] != null
+          ? data['isShowClustersOnStart']
           : false,
       editorFormat:
           data.containsKey('editorFormat') && data['editorFormat'] != null
@@ -331,6 +377,7 @@ class AppRepositorySettings {
     return {
       'namespaces': json.encode(namespaces),
       'isAuthenticationEnabled': isAuthenticationEnabled,
+      'isShowClustersOnStart': isShowClustersOnStart,
       'editorFormat': editorFormat,
       'proxy': proxy,
       'timeout': timeout,

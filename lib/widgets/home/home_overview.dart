@@ -25,7 +25,7 @@ import 'package:kubenav/widgets/shared/app_no_clusters_widget.dart';
 class HomeOverview extends StatelessWidget {
   const HomeOverview({Key? key}) : super(key: key);
 
-  List<Widget> buildContent(BuildContext context) {
+  List<Widget> _buildContent(BuildContext context) {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -174,7 +174,7 @@ class HomeOverview extends StatelessWidget {
       floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SingleChildScrollView(
         child: Column(
-          children: buildContent(context),
+          children: _buildContent(context),
         ),
       ),
     );
