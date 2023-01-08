@@ -19,7 +19,7 @@ class AppClustersWidget extends StatefulWidget {
 }
 
 class _AppClustersWidgetState extends State<AppClustersWidget> {
-  Future<void> setActiveCluster(BuildContext context, String clusterId) async {
+  Future<void> _setActiveCluster(BuildContext context, String clusterId) async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -82,7 +82,7 @@ class _AppClustersWidgetState extends State<AppClustersWidget> {
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 onTap: () {
-                  setActiveCluster(
+                  _setActiveCluster(
                     context,
                     clustersRepository.clusters[index].id,
                   );
