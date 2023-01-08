@@ -1,16 +1,16 @@
 <div align="center">
-  <img src="assets/_images/repo/github-readme-logo.png" width="200" />
+  <img src="utils/images/repo/github-readme-logo.png" width="200" />
   <br><br>
 
   **kubenav** is the navigator for your **Kubernetes** clusters right in your pocket. kubenav is a **mobile and desktop** app to manage Kubernetes clusters and to get an overview of the status of your Kubernetes resources.
 
   <p>
-    <a href="https://apps.apple.com/us/app/kubenav/id1494512160" target="_blank"><img src="assets/_images/repo/badge-app-store.png" height="50"></a>
-    <a href="https://play.google.com/store/apps/details?id=io.kubenav.kubenav" target="_blank"><img src="assets/_images/repo/badge-google-play.png" height="50"></a>
-    <a href="https://github.com/kubenav/kubenav/releases" target="_self"><img src="assets/_images/repo/badge-desktop.png" height="50"></a>
+    <a href="https://apps.apple.com/us/app/kubenav/id1494512160" target="_blank"><img src="utils/images/repo/badge-app-store.png" height="50"></a>
+    <a href="https://play.google.com/store/apps/details?id=io.kubenav.kubenav" target="_blank"><img src="utils/images/repo/badge-google-play.png" height="50"></a>
+    <a href="https://github.com/kubenav/kubenav/releases" target="_self"><img src="utils/images/repo/badge-desktop.png" height="50"></a>
   </p>
 
-  <img src="assets/_images/repo/github-screenshot.png" width="100%" />
+  <img src="utils/images/repo/github-screenshot.png" width="100%" />
 </div>
 
 kubenav is a mobile and desktop app to manage Kubernetes clusters. The app provides an overview of all resources in a Kubernetes cluster, including current status information for workloads. The details view for resources provides additional information. It is possible to view logs and events or to get a shell into a container. You can also edit and delete resources or scale your workloads within the app.
@@ -19,7 +19,7 @@ The app is developed using [Flutter](https://flutter.dev) and [Go](https://go.de
 
 ## Features
 
-- **Available for mobile, desktop and web:** kubenav provides the same experience for mobile, desktop and web, with nearly 100% code sharing.
+- **Available for mobile and desktop:** kubenav provides the same experience for mobile and desktop, with nearly 100% code sharing.
 - **Manage Resources:** All major resources like Deployments, StatefulSets, DaemonSets, Pods, etc. are supported.
 - **Custom Resource Definitions:** View all Custom Resource Definitions and mange Custom Resources.
 - **Modify Resources:** Edit and delete all available resources or scale your Deployments, StatefulSets, DaemonSets.

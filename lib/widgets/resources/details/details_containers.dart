@@ -70,7 +70,7 @@ class DetailsContainers extends StatelessWidget {
           (index) => AppHorizontalListCardsModel(
             title: initContainers[index].name,
             subtitle: getSubtitle('Init Container', initContainers[index]),
-            image: 'assets/resources/image108x108/containers.png',
+            image: 'assets/resources/containers.svg',
             imageFit: BoxFit.none,
             onTap: () {
               showModal(
@@ -91,7 +91,7 @@ class DetailsContainers extends StatelessWidget {
           (index) => AppHorizontalListCardsModel(
             title: containers[index].name,
             subtitle: getSubtitle('Container', containers[index]),
-            image: 'assets/resources/image108x108/containers.png',
+            image: 'assets/resources/containers.svg',
             imageFit: BoxFit.none,
             onTap: () {
               showModal(

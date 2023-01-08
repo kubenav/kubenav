@@ -288,7 +288,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                               child: AppErrorWidget(
                                 message: 'Could not load Helm chart',
                                 details: snapshot.error.toString(),
-                                icon: 'assets/plugins/image108x108/helm.png',
+                                icon: 'assets/plugins/helm.svg',
                               ),
                             ),
                           ),

@@ -163,7 +163,7 @@ class _SettingsAddClusterAzureState extends State<SettingsAddClusterAzure> {
                 AppErrorWidget(
                   message: 'Could not load clusters',
                   details: _error,
-                  icon: ClusterProviderType.azure.image250x140(),
+                  icon: ClusterProviderType.azure.icon(),
                 ),
               ],
             ),
@@ -256,7 +256,7 @@ class _SettingsAddClusterAzureState extends State<SettingsAddClusterAzure> {
     return AppBottomSheetWidget(
       title: ClusterProviderType.azure.title(),
       subtitle: ClusterProviderType.azure.subtitle(),
-      icon: ClusterProviderType.azure.image54x54(),
+      icon: ClusterProviderType.azure.icon(),
       closePressed: () {
         Navigator.pop(context);
       },

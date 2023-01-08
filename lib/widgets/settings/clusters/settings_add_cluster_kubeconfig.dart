@@ -141,7 +141,7 @@ class _SettingsAddClusterKubeconfigState
     return AppBottomSheetWidget(
       title: ClusterProviderType.kubeconfig.title(),
       subtitle: ClusterProviderType.kubeconfig.subtitle(),
-      icon: ClusterProviderType.kubeconfig.image54x54(),
+      icon: ClusterProviderType.kubeconfig.icon(),
       closePressed: () {
         Navigator.pop(context);
       },

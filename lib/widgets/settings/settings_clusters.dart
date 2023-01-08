@@ -98,7 +98,7 @@ class SettingsClusters extends StatelessWidget {
           (index) => AppHorizontalListCardsModel(
             title: ClusterProviderType.values[index].title(),
             subtitle: [ClusterProviderType.values[index].subtitle()],
-            image: ClusterProviderType.values[index].image250x140(),
+            image: ClusterProviderType.values[index].icon(),
             onTap: () {
               _showAddClusterBottomSheet(
                 context,

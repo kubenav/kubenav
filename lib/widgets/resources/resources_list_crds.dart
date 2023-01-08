@@ -282,7 +282,7 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                                     'Could not load CustomResourceDefinitions',
                                 details: snapshot.error.toString(),
                                 icon:
-                                    'assets/resources/image108x108/customresourcedefinitions.png',
+                                    'assets/resources/customresourcedefinitions.svg',
                               ),
                             ),
                           ),

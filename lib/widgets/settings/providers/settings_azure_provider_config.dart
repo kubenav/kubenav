@@ -141,7 +141,7 @@ class _SettingsAzureProviderState extends State<SettingsAzureProvider> {
     return AppBottomSheetWidget(
       title: ClusterProviderType.azure.title(),
       subtitle: ClusterProviderType.azure.subtitle(),
-      icon: ClusterProviderType.azure.image54x54(),
+      icon: ClusterProviderType.azure.icon(),
       closePressed: () {
         Navigator.pop(context);
       },

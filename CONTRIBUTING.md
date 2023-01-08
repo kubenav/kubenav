@@ -80,9 +80,9 @@ To sort all imports in the Dart code in a uniformly way you have to run the `flu
 
 #### Add a Custom Icon
 
-If you have to add a custom icon to the Flutter app we are using https://www.fluttericon.com. The configuration file for all existing icons can be found at `assets/_images/custom-icons/config.json`.
+If you have to add a custom icon to the Flutter app we are using https://www.fluttericon.com. The configuration file for all existing icons can be found at `utils/images/custom-icons/config.json`.
 
-When you add a new custom icon place the `.svg` file in the `assets/_images/custom-icons` folder. Please also update the `config.json` file. The content of the generated Dart class should be placed into the `lib/utils/custom_icons.dart` file.
+When you add a new custom icon place the `.svg` file in the `utils/images/custom-icons` folder. Please also update the `config.json` file. The content of the generated Dart class should be placed into the `lib/utils/custom_icons.dart` file.
 
 #### Add a new Image
 
@@ -108,7 +108,7 @@ flutter pub run flutter_launcher_icons:main
 flutter pub run flutter_native_splash:create
 ```
 
-The icons can be found in the `assets/_images/app-icons` folder. The splash screen icons can be found in the `assets/_images/splash-screen` folder.
+The icons can be found in the `utils/images/app-icons` folder. The splash screen icons can be found in the `utils/images/splash-screen` folder.
 
 ## Release
 

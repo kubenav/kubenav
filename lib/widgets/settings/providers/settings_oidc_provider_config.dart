@@ -273,7 +273,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
     return AppBottomSheetWidget(
       title: ClusterProviderType.oidc.title(),
       subtitle: ClusterProviderType.oidc.subtitle(),
-      icon: ClusterProviderType.oidc.image54x54(),
+      icon: ClusterProviderType.oidc.icon(),
       closePressed: () {
         Navigator.pop(context);
       },

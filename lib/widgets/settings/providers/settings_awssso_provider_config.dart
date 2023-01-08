@@ -245,7 +245,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
     return AppBottomSheetWidget(
       title: ClusterProviderType.awssso.title(),
       subtitle: ClusterProviderType.awssso.subtitle(),
-      icon: ClusterProviderType.awssso.image54x54(),
+      icon: ClusterProviderType.awssso.icon(),
       closePressed: () {
         Navigator.pop(context);
       },

@@ -155,7 +155,7 @@ class _OverviewEventsState extends State<OverviewEvents> {
                             message: 'Could not load events',
                             details: snapshot.error.toString(),
                             icon:
-                                'assets/resources/image108x108/${Resources.map['events']!.resource}.png',
+                                'assets/resources/${Resources.map['events']!.resource}.svg',
                           ),
                         ),
                       ),

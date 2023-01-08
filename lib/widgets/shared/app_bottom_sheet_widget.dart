@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_svg/svg.dart';
+
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -43,9 +45,6 @@ class AppBottomSheetWidget extends StatelessWidget {
         margin: const EdgeInsets.only(
           right: Constants.spacingMiddle,
         ),
-        padding: const EdgeInsets.all(
-          Constants.spacingExtraSmall,
-        ),
         decoration: BoxDecoration(
           color: theme(context).colorPrimary,
           borderRadius: const BorderRadius.all(
@@ -54,14 +53,12 @@ class AppBottomSheetWidget extends StatelessWidget {
         ),
         height: 54,
         width: 54,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(
-            Constants.sizeBorderRadius,
-          ),
-          child: Image.asset(
-            icon,
-            fit: BoxFit.fill,
-          ),
+        padding: const EdgeInsets.all(
+          Constants.spacingIcon54x54,
+        ),
+        child: SvgPicture.asset(
+          icon,
+          color: theme(context).colorOnPrimary,
         ),
       );
     } else if (icon is IconData) {

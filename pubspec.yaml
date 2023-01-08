@@ -47,6 +47,7 @@ dependencies:
       url: https://github.com/kubenav/flutter_secure_storage
       path: flutter_secure_storage
       ref: kubenav
+  flutter_svg: ^1.1.6
   highlight: ^0.7.0
   http: ^0.13.4
   json_path: ^0.4.2
@@ -97,17 +98,10 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-    - assets/general/
     - assets/help/
-    - assets/plugins/image42x42/
-    - assets/plugins/image54x54/
-    - assets/plugins/image108x108/
-    - assets/provider/image42x42/
-    - assets/provider/image54x54/
-    - assets/provider/image250x140/
-    - assets/resources/image42x42/
-    - assets/resources/image54x54/
-    - assets/resources/image108x108/
+    - assets/plugins/
+    - assets/providers/
+    - assets/resources/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -141,12 +135,12 @@ flutter:
         - asset: fonts/CustomIcons.ttf
 
 flutter_icons:
-  image_path_android: assets/_images/app-icons/android.png
-  image_path_ios: assets/_images/app-icons/ios.png
+  image_path_android: utils/images/app-icons/android.png
+  image_path_ios: utils/images/app-icons/ios.png
   android: true
   ios: true
   adaptive_icon_background: "#326ce5"
-  adaptive_icon_foreground: assets/_images/app-icons/android-adaptive.png
+  adaptive_icon_foreground: utils/images/app-icons/android-adaptive.png
 
 import_sorter:
   emojis: false
@@ -155,9 +149,9 @@ import_sorter:
 
 flutter_native_splash:
   color: "#326CE5"
-  image: assets/_images/splash-screen/splash.png
+  image: utils/images/splash-screen/splash.png
   android_12:
-    image: assets/_images/splash-screen/android12splash.png
+    image: utils/images/splash-screen/android12splash.png
     color: "#326CE5"
     icon_background_color: "#326CE5"
   fullscreen: true

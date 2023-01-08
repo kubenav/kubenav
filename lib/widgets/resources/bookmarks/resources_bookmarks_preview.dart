@@ -136,8 +136,8 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
                           .map[bookmarksRepository.bookmarks[index].resource]!
                           .path ==
                       bookmarksRepository.bookmarks[index].path
-              ? 'assets/resources/image108x108/${bookmarksRepository.bookmarks[index].resource}.png'
-              : 'assets/resources/image108x108/customresourcedefinitions.png',
+              ? 'assets/resources/${bookmarksRepository.bookmarks[index].resource}.svg'
+              : 'assets/resources/customresourcedefinitions.svg',
           imageFit: BoxFit.none,
           onTap: () {
             openBookmark(context, index);

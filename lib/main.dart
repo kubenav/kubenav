@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
+import 'package:window_manager/window_manager.dart';
 import 'package:window_size/window_size.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
@@ -16,7 +17,6 @@ import 'package:kubenav/services/kubenav_desktop.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/storage.dart';
 import 'package:kubenav/widgets/home/home.dart';
-import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();

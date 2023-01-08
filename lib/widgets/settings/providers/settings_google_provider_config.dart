@@ -174,7 +174,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
     return AppBottomSheetWidget(
       title: ClusterProviderType.google.title(),
       subtitle: ClusterProviderType.google.subtitle(),
-      icon: ClusterProviderType.google.image54x54(),
+      icon: ClusterProviderType.google.icon(),
       closePressed: () {
         Navigator.pop(context);
       },

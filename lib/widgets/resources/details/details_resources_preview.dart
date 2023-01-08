@@ -224,7 +224,7 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
                   details: snapshot.error.toString(),
                   icon: Resources.map.containsKey(widget.resource) &&
                           Resources.map[widget.resource]!.path == widget.path
-                      ? 'assets/resources/image108x108/${widget.resource}.png'
+                      ? 'assets/resources/${widget.resource}.svg'
                       : null,
                 ),
               );
@@ -238,7 +238,7 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
                   details: 'We could not found any ${widget.title}',
                   icon: Resources.map.containsKey(widget.resource) &&
                           Resources.map[widget.resource]!.path == widget.path
-                      ? 'assets/resources/image108x108/${widget.resource}.png'
+                      ? 'assets/resources/${widget.resource}.svg'
                       : null,
                 ),
               );
@@ -257,7 +257,7 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
                     widget.scope,
                     snapshot.data![index],
                   ),
-                  image: 'assets/resources/image108x108/${widget.resource}.png',
+                  image: 'assets/resources/${widget.resource}.svg',
                   imageFit: BoxFit.none,
                   onTap: () {
                     navigate(

@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:flutter_svg/svg.dart';
+
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_secret.dart';
 import 'package:kubenav/models/resource.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
@@ -32,7 +34,7 @@ class SecretDetailsItem extends StatelessWidget implements IDetailsItemWidget {
     return AppBottomSheetWidget(
       title: key,
       subtitle: 'Data',
-      icon: 'assets/resources/image54x54/secrets.png',
+      icon: 'assets/resources/secrets.svg',
       closePressed: () {
         Navigator.pop(context);
       },
@@ -98,8 +100,12 @@ class SecretDetailsItem extends StatelessWidget implements IDetailsItemWidget {
                       ),
                       height: 54,
                       width: 54,
-                      child: Image.asset(
-                        'assets/resources/image42x42/secrets.png',
+                      padding: const EdgeInsets.all(
+                        Constants.spacingIcon54x54,
+                      ),
+                      child: SvgPicture.asset(
+                        'assets/resources/secrets.svg',
+                        color: theme(context).colorOnPrimary,
                       ),
                     ),
                     const SizedBox(width: Constants.spacingSmall),

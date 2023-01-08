@@ -172,7 +172,7 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
                 AppErrorWidget(
                   message: 'Could not load clusters',
                   details: _error,
-                  icon: ClusterProviderType.aws.image250x140(),
+                  icon: ClusterProviderType.aws.icon(),
                 ),
               ],
             ),
@@ -265,7 +265,7 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
     return AppBottomSheetWidget(
       title: ClusterProviderType.aws.title(),
       subtitle: ClusterProviderType.aws.subtitle(),
-      icon: ClusterProviderType.aws.image54x54(),
+      icon: ClusterProviderType.aws.icon(),
       closePressed: () {
         Navigator.pop(context);
       },

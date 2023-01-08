@@ -341,7 +341,7 @@ class _ResourcesListState extends State<ResourcesList> {
                                             .containsKey(widget.resource) &&
                                         Resources.map[widget.resource]!.path ==
                                             widget.path
-                                    ? 'assets/resources/image108x108/${widget.resource}.png'
+                                    ? 'assets/resources/${widget.resource}.svg'
                                     : null,
                               ),
                             ),

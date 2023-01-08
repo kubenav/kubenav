@@ -135,7 +135,7 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
     return AppBottomSheetWidget(
       title: ClusterProviderType.aws.title(),
       subtitle: ClusterProviderType.aws.subtitle(),
-      icon: ClusterProviderType.aws.image54x54(),
+      icon: ClusterProviderType.aws.icon(),
       closePressed: () {
         Navigator.pop(context);
       },
