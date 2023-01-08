@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kubenav/utils/helpers.dart';
 
 import 'package:provider/provider.dart';
 
@@ -30,6 +31,7 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
   final _labelSelectorController = TextEditingController();
   final _containerController = TextEditingController();
   final _portController = TextEditingController();
+  final _pathController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _tokenController = TextEditingController();
@@ -62,6 +64,7 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
     _labelSelectorController.text = widget.currentPrometheus.labelSelector;
     _containerController.text = widget.currentPrometheus.container;
     _portController.text = '${widget.currentPrometheus.port}';
+    _pathController.text = widget.currentPrometheus.path;
     _usernameController.text = widget.currentPrometheus.username;
     _passwordController.text = widget.currentPrometheus.password;
     _tokenController.text = widget.currentPrometheus.token;
@@ -74,6 +77,7 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
     _labelSelectorController.dispose();
     _containerController.dispose();
     _portController.dispose();
+    _pathController.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
     _tokenController.dispose();
@@ -106,6 +110,7 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
               labelSelector: _labelSelectorController.text,
               container: _containerController.text,
               port: int.tryParse(_portController.text) ?? 9090,
+              path: _pathController.text,
               username: _usernameController.text,
               password: _passwordController.text,
               token: _tokenController.text,
@@ -125,7 +130,7 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                 vertical: Constants.spacingSmall,
               ),
               child: Text(
-                'You can specify the address of an Prometheus instance, or if your Prometheus instance is not reachable via a public address you can specify a namespace, label selector, container and port running inside your cluster',
+                'You can specify the address of a Prometheus instance, or if your Prometheus instance is not reachable via a public address you can specify a namespace, label selector, container and port running inside your cluster',
               ),
             ),
             Padding(
@@ -163,6 +168,34 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                   border: OutlineInputBorder(),
                   labelText: 'Address',
                 ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: Constants.spacingMiddle,
+                bottom: Constants.spacingMiddle,
+              ),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Divider(
+                      height: 0,
+                      thickness: 1.0,
+                    ),
+                  ),
+                  Text(
+                    'In-Cluster Configuration',
+                    style: secondaryTextStyle(
+                      context,
+                    ),
+                  ),
+                  const Expanded(
+                    child: Divider(
+                      height: 0,
+                      thickness: 1.0,
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -228,6 +261,50 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                   labelText: 'Port',
                 ),
                 validator: _portValidator,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Constants.spacingSmall,
+              ),
+              child: TextFormField(
+                controller: _pathController,
+                keyboardType: TextInputType.text,
+                autocorrect: false,
+                enableSuggestions: false,
+                maxLines: 1,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Path',
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: Constants.spacingMiddle,
+                bottom: Constants.spacingMiddle,
+              ),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Divider(
+                      height: 0,
+                      thickness: 1.0,
+                    ),
+                  ),
+                  Text(
+                    'Credentials',
+                    style: secondaryTextStyle(
+                      context,
+                    ),
+                  ),
+                  const Expanded(
+                    child: Divider(
+                      height: 0,
+                      thickness: 1.0,
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
