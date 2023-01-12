@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
@@ -18,6 +20,11 @@ class AppNoClustersWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ThemeRepository>(
+      context,
+      listen: true,
+    );
+
     /// On Android and iOS we show a widget which can be used by the user to go
     /// the [SettingsClusters] page, where he can add a cluster via his
     /// Kubeconfig or one of our supported providers.
