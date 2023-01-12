@@ -73,6 +73,10 @@ class _HomeState extends State<Home> {
       listen: true,
     );
 
+    if (!appRepository.isAuthenticated) {
+      return Container();
+    }
+
     if (appRepository.showClusters && clustersRepository.clusters.isNotEmpty) {
       return const HomeClusters();
     }
