@@ -43,7 +43,7 @@ class KubenavMobile {
     );
 
     Logger.log(
-      'KubenavDesktop kubernetesRequest',
+      'KubenavMobile kubernetesRequest',
       'Result of the kubernetesRequest function',
       result,
     );

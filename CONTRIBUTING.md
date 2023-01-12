@@ -13,6 +13,7 @@ Please note we have a [Code of Conduct](https://github.com/kubenav/kubenav/blob/
     - [Add a new Image](#add-a-new-image)
     - [Update Kubernetes Resources](#update-kubernetes-resources)
     - [Update the Icons and Splash Screen](#update-the-icons-and-splash-screen)
+    - [Run Release Build on a Device](#run-release-build-on-a-device)
 - [Release](#release)
 
 ## Feedback, Issues and Questions
@@ -109,6 +110,28 @@ flutter pub run flutter_native_splash:create
 ```
 
 The icons can be found in the `utils/images/app-icons` folder. The splash screen icons can be found in the `utils/images/splash-screen` folder.
+
+#### Run Release Build on a Device
+
+To run the release build on a device for testing, we have to get the Device ID first by running the following command:
+
+```sh
+$ flutter devices
+
+3 connected devices:
+
+Ricos iPad (mobile) • 00008027-0004785E0A31002E • ios            • iOS 16.2 20C65
+macOS (desktop)     • macos                     • darwin-arm64   • macOS 13.1 22C65 darwin-arm
+Chrome (web)        • chrome                    • web-javascript • Google Chrome 108.0.5359.124
+```
+
+Then we can use one of the listed devices and execute the following command to build and run the app on this device:
+
+```sh
+flutter run --release --device-id=00008027-0004785E0A31002E
+```
+
+With the above command we can also savely quit the terminal process (by pressing `q`) and continue testing on the device is not connected to our development machine.
 
 ## Release
 
