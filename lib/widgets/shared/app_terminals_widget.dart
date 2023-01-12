@@ -66,9 +66,12 @@ class AppTerminalsWidget extends StatelessWidget {
       listen: true,
     );
 
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom == 0;
+
     return SafeArea(
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.75,
+        height:
+            MediaQuery.of(context).size.height * (isKeyboardVisible ? 0.75 : 1),
         color: Colors.transparent,
         child: Scaffold(
           body: Container(
