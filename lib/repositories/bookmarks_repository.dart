@@ -77,6 +77,13 @@ class BookmarksRepository with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> removeBookmarksForCluster(String clusterId) async {
+    _bookmarks = _bookmarks.where((e) => e.clusterId != clusterId).toList();
+
+    await _save();
+    notifyListeners();
+  }
+
   /// [isBookmarked] returns the index of the bookmark which matches the given
   /// arguments or `-1` if no bookmark matches the given arguments.
   int isBookmarked(

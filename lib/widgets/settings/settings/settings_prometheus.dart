@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kubenav/utils/helpers.dart';
 
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 /// The [SettingsPrometheus] widget can be used to enable the Prometheus plugin,
