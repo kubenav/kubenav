@@ -101,6 +101,10 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
       context,
       listen: true,
     );
+    ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
+      context,
+      listen: true,
+    );
 
     if (bookmarksRepository.bookmarks.isEmpty) {
       return Container();
@@ -112,37 +116,43 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
         bookmarksRepository.bookmarks.length <= 10
             ? bookmarksRepository.bookmarks.length
             : 10,
-        (index) => AppHorizontalListCardsModel(
-          title: bookmarksRepository.bookmarks[index].title,
-          subtitle: bookmarksRepository.bookmarks[index].name == null
-              ? [
-                  'Cluster: ${bookmarksRepository.bookmarks[index].clusterId}',
-                  'Namespace: ${bookmarksRepository.bookmarks[index].namespace}',
-                ]
-              : [
-                  'Cluster: ${bookmarksRepository.bookmarks[index].clusterId}',
-                  'Namespace: ${bookmarksRepository.bookmarks[index].namespace}',
-                  'Name: ${bookmarksRepository.bookmarks[index].name}',
-                ],
-          image: resource_model.Resources.map.containsKey(
-                      bookmarksRepository.bookmarks[index].resource) &&
-                  resource_model
-                          .Resources
-                          .map[bookmarksRepository.bookmarks[index].resource]!
-                          .resource ==
-                      bookmarksRepository.bookmarks[index].resource &&
-                  resource_model
-                          .Resources
-                          .map[bookmarksRepository.bookmarks[index].resource]!
-                          .path ==
-                      bookmarksRepository.bookmarks[index].path
-              ? 'assets/resources/${bookmarksRepository.bookmarks[index].resource}.svg'
-              : 'assets/resources/customresourcedefinitions.svg',
-          imageFit: BoxFit.none,
-          onTap: () {
-            openBookmark(context, index);
-          },
-        ),
+        (index) {
+          final cluster = clustersRepository.getCluster(
+            bookmarksRepository.bookmarks[index].clusterId,
+          );
+
+          return AppHorizontalListCardsModel(
+            title: bookmarksRepository.bookmarks[index].title,
+            subtitle: bookmarksRepository.bookmarks[index].name == null
+                ? [
+                    'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
+                    'Namespace: ${bookmarksRepository.bookmarks[index].namespace}',
+                  ]
+                : [
+                    'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
+                    'Namespace: ${bookmarksRepository.bookmarks[index].namespace}',
+                    'Name: ${bookmarksRepository.bookmarks[index].name}',
+                  ],
+            image: resource_model.Resources.map.containsKey(
+                        bookmarksRepository.bookmarks[index].resource) &&
+                    resource_model
+                            .Resources
+                            .map[bookmarksRepository.bookmarks[index].resource]!
+                            .resource ==
+                        bookmarksRepository.bookmarks[index].resource &&
+                    resource_model
+                            .Resources
+                            .map[bookmarksRepository.bookmarks[index].resource]!
+                            .path ==
+                        bookmarksRepository.bookmarks[index].path
+                ? 'assets/resources/${bookmarksRepository.bookmarks[index].resource}.svg'
+                : 'assets/resources/customresourcedefinitions.svg',
+            imageFit: BoxFit.none,
+            onTap: () {
+              openBookmark(context, index);
+            },
+          );
+        },
       ),
       moreIcon: Icons.keyboard_arrow_right,
       moreText: 'View all',

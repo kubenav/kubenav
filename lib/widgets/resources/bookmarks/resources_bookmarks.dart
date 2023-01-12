@@ -128,6 +128,10 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
       context,
       listen: true,
     );
+    ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -159,6 +163,10 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                 context,
                 index,
               ) {
+                final cluster = clustersRepository.getCluster(
+                  bookmarksRepository.bookmarks[index].clusterId,
+                );
+
                 return ReorderableDragStartListener(
                   key: Key(
                     '${bookmarksRepository.bookmarks[index].type} ${bookmarksRepository.bookmarks[index].clusterId} ${bookmarksRepository.bookmarks[index].title} ${bookmarksRepository.bookmarks[index].resource} ${bookmarksRepository.bookmarks[index].path} ${bookmarksRepository.bookmarks[index].scope} ${bookmarksRepository.bookmarks[index].name} ${bookmarksRepository.bookmarks[index].namespace}',
@@ -225,7 +233,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                                         children: [
                                           Text(
                                             Characters(
-                                              'Cluster: ${bookmarksRepository.bookmarks[index].clusterId}',
+                                              'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
                                             )
                                                 .replaceAll(Characters(''),
                                                     Characters('\u{200B}'))

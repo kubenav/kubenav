@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/cluster.dart';
+import 'package:kubenav/repositories/bookmarks_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/showmodal.dart';
@@ -34,9 +35,14 @@ class _SettingsClusterActionsState extends State<SettingsClusterActions> {
       context,
       listen: false,
     );
+    BookmarksRepository bookmarksRepository = Provider.of<BookmarksRepository>(
+      context,
+      listen: false,
+    );
 
     try {
       await clustersRepository.deleteCluster(widget.cluster.id);
+      await bookmarksRepository.removeBookmarksForCluster(widget.cluster.id);
       if (mounted) {
         Navigator.pop(context);
         showSnackbar(
