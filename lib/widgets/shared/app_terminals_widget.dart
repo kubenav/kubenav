@@ -74,6 +74,7 @@ class AppTerminalsWidget extends StatelessWidget {
             MediaQuery.of(context).size.height * (isKeyboardVisible ? 0.75 : 1),
         color: Colors.transparent,
         child: Scaffold(
+          backgroundColor: Colors.transparent,
           body: Container(
             padding: const EdgeInsets.only(
               left: Constants.spacingMiddle,
