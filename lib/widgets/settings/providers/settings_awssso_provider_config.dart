@@ -88,7 +88,9 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
   Future<void> _verifyDevice() async {
     try {
       await openUrl(_awsSSOConfig!.device!.verificationUriComplete!);
-      _verified = true;
+      setState(() {
+        _verified = true;
+      });
     } catch (err) {
       Logger.log(
         'SettingsAWSSSOProvider _verifyDevice',
@@ -347,31 +349,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                         _ssoRegion = newValue ?? '';
                       });
                     },
-                    items: [
-                      'us-east-1',
-                      'us-east-2',
-                      'us-west-1',
-                      'us-west-2',
-                      'af-south-1',
-                      'ap-east-1',
-                      'ap-south-1',
-                      'ap-northeast-1',
-                      'ap-northeast-2',
-                      'ap-northeast-3',
-                      'ap-southeast-1',
-                      'ap-southeast-2',
-                      'ca-central-1',
-                      'cn-north-1',
-                      'cn-northwest-1',
-                      'eu-central-1',
-                      'eu-west-1',
-                      'eu-west-2',
-                      'eu-west-3',
-                      'eu-south-1',
-                      'eu-north-1',
-                      'me-south-1',
-                      'sa-east-1',
-                    ].map((value) {
+                    items: awsRegions.map((value) {
                       return DropdownMenuItem(
                         value: value,
                         child: Text(
@@ -406,31 +384,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                         _region = newValue ?? '';
                       });
                     },
-                    items: [
-                      'us-east-1',
-                      'us-east-2',
-                      'us-west-1',
-                      'us-west-2',
-                      'af-south-1',
-                      'ap-east-1',
-                      'ap-south-1',
-                      'ap-northeast-1',
-                      'ap-northeast-2',
-                      'ap-northeast-3',
-                      'ap-southeast-1',
-                      'ap-southeast-2',
-                      'ca-central-1',
-                      'cn-north-1',
-                      'cn-northwest-1',
-                      'eu-central-1',
-                      'eu-west-1',
-                      'eu-west-2',
-                      'eu-west-3',
-                      'eu-south-1',
-                      'eu-north-1',
-                      'me-south-1',
-                      'sa-east-1',
-                    ].map((value) {
+                    items: awsRegions.map((value) {
                       return DropdownMenuItem(
                         value: value,
                         child: Text(
@@ -486,7 +440,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                     ),
                   ),
                 ),
-                onPressed: _verifyDevice,
+                onPressed: _awsSSOConfig == null ? null : _verifyDevice,
                 child: Text(
                   'Verify',
                   style: primaryTextStyle(
@@ -512,7 +466,9 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                     ),
                   ),
                 ),
-                onPressed: _getSSOCredentials,
+                onPressed: _awsSSOConfig == null || !_verified
+                    ? null
+                    : _getSSOCredentials,
                 child: Text(
                   'Get Credentials',
                   style: primaryTextStyle(

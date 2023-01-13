@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
+import 'package:kubenav/services/providers/aws_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_aws.dart';
@@ -220,31 +221,7 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
                         _region = newValue ?? '';
                       });
                     },
-                    items: [
-                      'us-east-1',
-                      'us-east-2',
-                      'us-west-1',
-                      'us-west-2',
-                      'af-south-1',
-                      'ap-east-1',
-                      'ap-south-1',
-                      'ap-northeast-1',
-                      'ap-northeast-2',
-                      'ap-northeast-3',
-                      'ap-southeast-1',
-                      'ap-southeast-2',
-                      'ca-central-1',
-                      'cn-north-1',
-                      'cn-northwest-1',
-                      'eu-central-1',
-                      'eu-west-1',
-                      'eu-west-2',
-                      'eu-west-3',
-                      'eu-south-1',
-                      'eu-north-1',
-                      'me-south-1',
-                      'sa-east-1',
-                    ].map((value) {
+                    items: awsRegions.map((value) {
                       return DropdownMenuItem(
                         value: value,
                         child: Text(

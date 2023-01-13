@@ -47,7 +47,8 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
   Future<void> _signIn() async {
     try {
       await openUrl(
-          'https://accounts.google.com/o/oauth2/v2/auth?client_id=${_clientIDController.text}&redirect_uri=${Constants.googleRedirectURI}&response_type=code&scope=https://www.googleapis.com/auth/cloud-platform&access_type=offline&include_granted_scopes=true');
+        'https://accounts.google.com/o/oauth2/v2/auth?client_id=${_clientIDController.text}&redirect_uri=${Constants.googleRedirectURI}&response_type=code&scope=https://www.googleapis.com/auth/cloud-platform&access_type=offline&include_granted_scopes=true&prompt=consent',
+      );
     } catch (err) {
       Logger.log(
         'SettingsGoogleProvider _signIn',
@@ -129,6 +130,23 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
           if (mounted) {
             Navigator.pop(context);
           }
+        }
+      } else {
+        Logger.log(
+          'SettingsGoogleProvider _saveProvider',
+          'Could not get credentials',
+          'Access Token: ${googleTokens.accessToken}, Expires In: ${googleTokens.expiresIn}, Refresh Token: ${googleTokens.refreshToken}',
+        );
+        setState(() {
+          _isLoading = false;
+        });
+
+        if (mounted) {
+          showSnackbar(
+            context,
+            'Could not get credentials',
+            'Access Token: ${googleTokens.accessToken}, Expires In: ${googleTokens.expiresIn}, Refresh Token: ${googleTokens.refreshToken}',
+          );
         }
       }
     } catch (err) {
