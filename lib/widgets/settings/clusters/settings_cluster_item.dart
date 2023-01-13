@@ -18,12 +18,14 @@ import 'package:kubenav/utils/logger.dart';
 class SettingsClusterItem extends StatefulWidget {
   const SettingsClusterItem({
     Key? key,
+    required this.index,
     required this.cluster,
     required this.isActiveCluster,
     this.onTap,
     this.onDoubleTap,
   }) : super(key: key);
 
+  final int index;
   final Cluster cluster;
   final bool isActiveCluster;
   final void Function()? onTap;
@@ -90,7 +92,10 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(
-        bottom: Constants.spacingMiddle,
+        top: Constants.spacingSmall,
+        bottom: Constants.spacingSmall,
+        left: Constants.spacingMiddle,
+        right: Constants.spacingMiddle,
       ),
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -146,14 +151,17 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
                     ],
                   ),
                 ),
-                Icon(
-                  widget.isActiveCluster
-                      ? Icons.radio_button_checked
-                      : Icons.radio_button_unchecked,
-                  size: 24,
-                  color: statusOk
-                      ? theme(context).colorSuccess
-                      : theme(context).colorDanger,
+                ReorderableDragStartListener(
+                  index: widget.index,
+                  child: Icon(
+                    widget.isActiveCluster
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
+                    size: 24,
+                    color: statusOk
+                        ? theme(context).colorSuccess
+                        : theme(context).colorDanger,
+                  ),
                 ),
               ],
             ),

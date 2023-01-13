@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -22,18 +20,15 @@ import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 class SettingsNamespaces extends StatelessWidget {
   const SettingsNamespaces({Key? key}) : super(key: key);
 
-  /// [_proxyDecorator] is used to highlight the cluster which is currently
+  /// [_proxyDecorator] is used to highlight the bookmark which is currently
   /// draged by the user.
   Widget _proxyDecorator(BuildContext context, Widget child, int index,
       Animation<double> animation) {
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, Widget? child) {
-        final double animValue = Curves.easeInOut.transform(animation.value);
-        final double elevation = lerpDouble(0, 6, animValue)!;
         return Material(
-          elevation: elevation,
-          shadowColor: theme(context).colorShadow,
+          elevation: 0,
           child: child,
         );
       },
@@ -54,7 +49,10 @@ class SettingsNamespaces extends StatelessWidget {
     return Container(
       key: Key('$index'),
       margin: const EdgeInsets.only(
-        bottom: Constants.spacingMiddle,
+        top: Constants.spacingSmall,
+        bottom: Constants.spacingSmall,
+        left: Constants.spacingMiddle,
+        right: Constants.spacingMiddle,
       ),
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -96,6 +94,13 @@ class SettingsNamespaces extends StatelessWidget {
                 ],
               ),
             ),
+            ReorderableDragStartListener(
+              index: index,
+              child: Icon(
+                Icons.drag_handle,
+                color: Colors.grey[300],
+              ),
+            ),
           ],
         ),
       ),
@@ -135,36 +140,23 @@ class SettingsNamespaces extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: Constants.spacingLarge),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: Constants.spacingMiddle,
-                right: Constants.spacingMiddle,
-              ),
-              child: ReorderableListView.builder(
-                shrinkWrap: true,
-                buildDefaultDragHandles: false,
-                physics: const NeverScrollableScrollPhysics(),
-                onReorder: (int start, int current) {
-                  appRepository.reorderNamespaces(start, current);
-                },
-                proxyDecorator: (
-                  Widget child,
-                  int index,
-                  Animation<double> animation,
-                ) =>
-                    _proxyDecorator(context, child, index, animation),
-                itemCount: appRepository.settings.namespaces.length,
-                itemBuilder: (
-                  context,
-                  index,
-                ) {
-                  return ReorderableDragStartListener(
-                    key: Key('$index'),
-                    index: index,
-                    child: buildNamespace(context, index),
-                  );
-                },
-              ),
+            ReorderableListView.builder(
+              shrinkWrap: true,
+              buildDefaultDragHandles: false,
+              physics: const NeverScrollableScrollPhysics(),
+              onReorder: (int start, int current) {
+                appRepository.reorderNamespaces(start, current);
+              },
+              proxyDecorator:
+                  (Widget child, int index, Animation<double> animation) =>
+                      _proxyDecorator(context, child, index, animation),
+              itemCount: appRepository.settings.namespaces.length,
+              itemBuilder: (
+                context,
+                index,
+              ) {
+                return buildNamespace(context, index);
+              },
             ),
             const SizedBox(height: Constants.spacingSmall),
           ],

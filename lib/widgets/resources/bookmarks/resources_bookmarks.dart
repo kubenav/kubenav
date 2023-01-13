@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -37,11 +35,8 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, Widget? child) {
-        final double animValue = Curves.easeInOut.transform(animation.value);
-        final double elevation = lerpDouble(0, 6, animValue)!;
         return Material(
-          elevation: elevation,
-          shadowColor: theme(context).colorShadow,
+          elevation: 0,
           child: child,
         );
       },
@@ -148,10 +143,6 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
               shrinkWrap: true,
               buildDefaultDragHandles: false,
               physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.only(
-                right: Constants.spacingMiddle,
-                left: Constants.spacingMiddle,
-              ),
               onReorder: (int start, int current) {
                 bookmarksRepository.reorder(start, current);
               },
@@ -167,130 +158,126 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                   bookmarksRepository.bookmarks[index].clusterId,
                 );
 
-                return ReorderableDragStartListener(
+                return Container(
                   key: Key(
                     '${bookmarksRepository.bookmarks[index].type} ${bookmarksRepository.bookmarks[index].clusterId} ${bookmarksRepository.bookmarks[index].title} ${bookmarksRepository.bookmarks[index].resource} ${bookmarksRepository.bookmarks[index].path} ${bookmarksRepository.bookmarks[index].scope} ${bookmarksRepository.bookmarks[index].name} ${bookmarksRepository.bookmarks[index].namespace}',
                   ),
-                  index: index,
                   child: Container(
-                    key: Key(
-                      '${bookmarksRepository.bookmarks[index].type} ${bookmarksRepository.bookmarks[index].clusterId} ${bookmarksRepository.bookmarks[index].title} ${bookmarksRepository.bookmarks[index].resource} ${bookmarksRepository.bookmarks[index].path} ${bookmarksRepository.bookmarks[index].scope} ${bookmarksRepository.bookmarks[index].name} ${bookmarksRepository.bookmarks[index].namespace}',
+                    margin: const EdgeInsets.only(
+                      top: Constants.spacingSmall,
+                      bottom: Constants.spacingSmall,
+                      left: Constants.spacingMiddle,
+                      right: Constants.spacingMiddle,
                     ),
-                    child: Container(
-                      margin: const EdgeInsets.only(
-                        bottom: Constants.spacingMiddle,
-                      ),
-                      padding: const EdgeInsets.all(12.0),
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme(context).colorShadow,
-                            blurRadius: Constants.sizeBorderBlurRadius,
-                            spreadRadius: Constants.sizeBorderSpreadRadius,
-                            offset: const Offset(0.0, 0.0),
-                          ),
-                        ],
-                        color: theme(context).colorCard,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(Constants.sizeBorderRadius),
+                    padding: const EdgeInsets.all(12.0),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme(context).colorShadow,
+                          blurRadius: Constants.sizeBorderBlurRadius,
+                          spreadRadius: Constants.sizeBorderSpreadRadius,
+                          offset: const Offset(0.0, 0.0),
                         ),
+                      ],
+                      color: theme(context).colorCard,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(Constants.sizeBorderRadius),
                       ),
-                      child: InkWell(
-                        onTap: () {
-                          openBookmark(context, index);
-                        },
-                        onDoubleTap: () {
-                          showActions(
-                            context,
-                            ResourcesBookmarkActions(
-                              index: index,
-                            ),
-                          );
-                        },
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        bookmarksRepository
-                                            .bookmarks[index].title,
-                                        style: primaryTextStyle(
-                                          context,
-                                        ),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        openBookmark(context, index);
+                      },
+                      onDoubleTap: () {
+                        showActions(
+                          context,
+                          ResourcesBookmarkActions(
+                            index: index,
+                          ),
+                        );
+                      },
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      bookmarksRepository
+                                          .bookmarks[index].title,
+                                      style: primaryTextStyle(
+                                        context,
                                       ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            Characters(
-                                              'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
-                                            )
-                                                .replaceAll(Characters(''),
-                                                    Characters('\u{200B}'))
-                                                .toString(),
-                                            style: secondaryTextStyle(
-                                              context,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          Characters(
+                                            'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
+                                          )
+                                              .replaceAll(Characters(''),
+                                                  Characters('\u{200B}'))
+                                              .toString(),
+                                          style: secondaryTextStyle(
+                                            context,
                                           ),
-                                          Text(
-                                            Characters(
-                                              'Namespace: ${bookmarksRepository.bookmarks[index].namespace}',
-                                            )
-                                                .replaceAll(Characters(''),
-                                                    Characters('\u{200B}'))
-                                                .toString(),
-                                            style: secondaryTextStyle(
-                                              context,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Text(
+                                          Characters(
+                                            'Namespace: ${bookmarksRepository.bookmarks[index].namespace}',
+                                          )
+                                              .replaceAll(Characters(''),
+                                                  Characters('\u{200B}'))
+                                              .toString(),
+                                          style: secondaryTextStyle(
+                                            context,
                                           ),
-                                          bookmarksRepository
-                                                      .bookmarks[index].name !=
-                                                  null
-                                              ? Text(
-                                                  Characters(
-                                                    'Name: ${bookmarksRepository.bookmarks[index].name}',
-                                                  )
-                                                      .replaceAll(
-                                                          Characters(''),
-                                                          Characters(
-                                                              '\u{200B}'))
-                                                      .toString(),
-                                                  style: secondaryTextStyle(
-                                                    context,
-                                                  ),
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        bookmarksRepository
+                                                    .bookmarks[index].name !=
+                                                null
+                                            ? Text(
+                                                Characters(
+                                                  'Name: ${bookmarksRepository.bookmarks[index].name}',
                                                 )
-                                              : Container(),
-                                        ],
-                                      )
-                                    ],
-                                  ),
+                                                    .replaceAll(Characters(''),
+                                                        Characters('\u{200B}'))
+                                                    .toString(),
+                                                style: secondaryTextStyle(
+                                                  context,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              )
+                                            : Container(),
+                                      ],
+                                    )
+                                  ],
                                 ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
+                              ),
+                              ReorderableDragStartListener(
+                                index: index,
+                                child: Icon(
+                                  Icons.drag_handle,
                                   color: Colors.grey[300],
                                   size: 24,
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
