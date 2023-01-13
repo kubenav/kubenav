@@ -32,8 +32,8 @@ class ClusterProvider {
     return ClusterProvider(
       id: data.containsKey('id') ? data['id'] : null,
       name: data.containsKey('name') ? data['name'] : null,
-      type: data.containsKey('provider')
-          ? getClusterProviderType(data['provider'])
+      type: data.containsKey('type')
+          ? getClusterProviderType(data['type'])
           : null,
       aws: data.containsKey('aws') && data['aws'] != null
           ? ClusterProviderAWS.fromJson(data['aws'])

@@ -202,7 +202,7 @@ class _SettingsReauthenticateAWSSSOState
                 ),
               ),
             ),
-            onPressed: _verifyDevice,
+            onPressed: _awsSSOConfig == null ? null : _verifyDevice,
             child: Text(
               'Verify',
               style: primaryTextStyle(
@@ -229,7 +229,8 @@ class _SettingsReauthenticateAWSSSOState
                 ),
               ),
             ),
-            onPressed: _getSSOCredentials,
+            onPressed:
+                _awsSSOConfig == null || !_verified ? null : _getSSOCredentials,
             child: Text(
               'Get Credentials',
               style: primaryTextStyle(

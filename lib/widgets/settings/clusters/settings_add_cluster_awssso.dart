@@ -122,6 +122,7 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
               userTokenExpireTimestamp:
                   widget.provider.awssso!.ssoCredentials?.accessTokenExpire ??
                       0,
+              namespace: 'default',
             ),
           );
         }

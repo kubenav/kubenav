@@ -118,6 +118,7 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
               clusterServer: selectedCluster.endpoint ?? '',
               clusterCertificateAuthorityData:
                   selectedCluster.certificateAuthority?.data ?? '',
+              namespace: 'default',
             ),
           );
         }

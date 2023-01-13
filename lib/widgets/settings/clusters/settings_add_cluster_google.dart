@@ -108,7 +108,7 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
             id: const Uuid().v4(),
             name: selectedCluster.name!,
             clusterProviderType: ClusterProviderType.google,
-            clusterProviderId: widget.provider.name ?? '',
+            clusterProviderId: widget.provider.id ?? '',
             clusterServer: 'https://${selectedCluster.endpoint!}',
             clusterCertificateAuthorityData:
                 selectedCluster.masterAuth?.clusterCaCertificate ?? '',
@@ -118,6 +118,7 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
             userClientKeyData: selectedCluster.masterAuth?.clientKey ?? '',
             userUsername: selectedCluster.masterAuth?.username ?? '',
             userPassword: selectedCluster.masterAuth?.password ?? '',
+            namespace: 'default',
           ),
         );
       }
