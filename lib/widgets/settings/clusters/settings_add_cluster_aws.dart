@@ -208,49 +208,40 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
                   Radius.circular(Constants.sizeBorderRadius),
                 ),
               ),
-              child: Row(
-                children: [
-                  Checkbox(
-                    checkColor: Colors.white,
-                    fillColor: MaterialStateProperty.all(
-                      theme(context).colorPrimary,
-                    ),
-                    value: _selectedClusters
-                            .where((c) => c.name == _clusters[index].name)
-                            .toList()
-                            .length ==
-                        1,
-                    onChanged: (bool? value) {
-                      if (value == true) {
-                        setState(() {
-                          _selectedClusters.add(_clusters[index]);
-                        });
-                      }
-                      if (value == false) {
-                        setState(() {
-                          _selectedClusters = _selectedClusters
-                              .where((c) => c.name != _clusters[index].name)
-                              .toList();
-                        });
-                      }
-                    },
+              child: CheckboxListTile(
+                checkColor: Colors.white,
+                activeColor: theme(context).colorPrimary,
+                controlAffinity: ListTileControlAffinity.leading,
+                value: _selectedClusters
+                        .where((c) => c.name == _clusters[index].name)
+                        .toList()
+                        .length ==
+                    1,
+                onChanged: (bool? value) {
+                  if (value == true) {
+                    setState(() {
+                      _selectedClusters.add(_clusters[index]);
+                    });
+                  }
+                  if (value == false) {
+                    setState(() {
+                      _selectedClusters = _selectedClusters
+                          .where((c) => c.name != _clusters[index].name)
+                          .toList();
+                    });
+                  }
+                },
+                title: Text(
+                  Characters(
+                    'aws_${widget.provider.aws?.region}_${_clusters[index].name}',
+                  )
+                      .replaceAll(Characters(''), Characters('\u{200B}'))
+                      .toString(),
+                  style: noramlTextStyle(
+                    context,
                   ),
-                  const SizedBox(width: Constants.spacingSmall),
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      Characters(
-                        'aws_${widget.provider.aws?.region}_${_clusters[index].name}',
-                      )
-                          .replaceAll(Characters(''), Characters('\u{200B}'))
-                          .toString(),
-                      style: noramlTextStyle(
-                        context,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             );
           },
