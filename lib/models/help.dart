@@ -94,7 +94,7 @@ There are multiple ways to switch between clusters:
           markdown: '''
 You can sort your clusters on the **Clusters** page (**Settings** -> **View all**), so that your the cluster which you have to access the most is always on the top.
 
-To sort the clusters you have to **press longer** on the cluster name and move it up or down.
+To sort the clusters you have to **press on the status icon** of the cluster and move it up or down.
           ''',
         ),
       ],
@@ -341,7 +341,7 @@ To delete a namespace go to **Settings** -> **Namespaces**. Then **click** on th
           markdown: '''
 To sort the list of namespaces go to **Settings** -> **Namespaces**.
 
-To sort the namespaces you have to **press longer** on the namespace name and move it up or down.
+To sort the namespaces you have to **press on the drag handle icon** of the namespace and move it up or down.
           ''',
         ),
       ],
@@ -383,7 +383,7 @@ You can also delete bookmarks by click on **View all** in the **Bookmarks** sect
           markdown: '''
 You can sort you bookmarks on the **Bookmarks** page.
 
-To sort the bookmarks you have to **press longer** on a bookmark and move it up or down.
+To sort the bookmarks you have to **press on the drag handle icon** of the bookmark and move it up or down.
           ''',
         ),
       ],

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -37,11 +36,8 @@ class SettingsClusters extends StatelessWidget {
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, Widget? child) {
-        final double animValue = Curves.easeInOut.transform(animation.value);
-        final double elevation = lerpDouble(0, 6, animValue)!;
         return Material(
-          elevation: elevation,
-          shadowColor: theme(context).colorShadow,
+          elevation: 0,
           child: child,
         );
       },
@@ -162,10 +158,6 @@ class SettingsClusters extends StatelessWidget {
               shrinkWrap: true,
               buildDefaultDragHandles: false,
               physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.only(
-                right: Constants.spacingMiddle,
-                left: Constants.spacingMiddle,
-              ),
               onReorder: (int start, int current) {
                 clustersRepository.reorderClusters(start, current);
               },
@@ -177,34 +169,29 @@ class SettingsClusters extends StatelessWidget {
                 context,
                 index,
               ) {
-                return ReorderableDragStartListener(
+                return Container(
                   key: Key(
                     clustersRepository.clusters[index].id,
                   ),
-                  index: index,
-                  child: Container(
-                    key: Key(
-                      clustersRepository.clusters[index].id,
-                    ),
-                    child: SettingsClusterItem(
-                      key: Key(clustersRepository.clusters[index].id),
-                      cluster: clustersRepository.clusters[index],
-                      isActiveCluster: clustersRepository.clusters[index].id ==
-                          clustersRepository.activeClusterId,
-                      onTap: () {
-                        clustersRepository.setActiveCluster(
-                          clustersRepository.clusters[index].id,
-                        );
-                      },
-                      onDoubleTap: () {
-                        showActions(
-                          context,
-                          SettingsClusterActions(
-                            cluster: clustersRepository.clusters[index],
-                          ),
-                        );
-                      },
-                    ),
+                  child: SettingsClusterItem(
+                    key: Key(clustersRepository.clusters[index].id),
+                    index: index,
+                    cluster: clustersRepository.clusters[index],
+                    isActiveCluster: clustersRepository.clusters[index].id ==
+                        clustersRepository.activeClusterId,
+                    onTap: () {
+                      clustersRepository.setActiveCluster(
+                        clustersRepository.clusters[index].id,
+                      );
+                    },
+                    onDoubleTap: () {
+                      showActions(
+                        context,
+                        SettingsClusterActions(
+                          cluster: clustersRepository.clusters[index],
+                        ),
+                      );
+                    },
                   ),
                 );
               },
