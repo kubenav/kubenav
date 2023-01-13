@@ -106,7 +106,7 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
         await clustersRepository.addCluster(
           Cluster(
             id: const Uuid().v4(),
-            name: selectedCluster.name!,
+            name: 'gke_${selectedCluster.location}_${selectedCluster.name}',
             clusterProviderType: ClusterProviderType.google,
             clusterProviderId: widget.provider.id ?? '',
             clusterServer: 'https://${selectedCluster.endpoint!}',
@@ -238,7 +238,11 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      _clusters[index].name ?? '',
+                      Characters(
+                        'gke_${_clusters[index].location}_${_clusters[index].name}',
+                      )
+                          .replaceAll(Characters(''), Characters('\u{200B}'))
+                          .toString(),
                       style: noramlTextStyle(
                         context,
                       ),
