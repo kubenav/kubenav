@@ -244,7 +244,11 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      _clusters[index].name ?? '',
+                      Characters(
+                        'aws_${widget.provider.aws?.region}_${_clusters[index].name}',
+                      )
+                          .replaceAll(Characters(''), Characters('\u{200B}'))
+                          .toString(),
                       style: noramlTextStyle(
                         context,
                       ),
