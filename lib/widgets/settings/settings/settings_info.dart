@@ -182,7 +182,9 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: Colors.grey[300],
+              color: theme(context)
+                  .colorTextPrimary
+                  .withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -208,7 +210,9 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: Colors.grey[300],
+              color: theme(context)
+                  .colorTextPrimary
+                  .withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -234,7 +238,9 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: Colors.grey[300],
+              color: theme(context)
+                  .colorTextPrimary
+                  .withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -260,7 +266,9 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: Colors.grey[300],
+              color: theme(context)
+                  .colorTextPrimary
+                  .withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],

@@ -271,7 +271,9 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                                 index: index,
                                 child: Icon(
                                   Icons.drag_handle,
-                                  color: Colors.grey[300],
+                                  color: theme(context)
+                                      .colorTextSecondary
+                                      .withOpacity(Constants.opacityIcon),
                                   size: 24,
                                 ),
                               ),

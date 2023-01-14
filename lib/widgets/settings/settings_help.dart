@@ -80,7 +80,9 @@ class SettingsHelp extends StatelessWidget {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: Colors.grey[300],
+              color: theme(context)
+                  .colorTextPrimary
+                  .withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],

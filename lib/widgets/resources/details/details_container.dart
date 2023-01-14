@@ -265,7 +265,9 @@ class DetailsContainer extends StatelessWidget {
                       const SizedBox(width: Constants.spacingSmall),
                       Icon(
                         Icons.arrow_forward_ios,
-                        color: Colors.grey[300],
+                        color: theme(context)
+                            .colorTextSecondary
+                            .withOpacity(Constants.opacityIcon),
                         size: 24,
                       ),
                     ],
@@ -332,7 +334,9 @@ class DetailsContainer extends StatelessWidget {
                       const SizedBox(width: Constants.spacingSmall),
                       Icon(
                         Icons.arrow_forward_ios,
-                        color: Colors.grey[300],
+                        color: theme(context)
+                            .colorTextSecondary
+                            .withOpacity(Constants.opacityIcon),
                         size: 24,
                       ),
                     ],

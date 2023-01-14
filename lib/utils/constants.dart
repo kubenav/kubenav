@@ -17,8 +17,7 @@ class Constants {
 
   static const spacingIcon54x54 = 6.0;
 
-  static const opacityLight = 0.75;
-  static const opacityHeavy = 0.25;
+  static const opacityIcon = 0.25;
 
   static const pageIndexHome = 0;
   static const pageIndexResources = 1;
