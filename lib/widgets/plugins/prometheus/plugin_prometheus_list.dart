@@ -19,6 +19,7 @@ import 'package:kubenav/widgets/shared/app_actions_header_widget.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
+import 'package:kubenav/widgets/shared/app_list_item.dart';
 import 'package:kubenav/widgets/shared/app_namespaces_widget.dart';
 
 /// The [PluginPrometheusList] widget is used to render a list of Prometheus
@@ -82,87 +83,67 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
   /// [buildItem] returns the widget for a single dashboard which is displayed
   /// in the list of dashboards.
   Widget buildItem(BuildContext context, IoK8sApiCoreV1ConfigMap configMap) {
-    return Container(
-      margin: const EdgeInsets.only(
-        bottom: Constants.spacingMiddle,
-      ),
-      padding: const EdgeInsets.all(12.0),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: theme(context).colorShadow,
-            blurRadius: Constants.sizeBorderBlurRadius,
-            spreadRadius: Constants.sizeBorderSpreadRadius,
-            offset: const Offset(0.0, 0.0),
+    return AppListItem(
+      onTap: () {
+        navigate(
+          context,
+          PluginPrometheusDetails(
+            namespace: configMap.metadata?.namespace ?? '',
+            name: configMap.metadata?.name ?? '',
+          ),
+        );
+      },
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  Characters(configMap.metadata?.name ?? '')
+                      .replaceAll(Characters(''), Characters('\u{200B}'))
+                      .toString(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: primaryTextStyle(
+                    context,
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      Characters(
+                        'Namespace: ${configMap.metadata?.namespace ?? ''}',
+                      )
+                          .replaceAll(Characters(''), Characters('\u{200B}'))
+                          .toString(),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: secondaryTextStyle(
+                        context,
+                      ),
+                    ),
+                    Text(
+                      Characters(
+                        'Description: ${configMap.data.containsKey('description') ? configMap.data['description'] : ''}',
+                      )
+                          .replaceAll(Characters(''), Characters('\u{200B}'))
+                          .toString(),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: secondaryTextStyle(
+                        context,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
-        color: theme(context).colorCard,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(Constants.sizeBorderRadius),
-        ),
-      ),
-      child: InkWell(
-        onTap: () {
-          navigate(
-            context,
-            PluginPrometheusDetails(
-              namespace: configMap.metadata?.namespace ?? '',
-              name: configMap.metadata?.name ?? '',
-            ),
-          );
-        },
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    Characters(configMap.metadata?.name ?? '')
-                        .replaceAll(Characters(''), Characters('\u{200B}'))
-                        .toString(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: primaryTextStyle(
-                      context,
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        Characters(
-                          'Namespace: ${configMap.metadata?.namespace ?? ''}',
-                        )
-                            .replaceAll(Characters(''), Characters('\u{200B}'))
-                            .toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                      ),
-                      Text(
-                        Characters(
-                          'Description: ${configMap.data.containsKey('description') ? configMap.data['description'] : ''}',
-                        )
-                            .replaceAll(Characters(''), Characters('\u{200B}'))
-                            .toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -304,12 +285,16 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
                             top: Constants.spacingMiddle,
                             bottom: Constants.spacingMiddle,
                           ),
-                          child: ListView.builder(
+                          child: ListView.separated(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             padding: const EdgeInsets.only(
                               right: Constants.spacingMiddle,
                               left: Constants.spacingMiddle,
+                            ),
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                              height: Constants.spacingMiddle,
                             ),
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {

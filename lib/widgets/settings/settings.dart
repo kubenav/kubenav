@@ -24,6 +24,7 @@ import 'package:kubenav/widgets/settings/settings_namespaces.dart';
 import 'package:kubenav/widgets/settings/settings_providers.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
+import 'package:kubenav/widgets/shared/app_list_item.dart';
 import 'package:kubenav/widgets/shared/app_no_clusters_widget.dart';
 import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 
@@ -79,52 +80,34 @@ class Settings extends StatelessWidget {
                 left: Constants.spacingSmall,
                 right: Constants.spacingSmall,
               ),
-              padding: const EdgeInsets.all(12.0),
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: theme(context).colorShadow,
-                    blurRadius: Constants.sizeBorderBlurRadius,
-                    spreadRadius: Constants.sizeBorderSpreadRadius,
-                    offset: const Offset(0.0, 0.0),
-                  ),
-                ],
-                color: theme(context).colorCard,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(Constants.sizeBorderRadius),
-                ),
-              ),
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {
-                    clustersRepository.setActiveCluster(
-                      clustersRepository.clusters[index].id,
-                    );
-                  },
-                  child: Row(
-                    children: [
-                      Icon(
-                        clustersRepository.clusters[index].id ==
-                                clustersRepository.activeClusterId
-                            ? Icons.radio_button_checked
-                            : Icons.radio_button_unchecked,
-                        size: 24,
-                        color: theme(context).colorPrimary,
-                      ),
-                      const SizedBox(width: Constants.spacingSmall),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          clustersRepository.clusters[index].name,
-                          style: noramlTextStyle(
-                            context,
-                          ),
-                          overflow: TextOverflow.ellipsis,
+              child: AppListItem(
+                onTap: () {
+                  clustersRepository.setActiveCluster(
+                    clustersRepository.clusters[index].id,
+                  );
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      clustersRepository.clusters[index].id ==
+                              clustersRepository.activeClusterId
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_unchecked,
+                      size: 24,
+                      color: theme(context).colorPrimary,
+                    ),
+                    const SizedBox(width: Constants.spacingSmall),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        clustersRepository.clusters[index].name,
+                        style: noramlTextStyle(
+                          context,
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             );
@@ -151,29 +134,26 @@ class Settings extends StatelessWidget {
             flex: 1,
             child: Text('Clusters', style: primaryTextStyle(context, size: 18)),
           ),
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () {
-                navigate(context, const SettingsClusters());
-              },
-              child: Wrap(
-                children: [
-                  Text(
-                    'View all',
-                    style: secondaryTextStyle(
-                      context,
-                      color: theme(context).colorPrimary,
-                    ),
-                  ),
-                  const SizedBox(width: Constants.spacingExtraSmall),
-                  Icon(
-                    Icons.keyboard_arrow_right,
+          InkWell(
+            onTap: () {
+              navigate(context, const SettingsClusters());
+            },
+            child: Wrap(
+              children: [
+                Text(
+                  'View all',
+                  style: secondaryTextStyle(
+                    context,
                     color: theme(context).colorPrimary,
-                    size: 16,
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(width: Constants.spacingExtraSmall),
+                Icon(
+                  Icons.keyboard_arrow_right,
+                  color: theme(context).colorPrimary,
+                  size: 16,
+                ),
+              ],
             ),
           ),
         ],

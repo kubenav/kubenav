@@ -129,6 +129,8 @@ class AppMaterialApp extends StatelessWidget {
               borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
             ),
           ),
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
         ),
         debugShowCheckedModeBanner: false,
         home: const Home(),

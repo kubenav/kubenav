@@ -11,6 +11,7 @@ import 'package:kubenav/widgets/settings/namespaces/settings_add_namespace.dart'
 import 'package:kubenav/widgets/settings/namespaces/settings_delete_namespace.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
+import 'package:kubenav/widgets/shared/app_list_item.dart';
 
 /// The [SettingsNamespaces] widget is used to display all the users favorite
 /// namespaces on a new screen. Within the screen a user can also add new
@@ -54,22 +55,7 @@ class SettingsNamespaces extends StatelessWidget {
         left: Constants.spacingMiddle,
         right: Constants.spacingMiddle,
       ),
-      padding: const EdgeInsets.all(12.0),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: theme(context).colorShadow,
-            blurRadius: Constants.sizeBorderBlurRadius,
-            spreadRadius: Constants.sizeBorderSpreadRadius,
-            offset: const Offset(0.0, 0.0),
-          ),
-        ],
-        color: theme(context).colorCard,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(Constants.sizeBorderRadius),
-        ),
-      ),
-      child: InkWell(
+      child: AppListItem(
         onTap: () {
           showActions(
             context,

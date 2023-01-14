@@ -6,6 +6,7 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/widgets/resources/resource_details.dart';
+import 'package:kubenav/widgets/shared/app_list_item.dart';
 
 enum Status {
   undefined,
@@ -106,22 +107,7 @@ class ListItemWidget extends StatelessWidget {
       margin: const EdgeInsets.only(
         bottom: Constants.spacingMiddle,
       ),
-      padding: const EdgeInsets.all(12.0),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: theme(context).colorShadow,
-            blurRadius: Constants.sizeBorderBlurRadius,
-            spreadRadius: Constants.sizeBorderSpreadRadius,
-            offset: const Offset(0.0, 0.0),
-          ),
-        ],
-        color: theme(context).colorCard,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(Constants.sizeBorderRadius),
-        ),
-      ),
-      child: InkWell(
+      child: AppListItem(
         onTap: () {
           navigate(
             context,

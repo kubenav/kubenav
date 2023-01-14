@@ -188,7 +188,7 @@ class AppTerminalsWidget extends StatelessWidget {
                               (terminal) {
                                 return Tab(
                                   child: GestureDetector(
-                                    onLongPress: () {
+                                    onDoubleTap: () {
                                       terminalRepository.deleteTerminal(
                                         terminal.key,
                                       );

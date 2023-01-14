@@ -14,6 +14,7 @@ class Constants {
   static const spacingMiddle = 16.0;
   static const spacingLarge = 24.0;
   static const spacingExtraLarge = 32.0;
+  static const spacingListItemContent = 12.0;
 
   static const spacingIcon54x54 = 6.0;
 

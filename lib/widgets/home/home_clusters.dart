@@ -7,6 +7,7 @@ import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/widgets/shared/app_list_item.dart';
 
 /// The [HomeClusters] can be used to display a list of clusters when the app
 /// is started and the user has selected the [isShowClustersOnStart] option
@@ -57,62 +58,37 @@ class _HomeClustersState extends State<HomeClusters> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(Constants.spacingMiddle),
-        child: ListView(
-          children: List.generate(
-            clustersRepository.clusters.length,
-            (index) => Container(
-              margin: const EdgeInsets.only(
-                top: Constants.spacingSmall,
-                bottom: Constants.spacingSmall,
-                left: Constants.spacingExtraSmall,
-                right: Constants.spacingExtraSmall,
-              ),
-              padding: const EdgeInsets.all(12.0),
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: theme(context).colorShadow,
-                    blurRadius: Constants.sizeBorderBlurRadius,
-                    spreadRadius: Constants.sizeBorderSpreadRadius,
-                    offset: const Offset(0.0, 0.0),
-                  ),
-                ],
-                color: theme(context).colorCard,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(Constants.sizeBorderRadius),
+        child: ListView.separated(
+          separatorBuilder: (context, index) => const SizedBox(
+            height: Constants.spacingMiddle,
+          ),
+          itemCount: clustersRepository.clusters.length,
+          itemBuilder: (context, index) => AppListItem(
+            onTap: () {
+              _setActiveCluster(
+                context,
+                clustersRepository.clusters[index].id,
+              );
+            },
+            child: Row(
+              children: [
+                Icon(
+                  Icons.radio_button_unchecked,
+                  size: 24,
+                  color: theme(context).colorPrimary,
                 ),
-              ),
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {
-                    _setActiveCluster(
+                const SizedBox(width: Constants.spacingSmall),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    clustersRepository.clusters[index].name,
+                    style: noramlTextStyle(
                       context,
-                      clustersRepository.clusters[index].id,
-                    );
-                  },
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.radio_button_unchecked,
-                        size: 24,
-                        color: theme(context).colorPrimary,
-                      ),
-                      const SizedBox(width: Constants.spacingSmall),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          clustersRepository.clusters[index].name,
-                          style: noramlTextStyle(
-                            context,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         ),

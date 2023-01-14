@@ -30,44 +30,41 @@ class OverviewMetrics extends StatelessWidget {
     IconData icon, [
     void Function()? onTap,
   ]) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.all(
-            Constants.spacingMiddle,
-          ),
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: theme(context).colorShadow,
-                blurRadius: Constants.sizeBorderBlurRadius,
-                spreadRadius: Constants.sizeBorderSpreadRadius,
-                offset: const Offset(0.0, 0.0),
-              ),
-            ],
-            color: theme(context).colorCard,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(Constants.sizeBorderRadius),
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(
+          Constants.spacingMiddle,
+        ),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: theme(context).colorShadow,
+              blurRadius: Constants.sizeBorderBlurRadius,
+              spreadRadius: Constants.sizeBorderSpreadRadius,
+              offset: const Offset(0.0, 0.0),
             ),
+          ],
+          color: theme(context).colorCard,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(Constants.sizeBorderRadius),
           ),
-          child: Column(
-            children: [
-              Icon(
-                icon,
-                color: theme(context).colorPrimary,
-                size: 64,
+        ),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              color: theme(context).colorPrimary,
+              size: 64,
+            ),
+            const SizedBox(height: Constants.spacingSmall),
+            Text(
+              title,
+              style: primaryTextStyle(
+                context,
               ),
-              const SizedBox(height: Constants.spacingSmall),
-              Text(
-                title,
-                style: primaryTextStyle(
-                  context,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
