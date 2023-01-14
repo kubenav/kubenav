@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 
 class HelpItem {
@@ -135,7 +136,9 @@ Select the **Credentials** item from the menu to get a new Client ID. Then click
 
 Configure a new Web Application client and obtain a **Client ID** and **Client Secret**
 
-You must allow **https://kubenav.io/auth/google.html** as a valid redirect url in the settings.
+You must allow **${Constants.googleRedirectURI}** as a valid redirect url in the settings.
+
+![Google OAuth 2.0 Configuration](resource:assets/help/providers-google-3.png)
 
 #### Activate APIs
 
@@ -210,7 +213,7 @@ After you provided all the information click on the **Sign In** button and finis
 
 Finish the provider setup by clicking on **Save and add cluster(s)**
 
-You must allow **https://kubenav.io/auth/oidc.html** as a valid redirect url in the settings of your OIDC provider.
+You must allow **${Constants.oidcRedirectURI}** as a valid redirect url in the settings of your OIDC provider.
           ''',
         ),
         HelpItem(
@@ -326,6 +329,8 @@ Then provide the **Name** of the namespace and click **Add Namespace**
 ![Add a Namespace](resource:assets/help/namespaces-add-namespace-3.png)
 
 You can also use the **star icon** on the details page for a namespace, to add / remove the namespace from the list of namespaces.
+
+![Add a Namespace](resource:assets/help/namespaces-add-namespace-4.png)
           ''',
         ),
         HelpItem(
@@ -450,6 +455,90 @@ Select the port-forwarding session you want to use from the opened modal.
 From there you can open a browser, copy the address or delete the port-forwarding session.
 
 ![Port-Forwarding Session](resource:assets/help/pfs-4.png)
+          ''',
+        ),
+      ],
+    ),
+    HelpSection(
+      title: 'Plugins',
+      items: [
+        HelpItem(
+          title: 'Helm',
+          icon: Icons.extension,
+          markdown: '''
+To use the Helm plugin, you must be able to view all secrets in a cluster / namespace.
+
+Besides the required permissions the plugin doesn't require further configuration.
+          ''',
+        ),
+        HelpItem(
+          title: 'Prometheus',
+          icon: Icons.extension,
+          markdown: '''
+To use the Prometheus plugin, you have to enable and configure the plugin in the **Settings** -> **Prometheus** menu.
+
+You can use the Prometheus plugin with a public available Prometheus instance or via a Prometheus Pod running inside your cluster.
+
+To use a public available Prometheus instance you have to provide the **Address** field in the configuration. You can also provide a **Username**, **Password** and **Token** in the credentials section.
+
+To use a Prometheus instance running as Pod inside your cluster, the **Address field must be empty**. Instead you can provide a **Namespace**, **Label Selector**, **Container** and **Port** to use a Pod from your cluser. You can also specify an optional **Path** under which the Prometheus API is served from this port. The credentials section can also be used with the in-cluster configuration.
+          ''',
+        ),
+        HelpItem(
+          title: 'Prometheus - Custom Metrics',
+          icon: Icons.extension,
+          markdown: '''
+When the Prometheus plugin is enabled, the app will automatically show some important metrics for your workloads within the details page of each workload.
+
+You can also add custom metrics for all resources by adding a `kubenav.io/prometheus` annotation to this resource. In the following we are adding a custom metric to a Deployment to show the number of HTTP requests per response code (which is also used as label) for the deployment:
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  namespace: default
+  labels:
+    app: myapp
+  annotations:
+    kubenav.io/prometheus: |
+      - title: 'HTTP Requests'
+        unit: 'req/s'
+        queries:
+          - label: '{{.response_code}}'
+            query: 'sum(irate(istio_requests_total{reporter=~"destination",destination_workload_namespace=~"default",destination_workload=~"myapp"}[5m])) by (response_code)'
+spec:
+```
+
+![Prometheus - Custom Metric](resource:assets/help/plugins-prometheus-1.png)
+          ''',
+        ),
+        HelpItem(
+          title: 'Prometheus - Dashboards',
+          icon: Icons.extension,
+          markdown: '''
+Besides the default metrics and the custom metrics mentioned in the previous help section, it is also possible to define custom Prometheus dashboards.
+
+The dashboards are defined via ConfigMaps with a `kubenav.io/prometheus=dashboard` label and can be accessed via the **Plugins** -> **Prometheus** menu item. The page will then list all ConfigMaps with the mentioned label in the currently selected namespace.
+
+An example ConfigMap for a Prometheus dashboard can be found in the following:
+
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mydashboard
+  namespace: default
+  labels:
+    kubenav.io/prometheus: dashboard
+data:
+  charts: |
+    - title: 'HTTP Requests'
+      unit: 'req/s'
+      queries:
+        - label: '{{.response_code}}'
+          query: 'sum(irate(istio_requests_total{reporter=~"destination",destination_workload_namespace=~"default",destination_workload=~"myapp"}[5m])) by (response_code)'
+```
           ''',
         ),
       ],

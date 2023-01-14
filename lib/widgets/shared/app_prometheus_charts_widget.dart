@@ -67,22 +67,21 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
                     ['kubenav.io/prometheus'] !=
                 'dashboard') {
           Logger.log(
-            'AppPrometheusChartsController getCharts',
+            'AppPrometheusChartsController _getCharts',
             'Manifest contains kubenav.io/prometheus annotation',
             widget.manifest['metadata']['annotations']['kubenav.io/prometheus'],
           );
 
-          final parsedCharts = json.decode(
-            json.encode(
-              loadYaml(
-                widget.manifest['metadata']['annotations']
-                    ['kubenav.io/prometheus'],
-              ),
-            ),
+          final parsedCharts = loadYaml(
+            widget.manifest['metadata']['annotations']['kubenav.io/prometheus'],
           );
 
-          for (var parsedChart in parsedCharts) {
-            additionalCharts.add(Chart.fromJson(parsedChart));
+          for (var parsedChart in parsedCharts as List<dynamic>) {
+            additionalCharts.add(
+              Chart.fromYaml(
+                parsedChart,
+              ),
+            );
           }
         }
 
@@ -90,6 +89,11 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
           _charts = [...widget.defaultCharts, ...additionalCharts];
         });
       } catch (err) {
+        Logger.log(
+          'AppPrometheusChartsController _getCharts',
+          'Could not parse kubenav.io/prometheus annotation',
+          err,
+        );
         setState(() {
           _charts = widget.defaultCharts;
         });

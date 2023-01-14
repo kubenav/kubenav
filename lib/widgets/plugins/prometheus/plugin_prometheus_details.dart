@@ -73,29 +73,23 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
         configMap.metadata != null &&
         configMap.metadata!.name != null) {
       Logger.log(
-        'PluginPrometheusDetailsRepository fetchDashboard',
+        'PluginPrometheusDetailsRepository _fetchDashboard',
         'ConfigMap  ${configMap.metadata?.name} was returned',
         configMap,
       );
 
       if (configMap.data.containsKey('charts')) {
-        final parsedCharts = json.decode(
-          json.encode(
-            loadYaml(
-              configMap.data['charts']!,
-            ),
-          ),
-        );
+        final parsedCharts = loadYaml(configMap.data['charts']!);
 
         Logger.log(
-          'PluginPrometheusDetailsRepository fetchDashboard',
+          'PluginPrometheusDetailsRepository _fetchDashboard',
           'Charts were loaded from ConfigMap ${configMap.metadata?.name}',
           parsedCharts,
         );
 
         final List<Chart> charts = [];
-        for (var parsedChart in parsedCharts) {
-          charts.add(Chart.fromJson(parsedChart));
+        for (var parsedChart in parsedCharts as List<dynamic>) {
+          charts.add(Chart.fromYaml(parsedChart));
         }
         return charts;
       }

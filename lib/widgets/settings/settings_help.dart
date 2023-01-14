@@ -44,7 +44,17 @@ class SettingsHelp extends StatelessWidget {
                 actionIsLoading: false,
                 child: Markdown(
                   padding: const EdgeInsets.symmetric(
-                    vertical: 8,
+                    vertical: Constants.spacingSmall,
+                  ),
+                  styleSheet: MarkdownStyleSheet(
+                    code: TextStyle(
+                      fontFamily: getMonospaceFontFamily(),
+                      color: const Color(0xffd8dee9),
+                      backgroundColor: const Color(0xff2e3440),
+                    ),
+                    codeblockDecoration: const BoxDecoration(
+                      color: Color(0xff2e3440),
+                    ),
                   ),
                   selectable: true,
                   data: help_model
