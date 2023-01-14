@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
@@ -121,6 +120,7 @@ class AppVertialListSimpleWidget extends StatelessWidget {
             right: smallPadding
                 ? Constants.spacingExtraSmall
                 : Constants.spacingMiddle,
+            bottom: Constants.spacingMiddle,
           ),
           child: ListView.separated(
             physics: const NeverScrollableScrollPhysics(),
