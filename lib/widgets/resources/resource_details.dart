@@ -139,6 +139,11 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
     String? namespace,
     dynamic item,
   ) {
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: false,
+    );
+
     final List<AppActionsHeaderModel> additionalActions = [];
 
     if ((Resources.map['deployments']!.resource == resource &&
@@ -271,6 +276,31 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
       );
     }
 
+    if (Resources.map['namespaces']!.resource == resource &&
+        Resources.map['namespaces']!.path == path) {
+      additionalActions.add(
+        AppActionsHeaderModel(
+          title: 'Favorite',
+          icon: appRepository.settings.namespaces
+                  .where((e) => e == name)
+                  .toList()
+                  .isEmpty
+              ? Icons.star_outline
+              : Icons.star,
+          onTap: () {
+            if (appRepository.settings.namespaces
+                .where((e) => e == name)
+                .toList()
+                .isEmpty) {
+              appRepository.addNamespace(name);
+            } else {
+              appRepository.deleteNamespace(name);
+            }
+          },
+        ),
+      );
+    }
+
     return additionalActions;
   }
 
@@ -285,10 +315,6 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
   @override
   Widget build(BuildContext context) {
     Provider.of<ThemeRepository>(
-      context,
-      listen: true,
-    );
-    AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: true,
     );
@@ -378,6 +404,10 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
                       );
                     }
 
+                    AppRepository appRepository = Provider.of<AppRepository>(
+                      context,
+                      listen: true,
+                    );
                     BookmarksRepository bookmarksRepository =
                         Provider.of<BookmarksRepository>(
                       context,

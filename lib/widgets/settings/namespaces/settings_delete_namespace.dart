@@ -12,10 +12,10 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 class SettingsDeleteNamespace extends StatelessWidget {
   const SettingsDeleteNamespace({
     Key? key,
-    required this.index,
+    required this.namespace,
   }) : super(key: key);
 
-  final int index;
+  final String namespace;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +30,7 @@ class SettingsDeleteNamespace extends StatelessWidget {
           title: 'Delete',
           color: theme(context).colorDanger,
           onTap: () {
-            final namespace = appRepository.settings.namespaces[index];
-            appRepository.deleteNamespace(index);
+            appRepository.deleteNamespace(namespace);
             showSnackbar(
               context,
               'Namespace deleted',

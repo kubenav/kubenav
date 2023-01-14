@@ -47,7 +47,7 @@ class SettingsNamespaces extends StatelessWidget {
     );
 
     return Container(
-      key: Key('$index'),
+      key: Key(appRepository.settings.namespaces[index]),
       margin: const EdgeInsets.only(
         top: Constants.spacingSmall,
         bottom: Constants.spacingSmall,
@@ -73,7 +73,9 @@ class SettingsNamespaces extends StatelessWidget {
         onTap: () {
           showActions(
             context,
-            SettingsDeleteNamespace(index: index),
+            SettingsDeleteNamespace(
+              namespace: appRepository.settings.namespaces[index],
+            ),
           );
         },
         child: Row(

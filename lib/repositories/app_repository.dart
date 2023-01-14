@@ -195,15 +195,21 @@ class AppRepository with ChangeNotifier {
   /// [addNamespace] adds the provided [value] to the list of the users favorite
   /// namespaces.
   Future<void> addNamespace(String value) async {
-    _settings.namespaces.add(value);
-    await _save();
-    notifyListeners();
+    if (_settings.namespaces.where((e) => e == value).toList().isEmpty) {
+      _settings.namespaces.add(value);
+      await _save();
+      notifyListeners();
+    }
   }
 
-  /// [deleteNamespace] deletes the namespace with the provided [index] from the
+  /// [deleteNamespace] deletes the namespace with the provided [value] from the
   /// list of the users favorite namespaces.
-  Future<void> deleteNamespace(int index) async {
-    _settings.namespaces.removeAt(index);
+  Future<void> deleteNamespace(String value) async {
+    _settings.namespaces = _settings.namespaces
+        .where(
+          (e) => e != value,
+        )
+        .toList();
     await _save();
     notifyListeners();
   }
