@@ -53,12 +53,12 @@ class Query {
     return data;
   }
 
-  factory Query.fromJson(
-    Map<String, dynamic> json,
+  factory Query.fromYaml(
+    dynamic yaml,
   ) {
     return Query(
-      query: json['query'] ?? '',
-      label: json['label'] ?? '',
+      query: yaml['query'] ?? '',
+      label: yaml['label'] ?? '',
     );
   }
 
@@ -131,21 +131,21 @@ class Chart {
     required this.queries,
   });
 
-  factory Chart.fromJson(
-    Map<String, dynamic> json,
+  factory Chart.fromYaml(
+    dynamic yaml,
   ) {
     List<Query> queries = [];
-    if (json['queries'] != null) {
+    if (yaml['queries'] != null) {
       final tmpQueries = <Query>[];
-      json['queries'].forEach((query) {
-        tmpQueries.add(Query.fromJson(query));
+      yaml['queries'].forEach((query) {
+        tmpQueries.add(Query.fromYaml(query));
       });
       queries = tmpQueries;
     }
 
     return Chart(
-      title: json['title'] ?? '',
-      unit: json['unit'] ?? '',
+      title: yaml['title'] ?? '',
+      unit: yaml['unit'] ?? '',
       queries: queries,
     );
   }
