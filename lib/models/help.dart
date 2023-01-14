@@ -324,6 +324,8 @@ On the namespaces page select the **Plus** icon in the op right corner.
 Then provide the **Name** of the namespace and click **Add Namespace**
 
 ![Add a Namespace](resource:assets/help/namespaces-add-namespace-3.png)
+
+You can also use the **star icon** on the details page for a namespace, to add / remove the namespace from the list of namespaces.
           ''',
         ),
         HelpItem(
