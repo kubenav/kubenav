@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/widgets/shared/app_list_item.dart';
 
 /// [AppVertialListSimpleModel] represents a single item in the
 /// [AppVertialListSimpleWidget] widget. Each item mist contain a list of
@@ -121,34 +122,17 @@ class AppVertialListSimpleWidget extends StatelessWidget {
                 ? Constants.spacingExtraSmall
                 : Constants.spacingMiddle,
           ),
-          child: Column(
-            children: List.generate(
-              items.length,
-              (index) => Container(
-                margin: const EdgeInsets.only(
-                  bottom: Constants.spacingMiddle,
-                ),
-                padding: const EdgeInsets.all(12.0),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: theme(context).colorShadow,
-                      blurRadius: Constants.sizeBorderBlurRadius,
-                      spreadRadius: Constants.sizeBorderSpreadRadius,
-                      offset: const Offset(0.0, 0.0),
-                    ),
-                  ],
-                  color: theme(context).colorCard,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(Constants.sizeBorderRadius),
-                  ),
-                ),
-                child: InkWell(
-                  onTap: items[index].onTap,
-                  child: Row(
-                    children: items[index].children,
-                  ),
-                ),
+          child: ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            separatorBuilder: (context, index) => const SizedBox(
+              height: Constants.spacingMiddle,
+            ),
+            itemCount: items.length,
+            itemBuilder: (context, index) => AppListItem(
+              onTap: items[index].onTap,
+              child: Row(
+                children: items[index].children,
               ),
             ),
           ),

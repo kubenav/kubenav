@@ -76,27 +76,24 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
     void Function()? moreOnTap,
   ) {
     if (moreText != null && moreIcon != null) {
-      return MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: moreOnTap,
-          child: Wrap(
-            children: [
-              Text(
-                moreText,
-                style: secondaryTextStyle(
-                  context,
-                  color: theme(context).colorPrimary,
-                ),
-              ),
-              const SizedBox(width: Constants.spacingExtraSmall),
-              Icon(
-                moreIcon,
+      return InkWell(
+        onTap: moreOnTap,
+        child: Wrap(
+          children: [
+            Text(
+              moreText,
+              style: secondaryTextStyle(
+                context,
                 color: theme(context).colorPrimary,
-                size: 16,
               ),
-            ],
-          ),
+            ),
+            const SizedBox(width: Constants.spacingExtraSmall),
+            Icon(
+              moreIcon,
+              color: theme(context).colorPrimary,
+              size: 16,
+            ),
+          ],
         ),
       );
     }

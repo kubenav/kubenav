@@ -5,6 +5,7 @@ import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
+import 'package:kubenav/widgets/shared/app_list_item.dart';
 
 /// [times] is a list of all time values which are supported.
 List<String> times = [
@@ -102,66 +103,46 @@ class _AppTimeRangeSelectorWidgetState
         Navigator.pop(context);
       },
       actionIsLoading: false,
-      child: ListView(
-        children: [
-          ...List.generate(
-            times.length,
-            (index) {
-              return Container(
-                margin: const EdgeInsets.only(
-                  top: Constants.spacingSmall,
-                  bottom: Constants.spacingSmall,
-                  left: Constants.spacingExtraSmall,
-                  right: Constants.spacingExtraSmall,
-                ),
-                padding: const EdgeInsets.all(12.0),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: theme(context).colorShadow,
-                      blurRadius: Constants.sizeBorderBlurRadius,
-                      spreadRadius: Constants.sizeBorderSpreadRadius,
-                      offset: const Offset(0.0, 0.0),
-                    ),
-                  ],
-                  color: theme(context).colorCard,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(Constants.sizeBorderRadius),
+      child: ListView.separated(
+        padding: const EdgeInsets.only(
+          top: Constants.spacingSmall,
+          bottom: Constants.spacingSmall,
+          left: Constants.spacingExtraSmall,
+          right: Constants.spacingExtraSmall,
+        ),
+        separatorBuilder: (context, index) => const SizedBox(
+          height: Constants.spacingMiddle,
+        ),
+        itemCount: times.length,
+        itemBuilder: (context, index) => AppListItem(
+          onTap: () {
+            setState(() {
+              _selectedTime = times[index];
+            });
+          },
+          child: Row(
+            children: [
+              Icon(
+                times[index] == _selectedTime
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_unchecked,
+                size: 24,
+                color: theme(context).colorPrimary,
+              ),
+              const SizedBox(width: Constants.spacingSmall),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  times[index],
+                  style: noramlTextStyle(
+                    context,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedTime = times[index];
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      Icon(
-                        times[index] == _selectedTime
-                            ? Icons.radio_button_checked
-                            : Icons.radio_button_unchecked,
-                        size: 24,
-                        color: theme(context).colorPrimary,
-                      ),
-                      const SizedBox(width: Constants.spacingSmall),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          times[index],
-                          style: noramlTextStyle(
-                            context,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

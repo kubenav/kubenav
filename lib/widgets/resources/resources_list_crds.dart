@@ -16,6 +16,7 @@ import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
+import 'package:kubenav/widgets/shared/app_list_item.dart';
 
 /// The [ResourcesListCRDs] widget can be used to view a list of all CRDs in a
 /// cluster. When the user selects a CRD we redirect him to the [ResourcesList]
@@ -119,72 +120,52 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
     BuildContext context,
     Resource resource,
   ) {
-    return Container(
-      margin: const EdgeInsets.only(
-        bottom: Constants.spacingMiddle,
-      ),
-      padding: const EdgeInsets.all(12.0),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: theme(context).colorShadow,
-            blurRadius: Constants.sizeBorderBlurRadius,
-            spreadRadius: Constants.sizeBorderSpreadRadius,
-            offset: const Offset(0.0, 0.0),
+    return AppListItem(
+      onTap: () {
+        navigate(
+          context,
+          ResourcesList(
+            title: resource.title,
+            resource: resource.resource,
+            path: resource.path,
+            scope: resource.scope,
+            namespace: null,
+            selector: null,
+            additionalPrinterColumns: resource.additionalPrinterColumns,
+          ),
+        );
+      },
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  Characters(resource.title)
+                      .replaceAll(Characters(''), Characters('\u{200B}'))
+                      .toString(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: primaryTextStyle(
+                    context,
+                  ),
+                ),
+                Text(
+                  Characters(resource.description)
+                      .replaceAll(Characters(''), Characters('\u{200B}'))
+                      .toString(),
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                  style: secondaryTextStyle(
+                    context,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
-        color: theme(context).colorCard,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(Constants.sizeBorderRadius),
-        ),
-      ),
-      child: InkWell(
-        onTap: () {
-          navigate(
-            context,
-            ResourcesList(
-              title: resource.title,
-              resource: resource.resource,
-              path: resource.path,
-              scope: resource.scope,
-              namespace: null,
-              selector: null,
-              additionalPrinterColumns: resource.additionalPrinterColumns,
-            ),
-          );
-        },
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    Characters(resource.title)
-                        .replaceAll(Characters(''), Characters('\u{200B}'))
-                        .toString(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: primaryTextStyle(
-                      context,
-                    ),
-                  ),
-                  Text(
-                    Characters(resource.description)
-                        .replaceAll(Characters(''), Characters('\u{200B}'))
-                        .toString(),
-                    overflow: TextOverflow.fade,
-                    softWrap: false,
-                    style: secondaryTextStyle(
-                      context,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -338,12 +319,16 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                             top: Constants.spacingMiddle,
                             bottom: Constants.spacingMiddle,
                           ),
-                          child: ListView.builder(
+                          child: ListView.separated(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             padding: const EdgeInsets.only(
                               right: Constants.spacingMiddle,
                               left: Constants.spacingMiddle,
+                            ),
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                              height: Constants.spacingMiddle,
                             ),
                             itemCount: _getFilteredItems(snapshot.data!).length,
                             itemBuilder: (context, index) {

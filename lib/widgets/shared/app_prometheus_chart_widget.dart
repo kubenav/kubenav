@@ -146,7 +146,9 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                       left: Constants.spacingExtraSmall,
                       right: Constants.spacingExtraSmall,
                     ),
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(
+                      Constants.spacingListItemContent,
+                    ),
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(

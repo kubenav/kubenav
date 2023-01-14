@@ -85,27 +85,24 @@ class AppActionsHeaderWidget extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: action.onTap,
-                        child: Column(
-                          children: [
-                            Icon(
-                              action.icon,
-                              color: theme(context).colorPrimary,
-                              size: 28,
-                            ),
-                            const SizedBox(
-                              height: Constants.spacingSmall,
-                            ),
-                            Text(
-                              action.title,
-                              style: primaryTextStyle(context, size: 12),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
+                    InkWell(
+                      onTap: action.onTap,
+                      child: Column(
+                        children: [
+                          Icon(
+                            action.icon,
+                            color: theme(context).colorPrimary,
+                            size: 28,
+                          ),
+                          const SizedBox(
+                            height: Constants.spacingSmall,
+                          ),
+                          Text(
+                            action.title,
+                            style: primaryTextStyle(context, size: 12),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
                     ),
                   ],

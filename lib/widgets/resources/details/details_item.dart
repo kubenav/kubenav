@@ -78,18 +78,17 @@ class DetailsItemWidget extends StatelessWidget {
 
     if (onTap != null) {
       return Flexible(
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () {
-              onTap(-1);
-            },
-            child: Text(values.toString(),
-                softWrap: true,
-                style: TextStyle(
-                  color: theme(context).colorTextPrimary,
-                  decoration: TextDecoration.underline,
-                )),
+        child: InkWell(
+          onTap: () {
+            onTap(-1);
+          },
+          child: Text(
+            values.toString(),
+            softWrap: true,
+            style: TextStyle(
+              color: theme(context).colorTextPrimary,
+              decoration: TextDecoration.underline,
+            ),
           ),
         ),
       );
@@ -142,7 +141,7 @@ class DetailsItemWidget extends StatelessWidget {
                 ? Constants.spacingExtraSmall
                 : Constants.spacingMiddle,
           ),
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(Constants.spacingListItemContent),
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(

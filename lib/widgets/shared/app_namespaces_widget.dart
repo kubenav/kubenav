@@ -12,8 +12,10 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/widgets/resources/list/list_item.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
+import 'package:kubenav/widgets/shared/app_list_item.dart';
 
 /// [AppNamespacesWidget] is a widget which can be used to switch the namespace
 /// of the currently active cluster. The widget should be used within a modal
@@ -118,52 +120,34 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
           left: Constants.spacingExtraSmall,
           right: Constants.spacingExtraSmall,
         ),
-        padding: const EdgeInsets.all(12.0),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: theme(context).colorShadow,
-              blurRadius: Constants.sizeBorderBlurRadius,
-              spreadRadius: Constants.sizeBorderSpreadRadius,
-              offset: const Offset(0.0, 0.0),
-            ),
-          ],
-          color: theme(context).colorCard,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(Constants.sizeBorderRadius),
-          ),
-        ),
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () {
-              _changeNamespace(context, '');
-            },
-            child: Row(
-              children: [
-                Icon(
-                  clustersRepository
-                              .getCluster(clustersRepository.activeClusterId)!
-                              .namespace ==
-                          ''
-                      ? Icons.radio_button_checked
-                      : Icons.radio_button_unchecked,
-                  size: 24,
-                  color: theme(context).colorPrimary,
-                ),
-                const SizedBox(width: Constants.spacingSmall),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    'All Namespaces',
-                    style: noramlTextStyle(
-                      context,
-                    ),
-                    overflow: TextOverflow.ellipsis,
+        child: AppListItem(
+          onTap: () {
+            _changeNamespace(context, '');
+          },
+          child: Row(
+            children: [
+              Icon(
+                clustersRepository
+                            .getCluster(clustersRepository.activeClusterId)!
+                            .namespace ==
+                        ''
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_unchecked,
+                size: 24,
+                color: theme(context).colorPrimary,
+              ),
+              const SizedBox(width: Constants.spacingSmall),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  'All Namespaces',
+                  style: noramlTextStyle(
+                    context,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -179,53 +163,34 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
               left: Constants.spacingExtraSmall,
               right: Constants.spacingExtraSmall,
             ),
-            padding: const EdgeInsets.all(12.0),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: theme(context).colorShadow,
-                  blurRadius: Constants.sizeBorderBlurRadius,
-                  spreadRadius: Constants.sizeBorderSpreadRadius,
-                  offset: const Offset(0.0, 0.0),
-                ),
-              ],
-              color: theme(context).colorCard,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(Constants.sizeBorderRadius),
-              ),
-            ),
-            child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () {
-                  _changeNamespace(context, name);
-                },
-                child: Row(
-                  children: [
-                    Icon(
-                      name ==
-                              clustersRepository
-                                  .getCluster(
-                                      clustersRepository.activeClusterId)!
-                                  .namespace
-                          ? Icons.radio_button_checked
-                          : Icons.radio_button_unchecked,
-                      size: 24,
-                      color: theme(context).colorPrimary,
-                    ),
-                    const SizedBox(width: Constants.spacingSmall),
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        name,
-                        style: noramlTextStyle(
-                          context,
-                        ),
-                        overflow: TextOverflow.ellipsis,
+            child: AppListItem(
+              onTap: () {
+                _changeNamespace(context, name);
+              },
+              child: Row(
+                children: [
+                  Icon(
+                    name ==
+                            clustersRepository
+                                .getCluster(clustersRepository.activeClusterId)!
+                                .namespace
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
+                    size: 24,
+                    color: theme(context).colorPrimary,
+                  ),
+                  const SizedBox(width: Constants.spacingSmall),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      name,
+                      style: noramlTextStyle(
+                        context,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );
@@ -325,54 +290,36 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                           left: Constants.spacingExtraSmall,
                           right: Constants.spacingExtraSmall,
                         ),
-                        padding: const EdgeInsets.all(12.0),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: theme(context).colorShadow,
-                              blurRadius: Constants.sizeBorderBlurRadius,
-                              spreadRadius: Constants.sizeBorderSpreadRadius,
-                              offset: const Offset(0.0, 0.0),
-                            ),
-                          ],
-                          color: theme(context).colorCard,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(Constants.sizeBorderRadius),
-                          ),
-                        ),
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: () {
-                              _changeNamespace(context, name ?? 'default');
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  name != null &&
-                                          name ==
-                                              clustersRepository
-                                                  .getCluster(clustersRepository
-                                                      .activeClusterId)!
-                                                  .namespace
-                                      ? Icons.radio_button_checked
-                                      : Icons.radio_button_unchecked,
-                                  size: 24,
-                                  color: theme(context).colorPrimary,
-                                ),
-                                const SizedBox(width: Constants.spacingSmall),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    name ?? '',
-                                    style: noramlTextStyle(
-                                      context,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
+                        child: AppListItem(
+                          onTap: () {
+                            _changeNamespace(context, name ?? 'default');
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                name != null &&
+                                        name ==
+                                            clustersRepository
+                                                .getCluster(clustersRepository
+                                                    .activeClusterId)!
+                                                .namespace
+                                    ? Icons.radio_button_checked
+                                    : Icons.radio_button_unchecked,
+                                size: 24,
+                                color: theme(context).colorPrimary,
+                              ),
+                              const SizedBox(width: Constants.spacingSmall),
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  name ?? '',
+                                  style: noramlTextStyle(
+                                    context,
                                   ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       );

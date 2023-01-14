@@ -14,6 +14,7 @@ import 'package:kubenav/widgets/resources/resource_details.dart';
 import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
+import 'package:kubenav/widgets/shared/app_list_item.dart';
 
 /// The [ResourcesBookmarks] widget can be used as a screen to view all
 /// bookmarks saved by a user. When the user then clicks on a bookmark he will
@@ -169,22 +170,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                       left: Constants.spacingMiddle,
                       right: Constants.spacingMiddle,
                     ),
-                    padding: const EdgeInsets.all(12.0),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: theme(context).colorShadow,
-                          blurRadius: Constants.sizeBorderBlurRadius,
-                          spreadRadius: Constants.sizeBorderSpreadRadius,
-                          offset: const Offset(0.0, 0.0),
-                        ),
-                      ],
-                      color: theme(context).colorCard,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(Constants.sizeBorderRadius),
-                      ),
-                    ),
-                    child: InkWell(
+                    child: AppListItem(
                       onTap: () {
                         openBookmark(context, index);
                       },

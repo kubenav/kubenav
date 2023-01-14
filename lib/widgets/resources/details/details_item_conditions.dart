@@ -5,6 +5,7 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources/general.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/widgets/shared/app_list_item.dart';
 
 class DetailsItemConditions extends StatelessWidget {
   const DetailsItemConditions({
@@ -59,69 +60,47 @@ class DetailsItemConditions extends StatelessWidget {
                     item['status']['conditions'].length,
                     (index) {
                       return Container(
-                        margin: const EdgeInsets.only(
-                          top: Constants.spacingSmall,
-                          bottom: Constants.spacingSmall,
-                          left: Constants.spacingSmall,
-                          right: Constants.spacingSmall,
+                        margin: const EdgeInsets.all(
+                          Constants.spacingSmall,
                         ),
-                        padding: const EdgeInsets.all(12.0),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: theme(context).colorShadow,
-                              blurRadius: Constants.sizeBorderBlurRadius,
-                              spreadRadius: Constants.sizeBorderSpreadRadius,
-                              offset: const Offset(0.0, 0.0),
-                            ),
-                          ],
-                          color: theme(context).colorCard,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(Constants.sizeBorderRadius),
-                          ),
-                        ),
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: () {
-                              final age = item['status']['conditions'][index]
-                                          ['lastTransitionTime'] !=
-                                      null
-                                  ? getAge(DateTime.parse(item['status']
-                                          ['conditions'][index]
-                                      ['lastTransitionTime']))
-                                  : '-';
+                        child: AppListItem(
+                          onTap: () {
+                            final age = item['status']['conditions'][index]
+                                        ['lastTransitionTime'] !=
+                                    null
+                                ? getAge(DateTime.parse(item['status']
+                                        ['conditions'][index]
+                                    ['lastTransitionTime']))
+                                : '-';
 
-                              showSnackbar(
-                                context,
-                                item['status']['conditions'][index]['type'],
-                                'Status: ${item['status']['conditions'][index]['status']}\nAge: $age\nReason: ${item['status']['conditions'][index]['reason'] ?? '-'}\nMessage: ${item['status']['conditions'][index]['message'] ?? '-'}',
-                              );
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  item['status']['conditions'][index]
-                                              ['status'] ==
-                                          'True'
-                                      ? Icons.radio_button_checked
-                                      : Icons.radio_button_unchecked,
-                                  size: 24,
-                                  color: theme(context).colorPrimary,
-                                ),
-                                const SizedBox(width: Constants.spacingSmall),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    item['status']['conditions'][index]['type'],
-                                    style: noramlTextStyle(
-                                      context,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
+                            showSnackbar(
+                              context,
+                              item['status']['conditions'][index]['type'],
+                              'Status: ${item['status']['conditions'][index]['status']}\nAge: $age\nReason: ${item['status']['conditions'][index]['reason'] ?? '-'}\nMessage: ${item['status']['conditions'][index]['message'] ?? '-'}',
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                item['status']['conditions'][index]['status'] ==
+                                        'True'
+                                    ? Icons.radio_button_checked
+                                    : Icons.radio_button_unchecked,
+                                size: 24,
+                                color: theme(context).colorPrimary,
+                              ),
+                              const SizedBox(width: Constants.spacingSmall),
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  item['status']['conditions'][index]['type'],
+                                  style: noramlTextStyle(
+                                    context,
                                   ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       );

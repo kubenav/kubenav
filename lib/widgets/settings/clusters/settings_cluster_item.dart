@@ -11,6 +11,7 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
+import 'package:kubenav/widgets/shared/app_list_item.dart';
 
 /// The [SettingsClusterItem] widget is used to display a single cluster in the
 /// [SettingsClusters] widget. The widget also makes an API call to the health
@@ -97,22 +98,7 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
         left: Constants.spacingMiddle,
         right: Constants.spacingMiddle,
       ),
-      padding: const EdgeInsets.all(12.0),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: theme(context).colorShadow,
-            blurRadius: Constants.sizeBorderBlurRadius,
-            spreadRadius: Constants.sizeBorderSpreadRadius,
-            offset: const Offset(0.0, 0.0),
-          ),
-        ],
-        color: theme(context).colorCard,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(Constants.sizeBorderRadius),
-        ),
-      ),
-      child: InkWell(
+      child: AppListItem(
         onTap: widget.onTap,
         onDoubleTap: widget.onDoubleTap,
         child: Column(

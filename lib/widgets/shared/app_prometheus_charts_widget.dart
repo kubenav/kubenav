@@ -13,6 +13,7 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/widgets/shared/app_list_item.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_chart_widget.dart';
 import 'package:kubenav/widgets/shared/app_time_range_selector_widget.dart';
 
@@ -136,106 +137,84 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
                   style: primaryTextStyle(context, size: 18),
                 ),
               ),
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {
-                    showModal(
-                      context,
-                      AppTimeRangeSelectorWidget(
-                        time: _time,
-                        selectTime: (Time time) {
-                          setState(() {
-                            _time = time;
-                          });
-                        },
-                      ),
-                    );
-                  },
-                  child: Wrap(
-                    children: [
-                      Icon(
-                        Icons.schedule,
+              InkWell(
+                onTap: () {
+                  showModal(
+                    context,
+                    AppTimeRangeSelectorWidget(
+                      time: _time,
+                      selectTime: (Time time) {
+                        setState(() {
+                          _time = time;
+                        });
+                      },
+                    ),
+                  );
+                },
+                child: Wrap(
+                  children: [
+                    Icon(
+                      Icons.schedule,
+                      color: theme(context).colorPrimary,
+                      size: 16,
+                    ),
+                    const SizedBox(width: Constants.spacingExtraSmall),
+                    Text(
+                      'Time Range',
+                      style: secondaryTextStyle(
+                        context,
                         color: theme(context).colorPrimary,
-                        size: 16,
                       ),
-                      const SizedBox(width: Constants.spacingExtraSmall),
-                      Text(
-                        'Time Range',
-                        style: secondaryTextStyle(
-                          context,
-                          color: theme(context).colorPrimary,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
         ),
-        Container(
+        ListView.separated(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
           padding: const EdgeInsets.only(
             left: Constants.spacingMiddle,
             right: Constants.spacingMiddle,
           ),
-          child: Column(
-            children: List.generate(
-              _charts.length,
-              (index) => Container(
-                margin: const EdgeInsets.only(
-                  bottom: Constants.spacingMiddle,
+          separatorBuilder: (context, index) => const SizedBox(
+            height: Constants.spacingMiddle,
+          ),
+          itemCount: _charts.length,
+          itemBuilder: (context, index) => AppListItem(
+            onTap: () {
+              showModal(
+                context,
+                AppPrometheusChartWidget(
+                  title: _charts[index].title,
+                  unit: _charts[index].unit,
+                  manifest: widget.manifest,
+                  queries: _charts[index].queries,
+                  time: _time,
                 ),
-                padding: const EdgeInsets.all(12.0),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: theme(context).colorShadow,
-                      blurRadius: Constants.sizeBorderBlurRadius,
-                      spreadRadius: Constants.sizeBorderSpreadRadius,
-                      offset: const Offset(0.0, 0.0),
-                    ),
-                  ],
-                  color: theme(context).colorCard,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(Constants.sizeBorderRadius),
-                  ),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    showModal(
-                      context,
-                      AppPrometheusChartWidget(
-                        title: _charts[index].title,
-                        unit: _charts[index].unit,
-                        manifest: widget.manifest,
-                        queries: _charts[index].queries,
-                        time: _time,
-                      ),
-                    );
-                  },
-                  child: Row(
+              );
+            },
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _charts[index].title,
-                              style: primaryTextStyle(
-                                context,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
+                      Text(
+                        _charts[index].title,
+                        style: primaryTextStyle(
+                          context,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         ),

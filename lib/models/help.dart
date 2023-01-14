@@ -410,7 +410,7 @@ In the opened modal select the container and the time range for which you want t
 
 ![Logs](resource:assets/help/logs-2.png)
 
-To close the opened terminal with the logs you have to **press longer** on the terminal tab.
+To close the opened terminal with the logs you have to **double tap** on the terminal tab.
 
 ![Logs](resource:assets/help/logs-3.png)
           ''',
@@ -427,7 +427,7 @@ In the opened modal select the container and the shell and click on **Get Termin
 
 ![Terminals](resource:assets/help/terminals-2.png)
 
-To close the opened terminal you have to **press longer** on the terminal tab.
+To close the opened terminal you have to **double tap** on the terminal tab.
 
 ![Terminals](resource:assets/help/terminals-3.png)
 
