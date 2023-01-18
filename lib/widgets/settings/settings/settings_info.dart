@@ -14,7 +14,7 @@ import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 
 const licenseText = '''MIT License
 
-Copyright (c) 2022 Rico Berger
+Copyright (c) 2023 Rico Berger
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

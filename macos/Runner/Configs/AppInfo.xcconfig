@@ -11,4 +11,4 @@ PRODUCT_NAME = kubenav
 PRODUCT_BUNDLE_IDENTIFIER = io.kubenav.kubenav
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2022 Rico Berger. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 Rico Berger. All rights reserved.
