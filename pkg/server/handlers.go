@@ -14,6 +14,7 @@ import (
 	"github.com/kubenav/kubenav/pkg/server/terminal"
 
 	"github.com/gorilla/websocket"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/tools/remotecommand"
 )
 
@@ -70,10 +71,36 @@ func (s *server) portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		restConfig, _, err := s.kubeClient.GetClient(request.ContextName, request.ClusterServer, request.ClusterCertificateAuthorityData, request.ClusterInsecureSkipTLSVerify, request.UserClientCertificateData, request.UserClientKeyData, request.UserToken, request.UserUsername, request.UserPassword, request.Proxy, 0)
+		restConfig, clientset, err := s.kubeClient.GetClient(request.ContextName, request.ClusterServer, request.ClusterCertificateAuthorityData, request.ClusterInsecureSkipTLSVerify, request.UserClientCertificateData, request.UserClientKeyData, request.UserToken, request.UserUsername, request.UserPassword, request.Proxy, 0)
 		if err != nil {
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 			return
+		}
+
+		// If the request doesn't contain a pod name, container and port number, we assume that the port forwarding
+		// request was initialized via a service. This means that we have to get all pods for this service via it's
+		// selector and then we have to get the container and port from the pods manifest file.
+		if request.PodName == "" && request.PodContainer == "" && request.PodPort == 0 {
+			pods, err := clientset.CoreV1().Pods(request.PodNamespace).List(r.Context(), metav1.ListOptions{
+				LabelSelector: request.ServiceSelector,
+			})
+			if err != nil {
+				middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not get pods: %s", err.Error()))
+				return
+			}
+
+			if pods == nil || len(pods.Items) == 0 {
+				middleware.Errorf(w, r, err, http.StatusBadRequest, "Could not get pods")
+				return
+			}
+
+			request.PodName = pods.Items[0].ObjectMeta.Name
+			request.PodContainer, request.PodPort = getPodContainerAndPort(pods.Items[0], request.ServiceTargetPort)
+
+			if request.PodContainer == "" || request.PodPort == 0 {
+				middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not determine container (%s) and port (%d): %s %s %s", request.PodContainer, request.PodPort, request.PodNamespace, request.ServiceSelector, request.ServiceTargetPort))
+				return
+			}
 		}
 
 		// Create a new session for port forwarding and start the portforwarding request. Then we wait until the
@@ -101,12 +128,13 @@ func (s *server) portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
-		middleware.Write(w, r, struct {
-			SessionID string `json:"sessionID"`
-			LocalPort int64  `json:"localPort"`
-		}{
-			pf.ID,
-			pf.LocalPort,
+		middleware.Write(w, r, portforwarding.GetResponse{
+			ID:         pf.ID,
+			Name:       pf.Name,
+			Namespace:  pf.Namespace,
+			Container:  pf.Container,
+			RemotePort: pf.RemotePort,
+			LocalPort:  pf.LocalPort,
 		})
 		return
 	}

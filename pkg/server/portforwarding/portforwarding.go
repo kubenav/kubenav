@@ -34,6 +34,8 @@ type CreateRequest struct {
 	PodNamespace                    string `json:"podNamespace"`
 	PodContainer                    string `json:"podContainer"`
 	PodPort                         int64  `json:"podPort"`
+	ServiceSelector                 string `json:"serviceSelector"`
+	ServiceTargetPort               string `json:"serviceTargetPort"`
 }
 
 // DeleteRequest is the structure of a request to delete a port forwarding session, for that is just contains the
