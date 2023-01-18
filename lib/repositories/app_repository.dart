@@ -104,6 +104,8 @@ class AppRepository with ChangeNotifier {
     try {
       if (_settings.isAuthenticationEnabled) {
         _settings.isAuthenticationEnabled = false;
+        await _save();
+        notifyListeners();
       } else {
         final LocalAuthentication auth = LocalAuthentication();
         final bool canAuthenticateWithBiometrics =
@@ -121,7 +123,7 @@ class AppRepository with ChangeNotifier {
             notifyListeners();
           } else {
             Logger.log(
-              'Enable Authentication failed',
+              'Enable / disable Authentication failed',
               'Authentication could not be enabled, because the device hasn\'t any biometrics enrolled.',
             );
             throw Exception(
@@ -130,7 +132,7 @@ class AppRepository with ChangeNotifier {
           }
         } else {
           Logger.log(
-            'Enable Authentication failed',
+            'Enable / disable Authentication failed',
             'Authentication could not be enabled, because the device is not supported.',
           );
           throw Exception(
@@ -140,7 +142,7 @@ class AppRepository with ChangeNotifier {
       }
     } catch (err) {
       Logger.log(
-        'Enable Authentication failed',
+        'Enable / disable Authentication failed',
         err.toString(),
       );
       rethrow;
