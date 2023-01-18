@@ -119,6 +119,10 @@ class PortForwardingRepository with ChangeNotifier {
   /// internal http server is running before we can create the session. The
   /// created session is then added to the [_sessions] list and can be viewed
   /// by a user via the corresponding floating action button.
+  ///
+  /// If the [container] is an empty string and [port] the port is 0 the
+  /// [serviceSelector] and [serviceTargetPort] must be provided to establish a
+  /// port forwading session via the a service.
   Future<void> createSession(
     Cluster cluster,
     String proxy,
@@ -127,6 +131,8 @@ class PortForwardingRepository with ChangeNotifier {
     String namespace,
     String container,
     int port,
+    String serviceSelector,
+    String serviceTargetPort,
   ) async {
     try {
       final isStarted = await KubernetesService(
@@ -144,17 +150,15 @@ class PortForwardingRepository with ChangeNotifier {
           cluster: cluster,
           proxy: proxy,
           timeout: timeout,
-        ).portForwarding(name, namespace, port);
-        _sessions.add(
-          PortForwardingSession(
-            id: result['sessionID'],
-            name: name,
-            namespace: namespace,
-            container: container,
-            remotePort: port,
-            localPort: result['localPort'],
-          ),
+        ).portForwarding(
+          name,
+          namespace,
+          port,
+          serviceSelector,
+          serviceTargetPort,
         );
+
+        _sessions.add(PortForwardingSession.fromJson(result));
         notifyListeners();
       }
     } catch (err) {

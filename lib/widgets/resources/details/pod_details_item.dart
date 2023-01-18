@@ -119,6 +119,8 @@ class _PodDetailsItemState extends State<PodDetailsItem> {
         pod.metadata!.namespace!,
         containerName,
         containerPort,
+        '',
+        '',
       );
 
       if (mounted) {

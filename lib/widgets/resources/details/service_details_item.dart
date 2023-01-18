@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_service.dart';
 import 'package:kubenav/models/resource.dart';
+import 'package:kubenav/repositories/app_repository.dart';
+import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/portforwarding_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/resources/details/details_item.dart';
 import 'package:kubenav/widgets/resources/details/details_resources_preview.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 
-class ServiceDetailsItem extends StatelessWidget implements IDetailsItemWidget {
+class ServiceDetailsItem extends StatefulWidget implements IDetailsItemWidget {
   const ServiceDetailsItem({
     Key? key,
     required this.item,
@@ -18,8 +24,71 @@ class ServiceDetailsItem extends StatelessWidget implements IDetailsItemWidget {
   final dynamic item;
 
   @override
+  State<ServiceDetailsItem> createState() => _ServiceDetailsItemState();
+}
+
+class _ServiceDetailsItemState extends State<ServiceDetailsItem> {
+  Future<void> _portForward(
+    String serviceNamespace,
+    String serviceSelector,
+    String serviceTargetPort,
+  ) async {
+    ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
+      context,
+      listen: false,
+    );
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: false,
+    );
+    PortForwardingRepository portForwardingRepository =
+        Provider.of<PortForwardingRepository>(
+      context,
+      listen: false,
+    );
+
+    showSnackbar(
+      context,
+      'Port Forwarding',
+      'Session is created ...',
+    );
+
+    try {
+      final cluster = await clustersRepository.getClusterWithCredentials(
+        clustersRepository.activeClusterId,
+      );
+
+      await portForwardingRepository.createSession(
+        cluster!,
+        appRepository.settings.proxy,
+        appRepository.settings.timeout,
+        '',
+        serviceNamespace,
+        '',
+        0,
+        serviceSelector,
+        serviceTargetPort,
+      );
+
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Port Forwarding',
+          'Session was created',
+        );
+      }
+    } catch (err) {
+      showSnackbar(
+        context,
+        'Could not create session',
+        err.toString(),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final service = IoK8sApiCoreV1Service.fromJson(item);
+    final service = IoK8sApiCoreV1Service.fromJson(widget.item);
 
     if (service == null || service.spec == null || service.status == null) {
       return Container();
@@ -46,6 +115,16 @@ class ServiceDetailsItem extends StatelessWidget implements IDetailsItemWidget {
                   .map((port) =>
                       '${port.port}${port.nodePort != null ? '/${port.nodePort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''} -> ${port.targetPort}')
                   .toList(),
+              onTap: (index) {
+                _portForward(
+                  service.metadata?.namespace ?? '',
+                  service.spec!.selector.entries
+                      .map((selector) => '${selector.key}=${selector.value}')
+                      .toList()
+                      .join(','),
+                  service.spec!.ports[index].targetPort.toString(),
+                );
+              },
             ),
             DetailsItemModel(
               name: 'Session Affinity',
@@ -102,7 +181,7 @@ class ServiceDetailsItem extends StatelessWidget implements IDetailsItemWidget {
           scope: Resources.map['pods']!.scope,
           additionalPrinterColumns:
               Resources.map['pods']!.additionalPrinterColumns,
-          namespace: item['metadata']['namespace'],
+          namespace: service.metadata?.namespace,
           selector: getMatchLabelsSelector(service.spec!.selector),
         ),
         DetailsResourcesPreview(
@@ -112,13 +191,13 @@ class ServiceDetailsItem extends StatelessWidget implements IDetailsItemWidget {
           scope: Resources.map['events']!.scope,
           additionalPrinterColumns:
               Resources.map['events']!.additionalPrinterColumns,
-          namespace: item['metadata']['namespace'],
+          namespace: service.metadata?.namespace,
           selector:
-              'fieldSelector=involvedObject.name=${item['metadata']['name']}',
+              'fieldSelector=involvedObject.name=${service.metadata?.name}',
         ),
         const SizedBox(height: Constants.spacingMiddle),
         AppPrometheusChartsWidget(
-          manifest: item,
+          manifest: widget.item,
           defaultCharts: const [],
         ),
       ],

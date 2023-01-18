@@ -344,7 +344,12 @@ class KubernetesService {
   /// of the given Pod name, by using the `portforwarding` endpoint of the
   /// internal http server.
   Future<Map<String, dynamic>> portForwarding(
-      String name, String namespace, int port) async {
+    String name,
+    String namespace,
+    int port,
+    String serviceSelector,
+    String serviceTargetPort,
+  ) async {
     try {
       final response = await http.post(
         Uri.parse('http://localhost:14122/portforwarding'),
@@ -367,6 +372,8 @@ class KubernetesService {
           'podName': name,
           'podNamespace': namespace,
           'podPort': port,
+          'serviceSelector': serviceSelector,
+          'serviceTargetPort': serviceTargetPort,
         }),
       );
 
