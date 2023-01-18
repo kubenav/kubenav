@@ -1,4 +1,5 @@
 import UIKit
+import TPInAppReceipt
 import Flutter
 import Kubenav
 
@@ -253,6 +254,8 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
+    } else if call.method == "verifyIAP" {
+      verifyIAP(result: result)
     } else {
       result(FlutterMethodNotImplemented)
     }
@@ -438,6 +441,22 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
       result(FlutterError(code: "PROMETHEUS_GET_DATA_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
       result(data)
+    }
+  }
+
+  private func verifyIAP(result: FlutterResult) {
+    do {
+      let receipt = try InAppReceipt.localReceipt()
+      try receipt.validate()
+
+      let activePurchases: [InAppPurchase] = receipt.activeAutoRenewableSubscriptionPurchases
+      if activePurchases.isEmpty {
+        result("false")
+      } else {
+        result("true")
+      }
+    } catch {
+      result(FlutterError(code: "VERIFY_IAP_FAILED", message: error.localizedDescription, details: nil))
     }
   }
 }

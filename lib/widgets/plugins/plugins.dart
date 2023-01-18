@@ -35,6 +35,7 @@ class Plugins extends StatelessWidget {
     }
 
     return [
+      const SizedBox(height: Constants.spacingSmall),
       AppVertialListSimpleWidget(
         title: 'Plugins',
         items: [
