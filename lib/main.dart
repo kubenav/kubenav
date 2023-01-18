@@ -11,6 +11,7 @@ import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/bookmarks_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/portforwarding_repository.dart';
+import 'package:kubenav/repositories/sponsor_repository.dart';
 import 'package:kubenav/repositories/terminal_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubenav_desktop.dart';
@@ -59,6 +60,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => SponsorRepository()),
         ChangeNotifierProvider(create: (_) => ThemeRepository()),
         ChangeNotifierProvider(create: (_) => AppRepository()),
         ChangeNotifierProvider(create: (_) => ClustersRepository()),

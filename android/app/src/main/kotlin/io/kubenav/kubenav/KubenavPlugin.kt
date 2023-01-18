@@ -263,6 +263,8 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       } else {
         prometheusGetData(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, request, result)
       }
+    } else if (call.method == "verifyIAP") {
+      result.notImplemented()
     } else {
       result.notImplemented()
     }

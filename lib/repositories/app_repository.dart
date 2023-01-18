@@ -315,6 +315,16 @@ class AppRepository with ChangeNotifier {
       notifyListeners();
     } catch (_) {}
   }
+
+  /// [setSponsorReminder] sets the sponsor reminder to the provided [value].
+  /// The value must be a unix timestamp in milliseconds which is in the future.
+  Future<void> setSponsorReminder(int value) async {
+    try {
+      _settings.sponsorReminder = value;
+      await _save();
+      notifyListeners();
+    } catch (_) {}
+  }
 }
 
 /// The [AppRepositorySettings] model represents all the app settings which can
@@ -326,6 +336,7 @@ class AppRepositorySettings {
   String editorFormat;
   String proxy;
   int timeout;
+  int sponsorReminder;
   AppRepositorySettingsPrometheus prometheus;
 
   AppRepositorySettings({
@@ -335,6 +346,7 @@ class AppRepositorySettings {
     required this.editorFormat,
     required this.proxy,
     required this.timeout,
+    required this.sponsorReminder,
     required this.prometheus,
   });
 
@@ -346,6 +358,7 @@ class AppRepositorySettings {
       editorFormat: 'yaml',
       proxy: '',
       timeout: 0,
+      sponsorReminder: 0,
       prometheus: AppRepositorySettingsPrometheus.fromDefault(),
     );
   }
@@ -373,6 +386,10 @@ class AppRepositorySettings {
       timeout: data.containsKey('timeout') && data['timeout'] != null
           ? data['timeout']
           : 0,
+      sponsorReminder:
+          data.containsKey('sponsorReminder') && data['sponsorReminder'] != null
+              ? data['sponsorReminder']
+              : 0,
       prometheus: data.containsKey('prometheus') && data['prometheus'] != null
           ? AppRepositorySettingsPrometheus.fromJson(data['prometheus'])
           : AppRepositorySettingsPrometheus.fromDefault(),

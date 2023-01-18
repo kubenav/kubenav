@@ -18,6 +18,7 @@ import 'package:kubenav/widgets/settings/settings/settings_prometheus.dart';
 import 'package:kubenav/widgets/settings/settings/settings_proxy.dart';
 import 'package:kubenav/widgets/settings/settings/settings_sponsor.dart';
 import 'package:kubenav/widgets/settings/settings/settings_timeout.dart';
+import 'package:kubenav/widgets/settings/settings/sponsor/settings_sponsor_banner.dart';
 import 'package:kubenav/widgets/settings/settings_clusters.dart';
 import 'package:kubenav/widgets/settings/settings_help.dart';
 import 'package:kubenav/widgets/settings/settings_namespaces.dart';
@@ -619,15 +620,16 @@ class Settings extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: Constants.spacingSmall),
+            const SettingsSponsorBanner(),
             _buildViewAllClusters(context),
             _buildClusters(context),
             AppVertialListSimpleWidget(
               title: 'Settings',
               items: buildSettings(context),
             ),
+            const SettingsSponsor(),
             buildHelp(context),
             const SettingsInfo(),
-            const SettingsSponsor(),
             const SizedBox(height: Constants.spacingMiddle),
           ],
         ),
