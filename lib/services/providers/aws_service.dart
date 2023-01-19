@@ -313,6 +313,7 @@ class AWSService {
     String secretKey,
     String region,
     String sessionToken,
+    String roleArn,
     String clusterID,
   ) async {
     try {
@@ -323,6 +324,7 @@ class AWSService {
           'secretKey': secretKey,
           'region': region,
           'sessionToken': sessionToken,
+          'roleArn': roleArn,
           'clusterID': clusterID,
         },
       );

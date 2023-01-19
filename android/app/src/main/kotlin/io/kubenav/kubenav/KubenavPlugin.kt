@@ -113,12 +113,13 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val secretKey = call.argument<String>("secretKey")
       val region = call.argument<String>("region")
       val sessionToken = call.argument<String>("sessionToken")
+      val roleArn = call.argument<String>("roleArn")
       val clusterID = call.argument<String>("clusterID")
 
-      if (accessKeyID == null || secretKey == null || region == null || sessionToken == null || clusterID == null) {
+      if (accessKeyID == null || secretKey == null || region == null || sessionToken == null || roleArn == null || clusterID == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        awsGetToken(accessKeyID, secretKey, region, sessionToken, clusterID, result)
+        awsGetToken(accessKeyID, secretKey, region, sessionToken, roleArn, clusterID, result)
       }
     } else if (call.method == "awsGetSSOConfig") {
       val ssoRegion = call.argument<String>("ssoRegion")
@@ -332,9 +333,9 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun awsGetToken(accessKeyID: String, secretKey: String, region: String, sessionToken: String, clusterID: String, result: MethodChannel.Result) {
+  private fun awsGetToken(accessKeyID: String, secretKey: String, region: String, sessionToken: String, roleArn: String, clusterID: String, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.awsGetToken(accessKeyID, secretKey, region, sessionToken, clusterID)
+      val data: String = Kubenav.awsGetToken(accessKeyID, secretKey, region, sessionToken, roleArn, clusterID)
       result.success(data)
     } catch (e: Exception) {
       result.error("AWS_GET_TOKEN_FAILED", e.localizedMessage, null)
