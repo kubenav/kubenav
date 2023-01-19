@@ -105,9 +105,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let secretKey = args["secretKey"] as? String,
         let region = args["region"] as? String,
         let sessionToken = args["sessionToken"] as? String,
+        let roleArn = args["roleArn"] as? String,
         let clusterID = args["clusterID"] as? String
       {
-        awsGetToken(accessKeyID: accessKeyID, secretKey: secretKey, region: region, sessionToken: sessionToken, clusterID: clusterID, result: result)
+        awsGetToken(accessKeyID: accessKeyID, secretKey: secretKey, region: region, sessionToken: sessionToken, roleArn: roleArn, clusterID: clusterID, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -334,10 +335,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func awsGetToken(accessKeyID: String, secretKey: String, region: String, sessionToken: String, clusterID: String, result: FlutterResult) {
+  private func awsGetToken(accessKeyID: String, secretKey: String, region: String, sessionToken: String, roleArn: String, clusterID: String, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavAWSGetToken(accessKeyID, secretKey, region, sessionToken, clusterID, &error)
+    let data = KubenavAWSGetToken(accessKeyID, secretKey, region, sessionToken, roleArn, clusterID, &error)
     if error != nil {
       result(FlutterError(code: "AWS_GET_TOKEN_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {

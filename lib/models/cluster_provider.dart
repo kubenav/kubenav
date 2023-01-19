@@ -80,12 +80,14 @@ class ClusterProviderAWS {
   String? secretKey;
   String? region;
   String? sessionToken;
+  String? roleArn;
 
   ClusterProviderAWS({
     required this.accessKeyID,
     required this.secretKey,
     required this.region,
     required this.sessionToken,
+    required this.roleArn,
   });
 
   factory ClusterProviderAWS.fromJson(Map<String, dynamic> data) {
@@ -95,6 +97,7 @@ class ClusterProviderAWS {
       region: data.containsKey('region') ? data['region'] : null,
       sessionToken:
           data.containsKey('sessionToken') ? data['sessionToken'] : null,
+      roleArn: data.containsKey('roleArn') ? data['roleArn'] : null,
     );
   }
 

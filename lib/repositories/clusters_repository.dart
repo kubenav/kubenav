@@ -253,10 +253,11 @@ class ClustersRepository with ChangeNotifier {
           final provider = getProvider(cluster.clusterProviderId);
           if (provider != null && provider.aws != null) {
             final token = await AWSService().getToken(
-              provider.aws!.accessKeyID!,
-              provider.aws!.secretKey!,
-              provider.aws!.region!,
-              provider.aws!.sessionToken!,
+              provider.aws?.accessKeyID ?? '',
+              provider.aws?.secretKey ?? '',
+              provider.aws?.region ?? '',
+              provider.aws?.sessionToken ?? '',
+              provider.aws?.roleArn ?? '',
               cluster.clusterProviderInternal,
             );
             cluster.userToken = token;
@@ -294,24 +295,25 @@ class ClustersRepository with ChangeNotifier {
             }
 
             final credentials = await AWSService().getSSOToken(
-              provider.awssso!.accountID!,
-              provider.awssso!.roleName!,
-              provider.awssso!.ssoRegion!,
-              provider.awssso!.ssoConfig!.client!.clientId!,
-              provider.awssso!.ssoConfig!.client!.clientSecret!,
-              provider.awssso!.ssoConfig!.device!.deviceCode!,
-              provider.awssso!.ssoCredentials!.accessToken!,
-              provider.awssso!.ssoCredentials!.accessTokenExpire!,
+              provider.awssso?.accountID ?? '',
+              provider.awssso?.roleName ?? '',
+              provider.awssso?.ssoRegion ?? '',
+              provider.awssso?.ssoConfig?.client?.clientId ?? '',
+              provider.awssso?.ssoConfig?.client?.clientSecret ?? '',
+              provider.awssso?.ssoConfig?.device?.deviceCode ?? '',
+              provider.awssso?.ssoCredentials?.accessToken ?? '',
+              provider.awssso?.ssoCredentials?.accessTokenExpire ?? 0,
             );
 
             provider.awssso!.ssoCredentials = credentials;
             await editProviderWithoutNotify(provider);
 
             final token = await AWSService().getToken(
-              credentials.accessKeyId!,
-              credentials.secretAccessKey!,
-              provider.awssso!.region!,
-              credentials.sessionToken!,
+              credentials.accessKeyId ?? '',
+              credentials.secretAccessKey ?? '',
+              provider.awssso?.region ?? '',
+              credentials.sessionToken ?? '',
+              '',
               cluster.clusterProviderInternal,
             );
 
@@ -339,27 +341,27 @@ class ClustersRepository with ChangeNotifier {
         final provider = getProvider(cluster.clusterProviderId);
 
         if (DateTime.fromMillisecondsSinceEpoch(
-          provider!.google!.accessTokenExpires!,
+          provider?.google?.accessTokenExpires ?? 0,
         ).isBefore(DateTime.now())) {
           final googleTokens = await GoogleService().getTokensFromRefreshToken(
-            provider.google!.clientID!,
-            provider.google!.clientSecret!,
-            provider.google!.refreshToken!,
+            provider?.google?.clientID ?? '',
+            provider?.google?.clientSecret ?? '',
+            provider?.google?.refreshToken ?? '',
           );
 
           final expires = DateTime.now().millisecondsSinceEpoch +
               googleTokens.expiresIn! * 1000;
-          provider.google!.accessToken = googleTokens.accessToken!;
-          provider.google!.accessTokenExpires = expires;
+          provider?.google?.accessToken = googleTokens.accessToken!;
+          provider?.google?.accessTokenExpires = expires;
 
-          cluster.userToken = provider.google!.accessToken!;
+          cluster.userToken = provider?.google?.accessToken ?? '';
 
-          await editProviderWithoutNotify(provider);
+          await editProviderWithoutNotify(provider!);
           await editClusterWithoutNotify(cluster);
           return cluster;
         } else {
-          if (cluster.userToken != provider.google!.accessToken) {
-            cluster.userToken = provider.google!.accessToken!;
+          if (cluster.userToken != provider?.google?.accessToken) {
+            cluster.userToken = provider?.google?.accessToken ?? '';
             await editClusterWithoutNotify(cluster);
           }
           return cluster;
@@ -375,36 +377,36 @@ class ClustersRepository with ChangeNotifier {
         /// the cluster configuration before we return the cluster.
         final provider = getProvider(cluster.clusterProviderId);
 
-        DateTime? expiryDate = Jwt.getExpiryDate(provider!.oidc!.idToken!);
+        DateTime? expiryDate = Jwt.getExpiryDate(provider?.oidc?.idToken ?? '');
 
         if (expiryDate != null && expiryDate.isBefore(DateTime.now())) {
           final oidcResponse = await OIDCService().getAccessToken(
-            provider.oidc!.discoveryURL!,
-            provider.oidc!.clientID!,
-            provider.oidc!.clientSecret!,
-            provider.oidc!.certificateAuthority!,
-            provider.oidc!.scopes!,
+            provider?.oidc?.discoveryURL ?? '',
+            provider?.oidc?.clientID ?? '',
+            provider?.oidc?.clientSecret ?? '',
+            provider?.oidc?.certificateAuthority ?? '',
+            provider?.oidc?.scopes ?? '',
             Constants.oidcRedirectURI,
-            provider.oidc!.refreshToken!,
+            provider?.oidc?.refreshToken ?? '',
           );
 
           if (oidcResponse.idToken != null) {
-            provider.oidc!.idToken = oidcResponse.idToken!;
+            provider?.oidc?.idToken = oidcResponse.idToken!;
           }
 
           if (oidcResponse.refreshToken != null &&
               oidcResponse.refreshToken != '') {
-            provider.oidc!.refreshToken = oidcResponse.refreshToken!;
+            provider?.oidc?.refreshToken = oidcResponse.refreshToken!;
           }
 
           cluster.userToken = oidcResponse.idToken!;
-          await editProviderWithoutNotify(provider);
+          await editProviderWithoutNotify(provider!);
           await editClusterWithoutNotify(cluster);
 
           return cluster;
         } else {
-          if (cluster.userToken != provider.oidc!.idToken) {
-            cluster.userToken = provider.oidc!.idToken!;
+          if (cluster.userToken != provider?.oidc?.idToken) {
+            cluster.userToken = provider?.oidc?.idToken ?? '';
             editClusterWithoutNotify(cluster);
           }
           return cluster;

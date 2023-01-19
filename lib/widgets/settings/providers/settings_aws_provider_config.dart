@@ -31,6 +31,7 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
   final _secretKeyController = TextEditingController();
   String _region = 'us-east-1';
   final _sessionTokenController = TextEditingController();
+  final _roleArnController = TextEditingController();
   bool _isLoading = false;
 
   /// [_validator] is used to validate all the required fields. If they are
@@ -65,6 +66,7 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
               secretKey: _secretKeyController.text,
               region: _region,
               sessionToken: _sessionTokenController.text,
+              roleArn: _roleArnController.text,
             ),
           );
           await clustersRepository.addProvider(provider);
@@ -88,6 +90,7 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
           provider.aws!.secretKey = _secretKeyController.text;
           provider.aws!.region = _region;
           provider.aws!.sessionToken = _sessionTokenController.text;
+          provider.aws!.roleArn = _roleArnController.text;
           await clustersRepository.editProvider(provider);
 
           setState(() {
@@ -119,6 +122,7 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
       _secretKeyController.text = widget.provider!.aws!.secretKey ?? '';
       _region = widget.provider!.aws!.region ?? '';
       _sessionTokenController.text = widget.provider!.aws!.sessionToken ?? '';
+      _roleArnController.text = widget.provider!.aws!.roleArn ?? '';
     }
   }
 
@@ -128,6 +132,7 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
     _accessKeyIDController.dispose();
     _secretKeyController.dispose();
     _sessionTokenController.dispose();
+    _roleArnController.dispose();
     super.dispose();
   }
 
@@ -248,7 +253,23 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
                 maxLines: 1,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Session Token',
+                  labelText: 'Session Token (optional)',
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Constants.spacingSmall,
+              ),
+              child: TextFormField(
+                controller: _roleArnController,
+                keyboardType: TextInputType.text,
+                autocorrect: false,
+                enableSuggestions: false,
+                maxLines: 1,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Role ARN (optional)',
                 ),
               ),
             ),
