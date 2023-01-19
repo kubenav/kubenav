@@ -8,6 +8,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/eks"
 	"github.com/aws/aws-sdk-go/service/sso"
@@ -88,7 +89,7 @@ func AWSGetClusters(accessKeyID, secretKey, region, sessionToken string) (string
 
 // AWSGetToken returns a token, which can be used to access the Kubernetes API of a cluster with the given clusterID.
 // See: https://github.com/kubernetes-sigs/aws-iam-authenticator/blob/7547c74e660f8d34d9980f2c69aa008eed1f48d0/pkg/token/token.go#L310
-func AWSGetToken(accessKeyID, secretKey, region, sessionToken, clusterID string) (string, error) {
+func AWSGetToken(accessKeyID, secretKey, region, sessionToken, roleArn, clusterID string) (string, error) {
 	cred := credentials.NewStaticCredentials(accessKeyID, secretKey, sessionToken)
 
 	sess, err := session.NewSession(&aws.Config{Region: aws.String(region), Credentials: cred})
@@ -96,7 +97,11 @@ func AWSGetToken(accessKeyID, secretKey, region, sessionToken, clusterID string)
 		return "", err
 	}
 
-	stsClient := sts.New(sess)
+	if roleArn != "" {
+		cred = stscreds.NewCredentials(sess, roleArn)
+	}
+
+	stsClient := sts.New(sess, &aws.Config{Credentials: cred})
 
 	request, _ := stsClient.GetCallerIdentityRequest(&sts.GetCallerIdentityInput{})
 	request.HTTPRequest.Header.Add("x-k8s-aws-id", clusterID)
