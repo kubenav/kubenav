@@ -1,5 +1,7 @@
 package main
 
+// #include <stdlib.h>
+// #include "stdint.h"
 import "C"
 
 import (
@@ -12,7 +14,7 @@ import (
 // process the error is returned.
 //
 //export HelmListCharts
-func HelmListCharts(port C.long, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.long, namespaceC *C.char, namespaceLen C.int) {
+func HelmListCharts(port C.int64_t, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.int64_t, namespaceC *C.char, namespaceLen C.int) {
 	contextName := C.GoStringN(contextNameC, contextNameLen)
 	proxy := C.GoStringN(proxyC, proxyLen)
 	namespace := C.GoStringN(namespaceC, namespaceLen)
@@ -40,7 +42,7 @@ func helmListCharts(port int64, contextName, proxy string, timeout int64, namesp
 // error occures during the process the error is returned.
 //
 //export HelmGetChart
-func HelmGetChart(port C.long, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.long, namespaceC *C.char, namespaceLen C.int, nameC *C.char, nameLen C.int, versionC C.long) {
+func HelmGetChart(port C.int64_t, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.int64_t, namespaceC *C.char, namespaceLen C.int, nameC *C.char, nameLen C.int, versionC C.int64_t) {
 	contextName := C.GoStringN(contextNameC, contextNameLen)
 	proxy := C.GoStringN(proxyC, proxyLen)
 	namespace := C.GoStringN(namespaceC, namespaceLen)
@@ -69,7 +71,7 @@ func helmGetChart(port int64, contextName, proxy string, timeout int64, namespac
 // error occures during the process the error is returned.
 //
 //export HelmGetHistory
-func HelmGetHistory(port C.long, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.long, namespaceC *C.char, namespaceLen C.int, nameC *C.char, nameLen C.int) {
+func HelmGetHistory(port C.int64_t, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.int64_t, namespaceC *C.char, namespaceLen C.int, nameC *C.char, nameLen C.int) {
 	contextName := C.GoStringN(contextNameC, contextNameLen)
 	proxy := C.GoStringN(proxyC, proxyLen)
 	namespace := C.GoStringN(namespaceC, namespaceLen)

@@ -1,5 +1,7 @@
 package main
 
+// #include <stdlib.h>
+// #include "stdint.h"
 import "C"
 
 import (
@@ -11,7 +13,7 @@ import (
 // PrometheusGetData returns metrics for a list of PromQL queries.
 //
 //export PrometheusGetData
-func PrometheusGetData(port C.long, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.long, requestC *C.char, requestLen C.int) {
+func PrometheusGetData(port C.int64_t, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.int64_t, requestC *C.char, requestLen C.int) {
 	contextName := C.GoStringN(contextNameC, contextNameLen)
 	proxy := C.GoStringN(proxyC, proxyLen)
 	request := C.GoStringN(requestC, requestLen)

@@ -1,5 +1,7 @@
 package main
 
+// #include <stdlib.h>
+// #include "stdint.h"
 import "C"
 
 import (
@@ -42,7 +44,7 @@ func KubernetesClusters() *C.char {
 // Pods from the Kubernetes API the method "GET" and the URL "/api/v1/pods" can be used.
 //
 //export KubernetesRequest
-func KubernetesRequest(port C.long, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.long, requestMethodC *C.char, requestMethodLen C.int, requestURLC *C.char, requestURLLen C.int, requestBodyC *C.char, requestBodyLen C.int) {
+func KubernetesRequest(port C.int64_t, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.int64_t, requestMethodC *C.char, requestMethodLen C.int, requestURLC *C.char, requestURLLen C.int, requestBodyC *C.char, requestBodyLen C.int) {
 	contextName := C.GoStringN(contextNameC, contextNameLen)
 	proxy := C.GoStringN(proxyC, proxyLen)
 	requestMethod := C.GoStringN(requestMethodC, requestMethodLen)
@@ -75,7 +77,7 @@ func kubernetesRequest(port int64, contextName, proxy string, timeout int64, req
 // container, since and previous parameter.
 //
 //export KubernetesGetLogs
-func KubernetesGetLogs(port C.long, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.long, namesC *C.char, namesLen C.int, namespaceC *C.char, namespaceLen C.int, containerC *C.char, containerLen C.int, sinceC C.int, filterC *C.char, filterLen C.int, previousC C.int) {
+func KubernetesGetLogs(port C.int64_t, contextNameC *C.char, contextNameLen C.int, proxyC *C.char, proxyLen C.int, timeout C.int64_t, namesC *C.char, namesLen C.int, namespaceC *C.char, namespaceLen C.int, containerC *C.char, containerLen C.int, sinceC C.int, filterC *C.char, filterLen C.int, previousC C.int) {
 	contextName := C.GoStringN(contextNameC, contextNameLen)
 	proxy := C.GoStringN(proxyC, proxyLen)
 	names := C.GoStringN(namesC, namesLen)
