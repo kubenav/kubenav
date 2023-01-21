@@ -1,5 +1,7 @@
 package main
 
+// #include <stdlib.h>
+// #include "stdint.h"
 import "C"
 
 import (
@@ -12,7 +14,7 @@ import (
 // json string into a map[string]interface{} which we can then marshal to the prettified yaml string.
 //
 //export PrettifyYAML
-func PrettifyYAML(port C.long, jsonStrC *C.char, jsonStrLen C.int) {
+func PrettifyYAML(port C.int64_t, jsonStrC *C.char, jsonStrLen C.int) {
 	jsonStr := C.GoStringN(jsonStrC, jsonStrLen)
 	go prettifyYAML(int64(port), jsonStr)
 }
@@ -32,7 +34,7 @@ func prettifyYAML(port int64, jsonStr string) {
 // can then be send to the Kubernetes API to edit the resource.
 //
 //export CreateJSONPatch
-func CreateJSONPatch(port C.long, sourceC *C.char, sourceLen C.int, targetC *C.char, targetLen C.int) {
+func CreateJSONPatch(port C.int64_t, sourceC *C.char, sourceLen C.int, targetC *C.char, targetLen C.int) {
 	source := C.GoStringN(sourceC, sourceLen)
 	target := C.GoStringN(targetC, targetLen)
 
