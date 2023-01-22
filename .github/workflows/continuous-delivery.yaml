@@ -103,10 +103,11 @@ jobs:
           path: build/macos/Build/Products/Release/kubenav-macos-universal.zip
 
       - name: Upload Artifacts (Release)
-        uses: softprops/action-gh-release@v1
+        uses: shogo82148/actions-upload-release-asset@v1
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
         with:
-          files: build/macos/Build/Products/Release/kubenav-macos-universal.zip
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: build/macos/Build/Products/Release/kubenav-macos-universal.zip
 
       - name: Clean up Keychain and AuthKey for Notarization Service
         if: ${{ always() }}
@@ -179,10 +180,11 @@ jobs:
           path: kubenav-x86_64.AppImage
 
       - name: Upload Artifacts (Release)
-        uses: softprops/action-gh-release@v1
+        uses: shogo82148/actions-upload-release-asset@v1
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
         with:
-          files: kubenav-x86_64.AppImage
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: kubenav-x86_64.AppImage
 
   windows:
     name: Windows
@@ -234,7 +236,8 @@ jobs:
           path: build/windows/runner/kubenav-windows-x86_64.zip
 
       - name: Upload Artifacts (Release)
-        uses: softprops/action-gh-release@v1
+        uses: shogo82148/actions-upload-release-asset@v1
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
         with:
-          files: build/windows/runner/kubenav-windows-x86_64.zip
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: build/windows/runner/kubenav-windows-x86_64.zip
