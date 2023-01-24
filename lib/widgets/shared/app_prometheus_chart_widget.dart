@@ -175,6 +175,10 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                 enabled: true,
                                 handleBuiltInTouches: true,
                                 touchTooltipData: LineTouchTooltipData(
+                                  fitInsideHorizontally: true,
+                                  fitInsideVertically: true,
+                                  maxContentWidth:
+                                      MediaQuery.of(context).size.width,
                                   tooltipBgColor: theme(
                                     context,
                                   ).colorMessageBackground,

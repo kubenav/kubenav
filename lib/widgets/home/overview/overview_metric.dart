@@ -464,6 +464,8 @@ class _OverviewMetricState extends State<OverviewMetric> {
                               ],
                               barTouchData: BarTouchData(
                                 touchTooltipData: BarTouchTooltipData(
+                                  fitInsideHorizontally: true,
+                                  fitInsideVertically: true,
                                   tooltipBgColor:
                                       theme(context).colorMessageBackground,
                                   getTooltipItem:
