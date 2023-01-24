@@ -168,7 +168,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
         AppVertialListSimpleModel(
           children: [
             Icon(
-              CustomIcons.version,
+              Icons.code,
               color: theme(context).colorPrimary,
             ),
             const SizedBox(width: Constants.spacingSmall),
@@ -216,7 +216,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           },
           children: [
             Icon(
-              CustomIcons.browser,
+              Icons.language,
               color: theme(context).colorPrimary,
             ),
             const SizedBox(width: Constants.spacingSmall),
@@ -301,7 +301,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
               AppBottomSheetWidget(
                 title: 'License',
                 subtitle: 'MIT License',
-                icon: CustomIcons.license,
+                icon: Icons.copyright,
                 closePressed: () {
                   Navigator.pop(context);
                 },
@@ -334,7 +334,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           },
           children: [
             Icon(
-              CustomIcons.license,
+              Icons.copyright,
               color: theme(context).colorPrimary,
             ),
             const SizedBox(width: Constants.spacingSmall),
