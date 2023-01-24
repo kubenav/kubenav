@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
+import 'package:kubenav/repositories/sponsor_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
@@ -66,6 +69,86 @@ class _SettingsInfoState extends State<SettingsInfo> {
     }
   }
 
+  /// [buildAdditionalLinks] returns additional links for iOS which must be
+  /// present in the app so that the app is not rejected in the App Store
+  /// submission.
+  List<AppVertialListSimpleModel> buildAdditionalLinks(BuildContext context) {
+    if (Platform.isIOS) {
+      SponsorRepository sponsorRepository = Provider.of<SponsorRepository>(
+        context,
+        listen: false,
+      );
+
+      return [
+        AppVertialListSimpleModel(
+          onTap: () {
+            openUrl(
+              'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
+            );
+          },
+          children: [
+            Icon(
+              Icons.policy,
+              color: theme(context).colorPrimary,
+            ),
+            const SizedBox(width: Constants.spacingSmall),
+            Expanded(
+              flex: 1,
+              child: Text(
+                'Terms of Use',
+                style: noramlTextStyle(
+                  context,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: theme(context)
+                  .colorTextPrimary
+                  .withOpacity(Constants.opacityIcon),
+              size: 16,
+            ),
+          ],
+        ),
+        AppVertialListSimpleModel(
+          onTap: () {
+            sponsorRepository.restorePurchases();
+            showSnackbar(
+              context,
+              'Restore Purchases',
+              'Your previous purchases were restored',
+            );
+          },
+          children: [
+            Icon(
+              Icons.favorite,
+              color: theme(context).colorPrimary,
+            ),
+            const SizedBox(width: Constants.spacingSmall),
+            Expanded(
+              flex: 1,
+              child: Text(
+                'Restore Purchases',
+                style: noramlTextStyle(
+                  context,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: theme(context)
+                  .colorTextPrimary
+                  .withOpacity(Constants.opacityIcon),
+              size: 16,
+            ),
+          ],
+        ),
+      ];
+    }
+
+    return [];
+  }
+
   @override
   void initState() {
     super.initState();
@@ -124,68 +207,6 @@ class _SettingsInfoState extends State<SettingsInfo> {
                 ),
                 textAlign: TextAlign.center,
               ),
-            ),
-          ],
-        ),
-        AppVertialListSimpleModel(
-          onTap: () {
-            showModal(
-              context,
-              AppBottomSheetWidget(
-                title: 'License',
-                subtitle: 'MIT License',
-                icon: CustomIcons.license,
-                closePressed: () {
-                  Navigator.pop(context);
-                },
-                actionText: 'Close',
-                actionPressed: () {
-                  Navigator.pop(context);
-                },
-                actionIsLoading: false,
-                child: Form(
-                  key: const Key('settings/license'),
-                  child: ListView(
-                    shrinkWrap: false,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                        ),
-                        child: Text(
-                          licenseText,
-                          style: TextStyle(
-                            color: theme(context).colorTextPrimary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-          children: [
-            Icon(
-              CustomIcons.license,
-              color: theme(context).colorPrimary,
-            ),
-            const SizedBox(width: Constants.spacingSmall),
-            Expanded(
-              flex: 1,
-              child: Text(
-                'License',
-                style: noramlTextStyle(
-                  context,
-                ),
-              ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: theme(context)
-                  .colorTextPrimary
-                  .withOpacity(Constants.opacityIcon),
-              size: 16,
             ),
           ],
         ),
@@ -273,6 +294,97 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
           ],
         ),
+        AppVertialListSimpleModel(
+          onTap: () {
+            showModal(
+              context,
+              AppBottomSheetWidget(
+                title: 'License',
+                subtitle: 'MIT License',
+                icon: CustomIcons.license,
+                closePressed: () {
+                  Navigator.pop(context);
+                },
+                actionText: 'Close',
+                actionPressed: () {
+                  Navigator.pop(context);
+                },
+                actionIsLoading: false,
+                child: Form(
+                  key: const Key('settings/license'),
+                  child: ListView(
+                    shrinkWrap: false,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                        ),
+                        child: Text(
+                          licenseText,
+                          style: TextStyle(
+                            color: theme(context).colorTextPrimary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+          children: [
+            Icon(
+              CustomIcons.license,
+              color: theme(context).colorPrimary,
+            ),
+            const SizedBox(width: Constants.spacingSmall),
+            Expanded(
+              flex: 1,
+              child: Text(
+                'License',
+                style: noramlTextStyle(
+                  context,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: theme(context)
+                  .colorTextPrimary
+                  .withOpacity(Constants.opacityIcon),
+              size: 16,
+            ),
+          ],
+        ),
+        AppVertialListSimpleModel(
+          onTap: () {
+            openUrl('https://kubenav.io/privacy.html');
+          },
+          children: [
+            Icon(
+              Icons.policy,
+              color: theme(context).colorPrimary,
+            ),
+            const SizedBox(width: Constants.spacingSmall),
+            Expanded(
+              flex: 1,
+              child: Text(
+                'Privacy Policy',
+                style: noramlTextStyle(
+                  context,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: theme(context)
+                  .colorTextPrimary
+                  .withOpacity(Constants.opacityIcon),
+              size: 16,
+            ),
+          ],
+        ),
+        ...buildAdditionalLinks(context),
       ],
     );
   }

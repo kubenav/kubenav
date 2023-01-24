@@ -68,7 +68,9 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
   @override
   Widget build(BuildContext context) {
     return AppBottomSheetWidget(
-      title: widget.product.title,
+      title: titles.containsKey(widget.product.id)
+          ? titles[widget.product.id]!
+          : widget.product.title,
       subtitle:
           'Subscribe for ${widget.product.price} ${periods.containsKey(widget.product.id) ? periods[widget.product.id] : ''}',
       icon: Icons.favorite,
