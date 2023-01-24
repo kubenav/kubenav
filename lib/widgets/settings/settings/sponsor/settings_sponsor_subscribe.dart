@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 
@@ -65,6 +68,93 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
     }
   }
 
+  Widget _buildIOSNotes() {
+    if (Platform.isIOS) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: Constants.spacingSmall,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Notes:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [
+                Text('\u2022'),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Sponsor banner is removed as long as the subscription is active',
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Text('\u2022'),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Subscription will automatically renew for ${widget.product.price} ${periods.containsKey(widget.product.id) ? periods[widget.product.id] : ''} until automatically renew is turned off',
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [
+                Text('\u2022'),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Subscription will be charged to your Apple account at confirmation of purchase',
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [
+                Text('\u2022'),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Privacy Policy: https://kubenav.io/privacy.html',
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [
+                Text('\u2022'),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBottomSheetWidget(
@@ -86,7 +176,7 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
       child: Form(
         child: ListView(
           shrinkWrap: false,
-          children: const [
+          children: [
             Padding(
               padding: EdgeInsets.symmetric(
                 vertical: Constants.spacingSmall,
@@ -111,6 +201,7 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
                 'You can also support us by reporting bugs, submitting fixes, proposing new features or by becoming a maintainer. For more information you can have a look at the contributing guide in our GitHub repository. The repository is available at https://github.com/kubenav/kubenav.',
               ),
             ),
+            _buildIOSNotes(),
           ],
         ),
       ),
