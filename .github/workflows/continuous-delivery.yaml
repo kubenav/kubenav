@@ -3,7 +3,8 @@ name: Continuous Delivery
 on:
   pull_request:
   release:
-    types: [created]
+    types:
+      - published
 
 jobs:
   macos:
@@ -85,7 +86,7 @@ jobs:
       # the following command can be used for debugging
       #   xcrun notarytool log <RANDOM-ID> --key AuthKey_${MACOS_ASC_API_KEY}.p8 --key-id $MACOS_ASC_API_KEY --issuer $MACOS_ACS_ISSUER
       - name: Upload to Notarization Service
-        # if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
+        # if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
         env:
           MACOS_ASC_AUTH_KEY: ${{ secrets.MACOS_ASC_AUTH_KEY }}
           MACOS_ASC_API_KEY: ${{ secrets.MACOS_ASC_API_KEY }}
@@ -104,7 +105,7 @@ jobs:
 
       - name: Upload Artifacts (Release)
         uses: shogo82148/actions-upload-release-asset@v1
-        if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
+        if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: build/macos/Build/Products/Release/kubenav-macos-universal.zip
@@ -181,7 +182,7 @@ jobs:
 
       - name: Upload Artifacts (Release)
         uses: shogo82148/actions-upload-release-asset@v1
-        if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
+        if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: kubenav-x86_64.AppImage
@@ -237,7 +238,7 @@ jobs:
 
       - name: Upload Artifacts (Release)
         uses: shogo82148/actions-upload-release-asset@v1
-        if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
+        if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: build/windows/runner/kubenav-windows-x86_64.zip
