@@ -104,7 +104,7 @@ class SettingsSponsor extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      e.title,
+                      titles.containsKey(e.id) ? titles[e.id]! : e.title,
                       style: noramlTextStyle(
                         context,
                       ),

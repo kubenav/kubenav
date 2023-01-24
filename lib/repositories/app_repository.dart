@@ -406,6 +406,7 @@ class AppRepositorySettings {
       'editorFormat': editorFormat,
       'proxy': proxy,
       'timeout': timeout,
+      'sponsorReminder': sponsorReminder,
       'prometheus': prometheus.toJson(),
     };
   }

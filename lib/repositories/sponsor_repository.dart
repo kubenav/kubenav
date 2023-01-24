@@ -19,6 +19,12 @@ const Map<String, String> periods = {
   'yearly_sponsor': 'per Year',
 };
 
+/// [titles] contains the titles for all configured [productIDs].
+const Map<String, String> titles = {
+  'monthly_sponsor': 'Monthly Sponsor',
+  'yearly_sponsor': 'Yearly Sponsor',
+};
+
 /// The [SponsorRepositoryStatus] enum value contains all statuses for the
 /// [SponsorRepository]. The status can be [done] or [pending]. Normally the
 /// status is always [done] and only [pending] for the time between the user
@@ -84,6 +90,7 @@ class SponsorRepository with ChangeNotifier {
             data,
           );
 
+          bool skipVerify = false;
           for (final purchaseDetails in data) {
             Logger.log(
               'SponsorRepository _init',
@@ -108,14 +115,14 @@ class SponsorRepository with ChangeNotifier {
                   _status = SponsorRepositoryStatus.done;
                   notifyListeners();
                 } else if (purchaseDetails.status == PurchaseStatus.restored) {
-                  if (_isSponsor == false) {
+                  if (_isSponsor == false && skipVerify == false) {
                     if (await _verify() == true) {
                       _isSponsor = true;
                     }
                   }
                   _status = SponsorRepositoryStatus.done;
                   notifyListeners();
-                  break;
+                  skipVerify = true;
                 }
 
                 if (purchaseDetails.pendingCompletePurchase) {
@@ -171,6 +178,15 @@ class SponsorRepository with ChangeNotifier {
       'Get products',
       'Not Found IDs: ${response.notFoundIDs}, Products: ${response.productDetails}, Error: ${response.error.toString()}',
     );
+
+    for (final product in response.productDetails) {
+      Logger.log(
+        'SponsorRepository _getProducts',
+        'Product details',
+        'ID: ${product.id}, Title: ${product.title}, Price: ${product.price}',
+      );
+    }
+
     _products = response.productDetails;
     notifyListeners();
   }
@@ -203,9 +219,8 @@ class SponsorRepository with ChangeNotifier {
         'Could not verify subscriptions',
         err,
       );
+      return false;
     }
-
-    return true;
   }
 
   /// [subscribe] let a user subscribe to the provided [product]. This just
@@ -223,6 +238,21 @@ class SponsorRepository with ChangeNotifier {
       Logger.log(
         'SponsorRepository subscribe',
         'An error occured, while subscription was created',
+        err,
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> restorePurchases() async {
+    try {
+      if (_isAvailable) {
+        await _iap.restorePurchases();
+      }
+    } catch (err) {
+      Logger.log(
+        'SponsorRepository restorePurchases',
+        'An error occured, while restoring purchases',
         err,
       );
       rethrow;
