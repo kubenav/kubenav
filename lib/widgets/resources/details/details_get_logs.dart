@@ -34,12 +34,12 @@ Map<String, int> sinceOptions = {
 class DetailsGetLogs extends StatefulWidget {
   const DetailsGetLogs({
     super.key,
-    required this.name,
+    required this.names,
     required this.namespace,
     required this.item,
   });
 
-  final String name;
+  final String names;
   final String namespace;
   final dynamic item;
 
@@ -90,8 +90,8 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
           proxy: appRepository.settings.proxy,
           timeout: appRepository.settings.timeout,
         ).getLogs(
-          widget.item['metadata']['name'],
-          widget.item['metadata']['namespace'],
+          widget.names,
+          widget.namespace,
           _container,
           sinceOptions[_since]!,
           _filterController.text,
@@ -172,7 +172,7 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
   Widget build(BuildContext context) {
     return AppBottomSheetWidget(
       title: 'Logs',
-      subtitle: widget.name,
+      subtitle: widget.names,
       icon: Icons.subject,
       closePressed: () {
         Navigator.pop(context);
