@@ -89,7 +89,10 @@ class _ResourcesListState extends State<ResourcesList> {
         ? '${widget.path}/${widget.resource}?${widget.selector} ?? ' '}'
         : widget.namespace != null
             ? '${widget.path}/namespaces/${widget.namespace}/${widget.resource}?${widget.selector ?? ''}'
-            : '${widget.path}${cluster!.namespace != '' ? '/namespaces/${cluster.namespace}' : ''}/${widget.resource}?${widget.selector ?? ''}';
+            : widget.selector != null &&
+                    widget.selector!.startsWith('fieldSelector=spec.nodeName=')
+                ? '${widget.path}/${widget.resource}?${widget.selector ?? ''}'
+                : '${widget.path}${cluster!.namespace != '' ? '/namespaces/${cluster.namespace}' : ''}/${widget.resource}?${widget.selector ?? ''}';
 
     final resourcesList = await KubernetesService(
       cluster: cluster!,
