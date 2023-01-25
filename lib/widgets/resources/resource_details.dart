@@ -15,6 +15,7 @@ import 'package:kubenav/widgets/resources/details/details_create_job.dart';
 import 'package:kubenav/widgets/resources/details/details_delete_resource.dart';
 import 'package:kubenav/widgets/resources/details/details_edit_resource.dart';
 import 'package:kubenav/widgets/resources/details/details_get_logs.dart';
+import 'package:kubenav/widgets/resources/details/details_get_logs_pods.dart';
 import 'package:kubenav/widgets/resources/details/details_item_additional_printer_columns.dart';
 import 'package:kubenav/widgets/resources/details/details_item_conditions.dart';
 import 'package:kubenav/widgets/resources/details/details_item_metadata.dart';
@@ -226,6 +227,30 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
             showModal(
               context,
               DetailsGetLogs(
+                names: name,
+                namespace: namespace ?? '',
+                item: item,
+              ),
+            );
+          },
+        ),
+      );
+    }
+
+    if ((Resources.map['deployments']!.resource == resource &&
+            Resources.map['deployments']!.path == path) ||
+        (Resources.map['statefulsets']!.resource == resource &&
+            Resources.map['statefulsets']!.path == path) ||
+        (Resources.map['daemonsets']!.resource == resource &&
+            Resources.map['daemonsets']!.path == path)) {
+      additionalActions.add(
+        AppActionsHeaderModel(
+          title: 'Logs',
+          icon: Icons.subject,
+          onTap: () {
+            showModal(
+              context,
+              DetailsGetLogsPods(
                 name: name,
                 namespace: namespace ?? '',
                 item: item,
