@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:xterm/ui.dart' as xtermui;
 import 'package:xterm/xterm.dart' as xterm;
 
+import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/terminal_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
@@ -61,17 +62,25 @@ class AppTerminalsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: false,
+    );
     TerminalRepository terminalRepository = Provider.of<TerminalRepository>(
       context,
       listen: true,
     );
 
-    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom == 0;
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return SafeArea(
       child: Container(
-        height:
-            MediaQuery.of(context).size.height * (isKeyboardVisible ? 0.75 : 1),
+        height: MediaQuery.of(context).size.height *
+            (isKeyboardVisible
+                ? 1
+                : appRepository.settings.fullHeightModals
+                    ? 1
+                    : 0.75),
         color: Colors.transparent,
         child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -173,37 +182,40 @@ class AppTerminalsWidget extends StatelessWidget {
                           borderRadius: const BorderRadius.all(
                             Radius.circular(Constants.sizeBorderRadius),
                           ),
-                          child: TabBar(
-                            isScrollable: true,
-                            labelColor: Colors.white,
-                            unselectedLabelColor: theme(context).colorPrimary,
-                            indicatorSize: TabBarIndicatorSize.tab,
-                            indicator: BoxDecoration(
-                              color: theme(context).colorPrimary,
-                            ),
-                            tabs: terminalRepository.terminals
-                                .asMap()
-                                .entries
-                                .map(
-                              (terminal) {
-                                return Tab(
-                                  child: GestureDetector(
-                                    onDoubleTap: () {
-                                      terminalRepository.deleteTerminal(
-                                        terminal.key,
-                                      );
-                                      if (terminalRepository
-                                          .terminals.isEmpty) {
-                                        Navigator.pop(context);
-                                      }
-                                    },
-                                    child: Text(
-                                      terminal.value.name,
+                          child: SizedBox(
+                            height: 32,
+                            child: TabBar(
+                              isScrollable: true,
+                              labelColor: Colors.white,
+                              unselectedLabelColor: theme(context).colorPrimary,
+                              indicatorSize: TabBarIndicatorSize.tab,
+                              indicator: BoxDecoration(
+                                color: theme(context).colorPrimary,
+                              ),
+                              tabs: terminalRepository.terminals
+                                  .asMap()
+                                  .entries
+                                  .map(
+                                (terminal) {
+                                  return Tab(
+                                    child: GestureDetector(
+                                      onDoubleTap: () {
+                                        terminalRepository.deleteTerminal(
+                                          terminal.key,
+                                        );
+                                        if (terminalRepository
+                                            .terminals.isEmpty) {
+                                          Navigator.pop(context);
+                                        }
+                                      },
+                                      child: Text(
+                                        terminal.value.name,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            ).toList(),
+                                  );
+                                },
+                              ).toList(),
+                            ),
                           ),
                         ),
                         const SizedBox(height: Constants.spacingMiddle),

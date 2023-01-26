@@ -327,6 +327,17 @@ class AppRepository with ChangeNotifier {
       notifyListeners();
     } catch (_) {}
   }
+
+  /// [setFullHeightModals] enables or disables full height modals. When the
+  /// [value] is `true` full height modals will be enabled. If the [value] is
+  /// `false` the will be disabled.
+  Future<void> setFullHeightModals(bool value) async {
+    try {
+      _settings.fullHeightModals = value;
+      await _save();
+      notifyListeners();
+    } catch (_) {}
+  }
 }
 
 /// The [AppRepositorySettings] model represents all the app settings which can
@@ -336,6 +347,7 @@ class AppRepositorySettings {
   bool isAuthenticationEnabled;
   bool isShowClustersOnStart;
   String editorFormat;
+  bool fullHeightModals;
   String proxy;
   int timeout;
   int sponsorReminder;
@@ -346,6 +358,7 @@ class AppRepositorySettings {
     required this.isAuthenticationEnabled,
     required this.isShowClustersOnStart,
     required this.editorFormat,
+    required this.fullHeightModals,
     required this.proxy,
     required this.timeout,
     required this.sponsorReminder,
@@ -358,6 +371,7 @@ class AppRepositorySettings {
       isAuthenticationEnabled: false,
       isShowClustersOnStart: false,
       editorFormat: 'yaml',
+      fullHeightModals: false,
       proxy: '',
       timeout: 0,
       sponsorReminder: 0,
@@ -382,6 +396,10 @@ class AppRepositorySettings {
           data.containsKey('editorFormat') && data['editorFormat'] != null
               ? data['editorFormat']
               : 'yaml',
+      fullHeightModals: data.containsKey('fullHeightModals') &&
+              data['fullHeightModals'] != null
+          ? data['fullHeightModals']
+          : false,
       proxy: data.containsKey('proxy') && data['proxy'] != null
           ? data['proxy']
           : '',
@@ -404,6 +422,7 @@ class AppRepositorySettings {
       'isAuthenticationEnabled': isAuthenticationEnabled,
       'isShowClustersOnStart': isShowClustersOnStart,
       'editorFormat': editorFormat,
+      'fullHeightModals': fullHeightModals,
       'proxy': proxy,
       'timeout': timeout,
       'sponsorReminder': sponsorReminder,
