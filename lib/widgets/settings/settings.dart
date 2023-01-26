@@ -412,6 +412,32 @@ class Settings extends StatelessWidget {
 
     items.add(
       AppVertialListSimpleModel(
+        children: [
+          Icon(
+            Icons.code,
+            color: theme(context).colorPrimary,
+          ),
+          const SizedBox(width: Constants.spacingSmall),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'Full Height Modal',
+              style: noramlTextStyle(
+                context,
+              ),
+            ),
+          ),
+          Switch(
+            activeColor: theme(context).colorPrimary,
+            onChanged: (value) => {appRepository.setFullHeightModals(value)},
+            value: appRepository.settings.fullHeightModals,
+          ),
+        ],
+      ),
+    );
+
+    items.add(
+      AppVertialListSimpleModel(
         onTap: () {
           showModal(
             context,

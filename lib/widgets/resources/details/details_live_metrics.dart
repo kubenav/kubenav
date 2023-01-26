@@ -243,19 +243,22 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
               borderRadius: const BorderRadius.all(
                 Radius.circular(Constants.sizeBorderRadius),
               ),
-              child: TabBar(
-                isScrollable: false,
-                labelColor: Colors.white,
-                unselectedLabelColor: theme(context).colorPrimary,
-                labelPadding: EdgeInsets.zero,
-                indicatorSize: TabBarIndicatorSize.tab,
-                indicator: BoxDecoration(
-                  color: theme(context).colorPrimary,
+              child: SizedBox(
+                height: 32,
+                child: TabBar(
+                  isScrollable: false,
+                  labelColor: Colors.white,
+                  unselectedLabelColor: theme(context).colorPrimary,
+                  labelPadding: EdgeInsets.zero,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  indicator: BoxDecoration(
+                    color: theme(context).colorPrimary,
+                  ),
+                  tabs: const [
+                    Tab(text: 'CPU'),
+                    Tab(text: 'Memory'),
+                  ],
                 ),
-                tabs: const [
-                  Tab(text: 'CPU'),
-                  Tab(text: 'Memory'),
-                ],
               ),
             ),
             const SizedBox(height: Constants.spacingMiddle),

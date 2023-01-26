@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
+import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -90,12 +92,21 @@ class AppBottomSheetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom == 0;
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: false,
+    );
+
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return SafeArea(
       child: Container(
-        height:
-            MediaQuery.of(context).size.height * (isKeyboardVisible ? 0.75 : 1),
+        height: MediaQuery.of(context).size.height *
+            (isKeyboardVisible
+                ? 1
+                : appRepository.settings.fullHeightModals
+                    ? 1
+                    : 0.75),
         color: Colors.transparent,
         child: Scaffold(
           backgroundColor: Colors.transparent,
