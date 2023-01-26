@@ -107,6 +107,7 @@ class ClusterProviderAWS {
       'secretKey': secretKey,
       'region': region,
       'sessionToken': sessionToken,
+      'roleArn': roleArn,
     };
   }
 }
