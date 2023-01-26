@@ -52,19 +52,55 @@ class AppBottomNavigationBarWidget extends StatelessWidget {
       onTap: (value) {
         switch (value) {
           case 0:
-            navigate(context, const Home(), Constants.pageIndexHome);
+            if (Navigator.of(context).canPop() == true ||
+                appRepository.currentPageIndex != Constants.pageIndexHome) {
+              navigate(
+                context,
+                const Home(),
+                Constants.pageIndexHome,
+              );
+            }
             break;
           case 1:
-            navigate(context, const Resources(), Constants.pageIndexResources);
+            if (Navigator.of(context).canPop() == true ||
+                appRepository.currentPageIndex !=
+                    Constants.pageIndexResources) {
+              navigate(
+                context,
+                const Resources(),
+                Constants.pageIndexResources,
+              );
+            }
             break;
           case 2:
-            navigate(context, const Plugins(), Constants.pageIndexPlugins);
+            if (Navigator.of(context).canPop() == true ||
+                appRepository.currentPageIndex != Constants.pageIndexPlugins) {
+              navigate(
+                context,
+                const Plugins(),
+                Constants.pageIndexPlugins,
+              );
+            }
             break;
           case 3:
-            navigate(context, const Settings(), Constants.pageIndexSettings);
+            if (Navigator.of(context).canPop() == true ||
+                appRepository.currentPageIndex != Constants.pageIndexSettings) {
+              navigate(
+                context,
+                const Settings(),
+                Constants.pageIndexSettings,
+              );
+            }
             break;
           default:
-            navigate(context, const Home(), Constants.pageIndexHome);
+            if (Navigator.of(context).canPop() == true ||
+                appRepository.currentPageIndex != Constants.pageIndexHome) {
+              navigate(
+                context,
+                const Home(),
+                Constants.pageIndexHome,
+              );
+            }
             break;
         }
       },
