@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 
@@ -177,7 +176,7 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
         child: ListView(
           shrinkWrap: false,
           children: [
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(
                 vertical: Constants.spacingSmall,
               ),
@@ -185,7 +184,7 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
                 'We believe in open source. This means that we will never put any features behind a paywall. You will always be able to use all features of kubenav for free.',
               ),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(
                 vertical: Constants.spacingSmall,
               ),
@@ -193,7 +192,7 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
                 'With the monthly and yearly sponsoring you can remove the "Sponsor" banner in the settings screen and support the development of kubenav.',
               ),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(
                 vertical: Constants.spacingSmall,
               ),
