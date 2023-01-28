@@ -44,6 +44,7 @@ class RoleBindingListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: roleBinding?.metadata?.name ?? '',
       namespace: roleBinding?.metadata?.namespace,
+      item: item,
       info: [
         'Namespace: ${roleBinding?.metadata?.namespace ?? '-'}',
         'Role: $role',

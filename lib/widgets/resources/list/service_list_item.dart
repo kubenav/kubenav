@@ -51,6 +51,7 @@ class ServiceListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: service?.metadata?.name ?? '',
       namespace: service?.metadata?.namespace,
+      item: item,
       info: [
         'Namespace: ${service?.metadata?.namespace ?? '-'}',
         'Type: $type',

@@ -44,6 +44,7 @@ class ServiceAccountListItem extends StatelessWidget
       additionalPrinterColumns: additionalPrinterColumns,
       name: sa?.metadata?.name ?? '',
       namespace: sa?.metadata?.namespace,
+      item: item,
       info: [
         'Namespace: ${sa?.metadata?.namespace ?? '-'}',
         'Secrets: $secrets',

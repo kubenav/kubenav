@@ -75,6 +75,7 @@ class DaemonSetListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: daemonSet?.metadata?.name ?? '',
       namespace: daemonSet?.metadata?.namespace,
+      item: item,
       info: [
         'Namespace: ${daemonSet?.metadata?.namespace ?? '-'}',
         'Desired: $desired',

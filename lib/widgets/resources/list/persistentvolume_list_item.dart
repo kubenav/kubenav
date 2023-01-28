@@ -54,6 +54,7 @@ class PersistentVolumeListItem extends StatelessWidget
       additionalPrinterColumns: additionalPrinterColumns,
       name: pv?.metadata?.name ?? '',
       namespace: null,
+      item: item,
       info: [
         'Capacity: $capacity',
         'Access Modes: $accessMode',

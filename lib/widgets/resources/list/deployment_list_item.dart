@@ -67,6 +67,7 @@ class DeploymentListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: deplyoment?.metadata?.name ?? '',
       namespace: deplyoment?.metadata?.namespace,
+      item: item,
       info: info,
       status: getStatus(
         replicas,

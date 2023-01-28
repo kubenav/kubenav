@@ -65,6 +65,7 @@ class NodeListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: node?.metadata?.name ?? '',
       namespace: null,
+      item: item,
       info: info,
       status: status != null && status.where((e) => e == 'Ready').isNotEmpty
           ? Status.success

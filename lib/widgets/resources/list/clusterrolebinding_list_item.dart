@@ -45,6 +45,7 @@ class ClusterRoleBindingListItem extends StatelessWidget
       additionalPrinterColumns: additionalPrinterColumns,
       name: clusterRoleBinding?.metadata?.name ?? '',
       namespace: null,
+      item: item,
       info: [
         'Role: $role',
         'Age: $age',

@@ -59,6 +59,7 @@ class SecretListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: secret?.metadata?.name ?? '',
       namespace: secret?.metadata?.namespace,
+      item: item,
       info: [
         'Namespace: ${secret?.metadata?.namespace ?? '-'}',
         'Type: $type',

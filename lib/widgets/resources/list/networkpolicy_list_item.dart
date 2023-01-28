@@ -45,6 +45,7 @@ class NetworkPolicyListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: np?.metadata?.name ?? '',
       namespace: np?.metadata?.namespace,
+      item: item,
       info: [
         'Namespace: ${np?.metadata?.namespace ?? '-'}',
         'Pod Selector: ${podSelector != null && podSelector.isNotEmpty ? podSelector.join(', ') : '-'}',

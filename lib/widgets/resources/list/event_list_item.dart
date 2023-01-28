@@ -43,6 +43,7 @@ class EventListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: event?.metadata.name ?? '',
       namespace: event?.metadata.namespace,
+      item: item,
       info: info,
       status: type == 'Normal' ? Status.success : Status.warning,
     );

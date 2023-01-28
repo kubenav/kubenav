@@ -46,6 +46,7 @@ class CronJobListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: cronJob?.metadata?.name ?? '',
       namespace: cronJob?.metadata?.namespace,
+      item: item,
       info: info,
       status: suspend == 'True' ? Status.warning : Status.success,
     );

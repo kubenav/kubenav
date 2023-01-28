@@ -54,6 +54,7 @@ class PodListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: pod?.metadata?.name ?? '',
       namespace: pod?.metadata?.namespace,
+      item: item,
       info: info,
       status: status,
     );
