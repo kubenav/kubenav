@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
+import 'package:web_socket_channel/io.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
@@ -54,6 +55,7 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
   String _since = '5 Minutes';
   final _filterController = TextEditingController();
   bool _previous = false;
+  bool _follow = false;
   bool _isLoading = false;
 
   /// [_getLogs] makes the Kubernetes API call to get the logs. If the API call
@@ -85,25 +87,89 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
           clustersRepository.activeClusterId,
         );
 
-        final logs = await KubernetesService(
-          cluster: cluster!,
-          proxy: appRepository.settings.proxy,
-          timeout: appRepository.settings.timeout,
-        ).getLogs(
-          widget.names,
-          widget.namespace,
-          _container,
-          sinceOptions[_since]!,
-          _filterController.text,
-          _previous,
-        );
+        /// If the user selected the [_follow] option we have to start a http
+        /// server to stream the logs over a websocket connection.
+        if (_follow) {
+          final isStarted = await KubernetesService(
+            cluster: cluster!,
+            proxy: appRepository.settings.proxy,
+            timeout: appRepository.settings.timeout,
+          ).startServer();
 
-        terminalRepository.addTerminal(
-          TerminalType.log,
-          _container,
-          logs,
-          null,
-        );
+          if (isStarted) {
+            final channel = IOWebSocketChannel.connect(
+              'ws://localhost:14122/logs?name=${widget.names}&namespace=${widget.namespace}&container=$_container&since=$_since',
+              headers: <String, dynamic>{
+                'X-CONTEXT-NAME': cluster.name,
+                'X-CLUSTER-SERVER': cluster.clusterServer,
+                'X-CLUSTER-CERTIFICATE-AUTHORITY-DATA':
+                    cluster.clusterCertificateAuthorityData,
+                'X-CLUSTER-INSECURE-SKIP-TLS-VERIFY':
+                    '${cluster.clusterInsecureSkipTLSVerify}',
+                'X-USER-CLIENT-CERTIFICATE-DATA':
+                    cluster.userClientCertificateData,
+                'X-USER-CLIENT-KEY-DATA': cluster.userClientKeyData,
+                'X-USER-TOKEN': cluster.userToken,
+                'X-USER-USERNAME': cluster.userUsername,
+                'X-USER-PASSWORD': cluster.userPassword,
+                'X-PROXY': appRepository.settings.proxy,
+                'X-TIMEOUT': appRepository.settings.timeout,
+              },
+            );
+
+            terminalRepository.addTerminal(
+              TerminalType.logstream,
+              _container,
+              null,
+              LogStreamBackend(channel),
+              null,
+            );
+            setState(() {
+              _isLoading = false;
+            });
+            if (mounted) {
+              Navigator.pop(context);
+              showModal(
+                context,
+                const AppTerminalsWidget(),
+              );
+            }
+          } else {
+            setState(() {
+              showSnackbar(
+                context,
+                'Could not create terminal',
+                'The internal http server is unhealthy',
+              );
+              _isLoading = false;
+            });
+          }
+        } else {
+          /// If the user didn't select the [_follow] option we can get the logs
+          /// via the [getLogs] method of the [KubernetesService] which uses
+          /// platform channels to make the Kubernetes request. This has the
+          /// advantage that we do not have to start a http server first.
+          final logs = await KubernetesService(
+            cluster: cluster!,
+            proxy: appRepository.settings.proxy,
+            timeout: appRepository.settings.timeout,
+          ).getLogs(
+            widget.names,
+            widget.namespace,
+            _container,
+            sinceOptions[_since]!,
+            _filterController.text,
+            _previous,
+          );
+
+          terminalRepository.addTerminal(
+            TerminalType.log,
+            _container,
+            logs,
+            null,
+            null,
+          );
+        }
 
         setState(() {
           _isLoading = false;
@@ -301,6 +367,29 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
                       });
                     },
                     value: _previous,
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Constants.spacingSmall,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text('Follow'),
+                  Switch(
+                    activeColor: theme(context).colorPrimary,
+                    onChanged: widget.names.split(',').length > 1
+                        ? null
+                        : (value) {
+                            setState(() {
+                              _follow = !_follow;
+                            });
+                          },
+                    value: _follow,
                   ),
                 ],
               ),

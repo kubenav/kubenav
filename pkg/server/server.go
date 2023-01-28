@@ -21,6 +21,7 @@ func Start(kubeClient kube.Client) {
 	router.HandleFunc("/health", middleware.Cors(s.healthHandler))
 	router.HandleFunc("/portforwarding", middleware.Cors(s.portForwardingHandler))
 	router.HandleFunc("/terminal", middleware.Cors(s.terminalHandler))
+	router.HandleFunc("/logs", middleware.Cors(s.logsHandler))
 
 	if err := http.ListenAndServe(":14122", router); err != nil {
 		return

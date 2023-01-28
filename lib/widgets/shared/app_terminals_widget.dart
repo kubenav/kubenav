@@ -238,36 +238,52 @@ class AppTerminalsWidget extends StatelessWidget {
                                             ),
                                           )
                                         : Container()
-                                    : SingleChildScrollView(
-                                        physics: const ClampingScrollPhysics(),
-                                        child: Container(
-                                          padding: const EdgeInsets.all(
-                                            Constants.spacingSmall,
-                                          ),
-                                          color: const Color(0xff2E3440),
-                                          child: Wrap(
-                                            children: terminal.value.logs ==
-                                                    null
-                                                ? []
-                                                : terminal.value.logs!
-                                                    .asMap()
-                                                    .entries
-                                                    .map(
-                                                      (e) => SelectableText(
-                                                        e.value.join('\n\n'),
-                                                        style: TextStyle(
-                                                          color:
-                                                              getColor(e.key),
-                                                          fontSize: 14,
-                                                          fontFamily:
-                                                              getMonospaceFontFamily(),
-                                                        ),
-                                                      ),
-                                                    )
-                                                    .toList(),
-                                          ),
-                                        ),
-                                      );
+                                    : terminal.value.type ==
+                                            TerminalType.logstream
+                                        ? terminal.value.logstream != null
+                                            ? xtermui.TerminalView(
+                                                terminal
+                                                    .value.logstream!.terminal,
+                                                theme: terminalTheme,
+                                                textStyle: xterm.TerminalStyle(
+                                                  fontSize: 14,
+                                                  fontFamily:
+                                                      getMonospaceFontFamily(),
+                                                ),
+                                              )
+                                            : Container()
+                                        : SingleChildScrollView(
+                                            physics:
+                                                const ClampingScrollPhysics(),
+                                            child: Container(
+                                              padding: const EdgeInsets.all(
+                                                Constants.spacingSmall,
+                                              ),
+                                              color: const Color(0xff2E3440),
+                                              child: Wrap(
+                                                children: terminal.value.logs ==
+                                                        null
+                                                    ? []
+                                                    : terminal.value.logs!
+                                                        .asMap()
+                                                        .entries
+                                                        .map(
+                                                          (e) => SelectableText(
+                                                            e.value
+                                                                .join('\n\n'),
+                                                            style: TextStyle(
+                                                              color: getColor(
+                                                                  e.key),
+                                                              fontSize: 14,
+                                                              fontFamily:
+                                                                  getMonospaceFontFamily(),
+                                                            ),
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                              ),
+                                            ),
+                                          );
                               },
                             ).toList(),
                           ),

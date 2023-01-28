@@ -11,6 +11,7 @@ import (
 
 	"github.com/kubenav/kubenav/pkg/server/middleware"
 	"github.com/kubenav/kubenav/pkg/server/portforwarding"
+	"github.com/kubenav/kubenav/pkg/server/streamlogs"
 	"github.com/kubenav/kubenav/pkg/server/terminal"
 
 	"github.com/gorilla/websocket"
@@ -192,6 +193,10 @@ func (s *server) terminalHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	restConfig, _, err := s.kubeClient.GetClient(contextName, clusterServer, clusterCertificateAuthorityData, parsedClusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, 0)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes client: %s", err.Error()))
+		return
+	}
 
 	// After we create a client to interact with the Kubernetes API, we can upgrade the underlying http connection, to
 	// get a shell into the requested container.
@@ -257,6 +262,78 @@ func (s *server) terminalHandler(w http.ResponseWriter, r *http.Request) {
 			Data: fmt.Sprintf("Could not create terminal: %s", err.Error()),
 		})
 		c.WriteMessage(websocket.TextMessage, msg)
+		return
+	}
+}
+
+func (s *server) logsHandler(w http.ResponseWriter, r *http.Request) {
+	name := r.URL.Query().Get("name")
+	namespace := r.URL.Query().Get("namespace")
+	container := r.URL.Query().Get("container")
+	since := r.URL.Query().Get("since")
+
+	parsedSince, err := strconv.ParseInt(since, 10, 64)
+	if err != nil {
+		parsedSince = 300
+	}
+
+	contextName := r.Header.Get("X-CONTEXT-NAME")
+	clusterServer := r.Header.Get("X-CLUSTER-SERVER")
+	clusterCertificateAuthorityData := r.Header.Get("X-CLUSTER-CERTIFICATE-AUTHORITY-DATA")
+	clusterInsecureSkipTLSVerify := r.Header.Get("X-CLUSTER-INSECURE-SKIP-TLS-VERIFY")
+	userClientCertificateData := r.Header.Get("X-USER-CLIENT-CERTIFICATE-DATA")
+	userClientKeyData := r.Header.Get("X-USER-CLIENT-KEY-DATA")
+	userToken := r.Header.Get("X-USER-TOKEN")
+	userUsername := r.Header.Get("X-USER-USERNAME")
+	userPassword := r.Header.Get("X-USER-PASSWORD")
+	proxy := r.Header.Get("X-PROXY")
+
+	parsedClusterInsecureSkipTLSVerify, err := strconv.ParseBool(clusterInsecureSkipTLSVerify)
+	if err != nil {
+		parsedClusterInsecureSkipTLSVerify = false
+	}
+
+	_, clientset, err := s.kubeClient.GetClient(contextName, clusterServer, clusterCertificateAuthorityData, parsedClusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, 0)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes client: %s", err.Error()))
+		return
+	}
+
+	// After we create a client to interact with the Kubernetes API, we can upgrade the underlying http connection, to
+	// stream the logs of the requested container.
+	//
+	// We also setup the ping and pong handlers, so that the WebSocket connection isn't closed, when the user doesn't
+	// send any data for a while.
+	var upgrader = websocket.Upgrader{}
+	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
+
+	c, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not upgrade connection: %s", err.Error()))
+		return
+	}
+	defer c.Close()
+
+	c.SetPongHandler(func(string) error { return nil })
+
+	go func() {
+		ticker := time.NewTicker(30 * time.Second)
+		defer ticker.Stop()
+
+		for {
+			select {
+			case <-ticker.C:
+				if err := c.WriteMessage(websocket.PingMessage, nil); err != nil {
+					return
+				}
+			}
+		}
+	}()
+
+	// Stream the logs of the selected container via the created WebSocket connection.
+	err = streamlogs.StreamLogs(r.Context(), clientset, c, namespace, name, container, parsedSince)
+	if err != nil {
+		c.WriteMessage(websocket.TextMessage, []byte("Could not stream logs: "+err.Error()))
 		return
 	}
 }
