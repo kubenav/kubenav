@@ -93,6 +93,7 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
             TerminalType.exec,
             _container,
             null,
+            null,
             TerminalBackend(channel),
           );
           setState(() {

@@ -10,6 +10,7 @@ import 'package:xterm/xterm.dart' as xterm;
 /// [TerminalType] is a `enum`, which defines if a terminal is used to show logs or for connection to a container.
 enum TerminalType {
   log,
+  logstream,
   exec,
 }
 
@@ -19,12 +20,14 @@ class Terminal {
   TerminalType type;
   String name;
   List<dynamic>? logs;
+  LogStreamBackend? logstream;
   TerminalBackend? terminal;
 
   Terminal({
     required this.type,
     required this.name,
     this.logs,
+    this.logstream,
     this.terminal,
   });
 }
@@ -143,15 +146,64 @@ class TerminalBackend {
   }
 }
 
+/// The [LogStreamBackend] is the backend to stream the logs of a container. It
+/// container the WebSocket [channel] over which we send the logs from our Go
+/// code to the Flutter code. It also container a [terminal] which is used to
+/// write all received logs from the WebSocket connection. The [terminal] can
+/// then be used to show the logs in widget.
+class LogStreamBackend {
+  late xterm.Terminal terminal;
+  late IOWebSocketChannel channel;
+
+  LogStreamBackend(IOWebSocketChannel c) {
+    channel = c;
+
+    terminal = xterm.Terminal(
+      maxLines: 10000,
+      platform: Platform.isAndroid
+          ? xtermcore.TerminalTargetPlatform.android
+          : Platform.isIOS
+              ? xtermcore.TerminalTargetPlatform.ios
+              : Platform.isMacOS
+                  ? xtermcore.TerminalTargetPlatform.macos
+                  : Platform.isLinux
+                      ? xtermcore.TerminalTargetPlatform.linux
+                      : Platform.isWindows
+                          ? xtermcore.TerminalTargetPlatform.windows
+                          : xtermcore.TerminalTargetPlatform.unknown,
+    );
+
+    channel.stream.listen(
+      (data) {
+        terminal.write('$data\n\r\n\r');
+      },
+      onError: (error) {
+        terminal.write('Error: $error');
+      },
+      onDone: () {
+        terminal.write('The process exited');
+      },
+    );
+  }
+
+  void terminate() {
+    channel.sink.close();
+  }
+}
+
+/// The [TerminalRepository] contains all [_terminals] which were create by a
+/// user.
 class TerminalRepository with ChangeNotifier {
   final List<Terminal> _terminals = <Terminal>[];
 
   List<Terminal> get terminals => _terminals;
 
+  /// [addTerminal] adds a new terminal to the repository.
   void addTerminal(
     TerminalType type,
     String name,
     List<dynamic>? logs,
+    LogStreamBackend? logstream,
     TerminalBackend? terminal,
   ) {
     _terminals.add(
@@ -159,15 +211,23 @@ class TerminalRepository with ChangeNotifier {
         type: type,
         name: name,
         logs: logs,
+        logstream: logstream,
         terminal: terminal,
       ),
     );
     notifyListeners();
   }
 
+  /// [deleteTerminal] deletes the terminal with the provided [index]. If the
+  /// terminal has an [TerminalBackend] or [LogStreamBackend] we also call the
+  /// `terminate` method of the backend to close the WebSocket connection.
   void deleteTerminal(int index) {
     if (_terminals[index].terminal != null) {
       _terminals[index].terminal!.terminate();
+    }
+
+    if (_terminals[index].logstream != null) {
+      _terminals[index].logstream!.terminate();
     }
 
     _terminals.removeAt(index);
