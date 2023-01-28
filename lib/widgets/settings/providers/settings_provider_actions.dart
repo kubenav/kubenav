@@ -12,6 +12,7 @@ import 'package:kubenav/widgets/settings/providers/settings_azure_provider_confi
 import 'package:kubenav/widgets/settings/providers/settings_digitalocean_provider_config.dart';
 import 'package:kubenav/widgets/settings/providers/settings_google_provider_config.dart';
 import 'package:kubenav/widgets/settings/providers/settings_oidc_provider_config.dart';
+import 'package:kubenav/widgets/settings/providers/settings_rancher_provider_config.dart';
 import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 
 /// The [SettingsProviderActions] returns a list of actions to edit or delete an
@@ -60,6 +61,10 @@ class _SettingsProviderActionsState extends State<SettingsProviderActions> {
         );
       case ClusterProviderType.oidc:
         return SettingsOIDCProvider(
+          provider: widget.provider,
+        );
+      case ClusterProviderType.rancher:
+        return SettingsRancherProvider(
           provider: widget.provider,
         );
       default:

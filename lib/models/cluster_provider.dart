@@ -15,6 +15,7 @@ class ClusterProvider {
   ClusterProviderDigitalOcean? digitalocean;
   ClusterProviderGoogle? google;
   ClusterProviderOIDC? oidc;
+  ClusterProviderRancher? rancher;
 
   ClusterProvider({
     required this.id,
@@ -26,6 +27,7 @@ class ClusterProvider {
     this.digitalocean,
     this.google,
     this.oidc,
+    this.rancher,
   });
 
   factory ClusterProvider.fromJson(Map<String, dynamic> data) {
@@ -54,6 +56,9 @@ class ClusterProvider {
       oidc: data.containsKey('oidc') && data['oidc'] != null
           ? ClusterProviderOIDC.fromJson(data['oidc'])
           : null,
+      rancher: data.containsKey('rancher') && data['rancher'] != null
+          ? ClusterProviderRancher.fromJson(data['rancher'])
+          : null,
     );
   }
 
@@ -68,6 +73,7 @@ class ClusterProvider {
       'digitalocean': digitalocean?.toJson(),
       'google': google?.toJson(),
       'oidc': oidc?.toJson(),
+      'rancher': rancher?.toJson(),
     };
   }
 }
@@ -342,6 +348,47 @@ class ClusterProviderOIDC {
   }
 }
 
+/// A [ClusterProviderRancher] represents the provider configuration for the
+/// [ClusterProviderType.rancher] provider.
+class ClusterProviderRancher {
+  String? serverAddress;
+  bool? allowInsecureConnections;
+  String? username;
+  String? password;
+  String? token;
+
+  ClusterProviderRancher({
+    required this.serverAddress,
+    required this.allowInsecureConnections,
+    required this.username,
+    required this.password,
+    required this.token,
+  });
+
+  factory ClusterProviderRancher.fromJson(Map<String, dynamic> data) {
+    return ClusterProviderRancher(
+      serverAddress:
+          data.containsKey('serverAddress') ? data['serverAddress'] : null,
+      allowInsecureConnections: data.containsKey('allowInsecureConnections')
+          ? data['allowInsecureConnections']
+          : false,
+      username: data.containsKey('username') ? data['username'] : null,
+      password: data.containsKey('password') ? data['password'] : null,
+      token: data.containsKey('token') ? data['token'] : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'serverAddress': serverAddress,
+      'allowInsecureConnections': allowInsecureConnections,
+      'username': username,
+      'password': password,
+      'token': token,
+    };
+  }
+}
+
 /// [ClusterProviderType] is an enum value which represents all supported
 /// cluster providers. This means clusters can only be added via one of the
 /// supported types.
@@ -356,6 +403,7 @@ enum ClusterProviderType {
   azure,
   oidc,
   digitalocean,
+  rancher,
   manual,
 }
 
@@ -383,6 +431,8 @@ extension ClusterProviderTypeExtension on ClusterProviderType {
         return 'OIDC';
       case ClusterProviderType.digitalocean:
         return 'DigitalOcean';
+      case ClusterProviderType.rancher:
+        return 'Rancher';
       case ClusterProviderType.manual:
         return 'Manual';
       default:
@@ -407,6 +457,8 @@ extension ClusterProviderTypeExtension on ClusterProviderType {
         return 'OIDC Cluster Configuration';
       case ClusterProviderType.digitalocean:
         return 'Import your DOKS Clusters';
+      case ClusterProviderType.rancher:
+        return 'Import your Rancher Clusters';
       case ClusterProviderType.manual:
         return 'Manual Cluster Configuration';
       default:
@@ -431,6 +483,8 @@ extension ClusterProviderTypeExtension on ClusterProviderType {
         return 'assets/providers/oidc.svg';
       case ClusterProviderType.digitalocean:
         return 'assets/providers/digitalocean.svg';
+      case ClusterProviderType.rancher:
+        return 'assets/providers/rancher.svg';
       case ClusterProviderType.manual:
         return 'assets/providers/manual.svg';
       default:

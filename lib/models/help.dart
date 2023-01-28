@@ -217,10 +217,19 @@ You must allow **${Constants.oidcRedirectURI}** as a valid redirect url in the s
           ''',
         ),
         HelpItem(
-          title: 'Digital Ocean',
+          title: 'DigitalOcean',
           icon: CustomIcons.kubernetes,
           markdown: '''
-To use the Digital Ocean provider you just need a [Personal Access Token](https://www.digitalocean.com/docs/apis-clis/api/create-personal-access-token/) to access the Digital Ocean API.
+To use the DigitalOcean provider you just need a [Personal Access Token](https://www.digitalocean.com/docs/apis-clis/api/create-personal-access-token/) to access the DigitalOcean API.
+          ''',
+        ),
+        HelpItem(
+          title: 'Rancher',
+          icon: CustomIcons.kubernetes,
+          markdown: '''
+To use the Rancher provider you have to provide the **address** of the Rancher API. Ensure that the address doesn't contain a trailing slash ("/"). If you are using a self signed certificate for your Rancher setup, enable the **Allow Insecure Connections** option.
+
+You also have to provide a **username** and **password**. Once these information are provided you can use the **sign in** button to generate a new **token**, optionally you can also provide a token by your own.
           ''',
         ),
         HelpItem(

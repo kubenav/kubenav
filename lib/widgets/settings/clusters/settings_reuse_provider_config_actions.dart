@@ -14,12 +14,14 @@ import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_google.da
 import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_kubeconfig.dart';
 import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_manual.dart';
 import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_oidc.dart';
+import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_rancher.dart';
 import 'package:kubenav/widgets/settings/providers/settings_aws_provider_config.dart';
 import 'package:kubenav/widgets/settings/providers/settings_awssso_provider_config.dart';
 import 'package:kubenav/widgets/settings/providers/settings_azure_provider_config.dart';
 import 'package:kubenav/widgets/settings/providers/settings_digitalocean_provider_config.dart';
 import 'package:kubenav/widgets/settings/providers/settings_google_provider_config.dart';
 import 'package:kubenav/widgets/settings/providers/settings_oidc_provider_config.dart';
+import 'package:kubenav/widgets/settings/providers/settings_rancher_provider_config.dart';
 import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 
 /// The [SettingsReuseProviderActions] widget shows an action menu, with all the
@@ -66,6 +68,10 @@ class SettingsReuseProviderActions extends StatelessWidget {
         return SettingsAddClusterOIDC(
           provider: provider,
         );
+      case ClusterProviderType.rancher:
+        return SettingsAddClusterRancher(
+          provider: provider,
+        );
       default:
         return const SettingsAddClusterManual();
     }
@@ -101,6 +107,10 @@ class SettingsReuseProviderActions extends StatelessWidget {
         );
       case ClusterProviderType.oidc:
         return const SettingsOIDCProvider(
+          provider: null,
+        );
+      case ClusterProviderType.rancher:
+        return const SettingsRancherProvider(
           provider: null,
         );
       default:
