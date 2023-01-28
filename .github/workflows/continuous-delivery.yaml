@@ -20,6 +20,7 @@ jobs:
       #   - https://localazy.com/blog/how-to-automatically-sign-macos-apps-using-github-actions
       #   - https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development
       - name: Install the Apple Certificate
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
         env:
           MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
           MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
@@ -73,9 +74,13 @@ jobs:
           flutter config --enable-macos-desktop
           flutter build macos --release
 
-      - name: Package
+      - name: Code Sign
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
         run: |
           codesign --deep --force --options runtime --sign "Developer ID Application: Rico Berger (75AP6HWLUD)" build/macos/Build/Products/Release/kubenav.app -v
+
+      - name: Package
+        run: |
           ditto -c -k --keepParent "build/macos/Build/Products/Release/kubenav.app" "build/macos/Build/Products/Release/kubenav-macos-universal.zip"
 
       # If the following step returns an error like
@@ -86,7 +91,7 @@ jobs:
       # the following command can be used for debugging
       #   xcrun notarytool log <RANDOM-ID> --key AuthKey_${MACOS_ASC_API_KEY}.p8 --key-id $MACOS_ASC_API_KEY --issuer $MACOS_ACS_ISSUER
       - name: Upload to Notarization Service
-        # if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
         env:
           MACOS_ASC_AUTH_KEY: ${{ secrets.MACOS_ASC_AUTH_KEY }}
           MACOS_ASC_API_KEY: ${{ secrets.MACOS_ASC_API_KEY }}
@@ -112,6 +117,7 @@ jobs:
 
       - name: Clean up Keychain and AuthKey for Notarization Service
         if: ${{ always() }}
+        continue-on-error: true
         env:
           MACOS_ASC_API_KEY: ${{ secrets.MACOS_ASC_API_KEY }}
         run: |
