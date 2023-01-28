@@ -49,6 +49,7 @@ class StorageClassListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: sc?.metadata?.name ?? '',
       namespace: null,
+      item: item,
       info: [
         'Provisioner: $provisioner',
         'Reclaim Policy: $reclaimPolicy',

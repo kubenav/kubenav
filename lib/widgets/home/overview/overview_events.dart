@@ -98,6 +98,7 @@ class _OverviewEventsState extends State<OverviewEvents> {
           Resources.map['events']!.additionalPrinterColumns,
       name: event.metadata.name ?? '',
       namespace: event.metadata.namespace,
+      item: null,
       info: info,
       status: event.type == 'Normal' ? Status.success : Status.warning,
     );

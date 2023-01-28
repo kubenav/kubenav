@@ -47,6 +47,7 @@ class IngressListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: ingress?.metadata?.name ?? '',
       namespace: ingress?.metadata?.namespace,
+      item: item,
       info: [
         'Namespace: ${ingress?.metadata?.namespace ?? '-'}',
         'Hosts: ${hosts != null && hosts.isNotEmpty ? hosts.join(', ') : '-'}',

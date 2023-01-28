@@ -65,6 +65,7 @@ class StatefulSetListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: sts?.metadata?.name ?? '',
       namespace: sts?.metadata?.namespace,
+      item: item,
       info: info,
       status: getStatus(
         replicas,

@@ -61,6 +61,7 @@ class ReplicaSetListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: replicaSet?.metadata?.name ?? '',
       namespace: replicaSet?.metadata?.namespace,
+      item: item,
       info: [
         'Namespace: ${replicaSet?.metadata?.namespace ?? '-'}',
         'Desired: $desired',

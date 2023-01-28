@@ -5,6 +5,8 @@ import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
+import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/widgets/resources/list/list_item_actions.dart';
 import 'package:kubenav/widgets/resources/resource_details.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
 
@@ -43,6 +45,7 @@ class ListItemWidget extends StatelessWidget {
     required this.additionalPrinterColumns,
     required this.name,
     required this.namespace,
+    required this.item,
     required this.info,
     this.status = Status.undefined,
     this.onTap,
@@ -55,6 +58,7 @@ class ListItemWidget extends StatelessWidget {
   final List<AdditionalPrinterColumns> additionalPrinterColumns;
   final String name;
   final String? namespace;
+  final dynamic item;
   final List<String> info;
   final Status status;
   final void Function()? onTap;
@@ -122,6 +126,23 @@ class ListItemWidget extends StatelessWidget {
             ),
           );
         },
+        onDoubleTap: item == null
+            ? null
+            : () {
+                showActions(
+                  context,
+                  ListItemActions(
+                    title: title,
+                    resource: resource,
+                    path: path,
+                    scope: scope,
+                    additionalPrinterColumns: additionalPrinterColumns,
+                    name: name,
+                    namespace: namespace,
+                    item: item,
+                  ),
+                );
+              },
         child: Row(
           children: [
             Expanded(

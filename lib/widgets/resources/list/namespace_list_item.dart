@@ -43,6 +43,7 @@ class NamespaceListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: namespace?.metadata?.name ?? '',
       namespace: null,
+      item: item,
       info: [
         'Status: $status',
         'Age: $age',

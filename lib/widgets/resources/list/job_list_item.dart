@@ -44,6 +44,7 @@ class JobListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: job?.metadata?.name ?? '',
       namespace: job?.metadata?.namespace,
+      item: item,
       info: info,
       status: completions != 0 && completions != succeeded
           ? Status.danger

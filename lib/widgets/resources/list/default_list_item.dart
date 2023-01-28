@@ -77,6 +77,7 @@ class DefaultListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: name,
       namespace: namespace,
+      item: item,
       info: _buildInfo(namespace, age),
     );
   }

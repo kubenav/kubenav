@@ -46,6 +46,7 @@ class EndpointListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: endpoint?.metadata?.name ?? '',
       namespace: endpoint?.metadata?.namespace,
+      item: item,
       info: [
         'Namespace: ${endpoint?.metadata?.namespace ?? '-'}',
         'Endpoints: ${ips != null && ips.isNotEmpty ? ips.join(', ') : '-'}',

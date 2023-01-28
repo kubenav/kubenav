@@ -43,6 +43,7 @@ class ConfigMapListItem extends StatelessWidget implements IListItemWidget {
       additionalPrinterColumns: additionalPrinterColumns,
       name: configMap?.metadata?.name ?? '',
       namespace: configMap?.metadata?.namespace,
+      item: item,
       info: [
         'Namespace: ${configMap?.metadata?.namespace ?? '-'}',
         'Data: $data',

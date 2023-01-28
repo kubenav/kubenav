@@ -60,6 +60,7 @@ class HorizontalPodAutoscalerListItem extends StatelessWidget
       additionalPrinterColumns: additionalPrinterColumns,
       name: hpa?.metadata?.name ?? '',
       namespace: hpa?.metadata?.namespace,
+      item: item,
       info: [
         'Namespace: ${hpa?.metadata?.namespace ?? '-'}',
         'Reference: $reference',

@@ -48,6 +48,7 @@ class PersistentVolumeClaimListItem extends StatelessWidget
       additionalPrinterColumns: additionalPrinterColumns,
       name: pvc?.metadata?.name ?? '',
       namespace: pvc?.metadata?.namespace,
+      item: item,
       info: [
         'Namespace: ${pvc?.metadata?.namespace ?? '-'}',
         'Status: $status',

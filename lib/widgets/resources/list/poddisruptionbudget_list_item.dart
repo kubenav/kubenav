@@ -63,6 +63,7 @@ class PodDisruptionBudgetListItem extends StatelessWidget
       additionalPrinterColumns: additionalPrinterColumns,
       name: pdb?.metadata?.name ?? '',
       namespace: pdb?.metadata?.namespace,
+      item: item,
       info: [
         'Namespace: ${pdb?.metadata?.namespace ?? '-'}',
         'Min. Available: $minAvailable',
