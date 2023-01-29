@@ -421,7 +421,7 @@ class Settings extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Text(
-              'Full Height Modal',
+              'Full Height Modals',
               style: noramlTextStyle(
                 context,
               ),

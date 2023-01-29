@@ -53,5 +53,7 @@
 		<string>Protect your configured clusters from unauthorized access</string>
 		<key>UIStatusBarHidden</key>
 		<true/>
-	</dict>
+		<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+</dict>
 </plist>

@@ -61,7 +61,7 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
       final result = await KubernetesService(
         cluster: cluster!,
         proxy: appRepository.settings.proxy,
-        timeout: appRepository.settings.timeout,
+        timeout: 5,
       ).checkHealth();
       Logger.log(
         'SettingsClusterItem getClusterStatus',
