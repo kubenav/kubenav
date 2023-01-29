@@ -49,55 +49,53 @@ class AppActionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        margin: const EdgeInsets.only(
-          left: Constants.spacingMiddle,
-          right: Constants.spacingMiddle,
+    return Container(
+      margin: const EdgeInsets.only(
+        left: Constants.spacingMiddle,
+        right: Constants.spacingMiddle,
+      ),
+      padding: const EdgeInsets.only(
+        left: Constants.spacingMiddle,
+        right: Constants.spacingMiddle,
+      ),
+      decoration: BoxDecoration(
+        color: theme(context).colorCard,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(Constants.sizeBorderRadius),
         ),
-        padding: const EdgeInsets.only(
-          left: Constants.spacingMiddle,
-          right: Constants.spacingMiddle,
-        ),
-        decoration: BoxDecoration(
-          color: theme(context).colorCard,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(Constants.sizeBorderRadius),
-          ),
-        ),
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: List.generate(actions.length, (index) {
-            if (index == actions.length - 1) {
-              return Wrap(
-                children: [
-                  ListTile(
-                    onTap: actions[index].onTap,
-                    title: Text(
-                      actions[index].title,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: actions[index].color),
-                    ),
+      ),
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: List.generate(actions.length, (index) {
+          if (index == actions.length - 1) {
+            return Wrap(
+              children: [
+                ListTile(
+                  onTap: actions[index].onTap,
+                  title: Text(
+                    actions[index].title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: actions[index].color),
                   ),
-                  const Divider(
-                    height: 0,
-                    thickness: 1.0,
-                  ),
-                ],
-              );
-            } else {
-              return ListTile(
-                onTap: actions[index].onTap,
-                title: Text(
-                  actions[index].title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: actions[index].color),
                 ),
-              );
-            }
-          }),
-        ),
+                const Divider(
+                  height: 0,
+                  thickness: 1.0,
+                ),
+              ],
+            );
+          } else {
+            return ListTile(
+              onTap: actions[index].onTap,
+              title: Text(
+                actions[index].title,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: actions[index].color),
+              ),
+            );
+          }
+        }),
       ),
     );
   }
