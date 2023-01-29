@@ -8,6 +8,7 @@ void showModal(BuildContext context, Widget widget) {
     context: context,
     isScrollControlled: true,
     isDismissible: true,
+    useSafeArea: true,
     builder: (BuildContext context) {
       return widget;
     },
@@ -19,6 +20,7 @@ void showActions(BuildContext context, Widget widget) {
     context: context,
     isScrollControlled: false,
     isDismissible: true,
+    useSafeArea: true,
     backgroundColor: Colors.transparent,
     builder: (BuildContext context) {
       return Container(
