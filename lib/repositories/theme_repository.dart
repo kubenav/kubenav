@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import 'package:provider/provider.dart';
 
@@ -10,7 +11,7 @@ import 'package:kubenav/utils/storage.dart';
 ThemeSettings theme(BuildContext context) {
   return Provider.of<ThemeRepository>(
     context,
-    listen: false,
+    listen: true,
   ).theme;
 }
 
@@ -18,6 +19,7 @@ ThemeSettings theme(BuildContext context) {
 /// All defined themes must also have a [ThemeSettings] object which is returned
 /// for the specified theme name in the [ThemeRepository.theme] getter.
 enum ThemeName {
+  auto,
   light,
   dark,
 }
@@ -40,7 +42,16 @@ ThemeName getThemeNameFromString(String? theme) {
     return ThemeName.dark;
   }
 
-  return ThemeName.light;
+  if (theme?.toLowerCase() == 'light') {
+    return ThemeName.light;
+  }
+
+  return ThemeName.auto;
+}
+
+bool isDarkTheme() {
+  return SchedulerBinding.instance.platformDispatcher.platformBrightness ==
+      Brightness.dark;
 }
 
 /// The [ThemeRepository] handles all theme related function of the app. A users
@@ -48,7 +59,7 @@ ThemeName getThemeNameFromString(String? theme) {
 /// responsible for returneing hte correct [ThemeSettings] for the users
 /// selected theme.
 class ThemeRepository with ChangeNotifier {
-  ThemeName _themeName = ThemeName.light;
+  ThemeName _themeName = isDarkTheme() ? ThemeName.dark : ThemeName.light;
 
   ThemeName get themeName => _themeName;
 
@@ -97,11 +108,19 @@ class ThemeRepository with ChangeNotifier {
   /// [theme] returns the correct [ThemeSettings] for the users selected
   /// [_themeName].
   ThemeSettings get theme {
+    if (_themeName == ThemeName.light) {
+      return _lightTheme;
+    }
+
     if (_themeName == ThemeName.dark) {
       return _darkTheme;
     }
 
-    return _lightTheme;
+    return isDarkTheme() ? _darkTheme : _lightTheme;
+  }
+
+  void notify() {
+    notifyListeners();
   }
 }
 
