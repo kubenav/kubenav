@@ -99,7 +99,7 @@ class OverviewMetric extends StatefulWidget {
 }
 
 class _OverviewMetricState extends State<OverviewMetric> {
-  late Future<List<Metrics>> _futureFetchMetrics;
+  late Future<Metrics> _futureFetchMetrics;
 
   /// [_fetchMetrics] fetches all nodes, pods and node metrics or when a
   /// [widget.nodeName] is specified only the metrics for this single node. Once
@@ -108,7 +108,7 @@ class _OverviewMetricState extends State<OverviewMetric> {
   ///
   /// NOTE: Also when we are fetching and creating the data for CPU, Memory and
   /// Pods, only one of them is used via the [widget.metricType] value.
-  Future<List<Metrics>> _fetchMetrics() async {
+  Future<Metrics> _fetchMetrics() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -238,8 +238,8 @@ class _OverviewMetricState extends State<OverviewMetric> {
       }
     }
 
-    return [
-      Metrics(metrics: {
+    return Metrics(
+      metrics: {
         MetricType.cpu: Metric(
           allocatable: cpuAllocatable,
           usage: cpuUsage,
@@ -258,8 +258,8 @@ class _OverviewMetricState extends State<OverviewMetric> {
           requests: 0,
           limits: 0,
         ),
-      })
-    ];
+      },
+    );
   }
 
   /// [formatValue] format the provided [value] depending on the [metricType]
@@ -281,6 +281,174 @@ class _OverviewMetricState extends State<OverviewMetric> {
     setState(() {
       _futureFetchMetrics = _fetchMetrics();
     });
+  }
+
+  /// [buildBarGroups] returns the rows for the bar groups for the chart. If the
+  /// selected metric type ([widget.metricType]) is `pods` we do not return the
+  /// requests and limits groups, since they are always zero. For the `cpu` and
+  /// `memory` type we return all groups for the chart.
+  List<BarChartGroupData> buildBarGroups(Metrics data) {
+    final List<BarChartGroupData> barGroups = [
+      BarChartGroupData(
+        x: 0,
+        barRods: [
+          BarChartRodData(
+            toY: data.metrics[widget.metricType]!.allocatable.toDouble(),
+            color: theme(context).colorPrimary,
+            width: 25,
+            borderRadius: const BorderRadius.all(
+              Radius.zero,
+            ),
+          ),
+        ],
+      ),
+      BarChartGroupData(
+        x: 1,
+        barRods: [
+          BarChartRodData(
+            toY: data.metrics[widget.metricType]!.usage.toDouble(),
+            color: theme(context).colorPrimary,
+            width: 25,
+            borderRadius: const BorderRadius.all(
+              Radius.zero,
+            ),
+          ),
+        ],
+      ),
+    ];
+
+    if (widget.metricType != MetricType.pods) {
+      barGroups.addAll(
+        [
+          BarChartGroupData(
+            x: 2,
+            barRods: [
+              BarChartRodData(
+                toY: data.metrics[widget.metricType]!.requests.toDouble(),
+                color: theme(context).colorPrimary,
+                width: 25,
+                borderRadius: const BorderRadius.all(
+                  Radius.zero,
+                ),
+              ),
+            ],
+          ),
+          BarChartGroupData(
+            x: 3,
+            barRods: [
+              BarChartRodData(
+                toY: data.metrics[widget.metricType]!.limits.toDouble(),
+                color: theme(context).colorPrimary,
+                width: 25,
+                borderRadius: const BorderRadius.all(
+                  Radius.zero,
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    }
+
+    return barGroups;
+  }
+
+  /// [buildLegend] returns the rows for the legend in the chart. If the
+  /// selected metric type ([widget.metricType]) is `pods` we do not return the
+  /// requests and limits items for the legends, since they are always zero. For
+  /// the `cpu` and `memory` type we return all items for the legend.
+  List<Widget> buildLegend(Metrics data) {
+    final List<Widget> legend = [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Allocatable',
+            style: noramlTextStyle(
+              context,
+              size: Constants.sizeTextSecondary,
+            ),
+          ),
+          Text(
+            formatValue(
+              data.metrics[widget.metricType]!.allocatable,
+            ),
+            style: secondaryTextStyle(
+              context,
+            ),
+          ),
+        ],
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Usage',
+            style: noramlTextStyle(
+              context,
+              size: Constants.sizeTextSecondary,
+            ),
+          ),
+          Text(
+            formatValue(
+              data.metrics[widget.metricType]!.usage,
+            ),
+            style: secondaryTextStyle(
+              context,
+            ),
+          ),
+        ],
+      ),
+    ];
+
+    if (widget.metricType != MetricType.pods) {
+      legend.addAll(
+        [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Requests',
+                style: noramlTextStyle(
+                  context,
+                  size: Constants.sizeTextSecondary,
+                ),
+              ),
+              Text(
+                formatValue(
+                  data.metrics[widget.metricType]!.requests,
+                ),
+                style: secondaryTextStyle(
+                  context,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Limits',
+                style: noramlTextStyle(
+                  context,
+                  size: Constants.sizeTextSecondary,
+                ),
+              ),
+              Text(
+                formatValue(
+                  data.metrics[widget.metricType]!.limits,
+                ),
+                style: secondaryTextStyle(
+                  context,
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    }
+
+    return legend;
   }
 
   @override
@@ -306,7 +474,7 @@ class _OverviewMetricState extends State<OverviewMetric> {
         future: _futureFetchMetrics,
         builder: (
           BuildContext context,
-          AsyncSnapshot<List<Metrics>> snapshot,
+          AsyncSnapshot<Metrics> snapshot,
         ) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -336,26 +504,6 @@ class _OverviewMetricState extends State<OverviewMetric> {
                           AppErrorWidget(
                             message: 'Could not load metrics',
                             details: snapshot.error.toString(),
-                            icon: widget.icon,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              }
-
-              if (snapshot.data!.length != 1) {
-                return Flex(
-                  direction: Axis.vertical,
-                  children: [
-                    Expanded(
-                      child: Wrap(
-                        children: [
-                          AppErrorWidget(
-                            message: 'Could not load metrics',
-                            details:
-                                'We were not able to load all the required metrics',
                             icon: widget.icon,
                           ),
                         ],
@@ -398,70 +546,7 @@ class _OverviewMetricState extends State<OverviewMetric> {
                           width: double.infinity,
                           child: BarChart(
                             BarChartData(
-                              barGroups: [
-                                BarChartGroupData(
-                                  x: 0,
-                                  barRods: [
-                                    BarChartRodData(
-                                      toY: snapshot
-                                          .data![0]
-                                          .metrics[widget.metricType]!
-                                          .allocatable
-                                          .toDouble(),
-                                      color: theme(context).colorPrimary,
-                                      width: 25,
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.zero,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                BarChartGroupData(
-                                  x: 1,
-                                  barRods: [
-                                    BarChartRodData(
-                                      toY: snapshot.data![0]
-                                          .metrics[widget.metricType]!.usage
-                                          .toDouble(),
-                                      color: theme(context).colorPrimary,
-                                      width: 25,
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.zero,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                BarChartGroupData(
-                                  x: 2,
-                                  barRods: [
-                                    BarChartRodData(
-                                      toY: snapshot.data![0]
-                                          .metrics[widget.metricType]!.requests
-                                          .toDouble(),
-                                      color: theme(context).colorPrimary,
-                                      width: 25,
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.zero,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                BarChartGroupData(
-                                  x: 3,
-                                  barRods: [
-                                    BarChartRodData(
-                                      toY: snapshot.data![0]
-                                          .metrics[widget.metricType]!.limits
-                                          .toDouble(),
-                                      color: theme(context).colorPrimary,
-                                      width: 25,
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.zero,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                              barGroups: buildBarGroups(snapshot.data!),
                               barTouchData: BarTouchData(
                                 touchTooltipData: BarTouchTooltipData(
                                   fitInsideHorizontally: true,
@@ -581,90 +666,7 @@ class _OverviewMetricState extends State<OverviewMetric> {
                           ),
                         ),
                         const SizedBox(height: Constants.spacingMiddle),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Allocatable',
-                              style: noramlTextStyle(
-                                context,
-                                size: Constants.sizeTextSecondary,
-                              ),
-                            ),
-                            Text(
-                              formatValue(
-                                snapshot.data![0].metrics[widget.metricType]!
-                                    .allocatable,
-                              ),
-                              style: secondaryTextStyle(
-                                context,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Usage',
-                              style: noramlTextStyle(
-                                context,
-                                size: Constants.sizeTextSecondary,
-                              ),
-                            ),
-                            Text(
-                              formatValue(
-                                snapshot
-                                    .data![0].metrics[widget.metricType]!.usage,
-                              ),
-                              style: secondaryTextStyle(
-                                context,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Requests',
-                              style: noramlTextStyle(
-                                context,
-                                size: Constants.sizeTextSecondary,
-                              ),
-                            ),
-                            Text(
-                              formatValue(
-                                snapshot.data![0].metrics[widget.metricType]!
-                                    .requests,
-                              ),
-                              style: secondaryTextStyle(
-                                context,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Limits',
-                              style: noramlTextStyle(
-                                context,
-                                size: Constants.sizeTextSecondary,
-                              ),
-                            ),
-                            Text(
-                              formatValue(
-                                snapshot.data![0].metrics[widget.metricType]!
-                                    .limits,
-                              ),
-                              style: secondaryTextStyle(
-                                context,
-                              ),
-                            ),
-                          ],
-                        ),
+                        ...buildLegend(snapshot.data!),
                       ],
                     ),
                   ),
