@@ -36,6 +36,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
   final _scopesController = TextEditingController();
   final _certificateAuthorityController = TextEditingController();
   final _refreshTokenController = TextEditingController();
+  final _redirectURLController = TextEditingController();
   final _codeController = TextEditingController();
   String _verifier = '';
   bool _isLoading = false;
@@ -58,7 +59,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         _clientSecretController.text,
         _certificateAuthorityController.text,
         _scopesController.text,
-        Constants.oidcRedirectURI,
+        _redirectURLController.text,
         _pkceMethod,
       );
 
@@ -107,7 +108,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
             _clientSecretController.text,
             _certificateAuthorityController.text,
             _scopesController.text,
-            Constants.oidcRedirectURI,
+            _redirectURLController.text,
             _pkceMethod,
             _codeController.text,
             _verifier,
@@ -128,7 +129,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
             _clientSecretController.text,
             _certificateAuthorityController.text,
             _scopesController.text,
-            Constants.oidcRedirectURI,
+            _redirectURLController.text,
             _refreshTokenController.text,
           );
 
@@ -158,6 +159,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
               code: _codeController.text,
               idToken: tmpIDToken,
               refreshToken: tmpRefreshToken,
+              redirectURL: _redirectURLController.text,
             ),
           );
           await clustersRepository.addProvider(provider);
@@ -188,6 +190,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           provider.oidc!.code = _codeController.text;
           provider.oidc!.idToken = tmpIDToken;
           provider.oidc!.refreshToken = tmpRefreshToken;
+          provider.oidc!.redirectURL = _redirectURLController.text;
           await clustersRepository.editProvider(provider);
 
           setState(() {
@@ -251,7 +254,11 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
       _certificateAuthorityController.text =
           widget.provider?.oidc?.certificateAuthority ?? '';
       _refreshTokenController.text = widget.provider?.oidc?.refreshToken ?? '';
+      _redirectURLController.text =
+          widget.provider?.oidc?.redirectURL ?? Constants.oidcRedirectURI;
       _codeController.text = widget.provider?.oidc?.code ?? '';
+    } else {
+      _redirectURLController.text = Constants.oidcRedirectURI;
     }
   }
 
@@ -264,6 +271,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
     _scopesController.dispose();
     _certificateAuthorityController.dispose();
     _refreshTokenController.dispose();
+    _redirectURLController.dispose();
     _codeController.dispose();
     super.dispose();
   }
@@ -422,6 +430,22 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Refresh Token (optional)',
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Constants.spacingSmall,
+              ),
+              child: TextFormField(
+                controller: _redirectURLController,
+                keyboardType: TextInputType.text,
+                autocorrect: false,
+                enableSuggestions: false,
+                maxLines: 1,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Redirect URL',
                 ),
               ),
             ),
