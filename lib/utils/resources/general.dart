@@ -1,12 +1,19 @@
+import 'package:flutter/material.dart';
+
 import 'package:json_path/json_path.dart';
 
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_object_reference.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_rbac_v1_policy_rule.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_label_selector.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_owner_reference.dart';
 import 'package:kubenav/models/resource.dart';
+import 'package:kubenav/utils/navigate.dart';
+import 'package:kubenav/widgets/resources/resource_details.dart';
 
-/// [getAge] returns the age of a Kubernetes resources in a human readable format. This is mostly used to dertermine the
-/// age of a resource via the `metadata.creationTimestamp` field. If the given [timestamp] is `null` we return a dash as
-/// placceholder for the age.
+/// [getAge] returns the age of a Kubernetes resources in a human readable
+/// format. This is mostly used to dertermine the age of a resource via the
+/// `metadata.creationTimestamp` field. If the given [timestamp] is `null` we
+/// return a dash as placceholder for the age.
 String getAge(DateTime? timestamp) {
   if (timestamp == null) {
     return '-';
@@ -37,12 +44,14 @@ String timeDiff(DateTime? start, DateTime? end) {
   return '${age.inSeconds}s';
 }
 
-/// [getSelector] returns a selector string which can be used in a Kubernetes API request to the the all resources,
-/// which are matching the given selector. For example this can be used to get all Pods for a Deployment by using the
+/// [getSelector] returns a selector string which can be used in a Kubernetes
+/// API request to the the all resources, which are matching the given selector.
+/// For example this can be used to get all Pods for a Deployment by using the
 /// `deployment.spec.selector` field.
 ///
-/// TODO: Currently we only have implemented this function for the `matchLabels` field in the selector. in the future we
-/// should also implement it for `matchExpressions`.
+/// TODO: Currently we only have implemented this function for the `matchLabels`
+/// field in the selector. in the future we should also implement it for
+/// `matchExpressions`.
 String getSelector(IoK8sApimachineryPkgApisMetaV1LabelSelector? selector) {
   if (selector == null) {
     return '';
@@ -55,8 +64,8 @@ String getSelector(IoK8sApimachineryPkgApisMetaV1LabelSelector? selector) {
   return '';
 }
 
-/// [getMatchLabelsSelector] builds the selector the [matchLabels] values of a selector. The [matchLabels] argument must
-/// be of type `Map<String, String>`.
+/// [getMatchLabelsSelector] builds the selector the [matchLabels] values of a
+/// selector. The [matchLabels] argument must be of type `Map<String, String>`.
 String getMatchLabelsSelector(Map<String, String> matchLabels) {
   if (matchLabels.isEmpty) {
     return '';
@@ -68,7 +77,8 @@ String getMatchLabelsSelector(Map<String, String> matchLabels) {
   return 'labelSelector=${Uri.encodeComponent(labelSelectors.join(','))}';
 }
 
-/// [formatTime] formats the given `DateTime` parameter. The returned `String` is the in the form `YYYY-MM-DD HH:mm:SS`.
+/// [formatTime] formats the given `DateTime` parameter. The returned `String`
+/// is the in the form `YYYY-MM-DD HH:mm:SS`.
 String formatTime(DateTime? timestamp) {
   if (timestamp == null) {
     return '-';
@@ -77,8 +87,10 @@ String formatTime(DateTime? timestamp) {
   return '${timestamp.year.toString()}-${timestamp.month.toString().padLeft(2, '0')}-${timestamp.day.toString().padLeft(2, '0')} ${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}';
 }
 
-/// [Rule] is our internal format of a rule in a ClusterRole or Role. It contains the [resource] name and a list of all
-/// [nonResourceURLs], [resourceNames] and [verbs]. The [resource] consists of the `resource` name and `apiGroup`.
+/// [Rule] is our internal format of a rule in a ClusterRole or Role. It
+/// contains the [resource] name and a list of all [nonResourceURLs],
+/// [resourceNames] and [verbs]. The [resource] consists of the `resource` name
+/// and `apiGroup`.
 class Rule {
   String resource;
   List<String> nonResourceURLs;
@@ -93,8 +105,8 @@ class Rule {
   });
 }
 
-/// [formatRules] returns a `List` of rules in our internal [Rule] format from the given [rules] list from a ClusterRole
-/// or Role.
+/// [formatRules] returns a `List` of rules in our internal [Rule] format from
+/// the given [rules] list from a ClusterRole or Role.
 List<Rule> formatRules(List<IoK8sApiRbacV1PolicyRule> rules) {
   final List<Rule> formattedRules = [];
 
@@ -116,8 +128,8 @@ List<Rule> formatRules(List<IoK8sApiRbacV1PolicyRule> rules) {
   return formattedRules;
 }
 
-/// [cpuMetricsStringToDouble] converts the given [metric] `String` into an `double` value. The `double` value uses the
-/// smallest unit for CPU `n`.
+/// [cpuMetricsStringToDouble] converts the given [metric] `String` into an
+/// `double` value. The `double` value uses the smallest unit for CPU `n`.
 double cpuMetricsStringToDouble(String metric) {
   if (metric == '') {
     return 0;
@@ -138,8 +150,8 @@ double cpuMetricsStringToDouble(String metric) {
   return double.parse(metric) * 1000 * 1000 * 1000;
 }
 
-/// [memoryMetricsStringToDouble] converts the given [metric] `String` into an `double` value. The `double` value uses
-/// the smalles unit for Memory `Ki`.
+/// [memoryMetricsStringToDouble] converts the given [metric] `String` into an
+/// `double` value. The `double` value uses the smalles unit for Memory `Ki`.
 double memoryMetricsStringToDouble(String metric) {
   if (metric == '') {
     return 0;
@@ -160,7 +172,8 @@ double memoryMetricsStringToDouble(String metric) {
   return 0;
 }
 
-/// [formatCpuMetric] format a CPU metric value as it is returned by the [cpuMetricsStringToInt] function.
+/// [formatCpuMetric] format a CPU metric value as it is returned by the
+/// [cpuMetricsStringToDouble] function.
 String formatCpuMetric(double size, [int round = 2]) {
   int divider = 1000;
 
@@ -183,7 +196,8 @@ String formatCpuMetric(double size, [int round = 2]) {
   return (size / divider / divider / divider).toStringAsFixed(round);
 }
 
-/// [formatMemoryMetric] format a Memory metric value as it is returned by the [memoryMetricsStringToInt] function.
+/// [formatMemoryMetric] format a Memory metric value as it is returned by the
+/// [memoryMetricsStringToDouble] function.
 String formatMemoryMetric(double size, [int round = 2]) {
   int divider = 1024;
 
@@ -230,4 +244,62 @@ String getAdditionalPrinterColumnValue(
   }
 
   return formattedValue;
+}
+
+/// [goToReference] allows us to navigate to the provided [reference]. It
+/// returns a `navigate` function or null for a provided reference. The
+/// reference can be a [IoK8sApiCoreV1ObjectReference] as it is used in events
+/// or a [IoK8sApimachineryPkgApisMetaV1OwnerReference] as it is used in other
+/// manifests. If the reference is a owner reference we also need a [namespace].
+///
+/// TODO: Currently this only supports resources we have defined in the
+/// [Resources.map], but it would be nice if we can also use this for CRDs.
+void Function()? goToReference(
+  BuildContext context,
+  dynamic reference,
+  String? namespace,
+) {
+  if (reference is IoK8sApiCoreV1ObjectReference) {
+    if (Resources.map.containsKey('${reference.kind?.toLowerCase()}s')) {
+      final resource = Resources.map['${reference.kind?.toLowerCase()}s']!;
+
+      return () {
+        navigate(
+          context,
+          ResourcesDetails(
+            title: resource.title,
+            resource: resource.resource,
+            path: resource.path,
+            scope: resource.scope,
+            additionalPrinterColumns: resource.additionalPrinterColumns,
+            name: reference.name ?? '',
+            namespace: reference.namespace,
+          ),
+        );
+      };
+    }
+  }
+
+  if (reference is IoK8sApimachineryPkgApisMetaV1OwnerReference) {
+    if (Resources.map.containsKey('${reference.kind.toLowerCase()}s')) {
+      final resource = Resources.map['${reference.kind.toLowerCase()}s']!;
+
+      return () {
+        navigate(
+          context,
+          ResourcesDetails(
+            title: resource.title,
+            resource: resource.resource,
+            path: resource.path,
+            scope: resource.scope,
+            additionalPrinterColumns: resource.additionalPrinterColumns,
+            name: reference.name,
+            namespace: namespace,
+          ),
+        );
+      };
+    }
+  }
+
+  return null;
 }

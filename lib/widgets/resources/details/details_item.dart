@@ -13,10 +13,12 @@ abstract class IDetailsItemWidget {
   final dynamic item;
 }
 
-/// [DetailsItemModel] is the structure of a single item in the [DetailsItemWidget]. Each item requires a [name] and a
-/// [values] parameter. The [values] parameter can be of type `String` or a `List<String>`. The optional [onTap]
-/// function can be used to overwrite the behaviour of what happens when the user clicks on a value. It returns the
-/// `index` of the value which was clicked.
+/// [DetailsItemModel] is the structure of a single item in the
+/// [DetailsItemWidget]. Each item requires a [name] and a [values] parameter.
+/// The [values] parameter can be of type `String` or a `List<String>`. The
+/// optional [onTap] function can be used to overwrite the behaviour of what
+/// happens when the user clicks on a value. It returns the `index` of the value
+/// which was clicked.
 class DetailsItemModel {
   const DetailsItemModel({
     required this.name,
@@ -29,25 +31,32 @@ class DetailsItemModel {
   final void Function(int index)? onTap;
 }
 
-/// [DetailsItemWidget] is a widget which can be used to render a list of details for a resource. It takes a list of
-/// [details] which are of type [DetailsItemModel] and a [title]. The [smallPadding] argument can be used to minimize
-/// the additional padding for the widget, so that it can be used in other places, like a bottom sheet.
+/// [DetailsItemWidget] is a widget which can be used to render a list of
+/// details for a resource. It takes a list of [details] which are of type
+/// [DetailsItemModel] and a [title]. The [smallPadding] argument can be used to
+/// minimize the additional padding for the widget, so that it can be used in
+/// other places, like a bottom sheet.
 class DetailsItemWidget extends StatelessWidget {
   const DetailsItemWidget({
     Key? key,
     required this.title,
     required this.details,
     this.smallPadding = false,
+    this.goTo,
+    this.goToOnTap,
   }) : super(key: key);
 
   final String title;
   final List<DetailsItemModel> details;
   final bool smallPadding;
+  final String? goTo;
+  final void Function()? goToOnTap;
 
-  /// [buildValue] build the values field for a details item. If the value is of type `List<String>` it will render the
-  /// values via the [Chip] widget. If it is of type `String` or has an unknown type it will render the value via a
-  /// [Text] component.
-  Widget buildValue(
+  /// [_buildValue] build the values field for a details item. If the value is
+  /// of type `List<String>` it will render the values via the [Chip] widget. If
+  /// it is of type `String` or has an unknown type it will render the value via
+  /// a [Text] component.
+  Widget _buildValue(
     BuildContext context,
     String name,
     dynamic values,
@@ -105,6 +114,34 @@ class DetailsItemWidget extends StatelessWidget {
     );
   }
 
+  /// [_buildGoTo] renders a link with the provided [goTo] text and [goToOnTap]
+  /// function next to the title.
+  Widget _buildGoTo(BuildContext context) {
+    if (goTo != null && goToOnTap != null) {
+      return InkWell(
+        onTap: goToOnTap,
+        child: Wrap(
+          children: [
+            Text(
+              goTo!,
+              style: secondaryTextStyle(
+                context,
+                color: theme(context).colorPrimary,
+              ),
+            ),
+            const SizedBox(width: Constants.spacingExtraSmall),
+            Icon(
+              Icons.keyboard_arrow_right,
+              color: theme(context).colorPrimary,
+              size: 16,
+            ),
+          ],
+        ),
+      );
+    }
+    return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -128,6 +165,7 @@ class DetailsItemWidget extends StatelessWidget {
                   style: primaryTextStyle(context, size: 18),
                 ),
               ),
+              _buildGoTo(context),
             ],
           ),
         ),
@@ -175,7 +213,7 @@ class DetailsItemWidget extends StatelessWidget {
                         maxLines: 2,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
-                      buildValue(
+                      _buildValue(
                         context,
                         details[index].name,
                         details[index].values,
