@@ -24,6 +24,7 @@ import 'package:kubenav/widgets/settings/settings_help.dart';
 import 'package:kubenav/widgets/settings/settings_namespaces.dart';
 import 'package:kubenav/widgets/settings/settings_providers.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
+import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
 import 'package:kubenav/widgets/shared/app_no_clusters_widget.dart';
@@ -438,6 +439,32 @@ class Settings extends StatelessWidget {
 
     items.add(
       AppVertialListSimpleModel(
+        children: [
+          Icon(
+            Icons.dashboard,
+            color: theme(context).colorPrimary,
+          ),
+          const SizedBox(width: Constants.spacingSmall),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'Classic Mode',
+              style: noramlTextStyle(
+                context,
+              ),
+            ),
+          ),
+          Switch(
+            activeColor: theme(context).colorPrimary,
+            onChanged: (value) => {appRepository.setClassicMode(value)},
+            value: appRepository.settings.classicMode,
+          ),
+        ],
+      ),
+    );
+
+    items.add(
+      AppVertialListSimpleModel(
         onTap: () {
           showModal(
             context,
@@ -626,7 +653,7 @@ class Settings extends StatelessWidget {
       context,
       listen: true,
     );
-    Provider.of<AppRepository>(
+    AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: true,
     );
@@ -636,28 +663,33 @@ class Settings extends StatelessWidget {
     );
 
     return Scaffold(
+      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Settings'),
       ),
-      bottomNavigationBar: const AppBottomNavigationBarWidget(),
+      bottomNavigationBar: appRepository.settings.classicMode
+          ? null
+          : const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: Constants.spacingSmall),
-            const SettingsSponsorBanner(),
-            _buildViewAllClusters(context),
-            _buildClusters(context),
-            AppVertialListSimpleWidget(
-              title: 'Settings',
-              items: buildSettings(context),
-            ),
-            const SettingsSponsor(),
-            buildHelp(context),
-            const SettingsInfo(),
-            const SizedBox(height: Constants.spacingMiddle),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: Constants.spacingSmall),
+              const SettingsSponsorBanner(),
+              _buildViewAllClusters(context),
+              _buildClusters(context),
+              AppVertialListSimpleWidget(
+                title: 'Settings',
+                items: buildSettings(context),
+              ),
+              const SettingsSponsor(),
+              buildHelp(context),
+              const SettingsInfo(),
+              const SizedBox(height: Constants.spacingMiddle),
+            ],
+          ),
         ),
       ),
     );

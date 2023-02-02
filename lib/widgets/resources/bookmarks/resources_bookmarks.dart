@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/bookmarks_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
@@ -13,6 +14,7 @@ import 'package:kubenav/widgets/resources/bookmarks/resources_bookmark_actions.d
 import 'package:kubenav/widgets/resources/resource_details.dart';
 import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
+import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
 
@@ -120,6 +122,10 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
       context,
       listen: true,
     );
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: true,
+    );
     BookmarksRepository bookmarksRepository = Provider.of<BookmarksRepository>(
       context,
       listen: true,
@@ -130,150 +136,159 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
     );
 
     return Scaffold(
+      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Bookmarks'),
       ),
-      bottomNavigationBar: const AppBottomNavigationBarWidget(),
+      bottomNavigationBar: appRepository.settings.classicMode
+          ? null
+          : const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: Constants.spacingLarge),
-            ReorderableListView.builder(
-              shrinkWrap: true,
-              buildDefaultDragHandles: false,
-              physics: const NeverScrollableScrollPhysics(),
-              onReorder: (int start, int current) {
-                bookmarksRepository.reorder(start, current);
-              },
-              proxyDecorator:
-                  (Widget child, int index, Animation<double> animation) =>
-                      _proxyDecorator(context, child, index, animation),
-              itemCount: bookmarksRepository.bookmarks.length,
-              itemBuilder: (
-                context,
-                index,
-              ) {
-                final cluster = clustersRepository.getCluster(
-                  bookmarksRepository.bookmarks[index].clusterId,
-                );
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: Constants.spacingLarge),
+              ReorderableListView.builder(
+                shrinkWrap: true,
+                buildDefaultDragHandles: false,
+                physics: const NeverScrollableScrollPhysics(),
+                onReorder: (int start, int current) {
+                  bookmarksRepository.reorder(start, current);
+                },
+                proxyDecorator:
+                    (Widget child, int index, Animation<double> animation) =>
+                        _proxyDecorator(context, child, index, animation),
+                itemCount: bookmarksRepository.bookmarks.length,
+                itemBuilder: (
+                  context,
+                  index,
+                ) {
+                  final cluster = clustersRepository.getCluster(
+                    bookmarksRepository.bookmarks[index].clusterId,
+                  );
 
-                return Container(
-                  key: Key(
-                    '${bookmarksRepository.bookmarks[index].type} ${bookmarksRepository.bookmarks[index].clusterId} ${bookmarksRepository.bookmarks[index].title} ${bookmarksRepository.bookmarks[index].resource} ${bookmarksRepository.bookmarks[index].path} ${bookmarksRepository.bookmarks[index].scope} ${bookmarksRepository.bookmarks[index].name} ${bookmarksRepository.bookmarks[index].namespace}',
-                  ),
-                  child: Container(
-                    margin: const EdgeInsets.only(
-                      top: Constants.spacingSmall,
-                      bottom: Constants.spacingSmall,
-                      left: Constants.spacingMiddle,
-                      right: Constants.spacingMiddle,
+                  return Container(
+                    key: Key(
+                      '${bookmarksRepository.bookmarks[index].type} ${bookmarksRepository.bookmarks[index].clusterId} ${bookmarksRepository.bookmarks[index].title} ${bookmarksRepository.bookmarks[index].resource} ${bookmarksRepository.bookmarks[index].path} ${bookmarksRepository.bookmarks[index].scope} ${bookmarksRepository.bookmarks[index].name} ${bookmarksRepository.bookmarks[index].namespace}',
                     ),
-                    child: AppListItem(
-                      onTap: () {
-                        openBookmark(context, index);
-                      },
-                      onDoubleTap: () {
-                        showActions(
-                          context,
-                          ResourcesBookmarkActions(
-                            index: index,
-                          ),
-                        );
-                      },
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      bookmarksRepository
-                                          .bookmarks[index].title,
-                                      style: primaryTextStyle(
-                                        context,
-                                      ),
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          Characters(
-                                            'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
-                                          )
-                                              .replaceAll(Characters(''),
-                                                  Characters('\u{200B}'))
-                                              .toString(),
-                                          style: secondaryTextStyle(
-                                            context,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        Text(
-                                          Characters(
-                                            'Namespace: ${bookmarksRepository.bookmarks[index].namespace}',
-                                          )
-                                              .replaceAll(Characters(''),
-                                                  Characters('\u{200B}'))
-                                              .toString(),
-                                          style: secondaryTextStyle(
-                                            context,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                        top: Constants.spacingSmall,
+                        bottom: Constants.spacingSmall,
+                        left: Constants.spacingMiddle,
+                        right: Constants.spacingMiddle,
+                      ),
+                      child: AppListItem(
+                        onTap: () {
+                          openBookmark(context, index);
+                        },
+                        onDoubleTap: () {
+                          showActions(
+                            context,
+                            ResourcesBookmarkActions(
+                              index: index,
+                            ),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
                                         bookmarksRepository
-                                                    .bookmarks[index].name !=
-                                                null
-                                            ? Text(
-                                                Characters(
-                                                  'Name: ${bookmarksRepository.bookmarks[index].name}',
+                                            .bookmarks[index].title,
+                                        style: primaryTextStyle(
+                                          context,
+                                        ),
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            Characters(
+                                              'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
+                                            )
+                                                .replaceAll(Characters(''),
+                                                    Characters('\u{200B}'))
+                                                .toString(),
+                                            style: secondaryTextStyle(
+                                              context,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Text(
+                                            Characters(
+                                              'Namespace: ${bookmarksRepository.bookmarks[index].namespace}',
+                                            )
+                                                .replaceAll(Characters(''),
+                                                    Characters('\u{200B}'))
+                                                .toString(),
+                                            style: secondaryTextStyle(
+                                              context,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          bookmarksRepository
+                                                      .bookmarks[index].name !=
+                                                  null
+                                              ? Text(
+                                                  Characters(
+                                                    'Name: ${bookmarksRepository.bookmarks[index].name}',
+                                                  )
+                                                      .replaceAll(
+                                                          Characters(''),
+                                                          Characters(
+                                                              '\u{200B}'))
+                                                      .toString(),
+                                                  style: secondaryTextStyle(
+                                                    context,
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 )
-                                                    .replaceAll(Characters(''),
-                                                        Characters('\u{200B}'))
-                                                    .toString(),
-                                                style: secondaryTextStyle(
-                                                  context,
-                                                ),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              )
-                                            : Container(),
-                                      ],
-                                    )
-                                  ],
+                                              : Container(),
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              ReorderableDragStartListener(
-                                index: index,
-                                child: Icon(
-                                  Icons.drag_handle,
-                                  color: theme(context)
-                                      .colorTextSecondary
-                                      .withOpacity(Constants.opacityIcon),
-                                  size: 24,
+                                ReorderableDragStartListener(
+                                  index: index,
+                                  child: Icon(
+                                    Icons.drag_handle,
+                                    color: theme(context)
+                                        .colorTextSecondary
+                                        .withOpacity(Constants.opacityIcon),
+                                    size: 24,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: Constants.spacingSmall),
-          ],
+                  );
+                },
+              ),
+              const SizedBox(height: Constants.spacingSmall),
+            ],
+          ),
         ),
       ),
     );

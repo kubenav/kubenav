@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
+import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
@@ -16,6 +17,7 @@ import 'package:kubenav/widgets/settings/clusters/settings_cluster_actions.dart'
 import 'package:kubenav/widgets/settings/clusters/settings_cluster_item.dart';
 import 'package:kubenav/widgets/settings/clusters/settings_reuse_provider_config_actions.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
+import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_horizontal_list_cards_widget.dart';
 
@@ -115,89 +117,98 @@ class SettingsClusters extends StatelessWidget {
       context,
       listen: true,
     );
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: true,
+    );
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,
     );
 
     return Scaffold(
+      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Clusters'),
       ),
-      bottomNavigationBar: const AppBottomNavigationBarWidget(),
+      bottomNavigationBar: appRepository.settings.classicMode
+          ? null
+          : const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: Constants.spacingSmall),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: Constants.spacingSmall),
 
-            buildProviders(context),
+              buildProviders(context),
 
-            Padding(
-              padding: const EdgeInsets.all(
-                Constants.spacingMiddle,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Clusters',
-                      style: primaryTextStyle(context, size: 18),
+              Padding(
+                padding: const EdgeInsets.all(
+                  Constants.spacingMiddle,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Clusters',
+                        style: primaryTextStyle(context, size: 18),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
-            /// Display a list of all the users added clusters. The clusters are
-            /// diplayed using the [SettingsClusterItem] widget, which also
-            /// indicates the status of the current cluster. The list can also
-            /// be used to reorder the clusters.
-            ReorderableListView.builder(
-              shrinkWrap: true,
-              buildDefaultDragHandles: false,
-              physics: const NeverScrollableScrollPhysics(),
-              onReorder: (int start, int current) {
-                clustersRepository.reorderClusters(start, current);
-              },
-              proxyDecorator:
-                  (Widget child, int index, Animation<double> animation) =>
-                      _proxyDecorator(context, child, index, animation),
-              itemCount: clustersRepository.clusters.length,
-              itemBuilder: (
-                context,
-                index,
-              ) {
-                return Container(
-                  key: Key(
-                    clustersRepository.clusters[index].id,
-                  ),
-                  child: SettingsClusterItem(
-                    key: Key(clustersRepository.clusters[index].id),
-                    index: index,
-                    cluster: clustersRepository.clusters[index],
-                    isActiveCluster: clustersRepository.clusters[index].id ==
-                        clustersRepository.activeClusterId,
-                    onTap: () {
-                      clustersRepository.setActiveCluster(
-                        clustersRepository.clusters[index].id,
-                      );
-                    },
-                    onDoubleTap: () {
-                      showActions(
-                        context,
-                        SettingsClusterActions(
-                          cluster: clustersRepository.clusters[index],
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: Constants.spacingSmall),
-          ],
+              /// Display a list of all the users added clusters. The clusters are
+              /// diplayed using the [SettingsClusterItem] widget, which also
+              /// indicates the status of the current cluster. The list can also
+              /// be used to reorder the clusters.
+              ReorderableListView.builder(
+                shrinkWrap: true,
+                buildDefaultDragHandles: false,
+                physics: const NeverScrollableScrollPhysics(),
+                onReorder: (int start, int current) {
+                  clustersRepository.reorderClusters(start, current);
+                },
+                proxyDecorator:
+                    (Widget child, int index, Animation<double> animation) =>
+                        _proxyDecorator(context, child, index, animation),
+                itemCount: clustersRepository.clusters.length,
+                itemBuilder: (
+                  context,
+                  index,
+                ) {
+                  return Container(
+                    key: Key(
+                      clustersRepository.clusters[index].id,
+                    ),
+                    child: SettingsClusterItem(
+                      key: Key(clustersRepository.clusters[index].id),
+                      index: index,
+                      cluster: clustersRepository.clusters[index],
+                      isActiveCluster: clustersRepository.clusters[index].id ==
+                          clustersRepository.activeClusterId,
+                      onTap: () {
+                        clustersRepository.setActiveCluster(
+                          clustersRepository.clusters[index].id,
+                        );
+                      },
+                      onDoubleTap: () {
+                        showActions(
+                          context,
+                          SettingsClusterActions(
+                            cluster: clustersRepository.clusters[index],
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: Constants.spacingSmall),
+            ],
+          ),
         ),
       ),
     );

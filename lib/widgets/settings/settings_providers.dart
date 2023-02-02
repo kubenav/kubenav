@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
+import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
@@ -11,6 +12,7 @@ import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/settings/providers/settings_provider_actions.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
+import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
 
@@ -105,40 +107,49 @@ class SettingsProviders extends StatelessWidget {
       context,
       listen: true,
     );
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: true,
+    );
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,
     );
 
     return Scaffold(
+      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Providers'),
       ),
-      bottomNavigationBar: const AppBottomNavigationBarWidget(),
+      bottomNavigationBar: appRepository.settings.classicMode
+          ? null
+          : const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: Constants.spacingLarge),
-            ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(
-                left: Constants.spacingMiddle,
-                right: Constants.spacingMiddle,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: Constants.spacingLarge),
+              ListView.separated(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(
+                  left: Constants.spacingMiddle,
+                  right: Constants.spacingMiddle,
+                ),
+                separatorBuilder: (context, index) => const SizedBox(
+                  height: Constants.spacingMiddle,
+                ),
+                itemCount: clustersRepository.providers.length,
+                itemBuilder: (context, index) => buildProvider(
+                  context,
+                  clustersRepository.providers[index],
+                ),
               ),
-              separatorBuilder: (context, index) => const SizedBox(
-                height: Constants.spacingMiddle,
-              ),
-              itemCount: clustersRepository.providers.length,
-              itemBuilder: (context, index) => buildProvider(
-                context,
-                clustersRepository.providers[index],
-              ),
-            ),
-            const SizedBox(height: Constants.spacingSmall),
-          ],
+              const SizedBox(height: Constants.spacingSmall),
+            ],
+          ),
         ),
       ),
     );

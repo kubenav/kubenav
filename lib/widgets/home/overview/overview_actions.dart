@@ -16,7 +16,7 @@ import 'package:kubenav/widgets/resources/resources.dart';
 import 'package:kubenav/widgets/settings/settings.dart';
 import 'package:kubenav/widgets/settings/settings/sponsor/settings_sponsor_actions.dart';
 import 'package:kubenav/widgets/settings/settings_clusters.dart';
-import 'package:kubenav/widgets/shared/app_actions_header_widget.dart';
+import 'package:kubenav/widgets/shared/app_resource_actions.dart';
 
 class OverviewActions extends StatelessWidget {
   const OverviewActions({Key? key}) : super(key: key);
@@ -32,7 +32,7 @@ class OverviewActions extends StatelessWidget {
             sponsorRepository.isAvailable &&
             sponsorRepository.products.isNotEmpty &&
             !sponsorRepository.isSponsor)
-        ? AppActionsHeaderModel(
+        ? AppResourceActionsModel(
             title: 'Sponsor',
             icon: Icons.favorite,
             onTap: () {
@@ -44,7 +44,7 @@ class OverviewActions extends StatelessWidget {
               );
             },
           )
-        : AppActionsHeaderModel(
+        : AppResourceActionsModel(
             title: 'GitHub',
             icon: CustomIcons.github,
             onTap: () {
@@ -52,9 +52,10 @@ class OverviewActions extends StatelessWidget {
             },
           );
 
-    return AppActionsHeaderWidget(
+    return AppResourceActions(
+      mode: AppResourceActionsMode.header,
       actions: [
-        AppActionsHeaderModel(
+        AppResourceActionsModel(
           title: 'Resources',
           icon: CustomIcons.kubernetes,
           onTap: () {
@@ -65,7 +66,7 @@ class OverviewActions extends StatelessWidget {
             );
           },
         ),
-        AppActionsHeaderModel(
+        AppResourceActionsModel(
           title: 'Plugins',
           icon: Icons.extension,
           onTap: () {
@@ -76,7 +77,7 @@ class OverviewActions extends StatelessWidget {
             );
           },
         ),
-        AppActionsHeaderModel(
+        AppResourceActionsModel(
           title: 'Settings',
           icon: Icons.settings,
           onTap: () {
@@ -87,7 +88,7 @@ class OverviewActions extends StatelessWidget {
             );
           },
         ),
-        AppActionsHeaderModel(
+        AppResourceActionsModel(
           title: 'Clusters',
           icon: CustomIcons.clusters,
           onTap: () {
@@ -98,7 +99,7 @@ class OverviewActions extends StatelessWidget {
             );
           },
         ),
-        AppActionsHeaderModel(
+        AppResourceActionsModel(
           title: 'Bookmarks',
           icon: Icons.bookmark,
           onTap: () {

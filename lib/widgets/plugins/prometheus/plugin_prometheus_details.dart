@@ -12,6 +12,7 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
+import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
@@ -110,12 +111,17 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
       context,
       listen: true,
     );
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: true,
+    );
     Provider.of<ClustersRepository>(
       context,
       listen: true,
     );
 
     return Scaffold(
+      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
         centerTitle: true,
         title: Column(
@@ -145,63 +151,67 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
           ],
         ),
       ),
-      bottomNavigationBar: const AppBottomNavigationBarWidget(),
+      bottomNavigationBar: appRepository.settings.classicMode
+          ? null
+          : const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            FutureBuilder(
-              future: _futureFetchDashboard,
-              builder: (
-                BuildContext context,
-                AsyncSnapshot<List<Chart>> snapshot,
-              ) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding:
-                              const EdgeInsets.all(Constants.spacingMiddle),
-                          child: CircularProgressIndicator(
-                            color: theme(context).colorPrimary,
-                          ),
-                        ),
-                      ],
-                    );
-                  default:
-                    if (snapshot.hasError) {
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              FutureBuilder(
+                future: _futureFetchDashboard,
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<List<Chart>> snapshot,
+                ) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Flexible(
-                            child: Padding(
-                              padding: const EdgeInsets.all(
-                                Constants.spacingMiddle,
-                              ),
-                              child: AppErrorWidget(
-                                message: 'Could not load dashboard',
-                                details: snapshot.error.toString(),
-                                icon: 'assets/plugins/prometheus.svg',
-                              ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.all(Constants.spacingMiddle),
+                            child: CircularProgressIndicator(
+                              color: theme(context).colorPrimary,
                             ),
                           ),
                         ],
                       );
-                    }
+                    default:
+                      if (snapshot.hasError) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.all(
+                                  Constants.spacingMiddle,
+                                ),
+                                child: AppErrorWidget(
+                                  message: 'Could not load dashboard',
+                                  details: snapshot.error.toString(),
+                                  icon: 'assets/plugins/prometheus.svg',
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
 
-                    return AppPrometheusChartsWidget(
-                      manifest: const {},
-                      defaultCharts: snapshot.data!,
-                    );
-                }
-              },
-            ),
-          ],
+                      return AppPrometheusChartsWidget(
+                        manifest: const {},
+                        defaultCharts: snapshot.data!,
+                      );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

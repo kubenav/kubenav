@@ -338,6 +338,17 @@ class AppRepository with ChangeNotifier {
       notifyListeners();
     } catch (_) {}
   }
+
+  /// [setClassicMode] enables or disables the classic navigation mode known
+  /// from version 3. When the [value] is `true` classic mode will be enabled.
+  /// If the [value] is `false` it will be disabled.
+  Future<void> setClassicMode(bool value) async {
+    try {
+      _settings.classicMode = value;
+      await _save();
+      notifyListeners();
+    } catch (_) {}
+  }
 }
 
 /// The [AppRepositorySettings] model represents all the app settings which can
@@ -348,6 +359,7 @@ class AppRepositorySettings {
   bool isShowClustersOnStart;
   String editorFormat;
   bool fullHeightModals;
+  bool classicMode;
   String proxy;
   int timeout;
   int sponsorReminder;
@@ -359,6 +371,7 @@ class AppRepositorySettings {
     required this.isShowClustersOnStart,
     required this.editorFormat,
     required this.fullHeightModals,
+    required this.classicMode,
     required this.proxy,
     required this.timeout,
     required this.sponsorReminder,
@@ -372,6 +385,7 @@ class AppRepositorySettings {
       isShowClustersOnStart: false,
       editorFormat: 'yaml',
       fullHeightModals: false,
+      classicMode: false,
       proxy: '',
       timeout: 0,
       sponsorReminder: 0,
@@ -400,6 +414,10 @@ class AppRepositorySettings {
               data['fullHeightModals'] != null
           ? data['fullHeightModals']
           : false,
+      classicMode:
+          data.containsKey('classicMode') && data['classicMode'] != null
+              ? data['classicMode']
+              : false,
       proxy: data.containsKey('proxy') && data['proxy'] != null
           ? data['proxy']
           : '',
@@ -423,6 +441,7 @@ class AppRepositorySettings {
       'isShowClustersOnStart': isShowClustersOnStart,
       'editorFormat': editorFormat,
       'fullHeightModals': fullHeightModals,
+      'classicMode': classicMode,
       'proxy': proxy,
       'timeout': timeout,
       'sponsorReminder': sponsorReminder,

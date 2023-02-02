@@ -25,11 +25,325 @@ import 'package:kubenav/widgets/resources/details/details_restart_resource.dart'
 import 'package:kubenav/widgets/resources/details/details_scale_resource.dart';
 import 'package:kubenav/widgets/resources/details/details_show_yaml.dart';
 import 'package:kubenav/widgets/resources/details/details_terminal.dart';
-import 'package:kubenav/widgets/shared/app_actions_header_widget.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
+import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
+import 'package:kubenav/widgets/shared/app_resource_actions.dart';
+
+/// [resourceDetailsActions] defines all the actions for the resources in the
+/// details view. The [additionalActions] argument can be used to render an
+/// additional refresh button, which should not be available when the actions
+/// are rendered as actions sheet in the list view.
+List<AppResourceActionsModel> resourceDetailsActions(
+  BuildContext context,
+  String title,
+  String resource,
+  String path,
+  ResourceScope scope,
+  List<AdditionalPrinterColumns> additionalPrinterColumns,
+  String name,
+  String? namespace,
+  dynamic item,
+  List<AppResourceActionsModel> additionalActions,
+) {
+  AppRepository appRepository = Provider.of<AppRepository>(
+    context,
+    listen: false,
+  );
+  ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
+    context,
+    listen: false,
+  );
+  BookmarksRepository bookmarksRepository = Provider.of<BookmarksRepository>(
+    context,
+    listen: false,
+  );
+
+  final actions = [
+    AppResourceActionsModel(
+      title: appRepository.settings.editorFormat == 'json' ? 'Json' : 'Yaml',
+      icon: Icons.description,
+      onTap: () {
+        showModal(
+          context,
+          DetailsShowYaml(
+            item: item,
+          ),
+        );
+      },
+    ),
+    AppResourceActionsModel(
+      title: 'Edit',
+      icon: Icons.edit,
+      onTap: () {
+        showModal(
+          context,
+          DetailsEditResource(
+            resource: resource,
+            path: path,
+            name: name,
+            namespace: namespace,
+            item: item,
+          ),
+        );
+      },
+    ),
+    AppResourceActionsModel(
+      title: 'Delete',
+      icon: Icons.delete,
+      onTap: () {
+        showModal(
+          context,
+          DetailsDeleteResource(
+            resource: resource,
+            path: path,
+            name: name,
+            namespace: namespace,
+          ),
+        );
+      },
+    ),
+    ...additionalActions,
+    AppResourceActionsModel(
+      title: bookmarksRepository.isBookmarked(
+                BookmarkType.details,
+                clustersRepository.activeClusterId,
+                title,
+                resource,
+                path,
+                scope,
+                name,
+                namespace,
+              ) >
+              -1
+          ? 'Remove Bookmark'
+          : 'Add Bookmark',
+      icon: bookmarksRepository.isBookmarked(
+                BookmarkType.details,
+                clustersRepository.activeClusterId,
+                title,
+                resource,
+                path,
+                scope,
+                name,
+                namespace,
+              ) >
+              -1
+          ? Icons.bookmark
+          : Icons.bookmark_border,
+      onTap: () {
+        final bookmarkIndex = bookmarksRepository.isBookmarked(
+          BookmarkType.details,
+          clustersRepository.activeClusterId,
+          title,
+          resource,
+          path,
+          scope,
+          name,
+          namespace,
+        );
+        if (bookmarkIndex > -1) {
+          bookmarksRepository.removeBookmark(bookmarkIndex);
+        } else {
+          bookmarksRepository.addBookmark(
+            BookmarkType.details,
+            clustersRepository.activeClusterId,
+            title,
+            resource,
+            path,
+            scope,
+            additionalPrinterColumns,
+            name,
+            namespace,
+          );
+        }
+      },
+    ),
+  ];
+
+  if ((Resources.map['deployments']!.resource == resource &&
+          Resources.map['deployments']!.path == path) ||
+      (Resources.map['statefulsets']!.resource == resource &&
+          Resources.map['statefulsets']!.path == path)) {
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Scale',
+        icon: Icons.difference,
+        onTap: () {
+          showModal(
+            context,
+            DetailsScaleResource(
+              resource: resource,
+              path: path,
+              name: name,
+              namespace: namespace ?? '',
+              item: item,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  if ((Resources.map['deployments']!.resource == resource &&
+          Resources.map['deployments']!.path == path) ||
+      (Resources.map['statefulsets']!.resource == resource &&
+          Resources.map['statefulsets']!.path == path) ||
+      (Resources.map['daemonsets']!.resource == resource &&
+          Resources.map['daemonsets']!.path == path)) {
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Restart',
+        icon: Icons.restart_alt,
+        onTap: () {
+          showModal(
+            context,
+            DetailsRestartResource(
+              resource: resource,
+              path: path,
+              name: name,
+              namespace: namespace ?? '',
+              item: item,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  if (Resources.map['cronjobs']!.resource == resource &&
+      Resources.map['cronjobs']!.path == path) {
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Create Job',
+        icon: Icons.play_arrow,
+        onTap: () {
+          showModal(
+            context,
+            DetailsCreateJob(
+              name: name,
+              namespace: namespace ?? '',
+              item: item,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  if (Resources.map['pods']!.resource == resource &&
+      Resources.map['pods']!.path == path) {
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Logs',
+        icon: Icons.subject,
+        onTap: () {
+          showModal(
+            context,
+            DetailsGetLogs(
+              names: name,
+              namespace: namespace ?? '',
+              item: item,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  if ((Resources.map['deployments']!.resource == resource &&
+          Resources.map['deployments']!.path == path) ||
+      (Resources.map['statefulsets']!.resource == resource &&
+          Resources.map['statefulsets']!.path == path) ||
+      (Resources.map['daemonsets']!.resource == resource &&
+          Resources.map['daemonsets']!.path == path)) {
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Logs',
+        icon: Icons.subject,
+        onTap: () {
+          showModal(
+            context,
+            DetailsGetLogsPods(
+              name: name,
+              namespace: namespace ?? '',
+              item: item,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  if (Resources.map['pods']!.resource == resource &&
+      Resources.map['pods']!.path == path) {
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Terminal',
+        icon: Icons.terminal,
+        onTap: () {
+          showModal(
+            context,
+            DetailsTerminal(
+              name: name,
+              namespace: namespace ?? '',
+              item: item,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  if (Resources.map['pods']!.resource == resource &&
+      Resources.map['pods']!.path == path) {
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Live Metrics',
+        icon: Icons.insights,
+        onTap: () {
+          showActions(
+            context,
+            DetailsLiveMetricsContainers(
+              name: name,
+              namespace: namespace ?? '',
+              pod: IoK8sApiCoreV1Pod.fromJson(item)!,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  if (Resources.map['namespaces']!.resource == resource &&
+      Resources.map['namespaces']!.path == path) {
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Favorite',
+        icon: appRepository.settings.namespaces
+                .where((e) => e == name)
+                .toList()
+                .isEmpty
+            ? Icons.star_outline
+            : Icons.star,
+        onTap: () {
+          if (appRepository.settings.namespaces
+              .where((e) => e == name)
+              .toList()
+              .isEmpty) {
+            appRepository.addNamespace(name);
+          } else {
+            appRepository.deleteNamespace(name);
+          }
+        },
+      ),
+    );
+  }
+
+  return actions;
+}
 
 /// The [ResourcesDetails] displays the details of a resource. To get the
 /// resource the following arguments must be provided:
@@ -89,10 +403,136 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
     ).getRequest(resourcesDetailsUrl);
   }
 
-  /// [buildDetailsItem] is responsible for showing the correct details item for
+  /// [_buildLayout] builds the page layout for the details page. This includes
+  /// the scaffold and appbar and is required, because we have to access the
+  /// result of the FutureBuilder which loads the item in the [AppBar].
+  Widget _buildLayout(BuildContext context, dynamic item, Widget child) {
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: false,
+    );
+
+    return Scaffold(
+      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
+      appBar: AppBar(
+        centerTitle: true,
+        title: Column(
+          children: [
+            Text(
+              Characters(widget.name)
+                  .replaceAll(Characters(''), Characters('\u{200B}'))
+                  .toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Text(
+              Characters(widget.namespace ?? 'No Namespace')
+                  .replaceAll(Characters(''), Characters('\u{200B}'))
+                  .toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+
+        /// When an [item] was provided which is not `null` and the user opt in
+        /// for the classic mode, we show an action in the app bar where the
+        /// actions for the resource can be accessed.
+        actions: item != null && appRepository.settings.classicMode
+            ? [
+                AppResourceActions(
+                  mode: AppResourceActionsMode.menu,
+                  actions: resourceDetailsActions(
+                    context,
+                    widget.title,
+                    widget.resource,
+                    widget.path,
+                    widget.scope,
+                    widget.additionalPrinterColumns,
+                    widget.name,
+                    widget.namespace,
+                    item,
+                    [
+                      AppResourceActionsModel(
+                        title: 'Refresh',
+                        icon: Icons.refresh,
+                        onTap: () {
+                          setState(() {
+                            _futureFetchItem = _fetchItem();
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ]
+            : null,
+      ),
+      bottomNavigationBar: appRepository.settings.classicMode
+          ? null
+          : const AppBottomNavigationBarWidget(),
+      floatingActionButton: const AppFloatingActionButtonsWidget(),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [child],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// [_buildHeaderActions] returns the resource actions as header when the user
+  /// didn't opt in for the classic mode.
+  Widget _buildHeaderActions(BuildContext context, dynamic item) {
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: false,
+    );
+
+    if (!appRepository.settings.classicMode) {
+      return AppResourceActions(
+        mode: AppResourceActionsMode.header,
+        actions: resourceDetailsActions(
+          context,
+          widget.title,
+          widget.resource,
+          widget.path,
+          widget.scope,
+          widget.additionalPrinterColumns,
+          widget.name,
+          widget.namespace,
+          item,
+          [
+            AppResourceActionsModel(
+              title: 'Refresh',
+              icon: Icons.refresh,
+              onTap: () {
+                setState(() {
+                  _futureFetchItem = _fetchItem();
+                });
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Container();
+  }
+
+  /// [_buildDetailsItem] is responsible for showing the correct details item for
   /// the selected resource. If we do not have a dedicated item for a resource
   /// (e.g. Custom Resources) we are showing the events for the resource.
-  List<Widget> buildDetailsItem(
+  List<Widget> _buildDetailsItem(
     String title,
     String resource,
     String path,
@@ -128,207 +568,6 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
     ];
   }
 
-  /// [buildAdditionalActions] returns an additianal list of
-  /// [AppActionsHeaderModel]. The list if created based on the [resource] and
-  /// [path] (e.g. for CronJobs we add an additional action to create a new Job
-  /// from the CronJob specs.)
-  List<AppActionsHeaderModel> buildAdditionalActions(
-    BuildContext context,
-    String resource,
-    String path,
-    String name,
-    String? namespace,
-    dynamic item,
-  ) {
-    AppRepository appRepository = Provider.of<AppRepository>(
-      context,
-      listen: false,
-    );
-
-    final List<AppActionsHeaderModel> additionalActions = [];
-
-    if ((Resources.map['deployments']!.resource == resource &&
-            Resources.map['deployments']!.path == path) ||
-        (Resources.map['statefulsets']!.resource == resource &&
-            Resources.map['statefulsets']!.path == path)) {
-      additionalActions.add(
-        AppActionsHeaderModel(
-          title: 'Scale',
-          icon: Icons.difference,
-          onTap: () {
-            showModal(
-              context,
-              DetailsScaleResource(
-                resource: resource,
-                path: path,
-                name: name,
-                namespace: namespace ?? '',
-                item: item,
-              ),
-            );
-          },
-        ),
-      );
-    }
-
-    if ((Resources.map['deployments']!.resource == resource &&
-            Resources.map['deployments']!.path == path) ||
-        (Resources.map['statefulsets']!.resource == resource &&
-            Resources.map['statefulsets']!.path == path) ||
-        (Resources.map['daemonsets']!.resource == resource &&
-            Resources.map['daemonsets']!.path == path)) {
-      additionalActions.add(
-        AppActionsHeaderModel(
-          title: 'Restart',
-          icon: Icons.restart_alt,
-          onTap: () {
-            showModal(
-              context,
-              DetailsRestartResource(
-                resource: resource,
-                path: path,
-                name: name,
-                namespace: namespace ?? '',
-                item: item,
-              ),
-            );
-          },
-        ),
-      );
-    }
-
-    if (Resources.map['cronjobs']!.resource == resource &&
-        Resources.map['cronjobs']!.path == path) {
-      additionalActions.add(
-        AppActionsHeaderModel(
-          title: 'Create Job',
-          icon: Icons.play_arrow,
-          onTap: () {
-            showModal(
-              context,
-              DetailsCreateJob(
-                name: name,
-                namespace: namespace ?? '',
-                item: item,
-              ),
-            );
-          },
-        ),
-      );
-    }
-
-    if (Resources.map['pods']!.resource == resource &&
-        Resources.map['pods']!.path == path) {
-      additionalActions.add(
-        AppActionsHeaderModel(
-          title: 'Logs',
-          icon: Icons.subject,
-          onTap: () {
-            showModal(
-              context,
-              DetailsGetLogs(
-                names: name,
-                namespace: namespace ?? '',
-                item: item,
-              ),
-            );
-          },
-        ),
-      );
-    }
-
-    if ((Resources.map['deployments']!.resource == resource &&
-            Resources.map['deployments']!.path == path) ||
-        (Resources.map['statefulsets']!.resource == resource &&
-            Resources.map['statefulsets']!.path == path) ||
-        (Resources.map['daemonsets']!.resource == resource &&
-            Resources.map['daemonsets']!.path == path)) {
-      additionalActions.add(
-        AppActionsHeaderModel(
-          title: 'Logs',
-          icon: Icons.subject,
-          onTap: () {
-            showModal(
-              context,
-              DetailsGetLogsPods(
-                name: name,
-                namespace: namespace ?? '',
-                item: item,
-              ),
-            );
-          },
-        ),
-      );
-    }
-
-    if (Resources.map['pods']!.resource == resource &&
-        Resources.map['pods']!.path == path) {
-      additionalActions.add(
-        AppActionsHeaderModel(
-          title: 'Terminal',
-          icon: Icons.terminal,
-          onTap: () {
-            showModal(
-              context,
-              DetailsTerminal(
-                name: name,
-                namespace: namespace ?? '',
-                item: item,
-              ),
-            );
-          },
-        ),
-      );
-    }
-
-    if (Resources.map['pods']!.resource == resource &&
-        Resources.map['pods']!.path == path) {
-      additionalActions.add(
-        AppActionsHeaderModel(
-          title: 'Live Metrics',
-          icon: Icons.insights,
-          onTap: () {
-            showActions(
-              context,
-              DetailsLiveMetricsContainers(
-                name: name,
-                namespace: namespace ?? '',
-                pod: IoK8sApiCoreV1Pod.fromJson(item)!,
-              ),
-            );
-          },
-        ),
-      );
-    }
-
-    if (Resources.map['namespaces']!.resource == resource &&
-        Resources.map['namespaces']!.path == path) {
-      additionalActions.add(
-        AppActionsHeaderModel(
-          title: 'Favorite',
-          icon: appRepository.settings.namespaces
-                  .where((e) => e == name)
-                  .toList()
-                  .isEmpty
-              ? Icons.star_outline
-              : Icons.star,
-          onTap: () {
-            if (appRepository.settings.namespaces
-                .where((e) => e == name)
-                .toList()
-                .isEmpty) {
-              appRepository.addNamespace(name);
-            } else {
-              appRepository.deleteNamespace(name);
-            }
-          },
-        ),
-      );
-    }
-
-    return additionalActions;
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -343,246 +582,105 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
       context,
       listen: true,
     );
-    ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
+    Provider.of<AppRepository>(
+      context,
+      listen: true,
+    );
+    Provider.of<ClustersRepository>(
       context,
       listen: true,
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Column(
-          children: [
-            Text(
-              Characters(widget.name)
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                overflow: TextOverflow.ellipsis,
+    return FutureBuilder(
+      future: _futureFetchItem,
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<dynamic> snapshot,
+      ) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return _buildLayout(
+              context,
+              null,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(
+                      Constants.spacingMiddle,
+                    ),
+                    child: CircularProgressIndicator(
+                      color: theme(context).colorPrimary,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            Text(
-              Characters(widget.namespace ?? 'No Namespace')
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                overflow: TextOverflow.ellipsis,
+            );
+          default:
+            if (snapshot.hasError) {
+              return _buildLayout(
+                context,
+                null,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(Constants.spacingMiddle),
+                        child: AppErrorWidget(
+                          message: 'Could not load ${widget.title}',
+                          details: snapshot.error.toString(),
+                          icon: Resources.map.containsKey(widget.resource)
+                              ? 'assets/resources/${widget.resource}.svg'
+                              : null,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            Provider.of<BookmarksRepository>(
+              context,
+              listen: true,
+            );
+
+            return _buildLayout(
+              context,
+              snapshot.data,
+              Column(
+                children: [
+                  _buildHeaderActions(context, snapshot.data),
+                  DetailsItemMetadata(
+                    item: snapshot.data,
+                  ),
+                  DetailsItemAdditionalPrinterColumns(
+                    additionalPrinterColumns: widget.additionalPrinterColumns,
+                    item: snapshot.data,
+                  ),
+                  DetailsItemConditions(
+                    item: snapshot.data,
+                  ),
+                  const SizedBox(height: Constants.spacingMiddle),
+                  ..._buildDetailsItem(
+                    widget.title,
+                    widget.resource,
+                    widget.path,
+                    widget.scope,
+                    widget.name,
+                    widget.namespace,
+                    snapshot.data,
+                  ),
+                  const SizedBox(height: Constants.spacingExtraLarge),
+                ],
               ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: const AppBottomNavigationBarWidget(),
-      floatingActionButton: const AppFloatingActionButtonsWidget(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            FutureBuilder(
-              future: _futureFetchItem,
-              builder: (
-                BuildContext context,
-                AsyncSnapshot<dynamic> snapshot,
-              ) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(
-                            Constants.spacingMiddle,
-                          ),
-                          child: CircularProgressIndicator(
-                            color: theme(context).colorPrimary,
-                          ),
-                        ),
-                      ],
-                    );
-                  default:
-                    if (snapshot.hasError) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.all(Constants.spacingMiddle),
-                              child: AppErrorWidget(
-                                message: 'Could not load ${widget.title}',
-                                details: snapshot.error.toString(),
-                                icon: Resources.map.containsKey(widget.resource)
-                                    ? 'assets/resources/${widget.resource}.svg'
-                                    : null,
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    }
-
-                    AppRepository appRepository = Provider.of<AppRepository>(
-                      context,
-                      listen: true,
-                    );
-                    BookmarksRepository bookmarksRepository =
-                        Provider.of<BookmarksRepository>(
-                      context,
-                      listen: true,
-                    );
-
-                    return Column(
-                      children: [
-                        AppActionsHeaderWidget(
-                          actions: [
-                            AppActionsHeaderModel(
-                              title:
-                                  appRepository.settings.editorFormat == 'json'
-                                      ? 'Json'
-                                      : 'Yaml',
-                              icon: Icons.description,
-                              onTap: () {
-                                showModal(
-                                  context,
-                                  DetailsShowYaml(
-                                    item: snapshot.data,
-                                  ),
-                                );
-                              },
-                            ),
-                            AppActionsHeaderModel(
-                              title: 'Edit',
-                              icon: Icons.edit,
-                              onTap: () {
-                                showModal(
-                                  context,
-                                  DetailsEditResource(
-                                    resource: widget.resource,
-                                    path: widget.path,
-                                    name: widget.name,
-                                    namespace: widget.namespace,
-                                    item: snapshot.data,
-                                  ),
-                                );
-                              },
-                            ),
-                            AppActionsHeaderModel(
-                              title: 'Delete',
-                              icon: Icons.delete,
-                              onTap: () {
-                                showModal(
-                                  context,
-                                  DetailsDeleteResource(
-                                    resource: widget.resource,
-                                    path: widget.path,
-                                    name: widget.name,
-                                    namespace: widget.namespace,
-                                  ),
-                                );
-                              },
-                            ),
-                            AppActionsHeaderModel(
-                              title: 'Refresh',
-                              icon: Icons.refresh,
-                              onTap: () {
-                                setState(() {
-                                  _futureFetchItem = _fetchItem();
-                                });
-                              },
-                            ),
-                            AppActionsHeaderModel(
-                              title: 'Bookmark',
-                              icon: bookmarksRepository.isBookmarked(
-                                        BookmarkType.details,
-                                        clustersRepository.activeClusterId,
-                                        widget.title,
-                                        widget.resource,
-                                        widget.path,
-                                        widget.scope,
-                                        widget.name,
-                                        widget.namespace,
-                                      ) >
-                                      -1
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_border,
-                              onTap: () {
-                                final bookmarkIndex =
-                                    bookmarksRepository.isBookmarked(
-                                  BookmarkType.details,
-                                  clustersRepository.activeClusterId,
-                                  widget.title,
-                                  widget.resource,
-                                  widget.path,
-                                  widget.scope,
-                                  widget.name,
-                                  widget.namespace,
-                                );
-                                if (bookmarkIndex > -1) {
-                                  bookmarksRepository
-                                      .removeBookmark(bookmarkIndex);
-                                } else {
-                                  bookmarksRepository.addBookmark(
-                                    BookmarkType.details,
-                                    clustersRepository.activeClusterId,
-                                    widget.title,
-                                    widget.resource,
-                                    widget.path,
-                                    widget.scope,
-                                    widget.additionalPrinterColumns,
-                                    widget.name,
-                                    widget.namespace,
-                                  );
-                                }
-                              },
-                            ),
-                            ...buildAdditionalActions(
-                              context,
-                              widget.resource,
-                              widget.path,
-                              widget.name,
-                              widget.namespace,
-                              snapshot.data,
-                            ),
-                          ],
-                        ),
-                        DetailsItemMetadata(
-                          item: snapshot.data,
-                        ),
-                        DetailsItemAdditionalPrinterColumns(
-                          additionalPrinterColumns:
-                              widget.additionalPrinterColumns,
-                          item: snapshot.data,
-                        ),
-                        DetailsItemConditions(
-                          item: snapshot.data,
-                        ),
-                        const SizedBox(height: Constants.spacingMiddle),
-                        ...buildDetailsItem(
-                          widget.title,
-                          widget.resource,
-                          widget.path,
-                          widget.scope,
-                          widget.name,
-                          widget.namespace,
-                          snapshot.data,
-                        ),
-                        const SizedBox(height: Constants.spacingExtraLarge),
-                      ],
-                    );
-                }
-              },
-            ),
-          ],
-        ),
-      ),
+            );
+        }
+      },
     );
   }
 }

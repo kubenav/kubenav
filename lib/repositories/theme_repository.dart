@@ -11,7 +11,7 @@ import 'package:kubenav/utils/storage.dart';
 ThemeSettings theme(BuildContext context) {
   return Provider.of<ThemeRepository>(
     context,
-    listen: true,
+    listen: false,
   ).theme;
 }
 
