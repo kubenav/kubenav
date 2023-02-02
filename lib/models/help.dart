@@ -136,7 +136,7 @@ Select the **Credentials** item from the menu to get a new Client ID. Then click
 
 Configure a new Web Application client and obtain a **Client ID** and **Client Secret**
 
-You must allow **${Constants.googleRedirectURI}** as a valid redirect url in the settings.
+You must allow **${Constants.googleRedirectURI}** as a valid redirect url in the settings. Or you specify a custom redirect url while adding the provider. The redirect url should point to a site where you can easily copy the returned **code** parameter, an example html file for such a page can be found at https://github.com/kubenav/kubenav/blob/main/kubenav.io/auth/google.html.
 
 ![Google OAuth 2.0 Configuration](resource:assets/help/providers-google-3.png)
 
@@ -213,7 +213,7 @@ After you provided all the information click on the **Sign In** button and finis
 
 Finish the provider setup by clicking on **Save and add cluster(s)**
 
-You must allow **${Constants.oidcRedirectURI}** as a valid redirect url in the settings of your OIDC provider.
+You must allow **${Constants.oidcRedirectURI}** as a valid redirect url in the settings of your OIDC provider. Or you specify a custom redirect url while adding the provider. The redirect url should point to a site where you can easily copy the returned **code** parameter, an example html file for such a page can be found at https://github.com/kubenav/kubenav/blob/main/kubenav.io/auth/oidc.html.
           ''',
         ),
         HelpItem(

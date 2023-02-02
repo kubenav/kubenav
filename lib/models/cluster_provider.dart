@@ -1,4 +1,5 @@
 import 'package:kubenav/services/providers/aws_service.dart';
+import 'package:kubenav/utils/constants.dart';
 
 /// A [ClusterProvider] is the model with the configuration for all supported
 /// [ClusterProviderType]s. The cluster provider contains all information to get
@@ -248,6 +249,7 @@ class ClusterProviderGoogle {
   String? accessToken;
   int? accessTokenExpires;
   String? refreshToken;
+  String? redirectURL;
 
   ClusterProviderGoogle({
     required this.clientID,
@@ -256,6 +258,7 @@ class ClusterProviderGoogle {
     required this.accessToken,
     required this.accessTokenExpires,
     required this.refreshToken,
+    required this.redirectURL,
   });
 
   factory ClusterProviderGoogle.fromJson(Map<String, dynamic> data) {
@@ -270,6 +273,9 @@ class ClusterProviderGoogle {
           : null,
       refreshToken:
           data.containsKey('refreshToken') ? data['refreshToken'] : null,
+      redirectURL: data.containsKey('redirectURL')
+          ? data['redirectURL']
+          : Constants.googleRedirectURI,
     );
   }
 
@@ -281,6 +287,7 @@ class ClusterProviderGoogle {
       'accessToken': accessToken,
       'accessTokenExpires': accessTokenExpires,
       'refreshToken': refreshToken,
+      'redirectURL': redirectURL,
     };
   }
 }
@@ -298,6 +305,7 @@ class ClusterProviderOIDC {
   String? code;
   String? idToken;
   String? refreshToken;
+  String? redirectURL;
 
   ClusterProviderOIDC({
     required this.discoveryURL,
@@ -310,6 +318,7 @@ class ClusterProviderOIDC {
     required this.code,
     required this.idToken,
     required this.refreshToken,
+    required this.redirectURL,
   });
 
   factory ClusterProviderOIDC.fromJson(Map<String, dynamic> data) {
@@ -329,6 +338,9 @@ class ClusterProviderOIDC {
       idToken: data.containsKey('idToken') ? data['idToken'] : null,
       refreshToken:
           data.containsKey('refreshToken') ? data['refreshToken'] : null,
+      redirectURL: data.containsKey('redirectURL')
+          ? data['redirectURL']
+          : Constants.oidcRedirectURI,
     );
   }
 
@@ -344,6 +356,7 @@ class ClusterProviderOIDC {
       'code': code,
       'idToken': idToken,
       'refreshToken': refreshToken,
+      'redirectURL': redirectURL,
     };
   }
 }
