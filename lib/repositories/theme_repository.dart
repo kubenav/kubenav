@@ -8,6 +8,9 @@ import 'package:kubenav/utils/storage.dart';
 
 /// [theme] is a helper function which returns the [ThemeSettings] for the users
 /// currently selected team.
+///
+/// NOTE: WE CAN NOT LISTEN TO CHANGES HERE, THIS WILL BREAK ALL OUR CHARTS AND
+/// SOME OTHER ACTIONS LIKE DELETING RESOURCES.
 ThemeSettings theme(BuildContext context) {
   return Provider.of<ThemeRepository>(
     context,

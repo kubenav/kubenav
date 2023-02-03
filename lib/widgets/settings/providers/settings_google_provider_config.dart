@@ -31,6 +31,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
   final _nameController = TextEditingController();
   final _clientIDController = TextEditingController();
   final _clientSecretController = TextEditingController();
+  final _redirectURLController = TextEditingController();
   final _codeController = TextEditingController();
   bool _isLoading = false;
 
@@ -47,7 +48,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
   Future<void> _signIn() async {
     try {
       await openUrl(
-        'https://accounts.google.com/o/oauth2/v2/auth?client_id=${_clientIDController.text}&redirect_uri=${Constants.googleRedirectURI}&response_type=code&scope=https://www.googleapis.com/auth/cloud-platform&access_type=offline&include_granted_scopes=true&prompt=consent',
+        'https://accounts.google.com/o/oauth2/v2/auth?client_id=${_clientIDController.text}&redirect_uri=${_redirectURLController.text}&response_type=code&scope=https://www.googleapis.com/auth/cloud-platform&access_type=offline&include_granted_scopes=true&prompt=consent',
       );
     } catch (err) {
       Logger.log(
@@ -97,6 +98,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
               accessToken: googleTokens.accessToken!,
               accessTokenExpires: expires,
               refreshToken: googleTokens.refreshToken!,
+              redirectURL: _redirectURLController.text,
             ),
           );
           await clustersRepository.addProvider(provider);
@@ -122,6 +124,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
           provider.google!.accessToken = googleTokens.accessToken!;
           provider.google!.accessTokenExpires = expires;
           provider.google!.refreshToken = googleTokens.refreshToken!;
+          provider.google!.redirectURL = _redirectURLController.text;
           await clustersRepository.editProvider(provider);
 
           setState(() {
@@ -174,7 +177,11 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
       _clientIDController.text = widget.provider!.google!.clientID ?? '';
       _clientSecretController.text =
           widget.provider!.google!.clientSecret ?? '';
+      _redirectURLController.text =
+          widget.provider!.google!.redirectURL ?? Constants.googleRedirectURI;
       _codeController.text = widget.provider!.google!.code ?? '';
+    } else {
+      _redirectURLController.text = Constants.googleRedirectURI;
     }
   }
 
@@ -183,6 +190,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
     _nameController.dispose();
     _clientIDController.dispose();
     _clientSecretController.dispose();
+    _redirectURLController.dispose();
     _codeController.dispose();
     super.dispose();
   }
@@ -253,6 +261,23 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Client Secret',
+                ),
+                validator: _validator,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Constants.spacingSmall,
+              ),
+              child: TextFormField(
+                controller: _redirectURLController,
+                keyboardType: TextInputType.text,
+                autocorrect: false,
+                enableSuggestions: false,
+                maxLines: 1,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Redirect URL',
                 ),
                 validator: _validator,
               ),

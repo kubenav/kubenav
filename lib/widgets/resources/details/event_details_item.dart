@@ -65,6 +65,12 @@ class EventDetailsItem extends StatelessWidget implements IDetailsItemWidget {
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItemWidget(
           title: 'Involved Object',
+          goTo: 'View',
+          goToOnTap: goToReference(
+            context,
+            event.involvedObject,
+            null,
+          ),
           details: [
             DetailsItemModel(
               name: 'API Version',

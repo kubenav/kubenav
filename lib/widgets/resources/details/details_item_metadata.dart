@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
 import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/resources/details/details_item.dart';
 
 class DetailsItemMetadata extends StatelessWidget {
@@ -20,17 +21,21 @@ class DetailsItemMetadata extends StatelessWidget {
     List<DetailsItemModel> detailsItems = [];
     if (metadata != null) {
       if (metadata.name != null) {
-        detailsItems.add(DetailsItemModel(
-          name: 'Name',
-          values: metadata.name!,
-        ));
+        detailsItems.add(
+          DetailsItemModel(
+            name: 'Name',
+            values: metadata.name!,
+          ),
+        );
       }
 
       if (metadata.namespace != null) {
-        detailsItems.add(DetailsItemModel(
-          name: 'Namespace',
-          values: metadata.namespace!,
-        ));
+        detailsItems.add(
+          DetailsItemModel(
+            name: 'Namespace',
+            values: metadata.namespace!,
+          ),
+        );
       }
 
       detailsItems.add(DetailsItemModel(
@@ -41,20 +46,24 @@ class DetailsItemMetadata extends StatelessWidget {
       List<String> labelValues = [];
       metadata.labels.forEach((key, value) => labelValues.add('$key: $value'));
       if (labelValues.isNotEmpty) {
-        detailsItems.add(DetailsItemModel(
-          name: 'Labels',
-          values: labelValues,
-        ));
+        detailsItems.add(
+          DetailsItemModel(
+            name: 'Labels',
+            values: labelValues,
+          ),
+        );
       }
 
       List<String> annotationValues = [];
       metadata.annotations
           .forEach((key, value) => annotationValues.add('$key: $value'));
       if (annotationValues.isNotEmpty) {
-        detailsItems.add(DetailsItemModel(
-          name: 'Annotations',
-          values: annotationValues,
-        ));
+        detailsItems.add(
+          DetailsItemModel(
+            name: 'Annotations',
+            values: annotationValues,
+          ),
+        );
       }
 
       final ownerReferences = metadata.ownerReferences
@@ -62,10 +71,28 @@ class DetailsItemMetadata extends StatelessWidget {
               '${ownerReference.kind} (${ownerReference.name})')
           .toList();
       if (ownerReferences.isNotEmpty) {
-        detailsItems.add(DetailsItemModel(
-          name: 'Controlled by',
-          values: ownerReferences,
-        ));
+        detailsItems.add(
+          DetailsItemModel(
+            name: 'Controlled by',
+            values: ownerReferences,
+            onTap: (int index) {
+              final goToFunc = goToReference(
+                context,
+                metadata.ownerReferences[index],
+                metadata.namespace,
+              );
+              if (goToFunc != null) {
+                goToFunc();
+              } else {
+                showSnackbar(
+                  context,
+                  'Controlled by',
+                  '${metadata.ownerReferences[index].kind} (${metadata.ownerReferences[index].name})',
+                );
+              }
+            },
+          ),
+        );
       }
     }
 
