@@ -77,7 +77,7 @@ class DetailsItemWidget extends StatelessWidget {
                     showSnackbar(context, name, values[index]);
                   }
                 },
-                label: Text(values[index]),
+                label: SelectableText(values[index]),
               ),
             ),
           ),
@@ -91,9 +91,8 @@ class DetailsItemWidget extends StatelessWidget {
           onTap: () {
             onTap(-1);
           },
-          child: Text(
+          child: SelectableText(
             values.toString(),
-            softWrap: true,
             style: TextStyle(
               color: theme(context).colorTextPrimary,
               decoration: TextDecoration.underline,
@@ -104,9 +103,8 @@ class DetailsItemWidget extends StatelessWidget {
     }
 
     return Flexible(
-      child: Text(
+      child: SelectableText(
         values.toString(),
-        softWrap: true,
         style: TextStyle(
           color: theme(context).colorTextPrimary,
         ),
