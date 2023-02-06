@@ -33,6 +33,7 @@ class AppNamespacesWidget extends StatefulWidget {
 
 class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
   late Future<List<IoK8sApiCoreV1Namespace>> _futureFetchNamespaces;
+  String _filter = '';
 
   /// [_fetchNamespaces] fetches all Namespaces of the currently active cluster.
   Future<List<IoK8sApiCoreV1Namespace>> _fetchNamespaces() async {
@@ -56,6 +57,23 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
     ).getRequest('/api/v1/namespaces');
 
     return IoK8sApiCoreV1NamespaceList.fromJson(result)!.items;
+  }
+
+  /// [_getFilteredNamespaces] filters the given list of [namespaces] by the
+  /// setted [_filter]. When the [_filter] is not empty the name of an item must
+  /// contain the filter keyword.
+  List<dynamic> _getFilteredNamespaces(
+    List<IoK8sApiCoreV1Namespace> namespaces,
+  ) {
+    return _filter == ''
+        ? namespaces
+        : namespaces
+            .where((namespace) =>
+                namespace.metadata != null &&
+                namespace.metadata!.name != null &&
+                namespace.metadata!.name is String &&
+                namespace.metadata!.name!.contains(_filter.toLowerCase()))
+            .toList();
   }
 
   /// [_changeNamespace] sets the namespace of the currently active cluster to
@@ -274,13 +292,38 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                 );
               }
 
+              final filteredNamespaces = _getFilteredNamespaces(snapshot.data!);
+
               return ListView(
                 children: [
                   ..._buildFavoriteNamespace(context),
+                  Container(
+                    padding: const EdgeInsets.only(
+                      top: Constants.spacingSmall,
+                      bottom: Constants.spacingSmall,
+                      left: Constants.spacingExtraSmall,
+                      right: Constants.spacingExtraSmall,
+                    ),
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          _filter = value;
+                        });
+                      },
+                      keyboardType: TextInputType.text,
+                      autocorrect: false,
+                      enableSuggestions: false,
+                      maxLines: 1,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Filter',
+                      ),
+                    ),
+                  ),
                   ...List.generate(
-                    snapshot.data!.length,
+                    filteredNamespaces.length,
                     (index) {
-                      final name = snapshot.data![index].metadata?.name;
+                      final name = filteredNamespaces[index].metadata?.name;
 
                       return Container(
                         margin: const EdgeInsets.only(
