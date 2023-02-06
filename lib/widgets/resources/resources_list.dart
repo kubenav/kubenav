@@ -370,7 +370,7 @@ class _ResourcesListState extends State<ResourcesList> {
                           ),
                           color: theme(context).colorPrimary,
                           child: TextField(
-                            onSubmitted: (value) {
+                            onChanged: (value) {
                               setState(() {
                                 _filter = value;
                               });

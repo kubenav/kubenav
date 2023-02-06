@@ -282,7 +282,7 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                           ),
                           color: theme(context).colorPrimary,
                           child: TextField(
-                            onSubmitted: (value) {
+                            onChanged: (value) {
                               setState(() {
                                 _filter = value;
                               });
