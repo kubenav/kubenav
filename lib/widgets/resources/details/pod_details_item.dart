@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kubenav/utils/navigate.dart';
+import 'package:kubenav/widgets/resources/resource_details.dart';
 
 import 'package:provider/provider.dart';
 
@@ -178,6 +180,21 @@ class _PodDetailsItemState extends State<PodDetailsItem> {
             DetailsItemModel(
               name: 'Node',
               values: pod.spec!.nodeName ?? '-',
+              onTap: (index) {
+                navigate(
+                  context,
+                  ResourcesDetails(
+                    title: Resources.map['nodes']!.title,
+                    resource: Resources.map['nodes']!.resource,
+                    path: Resources.map['nodes']!.path,
+                    scope: Resources.map['nodes']!.scope,
+                    additionalPrinterColumns:
+                        Resources.map['nodes']!.additionalPrinterColumns,
+                    name: pod.spec!.nodeName ?? '',
+                    namespace: null,
+                  ),
+                );
+              },
             ),
             DetailsItemModel(
               name: 'Node',
