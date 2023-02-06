@@ -115,6 +115,7 @@ class _AppMaterialAppState extends State<AppMaterialApp> {
           brightness: theme.brightness,
           primaryColor: theme.colorPrimary,
           canvasColor: theme.colorBackground,
+          cardColor: theme.colorBackground,
           appBarTheme: AppBarTheme(
             backgroundColor: theme.colorPrimary,
             foregroundColor: theme.colorOnPrimary,
