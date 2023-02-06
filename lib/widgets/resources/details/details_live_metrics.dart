@@ -333,10 +333,14 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                     sideTitles: SideTitles(
                                       showTitles: true,
                                       reservedSize: 42,
-                                      getTitlesWidget:
-                                          (double value, TitleMeta meta) {
+                                      getTitlesWidget: (
+                                        double value,
+                                        TitleMeta meta,
+                                      ) {
                                         return Text(
-                                          formatCpuMetric(value, 0),
+                                          value > 1000000000
+                                              ? formatCpuMetric(value)
+                                              : formatCpuMetric(value, 0),
                                           style: secondaryTextStyle(
                                             context,
                                           ),
@@ -490,10 +494,14 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                     sideTitles: SideTitles(
                                       showTitles: true,
                                       reservedSize: 42,
-                                      getTitlesWidget:
-                                          (double value, TitleMeta meta) {
+                                      getTitlesWidget: (
+                                        double value,
+                                        TitleMeta meta,
+                                      ) {
                                         return Text(
-                                          formatMemoryMetric(value, 0),
+                                          value > 1048576
+                                              ? formatMemoryMetric(value, 2)
+                                              : formatMemoryMetric(value, 0),
                                           style: secondaryTextStyle(
                                             context,
                                           ),
