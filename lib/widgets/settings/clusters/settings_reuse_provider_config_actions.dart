@@ -16,6 +16,7 @@ import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_manual.da
 import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_oidc.dart';
 import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_rancher.dart';
 import 'package:kubenav/widgets/settings/providers/settings_aws_provider_config.dart';
+import 'package:kubenav/widgets/settings/providers/settings_awssso_multiple_providers_config.dart';
 import 'package:kubenav/widgets/settings/providers/settings_awssso_provider_config.dart';
 import 'package:kubenav/widgets/settings/providers/settings_azure_provider_config.dart';
 import 'package:kubenav/widgets/settings/providers/settings_digitalocean_provider_config.dart';
@@ -149,6 +150,23 @@ class SettingsReuseProviderActions extends StatelessWidget {
         },
       ),
     );
+
+    /// If a user selected the AWS SSO provider we also have to add an option,
+    /// where the user can load all the account ids and roles he has access to,
+    /// so that he haven't to specify them manually in the provider
+    /// configuration.
+    if (providerType == ClusterProviderType.awssso) {
+      actions.add(
+        AppActionsWidgetAction(
+          title: 'Add Multiple Providers',
+          color: theme(context).colorPrimary,
+          onTap: () {
+            Navigator.pop(context);
+            showModal(context, const SettingsAWSSSOMultipleProviders());
+          },
+        ),
+      );
+    }
 
     return AppActionsWidget(
       actions: actions,

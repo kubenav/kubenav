@@ -259,6 +259,48 @@ class AWSSSOCredentials {
   }
 }
 
+/// [AWSSSOAccount] represents a account including all roles which can be used
+/// to create a new AWS SSO provider.
+class AWSSSOAccount {
+  String? accountId;
+  String? accountName;
+  List<String>? roles;
+  String? accessToken;
+  int? accessTokenExpire;
+
+  AWSSSOAccount({
+    required this.accountId,
+    required this.accountName,
+    required this.roles,
+    required this.accessToken,
+    required this.accessTokenExpire,
+  });
+
+  factory AWSSSOAccount.fromJson(Map<String, dynamic> data) {
+    return AWSSSOAccount(
+      accountId: data.containsKey('accountId') ? data['accountId'] : null,
+      accountName: data.containsKey('accountName') ? data['accountName'] : null,
+      roles: data.containsKey('roles')
+          ? List<String>.from(data['roles'].map((v) => v))
+          : null,
+      accessToken: data.containsKey('accessToken') ? data['accessToken'] : null,
+      accessTokenExpire: data.containsKey('accessTokenExpire')
+          ? data['accessTokenExpire']
+          : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'accountId': accountId,
+      'accountName': accountName,
+      'roles': roles,
+      'accessToken': accessToken,
+      'accessTokenExpire': accessTokenExpire,
+    };
+  }
+}
+
 /// [AWSService] implements a service to interactiv with the AWS functions from
 /// our Go code. The implementation details of each Go function can be found in
 /// the `cmd/kubenav/aws.go` file.
@@ -419,6 +461,47 @@ class AWSService {
       Logger.log(
         'AWSService getSSOToken',
         'Could not get SSO token',
+        err,
+      );
+      rethrow;
+    }
+  }
+
+  /// [getSSOAccounts] can be used to get a list of AWS SSO accounts and all the
+  /// available roles for a user.
+  Future<List<AWSSSOAccount>> getSSOAccounts(
+    String ssoRegion,
+    String ssoClientID,
+    String ssoClientSecret,
+    String ssoDeviceCode,
+  ) async {
+    try {
+      final String result = await platform.invokeMethod(
+        'awsGetSSOAccounts',
+        <String, dynamic>{
+          'ssoRegion': ssoRegion,
+          'ssoClientID': ssoClientID,
+          'ssoClientSecret': ssoClientSecret,
+          'ssoDeviceCode': ssoDeviceCode,
+        },
+      );
+
+      Logger.log(
+        'AWSService getSSOAccounts',
+        'Accounts were returned',
+        result,
+      );
+
+      List<dynamic> jsonData = json.decode(result);
+      final accounts = <AWSSSOAccount>[];
+      for (var account in jsonData) {
+        accounts.add(AWSSSOAccount.fromJson(account));
+      }
+      return accounts;
+    } catch (err) {
+      Logger.log(
+        'AWSService getSSOAccounts',
+        'Could not get AWS SSO accounts',
         err,
       );
       rethrow;
