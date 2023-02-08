@@ -145,6 +145,17 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       } else {
         awsGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, accessToken, accessTokenExpire, result)
       }
+    } else if (call.method == "awsGetSSOAccounts") {
+      val ssoRegion = call.argument<String>("ssoRegion")
+      val ssoClientID = call.argument<String>("ssoClientID")
+      val ssoClientSecret = call.argument<String>("ssoClientSecret")
+      val ssoDeviceCode = call.argument<String>("ssoDeviceCode")
+
+      if (ssoRegion == null || ssoClientID == null || ssoClientSecret == null || ssoDeviceCode == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        awsGetSSOAccounts(ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, result)
+      }
     } else if (call.method == "helmListCharts") {
       val clusterServer = call.argument<String>("clusterServer")
       val clusterCertificateAuthorityData = call.argument<String>("clusterCertificateAuthorityData")
@@ -357,6 +368,15 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       result.success(data)
     } catch (e: Exception) {
       result.error("AWS_GET_SSO_TOKEN_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun awsGetSSOAccounts(ssoRegion: String, ssoClientID: String, ssoClientSecret: String, ssoDeviceCode: String, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.awsGetSSOAccounts(ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode)
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("AWS_GET_SSO_ACCOUNTS_FAILED", e.localizedMessage, null)
     }
   }
 

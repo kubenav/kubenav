@@ -136,6 +136,17 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
+    } else if call.method == "awsGetSSOAccounts" {
+      if let args = call.arguments as? Dictionary<String, Any>,
+        let ssoRegion = args["ssoRegion"] as? String,
+        let ssoClientID = args["ssoClientID"] as? String,
+        let ssoClientSecret = args["ssoClientSecret"] as? String,
+        let ssoDeviceCode = args["ssoDeviceCode"] as? String
+      {
+        awsGetSSOAccounts(ssoRegion: ssoRegion, ssoClientID: ssoClientID, ssoClientSecret: ssoClientSecret, ssoDeviceCode: ssoDeviceCode, result: result)
+      } else {
+        result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
+      }
     } else if call.method == "helmListCharts" {
       if let args = call.arguments as? Dictionary<String, Any>,
         let clusterServer = args["clusterServer"] as? String,
@@ -363,6 +374,17 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     let data = KubenavAWSGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, accessToken, accessTokenExpire, &error)
     if error != nil {
       result(FlutterError(code: "AWS_GET_SSO_TOKEN_FAILED", message: error?.localizedDescription ?? "", details: nil))
+    } else {
+      result(data)
+    }
+  }
+
+  private func awsGetSSOAccounts(ssoRegion: String, ssoClientID: String, ssoClientSecret: String, ssoDeviceCode: String, result: FlutterResult) {
+    var error: NSError?
+
+    let data = KubenavAWSGetSSOAccounts(ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, &error)
+    if error != nil {
+      result(FlutterError(code: "AWS_GET_SSO_ACCOUNTS_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
       result(data)
     }

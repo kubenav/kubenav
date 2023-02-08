@@ -590,6 +590,8 @@ class _ResourcesListState extends State<ResourcesList> {
               listen: true,
             );
 
+            final filteredItems = _getFilteredItems(snapshot.data!.items);
+
             return _buildLayout(
               context,
               Wrap(
@@ -603,7 +605,7 @@ class _ResourcesListState extends State<ResourcesList> {
                     ),
                     color: theme(context).colorPrimary,
                     child: TextField(
-                      onSubmitted: (value) {
+                      onChanged: (value) {
                         setState(() {
                           _filter = value;
                         });
@@ -648,9 +650,7 @@ class _ResourcesListState extends State<ResourcesList> {
                         right: Constants.spacingMiddle,
                         left: Constants.spacingMiddle,
                       ),
-                      itemCount: _getFilteredItems(
-                        snapshot.data!.items,
-                      ).length,
+                      itemCount: filteredItems.length,
                       itemBuilder: (context, index) {
                         return _buildListItem(
                           widget.title,
@@ -658,7 +658,7 @@ class _ResourcesListState extends State<ResourcesList> {
                           widget.path,
                           widget.scope,
                           widget.additionalPrinterColumns,
-                          _getFilteredItems(snapshot.data!.items)[index],
+                          filteredItems[index],
                           snapshot.data!.metrics,
                         );
                       },

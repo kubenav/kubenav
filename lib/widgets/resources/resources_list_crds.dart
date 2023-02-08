@@ -280,6 +280,8 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                         );
                       }
 
+                      final filteredItems = _getFilteredItems(snapshot.data!);
+
                       return Wrap(
                         children: [
                           Container(
@@ -291,7 +293,7 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                             ),
                             color: theme(context).colorPrimary,
                             child: TextField(
-                              onSubmitted: (value) {
+                              onChanged: (value) {
                                 setState(() {
                                   _filter = value;
                                 });
@@ -339,12 +341,11 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                                   const SizedBox(
                                 height: Constants.spacingMiddle,
                               ),
-                              itemCount:
-                                  _getFilteredItems(snapshot.data!).length,
+                              itemCount: filteredItems.length,
                               itemBuilder: (context, index) {
                                 return buildListItem(
                                   context,
-                                  _getFilteredItems(snapshot.data!)[index],
+                                  filteredItems[index],
                                 );
                               },
                             ),
