@@ -38,6 +38,17 @@ type AWSSSOCredentials struct {
 	AccessTokenExpire int64  `json:"accessTokenExpire"`
 }
 
+// AWSSSOAccount represents a single AWS SSO account with it's name and id and all the available roles for an
+// authenticated user. It also contains the access token and expire timestamp which was generated to get the account,
+// so that they can be used to get the sso credentials in a follow up API call.
+type AWSSSOAccount struct {
+	AccountID         string   `json:"accountId"`
+	AccountName       string   `json:"accountName"`
+	Roles             []string `json:"roles"`
+	AccessToken       string   `json:"accessToken"`
+	AccessTokenExpire int64    `json:"accessTokenExpire"`
+}
+
 // AWSGetClusters returns all clusters which can be accessed with the given credentials.
 func AWSGetClusters(accessKeyID, secretKey, region, sessionToken string) (string, error) {
 	var clusters []*eks.Cluster
@@ -209,4 +220,79 @@ func AWSGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret
 	}
 
 	return string(ssoCredentials), nil
+}
+
+// AWSGetSSOAccounts returns a list of accounts and roles for the currently authenticated user, so that a user does not
+// have to provide these information by his own.
+func AWSGetSSOAccounts(ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode string) (string, error) {
+	grantType := "urn:ietf:params:oauth:grant-type:device_code"
+
+	sess, err := session.NewSession()
+	if err != nil {
+		return "", err
+	}
+
+	svcssooidc := ssooidc.New(sess, aws.NewConfig().WithRegion(ssoRegion))
+
+	token, err := svcssooidc.CreateToken(&ssooidc.CreateTokenInput{
+		ClientId:     &ssoClientID,
+		ClientSecret: &ssoClientSecret,
+		DeviceCode:   &ssoDeviceCode,
+		GrantType:    &grantType,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	accessToken := *token.AccessToken
+	accessTokenExpire := (time.Now().Unix() + *token.ExpiresIn) * 1000
+
+	svcsso := sso.New(sess, aws.NewConfig().WithRegion(ssoRegion))
+
+	accounts, err := svcsso.ListAccounts(&sso.ListAccountsInput{
+		AccessToken: &accessToken,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	if accounts == nil || accounts.AccountList == nil {
+		return "", fmt.Errorf("no accounts were found")
+	}
+
+	var ssoAccounts []AWSSSOAccount
+
+	for _, account := range accounts.AccountList {
+		roles, err := svcsso.ListAccountRoles(&sso.ListAccountRolesInput{
+			AccountId:   account.AccountId,
+			AccessToken: &accessToken,
+		})
+		if err != nil {
+			return "", err
+		}
+
+		var ssoRoles []string
+
+		if roles != nil || roles.RoleList != nil {
+			for _, role := range roles.RoleList {
+				ssoRoles = append(ssoRoles, *role.RoleName)
+			}
+
+		}
+
+		ssoAccounts = append(ssoAccounts, AWSSSOAccount{
+			AccountID:         *account.AccountId,
+			AccountName:       *account.AccountName,
+			Roles:             ssoRoles,
+			AccessToken:       accessToken,
+			AccessTokenExpire: accessTokenExpire,
+		})
+	}
+
+	ssoAccountsBytes, err := json.Marshal(ssoAccounts)
+	if err != nil {
+		return "", err
+	}
+
+	return string(ssoAccountsBytes), nil
 }

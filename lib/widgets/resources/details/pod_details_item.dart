@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kubenav/utils/navigate.dart';
-import 'package:kubenav/widgets/resources/resource_details.dart';
 
 import 'package:provider/provider.dart';
 
@@ -15,11 +13,13 @@ import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
+import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources/pods.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/resources/details/details_containers.dart';
 import 'package:kubenav/widgets/resources/details/details_item.dart';
 import 'package:kubenav/widgets/resources/details/details_resources_preview.dart';
+import 'package:kubenav/widgets/resources/resource_details.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 
 class PodDetailsItem extends StatefulWidget implements IDetailsItemWidget {
