@@ -1,4 +1,5 @@
 import 'package:kubenav/services/providers/aws_service.dart';
+import 'package:kubenav/services/providers/oidc_service.dart';
 import 'package:kubenav/utils/constants.dart';
 
 /// A [ClusterProvider] is the model with the configuration for all supported
@@ -295,6 +296,7 @@ class ClusterProviderGoogle {
 /// A [ClusterProviderOIDC] represents the provider configuration for the
 /// [ClusterProviderType.oidc] provider.
 class ClusterProviderOIDC {
+  OIDCFlow? flow;
   String? discoveryURL;
   String? clientID;
   String? clientSecret;
@@ -306,8 +308,10 @@ class ClusterProviderOIDC {
   String? idToken;
   String? refreshToken;
   String? redirectURL;
+  bool? useAccessToken;
 
   ClusterProviderOIDC({
+    required this.flow,
     required this.discoveryURL,
     required this.clientID,
     required this.clientSecret,
@@ -319,10 +323,14 @@ class ClusterProviderOIDC {
     required this.idToken,
     required this.refreshToken,
     required this.redirectURL,
+    required this.useAccessToken,
   });
 
   factory ClusterProviderOIDC.fromJson(Map<String, dynamic> data) {
     return ClusterProviderOIDC(
+      flow: data.containsKey('flow')
+          ? getOIDCFlowFromString(data['flow'])
+          : OIDCFlow.standard,
       discoveryURL:
           data.containsKey('discoveryURL') ? data['discoveryURL'] : null,
       clientID: data.containsKey('clientID') ? data['clientID'] : null,
@@ -341,11 +349,14 @@ class ClusterProviderOIDC {
       redirectURL: data.containsKey('redirectURL')
           ? data['redirectURL']
           : Constants.oidcRedirectURI,
+      useAccessToken:
+          data.containsKey('useAccessToken') ? data['useAccessToken'] : false,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'flow': flow?.toShortString() ?? OIDCFlow.standard.toShortString(),
       'discoveryURL': discoveryURL,
       'clientID': clientID,
       'clientSecret': clientSecret,
@@ -357,6 +368,7 @@ class ClusterProviderOIDC {
       'idToken': idToken,
       'refreshToken': refreshToken,
       'redirectURL': redirectURL,
+      'useAccessToken': useAccessToken,
     };
   }
 }

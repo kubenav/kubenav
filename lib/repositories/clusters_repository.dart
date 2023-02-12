@@ -388,6 +388,7 @@ class ClustersRepository with ChangeNotifier {
             provider?.oidc?.scopes ?? '',
             Constants.oidcRedirectURI,
             provider?.oidc?.refreshToken ?? '',
+            provider?.oidc?.useAccessToken ?? false,
           );
 
           if (oidcResponse.idToken != null) {
