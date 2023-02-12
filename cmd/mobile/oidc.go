@@ -91,6 +91,7 @@ func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, sco
 
 	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
 	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
+	parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
 
 	oauth2Config := oauth2.Config{
 		ClientID:     clientID,
@@ -135,7 +136,7 @@ func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, sco
 
 // OIDCGetRefreshToken returns a refresh token for the configured OIDC provider. The refresh token can be used to get a
 // new access token via the OIDCGetAccessToken function.
-func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, code, verifier string) (string, error) {
+func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, code, verifier string, useAccessToken bool) (string, error) {
 	ctx, err := oidcContext(context.Background(), certificateAuthority)
 	if err != nil {
 		return "", err
@@ -148,6 +149,7 @@ func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthor
 
 	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
 	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
+	parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
 
 	oauth2Config := oauth2.Config{
 		ClientID:     clientID,
@@ -167,9 +169,13 @@ func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthor
 		return "", err
 	}
 
-	idToken, ok := oauth2Token.Extra("id_token").(string)
-	if !ok {
-		return "", fmt.Errorf("invalid id_token")
+	idToken := oauth2Token.AccessToken
+	if !useAccessToken {
+		tmpIDToken, ok := oauth2Token.Extra("id_token").(string)
+		if !ok {
+			return "", fmt.Errorf("invalid id_token")
+		}
+		idToken = tmpIDToken
 	}
 
 	oidcResponse := OIDCResponse{
@@ -186,7 +192,7 @@ func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthor
 }
 
 // OIDCGetAccessToken is used to retrieve an access token from a refresh token.
-func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, refreshToken string) (string, error) {
+func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, refreshToken string, useAccessToken bool) (string, error) {
 	ctx, err := oidcContext(context.Background(), certificateAuthority)
 	if err != nil {
 		return "", err
@@ -199,6 +205,7 @@ func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthori
 
 	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
 	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
+	parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
 
 	oauth2Config := oauth2.Config{
 		ClientID:     clientID,
@@ -214,9 +221,119 @@ func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthori
 		return "", err
 	}
 
-	idToken, ok := oauth2Token.Extra("id_token").(string)
-	if !ok {
-		return "", fmt.Errorf("invalid id_token")
+	idToken := oauth2Token.AccessToken
+	if !useAccessToken {
+		tmpIDToken, ok := oauth2Token.Extra("id_token").(string)
+		if !ok {
+			return "", fmt.Errorf("invalid id_token")
+		}
+		idToken = tmpIDToken
+	}
+
+	oidcResponse := OIDCResponse{
+		IDToken:      idToken,
+		RefreshToken: oauth2Token.RefreshToken,
+	}
+
+	oidcResponseBytes, err := json.Marshal(oidcResponse)
+	if err != nil {
+		return "", err
+	}
+
+	return string(oidcResponseBytes), nil
+}
+
+func OIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes string) (string, error) {
+	ctx, err := oidcContext(context.Background(), certificateAuthority)
+	if err != nil {
+		return "", err
+	}
+
+	provider, err := oidc.NewProvider(ctx, discoveryURL)
+	if err != nil {
+		return "", err
+	}
+
+	var claims struct {
+		DeviceAuthorizationEndpoint string `json:"device_authorization_endpoint"`
+	}
+	err = provider.Claims(&claims)
+	if err != nil {
+		return "", err
+	}
+
+	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
+	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
+	parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+
+	oauth2Config := oauth2.Config{
+		ClientID: clientID,
+		Endpoint: oauth2.Endpoint{
+			AuthURL:       provider.Endpoint().AuthURL,
+			DeviceAuthURL: claims.DeviceAuthorizationEndpoint,
+			TokenURL:      provider.Endpoint().TokenURL,
+		},
+		Scopes: parsedScopes,
+	}
+
+	deviceAuth, err := oauth2Config.AuthDevice(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	deviceAuthData, err := json.Marshal(deviceAuth)
+	if err != nil {
+		return "", err
+	}
+
+	return string(deviceAuthData), nil
+}
+
+func OIDCDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority, scopes, deviceCode string, useAccessToken bool) (string, error) {
+	ctx, err := oidcContext(context.Background(), certificateAuthority)
+	if err != nil {
+		return "", err
+	}
+
+	provider, err := oidc.NewProvider(ctx, discoveryURL)
+	if err != nil {
+		return "", err
+	}
+
+	var claims struct {
+		DeviceAuthorizationEndpoint string `json:"device_authorization_endpoint"`
+	}
+	err = provider.Claims(&claims)
+	if err != nil {
+		return "", err
+	}
+
+	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
+	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
+	parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+
+	oauth2Config := oauth2.Config{
+		ClientID: clientID,
+		Endpoint: oauth2.Endpoint{
+			AuthURL:       provider.Endpoint().AuthURL,
+			DeviceAuthURL: claims.DeviceAuthorizationEndpoint,
+			TokenURL:      provider.Endpoint().TokenURL,
+		},
+		Scopes: parsedScopes,
+	}
+
+	oauth2Token, err := oauth2Config.Poll(ctx, &oauth2.DeviceAuth{DeviceCode: deviceCode})
+	if err != nil {
+		return "", err
+	}
+
+	idToken := oauth2Token.AccessToken
+	if !useAccessToken {
+		tmpIDToken, ok := oauth2Token.Extra("id_token").(string)
+		if !ok {
+			return "", fmt.Errorf("invalid id_token")
+		}
+		idToken = tmpIDToken
 	}
 
 	oidcResponse := OIDCResponse{
