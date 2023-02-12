@@ -469,7 +469,7 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun oidcDeviceAuthGetRefreshToken(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, refreshToken: String, useAccessToken: Boolean, result: MethodChannel.Result) {
+  private fun oidcDeviceAuthGetRefreshToken(discoveryURL: String, clientID: String, certificateAuthority: String, scopes: String, deviceCode: String, useAccessToken: Boolean, result: MethodChannel.Result) {
     try {
       val data: String = Kubenav.oidcDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority, scopes, deviceCode, useAccessToken)
       result.success(data)
