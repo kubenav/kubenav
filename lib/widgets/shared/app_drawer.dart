@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/resource.dart' as resource_model;
+import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/navigate.dart';
+import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/home/home.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_list.dart';
 import 'package:kubenav/widgets/plugins/prometheus/plugin_prometheus_list.dart';
@@ -14,6 +17,7 @@ import 'package:kubenav/widgets/resources/bookmarks/resources_bookmarks.dart';
 import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/resources/resources_list_crds.dart';
 import 'package:kubenav/widgets/settings/settings.dart';
+import 'package:kubenav/widgets/shared/app_clusters_widget.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -136,6 +140,14 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
+      context,
+      listen: true,
+    );
+    final activeCluster = clustersRepository.getCluster(
+      clustersRepository.activeClusterId,
+    );
+
     return Drawer(
       child: Container(
         color: theme(context).colorPrimary,
@@ -176,6 +188,34 @@ class AppDrawer extends StatelessWidget {
                       context,
                       const ResourcesBookmarks(),
                       Constants.pageIndexResources,
+                    )
+                  },
+                ),
+                ListTile(
+                  leading: buildLeading(context, CustomIcons.clusters),
+                  title: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Cluster',
+                        style: TextStyle(
+                          color: theme(context).colorOnPrimary,
+                          fontSize: 10,
+                        ),
+                      ),
+                      Text(
+                        Characters(activeCluster?.name ?? 'No Active Cluster')
+                            .replaceAll(Characters(''), Characters('\u{200B}'))
+                            .toString(),
+                        style: TextStyle(color: theme(context).colorOnPrimary),
+                      )
+                    ],
+                  ),
+                  onTap: () => {
+                    showModal(
+                      context,
+                      const AppClustersWidget(),
                     )
                   },
                 ),
