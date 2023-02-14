@@ -197,10 +197,6 @@ class _PodDetailsItemState extends State<PodDetailsItem> {
               },
             ),
             DetailsItemModel(
-              name: 'Node',
-              values: pod.spec!.serviceAccountName ?? '-',
-            ),
-            DetailsItemModel(
               name: 'Service Account',
               values: pod.spec!.serviceAccountName ?? '-',
             ),
