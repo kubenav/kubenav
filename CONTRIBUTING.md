@@ -36,9 +36,9 @@ kubenav uses [Flutter](https://flutter.dev) and [Go](https://go.dev), make sure 
 ```sh
 $ flutter --version
 
-Flutter 3.7.2 • channel stable • https://github.com/flutter/flutter.git
-Framework • revision 32fb2f948e (6 hours ago) • 2023-02-08 07:30:10 -0800
-Engine • revision f40b73f8a4
+Flutter 3.7.3 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision 9944297138 (11 days ago) • 2023-02-08 15:46:04 -0800
+Engine • revision 248290d6d5
 Tools • Dart 2.19.2 • DevTools 2.20.1
 
 
