@@ -14,6 +14,7 @@ import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
+import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
@@ -184,12 +185,17 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
       context,
       listen: true,
     );
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: true,
+    );
     Provider.of<ClustersRepository>(
       context,
       listen: true,
     );
 
     return Scaffold(
+      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
         centerTitle: true,
         title: Column(
@@ -219,132 +225,138 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
           ],
         ),
       ),
-      bottomNavigationBar: const AppBottomNavigationBarWidget(),
+      bottomNavigationBar: appRepository.settings.classicMode
+          ? null
+          : const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            FutureBuilder(
-              future: _futureFetchItems,
-              builder: (
-                BuildContext context,
-                AsyncSnapshot<List<Resource>> snapshot,
-              ) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(
-                            Constants.spacingMiddle,
-                          ),
-                          child: CircularProgressIndicator(
-                            color: theme(context).colorPrimary,
-                          ),
-                        ),
-                      ],
-                    );
-                  default:
-                    if (snapshot.hasError) {
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              FutureBuilder(
+                future: _futureFetchItems,
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<List<Resource>> snapshot,
+                ) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Flexible(
-                            child: Padding(
-                              padding: const EdgeInsets.all(
-                                Constants.spacingMiddle,
-                              ),
-                              child: AppErrorWidget(
-                                message:
-                                    'Could not load CustomResourceDefinitions',
-                                details: snapshot.error.toString(),
-                                icon:
-                                    'assets/resources/customresourcedefinitions.svg',
-                              ),
+                          Padding(
+                            padding: const EdgeInsets.all(
+                              Constants.spacingMiddle,
+                            ),
+                            child: CircularProgressIndicator(
+                              color: theme(context).colorPrimary,
                             ),
                           ),
                         ],
                       );
-                    }
-
-                    return Wrap(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(
-                            top: Constants.spacingMiddle,
-                            bottom: Constants.spacingMiddle,
-                            left: Constants.spacingMiddle,
-                            right: Constants.spacingMiddle,
-                          ),
-                          color: theme(context).colorPrimary,
-                          child: TextField(
-                            onChanged: (value) {
-                              setState(() {
-                                _filter = value;
-                              });
-                            },
-                            style: const TextStyle(
-                              color: Colors.white,
+                    default:
+                      if (snapshot.hasError) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.all(
+                                  Constants.spacingMiddle,
+                                ),
+                                child: AppErrorWidget(
+                                  message:
+                                      'Could not load CustomResourceDefinitions',
+                                  details: snapshot.error.toString(),
+                                  icon:
+                                      'assets/resources/customresourcedefinitions.svg',
+                                ),
+                              ),
                             ),
-                            cursorColor: Colors.white,
-                            keyboardType: TextInputType.text,
-                            autocorrect: false,
-                            enableSuggestions: false,
-                            maxLines: 1,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.white, width: 0.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.white, width: 0.0),
-                              ),
-                              isDense: true,
-                              contentPadding: EdgeInsets.all(8),
-                              hintStyle: TextStyle(
+                          ],
+                        );
+                      }
+
+                      final filteredItems = _getFilteredItems(snapshot.data!);
+
+                      return Wrap(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(
+                              top: Constants.spacingMiddle,
+                              bottom: Constants.spacingMiddle,
+                              left: Constants.spacingMiddle,
+                              right: Constants.spacingMiddle,
+                            ),
+                            color: theme(context).colorPrimary,
+                            child: TextField(
+                              onChanged: (value) {
+                                setState(() {
+                                  _filter = value;
+                                });
+                              },
+                              style: const TextStyle(
                                 color: Colors.white,
                               ),
-                              hintText: 'Filter...',
+                              cursorColor: Colors.white,
+                              keyboardType: TextInputType.text,
+                              autocorrect: false,
+                              enableSuggestions: false,
+                              maxLines: 1,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 0.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 0.0),
+                                ),
+                                isDense: true,
+                                contentPadding: EdgeInsets.all(8),
+                                hintStyle: TextStyle(
+                                  color: Colors.white,
+                                ),
+                                hintText: 'Filter...',
+                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(
-                            top: Constants.spacingMiddle,
-                            bottom: Constants.spacingMiddle,
-                          ),
-                          child: ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
+                          Container(
                             padding: const EdgeInsets.only(
-                              right: Constants.spacingMiddle,
-                              left: Constants.spacingMiddle,
+                              top: Constants.spacingMiddle,
+                              bottom: Constants.spacingMiddle,
                             ),
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(
-                              height: Constants.spacingMiddle,
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: const EdgeInsets.only(
+                                right: Constants.spacingMiddle,
+                                left: Constants.spacingMiddle,
+                              ),
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(
+                                height: Constants.spacingMiddle,
+                              ),
+                              itemCount: filteredItems.length,
+                              itemBuilder: (context, index) {
+                                return buildListItem(
+                                  context,
+                                  filteredItems[index],
+                                );
+                              },
                             ),
-                            itemCount: _getFilteredItems(snapshot.data!).length,
-                            itemBuilder: (context, index) {
-                              return buildListItem(
-                                context,
-                                _getFilteredItems(snapshot.data!)[index],
-                              );
-                            },
                           ),
-                        ),
-                      ],
-                    );
-                }
-              },
-            ),
-          ],
+                        ],
+                      );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -14,12 +14,13 @@ import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources/general.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details.dart';
-import 'package:kubenav/widgets/shared/app_actions_header_widget.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
+import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
 import 'package:kubenav/widgets/shared/app_namespaces_widget.dart';
+import 'package:kubenav/widgets/shared/app_resource_actions.dart';
 
 /// The [PluginHelmList] can be used to view all Helm releases for the currently
 /// active cluster and namespace. It shows a list of all Helm releases, with the
@@ -62,10 +63,10 @@ class _PluginHelmListState extends State<PluginHelmList> {
     ).helmListCharts(cluster.namespace);
   }
 
-  /// [buildItem] builds the widget for a single Helm release shown in the list
+  /// [_buildItem] builds the widget for a single Helm release shown in the list
   /// of releases. When the user clicks on the release he will be redirected to
   /// the [PluginHelmDetails] screen.
-  Widget buildItem(BuildContext context, Release release) {
+  Widget _buildItem(BuildContext context, Release release) {
     return AppListItem(
       onTap: () {
         navigate(
@@ -170,6 +171,34 @@ class _PluginHelmListState extends State<PluginHelmList> {
     );
   }
 
+  /// [_buildHeaderActions] returns the Helm list actions as header when the
+  /// user didn't opt in for the classic mode.
+  Widget _buildHeaderActions(BuildContext context) {
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: false,
+    );
+
+    if (!appRepository.settings.classicMode) {
+      return AppResourceActions(
+        mode: AppResourceActionsMode.header,
+        actions: [
+          AppResourceActionsModel(
+            title: 'Refresh',
+            icon: Icons.refresh,
+            onTap: () {
+              setState(() {
+                _futureFetchHelmReleases = _fetchHelmReleases();
+              });
+            },
+          ),
+        ],
+      );
+    }
+
+    return Container();
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -184,22 +213,55 @@ class _PluginHelmListState extends State<PluginHelmList> {
       context,
       listen: true,
     );
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: true,
+    );
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,
     );
 
     return Scaffold(
+      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(CustomIcons.namespaces),
-            onPressed: () {
-              showModal(context, const AppNamespacesWidget());
-            },
-          ),
-        ],
+
+        /// If the user opt in for the classic mode, we show the actions for the
+        /// Helm list view in the [AppBar] next to the namespace selection. If a
+        /// user does not use this mode we only show the namespace selection
+        /// action.
+        actions: appRepository.settings.classicMode
+            ? [
+                IconButton(
+                  icon: const Icon(CustomIcons.namespaces),
+                  onPressed: () {
+                    showModal(context, const AppNamespacesWidget());
+                  },
+                ),
+                AppResourceActions(
+                  mode: AppResourceActionsMode.menu,
+                  actions: [
+                    AppResourceActionsModel(
+                      title: 'Refresh',
+                      icon: Icons.refresh,
+                      onTap: () {
+                        setState(() {
+                          _futureFetchHelmReleases = _fetchHelmReleases();
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ]
+            : [
+                IconButton(
+                  icon: const Icon(CustomIcons.namespaces),
+                  onPressed: () {
+                    showModal(context, const AppNamespacesWidget());
+                  },
+                ),
+              ],
         title: Column(
           children: [
             Text(
@@ -238,101 +300,92 @@ class _PluginHelmListState extends State<PluginHelmList> {
           ],
         ),
       ),
-      bottomNavigationBar: const AppBottomNavigationBarWidget(),
+      bottomNavigationBar: appRepository.settings.classicMode
+          ? null
+          : const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            FutureBuilder(
-              future: _futureFetchHelmReleases,
-              builder: (
-                BuildContext context,
-                AsyncSnapshot<List<Release>> snapshot,
-              ) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding:
-                              const EdgeInsets.all(Constants.spacingMiddle),
-                          child: CircularProgressIndicator(
-                            color: theme(context).colorPrimary,
-                          ),
-                        ),
-                      ],
-                    );
-                  default:
-                    if (snapshot.hasError) {
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              FutureBuilder(
+                future: _futureFetchHelmReleases,
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<List<Release>> snapshot,
+                ) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Flexible(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.all(Constants.spacingMiddle),
-                              child: AppErrorWidget(
-                                message: 'Could not load Helm charts',
-                                details: snapshot.error.toString(),
-                                icon: 'assets/plugins/helm.svg',
-                              ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.all(Constants.spacingMiddle),
+                            child: CircularProgressIndicator(
+                              color: theme(context).colorPrimary,
                             ),
                           ),
                         ],
                       );
-                    }
-
-                    return Wrap(
-                      children: [
-                        AppActionsHeaderWidget(
-                          actions: [
-                            AppActionsHeaderModel(
-                              title: 'Refresh',
-                              icon: Icons.refresh,
-                              onTap: () {
-                                setState(() {
-                                  _futureFetchHelmReleases =
-                                      _fetchHelmReleases();
-                                });
-                              },
+                    default:
+                      if (snapshot.hasError) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.all(
+                                    Constants.spacingMiddle),
+                                child: AppErrorWidget(
+                                  message: 'Could not load Helm charts',
+                                  details: snapshot.error.toString(),
+                                  icon: 'assets/plugins/helm.svg',
+                                ),
+                              ),
                             ),
                           ],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(
-                            top: Constants.spacingMiddle,
-                            bottom: Constants.spacingMiddle,
-                          ),
-                          child: ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
+                        );
+                      }
+
+                      return Wrap(
+                        children: [
+                          _buildHeaderActions(context),
+                          Container(
                             padding: const EdgeInsets.only(
-                              right: Constants.spacingMiddle,
-                              left: Constants.spacingMiddle,
+                              top: Constants.spacingMiddle,
+                              bottom: Constants.spacingMiddle,
                             ),
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(
-                              height: Constants.spacingMiddle,
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: const EdgeInsets.only(
+                                right: Constants.spacingMiddle,
+                                left: Constants.spacingMiddle,
+                              ),
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(
+                                height: Constants.spacingMiddle,
+                              ),
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                return _buildItem(
+                                  context,
+                                  snapshot.data![index],
+                                );
+                              },
                             ),
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              return buildItem(
-                                context,
-                                snapshot.data![index],
-                              );
-                            },
                           ),
-                        ),
-                      ],
-                    );
-                }
-              },
-            ),
-          ],
+                        ],
+                      );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
