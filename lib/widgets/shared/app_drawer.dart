@@ -36,10 +36,7 @@ class AppDrawer extends StatelessWidget {
         padding: const EdgeInsets.all(
           Constants.spacingIcon54x54,
         ),
-        child: SvgPicture.asset(
-          icon,
-          color: theme(context).colorOnPrimary,
-        ),
+        child: SvgPicture.asset(icon),
       );
     }
 

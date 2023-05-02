@@ -11,6 +11,7 @@
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		5520950029744B3100C0B38A /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 552094FF29744B3100C0B38A /* StoreKit.framework */; };
 		55430D6127DCF9DF00E69423 /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55430D6027DCF9DF00E69423 /* DispatchQueue.swift */; };
+		55972CD62A01A6D700E3E942 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55972CD52A01A6C000E3E942 /* libresolv.tbd */; };
 		559DC63327C8D7020018E78E /* Kubenav.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 559DC63127C8D6D50018E78E /* Kubenav.xcframework */; settings = {ATTRIBUTES = (Required, ); }; };
 		55C4E37827C952630039D04B /* KubenavPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C4E37727C952630039D04B /* KubenavPlugin.swift */; };
 		57B7696AAFE673571F3BDBEA /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F980B2BF4402CFBF648A1A8 /* Pods_Runner.framework */; };
@@ -26,6 +27,7 @@
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		552094FF29744B3100C0B38A /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		55430D6027DCF9DF00E69423 /* DispatchQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueue.swift; sourceTree = "<group>"; };
+		55972CD52A01A6C000E3E942 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		559DC63127C8D6D50018E78E /* Kubenav.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Kubenav.xcframework; sourceTree = "<group>"; };
 		55C4E37727C952630039D04B /* KubenavPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KubenavPlugin.swift; sourceTree = "<group>"; };
 		6F980B2BF4402CFBF648A1A8 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,6 +54,7 @@
 				5520950029744B3100C0B38A /* StoreKit.framework in Frameworks */,
 				559DC63327C8D7020018E78E /* Kubenav.xcframework in Frameworks */,
 				57B7696AAFE673571F3BDBEA /* Pods_Runner.framework in Frameworks */,
+				55972CD62A01A6D700E3E942 /* libresolv.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +82,7 @@
 		76CEC9B19E329A0DB6462407 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				55972CD52A01A6C000E3E942 /* libresolv.tbd */,
 				552094FF29744B3100C0B38A /* StoreKit.framework */,
 				6F980B2BF4402CFBF648A1A8 /* Pods_Runner.framework */,
 			);

@@ -50,10 +50,7 @@ class SettingsProviders extends StatelessWidget {
             padding: const EdgeInsets.all(
               Constants.spacingIcon54x54,
             ),
-            child: SvgPicture.asset(
-              provider.type!.icon(),
-              color: theme(context).colorOnPrimary,
-            ),
+            child: SvgPicture.asset(provider.type!.icon()),
           ),
           const SizedBox(width: Constants.spacingSmall),
           Expanded(

@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 4.2.0+83
 
 environment:
-  sdk: '>=2.19.0 <3.0.0'
+  sdk: '>=2.19.6 <3.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -37,10 +37,10 @@ dependencies:
   code_text_field: ^1.0.2
   ffi: ^2.0.1
   file_picker: ^5.0.1
-  fl_chart: ^0.60.0
+  fl_chart: ^0.62.0
   flutter_highlight: ^0.7.0
   flutter_markdown: ^0.6.12
-  flutter_native_splash: ^2.2.9
+  flutter_native_splash: ^2.2.19
   # flutter_secure_storage: ^7.0.1
   flutter_secure_storage:
     git:
@@ -80,7 +80,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.1
 
-  flutter_launcher_icons: ^0.11.0
+  flutter_launcher_icons: ^0.13.1
   import_sorter: ^4.6.0
 
 # For information on the generic Dart part of this file, see the

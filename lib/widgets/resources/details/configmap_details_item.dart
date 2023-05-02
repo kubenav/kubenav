@@ -104,7 +104,6 @@ class ConfigMapDetailsItem extends StatelessWidget
                       ),
                       child: SvgPicture.asset(
                         'assets/resources/configmaps.svg',
-                        color: theme(context).colorOnPrimary,
                       ),
                     ),
                     const SizedBox(width: Constants.spacingSmall),

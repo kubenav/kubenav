@@ -237,8 +237,10 @@ String getAdditionalPrinterColumnValue(
   } else if (values.isEmpty) {
     formattedValue = '';
   } else if (additionalPrinterColumns.type == 'date') {
-    formattedValue =
-        values.map((e) => getAge(DateTime.parse(e))).toList().join(', ');
+    formattedValue = values
+        .map((e) => getAge(DateTime.parse(e.toString())))
+        .toList()
+        .join(', ');
   } else {
     formattedValue = values.join(', ');
   }
