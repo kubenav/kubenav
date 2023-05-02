@@ -62,7 +62,6 @@ class RoleBindingDetailsItem extends StatelessWidget
                       ),
                       child: SvgPicture.asset(
                         'assets/resources/rolebindings.svg',
-                        color: theme(context).colorOnPrimary,
                       ),
                     ),
                     const SizedBox(width: Constants.spacingSmall),

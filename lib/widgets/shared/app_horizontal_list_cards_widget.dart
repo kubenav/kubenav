@@ -212,10 +212,7 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                             width: 250,
                             height: 140,
                             child: Center(
-                              child: SvgPicture.asset(
-                                cards[index].image,
-                                color: theme(context).colorOnPrimary,
-                              ),
+                              child: SvgPicture.asset(cards[index].image),
                             ),
                           ),
                         ),

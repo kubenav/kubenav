@@ -58,10 +58,7 @@ class Plugins extends StatelessWidget {
                 padding: const EdgeInsets.all(
                   Constants.spacingIcon54x54,
                 ),
-                child: SvgPicture.asset(
-                  'assets/plugins/helm.svg',
-                  color: theme(context).colorOnPrimary,
-                ),
+                child: SvgPicture.asset('assets/plugins/helm.svg'),
               ),
               const SizedBox(width: Constants.spacingSmall),
               Expanded(

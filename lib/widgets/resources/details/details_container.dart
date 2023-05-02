@@ -230,7 +230,6 @@ class DetailsContainer extends StatelessWidget {
                         ),
                         child: SvgPicture.asset(
                           'assets/resources/secrets.svg',
-                          color: theme(context).colorOnPrimary,
                         ),
                       ),
                       const SizedBox(width: Constants.spacingSmall),
@@ -303,7 +302,6 @@ class DetailsContainer extends StatelessWidget {
                         ),
                         child: SvgPicture.asset(
                           'assets/resources/persistentvolumes.svg',
-                          color: theme(context).colorOnPrimary,
                         ),
                       ),
                       const SizedBox(width: Constants.spacingSmall),

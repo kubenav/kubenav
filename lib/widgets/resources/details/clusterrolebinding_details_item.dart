@@ -63,7 +63,6 @@ class ClusterRoleBindingDetailsItem extends StatelessWidget
                       ),
                       child: SvgPicture.asset(
                         'assets/resources/clusterrolebindings.svg',
-                        color: theme(context).colorOnPrimary,
                       ),
                     ),
                     const SizedBox(width: Constants.spacingSmall),

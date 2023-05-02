@@ -32,10 +32,7 @@ class AppErrorWidget extends StatelessWidget {
   /// default one.
   Widget buildIcon(BuildContext context, dynamic icon) {
     if (icon is String) {
-      return SvgPicture.asset(
-        icon,
-        color: theme(context).colorOnPrimary,
-      );
+      return SvgPicture.asset(icon);
     } else if (icon is IconData) {
       return Icon(
         icon,

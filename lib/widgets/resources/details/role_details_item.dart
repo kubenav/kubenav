@@ -60,10 +60,7 @@ class RoleDetailsItem extends StatelessWidget implements IDetailsItemWidget {
                       padding: const EdgeInsets.all(
                         Constants.spacingIcon54x54,
                       ),
-                      child: SvgPicture.asset(
-                        'assets/resources/roles.svg',
-                        color: theme(context).colorOnPrimary,
-                      ),
+                      child: SvgPicture.asset('assets/resources/roles.svg'),
                     ),
                     const SizedBox(width: Constants.spacingSmall),
                     Expanded(
