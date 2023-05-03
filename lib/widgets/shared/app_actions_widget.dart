@@ -64,28 +64,11 @@ class AppActionsWidget extends StatelessWidget {
           Radius.circular(Constants.sizeBorderRadius),
         ),
       ),
-      child: Wrap(
-        alignment: WrapAlignment.center,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: List.generate(actions.length, (index) {
-          if (index == actions.length - 1) {
-            return Wrap(
-              children: [
-                ListTile(
-                  onTap: actions[index].onTap,
-                  title: Text(
-                    actions[index].title,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: actions[index].color),
-                  ),
-                ),
-                const Divider(
-                  height: 0,
-                  thickness: 1.0,
-                ),
-              ],
-            );
-          } else {
+      child: SingleChildScrollView(
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: List.generate(actions.length, (index) {
             return ListTile(
               onTap: actions[index].onTap,
               title: Text(
@@ -94,8 +77,8 @@ class AppActionsWidget extends StatelessWidget {
                 style: TextStyle(color: actions[index].color),
               ),
             );
-          }
-        }),
+          }),
+        ),
       ),
     );
   }
