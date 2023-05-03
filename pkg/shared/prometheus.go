@@ -3,10 +3,14 @@ package shared
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"fmt"
 	"html/template"
 	"math"
+	"net"
+	"net/http"
 	"time"
 
 	"github.com/kubenav/kubenav/pkg/server/portforwarding"
@@ -37,6 +41,7 @@ type prometheus struct {
 	Username      string `json:"username"`
 	Password      string `json:"password"`
 	Token         string `json:"token"`
+	Certificate   string `json:"certificate"`
 }
 
 type query struct {
@@ -84,7 +89,7 @@ func PrometheusGetData(restConfig *rest.Config, clientset *kubernetes.Clientset,
 	// Create a Prometheus client with the user specified credentials. As address for the Prometheus instance we are
 	// using localhost and the local port created in the port forwarding session.
 	// We also need to set the range for the PromQL query from the start and end time specified in the reuqest data.
-	roundTripper := api.DefaultRoundTripper
+	roundTripper := getRoundTripper(requestData.Prometheus)
 
 	if requestData.Prometheus.Username != "" && requestData.Prometheus.Password != "" {
 		roundTripper = basicAuthTransport{
@@ -157,8 +162,7 @@ func PrometheusGetData(restConfig *rest.Config, clientset *kubernetes.Clientset,
 				}
 			}
 
-			var labels map[string]any
-			labels = make(map[string]any)
+			labels := make(map[string]any)
 
 			for key, value := range stream.Metric {
 				labels[string(key)] = string(value)
@@ -245,4 +249,25 @@ func queryInterpolation(query string, manifest map[string]any) (string, error) {
 	}
 
 	return buf.String(), nil
+}
+
+func getRoundTripper(p prometheus) http.RoundTripper {
+	tr := &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
+		DialContext: (&net.Dialer{
+			Timeout:   30 * time.Second,
+			KeepAlive: 30 * time.Second,
+		}).DialContext,
+		TLSHandshakeTimeout: 10 * time.Second,
+	}
+
+	if p.Certificate != "" {
+		certPool := x509.NewCertPool()
+		certPool.AppendCertsFromPEM([]byte(p.Certificate))
+		tr.TLSClientConfig = &tls.Config{
+			RootCAs: certPool,
+		}
+	}
+
+	return tr
 }

@@ -35,6 +35,7 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _tokenController = TextEditingController();
+  final _certificateController = TextEditingController();
 
   /// [_portValidator] is used to validate the required field [_portController].
   /// If the value is empty or not a number the validation fails.
@@ -68,6 +69,7 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
     _usernameController.text = widget.currentPrometheus.username;
     _passwordController.text = widget.currentPrometheus.password;
     _tokenController.text = widget.currentPrometheus.token;
+    _certificateController.text = widget.currentPrometheus.certificate;
   }
 
   @override
@@ -81,6 +83,7 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
     _usernameController.dispose();
     _passwordController.dispose();
     _tokenController.dispose();
+    _certificateController.dispose();
     super.dispose();
   }
 
@@ -114,6 +117,7 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
               username: _usernameController.text,
               password: _passwordController.text,
               token: _tokenController.text,
+              certificate: _certificateController.text,
             ),
           );
           Navigator.pop(context);
@@ -352,6 +356,22 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Token',
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Constants.spacingSmall,
+              ),
+              child: TextFormField(
+                controller: _certificateController,
+                keyboardType: TextInputType.text,
+                autocorrect: false,
+                enableSuggestions: false,
+                maxLines: null,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Certificate',
                 ),
               ),
             ),
