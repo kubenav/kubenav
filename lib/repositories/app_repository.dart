@@ -463,6 +463,7 @@ class AppRepositorySettingsPrometheus {
   String username;
   String password;
   String token;
+  String certificate;
 
   AppRepositorySettingsPrometheus({
     required this.enabled,
@@ -475,6 +476,7 @@ class AppRepositorySettingsPrometheus {
     required this.username,
     required this.password,
     required this.token,
+    required this.certificate,
   });
 
   factory AppRepositorySettingsPrometheus.fromDefault() {
@@ -489,6 +491,7 @@ class AppRepositorySettingsPrometheus {
       username: '',
       password: '',
       token: '',
+      certificate: '',
     );
   }
 
@@ -524,6 +527,10 @@ class AppRepositorySettingsPrometheus {
       token: data.containsKey('token') && data['token'] != null
           ? data['token']
           : '',
+      certificate:
+          data.containsKey('certificate') && data['certificate'] != null
+              ? data['certificate']
+              : '',
     );
   }
 
@@ -539,6 +546,7 @@ class AppRepositorySettingsPrometheus {
       'username': username,
       'password': password,
       'token': token,
+      'certificate': certificate,
     };
   }
 }

@@ -101,9 +101,6 @@ type Chart struct {
 	// Files are miscellaneous files in a chart archive,
 	// e.g. README, LICENSE, etc.
 	Files []*File `json:"files"`
-
-	parent       *Chart
-	dependencies []*Chart
 }
 
 type File struct {
@@ -329,17 +326,11 @@ func HelmListCharts(clientset *kubernetes.Clientset, namespace string) (string, 
 		return "", err
 	}
 
-	var secrets map[string][]corev1.Secret
-	secrets = make(map[string][]corev1.Secret)
+	secrets := make(map[string][]corev1.Secret)
 
 	for _, secretItem := range secretList.Items {
 		key := secretItem.Namespace + "_" + secretItem.Labels["name"]
-
-		if _, ok := secrets[key]; ok {
-			secrets[key] = append(secrets[key], secretItem)
-		} else {
-			secrets[key] = []corev1.Secret{secretItem}
-		}
+		secrets[key] = append(secrets[key], secretItem)
 	}
 
 	for key := range secrets {
