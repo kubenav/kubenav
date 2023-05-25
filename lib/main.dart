@@ -154,6 +154,15 @@ class _AppMaterialAppState extends State<AppMaterialApp> {
               borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
             ),
           ),
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.linux: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.windows: CupertinoPageTransitionsBuilder(),
+            },
+          ),
           highlightColor: Colors.transparent,
           splashColor: Colors.transparent,
         ),
