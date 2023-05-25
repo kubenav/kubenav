@@ -90,8 +90,8 @@ List<AppResourceActionsModel> resourceListActions(
                 clustersRepository
                     .getCluster(
                       clustersRepository.activeClusterId,
-                    )!
-                    .namespace,
+                    )
+                    ?.namespace,
               ) >
               -1
           ? 'Remove Bookmark'
@@ -107,8 +107,8 @@ List<AppResourceActionsModel> resourceListActions(
                 clustersRepository
                     .getCluster(
                       clustersRepository.activeClusterId,
-                    )!
-                    .namespace,
+                    )
+                    ?.namespace,
               ) >
               -1
           ? Icons.bookmark
@@ -125,8 +125,8 @@ List<AppResourceActionsModel> resourceListActions(
           clustersRepository
               .getCluster(
                 clustersRepository.activeClusterId,
-              )!
-              .namespace,
+              )
+              ?.namespace,
         );
         if (bookmarkIndex > -1) {
           bookmarksRepository.removeBookmark(bookmarkIndex);
@@ -143,8 +143,8 @@ List<AppResourceActionsModel> resourceListActions(
             clustersRepository
                 .getCluster(
                   clustersRepository.activeClusterId,
-                )!
-                .namespace,
+                )
+                ?.namespace,
           );
         }
       },
@@ -382,16 +382,17 @@ class _ResourcesListState extends State<ResourcesList> {
                     Characters(clustersRepository
                                         .getCluster(
                                           clustersRepository.activeClusterId,
-                                        )!
-                                        .namespace ==
+                                        )
+                                        ?.namespace ==
                                     '' ||
                                 (widget.scope == ResourceScope.cluster)
                             ? 'All Namespaces'
                             : clustersRepository
-                                .getCluster(
-                                  clustersRepository.activeClusterId,
-                                )!
-                                .namespace)
+                                    .getCluster(
+                                      clustersRepository.activeClusterId,
+                                    )
+                                    ?.namespace ??
+                                'All Namespaces')
                         .replaceAll(Characters(''), Characters('\u{200B}'))
                         .toString(),
                     textAlign: TextAlign.center,
