@@ -223,6 +223,10 @@ class ClustersRepository with ChangeNotifier {
   /// refresh the token and save the refreshed provider and cluster.
   Future<Cluster?> getClusterWithCredentials(String clusterId) async {
     try {
+      if (_clusters.isEmpty) {
+        throw 'No clusters were found';
+      }
+
       final cluster = _clusters
           .where(
             (cluster) => cluster.id == clusterId,
