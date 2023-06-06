@@ -224,7 +224,7 @@ class AppDrawer extends StatelessWidget {
                 buildDivider(context, 'Discovery and Load Balancing'),
                 ...getResourceItems(
                   context,
-                  resource_model.ResourceType.workload,
+                  resource_model.ResourceType.discoveryandloadbalancing,
                 ),
                 buildDivider(context, 'Config and Storage'),
                 ...getResourceItems(
