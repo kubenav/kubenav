@@ -233,7 +233,9 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
                       color: theme(context).colorPrimary,
                     ),
                     onChanged: (String? value) {
-                      _shell = value ?? 'sh';
+                      setState(() {
+                        _shell = value ?? 'sh';
+                      });
                     },
                     items: [
                       'sh',
