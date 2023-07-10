@@ -94,8 +94,9 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let secretKey = args["secretKey"] as? String,
         let region = args["region"] as? String,
         let sessionToken = args["sessionToken"] as? String
+        let roleArn = args["roleArn"] as? String
       {
-        awsGetClusters(accessKeyID: accessKeyID, secretKey: secretKey, region: region, sessionToken: sessionToken, result: result)
+        awsGetClusters(accessKeyID: accessKeyID, secretKey: secretKey, region: region, sessionToken: sessionToken, roleArn: roleArn, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -361,10 +362,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func awsGetClusters(accessKeyID: String, secretKey: String, region: String, sessionToken: String, result: FlutterResult) {
+  private func awsGetClusters(accessKeyID: String, secretKey: String, region: String, sessionToken: String, roleArn: String, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavAWSGetClusters(accessKeyID, secretKey, region, sessionToken, &error)
+    let data = KubenavAWSGetClusters(accessKeyID, secretKey, region, sessionToken, roleArn, &error)
     if error != nil {
       result(FlutterError(code: "AWS_GET_CLUSTERS_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {

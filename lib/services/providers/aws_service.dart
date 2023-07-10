@@ -314,6 +314,7 @@ class AWSService {
     String secretKey,
     String region,
     String sessionToken,
+    String roleArn,
   ) async {
     try {
       final String result = await platform.invokeMethod(
@@ -323,6 +324,7 @@ class AWSService {
           'secretKey': secretKey,
           'region': region,
           'sessionToken': sessionToken,
+          'roleArn': roleArn,
         },
       );
 
