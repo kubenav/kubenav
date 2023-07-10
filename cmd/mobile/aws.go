@@ -50,7 +50,7 @@ type AWSSSOAccount struct {
 }
 
 // AWSGetClusters returns all clusters which can be accessed with the given credentials.
-func AWSGetClusters(accessKeyID, secretKey, region, sessionToken string) (string, error) {
+func AWSGetClusters(accessKeyID, secretKey, region, sessionToken, roleArn string) (string, error) {
 	var clusters []*eks.Cluster
 	var names []*string
 	var nextToken *string
@@ -62,7 +62,11 @@ func AWSGetClusters(accessKeyID, secretKey, region, sessionToken string) (string
 		return "", err
 	}
 
-	eksClient := eks.New(sess)
+	if roleArn != "" {
+		cred = stscreds.NewCredentials(sess, roleArn)
+	}
+
+	eksClient := eks.New(sess, &aws.Config{Credentials: cred})
 
 	for {
 		c, err := eksClient.ListClusters(&eks.ListClustersInput{NextToken: nextToken})
