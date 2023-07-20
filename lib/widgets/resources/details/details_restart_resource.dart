@@ -64,12 +64,12 @@ class _DetailsRestartResourceState extends State<DetailsRestartResource> {
       final String body = widget.item['spec'] != null &&
               widget.item['spec']['template'] != null &&
               widget.item['spec']['template']['metadata'] != null &&
-              widget.item['spec']['template']['metadata']['annotations'] !=
-                  null &&
-              widget.item['spec']['template']['metadata']['annotations']
+              widget.item['spec']['template']['metadata']['annotations'] != null
+          ? widget.item['spec']['template']['metadata']['annotations']
                       ['kubenav.io/restartedAt'] !=
                   null
-          ? '[{"op": "replace", "path": "/spec/template/metadata/annotations/kubenav.io~1restartedAt", "value": "$now"}]'
+              ? '[{"op": "replace", "path": "/spec/template/metadata/annotations/kubenav.io~1restartedAt", "value": "$now"}]'
+              : '[{"op": "add", "path": "/spec/template/metadata/annotations/kubenav.io~1restartedAt", "value": "$now"}]'
           : '[{"op": "add", "path": "/spec/template/metadata/annotations", "value": {"kubenav.io/restartedAt": "$now"}}]';
 
       final cluster = await clustersRepository.getClusterWithCredentials(
