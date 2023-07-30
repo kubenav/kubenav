@@ -57,6 +57,7 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
           widget.provider.aws?.secretKey ?? '',
           widget.provider.aws?.region ?? '',
           widget.provider.aws?.sessionToken ?? '',
+          widget.provider.aws?.roleArn ?? '',
         );
 
         Logger.log(

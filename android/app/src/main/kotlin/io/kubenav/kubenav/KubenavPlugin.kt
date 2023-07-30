@@ -102,11 +102,12 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val secretKey = call.argument<String>("secretKey")
       val region = call.argument<String>("region")
       val sessionToken = call.argument<String>("sessionToken")
+      val roleArn = call.argument<String>("roleArn")
 
-      if (accessKeyID == null || secretKey == null || region == null || sessionToken == null) {
+      if (accessKeyID == null || secretKey == null || region == null || sessionToken == null || roleArn == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        awsGetClusters(accessKeyID, secretKey, region, sessionToken, result)
+        awsGetClusters(accessKeyID, secretKey, region, sessionToken, roleArn, result)
       }
     } else if (call.method == "awsGetToken") {
       val accessKeyID = call.argument<String>("accessKeyID")
@@ -361,9 +362,9 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun awsGetClusters(accessKeyID: String, secretKey: String, region: String, sessionToken: String, result: MethodChannel.Result) {
+  private fun awsGetClusters(accessKeyID: String, secretKey: String, region: String, sessionToken: String, roleArn: String, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.awsGetClusters(accessKeyID, secretKey, region, sessionToken)
+      val data: String = Kubenav.awsGetClusters(accessKeyID, secretKey, region, sessionToken, roleArn)
       result.success(data)
     } catch (e: Exception) {
       result.error("AWS_GET_CLUSTERS_FAILED", e.localizedMessage, null)
