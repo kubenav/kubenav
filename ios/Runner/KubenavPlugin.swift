@@ -93,7 +93,7 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let accessKeyID = args["accessKeyID"] as? String,
         let secretKey = args["secretKey"] as? String,
         let region = args["region"] as? String,
-        let sessionToken = args["sessionToken"] as? String
+        let sessionToken = args["sessionToken"] as? String,
         let roleArn = args["roleArn"] as? String
       {
         awsGetClusters(accessKeyID: accessKeyID, secretKey: secretKey, region: region, sessionToken: sessionToken, roleArn: roleArn, result: result)
