@@ -227,7 +227,7 @@ jobs:
       - name: Build
         run: |
           flutter config --enable-windows-desktop
-          flutter build windows --release
+          flutter build windows --release --build-name ${{ github.event.release.tag_name }}
 
       - name: Package
         run: |
