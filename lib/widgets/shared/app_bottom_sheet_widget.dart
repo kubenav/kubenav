@@ -18,7 +18,7 @@ import 'package:kubenav/utils/helpers.dart';
 /// the child property.
 class AppBottomSheetWidget extends StatelessWidget {
   const AppBottomSheetWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
     required this.icon,
@@ -27,7 +27,7 @@ class AppBottomSheetWidget extends StatelessWidget {
     required this.actionPressed,
     required this.actionIsLoading,
     required this.child,
-  }) : super(key: key);
+  });
 
   final String title;
   final String subtitle;

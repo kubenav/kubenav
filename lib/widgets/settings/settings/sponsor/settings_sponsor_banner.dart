@@ -13,7 +13,7 @@ import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/settings/settings/sponsor/settings_sponsor_actions.dart';
 
 class SettingsSponsorBanner extends StatelessWidget {
-  const SettingsSponsorBanner({Key? key}) : super(key: key);
+  const SettingsSponsorBanner({super.key});
 
   @override
   Widget build(BuildContext context) {

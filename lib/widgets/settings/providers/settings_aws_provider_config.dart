@@ -14,9 +14,9 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class SettingsAWSProvider extends StatefulWidget {
   const SettingsAWSProvider({
-    Key? key,
+    super.key,
     required this.provider,
-  }) : super(key: key);
+  });
 
   final ClusterProvider? provider;
 
@@ -105,6 +105,7 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not save provider configuration',

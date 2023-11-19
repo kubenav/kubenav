@@ -20,7 +20,7 @@ import 'package:kubenav/widgets/settings/settings.dart';
 import 'package:kubenav/widgets/shared/app_clusters_widget.dart';
 
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({Key? key}) : super(key: key);
+  const AppDrawer({super.key});
 
   Widget buildLeading(BuildContext context, dynamic icon) {
     if (icon is String) {

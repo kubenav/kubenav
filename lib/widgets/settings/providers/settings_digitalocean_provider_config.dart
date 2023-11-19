@@ -13,9 +13,9 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class SettingsDigitalOceanProvider extends StatefulWidget {
   const SettingsDigitalOceanProvider({
-    Key? key,
+    super.key,
     required this.provider,
-  }) : super(key: key);
+  });
 
   final ClusterProvider? provider;
 
@@ -99,6 +99,7 @@ class _SettingsDigitalOceanProviderState
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not save provider configuration',

@@ -15,9 +15,9 @@ import 'package:kubenav/widgets/home/overview/overview_metric.dart';
 /// whole cluster the optional [nodeName] argument can be set.
 class OverviewMetrics extends StatelessWidget {
   const OverviewMetrics({
-    Key? key,
+    super.key,
     required this.nodeName,
-  }) : super(key: key);
+  });
 
   final String? nodeName;
 

@@ -11,9 +11,9 @@ import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 class PersistentVolumeClaimDetailsItem extends StatelessWidget
     implements IDetailsItemWidget {
   const PersistentVolumeClaimDetailsItem({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   final dynamic item;

@@ -22,11 +22,11 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// manifest ([item]) of the corresponding CronJob.
 class DetailsCreateJob extends StatefulWidget {
   const DetailsCreateJob({
-    Key? key,
+    super.key,
     required this.name,
     required this.namespace,
     required this.item,
-  }) : super(key: key);
+  });
 
   final String name;
   final String namespace;
@@ -111,6 +111,7 @@ class _DetailsCreateJobState extends State<DetailsCreateJob> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not create Job',
@@ -125,6 +126,7 @@ class _DetailsCreateJobState extends State<DetailsCreateJob> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not create Job',

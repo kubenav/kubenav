@@ -25,9 +25,9 @@ import 'package:kubenav/widgets/shared/app_error_widget.dart';
 /// configuration is required, with the users credentials to access the API.
 class SettingsAddClusterDigitalOcean extends StatefulWidget {
   const SettingsAddClusterDigitalOcean({
-    Key? key,
+    super.key,
     required this.provider,
-  }) : super(key: key);
+  });
 
   final ClusterProvider provider;
 
@@ -140,6 +140,7 @@ class _SettingsAddClusterDigitalOceanState
       setState(() {
         _isLoadingAddCluster = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not add clusters',

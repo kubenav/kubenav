@@ -13,9 +13,9 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// to create custom dashboards, which can be accessed via the app.
 class SettingsPrometheus extends StatefulWidget {
   const SettingsPrometheus({
-    Key? key,
+    super.key,
     required this.currentPrometheus,
-  }) : super(key: key);
+  });
 
   final AppRepositorySettingsPrometheus currentPrometheus;
 

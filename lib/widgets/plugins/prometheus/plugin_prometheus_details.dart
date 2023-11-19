@@ -23,10 +23,10 @@ import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 /// also used to render the list of charts for our Kubernetes resources.
 class PluginPrometheusDetails extends StatefulWidget {
   const PluginPrometheusDetails({
-    Key? key,
+    super.key,
     required this.namespace,
     required this.name,
-  }) : super(key: key);
+  });
 
   final String namespace;
   final String name;

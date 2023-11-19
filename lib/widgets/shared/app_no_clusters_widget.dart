@@ -16,7 +16,7 @@ import 'package:kubenav/widgets/settings/settings_clusters.dart';
 /// configure a cluster. On desktop it is used to show an error message, with a
 /// hint how the clusters are loaded.
 class AppNoClustersWidget extends StatelessWidget {
-  const AppNoClustersWidget({Key? key}) : super(key: key);
+  const AppNoClustersWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -24,9 +24,9 @@ import 'package:kubenav/widgets/shared/app_error_widget.dart';
 /// the clusters on behalf of the user.
 class SettingsAddClusterGoogle extends StatefulWidget {
   const SettingsAddClusterGoogle({
-    Key? key,
+    super.key,
     required this.provider,
-  }) : super(key: key);
+  });
 
   final ClusterProvider provider;
 
@@ -132,6 +132,7 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
       setState(() {
         _isLoadingAddCluster = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not add clusters',

@@ -41,9 +41,9 @@ class AppActionsWidgetAction {
 /// ```
 class AppActionsWidget extends StatelessWidget {
   const AppActionsWidget({
-    Key? key,
+    super.key,
     required this.actions,
-  }) : super(key: key);
+  });
 
   final List<AppActionsWidgetAction> actions;
 

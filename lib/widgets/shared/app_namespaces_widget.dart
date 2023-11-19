@@ -25,7 +25,7 @@ import 'package:kubenav/widgets/shared/app_list_item.dart';
 /// to view all namespaces in a cluster and the widget loads all namespaces
 /// from the currently active cluster via a Kubernetes API call.
 class AppNamespacesWidget extends StatefulWidget {
-  const AppNamespacesWidget({Key? key}) : super(key: key);
+  const AppNamespacesWidget({super.key});
 
   @override
   State<AppNamespacesWidget> createState() => _AppNamespacesWidgetState();
@@ -95,6 +95,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
         Navigator.pop(context);
       }
     } catch (err) {
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Namespace was not changed',

@@ -60,12 +60,12 @@ class ContainerMetric {
 /// Pod or selected container.
 class DetailsLiveMetrics extends StatefulWidget {
   const DetailsLiveMetrics({
-    Key? key,
+    super.key,
     required this.name,
     required this.namespace,
     required this.pod,
     required this.selectedContainer,
-  }) : super(key: key);
+  });
 
   final String name;
   final String namespace;
@@ -298,13 +298,13 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                             child: LineChart(
                               LineChartData(
                                 minY: 0,
-                                lineTouchData: LineTouchData(enabled: false),
-                                clipData: FlClipData.all(),
+                                lineTouchData: const LineTouchData(enabled: false),
+                                clipData: const FlClipData.all(),
                                 lineBarsData: _containerMetrics.entries
                                     .map(
                                       (e) => LineChartBarData(
                                         spots: e.value.cpu,
-                                        dotData: FlDotData(
+                                        dotData: const FlDotData(
                                           show: false,
                                         ),
                                         color: e.key == 'Requests'
@@ -319,12 +319,12 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                     .toList(),
                                 titlesData: FlTitlesData(
                                   show: true,
-                                  rightTitles: AxisTitles(
+                                  rightTitles: const AxisTitles(
                                     sideTitles: SideTitles(
                                       showTitles: false,
                                     ),
                                   ),
-                                  topTitles: AxisTitles(
+                                  topTitles: const AxisTitles(
                                     sideTitles: SideTitles(
                                       showTitles: false,
                                     ),
@@ -423,7 +423,7 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                   ],
                                 ),
                               )
-                              .toList(),
+                              ,
                         ],
                       ),
                     ),
@@ -461,12 +461,12 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                             child: LineChart(
                               LineChartData(
                                 minY: 0,
-                                lineTouchData: LineTouchData(enabled: false),
-                                clipData: FlClipData.all(),
+                                lineTouchData: const LineTouchData(enabled: false),
+                                clipData: const FlClipData.all(),
                                 lineBarsData: _containerMetrics.entries
                                     .map((e) => LineChartBarData(
                                           spots: e.value.memory,
-                                          dotData: FlDotData(
+                                          dotData: const FlDotData(
                                             show: false,
                                           ),
                                           color: e.key == 'Requests'
@@ -480,12 +480,12 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                     .toList(),
                                 titlesData: FlTitlesData(
                                   show: true,
-                                  rightTitles: AxisTitles(
+                                  rightTitles: const AxisTitles(
                                     sideTitles: SideTitles(
                                       showTitles: false,
                                     ),
                                   ),
-                                  topTitles: AxisTitles(
+                                  topTitles: const AxisTitles(
                                     sideTitles: SideTitles(
                                       showTitles: false,
                                     ),
@@ -583,7 +583,7 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                   ],
                                 ),
                               )
-                              .toList(),
+                              ,
                         ],
                       ),
                     ),

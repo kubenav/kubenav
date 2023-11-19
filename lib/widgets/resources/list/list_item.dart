@@ -37,7 +37,7 @@ abstract class IListItemWidget {
 
 class ListItemWidget extends StatelessWidget {
   const ListItemWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.resource,
     required this.path,
@@ -49,7 +49,7 @@ class ListItemWidget extends StatelessWidget {
     required this.info,
     this.status = Status.undefined,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final String title;
   final String resource;

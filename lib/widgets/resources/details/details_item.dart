@@ -38,13 +38,13 @@ class DetailsItemModel {
 /// other places, like a bottom sheet.
 class DetailsItemWidget extends StatelessWidget {
   const DetailsItemWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.details,
     this.smallPadding = false,
     this.goTo,
     this.goToOnTap,
-  }) : super(key: key);
+  });
 
   final String title;
   final List<DetailsItemModel> details;

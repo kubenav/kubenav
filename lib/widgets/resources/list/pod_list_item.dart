@@ -7,7 +7,7 @@ import 'package:kubenav/widgets/resources/list/list_item.dart';
 
 class PodListItem extends StatelessWidget implements IListItemWidget {
   const PodListItem({
-    Key? key,
+    super.key,
     required this.title,
     required this.resource,
     required this.path,
@@ -15,7 +15,7 @@ class PodListItem extends StatelessWidget implements IListItemWidget {
     required this.additionalPrinterColumns,
     required this.item,
     required this.metrics,
-  }) : super(key: key);
+  });
 
   @override
   final String title;

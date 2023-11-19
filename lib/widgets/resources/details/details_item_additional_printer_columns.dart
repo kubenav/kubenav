@@ -7,10 +7,10 @@ import 'package:kubenav/widgets/resources/details/details_item.dart';
 
 class DetailsItemAdditionalPrinterColumns extends StatelessWidget {
   const DetailsItemAdditionalPrinterColumns({
-    Key? key,
+    super.key,
     required this.additionalPrinterColumns,
     required this.item,
-  }) : super(key: key);
+  });
 
   final List<AdditionalPrinterColumns> additionalPrinterColumns;
   final dynamic item;

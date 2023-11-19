@@ -24,7 +24,7 @@ import 'package:kubenav/widgets/shared/app_list_item.dart';
 /// the bookmark an actions menu will be shown which can be used to delete the
 /// bookmark.
 class ResourcesBookmarks extends StatefulWidget {
-  const ResourcesBookmarks({Key? key}) : super(key: key);
+  const ResourcesBookmarks({super.key});
 
   @override
   State<ResourcesBookmarks> createState() => _ResourcesBookmarksState();

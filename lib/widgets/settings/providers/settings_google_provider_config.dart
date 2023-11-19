@@ -16,9 +16,9 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class SettingsGoogleProvider extends StatefulWidget {
   const SettingsGoogleProvider({
-    Key? key,
+    super.key,
     required this.provider,
-  }) : super(key: key);
+  });
 
   final ClusterProvider? provider;
 
@@ -56,6 +56,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
         'Could not open sign in url',
         err,
       );
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not open sign in url',
@@ -161,6 +162,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not save provider configuration',

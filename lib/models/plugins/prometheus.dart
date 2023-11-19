@@ -90,9 +90,9 @@ class Metric {
     }
   }
 
-  List<FlSpot>? toSpots() {
+  List<FlSpot> toSpots() {
     if (data == null) {
-      return null;
+      return [];
     }
 
     return data!

@@ -19,7 +19,7 @@ import 'package:kubenav/widgets/settings/settings_clusters.dart';
 import 'package:kubenav/widgets/shared/app_resource_actions.dart';
 
 class OverviewActions extends StatelessWidget {
-  const OverviewActions({Key? key}) : super(key: key);
+  const OverviewActions({super.key});
 
   @override
   Widget build(BuildContext context) {

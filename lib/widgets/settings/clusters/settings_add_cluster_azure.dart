@@ -22,9 +22,9 @@ import 'package:kubenav/widgets/shared/app_error_widget.dart';
 /// that we can get the clusters via the Azure API.
 class SettingsAddClusterAzure extends StatefulWidget {
   const SettingsAddClusterAzure({
-    Key? key,
+    super.key,
     required this.provider,
-  }) : super(key: key);
+  });
 
   final ClusterProvider provider;
 
@@ -123,6 +123,7 @@ class _SettingsAddClusterAzureState extends State<SettingsAddClusterAzure> {
       setState(() {
         _isLoadingAddCluster = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not add clusters',

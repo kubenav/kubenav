@@ -31,9 +31,9 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 /// the provided type.
 class SettingsReuseProviderActions extends StatelessWidget {
   const SettingsReuseProviderActions({
-    Key? key,
+    super.key,
     required this.providerType,
-  }) : super(key: key);
+  });
 
   final ClusterProviderType providerType;
 

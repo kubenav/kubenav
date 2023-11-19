@@ -353,7 +353,7 @@ List<AppResourceActionsModel> resourceDetailsActions(
 ///   cluster scoped resources the [namespace] must be `null`
 class ResourcesDetails extends StatefulWidget {
   const ResourcesDetails({
-    Key? key,
+    super.key,
     required this.title,
     required this.resource,
     required this.path,
@@ -361,7 +361,7 @@ class ResourcesDetails extends StatefulWidget {
     required this.additionalPrinterColumns,
     required this.name,
     required this.namespace,
-  }) : super(key: key);
+  });
 
   final String title;
   final String resource;

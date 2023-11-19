@@ -8,7 +8,7 @@ import 'package:kubenav/widgets/resources/list/list_item.dart';
 
 class NodeListItem extends StatelessWidget implements IListItemWidget {
   const NodeListItem({
-    Key? key,
+    super.key,
     required this.title,
     required this.resource,
     required this.path,
@@ -16,7 +16,7 @@ class NodeListItem extends StatelessWidget implements IListItemWidget {
     required this.additionalPrinterColumns,
     required this.item,
     required this.metrics,
-  }) : super(key: key);
+  });
 
   @override
   final String title;

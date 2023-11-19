@@ -76,11 +76,11 @@ class AppVertialListSimpleModel {
 /// other places, like a bottom sheet.
 class AppVertialListSimpleWidget extends StatelessWidget {
   const AppVertialListSimpleWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.items,
     this.smallPadding = false,
-  }) : super(key: key);
+  });
 
   final String title;
   final List<AppVertialListSimpleModel> items;

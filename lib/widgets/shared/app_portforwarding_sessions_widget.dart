@@ -16,7 +16,7 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 /// the session, which will show then show the actions for this specific
 /// sessions via the [AppPortForwardingSessionWidget] widget.
 class AppPortForwardingSessionsWidget extends StatelessWidget {
-  const AppPortForwardingSessionsWidget({Key? key}) : super(key: key);
+  const AppPortForwardingSessionsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +104,7 @@ class _AppPortForwardingSessionWidgetState
         Navigator.pop(context);
       }
     } catch (err) {
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Port Forwarding Session was not deleted',

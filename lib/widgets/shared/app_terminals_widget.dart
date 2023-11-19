@@ -58,7 +58,7 @@ Color getColor(int index) {
 }
 
 class AppTerminalsWidget extends StatelessWidget {
-  const AppTerminalsWidget({Key? key}) : super(key: key);
+  const AppTerminalsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -11,10 +11,10 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// a code editor.
 class PluginHelmDetailsTemplate extends StatefulWidget {
   const PluginHelmDetailsTemplate({
-    Key? key,
+    super.key,
     required this.name,
     required this.template,
-  }) : super(key: key);
+  });
 
   final String name;
   final String template;

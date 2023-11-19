@@ -84,11 +84,11 @@ class Metrics {
 /// [nodeName] can be specified.
 class OverviewMetric extends StatefulWidget {
   const OverviewMetric({
-    Key? key,
+    super.key,
     required this.metricType,
     required this.icon,
     required this.nodeName,
-  }) : super(key: key);
+  });
 
   final MetricType metricType;
   final IconData icon;
@@ -598,17 +598,17 @@ class _OverviewMetricState extends State<OverviewMetric> {
                               ),
                               titlesData: FlTitlesData(
                                 show: true,
-                                rightTitles: AxisTitles(
+                                rightTitles: const AxisTitles(
                                   sideTitles: SideTitles(
                                     showTitles: false,
                                   ),
                                 ),
-                                topTitles: AxisTitles(
+                                topTitles: const AxisTitles(
                                   sideTitles: SideTitles(
                                     showTitles: false,
                                   ),
                                 ),
-                                leftTitles: AxisTitles(
+                                leftTitles: const AxisTitles(
                                   sideTitles: SideTitles(
                                     showTitles: false,
                                   ),

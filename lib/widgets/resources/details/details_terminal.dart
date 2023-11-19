@@ -122,6 +122,7 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
           'An error was returned while creating the terminal',
           err,
         );
+        if (!context.mounted) return;
         showSnackbar(
           context,
           'Could not get create terminal',

@@ -36,10 +36,10 @@ kubenav uses [Flutter](https://flutter.dev) and [Go](https://go.dev), make sure 
 ```sh
 $ flutter --version
 
-Flutter 3.7.12 • channel stable • https://github.com/flutter/flutter.git
-Framework • revision 4d9e56e694 (2 weeks ago) • 2023-04-17 21:47:46 -0400
-Engine • revision 1a65d409c7
-Tools • Dart 2.19.6 • DevTools 2.20.1
+Flutter 3.16.0 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision db7ef5bf9f (4 days ago) • 2023-11-15 11:25:44 -0800
+Engine • revision 74d16627b9
+Tools • Dart 3.2.0 • DevTools 2.28.2
 
 
 $ go version

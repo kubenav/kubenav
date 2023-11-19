@@ -20,7 +20,7 @@ import 'package:kubenav/widgets/shared/app_list_item.dart';
 /// also be ordered by the user, so that the namespace which is used most of the
 /// time is always displayed at the top.
 class SettingsNamespaces extends StatelessWidget {
-  const SettingsNamespaces({Key? key}) : super(key: key);
+  const SettingsNamespaces({super.key});
 
   /// [_proxyDecorator] is used to highlight the bookmark which is currently
   /// draged by the user.

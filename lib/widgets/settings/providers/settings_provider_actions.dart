@@ -22,9 +22,9 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 /// a cluster.
 class SettingsProviderActions extends StatefulWidget {
   const SettingsProviderActions({
-    Key? key,
+    super.key,
     required this.provider,
-  }) : super(key: key);
+  });
 
   final ClusterProvider provider;
 

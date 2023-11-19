@@ -9,9 +9,9 @@ import 'package:kubenav/widgets/shared/app_list_item.dart';
 
 class DetailsItemConditions extends StatelessWidget {
   const DetailsItemConditions({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   final dynamic item;
 

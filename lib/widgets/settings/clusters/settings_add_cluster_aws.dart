@@ -24,9 +24,9 @@ import 'package:kubenav/widgets/shared/app_error_widget.dart';
 /// contain a valid set of credentails for the user.
 class SettingsAddClusterAWS extends StatefulWidget {
   const SettingsAddClusterAWS({
-    Key? key,
+    super.key,
     required this.provider,
-  }) : super(key: key);
+  });
 
   final ClusterProvider provider;
 
@@ -134,6 +134,7 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
       setState(() {
         _isLoadingAddCluster = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not add clusters',

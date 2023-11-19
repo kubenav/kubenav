@@ -61,6 +61,7 @@ class _AppFloatingActionButtonsWidgetState
         );
       }
     } catch (err) {
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Port Forwarding Session could not be shown',

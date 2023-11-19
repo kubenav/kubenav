@@ -10,9 +10,9 @@ import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 
 class CronJobDetailsItem extends StatelessWidget implements IDetailsItemWidget {
   const CronJobDetailsItem({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   final dynamic item;

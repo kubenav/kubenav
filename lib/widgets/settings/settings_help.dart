@@ -20,7 +20,7 @@ import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 /// into multiple section, where each section has multiple items. When the user
 /// clicks on a help item the help is rendered as Markdown in a modal.
 class SettingsHelp extends StatelessWidget {
-  const SettingsHelp({Key? key}) : super(key: key);
+  const SettingsHelp({super.key});
 
   Widget buildHelpSection(BuildContext context, int sectionIndex) {
     return AppVertialListSimpleWidget(

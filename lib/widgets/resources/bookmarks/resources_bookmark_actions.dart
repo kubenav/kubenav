@@ -12,9 +12,9 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 /// delete an existing bookmark via the actions.
 class ResourcesBookmarkActions extends StatelessWidget {
   const ResourcesBookmarkActions({
-    Key? key,
+    super.key,
     required this.index,
-  }) : super(key: key);
+  });
 
   final int index;
 

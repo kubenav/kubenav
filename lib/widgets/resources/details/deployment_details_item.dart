@@ -12,9 +12,9 @@ import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 class DeploymentDetailsItem extends StatelessWidget
     implements IDetailsItemWidget {
   const DeploymentDetailsItem({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   final dynamic item;

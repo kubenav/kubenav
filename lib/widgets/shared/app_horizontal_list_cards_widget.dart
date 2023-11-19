@@ -52,13 +52,13 @@ class AppHorizontalListCardsModel {
 ///  ```
 class AppHorizontalListCardsWidget extends StatelessWidget {
   const AppHorizontalListCardsWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.cards,
     this.moreText,
     this.moreIcon,
     this.moreOnTap,
-  }) : super(key: key);
+  });
 
   final String title;
   final List<AppHorizontalListCardsModel> cards;

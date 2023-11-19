@@ -17,9 +17,7 @@ import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 /// options. For iOS and Android we are using In-App Purchase for sponsoring. On
 /// desktop we are just displaying a ling to GitHub Sponsors and Paypal.
 class SettingsSponsor extends StatelessWidget {
-  const SettingsSponsor({
-    Key? key,
-  }) : super(key: key);
+  const SettingsSponsor({super.key});
 
   @override
   Widget build(BuildContext context) {

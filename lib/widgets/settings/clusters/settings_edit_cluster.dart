@@ -14,9 +14,9 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// change all configuration which matters for the user.
 class SettingsEditCluster extends StatefulWidget {
   const SettingsEditCluster({
-    Key? key,
+    super.key,
     required this.cluster,
-  }) : super(key: key);
+  });
 
   final Cluster cluster;
 
@@ -102,6 +102,7 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
       setState(() {
         _isLoadingAddCluster = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not save cluster',

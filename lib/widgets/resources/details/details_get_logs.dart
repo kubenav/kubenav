@@ -187,6 +187,7 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
           'An error was returned while getting the logs',
           err,
         );
+        if (!context.mounted) return;
         showSnackbar(
           context,
           'Could not get logs',

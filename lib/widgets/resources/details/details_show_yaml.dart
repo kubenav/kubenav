@@ -22,9 +22,9 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// document or a json document depending on the users settings.
 class DetailsShowYaml extends StatefulWidget {
   const DetailsShowYaml({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   final dynamic item;
 
@@ -115,6 +115,7 @@ class _DetailsShowYamlState extends State<DetailsShowYaml> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not export manifest',

@@ -18,7 +18,7 @@ import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_no_clusters_widget.dart';
 
 class HomeOverview extends StatelessWidget {
-  const HomeOverview({Key? key}) : super(key: key);
+  const HomeOverview({super.key});
 
   List<Widget> _buildContent(BuildContext context) {
     AppRepository appRepository = Provider.of<AppRepository>(

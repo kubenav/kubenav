@@ -18,13 +18,13 @@ import 'package:kubenav/widgets/shared/app_list_item.dart';
 /// endpoint of each cluster, to indicate if we can reach the cluster.
 class SettingsClusterItem extends StatefulWidget {
   const SettingsClusterItem({
-    Key? key,
+    super.key,
     required this.index,
     required this.cluster,
     required this.isActiveCluster,
     this.onTap,
     this.onDoubleTap,
-  }) : super(key: key);
+  });
 
   final int index;
   final Cluster cluster;

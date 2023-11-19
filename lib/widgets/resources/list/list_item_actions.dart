@@ -9,7 +9,7 @@ import 'package:kubenav/widgets/shared/app_resource_actions.dart';
 /// file for the details view of a resource.
 class ListItemActions extends StatefulWidget {
   const ListItemActions({
-    Key? key,
+    super.key,
     required this.title,
     required this.resource,
     required this.path,
@@ -18,7 +18,7 @@ class ListItemActions extends StatefulWidget {
     required this.name,
     required this.namespace,
     required this.item,
-  }) : super(key: key);
+  });
 
   final String title;
   final String resource;
