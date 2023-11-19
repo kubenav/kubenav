@@ -1,0 +1,1 @@
+Navigator for your Kubernetes clusters right in your pocket
