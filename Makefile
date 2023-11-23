@@ -1,7 +1,7 @@
 .PHONY: bindings-android
 bindings-android:
 	mkdir -p android/app/src/libs
-	gomobile bind -o android/app/src/libs/kubenav.aar -target=android -androidapi=23 github.com/kubenav/kubenav/cmd/mobile
+	gomobile bind -o android/app/src/libs/kubenav.aar -target=android -androidapi=21 github.com/kubenav/kubenav/cmd/mobile
 
 .PHONY: bindings-ios
 bindings-ios:

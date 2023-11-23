@@ -49,11 +49,10 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "io.kubenav.kubenav"
         // minSdkVersion flutter.minSdkVersion
         // targetSdkVersion flutter.targetSdkVersion
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
