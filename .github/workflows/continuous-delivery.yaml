@@ -7,6 +7,83 @@ on:
       - published
 
 jobs:
+  ios:
+    name: iOS
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: go.mod
+          cache: true
+          cache-dependency-path: go.sum
+
+      - name: Generate Bindings
+        run: |
+          go install golang.org/x/mobile/cmd/gomobile@latest
+          gomobile init
+          make bindings-ios
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          channel: 'stable'
+          cache: true
+          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:'
+          cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:'
+
+      - name: Install Dependencies
+        run: |
+          flutter pub get
+
+      - name: Build
+        run: |
+          flutter config --enable-ios
+          flutter build ipa --no-codesign
+
+  android:
+    name: Android
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: go.mod
+          cache: true
+          cache-dependency-path: go.sum
+
+      - name: Generate Bindings
+        run: |
+          echo "$ANDROID_NDK_HOME"
+          go install golang.org/x/mobile/cmd/gomobile@latest
+          gomobile init
+          make bindings-android
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          channel: 'stable'
+          cache: true
+          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:'
+          cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:'
+
+      - name: Install Dependencies
+        run: |
+          flutter pub get
+
+      - name: Build
+        run: |
+          flutter config --enable-android
+          flutter build appbundle
+
   macos:
     name: macOS
     runs-on: macos-latest
