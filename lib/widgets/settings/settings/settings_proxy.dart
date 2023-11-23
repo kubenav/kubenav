@@ -10,9 +10,9 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// Kubernetes API requests.
 class SettingsProxy extends StatefulWidget {
   const SettingsProxy({
-    Key? key,
+    super.key,
     required this.currentProxy,
-  }) : super(key: key);
+  });
 
   final String currentProxy;
 

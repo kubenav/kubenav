@@ -21,7 +21,7 @@ import 'package:kubenav/widgets/shared/app_no_clusters_widget.dart';
 import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 
 class Plugins extends StatelessWidget {
-  const Plugins({Key? key}) : super(key: key);
+  const Plugins({super.key});
 
   List<Widget> buildContent(BuildContext context) {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(

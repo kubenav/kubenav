@@ -38,7 +38,7 @@ import 'package:kubenav/utils/resources/statefulsets.dart'
 /// [filter] function.
 class DetailsResourcesPreview extends StatefulWidget {
   const DetailsResourcesPreview({
-    Key? key,
+    super.key,
     required this.title,
     required this.resource,
     required this.path,
@@ -47,7 +47,7 @@ class DetailsResourcesPreview extends StatefulWidget {
     required this.namespace,
     required this.selector,
     this.filter,
-  }) : super(key: key);
+  });
 
   final String title;
   final String resource;

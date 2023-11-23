@@ -121,6 +121,7 @@ class _SettingsAddClusterKubeconfigState
         setState(() {
           _isLoadingAddCluster = false;
         });
+        if (!context.mounted) return;
         showSnackbar(
           context,
           'Could not add clusters',

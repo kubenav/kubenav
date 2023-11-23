@@ -41,7 +41,7 @@ SOFTWARE.''';
 /// These information contain the installed app version, the license text, and
 /// the links to our website, GitHub and Twitter.
 class SettingsInfo extends StatefulWidget {
-  const SettingsInfo({Key? key}) : super(key: key);
+  const SettingsInfo({super.key});
 
   @override
   State<SettingsInfo> createState() => _SettingsInfoState();

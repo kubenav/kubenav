@@ -10,9 +10,9 @@ import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 
 class JobDetailsItem extends StatelessWidget implements IDetailsItemWidget {
   const JobDetailsItem({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   final dynamic item;

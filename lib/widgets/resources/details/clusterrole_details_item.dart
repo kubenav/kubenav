@@ -17,9 +17,9 @@ import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 class ClusterRoleDetailsItem extends StatelessWidget
     implements IDetailsItemWidget {
   const ClusterRoleDetailsItem({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   final dynamic item;

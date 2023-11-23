@@ -18,13 +18,13 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// Pods.
 class DetailsRestartResource extends StatefulWidget {
   const DetailsRestartResource({
-    Key? key,
+    super.key,
     required this.resource,
     required this.path,
     required this.name,
     required this.namespace,
     required this.item,
-  }) : super(key: key);
+  });
 
   final String resource;
   final String path;
@@ -104,6 +104,7 @@ class _DetailsRestartResourceState extends State<DetailsRestartResource> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not restart resource',
@@ -118,6 +119,7 @@ class _DetailsRestartResourceState extends State<DetailsRestartResource> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not restart resource',

@@ -23,7 +23,7 @@ import 'package:kubenav/widgets/shared/app_no_clusters_widget.dart';
 import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 
 class Resources extends StatelessWidget {
-  const Resources({Key? key}) : super(key: key);
+  const Resources({super.key});
 
   List<AppVertialListSimpleModel> getItems(
     BuildContext context,

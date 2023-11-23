@@ -15,9 +15,9 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 /// settings screen.
 class SettingsSponsorActions extends StatelessWidget {
   const SettingsSponsorActions({
-    Key? key,
+    super.key,
     required this.showDismiss,
-  }) : super(key: key);
+  });
 
   final bool showDismiss;
 
@@ -35,21 +35,19 @@ class SettingsSponsorActions extends StatelessWidget {
     return AppActionsWidget(
       actions: showDismiss
           ? [
-              ...sponsorRepository.products
-                  .map(
-                    (e) => AppActionsWidgetAction(
-                      title: titles.containsKey(e.id) ? titles[e.id]! : e.title,
-                      color: theme(context).colorPrimary,
-                      onTap: () {
-                        Navigator.pop(context);
-                        showModal(
-                          context,
-                          SettingsSponsorSubscribe(product: e),
-                        );
-                      },
-                    ),
-                  )
-                  .toList(),
+              ...sponsorRepository.products.map(
+                (e) => AppActionsWidgetAction(
+                  title: titles.containsKey(e.id) ? titles[e.id]! : e.title,
+                  color: theme(context).colorPrimary,
+                  onTap: () {
+                    Navigator.pop(context);
+                    showModal(
+                      context,
+                      SettingsSponsorSubscribe(product: e),
+                    );
+                  },
+                ),
+              ),
               AppActionsWidgetAction(
                 title: 'Not Now',
                 color: theme(context).colorDanger,

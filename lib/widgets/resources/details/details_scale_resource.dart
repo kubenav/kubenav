@@ -17,13 +17,13 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// patch to the Kubernetes API with the new number of replicas.
 class DetailsScaleResource extends StatefulWidget {
   const DetailsScaleResource({
-    Key? key,
+    super.key,
     required this.resource,
     required this.path,
     required this.name,
     required this.namespace,
     required this.item,
-  }) : super(key: key);
+  });
 
   final String resource;
   final String path;
@@ -116,6 +116,7 @@ class _DetailsScaleResourceState extends State<DetailsScaleResource> {
         setState(() {
           _isLoading = false;
         });
+        if (!context.mounted) return;
         showSnackbar(
           context,
           'Could not scale resource',
@@ -130,6 +131,7 @@ class _DetailsScaleResourceState extends State<DetailsScaleResource> {
         setState(() {
           _isLoading = false;
         });
+        if (!context.mounted) return;
         showSnackbar(
           context,
           'Could not scale resource',

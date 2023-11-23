@@ -12,8 +12,8 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class SettingsAWSSSOMultipleProviders extends StatefulWidget {
   const SettingsAWSSSOMultipleProviders({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<SettingsAWSSSOMultipleProviders> createState() =>
@@ -66,6 +66,7 @@ class _SettingsAWSSSOMultipleProvidersState
         'Could not get SSO configuration',
         err,
       );
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not get SSO configuration',
@@ -83,6 +84,7 @@ class _SettingsAWSSSOMultipleProvidersState
         'Could not verify device',
         err,
       );
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not verify device',
@@ -129,6 +131,7 @@ class _SettingsAWSSSOMultipleProvidersState
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not load accounts and roles',

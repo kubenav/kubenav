@@ -19,9 +19,9 @@ import 'package:kubenav/widgets/shared/app_error_widget.dart';
 
 class SettingsAddClusterRancher extends StatefulWidget {
   const SettingsAddClusterRancher({
-    Key? key,
+    super.key,
     required this.provider,
-  }) : super(key: key);
+  });
 
   final ClusterProvider provider;
 
@@ -131,6 +131,7 @@ class _SettingsAddClusterRancherState extends State<SettingsAddClusterRancher> {
       setState(() {
         _isLoadingAddCluster = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not add clusters',

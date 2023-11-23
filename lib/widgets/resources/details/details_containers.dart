@@ -11,13 +11,13 @@ import 'package:kubenav/widgets/shared/app_horizontal_list_cards_widget.dart';
 
 class DetailsContainers extends StatelessWidget {
   const DetailsContainers({
-    Key? key,
+    super.key,
     required this.initContainers,
     required this.containers,
     required this.initContainerStatuses,
     required this.containerStatuses,
     required this.containerMetrics,
-  }) : super(key: key);
+  });
 
   final List<IoK8sApiCoreV1Container> initContainers;
   final List<IoK8sApiCoreV1Container> containers;

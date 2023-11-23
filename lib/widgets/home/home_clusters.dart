@@ -15,7 +15,7 @@ import 'package:kubenav/widgets/shared/app_list_item.dart';
 /// in the settings. When the user selected a cluster, this screen is not shown
 /// again.
 class HomeClusters extends StatefulWidget {
-  const HomeClusters({Key? key}) : super(key: key);
+  const HomeClusters({super.key});
 
   @override
   State<HomeClusters> createState() => _HomeClustersState();

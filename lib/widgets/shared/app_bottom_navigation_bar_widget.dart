@@ -28,7 +28,7 @@ import 'package:kubenav/widgets/settings/settings.dart';
 /// );
 /// ```
 class AppBottomNavigationBarWidget extends StatelessWidget {
-  const AppBottomNavigationBarWidget({Key? key}) : super(key: key);
+  const AppBottomNavigationBarWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

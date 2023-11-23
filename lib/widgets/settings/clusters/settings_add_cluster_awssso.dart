@@ -24,9 +24,9 @@ import 'package:kubenav/widgets/shared/app_error_widget.dart';
 /// with the users credentials to access the AWS API.
 class SettingsAddClusterAWSSSO extends StatefulWidget {
   const SettingsAddClusterAWSSSO({
-    Key? key,
+    super.key,
     required this.provider,
-  }) : super(key: key);
+  });
 
   final ClusterProvider provider;
 
@@ -53,12 +53,11 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
     try {
       if (widget.provider.awssso != null) {
         final tmpClusters = await AWSService().getClusters(
-          widget.provider.awssso?.ssoCredentials?.accessKeyId ?? '',
-          widget.provider.awssso?.ssoCredentials?.secretAccessKey ?? '',
-          widget.provider.awssso?.region ?? '',
-          widget.provider.awssso?.ssoCredentials?.sessionToken ?? '',
-          ''
-        );
+            widget.provider.awssso?.ssoCredentials?.accessKeyId ?? '',
+            widget.provider.awssso?.ssoCredentials?.secretAccessKey ?? '',
+            widget.provider.awssso?.region ?? '',
+            widget.provider.awssso?.ssoCredentials?.sessionToken ?? '',
+            '');
 
         Logger.log(
           'SettingsAddClusterAWSSSO _getClusters',
@@ -138,6 +137,7 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
       setState(() {
         _isLoadingAddCluster = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not add clusters',

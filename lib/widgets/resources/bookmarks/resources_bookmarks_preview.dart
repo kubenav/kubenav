@@ -18,7 +18,7 @@ import 'package:kubenav/widgets/shared/app_horizontal_list_cards_widget.dart';
 /// If the user selects a bookmark from the preview he will be redirected to the
 /// corresponding resource.
 class ResourcesBookmarksPreview extends StatefulWidget {
-  const ResourcesBookmarksPreview({Key? key}) : super(key: key);
+  const ResourcesBookmarksPreview({super.key});
 
   @override
   State<ResourcesBookmarksPreview> createState() =>

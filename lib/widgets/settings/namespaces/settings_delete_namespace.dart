@@ -11,9 +11,9 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 /// added by the user to his favorite namespaces list.
 class SettingsDeleteNamespace extends StatelessWidget {
   const SettingsDeleteNamespace({
-    Key? key,
+    super.key,
     required this.namespace,
-  }) : super(key: key);
+  });
 
   final String namespace;
 

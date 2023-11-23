@@ -16,9 +16,9 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 /// properties. If the user selects the delete item, we remove the cluster.
 class SettingsClusterActions extends StatefulWidget {
   const SettingsClusterActions({
-    Key? key,
+    super.key,
     required this.cluster,
-  }) : super(key: key);
+  });
 
   final Cluster cluster;
 

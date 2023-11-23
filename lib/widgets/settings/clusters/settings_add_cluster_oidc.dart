@@ -16,9 +16,9 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// is required.
 class SettingsAddClusterOIDC extends StatefulWidget {
   const SettingsAddClusterOIDC({
-    Key? key,
+    super.key,
     required this.provider,
-  }) : super(key: key);
+  });
 
   final ClusterProvider provider;
 
@@ -101,6 +101,7 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
       setState(() {
         _isLoadingAddCluster = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not add cluster',

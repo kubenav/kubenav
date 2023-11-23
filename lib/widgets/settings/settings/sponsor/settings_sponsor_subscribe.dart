@@ -17,9 +17,9 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// then completed via the platforms native screens.
 class SettingsSponsorSubscribe extends StatefulWidget {
   const SettingsSponsorSubscribe({
-    Key? key,
+    super.key,
     required this.product,
-  }) : super(key: key);
+  });
 
   final ProductDetails product;
 
@@ -59,6 +59,7 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'An error occured',
@@ -81,10 +82,10 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
               'Notes:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            Row(
+            const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
+              children: [
                 Text('\u2022'),
                 SizedBox(width: 10),
                 Expanded(
@@ -107,10 +108,10 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
                 ),
               ],
             ),
-            Row(
+            const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
+              children: [
                 Text('\u2022'),
                 SizedBox(width: 10),
                 Expanded(
@@ -120,10 +121,10 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
                 ),
               ],
             ),
-            Row(
+            const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
+              children: [
                 Text('\u2022'),
                 SizedBox(width: 10),
                 Expanded(
@@ -133,10 +134,10 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
                 ),
               ],
             ),
-            Row(
+            const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
+              children: [
                 Text('\u2022'),
                 SizedBox(width: 10),
                 Expanded(

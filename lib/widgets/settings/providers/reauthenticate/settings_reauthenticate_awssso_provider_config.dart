@@ -12,7 +12,7 @@ import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
 
 class SettingsReauthenticateAWSSSO extends StatefulWidget {
-  const SettingsReauthenticateAWSSSO({Key? key}) : super(key: key);
+  const SettingsReauthenticateAWSSSO({super.key});
 
   @override
   State<SettingsReauthenticateAWSSSO> createState() =>
@@ -54,6 +54,7 @@ class _SettingsReauthenticateAWSSSOState
         'Could not get SSO configuration',
         err,
       );
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not get SSO configuration',
@@ -74,6 +75,7 @@ class _SettingsReauthenticateAWSSSOState
         'Could not verify device',
         err,
       );
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not verify device',
@@ -127,6 +129,7 @@ class _SettingsReauthenticateAWSSSOState
         'Could not get SSO credentials',
         err,
       );
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not get SSO credentials',

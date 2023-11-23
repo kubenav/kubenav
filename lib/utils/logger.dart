@@ -7,7 +7,7 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// to the console and to access the logs via the app. So that a user can share
 /// the logs when he encountered a problem within the app.
 class Logger extends StatelessWidget {
-  const Logger({Key? key}) : super(key: key);
+  const Logger({super.key});
 
   @override
   Widget build(BuildContext context) {

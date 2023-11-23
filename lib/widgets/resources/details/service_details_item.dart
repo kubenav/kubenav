@@ -16,9 +16,9 @@ import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 
 class ServiceDetailsItem extends StatefulWidget implements IDetailsItemWidget {
   const ServiceDetailsItem({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   final dynamic item;
@@ -78,6 +78,7 @@ class _ServiceDetailsItemState extends State<ServiceDetailsItem> {
         );
       }
     } catch (err) {
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not create session',

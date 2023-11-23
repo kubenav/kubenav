@@ -17,13 +17,13 @@ import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 
 class DetailsContainer extends StatelessWidget {
   const DetailsContainer({
-    Key? key,
+    super.key,
     required this.containerType,
     required this.container,
     required this.initContainerStatuses,
     required this.containerStatuses,
     required this.containerMetrics,
-  }) : super(key: key);
+  });
 
   final String containerType;
   final IoK8sApiCoreV1Container container;

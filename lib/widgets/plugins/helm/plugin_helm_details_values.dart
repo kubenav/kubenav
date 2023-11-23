@@ -20,9 +20,9 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// in a code editor as yaml or json document, depending on the users settings.
 class PluginHelmDetailsValues extends StatefulWidget {
   const PluginHelmDetailsValues({
-    Key? key,
+    super.key,
     required this.release,
-  }) : super(key: key);
+  });
 
   final Release release;
 

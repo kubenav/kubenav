@@ -33,7 +33,7 @@ import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 /// The [Settings] widget is used to display a list of clusters, the settings,
 /// the help and the app information.
 class Settings extends StatelessWidget {
-  const Settings({Key? key}) : super(key: key);
+  const Settings({super.key});
 
   /// [_buildClusters] returns a horizontal list of the users most used
   /// clusters (currently "most used" is defined via the order). The user can
@@ -172,6 +172,7 @@ class Settings extends StatelessWidget {
     try {
       await appRepository.toogleAuthentication();
     } catch (err) {
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not enabled authentication',

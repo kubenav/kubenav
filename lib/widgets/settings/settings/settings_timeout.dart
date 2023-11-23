@@ -10,9 +10,9 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// Kubernetes API requests.
 class SettingsTimeout extends StatefulWidget {
   const SettingsTimeout({
-    Key? key,
+    super.key,
     required this.currentTimeout,
-  }) : super(key: key);
+  });
 
   final int currentTimeout;
 

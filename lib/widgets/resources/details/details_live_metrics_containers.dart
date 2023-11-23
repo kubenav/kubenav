@@ -12,11 +12,11 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 /// live metrics for all contains in of a Pod.
 class DetailsLiveMetricsContainers extends StatelessWidget {
   const DetailsLiveMetricsContainers({
-    Key? key,
+    super.key,
     required this.name,
     required this.namespace,
     required this.pod,
-  }) : super(key: key);
+  });
 
   final String name;
   final String namespace;

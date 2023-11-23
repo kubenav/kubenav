@@ -57,11 +57,11 @@ List<AppResourceActionsModel> helmDetailsActions(
 /// templates of a Helm release and to view the History of the Helm release.
 class PluginHelmDetails extends StatefulWidget {
   const PluginHelmDetails({
-    Key? key,
+    super.key,
     required this.name,
     required this.namespace,
     required this.version,
-  }) : super(key: key);
+  });
 
   final String name;
   final String namespace;

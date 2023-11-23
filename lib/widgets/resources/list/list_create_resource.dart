@@ -25,12 +25,12 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// and is then used to create the resource.
 class ListCreateResource extends StatefulWidget {
   const ListCreateResource({
-    Key? key,
+    super.key,
     required this.title,
     required this.resource,
     required this.path,
     required this.template,
-  }) : super(key: key);
+  });
 
   final String title;
   final String resource;
@@ -153,6 +153,7 @@ class _ListCreateResourceState extends State<ListCreateResource> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not create resource',
@@ -167,6 +168,7 @@ class _ListCreateResourceState extends State<ListCreateResource> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not create resource',

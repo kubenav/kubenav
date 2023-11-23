@@ -18,13 +18,13 @@ import 'package:kubenav/widgets/shared/app_error_widget.dart';
 /// returned by Prometheus for a list of PromQL [queries].
 class AppPrometheusChartWidget extends StatefulWidget {
   const AppPrometheusChartWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.unit,
     required this.manifest,
     required this.queries,
     required this.time,
-  }) : super(key: key);
+  });
 
   final String title;
   final String unit;
@@ -198,11 +198,11 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                   },
                                 ),
                               ),
-                              clipData: FlClipData.all(),
+                              clipData: const FlClipData.all(),
                               lineBarsData: snapshot.data!
                                   .map((e) => LineChartBarData(
                                         spots: e.toSpots(),
-                                        dotData: FlDotData(
+                                        dotData: const FlDotData(
                                           show: false,
                                         ),
                                         color: theme(context).colorPrimary,
@@ -212,12 +212,12 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                   .toList(),
                               titlesData: FlTitlesData(
                                 show: true,
-                                rightTitles: AxisTitles(
+                                rightTitles: const AxisTitles(
                                   sideTitles: SideTitles(
                                     showTitles: false,
                                   ),
                                 ),
-                                topTitles: AxisTitles(
+                                topTitles: const AxisTitles(
                                   sideTitles: SideTitles(
                                     showTitles: false,
                                   ),
@@ -290,34 +290,30 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                         const SizedBox(
                           height: Constants.spacingMiddle,
                         ),
-                        ...snapshot.data!
-                            .map(
-                              (e) => Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    e.label ?? '',
-                                    style: noramlTextStyle(
-                                      context,
-                                      size: Constants.sizeTextSecondary,
-                                    ),
-                                  ),
-                                  Text(
-                                    e.data != null &&
-                                            e.data!.isNotEmpty &&
-                                            e.data![e.data!.length - 1].y !=
-                                                null
-                                        ? '${e.data![e.data!.length - 1].y!.toStringAsFixed(4)} ${widget.unit}'
-                                        : '',
-                                    style: secondaryTextStyle(
-                                      context,
-                                    ),
-                                  ),
-                                ],
+                        ...snapshot.data!.map(
+                          (e) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                e.label ?? '',
+                                style: noramlTextStyle(
+                                  context,
+                                  size: Constants.sizeTextSecondary,
+                                ),
                               ),
-                            )
-                            .toList(),
+                              Text(
+                                e.data != null &&
+                                        e.data!.isNotEmpty &&
+                                        e.data![e.data!.length - 1].y != null
+                                    ? '${e.data![e.data!.length - 1].y!.toStringAsFixed(4)} ${widget.unit}'
+                                    : '',
+                                style: secondaryTextStyle(
+                                  context,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),

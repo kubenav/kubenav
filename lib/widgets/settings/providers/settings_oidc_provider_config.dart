@@ -16,9 +16,9 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class SettingsOIDCProvider extends StatefulWidget {
   const SettingsOIDCProvider({
-    Key? key,
+    super.key,
     required this.provider,
-  }) : super(key: key);
+  });
 
   final ClusterProvider? provider;
 
@@ -84,6 +84,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         'Could not open sign in url',
         err,
       );
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not generate and open sign in url',
@@ -113,6 +114,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         'Could not initialize device flow',
         err,
       );
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not initialize device flow',
@@ -135,6 +137,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         'Could not verify device flow',
         err,
       );
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not verify device flow',
@@ -240,6 +243,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           setState(() {
             _isLoading = false;
           });
+          if (!context.mounted) return;
           showSnackbar(
             context,
             'Could not save provider configuration',
@@ -370,6 +374,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           setState(() {
             _isLoading = false;
           });
+          if (!context.mounted) return;
           showSnackbar(
             context,
             'Could not save provider configuration',

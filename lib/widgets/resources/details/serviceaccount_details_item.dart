@@ -15,9 +15,9 @@ import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 class ServiceAccountDetailsItem extends StatelessWidget
     implements IDetailsItemWidget {
   const ServiceAccountDetailsItem({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   final dynamic item;

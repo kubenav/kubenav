@@ -37,12 +37,12 @@ class SelectedAWSSSOAccount {
 /// a list of AWS SSO accounts and roles, which should be added to the app.
 class SettingsAWSSSOMultipleProvidersSelect extends StatefulWidget {
   const SettingsAWSSSOMultipleProvidersSelect({
-    Key? key,
+    super.key,
     required this.startURL,
     required this.ssoRegion,
     required this.ssoConfig,
     required this.accounts,
-  }) : super(key: key);
+  });
 
   final String startURL;
   final String ssoRegion;
@@ -125,6 +125,7 @@ class _SettingsAWSSSOMultipleProvidersSelectState
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not add providers',

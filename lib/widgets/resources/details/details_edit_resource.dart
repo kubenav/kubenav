@@ -25,13 +25,13 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// a Kubernetes API call to update the manifest of the resource.
 class DetailsEditResource extends StatefulWidget {
   const DetailsEditResource({
-    Key? key,
+    super.key,
     required this.resource,
     required this.path,
     required this.name,
     required this.namespace,
     required this.item,
-  }) : super(key: key);
+  });
 
   final String resource;
   final String path;
@@ -153,6 +153,7 @@ class _DetailsEditResourceState extends State<DetailsEditResource> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not save resource',

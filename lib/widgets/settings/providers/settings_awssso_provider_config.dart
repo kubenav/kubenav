@@ -16,9 +16,9 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class SettingsAWSSSOProvider extends StatefulWidget {
   const SettingsAWSSSOProvider({
-    Key? key,
+    super.key,
     required this.provider,
-  }) : super(key: key);
+  });
 
   final ClusterProvider? provider;
 
@@ -77,6 +77,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
         'Could not get SSO configuration',
         err,
       );
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not get SSO configuration',
@@ -97,6 +98,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
         'Could not verify device',
         err,
       );
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not verify device',
@@ -139,6 +141,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
         'Could not get SSO credentials',
         err,
       );
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not get SSO credentials',
@@ -212,6 +215,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not add provider configuration',

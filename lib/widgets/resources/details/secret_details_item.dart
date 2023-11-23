@@ -19,9 +19,9 @@ import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 
 class SecretDetailsItem extends StatelessWidget implements IDetailsItemWidget {
   const SecretDetailsItem({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   final dynamic item;

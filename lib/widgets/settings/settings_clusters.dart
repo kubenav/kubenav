@@ -29,7 +29,7 @@ import 'package:kubenav/widgets/shared/app_horizontal_list_cards_widget.dart';
 /// the status to each cluster item, so a user sees if we are able to reach the
 /// cluster.
 class SettingsClusters extends StatelessWidget {
-  const SettingsClusters({Key? key}) : super(key: key);
+  const SettingsClusters({super.key});
 
   /// [_proxyDecorator] is used to highlight the cluster which is currently
   /// draged by the user.

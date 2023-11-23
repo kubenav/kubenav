@@ -12,9 +12,9 @@ import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 class HorizontalPodAutoscalerDetailsItem extends StatelessWidget
     implements IDetailsItemWidget {
   const HorizontalPodAutoscalerDetailsItem({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   final dynamic item;

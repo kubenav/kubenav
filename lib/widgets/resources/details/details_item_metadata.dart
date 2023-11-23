@@ -7,9 +7,9 @@ import 'package:kubenav/widgets/resources/details/details_item.dart';
 
 class DetailsItemMetadata extends StatelessWidget {
   const DetailsItemMetadata({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   final dynamic item;
 

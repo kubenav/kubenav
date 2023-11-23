@@ -105,6 +105,7 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
       setState(() {
         _isLoadingAddCluster = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not add cluster',

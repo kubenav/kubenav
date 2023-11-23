@@ -42,10 +42,10 @@ class AppResourceActionsModel {
 ///   [AppBar].
 class AppResourceActions extends StatelessWidget {
   const AppResourceActions({
-    Key? key,
+    super.key,
     required this.mode,
     required this.actions,
-  }) : super(key: key);
+  });
 
   final AppResourceActionsMode mode;
   final List<AppResourceActionsModel> actions;

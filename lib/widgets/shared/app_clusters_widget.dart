@@ -14,7 +14,7 @@ import 'package:kubenav/widgets/shared/app_list_item.dart';
 /// [AppClustersWidget] is a widget which can be used to switch the active
 /// Kubernetes cluster.
 class AppClustersWidget extends StatefulWidget {
-  const AppClustersWidget({Key? key}) : super(key: key);
+  const AppClustersWidget({super.key});
 
   @override
   State<AppClustersWidget> createState() => _AppClustersWidgetState();

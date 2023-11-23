@@ -10,7 +10,7 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// favorite namespaces. To add the namespace a user must provide the name of
 /// the namespace.
 class SettingsAddNamespace extends StatefulWidget {
-  const SettingsAddNamespace({Key? key}) : super(key: key);
+  const SettingsAddNamespace({super.key});
 
   @override
   State<SettingsAddNamespace> createState() => _SettingsAddNamespaceState();

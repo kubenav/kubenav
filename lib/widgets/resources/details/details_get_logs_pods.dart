@@ -25,11 +25,11 @@ import 'package:kubenav/widgets/shared/app_error_widget.dart';
 /// Pods for which he wants to view the logs.
 class DetailsGetLogsPods extends StatefulWidget {
   const DetailsGetLogsPods({
-    Key? key,
+    super.key,
     required this.name,
     required this.namespace,
     required this.item,
-  }) : super(key: key);
+  });
 
   final String name;
   final String namespace;

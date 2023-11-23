@@ -7,14 +7,14 @@ import 'package:kubenav/widgets/resources/list/list_item.dart';
 
 class RoleBindingListItem extends StatelessWidget implements IListItemWidget {
   const RoleBindingListItem({
-    Key? key,
+    super.key,
     required this.title,
     required this.resource,
     required this.path,
     required this.scope,
     required this.item,
     required this.additionalPrinterColumns,
-  }) : super(key: key);
+  });
 
   @override
   final String title;

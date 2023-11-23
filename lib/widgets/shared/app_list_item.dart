@@ -23,11 +23,11 @@ import 'package:kubenav/utils/constants.dart';
 /// ```
 class AppListItem extends StatelessWidget {
   const AppListItem({
-    Key? key,
+    super.key,
     this.onTap,
     this.onDoubleTap,
     required this.child,
-  }) : super(key: key);
+  });
 
   final void Function()? onTap;
   final void Function()? onDoubleTap;

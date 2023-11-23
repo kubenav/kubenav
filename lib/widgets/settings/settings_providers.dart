@@ -23,7 +23,7 @@ import 'package:kubenav/widgets/shared/app_list_item.dart';
 /// It is not possible to add a new provider on this page, because new providers
 /// should only be added via the cluster page.
 class SettingsProviders extends StatelessWidget {
-  const SettingsProviders({Key? key}) : super(key: key);
+  const SettingsProviders({super.key});
 
   /// [buildProvider] returns a widget for a provider. The widget shows the user
   /// defined name of the provider, as well as the title and subtitle for the

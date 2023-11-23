@@ -16,9 +16,9 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class SettingsRancherProvider extends StatefulWidget {
   const SettingsRancherProvider({
-    Key? key,
+    super.key,
     required this.provider,
-  }) : super(key: key);
+  });
 
   final ClusterProvider? provider;
 
@@ -73,6 +73,7 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Sign in failed',
@@ -144,6 +145,7 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not save provider configuration',

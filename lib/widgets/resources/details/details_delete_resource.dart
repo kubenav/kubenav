@@ -18,12 +18,12 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// resource or not.
 class DetailsDeleteResource extends StatefulWidget {
   const DetailsDeleteResource({
-    Key? key,
+    super.key,
     required this.resource,
     required this.path,
     required this.name,
     required this.namespace,
-  }) : super(key: key);
+  });
 
   final String resource;
   final String path;
@@ -98,6 +98,7 @@ class _DetailsDeleteResourceState extends State<DetailsDeleteResource> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not delete resource',
@@ -112,6 +113,7 @@ class _DetailsDeleteResourceState extends State<DetailsDeleteResource> {
       setState(() {
         _isLoading = false;
       });
+      if (!context.mounted) return;
       showSnackbar(
         context,
         'Could not delete resource',

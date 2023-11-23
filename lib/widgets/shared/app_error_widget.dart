@@ -16,11 +16,11 @@ import 'package:kubenav/widgets/settings/providers/reauthenticate/settings_reaut
 /// [icon].
 class AppErrorWidget extends StatelessWidget {
   const AppErrorWidget({
-    Key? key,
+    super.key,
     required this.message,
     required this.details,
     this.icon,
-  }) : super(key: key);
+  });
 
   final String message;
   final String details;
