@@ -5,21 +5,57 @@ on:
     branches:
       - main
 
-permissions:
-  contents: read
-
 jobs:
+  # The "Changelog" job creates a new release draft on GitHub.
   changelog:
+    name: Changelog
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
-    name: Changelog
-    runs-on: ubuntu-latest
+
     steps:
       - name: Update Changelog
-        uses: release-drafter/release-drafter@v5
+        uses: release-drafter/release-drafter@v6
         with:
           config-name: release.yaml
           disable-autolabeler: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # The "Build Landing Page" job builds our landing page.
+  build-landing-page:
+    name: Build Landing Page
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: kubenav.io/
+
+  # The "Deploy Landing Page" job deploys our landing page to GitHub Pages.
+  deploy-landing-page:
+    name: Deploy Landing Page
+    runs-on: ubuntu-latest
+    needs: build-landing-page
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
