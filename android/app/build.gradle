@@ -69,7 +69,7 @@ android {
 
     buildTypes {
         release {
-            if (project.hasProperty("keyStoreFile")) {
+            if (keystorePropertiesFile.exists()) {
                 signingConfig signingConfigs.release
             } else {
                 // For testing purposes we sign with dummy credentials if no key properties are given.
