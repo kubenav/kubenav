@@ -37,7 +37,7 @@ dependencies:
   code_text_field: ^1.0.2
   ffi: ^2.0.1
   file_picker: ^6.1.1
-  fl_chart: ^0.64.0
+  fl_chart: ^0.65.0
   flutter_highlight: ^0.7.0
   flutter_markdown: ^0.6.12
   flutter_native_splash: ^2.2.19
@@ -49,7 +49,7 @@ dependencies:
       ref: kubenav
   flutter_svg: ^2.0.1
   highlight: ^0.7.0
-  http: ^1.1.0
+  http: ^1.1.2
   in_app_purchase: ^3.1.1
   json_path: ^0.6.6
   jwt_decode: ^0.3.1
