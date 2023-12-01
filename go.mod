@@ -8,7 +8,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.9.0
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.4.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/containerservice/armcontainerservice v1.0.0
-	github.com/aws/aws-sdk-go v1.48.3
+	github.com/aws/aws-sdk-go v1.48.10
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/gorilla/websocket v1.5.1
 	github.com/prometheus/client_golang v1.17.0
