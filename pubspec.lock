@@ -165,10 +165,10 @@ packages:
     dependency: "direct main"
     description:
       name: fl_chart
-      sha256: "6b9eb2b3017241d05c482c01f668dd05cc909ec9a0114fdd49acd958ff2432fa"
+      sha256: fe6fec7d85975a99c73b9515a69a6e291364accfa0e4a5b3ce6de814d74b9a1c
       url: "https://pub.dev"
     source: hosted
-    version: "0.64.0"
+    version: "0.66.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -210,10 +210,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_native_splash
-      sha256: c4d899312b36e7454bedfd0a4740275837b99e532d81c8477579d8183db1de6c
+      sha256: "9cdb5d9665dab5d098dc50feab74301c2c228cd02ca25c9b546ab572cebcd6af"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.6"
+    version: "2.3.9"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -277,10 +277,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
+      sha256: d4872660c46d929f6b8a9ef4e7a7eff7e49bbf0c4ec3f385ee32df5119175139
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.2"
   http_parser:
     dependency: transitive
     description:
@@ -373,10 +373,10 @@ packages:
     dependency: "direct main"
     description:
       name: json_path
-      sha256: "93f2cb012eb37112e62d3b5e5eb535431beb4c2566a9c1987b079b13b308763b"
+      sha256: b1a3e5e34c862a6ca598e226e725647e462bde9fd98dbfa21bb53e105efeb177
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.6"
+    version: "0.7.0"
   jwt_decode:
     dependency: "direct main"
     description:
@@ -786,10 +786,10 @@ packages:
     dependency: "direct main"
     description:
       name: url_launcher
-      sha256: b1c9e98774adf8820c96fbc7ae3601231d324a7d5ebd8babe27b6dfac91357ba
+      sha256: e9aa5ea75c84cf46b3db4eea212523591211c3cf2e13099ee4ec147f54201c86
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.1"
+    version: "6.2.2"
   url_launcher_android:
     dependency: transitive
     description:
@@ -850,10 +850,10 @@ packages:
     dependency: "direct main"
     description:
       name: uuid
-      sha256: df5a4d8f22ee4ccd77f8839ac7cb274ebc11ef9adcce8b92be14b797fe889921
+      sha256: "22c94e5ad1e75f9934b766b53c742572ee2677c56bc871d850a57dad0f82127f"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.1"
+    version: "4.2.2"
   vector_graphics:
     dependency: transitive
     description:
@@ -939,10 +939,10 @@ packages:
     dependency: transitive
     description:
       name: xml
-      sha256: af5e77e9b83f2f4adc5d3f0a4ece1c7f45a2467b695c2540381bac793e34e556
+      sha256: b015a8ad1c488f66851d762d3090a21c600e479dc75e68328c52774040cf9226
       url: "https://pub.dev"
     source: hosted
-    version: "6.4.2"
+    version: "6.5.0"
   xterm:
     dependency: "direct main"
     description:
