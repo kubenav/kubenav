@@ -37,10 +37,10 @@ dependencies:
   code_text_field: ^1.0.2
   ffi: ^2.0.1
   file_picker: ^6.1.1
-  fl_chart: ^0.64.0
+  fl_chart: ^0.66.1
   flutter_highlight: ^0.7.0
   flutter_markdown: ^0.6.12
-  flutter_native_splash: ^2.2.19
+  flutter_native_splash: ^2.3.10
   # flutter_secure_storage: ^7.0.1
   flutter_secure_storage:
     git:
@@ -49,19 +49,19 @@ dependencies:
       ref: kubenav
   flutter_svg: ^2.0.1
   highlight: ^0.7.0
-  http: ^1.1.0
-  in_app_purchase: ^3.1.1
-  json_path: ^0.6.6
+  http: ^1.2.0
+  in_app_purchase: ^3.1.13
+  json_path: ^0.7.0
   jwt_decode: ^0.3.1
-  local_auth: ^2.1.2
+  local_auth: ^2.1.8
   package_info_plus: ^5.0.1
-  path_provider: ^2.0.9
+  path_provider: ^2.1.2
   provider: ^6.0.4
   shared_preferences: ^2.0.15
-  url_launcher: ^6.0.20
-  uuid: ^4.2.1
+  url_launcher: ^6.2.4
+  uuid: ^4.3.3
   web_socket_channel: ^2.1.0
-  window_manager: ^0.3.0
+  window_manager: ^0.3.8
   window_size:
     git:
       url: https://github.com/google/flutter-desktop-embedding
