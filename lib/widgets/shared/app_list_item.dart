@@ -38,6 +38,8 @@ class AppListItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       onDoubleTap: onDoubleTap,
+      onLongPress: onDoubleTap,
+      onSecondaryTap: onDoubleTap,
       child: Container(
         padding: const EdgeInsets.all(Constants.spacingListItemContent),
         decoration: BoxDecoration(
