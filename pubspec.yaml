@@ -35,38 +35,38 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   code_text_field: ^1.0.2
-  ffi: ^2.0.1
-  file_picker: ^6.1.1
-  fl_chart: ^0.64.0
+  ffi: ^2.1.2
+  file_picker: ^8.0.0+1
+  fl_chart: ^0.67.0
   flutter_highlight: ^0.7.0
-  flutter_markdown: ^0.6.12
-  flutter_native_splash: ^2.2.19
+  flutter_markdown: ^0.6.22
+  flutter_native_splash: ^2.4.0
   # flutter_secure_storage: ^7.0.1
   flutter_secure_storage:
     git:
       url: https://github.com/kubenav/flutter_secure_storage
       path: flutter_secure_storage
       ref: kubenav
-  flutter_svg: ^2.0.1
+  flutter_svg: ^2.0.10+1
   highlight: ^0.7.0
-  http: ^1.1.0
-  in_app_purchase: ^3.1.1
-  json_path: ^0.6.6
+  http: ^1.2.0
+  in_app_purchase: ^3.1.13
+  json_path: ^0.7.1
   jwt_decode: ^0.3.1
-  local_auth: ^2.1.2
-  package_info_plus: ^5.0.1
-  path_provider: ^2.0.9
-  provider: ^6.0.4
+  local_auth: ^2.2.0
+  package_info_plus: ^6.0.0
+  path_provider: ^2.1.2
+  provider: ^6.1.2
   shared_preferences: ^2.0.15
-  url_launcher: ^6.0.20
-  uuid: ^4.2.1
-  web_socket_channel: ^2.1.0
-  window_manager: ^0.3.0
+  url_launcher: ^6.2.5
+  uuid: ^4.3.3
+  web_socket_channel: ^2.4.4
+  window_manager: ^0.3.8
   window_size:
     git:
       url: https://github.com/google/flutter-desktop-embedding
       path: plugins/window_size
-  xterm: ^3.4.1
+  xterm: ^4.0.0
   yaml: ^3.1.0
 
 dev_dependencies:
@@ -78,7 +78,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.1
+  flutter_lints: ^3.0.2
 
   flutter_launcher_icons: ^0.13.1
   import_sorter: ^4.6.0
