@@ -551,8 +551,10 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                 touchTooltipData: BarTouchTooltipData(
                                   fitInsideHorizontally: true,
                                   fitInsideVertically: true,
-                                  tooltipBgColor:
-                                      theme(context).colorMessageBackground,
+                                  getTooltipColor: (BarChartGroupData group) {
+                                    return theme(context)
+                                        .colorMessageBackground;
+                                  },
                                   getTooltipItem:
                                       (group, groupIndex, rod, rodIndex) {
                                     String label;

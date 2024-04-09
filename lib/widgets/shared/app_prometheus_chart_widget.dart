@@ -179,9 +179,11 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                   fitInsideVertically: true,
                                   maxContentWidth:
                                       MediaQuery.of(context).size.width,
-                                  tooltipBgColor: theme(
-                                    context,
-                                  ).colorMessageBackground,
+                                  getTooltipColor: (LineBarSpot touchedSpot) {
+                                    return theme(
+                                      context,
+                                    ).colorMessageBackground;
+                                  },
                                   getTooltipItems: (touchedSpots) {
                                     return touchedSpots
                                         .map((LineBarSpot touchedSpot) {
