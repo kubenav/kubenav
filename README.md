@@ -5,11 +5,17 @@
   **kubenav** is the navigator for your **Kubernetes** clusters right in your pocket. kubenav is a **mobile** app to manage Kubernetes clusters and to get an overview of the status of your Kubernetes resources.
 
   <p>
-    <a href="https://apps.apple.com/us/app/kubenav/id1494512160" target="_blank"><img src="utils/images/repo/badge-app-store.svg" height="50"></a>
-    <a href="https://play.google.com/store/apps/details?id=io.kubenav.kubenav" target="_blank"><img src="utils/images/repo/badge-google-play.svg" height="50"></a>
+    <a href="https://apps.apple.com/us/app/kubenav/id1494512160" target="_blank"><img src="utils/images/repo/badge-app-store.svg" height="50" /></a>
+    <a href="https://play.google.com/store/apps/details?id=io.kubenav.kubenav" target="_blank"><img src="utils/images/repo/badge-google-play.svg" height="50" /></a>
   </p>
 
-  <img src="utils/images/repo/github-screenshot.png" width="100%" />
+  <table>
+    <tr>
+      <td><img src="utils/images/stores/iphone65-1.png" /></td>
+      <td><img src="utils/images/stores/iphone65-3.png" /></td>
+      <td><img src="utils/images/stores/iphone65-3.png" /></td>
+    </tr>
+  </table>
 </div>
 
 kubenav is a mobile app to manage Kubernetes clusters. The app provides an overview of all resources in a Kubernetes cluster, including current status information for workloads. The details view for resources provides additional information. It is possible to view logs and events or to get a shell into a container. You can also edit and delete resources or scale your workloads within the app.
@@ -33,6 +39,4 @@ The app is developed using [Flutter](https://flutter.dev) and [Go](https://go.de
 
 ## Usage
 
-The mobile version of kubenav can be downloaded from the [App Store](https://apps.apple.com/us/app/kubenav/id1494512160) or [Google Play](https://play.google.com/store/apps/details?id=io.kubenav.kubenav).
-
-For testing new features and faster feedback, we provide a **beta version** via [Apple Testflight](https://testflight.apple.com/join/RQUFGkHi) and [Google Play](https://play.google.com/apps/testing/io.kubenav.kubenav).
+The mobile version of kubenav can be downloaded from the [App Store](https://apps.apple.com/us/app/kubenav/id1494512160) or [Google Play](https://play.google.com/store/apps/details?id=io.kubenav.kubenav). For testing new features and faster feedback, we provide a **beta version** via [Apple Testflight](https://testflight.apple.com/join/RQUFGkHi) and [Google Play](https://play.google.com/apps/testing/io.kubenav.kubenav).
