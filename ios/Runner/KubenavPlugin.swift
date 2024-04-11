@@ -5,10 +5,8 @@ import Kubenav
 
 public class KubenavPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
-    // Note: In release 2.10, the Task Queue API is only available on the master channel for iOS.
-    // let taskQueue = registrar.messenger.makeBackgroundTaskQueue()
-    // let channel = FlutterMethodChannel(name: "kubenav.io", binaryMessenger: registrar.messenger(), codec: FlutterStandardMethodCodec.sharedInstance, taskQueue: taskQueue)
-    let channel = FlutterMethodChannel(name: "kubenav.io", binaryMessenger: registrar.messenger())
+    let taskQueue = registrar.messenger().makeBackgroundTaskQueue?()
+    let channel = FlutterMethodChannel(name: "kubenav.io", binaryMessenger: registrar.messenger(), codec: FlutterStandardMethodCodec.sharedInstance(), taskQueue: taskQueue)
     let instance = KubenavPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
