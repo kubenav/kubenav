@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:in_app_purchase/in_app_purchase.dart';
 
-import 'package:kubenav/services/kubenav_mobile.dart';
+import 'package:kubenav/services/sponsor_service.dart';
 import 'package:kubenav/utils/logger.dart';
 
 /// [productIDs] is a set of product ids which are configured in the Google Play
@@ -39,10 +39,6 @@ enum SponsorRepositoryStatus {
 /// products and for validating the purchase stream to check if the user has a
 /// valid subscription.
 ///
-/// The repository shouldn't be used on desktop, because we do not have the
-/// required APIs there. Instead we should just display the links to the GitHub
-/// sponsoring dashboard and Paypal.
-///
 /// Some helpful links for handling In-App Purchase on Android and iOS:
 ///   - https://help.apple.com/app-store-connect/#/devb57be10e7
 ///   - https://github.com/flutter/plugins/blob/main/packages/in_app_purchase/in_app_purchase/example/README.md
@@ -51,9 +47,7 @@ enum SponsorRepositoryStatus {
 ///   - https://qonversion.io/blog/the-ultimate-guide-to-subscription-testing-on-android/
 class SponsorRepository with ChangeNotifier {
   SponsorRepository() {
-    if (Platform.isAndroid || Platform.isIOS) {
-      _init();
-    }
+    _init();
   }
 
   final InAppPurchase _iap = InAppPurchase.instance;
@@ -83,77 +77,83 @@ class SponsorRepository with ChangeNotifier {
       _isAvailable = await _iap.isAvailable();
 
       if (_isAvailable) {
-        _iap.purchaseStream.listen((data) async {
-          Logger.log(
-            'SponsorRepository _init',
-            'Received purchase stream data',
-            data,
-          );
-
-          bool skipVerify = false;
-          for (final purchaseDetails in data) {
+        _iap.purchaseStream.listen(
+          (data) async {
             Logger.log(
               'SponsorRepository _init',
-              'Purchase details for received purchase stream data',
-              'ProductID: ${purchaseDetails.productID}, PurchaseID: ${purchaseDetails.purchaseID}, Status: ${purchaseDetails.status}, Error: ${purchaseDetails.error.toString()}',
+              'Received purchase stream data',
+              data,
             );
-            try {
-              if (purchaseDetails.status == PurchaseStatus.pending) {
-                _status = SponsorRepositoryStatus.pending;
-                notifyListeners();
-              } else {
-                if (purchaseDetails.status == PurchaseStatus.error) {
-                  Logger.log(
-                    'SponsorRepository _init',
-                    'PurchaseDetails status is error',
-                    'Source: ${purchaseDetails.error?.source}, Code: ${purchaseDetails.error?.code}, Message: ${purchaseDetails.error?.message}, Details: ${purchaseDetails.error?.details}',
-                  );
-                  _status = SponsorRepositoryStatus.done;
-                  notifyListeners();
-                } else if (purchaseDetails.status == PurchaseStatus.purchased) {
-                  _isSponsor = true;
-                  _status = SponsorRepositoryStatus.done;
-                  notifyListeners();
-                } else if (purchaseDetails.status == PurchaseStatus.restored) {
-                  if (_isSponsor == false && skipVerify == false) {
-                    if (await _verify() == true) {
-                      _isSponsor = true;
-                    }
-                  }
-                  _status = SponsorRepositoryStatus.done;
-                  notifyListeners();
-                  skipVerify = true;
-                }
 
-                if (purchaseDetails.pendingCompletePurchase) {
-                  await _iap.completePurchase(purchaseDetails);
-                  _status = SponsorRepositoryStatus.done;
-                  notifyListeners();
-                }
-              }
-            } catch (err) {
+            bool skipVerify = false;
+            for (final purchaseDetails in data) {
               Logger.log(
                 'SponsorRepository _init',
-                'An unknown error occured while listining to purchase stream',
-                err,
+                'Purchase details for received purchase stream data',
+                'ProductID: ${purchaseDetails.productID}, PurchaseID: ${purchaseDetails.purchaseID}, Status: ${purchaseDetails.status}, Error: ${purchaseDetails.error.toString()}',
               );
-            }
-          }
+              try {
+                if (purchaseDetails.status == PurchaseStatus.pending) {
+                  _status = SponsorRepositoryStatus.pending;
+                  notifyListeners();
+                } else {
+                  if (purchaseDetails.status == PurchaseStatus.error) {
+                    Logger.log(
+                      'SponsorRepository _init',
+                      'PurchaseDetails status is error',
+                      'Source: ${purchaseDetails.error?.source}, Code: ${purchaseDetails.error?.code}, Message: ${purchaseDetails.error?.message}, Details: ${purchaseDetails.error?.details}',
+                    );
+                    _status = SponsorRepositoryStatus.done;
+                    notifyListeners();
+                  } else if (purchaseDetails.status ==
+                      PurchaseStatus.purchased) {
+                    _isSponsor = true;
+                    _status = SponsorRepositoryStatus.done;
+                    notifyListeners();
+                  } else if (purchaseDetails.status ==
+                      PurchaseStatus.restored) {
+                    if (_isSponsor == false && skipVerify == false) {
+                      if (await _verify() == true) {
+                        _isSponsor = true;
+                      }
+                    }
+                    _status = SponsorRepositoryStatus.done;
+                    notifyListeners();
+                    skipVerify = true;
+                  }
 
-          _purchases.addAll(data);
-          notifyListeners();
-        }, onDone: () {
-          Logger.log(
-            'SponsorRepository _init',
-            'Listen to purchase stream is done',
-          );
-        }, onError: (err) {
-          Logger.log(
-            'SponsorRepository _init',
-            'An error occured while listining to the purchase stream',
-            err,
-          );
-        });
+                  if (purchaseDetails.pendingCompletePurchase) {
+                    await _iap.completePurchase(purchaseDetails);
+                    _status = SponsorRepositoryStatus.done;
+                    notifyListeners();
+                  }
+                }
+              } catch (err) {
+                Logger.log(
+                  'SponsorRepository _init',
+                  'An unknown error occured while listining to purchase stream',
+                  err,
+                );
+              }
+            }
+
+            _purchases.addAll(data);
+            notifyListeners();
+          },
+          onDone: () {
+            Logger.log(
+              'SponsorRepository _init',
+              'Listen to purchase stream is done',
+            );
+          },
+          onError: (err) {
+            Logger.log(
+              'SponsorRepository _init',
+              'An error occured while listining to the purchase stream',
+              err,
+            );
+          },
+        );
 
         await _getProducts();
         await _iap.restorePurchases();
@@ -205,7 +205,7 @@ class SponsorRepository with ChangeNotifier {
   Future<bool> _verify() async {
     try {
       if (Platform.isIOS) {
-        final result = await KubenavMobile().verifyIAP();
+        final result = await SponsorService().verifyIAP();
         if (result == 'true') {
           return true;
         }

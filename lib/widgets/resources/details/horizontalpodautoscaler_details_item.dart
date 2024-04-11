@@ -20,7 +20,7 @@ class HorizontalPodAutoscalerDetailsItem extends StatelessWidget
   final dynamic item;
 
   List<Widget> buildReference(
-      IoK8sApiAutoscalingV2HorizontalPodAutoscaler hpa) {
+      IoK8sApiAutoscalingV2HorizontalPodAutoscaler hpa,) {
     if (hpa.spec!.scaleTargetRef.kind != 'Deployment' &&
         hpa.spec!.scaleTargetRef.kind != 'StatefulSet') {
       return [Container()];

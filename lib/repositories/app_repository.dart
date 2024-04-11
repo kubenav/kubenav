@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 
@@ -72,8 +71,7 @@ class AppRepository with ChangeNotifier {
         _settings = AppRepositorySettings.fromJson(json.decode(data));
       }
 
-      if ((Platform.isAndroid || Platform.isIOS) &&
-          _settings.isAuthenticationEnabled) {
+      if (_settings.isAuthenticationEnabled) {
         await authenticate();
         _isAuthenticated = true;
       } else {

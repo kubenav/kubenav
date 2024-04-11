@@ -74,7 +74,7 @@ class _SettingsAddClusterKubeconfigState
 
   /// [_addCluster] adds a new cluster to our global list of clusters. Before we
   /// add the cluster we validate all the form values which have an validator.
-  Future<void> _addCluster(BuildContext context) async {
+  Future<void> _addCluster() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -121,12 +121,13 @@ class _SettingsAddClusterKubeconfigState
         setState(() {
           _isLoadingAddCluster = false;
         });
-        if (!context.mounted) return;
-        showSnackbar(
-          context,
-          'Could not add clusters',
-          err.toString(),
-        );
+        if (mounted) {
+          showSnackbar(
+            context,
+            'Could not add clusters',
+            err.toString(),
+          );
+        }
       }
     }
   }
@@ -148,7 +149,7 @@ class _SettingsAddClusterKubeconfigState
       },
       actionText: 'Add Clusters',
       actionPressed: () {
-        _addCluster(context);
+        _addCluster();
       },
       actionIsLoading: _isLoadingAddCluster,
       child: Form(

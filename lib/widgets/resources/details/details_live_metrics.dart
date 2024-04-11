@@ -356,7 +356,7 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                       getTitlesWidget: (value, titleMeta) {
                                         final timestamp =
                                             DateTime.fromMillisecondsSinceEpoch(
-                                                value.round());
+                                                value.round(),);
 
                                         return Container(
                                           padding: const EdgeInsets.only(
@@ -476,7 +476,7 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                                   : theme(context).colorPrimary,
                                           barWidth: 4,
                                           isCurved: false,
-                                        ))
+                                        ),)
                                     .toList(),
                                 titlesData: FlTitlesData(
                                   show: true,
@@ -517,7 +517,7 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                       getTitlesWidget: (value, titleMeta) {
                                         final timestamp =
                                             DateTime.fromMillisecondsSinceEpoch(
-                                                value.round());
+                                                value.round(),);
 
                                         return Container(
                                           padding: const EdgeInsets.only(
@@ -575,7 +575,7 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                     Text(
                                       formatMemoryMetric(e.value
                                           .memory[e.value.memory.length - 1].y
-                                          .toDouble()),
+                                          .toDouble(),),
                                       style: secondaryTextStyle(
                                         context,
                                       ),
@@ -590,7 +590,7 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

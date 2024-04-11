@@ -109,7 +109,7 @@ class DigitalOceanService {
     try {
       final response = await http.get(
         Uri.parse(
-            'https://api.digitalocean.com/v2/kubernetes/clusters/$id/kubeconfig'),
+            'https://api.digitalocean.com/v2/kubernetes/clusters/$id/kubeconfig',),
         headers: {
           'Authorization': 'Bearer $token',
         },

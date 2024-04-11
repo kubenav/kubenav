@@ -121,7 +121,7 @@ class HomeOverview extends StatelessWidget {
                 ),
               ),
             ],
-          )),
+          ),),
       bottomNavigationBar: appRepository.settings.classicMode
           ? null
           : const AppBottomNavigationBarWidget(),

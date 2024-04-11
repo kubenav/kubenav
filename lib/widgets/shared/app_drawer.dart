@@ -163,7 +163,7 @@ class AppDrawer extends StatelessWidget {
                       context,
                       const Home(),
                       Constants.pageIndexHome,
-                    )
+                    ),
                   },
                 ),
                 ListTile(
@@ -174,7 +174,7 @@ class AppDrawer extends StatelessWidget {
                       context,
                       const Settings(),
                       Constants.pageIndexSettings,
-                    )
+                    ),
                   },
                 ),
                 ListTile(
@@ -185,7 +185,7 @@ class AppDrawer extends StatelessWidget {
                       context,
                       const ResourcesBookmarks(),
                       Constants.pageIndexResources,
-                    )
+                    ),
                   },
                 ),
                 ListTile(
@@ -206,14 +206,14 @@ class AppDrawer extends StatelessWidget {
                             .replaceAll(Characters(''), Characters('\u{200B}'))
                             .toString(),
                         style: TextStyle(color: theme(context).colorOnPrimary),
-                      )
+                      ),
                     ],
                   ),
                   onTap: () => {
                     showModal(
                       context,
                       const AppClustersWidget(),
-                    )
+                    ),
                   },
                 ),
                 buildDivider(context, 'Workloads'),
@@ -250,7 +250,7 @@ class AppDrawer extends StatelessWidget {
                       context,
                       const PluginHelmList(),
                       Constants.pageIndexPlugins,
-                    )
+                    ),
                   },
                 ),
                 ListTile(
@@ -262,7 +262,7 @@ class AppDrawer extends StatelessWidget {
                       context,
                       const PluginPrometheusList(),
                       Constants.pageIndexPlugins,
-                    )
+                    ),
                   },
                 ),
               ],

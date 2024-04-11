@@ -142,8 +142,10 @@ class AppTerminalsWidget extends StatelessWidget {
                                   Characters(
                                     'You have ${terminalRepository.terminals.length} Terminals open',
                                   )
-                                      .replaceAll(Characters(''),
-                                          Characters('\u{200B}'))
+                                      .replaceAll(
+                                        Characters(''),
+                                        Characters('\u{200B}'),
+                                      )
                                       .toString(),
                                   overflow: TextOverflow.ellipsis,
                                   style: secondaryTextStyle(

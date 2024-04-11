@@ -56,16 +56,17 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
         'Could not open sign in url',
         err,
       );
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not open sign in url',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not open sign in url',
+          err.toString(),
+        );
+      }
     }
   }
 
-  Future<void> _saveProvider(BuildContext context) async {
+  Future<void> _saveProvider() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -162,12 +163,13 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
       setState(() {
         _isLoading = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not save provider configuration',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not save provider configuration',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -208,7 +210,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
       },
       actionText: widget.provider == null ? 'Save and add cluster(s)' : 'Save',
       actionPressed: () {
-        _saveProvider(context);
+        _saveProvider();
       },
       actionIsLoading: _isLoading,
       child: Form(

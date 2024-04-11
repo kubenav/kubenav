@@ -153,12 +153,13 @@ class _ListCreateResourceState extends State<ListCreateResource> {
       setState(() {
         _isLoading = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not create resource',
-        'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not create resource',
+          'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+        );
+      }
     } catch (err) {
       Logger.log(
         'ListCreateResource _createResource',
@@ -168,12 +169,13 @@ class _ListCreateResourceState extends State<ListCreateResource> {
       setState(() {
         _isLoading = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not create resource',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not create resource',
+          err.toString(),
+        );
+      }
     }
   }
 

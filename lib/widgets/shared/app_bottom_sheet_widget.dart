@@ -141,8 +141,10 @@ class AppBottomSheetWidget extends StatelessWidget {
                                 ),
                                 Text(
                                   Characters(subtitle)
-                                      .replaceAll(Characters(''),
-                                          Characters('\u{200B}'))
+                                      .replaceAll(
+                                        Characters(''),
+                                        Characters('\u{200B}'),
+                                      )
                                       .toString(),
                                   overflow: TextOverflow.ellipsis,
                                   style: secondaryTextStyle(

@@ -149,7 +149,7 @@ class OverviewMetrics extends StatelessWidget {
               },
             ),
           ],
-        )
+        ),
       ],
     );
   }

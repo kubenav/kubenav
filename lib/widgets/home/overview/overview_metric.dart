@@ -211,14 +211,14 @@ class _OverviewMetricState extends State<OverviewMetric> {
                 container.resources!.requests.containsKey('cpu')) {
               cpuRequests = cpuRequests +
                   cpuMetricsStringToDouble(
-                      container.resources!.requests['cpu']!);
+                      container.resources!.requests['cpu']!,);
             }
 
             if (container.resources != null &&
                 container.resources!.requests.containsKey('memory')) {
               memoryRequests = memoryRequests +
                   memoryMetricsStringToDouble(
-                      container.resources!.requests['memory']!);
+                      container.resources!.requests['memory']!,);
             }
 
             if (container.resources != null &&
@@ -231,7 +231,7 @@ class _OverviewMetricState extends State<OverviewMetric> {
                 container.resources!.limits.containsKey('memory')) {
               memoryLimits = memoryLimits +
                   memoryMetricsStringToDouble(
-                      container.resources!.limits['memory']!);
+                      container.resources!.limits['memory']!,);
             }
           }
         }

@@ -43,7 +43,7 @@ class _SettingsAzureProviderState extends State<SettingsAzureProvider> {
     return null;
   }
 
-  Future<void> _saveProviderConfig(BuildContext context) async {
+  Future<void> _saveProviderConfig() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -104,12 +104,13 @@ class _SettingsAzureProviderState extends State<SettingsAzureProvider> {
       setState(() {
         _isLoading = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not save provider configuration',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not save provider configuration',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -148,7 +149,7 @@ class _SettingsAzureProviderState extends State<SettingsAzureProvider> {
       },
       actionText: widget.provider == null ? 'Save and add cluster(s)' : 'Save',
       actionPressed: () {
-        _saveProviderConfig(context);
+        _saveProviderConfig();
       },
       actionIsLoading: _isLoading,
       child: Form(

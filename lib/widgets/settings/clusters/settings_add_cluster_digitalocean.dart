@@ -107,7 +107,7 @@ class _SettingsAddClusterDigitalOceanState
   /// [_addClusters] adds the list of the users [_selectedClusters] to the app.
   /// When an error is returned from the operation we show a snackbar with the
   /// error.
-  Future<void> _addClusters(BuildContext context) async {
+  Future<void> _addClusters() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -140,12 +140,13 @@ class _SettingsAddClusterDigitalOceanState
       setState(() {
         _isLoadingAddCluster = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not add clusters',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not add clusters',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -276,7 +277,7 @@ class _SettingsAddClusterDigitalOceanState
       },
       actionText: 'Add Clusters',
       actionPressed: () {
-        _addClusters(context);
+        _addClusters();
       },
       actionIsLoading: _isLoading || _isLoadingAddCluster,
       child: _buildContent(),

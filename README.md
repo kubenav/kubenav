@@ -2,24 +2,23 @@
   <img src="utils/images/repo/github-readme-logo.png" width="200" />
   <br><br>
 
-  **kubenav** is the navigator for your **Kubernetes** clusters right in your pocket. kubenav is a **mobile and desktop** app to manage Kubernetes clusters and to get an overview of the status of your Kubernetes resources.
+  **kubenav** is the navigator for your **Kubernetes** clusters right in your pocket. kubenav is a **mobile** app to manage Kubernetes clusters and to get an overview of the status of your Kubernetes resources.
 
   <p>
-    <a href="https://apps.apple.com/us/app/kubenav/id1494512160" target="_blank"><img src="utils/images/repo/badge-app-store.png" height="50"></a>
-    <a href="https://play.google.com/store/apps/details?id=io.kubenav.kubenav" target="_blank"><img src="utils/images/repo/badge-google-play.png" height="50"></a>
-    <a href="https://github.com/kubenav/kubenav/releases" target="_self"><img src="utils/images/repo/badge-desktop.png" height="50"></a>
+    <a href="https://apps.apple.com/us/app/kubenav/id1494512160" target="_blank"><img src="utils/images/repo/badge-app-store.svg" height="50"></a>
+    <a href="https://play.google.com/store/apps/details?id=io.kubenav.kubenav" target="_blank"><img src="utils/images/repo/badge-google-play.svg" height="50"></a>
   </p>
 
   <img src="utils/images/repo/github-screenshot.png" width="100%" />
 </div>
 
-kubenav is a mobile and desktop app to manage Kubernetes clusters. The app provides an overview of all resources in a Kubernetes cluster, including current status information for workloads. The details view for resources provides additional information. It is possible to view logs and events or to get a shell into a container. You can also edit and delete resources or scale your workloads within the app.
+kubenav is a mobile app to manage Kubernetes clusters. The app provides an overview of all resources in a Kubernetes cluster, including current status information for workloads. The details view for resources provides additional information. It is possible to view logs and events or to get a shell into a container. You can also edit and delete resources or scale your workloads within the app.
 
 The app is developed using [Flutter](https://flutter.dev) and [Go](https://go.dev). For more information you can read through our [contribution guidelines](https://github.com/kubenav/kubenav/blob/main/CONTRIBUTING.md) for development.
 
 ## Features
 
-- **Available for mobile and desktop:** kubenav provides the same experience for mobile and desktop, with nearly 100% code sharing.
+- **Available mobile:** kubenav provides the same experience as kubectl for mobile.
 - **Manage Resources:** All major resources like Deployments, StatefulSets, DaemonSets, Pods, etc. are supported.
 - **Custom Resource Definitions:** View all Custom Resource Definitions and mange Custom Resources.
 - **Modify Resources:** Edit and delete all available resources or scale your Deployments, StatefulSets, DaemonSets.
@@ -34,6 +33,6 @@ The app is developed using [Flutter](https://flutter.dev) and [Go](https://go.de
 
 ## Usage
 
-The mobile version of kubenav can be downloaded from the [App Store](https://apps.apple.com/us/app/kubenav/id1494512160) or [Google Play](https://play.google.com/store/apps/details?id=io.kubenav.kubenav). The desktop version for macOS, Linux and Windows can be downloaded from the [release page](https://github.com/kubenav/kubenav/releases).
+The mobile version of kubenav can be downloaded from the [App Store](https://apps.apple.com/us/app/kubenav/id1494512160) or [Google Play](https://play.google.com/store/apps/details?id=io.kubenav.kubenav).
 
-For testing new features and faster feedback, we provide a **beta version** via [Apple Testflight](https://testflight.apple.com/join/RQUFGkHi) and [Google Play](https://play.google.com/apps/testing/io.kubenav.kubenav). For the desktop version we are building the app **on each PR**. The binaries are then uploaded as artifacts in the [GitHub Action](https://github.com/kubenav/kubenav/actions/workflows/continuous-delivery.yaml).
+For testing new features and faster feedback, we provide a **beta version** via [Apple Testflight](https://testflight.apple.com/join/RQUFGkHi) and [Google Play](https://play.google.com/apps/testing/io.kubenav.kubenav).

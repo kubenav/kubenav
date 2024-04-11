@@ -52,7 +52,7 @@ class NodeListItem extends StatelessWidget implements IListItemWidget {
     ];
 
     info.add(
-        'CPU: ${nodeMetrics != null ? nodeMetrics.cpu : '-'} / ${nodeAllocatableResources != null ? nodeAllocatableResources.cpu : '-'}');
+        'CPU: ${nodeMetrics != null ? nodeMetrics.cpu : '-'} / ${nodeAllocatableResources != null ? nodeAllocatableResources.cpu : '-'}',);
     info.add(
       'Memory: ${nodeMetrics != null ? nodeMetrics.memory : '-'} / ${nodeAllocatableResources != null ? nodeAllocatableResources.memory : '-'}',
     );

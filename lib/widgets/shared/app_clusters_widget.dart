@@ -21,7 +21,7 @@ class AppClustersWidget extends StatefulWidget {
 }
 
 class _AppClustersWidgetState extends State<AppClustersWidget> {
-  Future<void> _setActiveCluster(BuildContext context, String clusterId) async {
+  Future<void> _setActiveCluster(String clusterId) async {
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: false,
@@ -83,10 +83,7 @@ class _AppClustersWidgetState extends State<AppClustersWidget> {
         itemCount: clustersRepository.clusters.length,
         itemBuilder: (context, index) => AppListItem(
           onTap: () {
-            _setActiveCluster(
-              context,
-              clustersRepository.clusters[index].id,
-            );
+            _setActiveCluster(clustersRepository.clusters[index].id);
           },
           child: Row(
             children: [

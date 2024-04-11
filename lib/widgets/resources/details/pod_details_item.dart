@@ -133,12 +133,13 @@ class _PodDetailsItemState extends State<PodDetailsItem> {
         );
       }
     } catch (err) {
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not create session',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not create session',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -213,8 +214,10 @@ class _PodDetailsItemState extends State<PodDetailsItem> {
               name: 'Ports',
               values: ports != null
                   ? ports
-                      .map((port) =>
-                          '${port.containerName}: ${port.port.containerPort}${port.port.protocol != null ? '/${port.port.protocol}' : ''}${port.port.name != null ? ' (${port.port.name})' : ''}')
+                      .map(
+                        (port) =>
+                            '${port.containerName}: ${port.port.containerPort}${port.port.protocol != null ? '/${port.port.protocol}' : ''}${port.port.name != null ? ' (${port.port.name})' : ''}',
+                      )
                       .toList()
                   : '-',
               onTap: (index) {

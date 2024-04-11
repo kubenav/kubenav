@@ -100,7 +100,7 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
   /// [buildContainer] builds the container for the [DetailsResourcesPreview]
   /// content when the repository state is loading, error or the list of items
   /// in the repository is empty.
-  Widget buildContainer(BuildContext context, Widget child) {
+  Widget buildContainer(Widget child) {
     return Column(
       children: [
         Padding(
@@ -175,10 +175,11 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
           .buildInfoText(IoK8sApiAppsV1StatefulSet.fromJson(item));
     }
 
-    final age = getAge(item['metadata'] != null &&
-            item['metadata']['creationTimestamp'] != null
-        ? DateTime.parse(item['metadata']['creationTimestamp'])
-        : null);
+    final age = getAge(
+      item['metadata'] != null && item['metadata']['creationTimestamp'] != null
+          ? DateTime.parse(item['metadata']['creationTimestamp'])
+          : null,
+    );
 
     return item['metadata']?['namespace'] != null
         ? ['Namespace: ${item['metadata']?['namespace']}', 'Age: $age']
@@ -210,7 +211,6 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
           case ConnectionState.none:
           case ConnectionState.waiting:
             return buildContainer(
-              context,
               CircularProgressIndicator(
                 color: theme(context).colorPrimary,
               ),
@@ -218,7 +218,6 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
           default:
             if (snapshot.hasError) {
               return buildContainer(
-                context,
                 AppErrorWidget(
                   message: 'Could not load ${widget.title}',
                   details: snapshot.error.toString(),
@@ -232,7 +231,6 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
 
             if (snapshot.data == null || snapshot.data!.isEmpty) {
               return buildContainer(
-                context,
                 AppErrorWidget(
                   message: 'No ${widget.title} found',
                   details: 'We could not found any ${widget.title}',

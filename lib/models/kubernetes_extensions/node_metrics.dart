@@ -21,8 +21,10 @@ class ApisMetricsV1beta1NodeMetricsList {
           ? ApisMetricsV1beta1NodeMetricsListMetadata.fromJson(data['metadata'])
           : null,
       items: data.containsKey('items') && data['items'] != null
-          ? List<ApisMetricsV1beta1NodeMetricsItem>.from(data['items']
-              .map((v) => ApisMetricsV1beta1NodeMetricsItem.fromJson(v)))
+          ? List<ApisMetricsV1beta1NodeMetricsItem>.from(
+              data['items']
+                  .map((v) => ApisMetricsV1beta1NodeMetricsItem.fromJson(v)),
+            )
           : null,
     );
   }

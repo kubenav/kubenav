@@ -111,16 +111,18 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: subtitle
-          .map((e) => Text(
-                Characters(e)
-                    .replaceAll(Characters(''), Characters('\u{200B}'))
-                    .toString(),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: secondaryTextStyle(
-                  context,
-                ),
-              ))
+          .map(
+            (e) => Text(
+              Characters(e)
+                  .replaceAll(Characters(''), Characters('\u{200B}'))
+                  .toString(),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: secondaryTextStyle(
+                context,
+              ),
+            ),
+          )
           .toList(),
     );
   }
@@ -225,7 +227,9 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                         child: Text(
                           Characters(cards[index].title)
                               .replaceAll(
-                                  Characters(''), Characters('\u{200B}'))
+                                Characters(''),
+                                Characters('\u{200B}'),
+                              )
                               .toString(),
                           overflow: TextOverflow.ellipsis,
                           style: primaryTextStyle(

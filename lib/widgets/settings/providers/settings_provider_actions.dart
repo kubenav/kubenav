@@ -75,7 +75,7 @@ class _SettingsProviderActionsState extends State<SettingsProviderActions> {
   /// [deleteProvider] deletes the given provider. For the success and the error
   /// case we show the user an message, to inform the user about the result of
   /// the operation.
-  Future<void> deleteProvider(BuildContext context) async {
+  Future<void> deleteProvider() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -119,7 +119,7 @@ class _SettingsProviderActionsState extends State<SettingsProviderActions> {
           title: 'Delete',
           color: theme(context).colorDanger,
           onTap: () {
-            deleteProvider(context);
+            deleteProvider();
           },
         ),
       ],

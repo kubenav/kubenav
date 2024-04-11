@@ -1,11 +1,7 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
-import 'package:window_manager/window_manager.dart';
-import 'package:window_size/window_size.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/bookmarks_repository.dart';
@@ -14,7 +10,6 @@ import 'package:kubenav/repositories/portforwarding_repository.dart';
 import 'package:kubenav/repositories/sponsor_repository.dart';
 import 'package:kubenav/repositories/terminal_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
-import 'package:kubenav/services/kubenav_desktop.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/storage.dart';
 import 'package:kubenav/widgets/home/home.dart';
@@ -22,31 +17,6 @@ import 'package:kubenav/widgets/home/home.dart';
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-
-  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-    await KubenavDesktop().init();
-
-    setWindowTitle('kubenav');
-    setWindowMinSize(const Size(1024, 768));
-    setWindowMaxSize(Size.infinite);
-
-    final screen = await getCurrentScreen();
-    await windowManager.ensureInitialized();
-
-    WindowOptions windowOptions = WindowOptions(
-      size: screen != null
-          ? Size(screen.frame.width / 100 * 62, screen.frame.height / 100 * 62)
-          : const Size(1024, 768),
-      center: true,
-      backgroundColor: Colors.transparent,
-      skipTaskbar: false,
-      titleBarStyle: TitleBarStyle.normal,
-    );
-    windowManager.waitUntilReadyToShow(windowOptions, () async {
-      await windowManager.show();
-      await windowManager.focus();
-    });
-  }
 
   await Storage().init();
 
@@ -158,9 +128,6 @@ class _AppMaterialAppState extends State<AppMaterialApp> {
             builders: {
               TargetPlatform.android: CupertinoPageTransitionsBuilder(),
               TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-              TargetPlatform.linux: CupertinoPageTransitionsBuilder(),
-              TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
-              TargetPlatform.windows: CupertinoPageTransitionsBuilder(),
             },
           ),
           highlightColor: Colors.transparent,

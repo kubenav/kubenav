@@ -22,7 +22,7 @@ class ApisMetricsV1beta1PodMetricsList {
           : null,
       items: data.containsKey('items') && data['items'] != null
           ? List<ApisMetricsV1beta1PodMetricsItem>.from(data['items']
-              .map((v) => ApisMetricsV1beta1PodMetricsItem.fromJson(v)))
+              .map((v) => ApisMetricsV1beta1PodMetricsItem.fromJson(v)),)
           : null,
     );
   }
@@ -84,7 +84,7 @@ class ApisMetricsV1beta1PodMetricsItem {
       containers: data.containsKey('containers') && data['containers'] != null
           ? List<ApisMetricsV1beta1PodMetricsItemContainer>.from(
               data['containers'].map(
-                  (v) => ApisMetricsV1beta1PodMetricsItemContainer.fromJson(v)))
+                  (v) => ApisMetricsV1beta1PodMetricsItemContainer.fromJson(v),),)
           : null,
     );
   }
@@ -151,7 +151,7 @@ class ApisMetricsV1beta1PodMetricsItemContainer {
       name: data.containsKey('name') ? data['name'] : null,
       usage: data.containsKey('usage') && data['usage'] != null
           ? ApisMetricsV1beta1PodMetricsItemContainerUsage.fromJson(
-              data['usage'])
+              data['usage'],)
           : null,
     );
   }

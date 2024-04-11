@@ -70,7 +70,7 @@ class DetailsItemConditions extends StatelessWidget {
                                     null
                                 ? getAge(DateTime.parse(item['status']
                                         ['conditions'][index]
-                                    ['lastTransitionTime']))
+                                    ['lastTransitionTime'],),)
                                 : '-';
 
                             showSnackbar(

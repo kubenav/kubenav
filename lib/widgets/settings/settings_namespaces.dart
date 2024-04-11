@@ -24,8 +24,12 @@ class SettingsNamespaces extends StatelessWidget {
 
   /// [_proxyDecorator] is used to highlight the bookmark which is currently
   /// draged by the user.
-  Widget _proxyDecorator(BuildContext context, Widget child, int index,
-      Animation<double> animation) {
+  Widget _proxyDecorator(
+    BuildContext context,
+    Widget child,
+    int index,
+    Animation<double> animation,
+  ) {
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, Widget? child) {
@@ -142,9 +146,13 @@ class SettingsNamespaces extends StatelessWidget {
                 onReorder: (int start, int current) {
                   appRepository.reorderNamespaces(start, current);
                 },
-                proxyDecorator:
-                    (Widget child, int index, Animation<double> animation) =>
-                        _proxyDecorator(context, child, index, animation),
+                proxyDecorator: (
+                  Widget child,
+                  int index,
+                  Animation<double> animation,
+                ) {
+                  return _proxyDecorator(context, child, index, animation);
+                },
                 itemCount: appRepository.settings.namespaces.length,
                 itemBuilder: (
                   context,

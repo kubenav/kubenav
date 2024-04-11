@@ -206,7 +206,7 @@ class Plugins extends StatelessWidget {
                 ),
               ),
             ],
-          )),
+          ),),
       bottomNavigationBar: appRepository.settings.classicMode
           ? null
           : const AppBottomNavigationBarWidget(),

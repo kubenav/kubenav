@@ -78,12 +78,13 @@ class _ServiceDetailsItemState extends State<ServiceDetailsItem> {
         );
       }
     } catch (err) {
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not create session',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not create session',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -113,8 +114,10 @@ class _ServiceDetailsItemState extends State<ServiceDetailsItem> {
             DetailsItemModel(
               name: 'Ports',
               values: service.spec!.ports
-                  .map((port) =>
-                      '${port.port}${port.nodePort != null ? '/${port.nodePort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''} -> ${port.targetPort}')
+                  .map(
+                    (port) =>
+                        '${port.port}${port.nodePort != null ? '/${port.nodePort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''} -> ${port.targetPort}',
+                  )
                   .toList(),
               onTap: (index) {
                 _portForward(

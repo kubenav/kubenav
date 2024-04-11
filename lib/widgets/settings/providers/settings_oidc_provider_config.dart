@@ -84,12 +84,13 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         'Could not open sign in url',
         err,
       );
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not generate and open sign in url',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not generate and open sign in url',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -114,12 +115,13 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         'Could not initialize device flow',
         err,
       );
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not initialize device flow',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not initialize device flow',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -137,16 +139,17 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         'Could not verify device flow',
         err,
       );
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not verify device flow',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not verify device flow',
+          err.toString(),
+        );
+      }
     }
   }
 
-  Future<void> _saveProvider(BuildContext context) async {
+  Future<void> _saveProvider() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -243,12 +246,13 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           setState(() {
             _isLoading = false;
           });
-          if (!context.mounted) return;
-          showSnackbar(
-            context,
-            'Could not save provider configuration',
-            err.toString(),
-          );
+          if (mounted) {
+            showSnackbar(
+              context,
+              'Could not save provider configuration',
+              err.toString(),
+            );
+          }
         }
       } else {
         /// Handle the standard authentication flow. For that we have to get a
@@ -374,12 +378,13 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           setState(() {
             _isLoading = false;
           });
-          if (!context.mounted) return;
-          showSnackbar(
-            context,
-            'Could not save provider configuration',
-            err.toString(),
-          );
+          if (mounted) {
+            showSnackbar(
+              context,
+              'Could not save provider configuration',
+              err.toString(),
+            );
+          }
         }
       }
     }
@@ -576,7 +581,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                   ),
                 );
               }).toList(),
-            )
+            ),
           ],
         ),
       ),
@@ -759,7 +764,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
       },
       actionText: widget.provider == null ? 'Save and add cluster(s)' : 'Save',
       actionPressed: () {
-        _saveProvider(context);
+        _saveProvider();
       },
       actionIsLoading: _isLoading,
       child: Form(

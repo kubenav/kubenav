@@ -169,7 +169,7 @@ class _DetailsGetLogsPodsState extends State<DetailsGetLogsPods> {
                 controlAffinity: ListTileControlAffinity.leading,
                 value: _selectedPods
                         .where((p) =>
-                            p.metadata?.name == _pods[index].metadata?.name)
+                            p.metadata?.name == _pods[index].metadata?.name,)
                         .toList()
                         .length ==
                     1,
@@ -183,7 +183,7 @@ class _DetailsGetLogsPodsState extends State<DetailsGetLogsPods> {
                     setState(() {
                       _selectedPods = _selectedPods
                           .where((p) =>
-                              p.metadata?.name == _pods[index].metadata?.name)
+                              p.metadata?.name == _pods[index].metadata?.name,)
                           .toList();
                     });
                   }

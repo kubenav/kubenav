@@ -1,6 +1,6 @@
-kubenav is a mobile and desktop app to manage Kubernetes clusters. The app provides an overview of all resources in a Kubernetes cluster, including current status information for workloads. The details view for resources provides additional information. It is possible to view logs and events or to get a shell into a container. You can also edit and delete resources or scale your workloads within the app.
+kubenav is a mobile app to manage Kubernetes clusters. The app provides an overview of all resources in a Kubernetes cluster, including current status information for workloads. The details view for resources provides additional information. It is possible to view logs and events or to get a shell into a container. You can also edit and delete resources or scale your workloads within the app.
 
-* Available for mobile and desktop: kubenav provides the same experience for mobile and desktop, with nearly 100% code sharing.
+* Available mobile: kubenav provides the same experience as kubectl for mobile.
 * Manage Resources: All major resources like Deployments, StatefulSets, DaemonSets, Pods, etc. are supported.
 * Custom Resource Definitions: View all Custom Resource Definitions and mange Custom Resources.
 * Modify Resources: Edit and delete all available resources or scale your Deployments, StatefulSets, DaemonSets.

@@ -3,6 +3,7 @@
 //
 // @dart=2.12
 
+// ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
 // ignore_for_file: unnecessary_this
 // ignore_for_file: dead_null_aware_expression
@@ -808,8 +809,7 @@ class IoK8sApiextensionsApiserverPkgApisApiextensionsV1JSONSchemaProps {
     dynamic json, {
     bool growable = false,
   }) {
-    final map = <
-        String,
+    final map = <String,
         List<
             IoK8sApiextensionsApiserverPkgApisApiextensionsV1JSONSchemaProps>>{};
     if (json is Map && json.isNotEmpty) {

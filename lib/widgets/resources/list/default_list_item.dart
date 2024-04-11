@@ -47,7 +47,7 @@ class DefaultListItem extends StatelessWidget implements IListItemWidget {
         'Namespace: $namespace',
         ...additionalPrinterColumns
             .map(
-                (e) => '${e.name}: ${getAdditionalPrinterColumnValue(e, item)}')
+                (e) => '${e.name}: ${getAdditionalPrinterColumnValue(e, item)}',)
             ,
       ];
     }
@@ -67,7 +67,7 @@ class DefaultListItem extends StatelessWidget implements IListItemWidget {
     final age = getAge(item['metadata'] != null &&
             item['metadata']['creationTimestamp'] != null
         ? DateTime.parse(item['metadata']['creationTimestamp'])
-        : null);
+        : null,);
 
     return ListItemWidget(
       title: title,

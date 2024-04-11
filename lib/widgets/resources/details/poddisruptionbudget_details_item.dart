@@ -36,7 +36,7 @@ class PodDisruptionBudgetDetailsItem extends StatelessWidget
               name: 'Selector',
               values: pdb.spec!.selector?.matchLabels.entries
                       .map((matchLabels) =>
-                          '${matchLabels.key}=${matchLabels.value}')
+                          '${matchLabels.key}=${matchLabels.value}',)
                       .toList() ??
                   '-',
             ),

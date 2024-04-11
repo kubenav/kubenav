@@ -72,7 +72,7 @@ class _OverviewEventsState extends State<OverviewEvents> {
       eventItems.sort((a, b) =>
           a.lastTimestamp != null && b.lastTimestamp != null
               ? b.lastTimestamp!.compareTo(a.lastTimestamp!)
-              : 0);
+              : 0,);
 
       if (eventItems.length > 25) {
         return eventItems.sublist(0, 25);
@@ -197,7 +197,7 @@ class _OverviewEventsState extends State<OverviewEvents> {
                           snapshot.data![index],
                         );
                       },
-                    )
+                    ),
                   ],
                 );
             }

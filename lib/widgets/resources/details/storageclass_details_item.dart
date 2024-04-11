@@ -34,7 +34,7 @@ class StorageClassDetailsItem extends StatelessWidget
               name: 'Default',
               values: sc.metadata != null &&
                       sc.metadata!.annotations.containsKey(
-                          'storageclass.kubernetes.io/is-default-class') &&
+                          'storageclass.kubernetes.io/is-default-class',) &&
                       sc
                               .metadata!
                               .annotations[

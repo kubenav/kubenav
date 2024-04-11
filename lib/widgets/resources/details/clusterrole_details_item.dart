@@ -74,7 +74,7 @@ class ClusterRoleDetailsItem extends StatelessWidget
                           Text(
                             Characters(rule.resource)
                                 .replaceAll(
-                                    Characters(''), Characters('\u{200B}'))
+                                    Characters(''), Characters('\u{200B}'),)
                                 .toString(),
                             style: primaryTextStyle(
                               context,

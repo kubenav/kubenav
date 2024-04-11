@@ -34,7 +34,7 @@ class EndpointDetailsItem extends StatelessWidget
                 name: 'Addresses',
                 values: endpoint.subsets[i].addresses
                     .map((address) =>
-                        '${address.ip}${address.hostname != null ? ' (${address.hostname})' : ''}')
+                        '${address.ip}${address.hostname != null ? ' (${address.hostname})' : ''}',)
                     .toList(),
                 onTap: (index) {
                   showSnackbar(
@@ -42,12 +42,12 @@ class EndpointDetailsItem extends StatelessWidget
                     endpoint.subsets[i].addresses[i].ip,
                     'Hostname: ${endpoint.subsets[i].addresses[i].hostname ?? '-'}\nNode Name: ${endpoint.subsets[i].addresses[i].nodeName ?? '-'}\nTarget: ${endpoint.subsets[i].addresses[i].targetRef != null ? '${endpoint.subsets[i].addresses[i].targetRef!.kind ?? '-'}/${endpoint.subsets[i].addresses[i].targetRef!.name ?? '-'}' : '-'}',
                   );
-                }),
+                },),
             DetailsItemModel(
               name: 'Ports',
               values: endpoint.subsets[i].ports
                   .map((port) =>
-                      '${port.port}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''}')
+                      '${port.port}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''}',)
                   .toList(),
             ),
           ],

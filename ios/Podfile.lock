@@ -17,9 +17,6 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - shared_preferences_foundation (0.0.1):
-    - Flutter
-    - FlutterMacOS
   - TPInAppReceipt (3.3.4):
     - TPInAppReceipt/Core (= 3.3.4)
   - TPInAppReceipt/Core (3.3.4):
@@ -36,7 +33,6 @@ DEPENDENCIES:
   - local_auth_darwin (from `.symlinks/plugins/local_auth_darwin/darwin`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
-  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - TPInAppReceipt
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
@@ -62,8 +58,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
-  shared_preferences_foundation:
-    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
@@ -77,7 +71,6 @@ SPEC CHECKSUMS:
   local_auth_darwin: c7e464000a6a89e952235699e32b329457608d98
   package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
-  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   TPInAppReceipt: 75ff97f2484a463cf46c172fe7f94225612aeda1
   url_launcher_ios: 6116280ddcfe98ab8820085d8d76ae7449447586
 

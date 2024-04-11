@@ -111,12 +111,13 @@ class _DetailsCreateJobState extends State<DetailsCreateJob> {
       setState(() {
         _isLoading = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not create Job',
-        'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not create Job',
+          'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+        );
+      }
     } catch (err) {
       Logger.log(
         'DetailsCreateJob _createJob',
@@ -126,12 +127,13 @@ class _DetailsCreateJobState extends State<DetailsCreateJob> {
       setState(() {
         _isLoading = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not create Job',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not create Job',
+          err.toString(),
+        );
+      }
     }
   }
 

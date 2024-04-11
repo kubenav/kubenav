@@ -41,8 +41,6 @@ To add a new cluster to kubenav, you can have to go to the **Settings** page and
 On the following page you can select one of the cluster providers on the top, to add a cluster to kubenav. Please also take a look at the providers section in the documentation, to see how the different cluster providers can be used.
 
 ![Add a Cluster](resource:assets/help/clusters-add-cluster-2.png)
-
-The **desktop** version of kubenav automatically loads all cluster from your Kubeconfig file located at `~/.kube/config`.
           ''',
         ),
         HelpItem(

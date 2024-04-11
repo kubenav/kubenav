@@ -281,11 +281,13 @@ class _ResourcesListState extends State<ResourcesList> {
     return _filter == ''
         ? items
         : items
-            .where((item) =>
-                item['metadata'] != null &&
-                item['metadata']['name'] != null &&
-                item['metadata']['name'] is String &&
-                item['metadata']['name'].contains(_filter.toLowerCase()))
+            .where(
+              (item) =>
+                  item['metadata'] != null &&
+                  item['metadata']['name'] != null &&
+                  item['metadata']['name'] is String &&
+                  item['metadata']['name'].contains(_filter.toLowerCase()),
+            )
             .toList();
   }
 
@@ -333,7 +335,7 @@ class _ResourcesListState extends State<ResourcesList> {
   /// the scaffold and appbar and is required, because the [AppBar] actions are
   /// not updated otherwise, when a user opt in for the classic mode. This only
   /// effects the bookmark action.
-  Widget _buildLayout(BuildContext context, Widget child) {
+  Widget _buildLayout(Widget child) {
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: false,
@@ -353,7 +355,7 @@ class _ResourcesListState extends State<ResourcesList> {
         /// user can change the active namespace of the cluster. If the resource
         /// is cluster scoped or when the user specified a selector (e.g. to
         /// view all Pods of a Deployment) we do not show the button.
-        actions: _buildAppBarActions(context),
+        actions: _buildAppBarActions(),
 
         /// We always display the title of the resource as main title for the
         /// widget.
@@ -379,20 +381,22 @@ class _ResourcesListState extends State<ResourcesList> {
             ),
             widget.selector == null
                 ? Text(
-                    Characters(clustersRepository
-                                        .getCluster(
-                                          clustersRepository.activeClusterId,
-                                        )
-                                        ?.namespace ==
-                                    '' ||
-                                (widget.scope == ResourceScope.cluster)
-                            ? 'All Namespaces'
-                            : clustersRepository
-                                    .getCluster(
-                                      clustersRepository.activeClusterId,
-                                    )
-                                    ?.namespace ??
-                                'All Namespaces')
+                    Characters(
+                      clustersRepository
+                                      .getCluster(
+                                        clustersRepository.activeClusterId,
+                                      )
+                                      ?.namespace ==
+                                  '' ||
+                              (widget.scope == ResourceScope.cluster)
+                          ? 'All Namespaces'
+                          : clustersRepository
+                                  .getCluster(
+                                    clustersRepository.activeClusterId,
+                                  )
+                                  ?.namespace ??
+                              'All Namespaces',
+                    )
                         .replaceAll(Characters(''), Characters('\u{200B}'))
                         .toString(),
                     textAlign: TextAlign.center,
@@ -437,7 +441,7 @@ class _ResourcesListState extends State<ResourcesList> {
   /// for the classic mode and an action to open the modal to select an
   /// namespace, when the current resource is a namespaces resource and no
   /// selector was specified.
-  List<Widget> _buildAppBarActions(BuildContext context) {
+  List<Widget> _buildAppBarActions() {
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: false,
@@ -482,7 +486,7 @@ class _ResourcesListState extends State<ResourcesList> {
 
   /// [_buildHeaderActions] returns the resource actions as header when the user
   /// didn't opt in for the classic mode.
-  Widget _buildHeaderActions(BuildContext context) {
+  Widget _buildHeaderActions() {
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: false,
@@ -543,7 +547,6 @@ class _ResourcesListState extends State<ResourcesList> {
           case ConnectionState.none:
           case ConnectionState.waiting:
             return _buildLayout(
-              context,
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -562,7 +565,6 @@ class _ResourcesListState extends State<ResourcesList> {
           default:
             if (snapshot.hasError) {
               return _buildLayout(
-                context,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -594,7 +596,6 @@ class _ResourcesListState extends State<ResourcesList> {
             final filteredItems = _getFilteredItems(snapshot.data!.items);
 
             return _buildLayout(
-              context,
               Wrap(
                 children: [
                   Container(
@@ -638,7 +639,7 @@ class _ResourcesListState extends State<ResourcesList> {
                       ),
                     ),
                   ),
-                  _buildHeaderActions(context),
+                  _buildHeaderActions(),
                   Container(
                     padding: const EdgeInsets.only(
                       top: Constants.spacingMiddle,

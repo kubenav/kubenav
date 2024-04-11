@@ -1,5 +1,3 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -55,9 +53,6 @@ class Settings extends StatelessWidget {
     }
 
     int maxClusters = 6;
-    if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
-      maxClusters = 12;
-    }
 
     return Container(
       padding: const EdgeInsets.only(
@@ -172,407 +167,14 @@ class Settings extends StatelessWidget {
     try {
       await appRepository.toogleAuthentication();
     } catch (err) {
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not enabled authentication',
-        err.toString(),
-      );
+      if (context.mounted) {
+        showSnackbar(
+          context,
+          'Could not enabled authentication',
+          err.toString(),
+        );
+      }
     }
-  }
-
-  /// buildSettings returns a list for our [AppVertialListSimpleWidget] widget,
-  /// with all entries which should be shown under the settings headline. These
-  /// settings can be used to modify the added providers on the Android and iOS
-  /// version of the app or to modify the appearance of the app or to configure
-  /// additional settings for plugins.
-  List<AppVertialListSimpleModel> buildSettings(BuildContext context) {
-    ThemeRepository themeRepository = Provider.of<ThemeRepository>(
-      context,
-      listen: false,
-    );
-    AppRepository appRepository = Provider.of<AppRepository>(
-      context,
-      listen: false,
-    );
-
-    final List<AppVertialListSimpleModel> items = [];
-
-    if (Platform.isAndroid || Platform.isIOS) {
-      items.add(
-        AppVertialListSimpleModel(
-          onTap: () {
-            navigate(context, const SettingsProviders());
-          },
-          children: [
-            Icon(
-              CustomIcons.kubernetes,
-              color: theme(context).colorPrimary,
-            ),
-            const SizedBox(width: Constants.spacingSmall),
-            Expanded(
-              flex: 1,
-              child: Text(
-                'Provider',
-                style: noramlTextStyle(
-                  context,
-                ),
-              ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: theme(context)
-                  .colorTextPrimary
-                  .withOpacity(Constants.opacityIcon),
-              size: 16,
-            ),
-          ],
-        ),
-      );
-    }
-
-    items.add(
-      AppVertialListSimpleModel(
-        onTap: () {
-          navigate(
-            context,
-            const SettingsNamespaces(),
-          );
-        },
-        children: [
-          Icon(
-            CustomIcons.namespaces,
-            color: theme(context).colorPrimary,
-          ),
-          const SizedBox(width: Constants.spacingSmall),
-          Expanded(
-            flex: 1,
-            child: Text(
-              'Namespaces',
-              style: noramlTextStyle(
-                context,
-              ),
-            ),
-          ),
-          Icon(
-            Icons.arrow_forward_ios,
-            color: theme(context)
-                .colorTextPrimary
-                .withOpacity(Constants.opacityIcon),
-            size: 16,
-          ),
-        ],
-      ),
-    );
-
-    if (Platform.isAndroid || Platform.isIOS) {
-      items.add(
-        AppVertialListSimpleModel(
-          children: [
-            Icon(
-              Icons.fingerprint,
-              color: theme(context).colorPrimary,
-            ),
-            const SizedBox(width: Constants.spacingSmall),
-            Expanded(
-              flex: 1,
-              child: Text(
-                'Authentication',
-                style: noramlTextStyle(
-                  context,
-                ),
-              ),
-            ),
-            Switch(
-              activeColor: theme(context).colorPrimary,
-              onChanged: (value) {
-                _toogleAuthentication(context);
-              },
-              value: appRepository.settings.isAuthenticationEnabled,
-            ),
-          ],
-        ),
-      );
-    }
-
-    items.add(
-      AppVertialListSimpleModel(
-        children: [
-          Icon(
-            CustomIcons.clusters,
-            color: theme(context).colorPrimary,
-          ),
-          const SizedBox(width: Constants.spacingSmall),
-          Expanded(
-            flex: 1,
-            child: Text(
-              'Show Cluster on Start',
-              style: noramlTextStyle(
-                context,
-              ),
-            ),
-          ),
-          Switch(
-            activeColor: theme(context).colorPrimary,
-            onChanged: (value) {
-              appRepository.setIsShowClustersOnStart(
-                !appRepository.settings.isShowClustersOnStart,
-              );
-            },
-            value: appRepository.settings.isShowClustersOnStart,
-          ),
-        ],
-      ),
-    );
-
-    items.add(
-      AppVertialListSimpleModel(
-        children: [
-          Icon(
-            Icons.code,
-            color: theme(context).colorPrimary,
-          ),
-          const SizedBox(width: Constants.spacingSmall),
-          Expanded(
-            flex: 1,
-            child: Text(
-              'Theme',
-              style: noramlTextStyle(
-                context,
-              ),
-            ),
-          ),
-          DropdownButton(
-            value: themeRepository.themeName,
-            underline: Container(
-              height: 2,
-              color: theme(context).colorPrimary,
-            ),
-            onChanged: (ThemeName? value) {
-              themeRepository.setThemeName(value ?? ThemeName.light);
-            },
-            items: ThemeName.values.map((value) {
-              return DropdownMenuItem(
-                value: value,
-                child: Text(
-                  value.toShortString(),
-                  style: TextStyle(
-                    color: theme(context).colorTextPrimary,
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-
-    items.add(
-      AppVertialListSimpleModel(
-        children: [
-          Icon(
-            Icons.code,
-            color: theme(context).colorPrimary,
-          ),
-          const SizedBox(width: Constants.spacingSmall),
-          Expanded(
-            flex: 1,
-            child: Text(
-              'Editor Format',
-              style: noramlTextStyle(
-                context,
-              ),
-            ),
-          ),
-          DropdownButton(
-            value: appRepository.settings.editorFormat,
-            underline: Container(
-              height: 2,
-              color: theme(context).colorPrimary,
-            ),
-            onChanged: (String? newValue) {
-              appRepository.setEditorFormat(newValue ?? 'yaml');
-            },
-            items: [
-              'yaml',
-              'json',
-            ].map((value) {
-              return DropdownMenuItem(
-                value: value,
-                child: Text(
-                  value,
-                  style: TextStyle(
-                    color: theme(context).colorTextPrimary,
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-
-    items.add(
-      AppVertialListSimpleModel(
-        children: [
-          Icon(
-            Icons.code,
-            color: theme(context).colorPrimary,
-          ),
-          const SizedBox(width: Constants.spacingSmall),
-          Expanded(
-            flex: 1,
-            child: Text(
-              'Full Height Modals',
-              style: noramlTextStyle(
-                context,
-              ),
-            ),
-          ),
-          Switch(
-            activeColor: theme(context).colorPrimary,
-            onChanged: (value) => {appRepository.setFullHeightModals(value)},
-            value: appRepository.settings.fullHeightModals,
-          ),
-        ],
-      ),
-    );
-
-    items.add(
-      AppVertialListSimpleModel(
-        children: [
-          Icon(
-            Icons.dashboard,
-            color: theme(context).colorPrimary,
-          ),
-          const SizedBox(width: Constants.spacingSmall),
-          Expanded(
-            flex: 1,
-            child: Text(
-              'Classic Mode',
-              style: noramlTextStyle(
-                context,
-              ),
-            ),
-          ),
-          Switch(
-            activeColor: theme(context).colorPrimary,
-            onChanged: (value) => {appRepository.setClassicMode(value)},
-            value: appRepository.settings.classicMode,
-          ),
-        ],
-      ),
-    );
-
-    items.add(
-      AppVertialListSimpleModel(
-        onTap: () {
-          showModal(
-            context,
-            SettingsProxy(
-              currentProxy: appRepository.settings.proxy,
-            ),
-          );
-        },
-        children: [
-          Icon(
-            Icons.http,
-            color: theme(context).colorPrimary,
-          ),
-          const SizedBox(width: Constants.spacingSmall),
-          Expanded(
-            flex: 1,
-            child: Text(
-              'Proxy',
-              style: noramlTextStyle(
-                context,
-              ),
-            ),
-          ),
-          Icon(
-            Icons.arrow_forward_ios,
-            color: theme(context)
-                .colorTextPrimary
-                .withOpacity(Constants.opacityIcon),
-            size: 16,
-          ),
-        ],
-      ),
-    );
-
-    items.add(
-      AppVertialListSimpleModel(
-        onTap: () {
-          showModal(
-            context,
-            SettingsTimeout(
-              currentTimeout: appRepository.settings.timeout,
-            ),
-          );
-        },
-        children: [
-          Icon(
-            Icons.schedule,
-            color: theme(context).colorPrimary,
-          ),
-          const SizedBox(width: Constants.spacingSmall),
-          Expanded(
-            flex: 1,
-            child: Text(
-              'Timeout',
-              style: noramlTextStyle(
-                context,
-              ),
-            ),
-          ),
-          Icon(
-            Icons.arrow_forward_ios,
-            color: theme(context)
-                .colorTextPrimary
-                .withOpacity(Constants.opacityIcon),
-            size: 16,
-          ),
-        ],
-      ),
-    );
-
-    items.add(
-      AppVertialListSimpleModel(
-        onTap: () {
-          showModal(
-            context,
-            SettingsPrometheus(
-              currentPrometheus: appRepository.settings.prometheus,
-            ),
-          );
-        },
-        children: [
-          Icon(
-            Icons.extension,
-            color: theme(context).colorPrimary,
-          ),
-          const SizedBox(width: Constants.spacingSmall),
-          Expanded(
-            flex: 1,
-            child: Text(
-              'Prometheus',
-              style: noramlTextStyle(
-                context,
-              ),
-            ),
-          ),
-          Icon(
-            Icons.arrow_forward_ios,
-            color: theme(context)
-                .colorTextPrimary
-                .withOpacity(Constants.opacityIcon),
-            size: 16,
-          ),
-        ],
-      ),
-    );
-
-    return items;
   }
 
   /// [buildHelp] builds the help section in the settings. From the help section
@@ -650,7 +252,7 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeRepository>(
+    ThemeRepository themeRepository = Provider.of<ThemeRepository>(
       context,
       listen: true,
     );
@@ -683,7 +285,348 @@ class Settings extends StatelessWidget {
               _buildClusters(context),
               AppVertialListSimpleWidget(
                 title: 'Settings',
-                items: buildSettings(context),
+                items: [
+                  AppVertialListSimpleModel(
+                    onTap: () {
+                      navigate(context, const SettingsProviders());
+                    },
+                    children: [
+                      Icon(
+                        CustomIcons.kubernetes,
+                        color: theme(context).colorPrimary,
+                      ),
+                      const SizedBox(width: Constants.spacingSmall),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'Provider',
+                          style: noramlTextStyle(
+                            context,
+                          ),
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: theme(context)
+                            .colorTextPrimary
+                            .withOpacity(Constants.opacityIcon),
+                        size: 16,
+                      ),
+                    ],
+                  ),
+                  AppVertialListSimpleModel(
+                    onTap: () {
+                      navigate(
+                        context,
+                        const SettingsNamespaces(),
+                      );
+                    },
+                    children: [
+                      Icon(
+                        CustomIcons.namespaces,
+                        color: theme(context).colorPrimary,
+                      ),
+                      const SizedBox(width: Constants.spacingSmall),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'Namespaces',
+                          style: noramlTextStyle(
+                            context,
+                          ),
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: theme(context)
+                            .colorTextPrimary
+                            .withOpacity(Constants.opacityIcon),
+                        size: 16,
+                      ),
+                    ],
+                  ),
+                  AppVertialListSimpleModel(
+                    children: [
+                      Icon(
+                        Icons.fingerprint,
+                        color: theme(context).colorPrimary,
+                      ),
+                      const SizedBox(width: Constants.spacingSmall),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'Authentication',
+                          style: noramlTextStyle(
+                            context,
+                          ),
+                        ),
+                      ),
+                      Switch(
+                        activeColor: theme(context).colorPrimary,
+                        onChanged: (value) {
+                          _toogleAuthentication(context);
+                        },
+                        value: appRepository.settings.isAuthenticationEnabled,
+                      ),
+                    ],
+                  ),
+                  AppVertialListSimpleModel(
+                    children: [
+                      Icon(
+                        CustomIcons.clusters,
+                        color: theme(context).colorPrimary,
+                      ),
+                      const SizedBox(width: Constants.spacingSmall),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'Show Cluster on Start',
+                          style: noramlTextStyle(
+                            context,
+                          ),
+                        ),
+                      ),
+                      Switch(
+                        activeColor: theme(context).colorPrimary,
+                        onChanged: (value) {
+                          appRepository.setIsShowClustersOnStart(
+                            !appRepository.settings.isShowClustersOnStart,
+                          );
+                        },
+                        value: appRepository.settings.isShowClustersOnStart,
+                      ),
+                    ],
+                  ),
+                  AppVertialListSimpleModel(
+                    children: [
+                      Icon(
+                        Icons.code,
+                        color: theme(context).colorPrimary,
+                      ),
+                      const SizedBox(width: Constants.spacingSmall),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'Theme',
+                          style: noramlTextStyle(
+                            context,
+                          ),
+                        ),
+                      ),
+                      DropdownButton(
+                        value: themeRepository.themeName,
+                        underline: Container(
+                          height: 2,
+                          color: theme(context).colorPrimary,
+                        ),
+                        onChanged: (ThemeName? value) {
+                          themeRepository
+                              .setThemeName(value ?? ThemeName.light);
+                        },
+                        items: ThemeName.values.map((value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Text(
+                              value.toShortString(),
+                              style: TextStyle(
+                                color: theme(context).colorTextPrimary,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                  AppVertialListSimpleModel(
+                    children: [
+                      Icon(
+                        Icons.code,
+                        color: theme(context).colorPrimary,
+                      ),
+                      const SizedBox(width: Constants.spacingSmall),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'Editor Format',
+                          style: noramlTextStyle(
+                            context,
+                          ),
+                        ),
+                      ),
+                      DropdownButton(
+                        value: appRepository.settings.editorFormat,
+                        underline: Container(
+                          height: 2,
+                          color: theme(context).colorPrimary,
+                        ),
+                        onChanged: (String? newValue) {
+                          appRepository.setEditorFormat(newValue ?? 'yaml');
+                        },
+                        items: [
+                          'yaml',
+                          'json',
+                        ].map((value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                color: theme(context).colorTextPrimary,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                  AppVertialListSimpleModel(
+                    children: [
+                      Icon(
+                        Icons.code,
+                        color: theme(context).colorPrimary,
+                      ),
+                      const SizedBox(width: Constants.spacingSmall),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'Full Height Modals',
+                          style: noramlTextStyle(
+                            context,
+                          ),
+                        ),
+                      ),
+                      Switch(
+                        activeColor: theme(context).colorPrimary,
+                        onChanged: (value) =>
+                            {appRepository.setFullHeightModals(value)},
+                        value: appRepository.settings.fullHeightModals,
+                      ),
+                    ],
+                  ),
+                  AppVertialListSimpleModel(
+                    children: [
+                      Icon(
+                        Icons.dashboard,
+                        color: theme(context).colorPrimary,
+                      ),
+                      const SizedBox(width: Constants.spacingSmall),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'Classic Mode',
+                          style: noramlTextStyle(
+                            context,
+                          ),
+                        ),
+                      ),
+                      Switch(
+                        activeColor: theme(context).colorPrimary,
+                        onChanged: (value) =>
+                            {appRepository.setClassicMode(value)},
+                        value: appRepository.settings.classicMode,
+                      ),
+                    ],
+                  ),
+                  AppVertialListSimpleModel(
+                    onTap: () {
+                      showModal(
+                        context,
+                        SettingsProxy(
+                          currentProxy: appRepository.settings.proxy,
+                        ),
+                      );
+                    },
+                    children: [
+                      Icon(
+                        Icons.http,
+                        color: theme(context).colorPrimary,
+                      ),
+                      const SizedBox(width: Constants.spacingSmall),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'Proxy',
+                          style: noramlTextStyle(
+                            context,
+                          ),
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: theme(context)
+                            .colorTextPrimary
+                            .withOpacity(Constants.opacityIcon),
+                        size: 16,
+                      ),
+                    ],
+                  ),
+                  AppVertialListSimpleModel(
+                    onTap: () {
+                      showModal(
+                        context,
+                        SettingsTimeout(
+                          currentTimeout: appRepository.settings.timeout,
+                        ),
+                      );
+                    },
+                    children: [
+                      Icon(
+                        Icons.schedule,
+                        color: theme(context).colorPrimary,
+                      ),
+                      const SizedBox(width: Constants.spacingSmall),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'Timeout',
+                          style: noramlTextStyle(
+                            context,
+                          ),
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: theme(context)
+                            .colorTextPrimary
+                            .withOpacity(Constants.opacityIcon),
+                        size: 16,
+                      ),
+                    ],
+                  ),
+                  AppVertialListSimpleModel(
+                    onTap: () {
+                      showModal(
+                        context,
+                        SettingsPrometheus(
+                          currentPrometheus: appRepository.settings.prometheus,
+                        ),
+                      );
+                    },
+                    children: [
+                      Icon(
+                        Icons.extension,
+                        color: theme(context).colorPrimary,
+                      ),
+                      const SizedBox(width: Constants.spacingSmall),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'Prometheus',
+                          style: noramlTextStyle(
+                            context,
+                          ),
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: theme(context)
+                            .colorTextPrimary
+                            .withOpacity(Constants.opacityIcon),
+                        size: 16,
+                      ),
+                    ],
+                  ),
+                ],
               ),
               const SettingsSponsor(),
               buildHelp(context),

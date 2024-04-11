@@ -90,7 +90,7 @@ class _SettingsAddClusterAzureState extends State<SettingsAddClusterAzure> {
 
   /// [_addClusters] adds all the users [_selectedClusters] to the app. If we
   /// can not add a cluster we show a snackbar with the error.
-  Future<void> _addClusters(BuildContext context) async {
+  Future<void> _addClusters() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -123,12 +123,13 @@ class _SettingsAddClusterAzureState extends State<SettingsAddClusterAzure> {
       setState(() {
         _isLoadingAddCluster = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not add clusters',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not add clusters',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -258,7 +259,7 @@ class _SettingsAddClusterAzureState extends State<SettingsAddClusterAzure> {
       },
       actionText: 'Add Clusters',
       actionPressed: () {
-        _addClusters(context);
+        _addClusters();
       },
       actionIsLoading: _isLoading || _isLoadingAddCluster,
       child: _buildContent(),

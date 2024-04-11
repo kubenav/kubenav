@@ -88,13 +88,7 @@ class TerminalBackend {
           ? xtermcore.TerminalTargetPlatform.android
           : Platform.isIOS
               ? xtermcore.TerminalTargetPlatform.ios
-              : Platform.isMacOS
-                  ? xtermcore.TerminalTargetPlatform.macos
-                  : Platform.isLinux
-                      ? xtermcore.TerminalTargetPlatform.linux
-                      : Platform.isWindows
-                          ? xtermcore.TerminalTargetPlatform.windows
-                          : xtermcore.TerminalTargetPlatform.unknown,
+              : xtermcore.TerminalTargetPlatform.unknown,
     );
 
     channel.stream.listen(
@@ -111,23 +105,27 @@ class TerminalBackend {
     );
 
     terminal.onResize = (width, height, pixelWidth, pixelHeight) {
-      channel.sink.add(TerminalData(
-        op: 'resize',
-        data: '',
-        rows: height,
-        cols: width,
-      ).toString());
+      channel.sink.add(
+        TerminalData(
+          op: 'resize',
+          data: '',
+          rows: height,
+          cols: width,
+        ).toString(),
+      );
 
       // channel.sink.add('{"Cols": $width, "Op": "resize", "Rows": $height}');
     };
 
     terminal.onOutput = (data) {
-      channel.sink.add(TerminalData(
-        op: 'stdin',
-        data: data,
-        rows: 0,
-        cols: 0,
-      ).toString());
+      channel.sink.add(
+        TerminalData(
+          op: 'stdin',
+          data: data,
+          rows: 0,
+          cols: 0,
+        ).toString(),
+      );
 
       // if (data == '\r') {
       //   channel.sink.add('{"Data": "\\r", "Op": "stdin"}');
@@ -164,13 +162,7 @@ class LogStreamBackend {
           ? xtermcore.TerminalTargetPlatform.android
           : Platform.isIOS
               ? xtermcore.TerminalTargetPlatform.ios
-              : Platform.isMacOS
-                  ? xtermcore.TerminalTargetPlatform.macos
-                  : Platform.isLinux
-                      ? xtermcore.TerminalTargetPlatform.linux
-                      : Platform.isWindows
-                          ? xtermcore.TerminalTargetPlatform.windows
-                          : xtermcore.TerminalTargetPlatform.unknown,
+              : xtermcore.TerminalTargetPlatform.unknown,
     );
 
     channel.stream.listen(

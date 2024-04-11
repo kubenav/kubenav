@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -33,8 +31,12 @@ class SettingsClusters extends StatelessWidget {
 
   /// [_proxyDecorator] is used to highlight the cluster which is currently
   /// draged by the user.
-  Widget _proxyDecorator(BuildContext context, Widget child, int index,
-      Animation<double> animation) {
+  Widget _proxyDecorator(
+    BuildContext context,
+    Widget child,
+    int index,
+    Animation<double> animation,
+  ) {
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, Widget? child) {
@@ -83,32 +85,24 @@ class SettingsClusters extends StatelessWidget {
   /// [buildProviders] is used to display a list with all providers. When the
   /// user clicks on one of the shown providers, we display a modal bottom
   /// sheet, which can be used to add a cluster using the selected provider.
-  ///
-  /// This widget is only displayed on iOS and Android, because we automatically
-  /// add all clusters from the users Kubeconfig file in "~/.kube/config" in the
-  /// desktop version.
   Widget buildProviders(BuildContext context) {
-    if (Platform.isAndroid || Platform.isIOS) {
-      return AppHorizontalListCardsWidget(
-        title: 'Add Cluster',
-        cards: List.generate(
-          ClusterProviderType.values.length,
-          (index) => AppHorizontalListCardsModel(
-            title: ClusterProviderType.values[index].title(),
-            subtitle: [ClusterProviderType.values[index].subtitle()],
-            image: ClusterProviderType.values[index].icon(),
-            onTap: () {
-              _showAddClusterBottomSheet(
-                context,
-                ClusterProviderType.values[index],
-              );
-            },
-          ),
+    return AppHorizontalListCardsWidget(
+      title: 'Add Cluster',
+      cards: List.generate(
+        ClusterProviderType.values.length,
+        (index) => AppHorizontalListCardsModel(
+          title: ClusterProviderType.values[index].title(),
+          subtitle: [ClusterProviderType.values[index].subtitle()],
+          image: ClusterProviderType.values[index].icon(),
+          onTap: () {
+            _showAddClusterBottomSheet(
+              context,
+              ClusterProviderType.values[index],
+            );
+          },
         ),
-      );
-    }
-
-    return Container();
+      ),
+    );
   }
 
   @override
@@ -171,9 +165,13 @@ class SettingsClusters extends StatelessWidget {
                 onReorder: (int start, int current) {
                   clustersRepository.reorderClusters(start, current);
                 },
-                proxyDecorator:
-                    (Widget child, int index, Animation<double> animation) =>
-                        _proxyDecorator(context, child, index, animation),
+                proxyDecorator: (
+                  Widget child,
+                  int index,
+                  Animation<double> animation,
+                ) {
+                  return _proxyDecorator(context, child, index, animation);
+                },
                 itemCount: clustersRepository.clusters.length,
                 itemBuilder: (
                   context,

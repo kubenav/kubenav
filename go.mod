@@ -1,8 +1,6 @@
 module github.com/kubenav/kubenav
 
-go 1.21
-
-toolchain go1.21.4
+go 1.22
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.11.1

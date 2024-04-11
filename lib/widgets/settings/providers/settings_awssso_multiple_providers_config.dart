@@ -66,12 +66,13 @@ class _SettingsAWSSSOMultipleProvidersState
         'Could not get SSO configuration',
         err,
       );
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not get SSO configuration',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not get SSO configuration',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -84,12 +85,13 @@ class _SettingsAWSSSOMultipleProvidersState
         'Could not verify device',
         err,
       );
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not verify device',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not verify device',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -97,7 +99,7 @@ class _SettingsAWSSSOMultipleProvidersState
   /// including there roles. If we are able to get these information we show
   /// the [SettingsAWSSSOMultipleProvidersSelect] widget in the next step, where
   /// the user can select the accounts and roles he wants to add to the app.
-  Future<void> _loadAccounts(BuildContext context) async {
+  Future<void> _loadAccounts() async {
     try {
       if (_providerConfigFormKey.currentState != null &&
           _providerConfigFormKey.currentState!.validate()) {
@@ -131,12 +133,13 @@ class _SettingsAWSSSOMultipleProvidersState
       setState(() {
         _isLoading = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not load accounts and roles',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not load accounts and roles',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -157,7 +160,7 @@ class _SettingsAWSSSOMultipleProvidersState
       },
       actionText: 'Load Accounts and Roles',
       actionPressed: () {
-        _loadAccounts(context);
+        _loadAccounts();
       },
       actionIsLoading: _isLoading,
       child: Form(

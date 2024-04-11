@@ -15,7 +15,7 @@ int getRestarts(IoK8sApiCoreV1Pod? pod) {
       ? pod.status?.containerStatuses
           .map((containerStatus) => containerStatus.restartCount)
           .reduce(
-              (restartCount1, restartCount2) => restartCount1 + restartCount2)
+              (restartCount1, restartCount2) => restartCount1 + restartCount2,)
       : 0;
 
   final initContainerRestarts = pod?.status?.initContainerStatuses != null &&
@@ -23,7 +23,7 @@ int getRestarts(IoK8sApiCoreV1Pod? pod) {
       ? pod.status?.initContainerStatuses
           .map((containerStatus) => containerStatus.restartCount)
           .reduce(
-              (restartCount1, restartCount2) => restartCount1 + restartCount2)
+              (restartCount1, restartCount2) => restartCount1 + restartCount2,)
       : 0;
 
   if (containerRestarts != null && initContainerRestarts != null) {
@@ -213,7 +213,7 @@ List<String> getProbe(IoK8sApiCoreV1Probe probe) {
 
   if (probe.httpGet != null) {
     list.add(
-        '${probe.httpGet!.scheme?.toLowerCase()}://${probe.httpGet!.host ?? 'localhost'}:${probe.httpGet!.port}${probe.httpGet!.path}');
+        '${probe.httpGet!.scheme?.toLowerCase()}://${probe.httpGet!.host ?? 'localhost'}:${probe.httpGet!.port}${probe.httpGet!.path}',);
   }
 
   if (probe.initialDelaySeconds != null) {
@@ -283,7 +283,7 @@ PodMetrics? getMetricsFromList(IoK8sApiCoreV1Pod? pod, dynamic metrics) {
     final podMetricsItem = podMetricsList.items!
         .where((item) =>
             item.metadata?.name == pod.metadata!.name &&
-            item.metadata?.namespace == pod.metadata!.namespace)
+            item.metadata?.namespace == pod.metadata!.namespace,)
         .toList();
 
     if (podMetricsItem.length != 1 ||
@@ -300,13 +300,13 @@ PodMetrics? getMetricsFromList(IoK8sApiCoreV1Pod? pod, dynamic metrics) {
         if (podMetricsItem[0].containers![i].usage!.cpu != null) {
           cpu = cpu +
               cpuMetricsStringToDouble(
-                  podMetricsItem[0].containers![i].usage!.cpu!);
+                  podMetricsItem[0].containers![i].usage!.cpu!,);
         }
 
         if (podMetricsItem[0].containers![i].usage!.memory != null) {
           memory = memory +
               memoryMetricsStringToDouble(
-                  podMetricsItem[0].containers![i].usage!.memory!);
+                  podMetricsItem[0].containers![i].usage!.memory!,);
         }
       }
     }
@@ -336,25 +336,25 @@ PodMetrics? getResources(IoK8sApiCoreV1Pod? pod) {
         if (pod.spec!.containers[i].resources!.requests.containsKey('cpu')) {
           cpuRequests = cpuRequests +
               cpuMetricsStringToDouble(
-                  pod.spec!.containers[i].resources!.requests['cpu']!);
+                  pod.spec!.containers[i].resources!.requests['cpu']!,);
         }
 
         if (pod.spec!.containers[i].resources!.requests.containsKey('memory')) {
           memoryRequests = memoryRequests +
               memoryMetricsStringToDouble(
-                  pod.spec!.containers[i].resources!.requests['memory']!);
+                  pod.spec!.containers[i].resources!.requests['memory']!,);
         }
 
         if (pod.spec!.containers[i].resources!.limits.containsKey('cpu')) {
           cpuLimits = cpuLimits +
               cpuMetricsStringToDouble(
-                  pod.spec!.containers[i].resources!.limits['cpu']!);
+                  pod.spec!.containers[i].resources!.limits['cpu']!,);
         }
 
         if (pod.spec!.containers[i].resources!.limits.containsKey('memory')) {
           memoryLimits = memoryLimits +
               memoryMetricsStringToDouble(
-                  pod.spec!.containers[i].resources!.limits['memory']!);
+                  pod.spec!.containers[i].resources!.limits['memory']!,);
         }
       }
     }
@@ -385,7 +385,7 @@ class PodResourceForLiveMetrics {
 }
 
 PodResourceForLiveMetrics? getResourcesForLiveMetrics(
-    IoK8sApiCoreV1Pod? pod, String selectedContainer) {
+    IoK8sApiCoreV1Pod? pod, String selectedContainer,) {
   try {
     if (pod == null || pod.spec == null || pod.spec!.containers.isEmpty) {
       return null;
@@ -403,26 +403,26 @@ PodResourceForLiveMetrics? getResourcesForLiveMetrics(
           if (pod.spec!.containers[i].resources!.requests.containsKey('cpu')) {
             cpuRequests = cpuRequests +
                 cpuMetricsStringToDouble(
-                    pod.spec!.containers[i].resources!.requests['cpu']!);
+                    pod.spec!.containers[i].resources!.requests['cpu']!,);
           }
 
           if (pod.spec!.containers[i].resources!.requests
               .containsKey('memory')) {
             memoryRequests = memoryRequests +
                 memoryMetricsStringToDouble(
-                    pod.spec!.containers[i].resources!.requests['memory']!);
+                    pod.spec!.containers[i].resources!.requests['memory']!,);
           }
 
           if (pod.spec!.containers[i].resources!.limits.containsKey('cpu')) {
             cpuLimits = cpuLimits +
                 cpuMetricsStringToDouble(
-                    pod.spec!.containers[i].resources!.limits['cpu']!);
+                    pod.spec!.containers[i].resources!.limits['cpu']!,);
           }
 
           if (pod.spec!.containers[i].resources!.limits.containsKey('memory')) {
             memoryLimits = memoryLimits +
                 memoryMetricsStringToDouble(
-                    pod.spec!.containers[i].resources!.limits['memory']!);
+                    pod.spec!.containers[i].resources!.limits['memory']!,);
           }
         }
       }
