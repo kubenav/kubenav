@@ -109,8 +109,10 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
     return _filter == ''
         ? items
         : items
-            .where((item) =>
-                item.title.toLowerCase().contains(_filter.toLowerCase()))
+            .where(
+              (item) =>
+                  item.title.toLowerCase().contains(_filter.toLowerCase()),
+            )
             .toList();
   }
 
@@ -310,11 +312,15 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                                 border: OutlineInputBorder(),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Colors.white, width: 0.0),
+                                    color: Colors.white,
+                                    width: 0.0,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Colors.white, width: 0.0),
+                                    color: Colors.white,
+                                    width: 0.0,
+                                  ),
                                 ),
                                 isDense: true,
                                 contentPadding: EdgeInsets.all(8),

@@ -40,7 +40,7 @@ class ServiceListItem extends StatelessWidget implements IListItemWidget {
         .toList();
     final ports = service?.spec?.ports
         .map((port) =>
-            '${port.port}${port.protocol != null ? '/${port.protocol}' : ''} (${port.name ?? ''}${port.appProtocol != null ? '/${port.appProtocol}' : ''})')
+            '${port.port}${port.protocol != null ? '/${port.protocol}' : ''} (${port.name ?? ''}${port.appProtocol != null ? '/${port.appProtocol}' : ''})',)
         .toList();
 
     return ListItemWidget(

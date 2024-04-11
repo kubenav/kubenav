@@ -25,7 +25,7 @@ class _HomeClustersState extends State<HomeClusters> {
   /// [_setActiveCluster] sets the cluster with the provided [clusterId] as the
   /// active cluster and disabled the [showClusters] option in the app
   /// repository, to not show this screen again.
-  Future<void> _setActiveCluster(BuildContext context, String clusterId) async {
+  Future<void> _setActiveCluster(String clusterId) async {
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: false,
@@ -72,10 +72,7 @@ class _HomeClustersState extends State<HomeClusters> {
             itemCount: clustersRepository.clusters.length,
             itemBuilder: (context, index) => AppListItem(
               onTap: () {
-                _setActiveCluster(
-                  context,
-                  clustersRepository.clusters[index].id,
-                );
+                _setActiveCluster(clustersRepository.clusters[index].id);
               },
               child: Row(
                 children: [

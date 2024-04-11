@@ -26,7 +26,7 @@ class DetailsContainers extends StatelessWidget {
   final List<ApisMetricsV1beta1PodMetricsItemContainer> containerMetrics;
 
   List<String> getSubtitle(
-      String containerType, IoK8sApiCoreV1Container container) {
+      String containerType, IoK8sApiCoreV1Container container,) {
     List<IoK8sApiCoreV1ContainerStatus> status = [];
     if (containerType == 'Init Container') {
       status =

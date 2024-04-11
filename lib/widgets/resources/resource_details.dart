@@ -406,7 +406,7 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
   /// [_buildLayout] builds the page layout for the details page. This includes
   /// the scaffold and appbar and is required, because we have to access the
   /// result of the FutureBuilder which loads the item in the [AppBar].
-  Widget _buildLayout(BuildContext context, dynamic item, Widget child) {
+  Widget _buildLayout(dynamic item, Widget child) {
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: false,
@@ -492,7 +492,7 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
 
   /// [_buildHeaderActions] returns the resource actions as header when the user
   /// didn't opt in for the classic mode.
-  Widget _buildHeaderActions(BuildContext context, dynamic item) {
+  Widget _buildHeaderActions(dynamic item) {
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: false,
@@ -601,7 +601,6 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
           case ConnectionState.none:
           case ConnectionState.waiting:
             return _buildLayout(
-              context,
               null,
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -621,7 +620,6 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
           default:
             if (snapshot.hasError) {
               return _buildLayout(
-                context,
                 null,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -650,11 +648,10 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
             );
 
             return _buildLayout(
-              context,
               snapshot.data,
               Column(
                 children: [
-                  _buildHeaderActions(context, snapshot.data),
+                  _buildHeaderActions(snapshot.data),
                   DetailsItemMetadata(
                     item: snapshot.data,
                   ),

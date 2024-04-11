@@ -191,39 +191,40 @@ class Resources extends StatelessWidget {
     return Scaffold(
       drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
-          centerTitle: true,
-          actions: [
-            IconButton(
-              icon: const Icon(CustomIcons.clusters),
-              onPressed: () {
-                showModal(context, const AppClustersWidget());
-              },
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(CustomIcons.clusters),
+            onPressed: () {
+              showModal(context, const AppClustersWidget());
+            },
+          ),
+        ],
+        title: Column(
+          children: [
+            const Text(
+              'Resources',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Text(
+              Characters(activeCluster?.name ?? 'No Active Cluster')
+                  .replaceAll(Characters(''), Characters('\u{200B}'))
+                  .toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
-          title: Column(
-            children: [
-              const Text(
-                'Resources',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              Text(
-                Characters(activeCluster?.name ?? 'No Active Cluster')
-                    .replaceAll(Characters(''), Characters('\u{200B}'))
-                    .toString(),
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          )),
+        ),
+      ),
       bottomNavigationBar: appRepository.settings.classicMode
           ? null
           : const AppBottomNavigationBarWidget(),

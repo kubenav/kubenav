@@ -116,12 +116,13 @@ class _DetailsScaleResourceState extends State<DetailsScaleResource> {
         setState(() {
           _isLoading = false;
         });
-        if (!context.mounted) return;
-        showSnackbar(
-          context,
-          'Could not scale resource',
-          'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
-        );
+        if (mounted) {
+          showSnackbar(
+            context,
+            'Could not scale resource',
+            'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+          );
+        }
       } catch (err) {
         Logger.log(
           'DetailsScaleResourceController scaleResource',
@@ -131,12 +132,13 @@ class _DetailsScaleResourceState extends State<DetailsScaleResource> {
         setState(() {
           _isLoading = false;
         });
-        if (!context.mounted) return;
-        showSnackbar(
-          context,
-          'Could not scale resource',
-          err.toString(),
-        );
+        if (mounted) {
+          showSnackbar(
+            context,
+            'Could not scale resource',
+            err.toString(),
+          );
+        }
       }
     }
   }

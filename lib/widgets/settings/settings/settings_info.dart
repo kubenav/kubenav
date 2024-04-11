@@ -72,7 +72,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
   /// [buildAdditionalLinks] returns additional links for iOS which must be
   /// present in the app so that the app is not rejected in the App Store
   /// submission.
-  List<AppVertialListSimpleModel> buildAdditionalLinks(BuildContext context) {
+  List<AppVertialListSimpleModel> buildAdditionalLinks() {
     if (Platform.isIOS) {
       SponsorRepository sponsorRepository = Provider.of<SponsorRepository>(
         context,
@@ -384,7 +384,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
           ],
         ),
-        ...buildAdditionalLinks(context),
+        ...buildAdditionalLinks(),
       ],
     );
   }

@@ -98,7 +98,7 @@ class _SettingsAddClusterRancherState extends State<SettingsAddClusterRancher> {
   /// [_addClusters] adds the users selected clusters [_selectedClusters] to the
   /// app. When we are not able to add the clusters a snackbar with the error is
   /// shown.
-  Future<void> _addClusters(BuildContext context) async {
+  Future<void> _addClusters() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -131,12 +131,13 @@ class _SettingsAddClusterRancherState extends State<SettingsAddClusterRancher> {
       setState(() {
         _isLoadingAddCluster = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not add clusters',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not add clusters',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -264,7 +265,7 @@ class _SettingsAddClusterRancherState extends State<SettingsAddClusterRancher> {
       },
       actionText: 'Add Clusters',
       actionPressed: () {
-        _addClusters(context);
+        _addClusters();
       },
       actionIsLoading: _isLoading || _isLoadingAddCluster,
       child: _buildContent(),

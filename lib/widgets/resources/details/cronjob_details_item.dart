@@ -62,7 +62,7 @@ class CronJobDetailsItem extends StatelessWidget implements IDetailsItemWidget {
               values: cronJob
                       .spec!.jobTemplate.spec?.selector?.matchLabels.entries
                       .map((matchLabel) =>
-                          '${matchLabel.key}=${matchLabel.value}')
+                          '${matchLabel.key}=${matchLabel.value}',)
                       .toList() ??
                   '-',
             ),
@@ -114,7 +114,7 @@ class CronJobDetailsItem extends StatelessWidget implements IDetailsItemWidget {
                     item['metadata']['ownerReferences'].length == 1 &&
                     item['metadata']['ownerReferences'][0]['name'] != null &&
                     item['metadata']['ownerReferences'][0]['name'] ==
-                        cronJob.metadata?.name)
+                        cronJob.metadata?.name,)
                 .toList();
           },
         ),

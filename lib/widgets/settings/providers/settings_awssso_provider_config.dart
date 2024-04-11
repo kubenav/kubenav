@@ -77,12 +77,13 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
         'Could not get SSO configuration',
         err,
       );
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not get SSO configuration',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not get SSO configuration',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -98,12 +99,13 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
         'Could not verify device',
         err,
       );
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not verify device',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not verify device',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -141,16 +143,17 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
         'Could not get SSO credentials',
         err,
       );
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not get SSO credentials',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not get SSO credentials',
+          err.toString(),
+        );
+      }
     }
   }
 
-  Future<void> _saveProvider(BuildContext context) async {
+  Future<void> _saveProvider() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -215,12 +218,13 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
       setState(() {
         _isLoading = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not add provider configuration',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not add provider configuration',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -257,7 +261,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
       },
       actionText: widget.provider == null ? 'Save and add cluster(s)' : 'Save',
       actionPressed: () {
-        _saveProvider(context);
+        _saveProvider();
       },
       actionIsLoading: _isLoading,
       child: Form(

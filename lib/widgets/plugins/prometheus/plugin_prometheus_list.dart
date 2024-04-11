@@ -83,7 +83,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
 
   /// [_buildItem] returns the widget for a single dashboard which is displayed
   /// in the list of dashboards.
-  Widget _buildItem(BuildContext context, IoK8sApiCoreV1ConfigMap configMap) {
+  Widget _buildItem(IoK8sApiCoreV1ConfigMap configMap) {
     return AppListItem(
       onTap: () {
         navigate(
@@ -151,7 +151,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
 
   /// [_buildHeaderActions] returns the Prometheus list actions as header when
   /// the user didn't opt in for the classic mode.
-  Widget _buildHeaderActions(BuildContext context) {
+  Widget _buildHeaderActions() {
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: false,
@@ -254,20 +254,20 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
               ),
             ),
             Text(
-              Characters(clustersRepository
-                              .getCluster(
-                                clustersRepository.activeClusterId,
-                              )!
-                              .namespace ==
-                          ''
-                      ? 'All Namespaces'
-                      : clustersRepository
-                          .getCluster(
-                            clustersRepository.activeClusterId,
-                          )!
-                          .namespace)
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
+              Characters(
+                clustersRepository
+                            .getCluster(
+                              clustersRepository.activeClusterId,
+                            )!
+                            .namespace ==
+                        ''
+                    ? 'All Namespaces'
+                    : clustersRepository
+                        .getCluster(
+                          clustersRepository.activeClusterId,
+                        )!
+                        .namespace,
+              ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 14,
@@ -332,7 +332,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
 
                       return Wrap(
                         children: [
-                          _buildHeaderActions(context),
+                          _buildHeaderActions(),
                           Container(
                             padding: const EdgeInsets.only(
                               top: Constants.spacingMiddle,
@@ -351,10 +351,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
                               ),
                               itemCount: snapshot.data!.length,
                               itemBuilder: (context, index) {
-                                return _buildItem(
-                                  context,
-                                  snapshot.data![index],
-                                );
+                                return _buildItem(snapshot.data![index]);
                               },
                             ),
                           ),

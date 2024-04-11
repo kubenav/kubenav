@@ -176,7 +176,7 @@ class GoogleService {
     try {
       final response = await http.post(
         Uri.parse(
-            'https://oauth2.googleapis.com/token?code=$code&client_id=$clientID&client_secret=$clientSecret&redirect_uri=${Constants.googleRedirectURI}&grant_type=authorization_code'),
+            'https://oauth2.googleapis.com/token?code=$code&client_id=$clientID&client_secret=$clientSecret&redirect_uri=${Constants.googleRedirectURI}&grant_type=authorization_code',),
       );
 
       Logger.log(
@@ -227,7 +227,7 @@ class GoogleService {
     try {
       final response = await http.post(
         Uri.parse(
-            'https://oauth2.googleapis.com/token?refresh_token=$refreshToken&client_id=$clientID&client_secret=$clientSecret&grant_type=refresh_token'),
+            'https://oauth2.googleapis.com/token?refresh_token=$refreshToken&client_id=$clientID&client_secret=$clientSecret&grant_type=refresh_token',),
       );
 
       Logger.log(
@@ -278,7 +278,7 @@ class GoogleService {
     try {
       final response = await http.get(
         Uri.parse(
-            'https://serviceusage.googleapis.com/v1/projects/$project/services/$api'),
+            'https://serviceusage.googleapis.com/v1/projects/$project/services/$api',),
         headers: {
           'Authorization': 'Bearer $accessToken',
         },
@@ -323,7 +323,7 @@ class GoogleService {
     try {
       final response = await http.get(
         Uri.parse(
-            'https://cloudresourcemanager.googleapis.com/v1/projects?filter=lifecycleState%3AACTIVE'),
+            'https://cloudresourcemanager.googleapis.com/v1/projects?filter=lifecycleState%3AACTIVE',),
         headers: {
           'Authorization': 'Bearer $accessToken',
         },
@@ -385,7 +385,7 @@ class GoogleService {
     try {
       final response = await http.get(
         Uri.parse(
-            'https://container.googleapis.com/v1/projects/$project/locations/-/clusters'),
+            'https://container.googleapis.com/v1/projects/$project/locations/-/clusters',),
         headers: {
           'Authorization': 'Bearer $accessToken',
         },

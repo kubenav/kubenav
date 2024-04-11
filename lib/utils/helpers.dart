@@ -60,7 +60,7 @@ Future<void> openUrl(String url) async {
 }
 
 String getMonospaceFontFamily() {
-  if (Platform.isIOS || Platform.isMacOS) {
+  if (Platform.isIOS) {
     return 'Courier';
   }
 

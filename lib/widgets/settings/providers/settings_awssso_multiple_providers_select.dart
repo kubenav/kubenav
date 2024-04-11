@@ -63,7 +63,7 @@ class _SettingsAWSSSOMultipleProvidersSelectState
   /// cluster providers. Before each account is added we also have to get the
   /// sso credentials for this account, so that we can use the account to get a
   /// the list of Kubernetes clusters from the AWS API.
-  Future<void> _addProviders(BuildContext context) async {
+  Future<void> _addProviders() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -125,12 +125,13 @@ class _SettingsAWSSSOMultipleProvidersSelectState
       setState(() {
         _isLoading = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not add providers',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not add providers',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -145,7 +146,7 @@ class _SettingsAWSSSOMultipleProvidersSelectState
       },
       actionText: 'Add Providers',
       actionPressed: () {
-        _addProviders(context);
+        _addProviders();
       },
       actionIsLoading: _isLoading,
       child: ListView(
@@ -203,13 +204,15 @@ class _SettingsAWSSSOMultipleProvidersSelectState
                               activeColor: theme(context).colorPrimary,
                               controlAffinity: ListTileControlAffinity.leading,
                               value: _selectedAccounts
-                                      .where((a) =>
-                                          a.accountId ==
-                                              widget.accounts[accountIndex]
-                                                  .accountId &&
-                                          a.role ==
-                                              widget.accounts[accountIndex]
-                                                  .roles![roleIndex])
+                                      .where(
+                                        (a) =>
+                                            a.accountId ==
+                                                widget.accounts[accountIndex]
+                                                    .accountId &&
+                                            a.role ==
+                                                widget.accounts[accountIndex]
+                                                    .roles![roleIndex],
+                                      )
                                       .toList()
                                       .length ==
                                   1,
@@ -236,12 +239,14 @@ class _SettingsAWSSSOMultipleProvidersSelectState
                                 if (value == false) {
                                   setState(() {
                                     _selectedAccounts = _selectedAccounts
-                                        .where((a) => !(a.accountId ==
-                                                widget.accounts[accountIndex]
-                                                    .accountId &&
-                                            a.role ==
-                                                widget.accounts[accountIndex]
-                                                    .roles![roleIndex]))
+                                        .where(
+                                          (a) => !(a.accountId ==
+                                                  widget.accounts[accountIndex]
+                                                      .accountId &&
+                                              a.role ==
+                                                  widget.accounts[accountIndex]
+                                                      .roles![roleIndex]),
+                                        )
                                         .toList();
                                   });
                                 }
@@ -252,7 +257,9 @@ class _SettingsAWSSSOMultipleProvidersSelectState
                                       .accounts[accountIndex].roles![roleIndex],
                                 )
                                     .replaceAll(
-                                        Characters(''), Characters('\u{200B}'))
+                                      Characters(''),
+                                      Characters('\u{200B}'),
+                                    )
                                     .toString(),
                                 style: noramlTextStyle(
                                   context,

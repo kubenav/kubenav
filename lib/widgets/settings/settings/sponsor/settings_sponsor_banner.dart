@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -30,8 +28,7 @@ class SettingsSponsorBanner extends StatelessWidget {
       listen: true,
     );
 
-    if ((Platform.isAndroid || Platform.isIOS) &&
-        sponsorRepository.isAvailable &&
+    if (sponsorRepository.isAvailable &&
         sponsorRepository.products.isNotEmpty &&
         !sponsorRepository.isSponsor &&
         DateTime.now().millisecondsSinceEpoch >

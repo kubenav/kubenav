@@ -53,7 +53,7 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
   /// parameter, by replacing all the values of the provided values with the
   /// values provided via the controllers. If we can not save the cluster in the
   /// clusters repository we show a snackbar with the returned error.
-  Future<void> _editCluster(BuildContext context) async {
+  Future<void> _editCluster() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -102,12 +102,13 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
       setState(() {
         _isLoadingAddCluster = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not save cluster',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not save cluster',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -153,7 +154,7 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
       },
       actionText: 'Save',
       actionPressed: () {
-        _editCluster(context);
+        _editCluster();
       },
       actionIsLoading: _isLoadingAddCluster,
       child: Form(

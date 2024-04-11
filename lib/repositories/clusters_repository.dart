@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 
@@ -7,7 +6,6 @@ import 'package:jwt_decode/jwt_decode.dart';
 
 import 'package:kubenav/models/cluster.dart';
 import 'package:kubenav/models/cluster_provider.dart';
-import 'package:kubenav/services/kubenav_desktop.dart';
 import 'package:kubenav/services/providers/aws_service.dart';
 import 'package:kubenav/services/providers/google_service.dart';
 import 'package:kubenav/services/providers/oidc_service.dart';
@@ -32,78 +30,45 @@ class ClustersRepository with ChangeNotifier {
   /// The [_save] method can be used to write all modifications to the
   /// [clusters], [providers] and the [activeClusterId] via the Flutter Secure
   /// Storage package.
-  ///
-  /// We only have to save the modifications for the Android and iOS version of
-  /// the app, because on the desktop version we are using the users Kubeconfig
-  /// file to load the [clusters].
   Future<void> _save() async {
-    if (Platform.isAndroid || Platform.isIOS) {
-      try {
-        Logger.log(
-          'ClustersRepository _save',
-          'Call save function',
-        );
-        await Storage().write(
-          'kubenavClustersRepository',
-          json.encode(
-            ClustersRepositoryStorage(
-              clusters: _clusters,
-              providers: _providers,
-              activeClusterId: _activeClusterId,
-            ).toJson(),
-          ),
-        );
-      } catch (err) {
-        Logger.log(
-          'ClustersRepository _save',
-          'Could not save clusters',
-          err,
-        );
-      }
+    try {
+      Logger.log(
+        'ClustersRepository _save',
+        'Call save function',
+      );
+      await Storage().write(
+        'kubenavClustersRepository',
+        json.encode(
+          ClustersRepositoryStorage(
+            clusters: _clusters,
+            providers: _providers,
+            activeClusterId: _activeClusterId,
+          ).toJson(),
+        ),
+      );
+    } catch (err) {
+      Logger.log(
+        'ClustersRepository _save',
+        'Could not save clusters',
+        err,
+      );
     }
   }
 
   /// [init] is used to initialize the [_clusters], [_activeClusterId] and
-  /// [_providers]. On the desktop version we are using the users Kubeconfig
-  /// file to initialize these values. On the mobile version we are using the
-  /// Flutter Secure Storage package to load these values.
+  /// [_providers]. For that we are looking for the clusters and provider
+  /// configs in the secure storage. If we found saved clusters we also set the
+  /// active cluster to the one which was saved in an older session.
   Future<void> init() async {
     try {
-      /// For the desktop version of kubenav we are using the Kubeconfig file of
-      /// the user from `~/.kube/config` to load the clusters, this means that
-      /// we can skip the lookup to the secure storage and instead load the
-      /// clusters from the file.
-      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        Map<String, dynamic> storedClusters =
-            KubenavDesktop().kubernetesClusters();
-        for (var storedCluster in storedClusters['clusters'].entries) {
-          _clusters.add(
-            Cluster(
-              id: storedCluster.key,
-              name: storedCluster.key,
-              clusterProviderType: ClusterProviderType.kubeconfig,
-              clusterProviderId: '',
-              clusterServer: '',
-              namespace: storedCluster.value,
-            ),
-          );
-        }
-        _activeClusterId = storedClusters['activeCluster'];
-      } else {
-        /// For the mobile implementation we are looking for the clusters and
-        /// provider configs in the secure storage. If we found saved clusters
-        /// we also set the active cluster to the one which was saved in an
-        /// older session.
-        final storedData = await Storage().read('kubenavClustersRepository');
-        if (storedData != null) {
-          final parsedStoredData =
-              ClustersRepositoryStorage.fromJson(json.decode(storedData));
-          _clusters = parsedStoredData.clusters;
-          _providers = parsedStoredData.providers;
-          _activeClusterId = parsedStoredData.activeClusterId;
-        }
+      final storedData = await Storage().read('kubenavClustersRepository');
+      if (storedData != null) {
+        final parsedStoredData =
+            ClustersRepositoryStorage.fromJson(json.decode(storedData));
+        _clusters = parsedStoredData.clusters;
+        _providers = parsedStoredData.providers;
+        _activeClusterId = parsedStoredData.activeClusterId;
       }
-
       notifyListeners();
     } catch (err) {
       Logger.log(
@@ -232,10 +197,6 @@ class ClustersRepository with ChangeNotifier {
             (cluster) => cluster.id == clusterId,
           )
           .toList()[0];
-
-      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        return cluster;
-      }
 
       if (cluster.clusterProviderType == ClusterProviderType.aws) {
         /// When the cluster provider is AWS we get the expiration time saved in
@@ -555,7 +516,8 @@ class ClustersRepositoryStorage {
           : [],
       providers: data.containsKey('providers') && data['providers'] != null
           ? List<ClusterProvider>.from(
-              data['providers'].map((v) => ClusterProvider.fromJson(v)))
+              data['providers'].map((v) => ClusterProvider.fromJson(v)),
+            )
           : [],
       activeClusterId:
           data.containsKey('activeClusterId') && data['activeClusterId'] != null

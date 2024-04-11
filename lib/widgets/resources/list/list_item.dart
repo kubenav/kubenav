@@ -100,7 +100,7 @@ class ListItemWidget extends StatelessWidget {
                 style: secondaryTextStyle(
                   context,
                 ),
-              ))
+              ),)
           .toList(),
     );
   }

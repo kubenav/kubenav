@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -28,8 +26,7 @@ class OverviewActions extends StatelessWidget {
       listen: true,
     );
 
-    final sponsorAction = ((Platform.isAndroid || Platform.isIOS) &&
-            sponsorRepository.isAvailable &&
+    final sponsorAction = (sponsorRepository.isAvailable &&
             sponsorRepository.products.isNotEmpty &&
             !sponsorRepository.isSponsor)
         ? AppResourceActionsModel(

@@ -176,7 +176,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
   /// [_buildTemplates] builds a list for all templates used by the Helm
   /// release. When the user clicks on one of the templates, the template will
   /// be opened in a modal bottom sheet.
-  Widget _buildTemplates(BuildContext context, Release? release) {
+  Widget _buildTemplates(Release? release) {
     if (release != null &&
         release.chart != null &&
         release.chart!.templates != null) {
@@ -205,7 +205,9 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                         Text(
                           Characters(template.name ?? '')
                               .replaceAll(
-                                  Characters(''), Characters('\u{200B}'))
+                                Characters(''),
+                                Characters('\u{200B}'),
+                              )
                               .toString(),
                           style: primaryTextStyle(
                             context,
@@ -229,7 +231,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
   /// [_buildLayout] builds the page layout for the details page. This includes
   /// the scaffold and appbar and is required, because we have to access the
   /// result of the FutureBuilder which loads the item in the [AppBar].
-  Widget _buildLayout(BuildContext context, Release? release, Widget child) {
+  Widget _buildLayout(Release? release, Widget child) {
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: false,
@@ -299,7 +301,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
 
   /// [_buildHeaderActions] returns the Helm details actions as header when the
   /// user didn't opt in for the classic mode.
-  Widget _buildHeaderActions(BuildContext context, Release release) {
+  Widget _buildHeaderActions(Release release) {
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: false,
@@ -358,7 +360,6 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
           case ConnectionState.none:
           case ConnectionState.waiting:
             return _buildLayout(
-              context,
               null,
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -376,7 +377,6 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
           default:
             if (snapshot.hasError) {
               return _buildLayout(
-                context,
                 null,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -400,11 +400,10 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
             }
 
             return _buildLayout(
-              context,
               snapshot.data,
               Column(
                 children: [
-                  _buildHeaderActions(context, snapshot.data!),
+                  _buildHeaderActions(snapshot.data!),
                   _buildDetails(snapshot.data),
                   const SizedBox(height: Constants.spacingMiddle),
                   FutureBuilder(
@@ -456,9 +455,12 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                           children: [
                                             Text(
                                               Characters(
-                                                      'Revision: ${release.version ?? ''}')
-                                                  .replaceAll(Characters(''),
-                                                      Characters('\u{200B}'))
+                                                'Revision: ${release.version ?? ''}',
+                                              )
+                                                  .replaceAll(
+                                                    Characters(''),
+                                                    Characters('\u{200B}'),
+                                                  )
                                                   .toString(),
                                               style: primaryTextStyle(
                                                 context,
@@ -468,9 +470,12 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                             ),
                                             Text(
                                               Characters(
-                                                      'Updated: ${formatTime(DateTime.parse(release.info?.lastDeployed ?? ''))}')
-                                                  .replaceAll(Characters(''),
-                                                      Characters('\u{200B}'))
+                                                'Updated: ${formatTime(DateTime.parse(release.info?.lastDeployed ?? ''))}',
+                                              )
+                                                  .replaceAll(
+                                                    Characters(''),
+                                                    Characters('\u{200B}'),
+                                                  )
                                                   .toString(),
                                               style: secondaryTextStyle(
                                                 context,
@@ -480,9 +485,12 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                             ),
                                             Text(
                                               Characters(
-                                                      'Status: ${release.info?.status}')
-                                                  .replaceAll(Characters(''),
-                                                      Characters('\u{200B}'))
+                                                'Status: ${release.info?.status}',
+                                              )
+                                                  .replaceAll(
+                                                    Characters(''),
+                                                    Characters('\u{200B}'),
+                                                  )
                                                   .toString(),
                                               style: secondaryTextStyle(
                                                 context,
@@ -492,9 +500,12 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                             ),
                                             Text(
                                               Characters(
-                                                      'Chart: ${release.chart?.metadata?.version}')
-                                                  .replaceAll(Characters(''),
-                                                      Characters('\u{200B}'))
+                                                'Chart: ${release.chart?.metadata?.version}',
+                                              )
+                                                  .replaceAll(
+                                                    Characters(''),
+                                                    Characters('\u{200B}'),
+                                                  )
                                                   .toString(),
                                               style: secondaryTextStyle(
                                                 context,
@@ -504,9 +515,12 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                             ),
                                             Text(
                                               Characters(
-                                                      'Chart: ${release.chart?.metadata?.appVersion}')
-                                                  .replaceAll(Characters(''),
-                                                      Characters('\u{200B}'))
+                                                'Chart: ${release.chart?.metadata?.appVersion}',
+                                              )
+                                                  .replaceAll(
+                                                    Characters(''),
+                                                    Characters('\u{200B}'),
+                                                  )
                                                   .toString(),
                                               style: secondaryTextStyle(
                                                 context,
@@ -526,10 +540,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                     },
                   ),
                   const SizedBox(height: Constants.spacingMiddle),
-                  _buildTemplates(
-                    context,
-                    snapshot.data,
-                  ),
+                  _buildTemplates(snapshot.data),
                   const SizedBox(height: Constants.spacingExtraLarge),
                 ],
               ),

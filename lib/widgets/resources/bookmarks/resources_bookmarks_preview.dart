@@ -31,7 +31,7 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
   /// change the active cluster and namespace to the values saved in the
   /// bookmark. Then we open the [ResourcesList] or [ResourcesDetails] widget
   /// with the bookmark values as arguments.
-  Future<void> openBookmark(BuildContext context, int index) async {
+  Future<void> openBookmark(int index) async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -46,8 +46,9 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
         await clustersRepository
             .setActiveCluster(bookmarksRepository.bookmarks[index].clusterId);
         await clustersRepository.setNamespace(
-            bookmarksRepository.bookmarks[index].clusterId,
-            bookmarksRepository.bookmarks[index].namespace ?? '');
+          bookmarksRepository.bookmarks[index].clusterId,
+          bookmarksRepository.bookmarks[index].namespace ?? '',
+        );
 
         if (mounted) {
           navigate(
@@ -73,8 +74,9 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
         await clustersRepository
             .setActiveCluster(bookmarksRepository.bookmarks[index].clusterId);
         await clustersRepository.setNamespace(
-            bookmarksRepository.bookmarks[index].clusterId,
-            bookmarksRepository.bookmarks[index].namespace ?? '');
+          bookmarksRepository.bookmarks[index].clusterId,
+          bookmarksRepository.bookmarks[index].namespace ?? '',
+        );
 
         if (mounted) {
           navigate(
@@ -134,7 +136,8 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
                     'Name: ${bookmarksRepository.bookmarks[index].name}',
                   ],
             image: resource_model.Resources.map.containsKey(
-                        bookmarksRepository.bookmarks[index].resource) &&
+                      bookmarksRepository.bookmarks[index].resource,
+                    ) &&
                     resource_model
                             .Resources
                             .map[bookmarksRepository.bookmarks[index].resource]!
@@ -149,7 +152,7 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
                 : 'assets/resources/customresourcedefinitions.svg',
             imageFit: BoxFit.none,
             onTap: () {
-              openBookmark(context, index);
+              openBookmark(index);
             },
           );
         },

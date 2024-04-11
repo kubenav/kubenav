@@ -33,8 +33,11 @@ class ResourcesBookmarks extends StatefulWidget {
 class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
   /// [_proxyDecorator] is used to highlight the bookmark which is currently
   /// draged by the user.
-  Widget _proxyDecorator(BuildContext context, Widget child, int index,
-      Animation<double> animation) {
+  Widget _proxyDecorator(
+    Widget child,
+    int index,
+    Animation<double> animation,
+  ) {
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, Widget? child) {
@@ -52,7 +55,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
   /// change the active cluster and namespace to the values saved in the
   /// bookmark. Then we open the [ResourcesList] or [ResourcesDetails] widget
   /// with the bookmark values as arguments.
-  Future<void> openBookmark(BuildContext context, int index) async {
+  Future<void> openBookmark(int index) async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -67,8 +70,9 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
         await clustersRepository
             .setActiveCluster(bookmarksRepository.bookmarks[index].clusterId);
         await clustersRepository.setNamespace(
-            bookmarksRepository.bookmarks[index].clusterId,
-            bookmarksRepository.bookmarks[index].namespace ?? '');
+          bookmarksRepository.bookmarks[index].clusterId,
+          bookmarksRepository.bookmarks[index].namespace ?? '',
+        );
 
         if (mounted) {
           navigate(
@@ -94,8 +98,9 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
         await clustersRepository
             .setActiveCluster(bookmarksRepository.bookmarks[index].clusterId);
         await clustersRepository.setNamespace(
-            bookmarksRepository.bookmarks[index].clusterId,
-            bookmarksRepository.bookmarks[index].namespace ?? '');
+          bookmarksRepository.bookmarks[index].clusterId,
+          bookmarksRepository.bookmarks[index].namespace ?? '',
+        );
 
         if (mounted) {
           navigate(
@@ -157,9 +162,13 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                 onReorder: (int start, int current) {
                   bookmarksRepository.reorder(start, current);
                 },
-                proxyDecorator:
-                    (Widget child, int index, Animation<double> animation) =>
-                        _proxyDecorator(context, child, index, animation),
+                proxyDecorator: (
+                  Widget child,
+                  int index,
+                  Animation<double> animation,
+                ) {
+                  return _proxyDecorator(child, index, animation);
+                },
                 itemCount: bookmarksRepository.bookmarks.length,
                 itemBuilder: (
                   context,
@@ -182,7 +191,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                       ),
                       child: AppListItem(
                         onTap: () {
-                          openBookmark(context, index);
+                          openBookmark(index);
                         },
                         onDoubleTap: () {
                           showActions(
@@ -220,8 +229,10 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                                             Characters(
                                               'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
                                             )
-                                                .replaceAll(Characters(''),
-                                                    Characters('\u{200B}'))
+                                                .replaceAll(
+                                                  Characters(''),
+                                                  Characters('\u{200B}'),
+                                                )
                                                 .toString(),
                                             style: secondaryTextStyle(
                                               context,
@@ -233,8 +244,10 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                                             Characters(
                                               'Namespace: ${bookmarksRepository.bookmarks[index].namespace}',
                                             )
-                                                .replaceAll(Characters(''),
-                                                    Characters('\u{200B}'))
+                                                .replaceAll(
+                                                  Characters(''),
+                                                  Characters('\u{200B}'),
+                                                )
                                                 .toString(),
                                             style: secondaryTextStyle(
                                               context,
@@ -250,9 +263,11 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                                                     'Name: ${bookmarksRepository.bookmarks[index].name}',
                                                   )
                                                       .replaceAll(
-                                                          Characters(''),
-                                                          Characters(
-                                                              '\u{200B}'))
+                                                        Characters(''),
+                                                        Characters(
+                                                          '\u{200B}',
+                                                        ),
+                                                      )
                                                       .toString(),
                                                   style: secondaryTextStyle(
                                                     context,
@@ -263,7 +278,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                                                 )
                                               : Container(),
                                         ],
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ),

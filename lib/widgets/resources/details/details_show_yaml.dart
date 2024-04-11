@@ -92,7 +92,8 @@ class _DetailsShowYamlState extends State<DetailsShowYaml> {
 
       final directory = await getApplicationDocumentsDirectory();
       final file = File(
-          '${directory.path}/$name.${appRepository.settings.editorFormat}');
+        '${directory.path}/$name.${appRepository.settings.editorFormat}',
+      );
       await file.writeAsString(_codeController.text);
 
       setState(() {
@@ -115,12 +116,13 @@ class _DetailsShowYamlState extends State<DetailsShowYaml> {
       setState(() {
         _isLoading = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not export manifest',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not export manifest',
+          err.toString(),
+        );
+      }
     }
   }
 

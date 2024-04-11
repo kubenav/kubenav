@@ -30,7 +30,7 @@ class _SettingsClusterActionsState extends State<SettingsClusterActions> {
   /// [deleteCluster] is used to remove the provided cluster from our list
   /// of clusters in the clusters repository. For the success and the error case
   /// we show an snackbar to inform the user about the result of the operation.
-  Future<void> deleteCluster(BuildContext context) async {
+  Future<void> deleteCluster() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -79,7 +79,7 @@ class _SettingsClusterActionsState extends State<SettingsClusterActions> {
           title: 'Delete',
           color: theme(context).colorDanger,
           onTap: () {
-            deleteCluster(context);
+            deleteCluster();
           },
         ),
       ],

@@ -59,12 +59,13 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
       setState(() {
         _isLoading = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'An error occured',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'An error occured',
+          err.toString(),
+        );
+      }
     }
   }
 

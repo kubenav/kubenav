@@ -66,7 +66,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
   /// [_buildItem] builds the widget for a single Helm release shown in the list
   /// of releases. When the user clicks on the release he will be redirected to
   /// the [PluginHelmDetails] screen.
-  Widget _buildItem(BuildContext context, Release release) {
+  Widget _buildItem(Release release) {
     return AppListItem(
       onTap: () {
         navigate(
@@ -121,7 +121,8 @@ class _PluginHelmListState extends State<PluginHelmList> {
                     ),
                     Text(
                       Characters(
-                              'Updated: ${formatTime(DateTime.parse(release.info?.lastDeployed ?? ''))}')
+                        'Updated: ${formatTime(DateTime.parse(release.info?.lastDeployed ?? ''))}',
+                      )
                           .replaceAll(Characters(''), Characters('\u{200B}'))
                           .toString(),
                       overflow: TextOverflow.ellipsis,
@@ -152,7 +153,8 @@ class _PluginHelmListState extends State<PluginHelmList> {
                     ),
                     Text(
                       Characters(
-                              'App Version: ${release.chart?.metadata?.appVersion}')
+                        'App Version: ${release.chart?.metadata?.appVersion}',
+                      )
                           .replaceAll(Characters(''), Characters('\u{200B}'))
                           .toString(),
                       overflow: TextOverflow.ellipsis,
@@ -173,7 +175,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
 
   /// [_buildHeaderActions] returns the Helm list actions as header when the
   /// user didn't opt in for the classic mode.
-  Widget _buildHeaderActions(BuildContext context) {
+  Widget _buildHeaderActions() {
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: false,
@@ -276,20 +278,20 @@ class _PluginHelmListState extends State<PluginHelmList> {
               ),
             ),
             Text(
-              Characters(clustersRepository
-                              .getCluster(
-                                clustersRepository.activeClusterId,
-                              )!
-                              .namespace ==
-                          ''
-                      ? 'All Namespaces'
-                      : clustersRepository
-                          .getCluster(
-                            clustersRepository.activeClusterId,
-                          )!
-                          .namespace)
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
+              Characters(
+                clustersRepository
+                            .getCluster(
+                              clustersRepository.activeClusterId,
+                            )!
+                            .namespace ==
+                        ''
+                    ? 'All Namespaces'
+                    : clustersRepository
+                        .getCluster(
+                          clustersRepository.activeClusterId,
+                        )!
+                        .namespace,
+              ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 14,
@@ -339,7 +341,8 @@ class _PluginHelmListState extends State<PluginHelmList> {
                             Flexible(
                               child: Padding(
                                 padding: const EdgeInsets.all(
-                                    Constants.spacingMiddle),
+                                  Constants.spacingMiddle,
+                                ),
                                 child: AppErrorWidget(
                                   message: 'Could not load Helm charts',
                                   details: snapshot.error.toString(),
@@ -353,7 +356,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
 
                       return Wrap(
                         children: [
-                          _buildHeaderActions(context),
+                          _buildHeaderActions(),
                           Container(
                             padding: const EdgeInsets.only(
                               top: Constants.spacingMiddle,
@@ -372,10 +375,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
                               ),
                               itemCount: snapshot.data!.length,
                               itemBuilder: (context, index) {
-                                return _buildItem(
-                                  context,
-                                  snapshot.data![index],
-                                );
+                                return _buildItem(snapshot.data![index]);
                               },
                             ),
                           ),

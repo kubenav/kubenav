@@ -3,6 +3,7 @@
 //
 // @dart=2.12
 
+// ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
 // ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
@@ -124,8 +125,8 @@ class IoK8sApiextensionsApiserverPkgApisApiextensionsV1WebhookClientConfig {
     dynamic json, {
     bool growable = false,
   }) {
-    final result = <
-        IoK8sApiextensionsApiserverPkgApisApiextensionsV1WebhookClientConfig>[];
+    final result =
+        <IoK8sApiextensionsApiserverPkgApisApiextensionsV1WebhookClientConfig>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
         final value =
@@ -167,8 +168,7 @@ class IoK8sApiextensionsApiserverPkgApisApiextensionsV1WebhookClientConfig {
     dynamic json, {
     bool growable = false,
   }) {
-    final map = <
-        String,
+    final map = <String,
         List<
             IoK8sApiextensionsApiserverPkgApisApiextensionsV1WebhookClientConfig>>{};
     if (json is Map && json.isNotEmpty) {

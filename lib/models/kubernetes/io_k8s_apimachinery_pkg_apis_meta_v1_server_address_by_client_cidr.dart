@@ -3,6 +3,7 @@
 //
 // @dart=2.12
 
+// ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
 // ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first

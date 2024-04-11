@@ -31,7 +31,8 @@ class BookmarksRepository with ChangeNotifier {
       final data = await Storage().read('kubenav-bookmarks');
       if (data != null) {
         _bookmarks = List<Bookmark>.from(
-            json.decode(data).map((e) => Bookmark.fromJson(e)));
+          json.decode(data).map((e) => Bookmark.fromJson(e)),
+        );
       }
       notifyListeners();
     } catch (err) {
@@ -207,8 +208,10 @@ class Bookmark {
       scope: getResourceScopeFromString(data['scope']),
       additionalPrinterColumns: data.containsKey('additionalPrinterColumns') &&
               data['additionalPrinterColumns'] != null
-          ? List<AdditionalPrinterColumns>.from(data['additionalPrinterColumns']
-              .map((v) => AdditionalPrinterColumns.fromJson(v)))
+          ? List<AdditionalPrinterColumns>.from(
+              data['additionalPrinterColumns']
+                  .map((v) => AdditionalPrinterColumns.fromJson(v)),
+            )
           : [],
       name: data.containsKey('name') && data['name'] != null
           ? data['name']

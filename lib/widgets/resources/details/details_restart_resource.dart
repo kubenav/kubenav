@@ -104,12 +104,13 @@ class _DetailsRestartResourceState extends State<DetailsRestartResource> {
       setState(() {
         _isLoading = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not restart resource',
-        'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not restart resource',
+          'Code: ${err.code}\nMessage: ${err.message}\nDetails: ${err.details.toString()}',
+        );
+      }
     } catch (err) {
       Logger.log(
         'DetailsRestartResource _restartResource',
@@ -119,12 +120,13 @@ class _DetailsRestartResourceState extends State<DetailsRestartResource> {
       setState(() {
         _isLoading = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not restart resource',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not restart resource',
+          err.toString(),
+        );
+      }
     }
   }
 

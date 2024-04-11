@@ -49,7 +49,7 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
   /// add the cluster we validate all the form values which have an validator.
   /// We also modify the user input to remove a possible trailing '/' from the
   /// server value and to remove possible white spaces.
-  Future<void> _addCluster(BuildContext context) async {
+  Future<void> _addCluster() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -101,12 +101,13 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
       setState(() {
         _isLoadingAddCluster = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not add cluster',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not add cluster',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -121,7 +122,7 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
       },
       actionText: 'Add Clusters',
       actionPressed: () {
-        _addCluster(context);
+        _addCluster();
       },
       actionIsLoading: _isLoadingAddCluster,
       child: Form(

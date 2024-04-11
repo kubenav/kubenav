@@ -153,12 +153,13 @@ class _DetailsEditResourceState extends State<DetailsEditResource> {
       setState(() {
         _isLoading = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not save resource',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not save resource',
+          err.toString(),
+        );
+      }
     }
   }
 

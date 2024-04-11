@@ -41,7 +41,7 @@ class DetailsItemMetadata extends StatelessWidget {
       detailsItems.add(DetailsItemModel(
         name: 'Age',
         values: getAge(metadata.creationTimestamp),
-      ));
+      ),);
 
       List<String> labelValues = [];
       metadata.labels.forEach((key, value) => labelValues.add('$key: $value'));
@@ -68,7 +68,7 @@ class DetailsItemMetadata extends StatelessWidget {
 
       final ownerReferences = metadata.ownerReferences
           .map((ownerReference) =>
-              '${ownerReference.kind} (${ownerReference.name})')
+              '${ownerReference.kind} (${ownerReference.name})',)
           .toList();
       if (ownerReferences.isNotEmpty) {
         detailsItems.add(

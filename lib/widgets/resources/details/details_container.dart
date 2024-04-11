@@ -121,7 +121,7 @@ class DetailsContainer extends StatelessWidget {
                 values: container.ports.isNotEmpty
                     ? container.ports
                         .map((port) =>
-                            '${port.containerPort}${port.hostPort != null ? '/${port.hostPort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''}')
+                            '${port.containerPort}${port.hostPort != null ? '/${port.hostPort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''}',)
                         .toList()
                     : '-',
               ),
@@ -156,7 +156,7 @@ class DetailsContainer extends StatelessWidget {
                 values: containerMetric.isNotEmpty &&
                         containerMetric[0].usage?.cpu != null
                     ? formatCpuMetric(cpuMetricsStringToDouble(
-                        containerMetric[0].usage!.cpu!))
+                        containerMetric[0].usage!.cpu!,),)
                     : '-',
               ),
               DetailsItemModel(
@@ -178,7 +178,7 @@ class DetailsContainer extends StatelessWidget {
                 values: containerMetric.isNotEmpty &&
                         containerMetric[0].usage?.memory != null
                     ? formatMemoryMetric(memoryMetricsStringToDouble(
-                        containerMetric[0].usage!.memory!))
+                        containerMetric[0].usage!.memory!,),)
                     : '-',
               ),
               DetailsItemModel(

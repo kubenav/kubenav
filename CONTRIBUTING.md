@@ -4,7 +4,7 @@ Every contribution to kubenav is welcome, whether it is reporting a bug, submitt
 
 Please note we have a [Code of Conduct](https://github.com/kubenav/kubenav/blob/main/CODE_OF_CONDUCT.md), please follow it in all your interactions with the project.
 
-- [Feedback, Issues and Questions](#feedback--issues-and-questions)
+- [Feedback, Issues and Questions](#feedback-issues-and-questions)
 - [Adding new Features](#adding-new-features)
 - [Development](#development)
   - [Working with the Go Code](#working-with-the-go-code)
@@ -43,27 +43,21 @@ Tools • Dart 3.3.3 • DevTools 2.31.1
 
 $ go version
 
-go version go1.20.3 darwin/arm64
+go version go1.22.0 darwin/arm64
 ```
 
 ### Working with the Go Code
 
-The Go code for kubenav can be found in the `cmd` and `pkg` folder. The entrypoints for the desktop version are available in the `cmd/desktop` folder and for the mobile version they can be found in the `cmd/mobile` folder.
-
-For the desktop version we have to compile the Go code into a C shared library. This is done via the `-buildmode c-shared` flag. We are providing a Makefile to generate the C shared libraries for all operating system. The following Make commands are available:
-
-- `make library-windows`
-- `make library-macos`
-- `make library-linux`
-
-For the mobile version we are using the [`gomobile`](https://github.com/golang/go/wiki/Mobile) tools. They can be installed by running the following two commands:
+The Go code for kubenav can be found in the `cmd` folder and we are using the [`gomobile`](https://github.com/golang/go/wiki/Mobile) tools. They can be installed by running the following two commands:
 
 ```sh
 go install golang.org/x/mobile/cmd/gomobile@latest
 gomobile init
+
+go get -d golang.org/x/mobile/cmd/gomobile
 ```
 
-To build the code via the `gomobile` command the `ANDROID_HOME` and `ANDROID_NDK_HOME` environment variables must be set. We are using NDK Version 23.2.8568313.
+To build the code via the `gomobile` command the `ANDROID_HOME` and `ANDROID_NDK_HOME` environment variables must be set. We are using NDK Version 25.2.9519653.
 
 The Android and iOS bindings can then be build using the following Make commands:
 
@@ -74,7 +68,7 @@ We are using `gofmt` to format the Go code.
 
 ### Working with the Flutter Code
 
-We are recommending to use the [Visual Studio Code](https://docs.flutter.dev/development/tools/vs-code) extensions for development.
+In the following section we descibe how to use the Flutter code for the app. When working with the Flutter code ensure that there are no linting errors when you commit your code and that you have sorted all imports.
 
 To sort all imports in the Dart code in a uniformly way you have to run the `flutter pub run import_sorter:main` command.
 
@@ -110,6 +104,22 @@ flutter pub run flutter_native_splash:create
 
 The icons can be found in the `utils/images/app-icons` folder. The splash screen icons can be found in the `utils/images/splash-screen` folder.
 
+#### Run Debug Build on an Emulator
+
+To list all available emulators the `flutter emulators` command can be used. Afterwards the emulators can be started as follows:
+
+```sh
+flutter emulators --launch apple_ios_simulator
+flutter emulators --launch Pixel_4_API_30
+```
+
+To run the app on a started emulator the following can be used:
+
+```sh
+flutter run -d "iPhone 15 Pro Max"
+flutter run -d "sdk gphone arm64"
+```
+
 #### Run Release Build on a Device
 
 To run the release build on a device for testing, we have to get the Device ID first by running the following command:
@@ -134,8 +144,6 @@ With the above command we can also savely quit the terminal process (by pressing
 
 ## Release
 
-For Linux, macOS and Windows kubenav is automatically build when a new release in the GitHub repository is created. This is done via the `.github/workflows/continuous-delivery.yaml` GitHub Action.
-
 To create a new release for Android and iOS which can be published in [Google Play](https://play.google.com/store/apps/details?id=io.kubenav.kubenav) and the [App Store](https://apps.apple.com/us/app/kubenav/id1494512160) the following workflow can be used:
 
 1. Create a file `/android/key.properties` with the following content:
@@ -153,6 +161,6 @@ To create a new release for Android and iOS which can be published in [Google Pl
 
 4. Delete all old builds by running `rm -rf build`
 
-5. Build the app for Android by running `flutter build appbundle`. The build can be found at `/build/app/outputs/bundle/release/app-release.aab` and must be uploaded to https://play.google.com/apps/publish
+5. Build the app for Android by running `flutter build appbundle`. The build can be found at `/build/app/outputs/bundle/release/app-release.aab` and must be uploaded to [https://play.google.com/apps/publish](https://play.google.com/apps/publish)
 
-6. Build the app for iOS by running `flutter build ipa`. The build can be found at `/build/ios/archive/Runner.xcarchive` and must be opened in Xcode. In Xcode **Validate App** and **Distribute App** can be used to upload the build to https://appstoreconnect.apple.com.
+6. Build the app for iOS by running `flutter build ipa`. The build can be found at `/build/ios/archive/Runner.xcarchive` and must be opened in Xcode. In Xcode **Validate App** and **Distribute App** can be used to upload the build to [https://appstoreconnect.apple.com](https://appstoreconnect.apple.com).

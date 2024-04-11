@@ -202,15 +202,17 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                               ),
                               clipData: const FlClipData.all(),
                               lineBarsData: snapshot.data!
-                                  .map((e) => LineChartBarData(
-                                        spots: e.toSpots(),
-                                        dotData: const FlDotData(
-                                          show: false,
-                                        ),
-                                        color: theme(context).colorPrimary,
-                                        barWidth: 4,
-                                        isCurved: false,
-                                      ))
+                                  .map(
+                                    (e) => LineChartBarData(
+                                      spots: e.toSpots(),
+                                      dotData: const FlDotData(
+                                        show: false,
+                                      ),
+                                      color: theme(context).colorPrimary,
+                                      barWidth: 4,
+                                      isCurved: false,
+                                    ),
+                                  )
                                   .toList(),
                               titlesData: FlTitlesData(
                                 show: true,
@@ -250,7 +252,8 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                     getTitlesWidget: (value, titleMeta) {
                                       final timestamp =
                                           DateTime.fromMillisecondsSinceEpoch(
-                                              value.round());
+                                        value.round(),
+                                      );
 
                                       return Container(
                                         padding: const EdgeInsets.only(

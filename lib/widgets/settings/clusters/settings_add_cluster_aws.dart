@@ -96,7 +96,7 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
   /// We also have to save the cluster name as it is returned from AWS to the
   /// clusterProviderInternal, so that we can get a set of credentials for the
   /// cluster.
-  Future<void> _addClusters(BuildContext context) async {
+  Future<void> _addClusters() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -134,12 +134,13 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
       setState(() {
         _isLoadingAddCluster = false;
       });
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Could not add clusters',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Could not add clusters',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -269,7 +270,7 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
       },
       actionText: 'Add Clusters',
       actionPressed: () {
-        _addClusters(context);
+        _addClusters();
       },
       actionIsLoading: _isLoading || _isLoadingAddCluster,
       child: _buildContent(),

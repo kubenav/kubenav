@@ -116,7 +116,8 @@ class Chart {
           : null,
       templates: data.containsKey('templates')
           ? List<File>.from(
-              data['templates'].map((template) => File.fromJson(template)))
+              data['templates'].map((template) => File.fromJson(template)),
+            )
           : null,
       values: data.containsKey('values') ? data['values'] : null,
     );

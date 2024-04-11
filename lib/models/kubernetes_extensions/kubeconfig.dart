@@ -21,15 +21,18 @@ class Kubeconfig {
     return Kubeconfig(
       clusters: data.containsKey('clusters')
           ? List<KubeconfigCluster>.from(
-              data['clusters'].map((v) => KubeconfigCluster.fromJson(v)))
+              data['clusters'].map((v) => KubeconfigCluster.fromJson(v)),
+            )
           : null,
       contexts: data.containsKey('contexts')
           ? List<KubeconfigContext>.from(
-              data['contexts'].map((v) => KubeconfigContext.fromJson(v)))
+              data['contexts'].map((v) => KubeconfigContext.fromJson(v)),
+            )
           : null,
       users: data.containsKey('users')
           ? List<KubeconfigUser>.from(
-              data['users'].map((v) => KubeconfigUser.fromJson(v)))
+              data['users'].map((v) => KubeconfigUser.fromJson(v)),
+            )
           : null,
     );
   }
@@ -140,24 +143,26 @@ class Kubeconfig {
                   'Could not parse kubeconfig: Cluster ${clusters![0].name} does not contain a server field',
                 );
               } else {
-                parsedClusters.add(Cluster(
-                  id: const Uuid().v4(),
-                  name: context.name!,
-                  clusterProviderType: clusterProviderType,
-                  clusterProviderId: clusterProviderId,
-                  clusterServer: cluster[0].cluster!.server!,
-                  clusterCertificateAuthorityData:
-                      cluster[0].cluster!.certificateAuthorityData ?? '',
-                  clusterInsecureSkipTLSVerify:
-                      cluster[0].cluster!.insecureSkipTlsVerify ?? false,
-                  userClientCertificateData:
-                      user[0].user!.clientCertificateData ?? '',
-                  userClientKeyData: user[0].user!.clientKeyData ?? '',
-                  userToken: user[0].user!.token ?? '',
-                  userUsername: user[0].user!.username ?? '',
-                  userPassword: user[0].user!.password ?? '',
-                  namespace: context.context!.namespace ?? 'default',
-                ));
+                parsedClusters.add(
+                  Cluster(
+                    id: const Uuid().v4(),
+                    name: context.name!,
+                    clusterProviderType: clusterProviderType,
+                    clusterProviderId: clusterProviderId,
+                    clusterServer: cluster[0].cluster!.server!,
+                    clusterCertificateAuthorityData:
+                        cluster[0].cluster!.certificateAuthorityData ?? '',
+                    clusterInsecureSkipTLSVerify:
+                        cluster[0].cluster!.insecureSkipTlsVerify ?? false,
+                    userClientCertificateData:
+                        user[0].user!.clientCertificateData ?? '',
+                    userClientKeyData: user[0].user!.clientKeyData ?? '',
+                    userToken: user[0].user!.token ?? '',
+                    userUsername: user[0].user!.username ?? '',
+                    userPassword: user[0].user!.password ?? '',
+                    namespace: context.context!.namespace ?? 'default',
+                  ),
+                );
               }
             }
           }

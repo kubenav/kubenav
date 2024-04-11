@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/services.dart';
 
-import 'package:kubenav/services/kubenav_desktop.dart';
-import 'package:kubenav/services/kubenav_mobile.dart';
 import 'package:kubenav/utils/logger.dart';
 
 /// [HelpersService] implements a service to interactiv with the helper
 /// functions from our Go code. The implementation details of each Go function
-/// can be found in the `cmd/kubenav/helpers.go` file.
+/// can be found in the `cmd//kubenav/helpers.go` file.
 class HelpersService {
   static const platform = MethodChannel('kubenav.io');
 
@@ -22,11 +19,25 @@ class HelpersService {
     try {
       final jsonStr = jsonObj is String ? jsonObj : json.encode(jsonObj);
 
-      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        return await KubenavDesktop().prettifyYAML(jsonStr);
-      } else {
-        return await KubenavMobile().prettifyYAML(jsonStr);
-      }
+      Logger.log(
+        'HelperService prettifyYAML',
+        'Run prettifyYAML function',
+        jsonStr,
+      );
+
+      final String result = await platform.invokeMethod(
+        'prettifyYAML',
+        <String, dynamic>{
+          'jsonStr': jsonStr,
+        },
+      );
+
+      Logger.log(
+        'HelperService prettifyYAML',
+        'Yaml was prettifyed',
+        result,
+      );
+      return result;
     } catch (err) {
       Logger.log(
         'HelpersService prettifyYAML',
@@ -46,11 +57,26 @@ class HelpersService {
       final sourceStr = json.encode(source);
       final targetStr = json.encode(target);
 
-      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        return await KubenavDesktop().createJSONPatch(sourceStr, targetStr);
-      } else {
-        return await KubenavMobile().createJSONPatch(sourceStr, targetStr);
-      }
+      Logger.log(
+        'HelperService createJSONPatch',
+        'Run createJSONPatch function',
+        '$sourceStr, $targetStr',
+      );
+
+      final String result = await platform.invokeMethod(
+        'createJSONPatch',
+        <String, dynamic>{
+          'source': sourceStr,
+          'target': targetStr,
+        },
+      );
+
+      Logger.log(
+        'HelperService createJSONPatch',
+        'Json patch was created',
+        result,
+      );
+      return result;
     } catch (err) {
       Logger.log(
         'HelpersService createJSONPatch',

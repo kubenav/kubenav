@@ -68,11 +68,13 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
     return _filter == ''
         ? namespaces
         : namespaces
-            .where((namespace) =>
-                namespace.metadata != null &&
-                namespace.metadata!.name != null &&
-                namespace.metadata!.name is String &&
-                namespace.metadata!.name!.contains(_filter.toLowerCase()))
+            .where(
+              (namespace) =>
+                  namespace.metadata != null &&
+                  namespace.metadata!.name != null &&
+                  namespace.metadata!.name is String &&
+                  namespace.metadata!.name!.contains(_filter.toLowerCase()),
+            )
             .toList();
   }
 
@@ -80,7 +82,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
   /// the provided [namespace]. If the operation succeeds we close the modal. If
   /// the operation return an error we show the user a snackbar with the
   /// returned error.
-  Future<void> _changeNamespace(BuildContext context, String namespace) async {
+  Future<void> _changeNamespace(String namespace) async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -95,12 +97,13 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
         Navigator.pop(context);
       }
     } catch (err) {
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Namespace was not changed',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Namespace was not changed',
+          err.toString(),
+        );
+      }
     }
   }
 
@@ -108,7 +111,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
   /// the app settings. This list is always displayed, also when the user has
   /// not the permissions to view a list of namespaces, to make it easier for
   /// these users to switch between different namespaces of a cluster.
-  List<Widget> _buildFavoriteNamespace(BuildContext context) {
+  List<Widget> _buildFavoriteNamespace() {
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: false,
@@ -140,7 +143,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
         ),
         child: AppListItem(
           onTap: () {
-            _changeNamespace(context, '');
+            _changeNamespace('');
           },
           child: Row(
             children: [
@@ -183,7 +186,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
             ),
             child: AppListItem(
               onTap: () {
-                _changeNamespace(context, name);
+                _changeNamespace(name);
               },
               child: Row(
                 children: [
@@ -267,7 +270,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
             case ConnectionState.waiting:
               return ListView(
                 children: [
-                  ..._buildFavoriteNamespace(context),
+                  ..._buildFavoriteNamespace(),
                   Center(
                     child: CircularProgressIndicator(
                       color: theme(context).colorPrimary,
@@ -279,7 +282,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
               if (snapshot.hasError) {
                 return ListView(
                   children: [
-                    ..._buildFavoriteNamespace(context),
+                    ..._buildFavoriteNamespace(),
                     Wrap(
                       children: [
                         AppErrorWidget(
@@ -297,7 +300,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
 
               return ListView(
                 children: [
-                  ..._buildFavoriteNamespace(context),
+                  ..._buildFavoriteNamespace(),
                   Container(
                     padding: const EdgeInsets.only(
                       top: Constants.spacingSmall,
@@ -335,7 +338,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                         ),
                         child: AppListItem(
                           onTap: () {
-                            _changeNamespace(context, name ?? 'default');
+                            _changeNamespace(name ?? 'default');
                           },
                           child: Row(
                             children: [
@@ -343,8 +346,10 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                                 name != null &&
                                         name ==
                                             clustersRepository
-                                                .getCluster(clustersRepository
-                                                    .activeClusterId)!
+                                                .getCluster(
+                                                  clustersRepository
+                                                      .activeClusterId,
+                                                )!
                                                 .namespace
                                     ? Icons.radio_button_checked
                                     : Icons.radio_button_unchecked,

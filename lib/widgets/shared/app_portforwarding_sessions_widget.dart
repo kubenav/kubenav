@@ -104,12 +104,13 @@ class _AppPortForwardingSessionWidgetState
         Navigator.pop(context);
       }
     } catch (err) {
-      if (!context.mounted) return;
-      showSnackbar(
-        context,
-        'Port Forwarding Session was not deleted',
-        err.toString(),
-      );
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Port Forwarding Session was not deleted',
+          err.toString(),
+        );
+      }
     }
   }
 
