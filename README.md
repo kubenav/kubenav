@@ -12,7 +12,7 @@
   <table>
     <tr>
       <td><img src="utils/images/stores/iphone65-1.png" /></td>
-      <td><img src="utils/images/stores/iphone65-3.png" /></td>
+      <td><img src="utils/images/stores/iphone65-2.png" /></td>
       <td><img src="utils/images/stores/iphone65-3.png" /></td>
     </tr>
   </table>
