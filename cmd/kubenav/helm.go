@@ -431,6 +431,10 @@ func HelmGetHistory(clusterServer, clusterCertificateAuthorityData string, clust
 		releases = append(releases, release)
 	}
 
+	sort.Slice(releases, func(i, j int) bool {
+		return releases[i].Version < releases[j].Version
+	})
+
 	releasesBytes, err := json.Marshal(releases)
 	if err != nil {
 		return "", err
