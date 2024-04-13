@@ -10,50 +10,9 @@ import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 
-/// [colors] is a list of all supported text colors of our terminal.
-List<Color> colors = [
-  const Color(0xffD8DEE9),
-  const Color(0xff81A1C1),
-  const Color(0xffB48EAD),
-  const Color(0xff8FBCBB),
-  const Color(0xffEBCB8B),
-  const Color(0xff88C0D0),
-  const Color(0xffA3BE8C),
-  const Color(0xff5E81AC),
-];
-
-/// [terminalTheme] is the theme for our terminal. These are the same colors as
-/// used the awesome Nord theme (https://www.nordtheme.com) which is currently
-/// my favorite theme.
-const xterm.TerminalTheme terminalTheme = xterm.TerminalTheme(
-  cursor: Color(0xffd8dee9),
-  selection: Color(0xff4c566a),
-  foreground: Color(0xffd8dee9),
-  background: Color(0xff2e3440),
-  black: Color(0xff3b4251),
-  red: Color(0xffbf6069),
-  green: Color(0xffa3be8b),
-  yellow: Color(0xffeacb8a),
-  blue: Color(0xff81a1c1),
-  magenta: Color(0xffb48dac),
-  cyan: Color(0xff88c0d0),
-  white: Color(0xffe5e9f0),
-  brightBlack: Color(0xff4c556a),
-  brightRed: Color(0xffbf6069),
-  brightGreen: Color(0xffa3be8b),
-  brightYellow: Color(0xffeacb8a),
-  brightBlue: Color(0xff81a1c1),
-  brightMagenta: Color(0xffb48dac),
-  brightCyan: Color(0xff8fbcbb),
-  brightWhite: Color(0xffeceef4),
-  searchHitBackground: Color(0xffeacb8a),
-  searchHitBackgroundCurrent: Color(0xffeacb8a),
-  searchHitForeground: Color(0xff2e3440),
-);
-
 /// [getColor] returns the correct color from the [colors] list for the provided
 /// [index].
-Color getColor(int index) {
+Color getColor(int index, List<Color> colors) {
   return colors[index % colors.length];
 }
 
@@ -111,7 +70,7 @@ class AppTerminalsWidget extends StatelessWidget {
                               Constants.spacingExtraSmall,
                             ),
                             decoration: BoxDecoration(
-                              color: theme(context).colorPrimary,
+                              color: theme(context).primary,
                               borderRadius: const BorderRadius.all(
                                 Radius.circular(
                                   Constants.sizeBorderRadius,
@@ -120,9 +79,9 @@ class AppTerminalsWidget extends StatelessWidget {
                             ),
                             height: 54,
                             width: 54,
-                            child: const Icon(
+                            child: Icon(
                               Icons.terminal,
-                              color: Colors.white,
+                              color: theme(context).onPrimary,
                               size: 36,
                             ),
                           ),
@@ -187,11 +146,11 @@ class AppTerminalsWidget extends StatelessWidget {
                           height: 32,
                           child: TabBar(
                             isScrollable: true,
-                            labelColor: Colors.white,
-                            unselectedLabelColor: theme(context).colorPrimary,
+                            labelColor: theme(context).onPrimary,
+                            unselectedLabelColor: theme(context).primary,
                             indicatorSize: TabBarIndicatorSize.tab,
                             indicator: BoxDecoration(
-                              color: theme(context).colorPrimary,
+                              color: theme(context).primary,
                             ),
                             tabs: terminalRepository.terminals
                                 .asMap()
@@ -229,7 +188,7 @@ class AppTerminalsWidget extends StatelessWidget {
                                   ? terminal.value.terminal != null
                                       ? xtermui.TerminalView(
                                           terminal.value.terminal!.terminal,
-                                          theme: terminalTheme,
+                                          theme: theme(context).terminalTheme,
                                           textStyle: xterm.TerminalStyle(
                                             fontSize: 14,
                                             fontFamily:
@@ -243,7 +202,8 @@ class AppTerminalsWidget extends StatelessWidget {
                                           ? xtermui.TerminalView(
                                               terminal
                                                   .value.logstream!.terminal,
-                                              theme: terminalTheme,
+                                              theme:
+                                                  theme(context).terminalTheme,
                                               textStyle: xterm.TerminalStyle(
                                                 fontSize: 14,
                                                 fontFamily:
@@ -258,7 +218,7 @@ class AppTerminalsWidget extends StatelessWidget {
                                             padding: const EdgeInsets.all(
                                               Constants.spacingSmall,
                                             ),
-                                            color: const Color(0xff2E3440),
+                                            color: theme(context).background,
                                             child: Wrap(
                                               children: terminal.value.logs ==
                                                       null
@@ -270,8 +230,11 @@ class AppTerminalsWidget extends StatelessWidget {
                                                         (e) => SelectableText(
                                                           e.value.join('\n\n'),
                                                           style: TextStyle(
-                                                            color:
-                                                                getColor(e.key),
+                                                            color: getColor(
+                                                              e.key,
+                                                              theme(context)
+                                                                  .logsTheme,
+                                                            ),
                                                             fontSize: 14,
                                                             fontFamily:
                                                                 getMonospaceFontFamily(),

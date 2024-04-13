@@ -29,7 +29,7 @@ class ResourcesBookmarkActions extends StatelessWidget {
       actions: [
         AppActionsWidgetAction(
           title: 'Delete',
-          color: theme(context).colorDanger,
+          color: theme(context).error,
           onTap: () {
             final title = bookmarksRepository.bookmarks[index].title;
             bookmarksRepository.removeBookmark(index);

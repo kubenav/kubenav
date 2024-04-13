@@ -208,7 +208,7 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
                 children: [
                   const Text('Insecure Skip TLS Verify'),
                   Switch(
-                    activeColor: theme(context).colorPrimary,
+                    activeColor: theme(context).primary,
                     onChanged: (val) => {
                       setState(() {
                         _clusterInsecureSkipTLSVerify =

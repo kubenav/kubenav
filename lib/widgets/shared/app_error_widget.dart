@@ -36,14 +36,14 @@ class AppErrorWidget extends StatelessWidget {
     } else if (icon is IconData) {
       return Icon(
         icon,
-        color: theme(context).colorOnPrimary,
+        color: theme(context).onPrimary,
         size: 108,
       );
     }
 
     return Icon(
       CustomIcons.kubenav,
-      color: theme(context).colorOnPrimary,
+      color: theme(context).onPrimary,
       size: 108,
     );
   }
@@ -66,13 +66,13 @@ class AppErrorWidget extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: theme(context).colorShadow,
+            color: theme(context).shadow,
             blurRadius: Constants.sizeBorderBlurRadius,
             spreadRadius: Constants.sizeBorderSpreadRadius,
             offset: const Offset(0.0, 0.0),
           ),
         ],
-        color: theme(context).colorCard,
+        color: theme(context).card,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),
@@ -82,7 +82,7 @@ class AppErrorWidget extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(Constants.sizeBorderRadius),
                 topRight: Radius.circular(Constants.sizeBorderRadius),

@@ -252,7 +252,7 @@ class _SettingsAzureProviderState extends State<SettingsAzureProvider> {
                 children: [
                   const Text('Admin'),
                   Switch(
-                    activeColor: theme(context).colorPrimary,
+                    activeColor: theme(context).primary,
                     onChanged: (val) {
                       setState(() {
                         _isAdmin = !_isAdmin;

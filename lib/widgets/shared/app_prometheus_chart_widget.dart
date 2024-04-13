@@ -110,7 +110,7 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                     child: Wrap(
                       children: [
                         CircularProgressIndicator(
-                          color: theme(context).colorPrimary,
+                          color: theme(context).primary,
                         ),
                       ],
                     ),
@@ -152,13 +152,13 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: theme(context).colorShadow,
+                          color: theme(context).shadow,
                           blurRadius: Constants.sizeBorderBlurRadius,
                           spreadRadius: Constants.sizeBorderSpreadRadius,
                           offset: const Offset(0.0, 0.0),
                         ),
                       ],
-                      color: theme(context).colorCard,
+                      color: theme(context).card,
                       borderRadius: const BorderRadius.all(
                         Radius.circular(Constants.sizeBorderRadius),
                       ),
@@ -182,7 +182,7 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                   getTooltipColor: (LineBarSpot touchedSpot) {
                                     return theme(
                                       context,
-                                    ).colorMessageBackground;
+                                    ).message;
                                   },
                                   getTooltipItems: (touchedSpots) {
                                     return touchedSpots
@@ -190,8 +190,7 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                       return LineTooltipItem(
                                         '${snapshot.data![touchedSpot.barIndex].label}: ${touchedSpot.y.toStringAsFixed(6)} ${widget.unit}',
                                         TextStyle(
-                                          color: theme(context)
-                                              .colorMessageForeground,
+                                          color: theme(context).onMessage,
                                           fontWeight: FontWeight.normal,
                                           fontSize: 14,
                                         ),
@@ -208,7 +207,7 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                       dotData: const FlDotData(
                                         show: false,
                                       ),
-                                      color: theme(context).colorPrimary,
+                                      color: theme(context).primary,
                                       barWidth: 4,
                                       isCurved: false,
                                     ),
@@ -276,14 +275,14 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                 show: true,
                                 getDrawingHorizontalLine: (value) {
                                   return FlLine(
-                                    color: theme(context).colorTextSecondary,
+                                    color: theme(context).textSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );
                                 },
                                 getDrawingVerticalLine: (value) {
                                   return FlLine(
-                                    color: theme(context).colorTextSecondary,
+                                    color: theme(context).textSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );

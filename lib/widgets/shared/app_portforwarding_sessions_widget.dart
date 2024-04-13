@@ -32,7 +32,7 @@ class AppPortForwardingSessionsWidget extends StatelessWidget {
         (index) => AppActionsWidgetAction(
           title:
               '${portForwardingRepository.sessions[index].name} ${portForwardingRepository.sessions[index].remotePort}:${portForwardingRepository.sessions[index].localPort}',
-          color: theme(context).colorPrimary,
+          color: theme(context).primary,
           onTap: () {
             Navigator.pop(context);
             showActions(
@@ -126,7 +126,7 @@ class _AppPortForwardingSessionWidgetState
       actions: [
         AppActionsWidgetAction(
           title: 'Open',
-          color: theme(context).colorPrimary,
+          color: theme(context).primary,
           onTap: () {
             Navigator.pop(context);
             openUrl(
@@ -136,7 +136,7 @@ class _AppPortForwardingSessionWidgetState
         ),
         AppActionsWidgetAction(
           title: 'Copy',
-          color: theme(context).colorPrimary,
+          color: theme(context).primary,
           onTap: () {
             Navigator.pop(context);
             Clipboard.setData(
@@ -149,7 +149,7 @@ class _AppPortForwardingSessionWidgetState
         ),
         AppActionsWidgetAction(
           title: 'Delete',
-          color: theme(context).colorDanger,
+          color: theme(context).error,
           onTap: () {
             _deleteSession();
           },

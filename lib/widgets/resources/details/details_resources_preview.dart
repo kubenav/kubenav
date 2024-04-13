@@ -212,7 +212,7 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
           case ConnectionState.waiting:
             return buildContainer(
               CircularProgressIndicator(
-                color: theme(context).colorPrimary,
+                color: theme(context).primary,
               ),
             );
           default:

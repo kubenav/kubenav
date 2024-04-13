@@ -15,7 +15,7 @@ TextStyle noramlTextStyle(
 }) {
   return TextStyle(
     fontSize: size ?? Constants.sizeTextPrimary,
-    color: color ?? theme(context).colorTextPrimary,
+    color: color ?? theme(context).textPrimary,
   );
 }
 
@@ -27,7 +27,7 @@ TextStyle primaryTextStyle(
 }) {
   return TextStyle(
     fontSize: size ?? Constants.sizeTextPrimary,
-    color: color ?? theme(context).colorTextPrimary,
+    color: color ?? theme(context).textPrimary,
     fontWeight: FontWeight.bold,
   );
 }
@@ -40,7 +40,7 @@ TextStyle secondaryTextStyle(
 }) {
   return TextStyle(
     fontSize: size ?? Constants.sizeTextSecondary,
-    color: color ?? theme(context).colorTextSecondary,
+    color: color ?? theme(context).textSecondary,
     fontWeight: FontWeight.normal,
   );
 }

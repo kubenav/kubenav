@@ -30,7 +30,7 @@ class AppVertialListSimpleModel {
 ///       children: [
 ///         const Icon(
 ///           CustomIcons.version,
-///           color: theme(context).colorPrimary,
+///           color: theme(context).primary,
 ///         ),
 ///         const SizedBox(width: Constants.spacingSmall),
 ///         Expanded(
@@ -45,7 +45,7 @@ class AppVertialListSimpleModel {
 ///             right: 6,
 ///           ),
 ///           decoration: const BoxDecoration(
-///             color: theme(context).colorPrimary,
+///             color: theme(context).primary,
 ///             borderRadius: BorderRadius.all(
 ///               Radius.circular(Constants.sizeBorderRadius),
 ///             ),

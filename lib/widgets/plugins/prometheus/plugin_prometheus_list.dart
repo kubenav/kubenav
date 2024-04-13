@@ -303,7 +303,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
                             padding:
                                 const EdgeInsets.all(Constants.spacingMiddle),
                             child: CircularProgressIndicator(
-                              color: theme(context).colorPrimary,
+                              color: theme(context).primary,
                             ),
                           ),
                         ],

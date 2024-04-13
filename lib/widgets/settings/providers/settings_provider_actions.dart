@@ -109,7 +109,7 @@ class _SettingsProviderActionsState extends State<SettingsProviderActions> {
       actions: [
         AppActionsWidgetAction(
           title: 'Edit',
-          color: theme(context).colorPrimary,
+          color: theme(context).primary,
           onTap: () {
             Navigator.pop(context);
             showModal(context, buildProviderModal());
@@ -117,7 +117,7 @@ class _SettingsProviderActionsState extends State<SettingsProviderActions> {
         ),
         AppActionsWidgetAction(
           title: 'Delete',
-          color: theme(context).colorDanger,
+          color: theme(context).error,
           onTap: () {
             deleteProvider();
           },

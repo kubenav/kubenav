@@ -94,7 +94,7 @@ class DetailsItemWidget extends StatelessWidget {
           child: Text(
             values.toString(),
             style: TextStyle(
-              color: theme(context).colorTextPrimary,
+              color: theme(context).textPrimary,
               decoration: TextDecoration.underline,
             ),
           ),
@@ -106,7 +106,7 @@ class DetailsItemWidget extends StatelessWidget {
       child: Text(
         values.toString(),
         style: TextStyle(
-          color: theme(context).colorTextPrimary,
+          color: theme(context).textPrimary,
         ),
       ),
     );
@@ -124,13 +124,13 @@ class DetailsItemWidget extends StatelessWidget {
               goTo!,
               style: secondaryTextStyle(
                 context,
-                color: theme(context).colorPrimary,
+                color: theme(context).primary,
               ),
             ),
             const SizedBox(width: Constants.spacingExtraSmall),
             Icon(
               Icons.keyboard_arrow_right,
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
               size: 16,
             ),
           ],
@@ -181,13 +181,13 @@ class DetailsItemWidget extends StatelessWidget {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: theme(context).colorShadow,
+                color: theme(context).shadow,
                 blurRadius: Constants.sizeBorderBlurRadius,
                 spreadRadius: Constants.sizeBorderSpreadRadius,
                 offset: const Offset(0.0, 0.0),
               ),
             ],
-            color: theme(context).colorCard,
+            color: theme(context).card,
             borderRadius: const BorderRadius.all(
               Radius.circular(Constants.sizeBorderRadius),
             ),

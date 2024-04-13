@@ -4,13 +4,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:code_text_field/code_text_field.dart';
-import 'package:flutter_highlight/themes/nord.dart';
 import 'package:highlight/languages/json.dart' as highlight_json;
 import 'package:highlight/languages/yaml.dart' as highlight_yaml;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/helpers_service.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
@@ -167,7 +167,7 @@ class _DetailsShowYamlState extends State<DetailsShowYaml> {
                 vertical: 8,
               ),
               child: CodeTheme(
-                data: const CodeThemeData(styles: nordTheme),
+                data: CodeThemeData(styles: theme(context).editorTheme),
                 child: CodeField(
                   controller: _codeController,
                   enabled: false,

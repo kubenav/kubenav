@@ -26,7 +26,7 @@ class AppDrawer extends StatelessWidget {
     if (icon is String) {
       return Container(
         decoration: BoxDecoration(
-          color: theme(context).colorPrimary,
+          color: theme(context).primary,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
@@ -42,7 +42,7 @@ class AppDrawer extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: theme(context).colorPrimary,
+        color: theme(context).primary,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),
@@ -54,7 +54,7 @@ class AppDrawer extends StatelessWidget {
       ),
       child: Icon(
         icon,
-        color: theme(context).colorOnPrimary,
+        color: theme(context).onPrimary,
       ),
     );
   }
@@ -62,13 +62,13 @@ class AppDrawer extends StatelessWidget {
   Widget buildTitle(BuildContext context, String title) {
     return Text(
       title,
-      style: TextStyle(color: theme(context).colorOnPrimary),
+      style: TextStyle(color: theme(context).onPrimary),
     );
   }
 
   Widget buildDivider(BuildContext context, String title) {
     // See: https://stackoverflow.com/a/58604669
-    final hsl = HSLColor.fromColor(theme(context).colorPrimary);
+    final hsl = HSLColor.fromColor(theme(context).primary);
     final hslDark = hsl.withLightness((hsl.lightness - 0.1).clamp(0.0, 1.0));
 
     return Container(
@@ -84,7 +84,7 @@ class AppDrawer extends StatelessWidget {
         style: TextStyle(
           // fontSize: 16,
           fontWeight: FontWeight.bold,
-          color: theme(context).colorOnPrimary,
+          color: theme(context).onPrimary,
         ),
       ),
     );
@@ -147,13 +147,13 @@ class AppDrawer extends StatelessWidget {
 
     return Drawer(
       child: Container(
-        color: theme(context).colorPrimary,
+        color: theme(context).primary,
         child: SafeArea(
           child: ListView(
             padding: EdgeInsets.zero,
             children: ListTile.divideTiles(
               context: context,
-              color: theme(context).colorOnPrimary,
+              color: theme(context).onPrimary,
               tiles: [
                 ListTile(
                   leading: buildLeading(context, Icons.home),
@@ -197,7 +197,7 @@ class AppDrawer extends StatelessWidget {
                       Text(
                         'Cluster',
                         style: TextStyle(
-                          color: theme(context).colorOnPrimary,
+                          color: theme(context).onPrimary,
                           fontSize: 10,
                         ),
                       ),
@@ -205,7 +205,7 @@ class AppDrawer extends StatelessWidget {
                         Characters(activeCluster?.name ?? 'No Active Cluster')
                             .replaceAll(Characters(''), Characters('\u{200B}'))
                             .toString(),
-                        style: TextStyle(color: theme(context).colorOnPrimary),
+                        style: TextStyle(color: theme(context).onPrimary),
                       ),
                     ],
                   ),

@@ -40,7 +40,7 @@ class SettingsProviders extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
               borderRadius: const BorderRadius.all(
                 Radius.circular(Constants.sizeBorderRadius),
               ),
@@ -88,9 +88,8 @@ class SettingsProviders extends StatelessWidget {
           const SizedBox(width: Constants.spacingSmall),
           Icon(
             Icons.arrow_forward_ios,
-            color: theme(context)
-                .colorTextSecondary
-                .withOpacity(Constants.opacityIcon),
+            color:
+                theme(context).textSecondary.withOpacity(Constants.opacityIcon),
             size: 24,
           ),
         ],

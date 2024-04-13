@@ -447,8 +447,8 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           ),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: theme(context).colorPrimary,
-              foregroundColor: Colors.white,
+              backgroundColor: theme(context).primary,
+              foregroundColor: theme(context).onPrimary,
               minimumSize: const Size.fromHeight(40),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
@@ -461,7 +461,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
               'Verify',
               style: primaryTextStyle(
                 context,
-                color: Colors.white,
+                color: theme(context).onPrimary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -477,7 +477,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
             children: [
               const Text('Use Access Token instead of ID Token'),
               Switch(
-                activeColor: theme(context).colorPrimary,
+                activeColor: theme(context).primary,
                 onChanged: (val) => {
                   setState(() {
                     _useAccessToken = !_useAccessToken;
@@ -522,8 +522,8 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           ),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: theme(context).colorPrimary,
-              foregroundColor: Colors.white,
+              backgroundColor: theme(context).primary,
+              foregroundColor: theme(context).onPrimary,
               minimumSize: const Size.fromHeight(40),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
@@ -536,7 +536,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
               'Initialize Device Flow',
               style: primaryTextStyle(
                 context,
-                color: Colors.white,
+                color: theme(context).onPrimary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -560,7 +560,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
               value: _pkceMethod,
               underline: Container(
                 height: 2,
-                color: theme(context).colorPrimary,
+                color: theme(context).primary,
               ),
               onChanged: (String? newValue) {
                 setState(() {
@@ -576,7 +576,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                   child: Text(
                     value,
                     style: TextStyle(
-                      color: theme(context).colorTextPrimary,
+                      color: theme(context).textPrimary,
                     ),
                   ),
                 );
@@ -660,7 +660,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           children: [
             const Text('Use Access Token instead of ID Token'),
             Switch(
-              activeColor: theme(context).colorPrimary,
+              activeColor: theme(context).primary,
               onChanged: (val) => {
                 setState(() {
                   _useAccessToken = !_useAccessToken;
@@ -677,8 +677,8 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         ),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: theme(context).colorPrimary,
-            foregroundColor: Colors.white,
+            backgroundColor: theme(context).primary,
+            foregroundColor: theme(context).onPrimary,
             minimumSize: const Size.fromHeight(40),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
@@ -691,7 +691,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
             'Sign In',
             style: primaryTextStyle(
               context,
-              color: Colors.white,
+              color: theme(context).onPrimary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -802,7 +802,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                     value: _flow,
                     underline: Container(
                       height: 2,
-                      color: theme(context).colorPrimary,
+                      color: theme(context).primary,
                     ),
                     onChanged: (OIDCFlow? newValue) {
                       setState(() {
@@ -815,7 +815,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                         child: Text(
                           value.pretty(),
                           style: TextStyle(
-                            color: theme(context).colorTextPrimary,
+                            color: theme(context).textPrimary,
                           ),
                         ),
                       );

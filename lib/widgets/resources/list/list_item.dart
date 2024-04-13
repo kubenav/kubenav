@@ -72,10 +72,10 @@ class ListItemWidget extends StatelessWidget {
             Icons.radio_button_checked,
             size: 24,
             color: status == Status.success
-                ? theme(context).colorSuccess
+                ? theme(context).success
                 : status == Status.danger
-                    ? theme(context).colorDanger
-                    : theme(context).colorWarning,
+                    ? theme(context).error
+                    : theme(context).warning,
           ),
         ],
       );
@@ -91,16 +91,18 @@ class ListItemWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: info
-          .map((e) => Text(
-                Characters(e)
-                    .replaceAll(Characters(''), Characters('\u{200B}'))
-                    .toString(),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: secondaryTextStyle(
-                  context,
-                ),
-              ),)
+          .map(
+            (e) => Text(
+              Characters(e)
+                  .replaceAll(Characters(''), Characters('\u{200B}'))
+                  .toString(),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: secondaryTextStyle(
+                context,
+              ),
+            ),
+          )
           .toList(),
     );
   }

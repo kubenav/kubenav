@@ -38,7 +38,7 @@ class SettingsSponsorActions extends StatelessWidget {
               ...sponsorRepository.products.map(
                 (e) => AppActionsWidgetAction(
                   title: titles.containsKey(e.id) ? titles[e.id]! : e.title,
-                  color: theme(context).colorPrimary,
+                  color: theme(context).primary,
                   onTap: () {
                     Navigator.pop(context);
                     showModal(
@@ -50,7 +50,7 @@ class SettingsSponsorActions extends StatelessWidget {
               ),
               AppActionsWidgetAction(
                 title: 'Not Now',
-                color: theme(context).colorDanger,
+                color: theme(context).error,
                 onTap: () {
                   // For testing we can set the reminder to 1 minute, by default
                   // it is set to 7 days.
@@ -67,7 +67,7 @@ class SettingsSponsorActions extends StatelessWidget {
               .map(
                 (e) => AppActionsWidgetAction(
                   title: titles.containsKey(e.id) ? titles[e.id]! : e.title,
-                  color: theme(context).colorPrimary,
+                  color: theme(context).primary,
                   onTap: () {
                     Navigator.pop(context);
                     showModal(

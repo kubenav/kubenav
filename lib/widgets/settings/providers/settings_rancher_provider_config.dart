@@ -244,7 +244,7 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
                 children: [
                   const Text('Allow Insecure Connections'),
                   Switch(
-                    activeColor: theme(context).colorPrimary,
+                    activeColor: theme(context).primary,
                     onChanged: (value) {
                       setState(() {
                         _allowInsecureConnections = !_allowInsecureConnections;
@@ -295,8 +295,8 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: theme(context).colorPrimary,
-                  foregroundColor: Colors.white,
+                  backgroundColor: theme(context).primary,
+                  foregroundColor: theme(context).onPrimary,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
@@ -309,7 +309,7 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
                   'Sign In',
                   style: primaryTextStyle(
                     context,
-                    color: Colors.white,
+                    color: theme(context).onPrimary,
                   ),
                   textAlign: TextAlign.center,
                 ),

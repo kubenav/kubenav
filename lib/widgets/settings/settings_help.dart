@@ -68,7 +68,7 @@ class SettingsHelp extends StatelessWidget {
           children: [
             Icon(
               help_model.Help.list[sectionIndex].items[itemIndex].icon,
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -82,9 +82,8 @@ class SettingsHelp extends StatelessWidget {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: theme(context)
-                  .colorTextPrimary
-                  .withOpacity(Constants.opacityIcon),
+              color:
+                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],

@@ -120,8 +120,10 @@ class DetailsContainer extends StatelessWidget {
                 name: 'Ports',
                 values: container.ports.isNotEmpty
                     ? container.ports
-                        .map((port) =>
-                            '${port.containerPort}${port.hostPort != null ? '/${port.hostPort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''}',)
+                        .map(
+                          (port) =>
+                              '${port.containerPort}${port.hostPort != null ? '/${port.hostPort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''}',
+                        )
                         .toList()
                     : '-',
               ),
@@ -155,8 +157,11 @@ class DetailsContainer extends StatelessWidget {
                 name: 'CPU Usage',
                 values: containerMetric.isNotEmpty &&
                         containerMetric[0].usage?.cpu != null
-                    ? formatCpuMetric(cpuMetricsStringToDouble(
-                        containerMetric[0].usage!.cpu!,),)
+                    ? formatCpuMetric(
+                        cpuMetricsStringToDouble(
+                          containerMetric[0].usage!.cpu!,
+                        ),
+                      )
                     : '-',
               ),
               DetailsItemModel(
@@ -177,8 +182,11 @@ class DetailsContainer extends StatelessWidget {
                 name: 'Memory Usage',
                 values: containerMetric.isNotEmpty &&
                         containerMetric[0].usage?.memory != null
-                    ? formatMemoryMetric(memoryMetricsStringToDouble(
-                        containerMetric[0].usage!.memory!,),)
+                    ? formatMemoryMetric(
+                        memoryMetricsStringToDouble(
+                          containerMetric[0].usage!.memory!,
+                        ),
+                      )
                     : '-',
               ),
               DetailsItemModel(
@@ -218,7 +226,7 @@ class DetailsContainer extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: theme(context).colorPrimary,
+                          color: theme(context).primary,
                           borderRadius: const BorderRadius.all(
                             Radius.circular(Constants.sizeBorderRadius),
                           ),
@@ -265,7 +273,7 @@ class DetailsContainer extends StatelessWidget {
                       Icon(
                         Icons.arrow_forward_ios,
                         color: theme(context)
-                            .colorTextSecondary
+                            .textSecondary
                             .withOpacity(Constants.opacityIcon),
                         size: 24,
                       ),
@@ -290,7 +298,7 @@ class DetailsContainer extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: theme(context).colorPrimary,
+                          color: theme(context).primary,
                           borderRadius: const BorderRadius.all(
                             Radius.circular(Constants.sizeBorderRadius),
                           ),
@@ -333,7 +341,7 @@ class DetailsContainer extends StatelessWidget {
                       Icon(
                         Icons.arrow_forward_ios,
                         color: theme(context)
-                            .colorTextSecondary
+                            .textSecondary
                             .withOpacity(Constants.opacityIcon),
                         size: 24,
                       ),

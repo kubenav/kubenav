@@ -35,13 +35,13 @@ class AppNoClustersWidget extends StatelessWidget {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: theme(context).colorShadow,
+              color: theme(context).shadow,
               blurRadius: Constants.sizeBorderBlurRadius,
               spreadRadius: Constants.sizeBorderSpreadRadius,
               offset: const Offset(0.0, 0.0),
             ),
           ],
-          color: theme(context).colorCard,
+          color: theme(context).card,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
@@ -59,7 +59,7 @@ class AppNoClustersWidget extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: theme(context).colorPrimary,
+                  color: theme(context).primary,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(Constants.sizeBorderRadius),
                     topRight: Radius.circular(Constants.sizeBorderRadius),
@@ -67,9 +67,9 @@ class AppNoClustersWidget extends StatelessWidget {
                 ),
                 height: 140,
                 width: MediaQuery.of(context).size.width,
-                child: const Icon(
+                child: Icon(
                   CustomIcons.clusters,
-                  color: Colors.white,
+                  color: theme(context).onPrimary,
                   size: 108,
                 ),
               ),

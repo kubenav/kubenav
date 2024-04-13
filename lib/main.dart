@@ -10,7 +10,6 @@ import 'package:kubenav/repositories/portforwarding_repository.dart';
 import 'package:kubenav/repositories/sponsor_repository.dart';
 import 'package:kubenav/repositories/terminal_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
-import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/storage.dart';
 import 'package:kubenav/widgets/home/home.dart';
 
@@ -82,47 +81,57 @@ class _AppMaterialAppState extends State<AppMaterialApp> {
       child: MaterialApp(
         title: 'kubenav',
         theme: ThemeData(
-          brightness: theme.brightness,
-          primaryColor: theme.colorPrimary,
-          canvasColor: theme.colorBackground,
-          cardColor: theme.colorBackground,
+          useMaterial3: true,
+          colorScheme: ColorScheme(
+            brightness: theme.brightness,
+            primary: theme.primary,
+            onPrimary: theme.onPrimary,
+            secondary: theme.primary,
+            onSecondary: theme.onPrimary,
+            error: theme.error,
+            onError: theme.onError,
+            background: theme.background,
+            onBackground: theme.onBackground,
+            surface: theme.surface,
+            onSurface: theme.onSurface,
+          ),
+          canvasColor: theme.canvasColor,
           appBarTheme: AppBarTheme(
-            backgroundColor: theme.colorPrimary,
-            foregroundColor: theme.colorOnPrimary,
+            backgroundColor: theme.primary,
+            foregroundColor: theme.onPrimary,
             elevation: 0,
           ),
-          // cardColor: theme.colorBackground,
-          inputDecorationTheme: InputDecorationTheme(
-            floatingLabelStyle: TextStyle(
-              color: theme.colorPrimary,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                style: BorderStyle.solid,
-                color: theme.colorPrimary,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                style: BorderStyle.solid,
-                color: theme.colorInputDecoration,
-              ),
-            ),
-            labelStyle: TextStyle(
-              color: theme.colorInputDecoration,
+          snackBarTheme: SnackBarThemeData(
+            backgroundColor: theme.surface,
+            contentTextStyle: TextStyle(
+              color: theme.onSurface,
             ),
           ),
-          textSelectionTheme: TextSelectionThemeData(
-            cursorColor: theme.colorPrimary,
-            selectionColor: theme.colorPrimary.withOpacity(0.25),
-            selectionHandleColor: theme.colorPrimary,
+          dialogTheme: DialogTheme(
+            backgroundColor: theme.background,
+            surfaceTintColor: theme.background,
+            contentTextStyle: TextStyle(
+              color: theme.onBackground,
+            ),
           ),
-          // shadowColor: Colors.grey.withOpacity(0.2),
+          popupMenuTheme: PopupMenuThemeData(
+            color: theme.background,
+            surfaceTintColor: theme.background,
+            textStyle: TextStyle(
+              color: theme.onBackground,
+            ),
+          ),
+          drawerTheme: DrawerThemeData(
+            backgroundColor: theme.background,
+            surfaceTintColor: theme.background,
+          ),
           bottomSheetTheme: BottomSheetThemeData(
-            backgroundColor: theme.colorBackground,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
-            ),
+            backgroundColor: theme.background,
+            surfaceTintColor: theme.background,
+          ),
+          dividerColor: theme.divider,
+          dividerTheme: DividerThemeData(
+            color: theme.divider,
           ),
           pageTransitionsTheme: const PageTransitionsTheme(
             builders: {

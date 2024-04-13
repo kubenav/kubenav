@@ -48,7 +48,7 @@ class Plugins extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: theme(context).colorPrimary,
+                  color: theme(context).primary,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(Constants.sizeBorderRadius),
                   ),
@@ -89,7 +89,7 @@ class Plugins extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios,
                 color: theme(context)
-                    .colorTextSecondary
+                    .textSecondary
                     .withOpacity(Constants.opacityIcon),
                 size: 24,
               ),
@@ -102,7 +102,7 @@ class Plugins extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: theme(context).colorPrimary,
+                  color: theme(context).primary,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(Constants.sizeBorderRadius),
                   ),
@@ -141,7 +141,7 @@ class Plugins extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios,
                 color: theme(context)
-                    .colorTextSecondary
+                    .textSecondary
                     .withOpacity(Constants.opacityIcon),
                 size: 24,
               ),
@@ -173,40 +173,41 @@ class Plugins extends StatelessWidget {
     return Scaffold(
       drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
-          centerTitle: true,
-          actions: [
-            IconButton(
-              icon: const Icon(CustomIcons.clusters),
-              onPressed: () {
-                showModal(context, const AppClustersWidget());
-              },
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(CustomIcons.clusters),
+            onPressed: () {
+              showModal(context, const AppClustersWidget());
+            },
+          ),
+        ],
+        automaticallyImplyLeading: false,
+        title: Column(
+          children: [
+            const Text(
+              'Plugins',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Text(
+              Characters(activeCluster?.name ?? 'No Active Cluster')
+                  .replaceAll(Characters(''), Characters('\u{200B}'))
+                  .toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
-          automaticallyImplyLeading: false,
-          title: Column(
-            children: [
-              const Text(
-                'Plugins',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              Text(
-                Characters(activeCluster?.name ?? 'No Active Cluster')
-                    .replaceAll(Characters(''), Characters('\u{200B}'))
-                    .toString(),
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),),
+        ),
+      ),
       bottomNavigationBar: appRepository.settings.classicMode
           ? null
           : const AppBottomNavigationBarWidget(),

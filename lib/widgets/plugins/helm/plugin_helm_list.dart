@@ -327,7 +327,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
                             padding:
                                 const EdgeInsets.all(Constants.spacingMiddle),
                             child: CircularProgressIndicator(
-                              color: theme(context).colorPrimary,
+                              color: theme(context).primary,
                             ),
                           ),
                         ],

@@ -197,7 +197,7 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
                     value: _container,
                     underline: Container(
                       height: 2,
-                      color: theme(context).colorPrimary,
+                      color: theme(context).primary,
                     ),
                     onChanged: (String? value) {
                       setState(() {
@@ -210,7 +210,7 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
                         child: Text(
                           value,
                           style: TextStyle(
-                            color: theme(context).colorTextPrimary,
+                            color: theme(context).textPrimary,
                           ),
                         ),
                       );
@@ -232,7 +232,7 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
                     value: _shell,
                     underline: Container(
                       height: 2,
-                      color: theme(context).colorPrimary,
+                      color: theme(context).primary,
                     ),
                     onChanged: (String? value) {
                       setState(() {
@@ -250,7 +250,7 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
                         child: Text(
                           value,
                           style: TextStyle(
-                            color: theme(context).colorTextPrimary,
+                            color: theme(context).textPrimary,
                           ),
                         ),
                       );

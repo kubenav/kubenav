@@ -273,7 +273,7 @@ class _PodDetailsItemState extends State<PodDetailsItem> {
               case ConnectionState.none:
               case ConnectionState.waiting:
                 return CircularProgressIndicator(
-                  color: theme(context).colorPrimary,
+                  color: theme(context).primary,
                 );
               default:
                 return DetailsContainers(

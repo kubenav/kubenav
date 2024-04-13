@@ -51,7 +51,7 @@ class ClusterRoleDetailsItem extends StatelessWidget
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),
@@ -74,7 +74,9 @@ class ClusterRoleDetailsItem extends StatelessWidget
                           Text(
                             Characters(rule.resource)
                                 .replaceAll(
-                                    Characters(''), Characters('\u{200B}'),)
+                                  Characters(''),
+                                  Characters('\u{200B}'),
+                                )
                                 .toString(),
                             style: primaryTextStyle(
                               context,

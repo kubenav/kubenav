@@ -368,7 +368,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                   Padding(
                     padding: const EdgeInsets.all(Constants.spacingMiddle),
                     child: CircularProgressIndicator(
-                      color: theme(context).colorPrimary,
+                      color: theme(context).primary,
                     ),
                   ),
                 ],
@@ -424,7 +424,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                   Constants.spacingMiddle,
                                 ),
                                 child: CircularProgressIndicator(
-                                  color: theme(context).colorPrimary,
+                                  color: theme(context).primary,
                                 ),
                               ),
                             ],

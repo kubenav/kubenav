@@ -556,7 +556,7 @@ class _ResourcesListState extends State<ResourcesList> {
                       Constants.spacingMiddle,
                     ),
                     child: CircularProgressIndicator(
-                      color: theme(context).colorPrimary,
+                      color: theme(context).primary,
                     ),
                   ),
                 ],
@@ -605,35 +605,39 @@ class _ResourcesListState extends State<ResourcesList> {
                       left: Constants.spacingMiddle,
                       right: Constants.spacingMiddle,
                     ),
-                    color: theme(context).colorPrimary,
+                    color: theme(context).primary,
                     child: TextField(
                       onChanged: (value) {
                         setState(() {
                           _filter = value;
                         });
                       },
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: theme(context).onPrimary,
                       ),
-                      cursorColor: Colors.white,
+                      cursorColor: theme(context).onPrimary,
                       keyboardType: TextInputType.text,
                       autocorrect: false,
                       enableSuggestions: false,
                       maxLines: 1,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 0.0),
+                          borderSide: BorderSide(
+                            color: theme(context).onPrimary,
+                            width: 0.0,
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 0.0),
+                          borderSide: BorderSide(
+                            color: theme(context).onPrimary,
+                            width: 0.0,
+                          ),
                         ),
                         isDense: true,
-                        contentPadding: EdgeInsets.all(8),
+                        contentPadding: const EdgeInsets.all(8),
                         hintStyle: TextStyle(
-                          color: Colors.white,
+                          color: theme(context).onPrimary,
                         ),
                         hintText: 'Filter...',
                       ),

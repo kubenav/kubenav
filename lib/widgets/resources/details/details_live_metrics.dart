@@ -247,12 +247,12 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                 height: 32,
                 child: TabBar(
                   isScrollable: false,
-                  labelColor: Colors.white,
-                  unselectedLabelColor: theme(context).colorPrimary,
+                  labelColor: theme(context).onPrimary,
+                  unselectedLabelColor: theme(context).primary,
                   labelPadding: EdgeInsets.zero,
                   indicatorSize: TabBarIndicatorSize.tab,
                   indicator: BoxDecoration(
-                    color: theme(context).colorPrimary,
+                    color: theme(context).primary,
                   ),
                   tabs: const [
                     Tab(text: 'CPU'),
@@ -279,13 +279,13 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color: theme(context).colorShadow,
+                            color: theme(context).shadow,
                             blurRadius: Constants.sizeBorderBlurRadius,
                             spreadRadius: Constants.sizeBorderSpreadRadius,
                             offset: const Offset(0.0, 0.0),
                           ),
                         ],
-                        color: theme(context).colorCard,
+                        color: theme(context).card,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),
@@ -298,7 +298,8 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                             child: LineChart(
                               LineChartData(
                                 minY: 0,
-                                lineTouchData: const LineTouchData(enabled: false),
+                                lineTouchData:
+                                    const LineTouchData(enabled: false),
                                 clipData: const FlClipData.all(),
                                 lineBarsData: _containerMetrics.entries
                                     .map(
@@ -308,10 +309,10 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                           show: false,
                                         ),
                                         color: e.key == 'Requests'
-                                            ? theme(context).colorWarning
+                                            ? theme(context).warning
                                             : e.key == 'Limits'
-                                                ? theme(context).colorDanger
-                                                : theme(context).colorPrimary,
+                                                ? theme(context).error
+                                                : theme(context).primary,
                                         barWidth: 4,
                                         isCurved: false,
                                       ),
@@ -356,7 +357,8 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                       getTitlesWidget: (value, titleMeta) {
                                         final timestamp =
                                             DateTime.fromMillisecondsSinceEpoch(
-                                                value.round(),);
+                                          value.round(),
+                                        );
 
                                         return Container(
                                           padding: const EdgeInsets.only(
@@ -379,14 +381,14 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                   show: true,
                                   getDrawingHorizontalLine: (value) {
                                     return FlLine(
-                                      color: theme(context).colorTextSecondary,
+                                      color: theme(context).textSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );
                                   },
                                   getDrawingVerticalLine: (value) {
                                     return FlLine(
-                                      color: theme(context).colorTextSecondary,
+                                      color: theme(context).textSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );
@@ -398,32 +400,29 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                           const SizedBox(
                             height: Constants.spacingMiddle,
                           ),
-                          ..._containerMetrics.entries
-                              .map(
-                                (e) => Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      e.key,
-                                      style: noramlTextStyle(
-                                        context,
-                                        size: Constants.sizeTextSecondary,
-                                      ),
-                                    ),
-                                    Text(
-                                      formatCpuMetric(
-                                        e.value.cpu[e.value.cpu.length - 1].y
-                                            .toDouble(),
-                                      ),
-                                      style: secondaryTextStyle(
-                                        context,
-                                      ),
-                                    ),
-                                  ],
+                          ..._containerMetrics.entries.map(
+                            (e) => Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  e.key,
+                                  style: noramlTextStyle(
+                                    context,
+                                    size: Constants.sizeTextSecondary,
+                                  ),
                                 ),
-                              )
-                              ,
+                                Text(
+                                  formatCpuMetric(
+                                    e.value.cpu[e.value.cpu.length - 1].y
+                                        .toDouble(),
+                                  ),
+                                  style: secondaryTextStyle(
+                                    context,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -442,13 +441,13 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color: theme(context).colorShadow,
+                            color: theme(context).shadow,
                             blurRadius: Constants.sizeBorderBlurRadius,
                             spreadRadius: Constants.sizeBorderSpreadRadius,
                             offset: const Offset(0.0, 0.0),
                           ),
                         ],
-                        color: theme(context).colorCard,
+                        color: theme(context).card,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),
@@ -461,22 +460,25 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                             child: LineChart(
                               LineChartData(
                                 minY: 0,
-                                lineTouchData: const LineTouchData(enabled: false),
+                                lineTouchData:
+                                    const LineTouchData(enabled: false),
                                 clipData: const FlClipData.all(),
                                 lineBarsData: _containerMetrics.entries
-                                    .map((e) => LineChartBarData(
-                                          spots: e.value.memory,
-                                          dotData: const FlDotData(
-                                            show: false,
-                                          ),
-                                          color: e.key == 'Requests'
-                                              ? theme(context).colorWarning
-                                              : e.key == 'Limits'
-                                                  ? theme(context).colorDanger
-                                                  : theme(context).colorPrimary,
-                                          barWidth: 4,
-                                          isCurved: false,
-                                        ),)
+                                    .map(
+                                      (e) => LineChartBarData(
+                                        spots: e.value.memory,
+                                        dotData: const FlDotData(
+                                          show: false,
+                                        ),
+                                        color: e.key == 'Requests'
+                                            ? theme(context).warning
+                                            : e.key == 'Limits'
+                                                ? theme(context).error
+                                                : theme(context).primary,
+                                        barWidth: 4,
+                                        isCurved: false,
+                                      ),
+                                    )
                                     .toList(),
                                 titlesData: FlTitlesData(
                                   show: true,
@@ -517,7 +519,8 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                       getTitlesWidget: (value, titleMeta) {
                                         final timestamp =
                                             DateTime.fromMillisecondsSinceEpoch(
-                                                value.round(),);
+                                          value.round(),
+                                        );
 
                                         return Container(
                                           padding: const EdgeInsets.only(
@@ -540,14 +543,14 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                   show: true,
                                   getDrawingHorizontalLine: (value) {
                                     return FlLine(
-                                      color: theme(context).colorTextSecondary,
+                                      color: theme(context).textSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );
                                   },
                                   getDrawingVerticalLine: (value) {
                                     return FlLine(
-                                      color: theme(context).colorTextSecondary,
+                                      color: theme(context).textSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );
@@ -559,31 +562,29 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                           const SizedBox(
                             height: Constants.spacingMiddle,
                           ),
-                          ..._containerMetrics.entries
-                              .map(
-                                (e) => Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      e.key,
-                                      style: noramlTextStyle(
-                                        context,
-                                        size: Constants.sizeTextSecondary,
-                                      ),
-                                    ),
-                                    Text(
-                                      formatMemoryMetric(e.value
-                                          .memory[e.value.memory.length - 1].y
-                                          .toDouble(),),
-                                      style: secondaryTextStyle(
-                                        context,
-                                      ),
-                                    ),
-                                  ],
+                          ..._containerMetrics.entries.map(
+                            (e) => Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  e.key,
+                                  style: noramlTextStyle(
+                                    context,
+                                    size: Constants.sizeTextSecondary,
+                                  ),
                                 ),
-                              )
-                              ,
+                                Text(
+                                  formatMemoryMetric(
+                                    e.value.memory[e.value.memory.length - 1].y
+                                        .toDouble(),
+                                  ),
+                                  style: secondaryTextStyle(
+                                    context,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),

@@ -92,7 +92,7 @@ class SettingsNamespaces extends StatelessWidget {
               child: Icon(
                 Icons.drag_handle,
                 color: theme(context)
-                    .colorTextPrimary
+                    .textPrimary
                     .withOpacity(Constants.opacityIcon),
               ),
             ),

@@ -89,7 +89,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               Icons.policy,
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -103,9 +103,8 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: theme(context)
-                  .colorTextPrimary
-                  .withOpacity(Constants.opacityIcon),
+              color:
+                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -122,7 +121,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               Icons.favorite,
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -136,9 +135,8 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: theme(context)
-                  .colorTextPrimary
-                  .withOpacity(Constants.opacityIcon),
+              color:
+                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -169,7 +167,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               Icons.code,
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -189,7 +187,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
                 right: 6,
               ),
               decoration: BoxDecoration(
-                color: theme(context).colorPrimary,
+                color: theme(context).primary,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(Constants.sizeBorderRadius),
                 ),
@@ -203,7 +201,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
                 style: secondaryTextStyle(
                   context,
                   size: 14,
-                  color: Colors.white,
+                  color: theme(context).onPrimary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -217,7 +215,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               Icons.language,
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -231,9 +229,8 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: theme(context)
-                  .colorTextPrimary
-                  .withOpacity(Constants.opacityIcon),
+              color:
+                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -245,7 +242,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               CustomIcons.github,
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -259,9 +256,8 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: theme(context)
-                  .colorTextPrimary
-                  .withOpacity(Constants.opacityIcon),
+              color:
+                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -273,7 +269,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               CustomIcons.twitter,
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -287,9 +283,8 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: theme(context)
-                  .colorTextPrimary
-                  .withOpacity(Constants.opacityIcon),
+              color:
+                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -322,7 +317,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
                         child: Text(
                           licenseText,
                           style: TextStyle(
-                            color: theme(context).colorTextPrimary,
+                            color: theme(context).textPrimary,
                           ),
                         ),
                       ),
@@ -335,7 +330,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               Icons.copyright,
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -349,9 +344,8 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: theme(context)
-                  .colorTextPrimary
-                  .withOpacity(Constants.opacityIcon),
+              color:
+                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -363,7 +357,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               Icons.policy,
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -377,9 +371,8 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: theme(context)
-                  .colorTextPrimary
-                  .withOpacity(Constants.opacityIcon),
+              color:
+                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],

@@ -64,7 +64,7 @@ class AppResourceActions extends StatelessWidget {
           bottom: Constants.spacingExtraLarge,
         ),
         decoration: BoxDecoration(
-          color: theme(context).colorPrimary,
+          color: theme(context).primary,
           borderRadius: BorderRadius.vertical(
             bottom: Radius.elliptical(MediaQuery.of(context).size.width, 80.0),
           ),
@@ -79,13 +79,13 @@ class AppResourceActions extends StatelessWidget {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: theme(context).colorShadow,
+                color: theme(context).shadow,
                 blurRadius: Constants.sizeBorderBlurRadius,
                 spreadRadius: Constants.sizeBorderSpreadRadius,
                 offset: const Offset(0.0, 0.0),
               ),
             ],
-            color: theme(context).colorCard,
+            color: theme(context).card,
             borderRadius: const BorderRadius.all(
               Radius.circular(Constants.sizeBorderRadius),
             ),
@@ -112,7 +112,7 @@ class AppResourceActions extends StatelessWidget {
                           children: [
                             Icon(
                               action.icon,
-                              color: theme(context).colorPrimary,
+                              color: theme(context).primary,
                               size: 28,
                             ),
                             const SizedBox(
@@ -142,7 +142,7 @@ class AppResourceActions extends StatelessWidget {
           (e) {
             return AppActionsWidgetAction(
               title: e.title,
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
               onTap: () {
                 Navigator.pop(context);
                 e.onTap();

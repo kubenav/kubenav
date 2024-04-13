@@ -147,7 +147,7 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                 children: [
                   const Text('Enabled'),
                   Switch(
-                    activeColor: theme(context).colorPrimary,
+                    activeColor: theme(context).primary,
                     onChanged: (value) {
                       setState(() {
                         _enabled = !_enabled;

@@ -611,7 +611,7 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
                       Constants.spacingMiddle,
                     ),
                     child: CircularProgressIndicator(
-                      color: theme(context).colorPrimary,
+                      color: theme(context).primary,
                     ),
                   ),
                 ],
