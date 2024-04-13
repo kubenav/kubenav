@@ -91,7 +91,7 @@ class Settings extends StatelessWidget {
                           ? Icons.radio_button_checked
                           : Icons.radio_button_unchecked,
                       size: 24,
-                      color: theme(context).colorPrimary,
+                      color: theme(context).primary,
                     ),
                     const SizedBox(width: Constants.spacingSmall),
                     Expanded(
@@ -141,13 +141,13 @@ class Settings extends StatelessWidget {
                   'View all',
                   style: secondaryTextStyle(
                     context,
-                    color: theme(context).colorPrimary,
+                    color: theme(context).primary,
                   ),
                 ),
                 const SizedBox(width: Constants.spacingExtraSmall),
                 Icon(
                   Icons.keyboard_arrow_right,
-                  color: theme(context).colorPrimary,
+                  color: theme(context).primary,
                   size: 16,
                 ),
               ],
@@ -194,7 +194,7 @@ class Settings extends StatelessWidget {
           children: [
             Icon(
               Icons.subject,
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -208,9 +208,8 @@ class Settings extends StatelessWidget {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: theme(context)
-                  .colorTextPrimary
-                  .withOpacity(Constants.opacityIcon),
+              color:
+                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -225,7 +224,7 @@ class Settings extends StatelessWidget {
           children: [
             Icon(
               Icons.help,
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -239,9 +238,8 @@ class Settings extends StatelessWidget {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: theme(context)
-                  .colorTextPrimary
-                  .withOpacity(Constants.opacityIcon),
+              color:
+                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -293,7 +291,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         CustomIcons.kubernetes,
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -308,7 +306,7 @@ class Settings extends StatelessWidget {
                       Icon(
                         Icons.arrow_forward_ios,
                         color: theme(context)
-                            .colorTextPrimary
+                            .textPrimary
                             .withOpacity(Constants.opacityIcon),
                         size: 16,
                       ),
@@ -324,7 +322,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         CustomIcons.namespaces,
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -339,7 +337,7 @@ class Settings extends StatelessWidget {
                       Icon(
                         Icons.arrow_forward_ios,
                         color: theme(context)
-                            .colorTextPrimary
+                            .textPrimary
                             .withOpacity(Constants.opacityIcon),
                         size: 16,
                       ),
@@ -349,7 +347,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.fingerprint,
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -362,7 +360,7 @@ class Settings extends StatelessWidget {
                         ),
                       ),
                       Switch(
-                        activeColor: theme(context).colorPrimary,
+                        activeColor: theme(context).primary,
                         onChanged: (value) {
                           _toogleAuthentication(context);
                         },
@@ -374,7 +372,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         CustomIcons.clusters,
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -387,7 +385,7 @@ class Settings extends StatelessWidget {
                         ),
                       ),
                       Switch(
-                        activeColor: theme(context).colorPrimary,
+                        activeColor: theme(context).primary,
                         onChanged: (value) {
                           appRepository.setIsShowClustersOnStart(
                             !appRepository.settings.isShowClustersOnStart,
@@ -401,7 +399,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.code,
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -417,7 +415,7 @@ class Settings extends StatelessWidget {
                         value: themeRepository.themeName,
                         underline: Container(
                           height: 2,
-                          color: theme(context).colorPrimary,
+                          color: theme(context).primary,
                         ),
                         onChanged: (ThemeName? value) {
                           themeRepository
@@ -429,7 +427,7 @@ class Settings extends StatelessWidget {
                             child: Text(
                               value.toShortString(),
                               style: TextStyle(
-                                color: theme(context).colorTextPrimary,
+                                color: theme(context).textPrimary,
                               ),
                             ),
                           );
@@ -441,7 +439,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.code,
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -457,7 +455,7 @@ class Settings extends StatelessWidget {
                         value: appRepository.settings.editorFormat,
                         underline: Container(
                           height: 2,
-                          color: theme(context).colorPrimary,
+                          color: theme(context).primary,
                         ),
                         onChanged: (String? newValue) {
                           appRepository.setEditorFormat(newValue ?? 'yaml');
@@ -471,7 +469,7 @@ class Settings extends StatelessWidget {
                             child: Text(
                               value,
                               style: TextStyle(
-                                color: theme(context).colorTextPrimary,
+                                color: theme(context).textPrimary,
                               ),
                             ),
                           );
@@ -483,7 +481,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.code,
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -496,7 +494,7 @@ class Settings extends StatelessWidget {
                         ),
                       ),
                       Switch(
-                        activeColor: theme(context).colorPrimary,
+                        activeColor: theme(context).primary,
                         onChanged: (value) =>
                             {appRepository.setFullHeightModals(value)},
                         value: appRepository.settings.fullHeightModals,
@@ -507,7 +505,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.dashboard,
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -520,7 +518,7 @@ class Settings extends StatelessWidget {
                         ),
                       ),
                       Switch(
-                        activeColor: theme(context).colorPrimary,
+                        activeColor: theme(context).primary,
                         onChanged: (value) =>
                             {appRepository.setClassicMode(value)},
                         value: appRepository.settings.classicMode,
@@ -539,7 +537,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.http,
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -554,7 +552,7 @@ class Settings extends StatelessWidget {
                       Icon(
                         Icons.arrow_forward_ios,
                         color: theme(context)
-                            .colorTextPrimary
+                            .textPrimary
                             .withOpacity(Constants.opacityIcon),
                         size: 16,
                       ),
@@ -572,7 +570,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.schedule,
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -587,7 +585,7 @@ class Settings extends StatelessWidget {
                       Icon(
                         Icons.arrow_forward_ios,
                         color: theme(context)
-                            .colorTextPrimary
+                            .textPrimary
                             .withOpacity(Constants.opacityIcon),
                         size: 16,
                       ),
@@ -605,7 +603,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.extension,
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -620,7 +618,7 @@ class Settings extends StatelessWidget {
                       Icon(
                         Icons.arrow_forward_ios,
                         color: theme(context)
-                            .colorTextPrimary
+                            .textPrimary
                             .withOpacity(Constants.opacityIcon),
                         size: 16,
                       ),

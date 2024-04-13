@@ -40,7 +40,7 @@ class ServiceAccountDetailsItem extends StatelessWidget
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),

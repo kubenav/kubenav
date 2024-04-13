@@ -109,7 +109,7 @@ class _DetailsGetLogsPodsState extends State<DetailsGetLogsPods> {
             child: Wrap(
               children: [
                 CircularProgressIndicator(
-                  color: theme(context).colorPrimary,
+                  color: theme(context).primary,
                 ),
               ],
             ),
@@ -152,24 +152,24 @@ class _DetailsGetLogsPodsState extends State<DetailsGetLogsPods> {
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: theme(context).colorShadow,
+                    color: theme(context).shadow,
                     blurRadius: Constants.sizeBorderBlurRadius,
                     spreadRadius: Constants.sizeBorderSpreadRadius,
                     offset: const Offset(0.0, 0.0),
                   ),
                 ],
-                color: theme(context).colorCard,
+                color: theme(context).card,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(Constants.sizeBorderRadius),
                 ),
               ),
               child: CheckboxListTile(
-                checkColor: Colors.white,
-                activeColor: theme(context).colorPrimary,
                 controlAffinity: ListTileControlAffinity.leading,
                 value: _selectedPods
-                        .where((p) =>
-                            p.metadata?.name == _pods[index].metadata?.name,)
+                        .where(
+                          (p) =>
+                              p.metadata?.name == _pods[index].metadata?.name,
+                        )
                         .toList()
                         .length ==
                     1,
@@ -182,8 +182,10 @@ class _DetailsGetLogsPodsState extends State<DetailsGetLogsPods> {
                   if (value == false) {
                     setState(() {
                       _selectedPods = _selectedPods
-                          .where((p) =>
-                              p.metadata?.name == _pods[index].metadata?.name,)
+                          .where(
+                            (p) =>
+                                p.metadata?.name == _pods[index].metadata?.name,
+                          )
                           .toList();
                     });
                   }

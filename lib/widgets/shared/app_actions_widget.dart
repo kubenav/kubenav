@@ -33,7 +33,7 @@ class AppActionsWidgetAction {
 ///     ),
 ///     AppActionsWidgetAction(
 ///       title: 'Delete',
-///       color: Constants.colorDanger,
+///       color: Constants.error,
 ///       onTap: () {},
 ///     ),
 ///   ],
@@ -59,7 +59,7 @@ class AppActionsWidget extends StatelessWidget {
         right: Constants.spacingMiddle,
       ),
       decoration: BoxDecoration(
-        color: theme(context).colorCard,
+        color: theme(context).card,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),

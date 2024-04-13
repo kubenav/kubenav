@@ -48,7 +48,7 @@ class AppBottomSheetWidget extends StatelessWidget {
           right: Constants.spacingMiddle,
         ),
         decoration: BoxDecoration(
-          color: theme(context).colorPrimary,
+          color: theme(context).primary,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
@@ -69,7 +69,7 @@ class AppBottomSheetWidget extends StatelessWidget {
           Constants.spacingExtraSmall,
         ),
         decoration: BoxDecoration(
-          color: theme(context).colorPrimary,
+          color: theme(context).primary,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
@@ -78,7 +78,7 @@ class AppBottomSheetWidget extends StatelessWidget {
         width: 54,
         child: Icon(
           icon,
-          color: Colors.white,
+          color: theme(context).onPrimary,
           size: 36,
         ),
       );
@@ -160,7 +160,7 @@ class AppBottomSheetWidget extends StatelessWidget {
                     IconButton(
                       icon: Icon(
                         Icons.close_outlined,
-                        color: theme(context).colorTextPrimary,
+                        color: theme(context).textPrimary,
                       ),
                       onPressed: closePressed,
                     ),
@@ -187,8 +187,8 @@ class AppBottomSheetWidget extends StatelessWidget {
                 ),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: theme(context).colorPrimary,
-                    foregroundColor: Colors.white,
+                    backgroundColor: theme(context).primary,
+                    foregroundColor: theme(context).onPrimary,
                     minimumSize: const Size.fromHeight(40),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
@@ -198,18 +198,18 @@ class AppBottomSheetWidget extends StatelessWidget {
                   ),
                   onPressed: actionIsLoading ? null : actionPressed,
                   child: actionIsLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           height: 24,
                           width: 24,
                           child: CircularProgressIndicator(
-                            color: Colors.white,
+                            color: theme(context).onPrimary,
                           ),
                         )
                       : Text(
                           actionText,
                           style: primaryTextStyle(
                             context,
-                            color: Colors.white,
+                            color: theme(context).onPrimary,
                           ),
                           textAlign: TextAlign.center,
                         ),

@@ -131,7 +131,7 @@ class SettingsReuseProviderActions extends StatelessWidget {
         .map(
           (p) => AppActionsWidgetAction(
             title: p.name ?? '',
-            color: theme(context).colorPrimary,
+            color: theme(context).primary,
             onTap: () {
               Navigator.pop(context);
               showModal(context, buildExistinModal(p));
@@ -143,7 +143,7 @@ class SettingsReuseProviderActions extends StatelessWidget {
     actions.add(
       AppActionsWidgetAction(
         title: 'Add Provider',
-        color: theme(context).colorPrimary,
+        color: theme(context).primary,
         onTap: () {
           Navigator.pop(context);
           showModal(context, buildNewModal());
@@ -159,7 +159,7 @@ class SettingsReuseProviderActions extends StatelessWidget {
       actions.add(
         AppActionsWidgetAction(
           title: 'Add Multiple Providers',
-          color: theme(context).colorPrimary,
+          color: theme(context).primary,
           onTap: () {
             Navigator.pop(context);
             showModal(context, const SettingsAWSSSOMultipleProviders());

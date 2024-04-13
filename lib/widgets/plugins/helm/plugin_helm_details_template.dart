@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:code_text_field/code_text_field.dart';
-import 'package:flutter_highlight/themes/nord.dart';
 
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
@@ -65,7 +65,7 @@ class _PluginHelmDetailsTemplateState extends State<PluginHelmDetailsTemplate> {
                 vertical: 8,
               ),
               child: CodeTheme(
-                data: const CodeThemeData(styles: nordTheme),
+                data: CodeThemeData(styles: theme(context).editorTheme),
                 child: CodeField(
                   controller: _codeController,
                   enabled: false,

@@ -93,7 +93,7 @@ class _AppClustersWidgetState extends State<AppClustersWidget> {
                     ? Icons.radio_button_checked
                     : Icons.radio_button_unchecked,
                 size: 24,
-                color: theme(context).colorPrimary,
+                color: theme(context).primary,
               ),
               const SizedBox(width: Constants.spacingSmall),
               Expanded(

@@ -155,7 +155,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                     ? Icons.radio_button_checked
                     : Icons.radio_button_unchecked,
                 size: 24,
-                color: theme(context).colorPrimary,
+                color: theme(context).primary,
               ),
               const SizedBox(width: Constants.spacingSmall),
               Expanded(
@@ -198,7 +198,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                         ? Icons.radio_button_checked
                         : Icons.radio_button_unchecked,
                     size: 24,
-                    color: theme(context).colorPrimary,
+                    color: theme(context).primary,
                   ),
                   const SizedBox(width: Constants.spacingSmall),
                   Expanded(
@@ -273,7 +273,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                   ..._buildFavoriteNamespace(),
                   Center(
                     child: CircularProgressIndicator(
-                      color: theme(context).colorPrimary,
+                      color: theme(context).primary,
                     ),
                   ),
                 ],
@@ -354,7 +354,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                                     ? Icons.radio_button_checked
                                     : Icons.radio_button_unchecked,
                                 size: 24,
-                                color: theme(context).colorPrimary,
+                                color: theme(context).primary,
                               ),
                               const SizedBox(width: Constants.spacingSmall),
                               Expanded(

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:code_text_field/code_text_field.dart';
-import 'package:flutter_highlight/themes/nord.dart';
 import 'package:highlight/languages/json.dart' as highlight_json;
 import 'package:highlight/languages/yaml.dart' as highlight_yaml;
 import 'package:provider/provider.dart';
@@ -12,6 +11,7 @@ import 'package:yaml/yaml.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/helpers_service.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -214,7 +214,7 @@ class _ListCreateResourceState extends State<ListCreateResource> {
                 vertical: 8,
               ),
               child: CodeTheme(
-                data: const CodeThemeData(styles: nordTheme),
+                data: CodeThemeData(styles: theme(context).editorTheme),
                 child: CodeField(
                   controller: _codeController,
                   enabled: true,

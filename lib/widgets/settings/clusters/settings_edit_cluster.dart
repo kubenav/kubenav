@@ -222,7 +222,7 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
                 children: [
                   const Text('Insecure Skip TLS Verify'),
                   Switch(
-                    activeColor: theme(context).colorPrimary,
+                    activeColor: theme(context).primary,
                     onChanged: (value) {
                       setState(() {
                         _clusterInsecureSkipTLSVerify =

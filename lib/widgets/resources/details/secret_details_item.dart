@@ -93,7 +93,7 @@ class SecretDetailsItem extends StatelessWidget implements IDetailsItemWidget {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),
@@ -134,7 +134,7 @@ class SecretDetailsItem extends StatelessWidget implements IDetailsItemWidget {
                     Icon(
                       Icons.arrow_forward_ios,
                       color: theme(context)
-                          .colorTextSecondary
+                          .textSecondary
                           .withOpacity(Constants.opacityIcon),
                       size: 24,
                     ),

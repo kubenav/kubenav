@@ -92,16 +92,16 @@ class _AppFloatingActionButtonsWidgetState
       floatingActionButtons.add(
         FloatingActionButton(
           heroTag: 'terminal',
-          backgroundColor: theme(context).colorPrimary,
+          backgroundColor: theme(context).primary,
           onPressed: () {
             showModal(
               context,
               const AppTerminalsWidget(),
             );
           },
-          child: const Icon(
+          child: Icon(
             Icons.terminal,
-            color: Colors.white,
+            color: theme(context).onPrimary,
           ),
         ),
       );
@@ -111,13 +111,13 @@ class _AppFloatingActionButtonsWidgetState
       floatingActionButtons.add(
         FloatingActionButton(
           heroTag: 'portforwarding',
-          backgroundColor: theme(context).colorPrimary,
+          backgroundColor: theme(context).primary,
           onPressed: () {
             _showPortForwardingSessions();
           },
-          child: const Icon(
+          child: Icon(
             Icons.link,
-            color: Colors.white,
+            color: theme(context).onPrimary,
           ),
         ),
       );

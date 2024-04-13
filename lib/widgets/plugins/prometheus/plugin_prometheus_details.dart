@@ -176,7 +176,7 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
                             padding:
                                 const EdgeInsets.all(Constants.spacingMiddle),
                             child: CircularProgressIndicator(
-                              color: theme(context).colorPrimary,
+                              color: theme(context).primary,
                             ),
                           ),
                         ],

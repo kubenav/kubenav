@@ -79,7 +79,7 @@ class _HomeClustersState extends State<HomeClusters> {
                   Icon(
                     Icons.radio_button_unchecked,
                     size: 24,
-                    color: theme(context).colorPrimary,
+                    color: theme(context).primary,
                   ),
                   const SizedBox(width: Constants.spacingSmall),
                   Expanded(

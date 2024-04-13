@@ -162,7 +162,7 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
             child: Wrap(
               children: [
                 CircularProgressIndicator(
-                  color: theme(context).colorPrimary,
+                  color: theme(context).primary,
                 ),
               ],
             ),
@@ -205,20 +205,18 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: theme(context).colorShadow,
+                    color: theme(context).shadow,
                     blurRadius: Constants.sizeBorderBlurRadius,
                     spreadRadius: Constants.sizeBorderSpreadRadius,
                     offset: const Offset(0.0, 0.0),
                   ),
                 ],
-                color: theme(context).colorCard,
+                color: theme(context).card,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(Constants.sizeBorderRadius),
                 ),
               ),
               child: CheckboxListTile(
-                checkColor: Colors.white,
-                activeColor: theme(context).colorPrimary,
                 controlAffinity: ListTileControlAffinity.leading,
                 value: _selectedClusters
                         .where((c) => c.name == _clusters[index].name)

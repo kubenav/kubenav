@@ -36,7 +36,7 @@ void showSnackbar(BuildContext context, String title, String message) {
     SnackBar(
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 3),
-      backgroundColor: theme(context).colorMessageBackground,
+      backgroundColor: theme(context).message,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
           Constants.sizeBorderRadius,
@@ -49,13 +49,13 @@ void showSnackbar(BuildContext context, String title, String message) {
           Text(
             title,
             style: TextStyle(
-              color: theme(context).colorMessageForeground,
+              color: theme(context).onMessage,
             ),
           ),
           Text(
             message,
             style: TextStyle(
-              color: theme(context).colorMessageForeground,
+              color: theme(context).onMessage,
             ),
           ),
         ],

@@ -153,7 +153,7 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
                   children: [
                     Icon(
                       Icons.schedule,
-                      color: theme(context).colorPrimary,
+                      color: theme(context).primary,
                       size: 16,
                     ),
                     const SizedBox(width: Constants.spacingExtraSmall),
@@ -161,7 +161,7 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
                       'Time Range',
                       style: secondaryTextStyle(
                         context,
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                       ),
                     ),
                   ],

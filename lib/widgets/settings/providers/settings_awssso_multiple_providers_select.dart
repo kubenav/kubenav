@@ -187,21 +187,19 @@ class _SettingsAWSSSOMultipleProvidersSelectState
                             decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
-                                  color: theme(context).colorShadow,
+                                  color: theme(context).shadow,
                                   blurRadius: Constants.sizeBorderBlurRadius,
                                   spreadRadius:
                                       Constants.sizeBorderSpreadRadius,
                                   offset: const Offset(0.0, 0.0),
                                 ),
                               ],
-                              color: theme(context).colorCard,
+                              color: theme(context).card,
                               borderRadius: const BorderRadius.all(
                                 Radius.circular(Constants.sizeBorderRadius),
                               ),
                             ),
                             child: CheckboxListTile(
-                              checkColor: Colors.white,
-                              activeColor: theme(context).colorPrimary,
                               controlAffinity: ListTileControlAffinity.leading,
                               value: _selectedAccounts
                                       .where(

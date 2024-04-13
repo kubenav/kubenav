@@ -39,13 +39,13 @@ class OverviewMetrics extends StatelessWidget {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: theme(context).colorShadow,
+              color: theme(context).shadow,
               blurRadius: Constants.sizeBorderBlurRadius,
               spreadRadius: Constants.sizeBorderSpreadRadius,
               offset: const Offset(0.0, 0.0),
             ),
           ],
-          color: theme(context).colorCard,
+          color: theme(context).card,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
@@ -54,7 +54,7 @@ class OverviewMetrics extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: theme(context).colorPrimary,
+              color: theme(context).primary,
               size: 64,
             ),
             const SizedBox(height: Constants.spacingSmall),

@@ -68,9 +68,12 @@ class DetailsItemConditions extends StatelessWidget {
                             final age = item['status']['conditions'][index]
                                         ['lastTransitionTime'] !=
                                     null
-                                ? getAge(DateTime.parse(item['status']
-                                        ['conditions'][index]
-                                    ['lastTransitionTime'],),)
+                                ? getAge(
+                                    DateTime.parse(
+                                      item['status']['conditions'][index]
+                                          ['lastTransitionTime'],
+                                    ),
+                                  )
                                 : '-';
 
                             showSnackbar(
@@ -87,7 +90,7 @@ class DetailsItemConditions extends StatelessWidget {
                                     ? Icons.radio_button_checked
                                     : Icons.radio_button_unchecked,
                                 size: 24,
-                                color: theme(context).colorPrimary,
+                                color: theme(context).primary,
                               ),
                               const SizedBox(width: Constants.spacingSmall),
                               Expanded(

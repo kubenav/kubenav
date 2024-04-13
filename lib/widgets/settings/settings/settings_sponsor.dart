@@ -63,7 +63,7 @@ class SettingsSponsor extends StatelessWidget {
             ),
             child: Center(
               child: CircularProgressIndicator(
-                color: theme(context).colorPrimary,
+                color: theme(context).primary,
               ),
             ),
           ),
@@ -91,7 +91,7 @@ class SettingsSponsor extends StatelessWidget {
               children: [
                 Icon(
                   Icons.favorite,
-                  color: theme(context).colorPrimary,
+                  color: theme(context).primary,
                 ),
                 const SizedBox(width: Constants.spacingSmall),
                 Expanded(
@@ -111,7 +111,7 @@ class SettingsSponsor extends StatelessWidget {
                     right: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: theme(context).colorPrimary,
+                    color: theme(context).primary,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(Constants.sizeBorderRadius),
                     ),
@@ -125,7 +125,7 @@ class SettingsSponsor extends StatelessWidget {
                     style: secondaryTextStyle(
                       context,
                       size: 14,
-                      color: Colors.white,
+                      color: theme(context).onPrimary,
                     ),
                     textAlign: TextAlign.center,
                   ),

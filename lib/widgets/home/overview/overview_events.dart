@@ -69,10 +69,11 @@ class _OverviewEventsState extends State<OverviewEvents> {
 
     if (eventsList != null) {
       final eventItems = eventsList.items;
-      eventItems.sort((a, b) =>
-          a.lastTimestamp != null && b.lastTimestamp != null
-              ? b.lastTimestamp!.compareTo(a.lastTimestamp!)
-              : 0,);
+      eventItems.sort(
+        (a, b) => a.lastTimestamp != null && b.lastTimestamp != null
+            ? b.lastTimestamp!.compareTo(a.lastTimestamp!)
+            : 0,
+      );
 
       if (eventItems.length > 25) {
         return eventItems.sublist(0, 25);
@@ -137,7 +138,7 @@ class _OverviewEventsState extends State<OverviewEvents> {
                     Padding(
                       padding: const EdgeInsets.all(Constants.spacingMiddle),
                       child: CircularProgressIndicator(
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                       ),
                     ),
                   ],

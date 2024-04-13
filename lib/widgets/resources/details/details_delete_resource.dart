@@ -164,7 +164,7 @@ class _DetailsDeleteResourceState extends State<DetailsDeleteResource> {
                 children: [
                   const Text('Force'),
                   Switch(
-                    activeColor: theme(context).colorPrimary,
+                    activeColor: theme(context).primary,
                     onChanged: (value) {
                       setState(() {
                         _force = !_force;

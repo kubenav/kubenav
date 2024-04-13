@@ -221,7 +221,7 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
                     value: _region,
                     underline: Container(
                       height: 2,
-                      color: theme(context).colorPrimary,
+                      color: theme(context).primary,
                     ),
                     onChanged: (String? newValue) {
                       setState(() {
@@ -234,7 +234,7 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
                         child: Text(
                           value,
                           style: TextStyle(
-                            color: theme(context).colorTextPrimary,
+                            color: theme(context).textPrimary,
                           ),
                         ),
                       );

@@ -350,7 +350,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                     value: _ssoRegion,
                     underline: Container(
                       height: 2,
-                      color: theme(context).colorPrimary,
+                      color: theme(context).primary,
                     ),
                     onChanged: (String? newValue) {
                       setState(() {
@@ -363,7 +363,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                         child: Text(
                           value,
                           style: TextStyle(
-                            color: theme(context).colorTextPrimary,
+                            color: theme(context).textPrimary,
                           ),
                         ),
                       );
@@ -385,7 +385,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                     value: _region,
                     underline: Container(
                       height: 2,
-                      color: theme(context).colorPrimary,
+                      color: theme(context).primary,
                     ),
                     onChanged: (String? newValue) {
                       setState(() {
@@ -398,7 +398,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                         child: Text(
                           value,
                           style: TextStyle(
-                            color: theme(context).colorTextPrimary,
+                            color: theme(context).textPrimary,
                           ),
                         ),
                       );
@@ -413,8 +413,8 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: theme(context).colorPrimary,
-                  foregroundColor: Colors.white,
+                  backgroundColor: theme(context).primary,
+                  foregroundColor: theme(context).onPrimary,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
@@ -427,7 +427,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                   'Sign In',
                   style: primaryTextStyle(
                     context,
-                    color: Colors.white,
+                    color: theme(context).onPrimary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -439,8 +439,8 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: theme(context).colorPrimary,
-                  foregroundColor: Colors.white,
+                  backgroundColor: theme(context).primary,
+                  foregroundColor: theme(context).onPrimary,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
@@ -453,7 +453,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                   'Verify',
                   style: primaryTextStyle(
                     context,
-                    color: Colors.white,
+                    color: theme(context).onPrimary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -465,8 +465,8 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: theme(context).colorPrimary,
-                  foregroundColor: Colors.white,
+                  backgroundColor: theme(context).primary,
+                  foregroundColor: theme(context).onPrimary,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
@@ -481,7 +481,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                   'Get Credentials',
                   style: primaryTextStyle(
                     context,
-                    color: Colors.white,
+                    color: theme(context).onPrimary,
                   ),
                   textAlign: TextAlign.center,
                 ),

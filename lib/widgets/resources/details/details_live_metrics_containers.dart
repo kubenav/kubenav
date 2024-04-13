@@ -31,7 +31,7 @@ class DetailsLiveMetricsContainers extends StatelessWidget {
           title: index == pod.spec!.containers.length
               ? 'All Containers'
               : pod.spec?.containers[index].name ?? '',
-          color: theme(context).colorPrimary,
+          color: theme(context).primary,
           onTap: () {
             Navigator.pop(context);
             showModal(

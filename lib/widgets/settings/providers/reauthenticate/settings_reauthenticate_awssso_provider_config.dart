@@ -172,8 +172,8 @@ class _SettingsReauthenticateAWSSSOState
           ),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: theme(context).colorPrimary,
-              foregroundColor: Colors.white,
+              backgroundColor: theme(context).primary,
+              foregroundColor: theme(context).onPrimary,
               minimumSize: const Size.fromHeight(40),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
@@ -186,7 +186,7 @@ class _SettingsReauthenticateAWSSSOState
               'Sign In',
               style: primaryTextStyle(
                 context,
-                color: Colors.white,
+                color: theme(context).onPrimary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -199,8 +199,8 @@ class _SettingsReauthenticateAWSSSOState
           ),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: theme(context).colorPrimary,
-              foregroundColor: Colors.white,
+              backgroundColor: theme(context).primary,
+              foregroundColor: theme(context).onPrimary,
               minimumSize: const Size.fromHeight(40),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
@@ -213,7 +213,7 @@ class _SettingsReauthenticateAWSSSOState
               'Verify',
               style: primaryTextStyle(
                 context,
-                color: Colors.white,
+                color: theme(context).onPrimary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -226,8 +226,8 @@ class _SettingsReauthenticateAWSSSOState
           ),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: theme(context).colorPrimary,
-              foregroundColor: Colors.white,
+              backgroundColor: theme(context).primary,
+              foregroundColor: theme(context).onPrimary,
               minimumSize: const Size.fromHeight(40),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
@@ -241,7 +241,7 @@ class _SettingsReauthenticateAWSSSOState
               'Get Credentials',
               style: primaryTextStyle(
                 context,
-                color: Colors.white,
+                color: theme(context).onPrimary,
               ),
               textAlign: TextAlign.center,
             ),

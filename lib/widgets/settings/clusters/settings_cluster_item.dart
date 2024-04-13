@@ -145,8 +145,8 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
                         : Icons.radio_button_unchecked,
                     size: 24,
                     color: statusOk
-                        ? theme(context).colorSuccess
-                        : theme(context).colorDanger,
+                        ? theme(context).success
+                        : theme(context).error,
                   ),
                 ),
               ],

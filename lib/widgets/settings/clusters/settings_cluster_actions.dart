@@ -69,7 +69,7 @@ class _SettingsClusterActionsState extends State<SettingsClusterActions> {
       actions: [
         AppActionsWidgetAction(
           title: 'Edit',
-          color: theme(context).colorPrimary,
+          color: theme(context).primary,
           onTap: () {
             Navigator.pop(context);
             showModal(context, SettingsEditCluster(cluster: widget.cluster));
@@ -77,7 +77,7 @@ class _SettingsClusterActionsState extends State<SettingsClusterActions> {
         ),
         AppActionsWidgetAction(
           title: 'Delete',
-          color: theme(context).colorDanger,
+          color: theme(context).error,
           onTap: () {
             deleteCluster();
           },

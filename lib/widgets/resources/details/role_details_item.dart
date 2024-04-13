@@ -50,7 +50,7 @@ class RoleDetailsItem extends StatelessWidget implements IDetailsItemWidget {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: theme(context).colorPrimary,
+                        color: theme(context).primary,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),
@@ -71,7 +71,9 @@ class RoleDetailsItem extends StatelessWidget implements IDetailsItemWidget {
                           Text(
                             Characters(rule.resource)
                                 .replaceAll(
-                                    Characters(''), Characters('\u{200B}'),)
+                                  Characters(''),
+                                  Characters('\u{200B}'),
+                                )
                                 .toString(),
                             style: primaryTextStyle(
                               context,

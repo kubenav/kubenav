@@ -268,7 +268,7 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
                     value: _container,
                     underline: Container(
                       height: 2,
-                      color: theme(context).colorPrimary,
+                      color: theme(context).primary,
                     ),
                     onChanged: (String? value) {
                       setState(() {
@@ -281,7 +281,7 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
                         child: Text(
                           value,
                           style: TextStyle(
-                            color: theme(context).colorTextPrimary,
+                            color: theme(context).textPrimary,
                           ),
                         ),
                       );
@@ -303,7 +303,7 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
                     value: _since,
                     underline: Container(
                       height: 2,
-                      color: theme(context).colorPrimary,
+                      color: theme(context).primary,
                     ),
                     onChanged: (String? value) {
                       setState(() {
@@ -327,7 +327,7 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
                         child: Text(
                           value,
                           style: TextStyle(
-                            color: theme(context).colorTextPrimary,
+                            color: theme(context).textPrimary,
                           ),
                         ),
                       );
@@ -362,7 +362,7 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
                 children: [
                   const Text('Previous'),
                   Switch(
-                    activeColor: theme(context).colorPrimary,
+                    activeColor: theme(context).primary,
                     onChanged: (value) {
                       setState(() {
                         _previous = !_previous;
@@ -383,7 +383,7 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
                 children: [
                   const Text('Follow'),
                   Switch(
-                    activeColor: theme(context).colorPrimary,
+                    activeColor: theme(context).primary,
                     onChanged: widget.names.split(',').length > 1
                         ? null
                         : (value) {
