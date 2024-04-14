@@ -9,6 +9,13 @@ void showModal(BuildContext context, Widget widget) {
     isScrollControlled: true,
     isDismissible: true,
     useSafeArea: true,
+    backgroundColor: Colors.transparent,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(Constants.spacingMiddle),
+      ),
+    ),
+    clipBehavior: Clip.antiAliasWithSaveLayer,
     builder: (BuildContext context) {
       return widget;
     },
@@ -18,11 +25,13 @@ void showModal(BuildContext context, Widget widget) {
 void showActions(BuildContext context, Widget widget) {
   showModalBottomSheet(
     context: context,
-    isScrollControlled: false,
+    isScrollControlled: true,
     isDismissible: true,
     useSafeArea: true,
+    elevation: 0,
     backgroundColor: Colors.transparent,
     builder: (BuildContext context) {
+      return widget;
       return Container(
         margin: const EdgeInsets.all(Constants.spacingMiddle),
         child: widget,

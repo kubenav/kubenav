@@ -326,17 +326,6 @@ class AppRepository with ChangeNotifier {
     } catch (_) {}
   }
 
-  /// [setFullHeightModals] enables or disables full height modals. When the
-  /// [value] is `true` full height modals will be enabled. If the [value] is
-  /// `false` the will be disabled.
-  Future<void> setFullHeightModals(bool value) async {
-    try {
-      _settings.fullHeightModals = value;
-      await _save();
-      notifyListeners();
-    } catch (_) {}
-  }
-
   /// [setClassicMode] enables or disables the classic navigation mode known
   /// from version 3. When the [value] is `true` classic mode will be enabled.
   /// If the [value] is `false` it will be disabled.
@@ -356,7 +345,6 @@ class AppRepositorySettings {
   bool isAuthenticationEnabled;
   bool isShowClustersOnStart;
   String editorFormat;
-  bool fullHeightModals;
   bool classicMode;
   String proxy;
   int timeout;
@@ -368,7 +356,6 @@ class AppRepositorySettings {
     required this.isAuthenticationEnabled,
     required this.isShowClustersOnStart,
     required this.editorFormat,
-    required this.fullHeightModals,
     required this.classicMode,
     required this.proxy,
     required this.timeout,
@@ -382,7 +369,6 @@ class AppRepositorySettings {
       isAuthenticationEnabled: false,
       isShowClustersOnStart: false,
       editorFormat: 'yaml',
-      fullHeightModals: false,
       classicMode: false,
       proxy: '',
       timeout: 0,
@@ -408,10 +394,6 @@ class AppRepositorySettings {
           data.containsKey('editorFormat') && data['editorFormat'] != null
               ? data['editorFormat']
               : 'yaml',
-      fullHeightModals: data.containsKey('fullHeightModals') &&
-              data['fullHeightModals'] != null
-          ? data['fullHeightModals']
-          : false,
       classicMode:
           data.containsKey('classicMode') && data['classicMode'] != null
               ? data['classicMode']
@@ -438,7 +420,6 @@ class AppRepositorySettings {
       'isAuthenticationEnabled': isAuthenticationEnabled,
       'isShowClustersOnStart': isShowClustersOnStart,
       'editorFormat': editorFormat,
-      'fullHeightModals': fullHeightModals,
       'classicMode': classicMode,
       'proxy': proxy,
       'timeout': timeout,
