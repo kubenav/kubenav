@@ -10,7 +10,6 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 enum AppResourceActionsMode {
   header,
   actions,
-  menu,
 }
 
 /// [AppResourceActionsModel] is the class to define an action for the
@@ -150,25 +149,6 @@ class AppResourceActions extends StatelessWidget {
             );
           },
         ).toList(),
-      );
-    }
-
-    if (mode == AppResourceActionsMode.menu) {
-      return PopupMenuButton(
-        icon: const Icon(Icons.more_vert),
-        itemBuilder: (context) {
-          return actions.asMap().entries.map(
-            (e) {
-              return PopupMenuItem(
-                value: e.key,
-                child: Text(e.value.title),
-              );
-            },
-          ).toList();
-        },
-        onSelected: (value) {
-          actions[value].onTap();
-        },
       );
     }
 

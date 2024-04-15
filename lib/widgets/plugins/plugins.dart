@@ -15,7 +15,6 @@ import 'package:kubenav/widgets/plugins/helm/plugin_helm_list.dart';
 import 'package:kubenav/widgets/plugins/prometheus/plugin_prometheus_list.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_clusters_widget.dart';
-import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_no_clusters_widget.dart';
 import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
@@ -158,7 +157,7 @@ class Plugins extends StatelessWidget {
       context,
       listen: true,
     );
-    AppRepository appRepository = Provider.of<AppRepository>(
+    Provider.of<AppRepository>(
       context,
       listen: true,
     );
@@ -171,7 +170,6 @@ class Plugins extends StatelessWidget {
     );
 
     return Scaffold(
-      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
         centerTitle: true,
         actions: [
@@ -208,9 +206,7 @@ class Plugins extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: appRepository.settings.classicMode
-          ? null
-          : const AppBottomNavigationBarWidget(),
+      bottomNavigationBar: const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SafeArea(
         child: SingleChildScrollView(

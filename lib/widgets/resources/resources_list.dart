@@ -15,142 +15,10 @@ import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/resources/list/default_list_item.dart';
 import 'package:kubenav/widgets/resources/list/list_create_resource.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
-import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_namespaces_widget.dart';
 import 'package:kubenav/widgets/shared/app_resource_actions.dart';
-
-/// [resourceListActions] returns the resource actions for the list view of a
-/// resource.
-List<AppResourceActionsModel> resourceListActions(
-  BuildContext context,
-  String title,
-  String resource,
-  String path,
-  ResourceScope scope,
-  List<AdditionalPrinterColumns> additionalPrinterColumns,
-  void Function() onRefresh,
-) {
-  ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
-    context,
-    listen: false,
-  );
-  BookmarksRepository bookmarksRepository = Provider.of<BookmarksRepository>(
-    context,
-    listen: false,
-  );
-
-  return [
-    AppResourceActionsModel(
-      title: 'Create',
-      icon: Icons.create,
-      onTap: () {
-        if (Resources.map.containsKey(resource) &&
-            Resources.map[resource]!.resource == resource &&
-            Resources.map[resource]!.path == path &&
-            Resources.map[resource]!.template != '') {
-          showModal(
-            context,
-            ListCreateResource(
-              title: title,
-              resource: resource,
-              path: path,
-              template: Resources.map[resource]!.template,
-            ),
-          );
-        } else {
-          showModal(
-            context,
-            ListCreateResource(
-              title: title,
-              resource: resource,
-              path: path,
-              template:
-                  '{"apiVersion":"","kind":"","metadata":{"name":"","namespace":""},"spec":{}}',
-            ),
-          );
-        }
-      },
-    ),
-    AppResourceActionsModel(
-      title: 'Refresh',
-      icon: Icons.refresh,
-      onTap: onRefresh,
-    ),
-    AppResourceActionsModel(
-      title: bookmarksRepository.isBookmarked(
-                BookmarkType.list,
-                clustersRepository.activeClusterId,
-                title,
-                resource,
-                path,
-                scope,
-                null,
-                clustersRepository
-                    .getCluster(
-                      clustersRepository.activeClusterId,
-                    )
-                    ?.namespace,
-              ) >
-              -1
-          ? 'Remove Bookmark'
-          : 'Add Bookmark',
-      icon: bookmarksRepository.isBookmarked(
-                BookmarkType.list,
-                clustersRepository.activeClusterId,
-                title,
-                resource,
-                path,
-                scope,
-                null,
-                clustersRepository
-                    .getCluster(
-                      clustersRepository.activeClusterId,
-                    )
-                    ?.namespace,
-              ) >
-              -1
-          ? Icons.bookmark
-          : Icons.bookmark_border,
-      onTap: () {
-        final bookmarkIndex = bookmarksRepository.isBookmarked(
-          BookmarkType.list,
-          clustersRepository.activeClusterId,
-          title,
-          resource,
-          path,
-          scope,
-          null,
-          clustersRepository
-              .getCluster(
-                clustersRepository.activeClusterId,
-              )
-              ?.namespace,
-        );
-        if (bookmarkIndex > -1) {
-          bookmarksRepository.removeBookmark(bookmarkIndex);
-        } else {
-          bookmarksRepository.addBookmark(
-            BookmarkType.list,
-            clustersRepository.activeClusterId,
-            title,
-            resource,
-            path,
-            scope,
-            additionalPrinterColumns,
-            null,
-            clustersRepository
-                .getCluster(
-                  clustersRepository.activeClusterId,
-                )
-                ?.namespace,
-          );
-        }
-      },
-    ),
-  ];
-}
 
 /// The [ResourcesListResult] model is the returns value for the [_fetchItems]
 /// future. It contains the loaded items and metrics for Pods and Nodes.
@@ -331,22 +199,30 @@ class _ResourcesListState extends State<ResourcesList> {
     );
   }
 
-  /// [_buildLayout] builds the page layout for the list page. This includes
-  /// the scaffold and appbar and is required, because the [AppBar] actions are
-  /// not updated otherwise, when a user opt in for the classic mode. This only
-  /// effects the bookmark action.
-  Widget _buildLayout(Widget child) {
-    AppRepository appRepository = Provider.of<AppRepository>(
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {
+      _futureFetchItems = _fetchItems();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Provider.of<ThemeRepository>(
       context,
-      listen: false,
+      listen: true,
+    );
+    Provider.of<AppRepository>(
+      context,
+      listen: true,
     );
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
-      listen: false,
+      listen: true,
     );
 
     return Scaffold(
-      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
         centerTitle: true,
 
@@ -355,7 +231,17 @@ class _ResourcesListState extends State<ResourcesList> {
         /// user can change the active namespace of the cluster. If the resource
         /// is cluster scoped or when the user specified a selector (e.g. to
         /// view all Pods of a Deployment) we do not show the button.
-        actions: _buildAppBarActions(),
+        actions:
+            widget.scope == ResourceScope.namespaced && widget.selector == null
+                ? [
+                    IconButton(
+                      icon: const Icon(CustomIcons.namespaces),
+                      onPressed: () {
+                        showModal(context, const AppNamespacesWidget());
+                      },
+                    ),
+                  ]
+                : null,
 
         /// We always display the title of the resource as main title for the
         /// widget.
@@ -422,259 +308,281 @@ class _ResourcesListState extends State<ResourcesList> {
           ],
         ),
       ),
-      bottomNavigationBar: appRepository.settings.classicMode
-          ? null
-          : const AppBottomNavigationBarWidget(),
+      bottomNavigationBar: const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            children: [child],
+            children: [
+              FutureBuilder(
+                future: _futureFetchItems,
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<ResourcesListResult> snapshot,
+                ) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(
+                              Constants.spacingMiddle,
+                            ),
+                            child: CircularProgressIndicator(
+                              color: theme(context).primary,
+                            ),
+                          ),
+                        ],
+                      );
+                    default:
+                      if (snapshot.hasError) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.all(
+                                  Constants.spacingMiddle,
+                                ),
+                                child: AppErrorWidget(
+                                  message: 'Could not load ${widget.title}',
+                                  details: snapshot.error.toString(),
+                                  icon: Resources.map
+                                              .containsKey(widget.resource) &&
+                                          Resources
+                                                  .map[widget.resource]!.path ==
+                                              widget.path
+                                      ? 'assets/resources/${widget.resource}.svg'
+                                      : null,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+
+                      BookmarksRepository bookmarksRepository =
+                          Provider.of<BookmarksRepository>(
+                        context,
+                        listen: true,
+                      );
+
+                      final filteredItems =
+                          _getFilteredItems(snapshot.data!.items);
+
+                      return Wrap(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(
+                              top: Constants.spacingMiddle,
+                              bottom: Constants.spacingSmall,
+                              left: Constants.spacingMiddle,
+                              right: Constants.spacingMiddle,
+                            ),
+                            color: theme(context).primary,
+                            child: TextField(
+                              onChanged: (value) {
+                                setState(() {
+                                  _filter = value;
+                                });
+                              },
+                              style: TextStyle(
+                                color: theme(context).onPrimary,
+                              ),
+                              cursorColor: theme(context).onPrimary,
+                              keyboardType: TextInputType.text,
+                              autocorrect: false,
+                              enableSuggestions: false,
+                              maxLines: 1,
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: theme(context).onPrimary,
+                                    width: 0.0,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: theme(context).onPrimary,
+                                    width: 0.0,
+                                  ),
+                                ),
+                                isDense: true,
+                                contentPadding: const EdgeInsets.all(8),
+                                hintStyle: TextStyle(
+                                  color: theme(context).onPrimary,
+                                ),
+                                hintText: 'Filter...',
+                              ),
+                            ),
+                          ),
+                          AppResourceActions(
+                            mode: AppResourceActionsMode.header,
+                            actions: [
+                              AppResourceActionsModel(
+                                title: 'Create',
+                                icon: Icons.create,
+                                onTap: () {
+                                  if (Resources.map
+                                          .containsKey(widget.resource) &&
+                                      Resources
+                                              .map[widget.resource]!.resource ==
+                                          widget.resource &&
+                                      Resources.map[widget.resource]!.path ==
+                                          widget.path &&
+                                      Resources
+                                              .map[widget.resource]!.template !=
+                                          '') {
+                                    showModal(
+                                      context,
+                                      ListCreateResource(
+                                        title: widget.title,
+                                        resource: widget.resource,
+                                        path: widget.path,
+                                        template: Resources
+                                            .map[widget.resource]!.template,
+                                      ),
+                                    );
+                                  } else {
+                                    showModal(
+                                      context,
+                                      ListCreateResource(
+                                        title: widget.title,
+                                        resource: widget.resource,
+                                        path: widget.path,
+                                        template:
+                                            '{"apiVersion":"","kind":"","metadata":{"name":"","namespace":""},"spec":{}}',
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                              AppResourceActionsModel(
+                                title: 'Refresh',
+                                icon: Icons.refresh,
+                                onTap: () {
+                                  setState(() {
+                                    _futureFetchItems = _fetchItems();
+                                  });
+                                },
+                              ),
+                              AppResourceActionsModel(
+                                title: bookmarksRepository.isBookmarked(
+                                          BookmarkType.list,
+                                          clustersRepository.activeClusterId,
+                                          widget.title,
+                                          widget.resource,
+                                          widget.path,
+                                          widget.scope,
+                                          null,
+                                          clustersRepository
+                                              .getCluster(
+                                                clustersRepository
+                                                    .activeClusterId,
+                                              )
+                                              ?.namespace,
+                                        ) >
+                                        -1
+                                    ? 'Remove Bookmark'
+                                    : 'Add Bookmark',
+                                icon: bookmarksRepository.isBookmarked(
+                                          BookmarkType.list,
+                                          clustersRepository.activeClusterId,
+                                          widget.title,
+                                          widget.resource,
+                                          widget.path,
+                                          widget.scope,
+                                          null,
+                                          clustersRepository
+                                              .getCluster(
+                                                clustersRepository
+                                                    .activeClusterId,
+                                              )
+                                              ?.namespace,
+                                        ) >
+                                        -1
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_border,
+                                onTap: () {
+                                  final bookmarkIndex =
+                                      bookmarksRepository.isBookmarked(
+                                    BookmarkType.list,
+                                    clustersRepository.activeClusterId,
+                                    widget.title,
+                                    widget.resource,
+                                    widget.path,
+                                    widget.scope,
+                                    null,
+                                    clustersRepository
+                                        .getCluster(
+                                          clustersRepository.activeClusterId,
+                                        )
+                                        ?.namespace,
+                                  );
+                                  if (bookmarkIndex > -1) {
+                                    bookmarksRepository
+                                        .removeBookmark(bookmarkIndex);
+                                  } else {
+                                    bookmarksRepository.addBookmark(
+                                      BookmarkType.list,
+                                      clustersRepository.activeClusterId,
+                                      widget.title,
+                                      widget.resource,
+                                      widget.path,
+                                      widget.scope,
+                                      widget.additionalPrinterColumns,
+                                      null,
+                                      clustersRepository
+                                          .getCluster(
+                                            clustersRepository.activeClusterId,
+                                          )
+                                          ?.namespace,
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(
+                              top: Constants.spacingMiddle,
+                              bottom: Constants.spacingMiddle,
+                            ),
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: const EdgeInsets.only(
+                                right: Constants.spacingMiddle,
+                                left: Constants.spacingMiddle,
+                              ),
+                              itemCount: filteredItems.length,
+                              itemBuilder: (context, index) {
+                                return _buildListItem(
+                                  widget.title,
+                                  widget.resource,
+                                  widget.path,
+                                  widget.scope,
+                                  widget.additionalPrinterColumns,
+                                  filteredItems[index],
+                                  snapshot.data!.metrics,
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                  }
+                },
+              ),
+            ],
           ),
         ),
       ),
-    );
-  }
-
-  /// [_buildAppBarActions] returns the actions for the [AppBar]. The actions
-  /// are containing the actions menu for the resources, when the user opt in
-  /// for the classic mode and an action to open the modal to select an
-  /// namespace, when the current resource is a namespaces resource and no
-  /// selector was specified.
-  List<Widget> _buildAppBarActions() {
-    AppRepository appRepository = Provider.of<AppRepository>(
-      context,
-      listen: false,
-    );
-
-    final List<Widget> actions = [];
-
-    if (widget.scope == ResourceScope.namespaced && widget.selector == null) {
-      actions.add(
-        IconButton(
-          icon: const Icon(CustomIcons.namespaces),
-          onPressed: () {
-            showModal(context, const AppNamespacesWidget());
-          },
-        ),
-      );
-    }
-
-    if (appRepository.settings.classicMode) {
-      actions.add(
-        AppResourceActions(
-          mode: AppResourceActionsMode.menu,
-          actions: resourceListActions(
-            context,
-            widget.title,
-            widget.resource,
-            widget.path,
-            widget.scope,
-            widget.additionalPrinterColumns,
-            () {
-              setState(() {
-                _futureFetchItems = _fetchItems();
-              });
-            },
-          ),
-        ),
-      );
-    }
-
-    return actions;
-  }
-
-  /// [_buildHeaderActions] returns the resource actions as header when the user
-  /// didn't opt in for the classic mode.
-  Widget _buildHeaderActions() {
-    AppRepository appRepository = Provider.of<AppRepository>(
-      context,
-      listen: false,
-    );
-
-    if (!appRepository.settings.classicMode) {
-      return AppResourceActions(
-        mode: AppResourceActionsMode.header,
-        actions: resourceListActions(
-          context,
-          widget.title,
-          widget.resource,
-          widget.path,
-          widget.scope,
-          widget.additionalPrinterColumns,
-          () {
-            setState(() {
-              _futureFetchItems = _fetchItems();
-            });
-          },
-        ),
-      );
-    }
-
-    return Container();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    setState(() {
-      _futureFetchItems = _fetchItems();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Provider.of<ThemeRepository>(
-      context,
-      listen: true,
-    );
-    Provider.of<AppRepository>(
-      context,
-      listen: true,
-    );
-    Provider.of<ClustersRepository>(
-      context,
-      listen: true,
-    );
-
-    return FutureBuilder(
-      future: _futureFetchItems,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<ResourcesListResult> snapshot,
-      ) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.waiting:
-            return _buildLayout(
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(
-                      Constants.spacingMiddle,
-                    ),
-                    child: CircularProgressIndicator(
-                      color: theme(context).primary,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          default:
-            if (snapshot.hasError) {
-              return _buildLayout(
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.all(Constants.spacingMiddle),
-                        child: AppErrorWidget(
-                          message: 'Could not load ${widget.title}',
-                          details: snapshot.error.toString(),
-                          icon: Resources.map.containsKey(widget.resource) &&
-                                  Resources.map[widget.resource]!.path ==
-                                      widget.path
-                              ? 'assets/resources/${widget.resource}.svg'
-                              : null,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            Provider.of<BookmarksRepository>(
-              context,
-              listen: true,
-            );
-
-            final filteredItems = _getFilteredItems(snapshot.data!.items);
-
-            return _buildLayout(
-              Wrap(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(
-                      top: Constants.spacingMiddle,
-                      bottom: Constants.spacingSmall,
-                      left: Constants.spacingMiddle,
-                      right: Constants.spacingMiddle,
-                    ),
-                    color: theme(context).primary,
-                    child: TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          _filter = value;
-                        });
-                      },
-                      style: TextStyle(
-                        color: theme(context).onPrimary,
-                      ),
-                      cursorColor: theme(context).onPrimary,
-                      keyboardType: TextInputType.text,
-                      autocorrect: false,
-                      enableSuggestions: false,
-                      maxLines: 1,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: theme(context).onPrimary,
-                            width: 0.0,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: theme(context).onPrimary,
-                            width: 0.0,
-                          ),
-                        ),
-                        isDense: true,
-                        contentPadding: const EdgeInsets.all(8),
-                        hintStyle: TextStyle(
-                          color: theme(context).onPrimary,
-                        ),
-                        hintText: 'Filter...',
-                      ),
-                    ),
-                  ),
-                  _buildHeaderActions(),
-                  Container(
-                    padding: const EdgeInsets.only(
-                      top: Constants.spacingMiddle,
-                      bottom: Constants.spacingMiddle,
-                    ),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.only(
-                        right: Constants.spacingMiddle,
-                        left: Constants.spacingMiddle,
-                      ),
-                      itemCount: filteredItems.length,
-                      itemBuilder: (context, index) {
-                        return _buildListItem(
-                          widget.title,
-                          widget.resource,
-                          widget.path,
-                          widget.scope,
-                          widget.additionalPrinterColumns,
-                          filteredItems[index],
-                          snapshot.data!.metrics,
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            );
-        }
-      },
     );
   }
 }

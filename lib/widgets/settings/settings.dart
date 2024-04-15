@@ -22,7 +22,6 @@ import 'package:kubenav/widgets/settings/settings_help.dart';
 import 'package:kubenav/widgets/settings/settings_namespaces.dart';
 import 'package:kubenav/widgets/settings/settings_providers.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
-import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
 import 'package:kubenav/widgets/shared/app_no_clusters_widget.dart';
@@ -264,14 +263,11 @@ class Settings extends StatelessWidget {
     );
 
     return Scaffold(
-      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Settings'),
       ),
-      bottomNavigationBar: appRepository.settings.classicMode
-          ? null
-          : const AppBottomNavigationBarWidget(),
+      bottomNavigationBar: const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -474,30 +470,6 @@ class Settings extends StatelessWidget {
                             ),
                           );
                         }).toList(),
-                      ),
-                    ],
-                  ),
-                  AppVertialListSimpleModel(
-                    children: [
-                      Icon(
-                        Icons.dashboard,
-                        color: theme(context).primary,
-                      ),
-                      const SizedBox(width: Constants.spacingSmall),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          'Classic Mode',
-                          style: noramlTextStyle(
-                            context,
-                          ),
-                        ),
-                      ),
-                      Switch(
-                        activeColor: theme(context).primary,
-                        onChanged: (value) =>
-                            {appRepository.setClassicMode(value)},
-                        value: appRepository.settings.classicMode,
                       ),
                     ],
                   ),

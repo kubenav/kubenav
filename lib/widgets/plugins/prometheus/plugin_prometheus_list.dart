@@ -16,7 +16,6 @@ import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/plugins/prometheus/plugin_prometheus_details.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
-import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
@@ -149,34 +148,6 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
     );
   }
 
-  /// [_buildHeaderActions] returns the Prometheus list actions as header when
-  /// the user didn't opt in for the classic mode.
-  Widget _buildHeaderActions() {
-    AppRepository appRepository = Provider.of<AppRepository>(
-      context,
-      listen: false,
-    );
-
-    if (!appRepository.settings.classicMode) {
-      return AppResourceActions(
-        mode: AppResourceActionsMode.header,
-        actions: [
-          AppResourceActionsModel(
-            title: 'Refresh',
-            icon: Icons.refresh,
-            onTap: () {
-              setState(() {
-                _futureFetchDashboards = _fetchDashboards();
-              });
-            },
-          ),
-        ],
-      );
-    }
-
-    return Container();
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -191,7 +162,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
       context,
       listen: true,
     );
-    AppRepository appRepository = Provider.of<AppRepository>(
+    Provider.of<AppRepository>(
       context,
       listen: true,
     );
@@ -201,45 +172,16 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
     );
 
     return Scaffold(
-      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
         centerTitle: true,
-
-        /// If the user opt in for the classic mode, we show the actions for the
-        /// Prometheus list view in the [AppBar] next to the namespace
-        /// selection. If a user does not use this mode we only show the
-        /// namespace selection action.
-        actions: appRepository.settings.classicMode
-            ? [
-                IconButton(
-                  icon: const Icon(CustomIcons.namespaces),
-                  onPressed: () {
-                    showModal(context, const AppNamespacesWidget());
-                  },
-                ),
-                AppResourceActions(
-                  mode: AppResourceActionsMode.menu,
-                  actions: [
-                    AppResourceActionsModel(
-                      title: 'Refresh',
-                      icon: Icons.refresh,
-                      onTap: () {
-                        setState(() {
-                          _futureFetchDashboards = _fetchDashboards();
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ]
-            : [
-                IconButton(
-                  icon: const Icon(CustomIcons.namespaces),
-                  onPressed: () {
-                    showModal(context, const AppNamespacesWidget());
-                  },
-                ),
-              ],
+        actions: [
+          IconButton(
+            icon: const Icon(CustomIcons.namespaces),
+            onPressed: () {
+              showModal(context, const AppNamespacesWidget());
+            },
+          ),
+        ],
         title: Column(
           children: [
             Text(
@@ -278,9 +220,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
           ],
         ),
       ),
-      bottomNavigationBar: appRepository.settings.classicMode
-          ? null
-          : const AppBottomNavigationBarWidget(),
+      bottomNavigationBar: const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -332,7 +272,20 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
 
                       return Wrap(
                         children: [
-                          _buildHeaderActions(),
+                          AppResourceActions(
+                            mode: AppResourceActionsMode.header,
+                            actions: [
+                              AppResourceActionsModel(
+                                title: 'Refresh',
+                                icon: Icons.refresh,
+                                onTap: () {
+                                  setState(() {
+                                    _futureFetchDashboards = _fetchDashboards();
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
                           Container(
                             padding: const EdgeInsets.only(
                               top: Constants.spacingMiddle,

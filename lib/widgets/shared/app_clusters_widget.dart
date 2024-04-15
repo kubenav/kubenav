@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
@@ -22,33 +21,18 @@ class AppClustersWidget extends StatefulWidget {
 
 class _AppClustersWidgetState extends State<AppClustersWidget> {
   Future<void> _setActiveCluster(String clusterId) async {
-    AppRepository appRepository = Provider.of<AppRepository>(
-      context,
-      listen: false,
-    );
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
     );
 
-    if (appRepository.settings.classicMode) {
-      try {
-        Navigator.popUntil(
-          context,
-          (route) => route.isFirst,
-        );
-        await Future.delayed(const Duration(seconds: 1));
-        await clustersRepository.setActiveCluster(clusterId);
-      } catch (_) {}
-    } else {
-      try {
-        await clustersRepository.setActiveCluster(clusterId);
+    try {
+      await clustersRepository.setActiveCluster(clusterId);
 
-        if (mounted) {
-          Navigator.pop(context);
-        }
-      } catch (_) {}
-    }
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    } catch (_) {}
   }
 
   @override
