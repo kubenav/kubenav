@@ -123,44 +123,42 @@ class AppTerminalsWidget extends StatelessWidget {
                   length: terminalRepository.terminals.length,
                   child: Column(
                     children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(Constants.sizeBorderRadius),
-                        ),
-                        child: SizedBox(
-                          height: 32,
-                          child: TabBar(
-                            isScrollable: true,
-                            labelColor: theme(context).onPrimary,
-                            unselectedLabelColor: theme(context).primary,
-                            indicatorSize: TabBarIndicatorSize.tab,
-                            indicator: BoxDecoration(
-                              color: theme(context).primary,
+                      SizedBox(
+                        height: 32,
+                        child: TabBar(
+                          isScrollable: true,
+                          tabAlignment: TabAlignment.center,
+                          labelColor: theme(context).onPrimary,
+                          unselectedLabelColor: theme(context).primary,
+                          indicatorPadding:
+                              const EdgeInsets.symmetric(horizontal: 5),
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          indicator: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              Constants.sizeBorderRadius,
                             ),
-                            tabs: terminalRepository.terminals
-                                .asMap()
-                                .entries
-                                .map(
-                              (terminal) {
-                                return Tab(
-                                  child: GestureDetector(
-                                    onDoubleTap: () {
-                                      terminalRepository.deleteTerminal(
-                                        terminal.key,
-                                      );
-                                      if (terminalRepository
-                                          .terminals.isEmpty) {
-                                        Navigator.pop(context);
-                                      }
-                                    },
-                                    child: Text(
-                                      terminal.value.name,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ).toList(),
+                            color: theme(context).primary,
                           ),
+                          tabs:
+                              terminalRepository.terminals.asMap().entries.map(
+                            (terminal) {
+                              return Tab(
+                                child: GestureDetector(
+                                  onDoubleTap: () {
+                                    terminalRepository.deleteTerminal(
+                                      terminal.key,
+                                    );
+                                    if (terminalRepository.terminals.isEmpty) {
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: Text(
+                                    terminal.value.name,
+                                  ),
+                                ),
+                              );
+                            },
+                          ).toList(),
                         ),
                       ),
                       const SizedBox(height: Constants.spacingMiddle),
@@ -203,7 +201,9 @@ class AppTerminalsWidget extends StatelessWidget {
                                             padding: const EdgeInsets.all(
                                               Constants.spacingSmall,
                                             ),
-                                            color: theme(context).background,
+                                            color: theme(context)
+                                                .terminalTheme
+                                                .background,
                                             child: Wrap(
                                               children: terminal.value.logs ==
                                                       null
