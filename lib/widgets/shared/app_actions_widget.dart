@@ -50,9 +50,8 @@ class AppActionsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(
-        left: Constants.spacingMiddle,
-        right: Constants.spacingMiddle,
+      margin: const EdgeInsets.all(
+        Constants.spacingMiddle,
       ),
       padding: const EdgeInsets.only(
         left: Constants.spacingMiddle,
