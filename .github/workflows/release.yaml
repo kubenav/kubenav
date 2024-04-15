@@ -40,7 +40,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: kubenav.io/
+          path: landing
 
   # The "Deploy Landing Page" job deploys our landing page to GitHub Pages.
   deploy-landing-page:
