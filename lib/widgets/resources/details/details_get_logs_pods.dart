@@ -184,7 +184,7 @@ class _DetailsGetLogsPodsState extends State<DetailsGetLogsPods> {
                       _selectedPods = _selectedPods
                           .where(
                             (p) =>
-                                p.metadata?.name == _pods[index].metadata?.name,
+                                p.metadata?.name != _pods[index].metadata?.name,
                           )
                           .toList();
                     });
