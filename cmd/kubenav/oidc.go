@@ -276,7 +276,7 @@ func OIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes string)
 		Scopes: parsedScopes,
 	}
 
-	deviceAuth, err := oauth2Config.AuthDevice(ctx)
+	deviceAuth, err := oauth2Config.DeviceAuth(ctx)
 	if err != nil {
 		return "", err
 	}
@@ -322,7 +322,7 @@ func OIDCDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority,
 		Scopes: parsedScopes,
 	}
 
-	oauth2Token, err := oauth2Config.Poll(ctx, &oauth2.DeviceAuth{DeviceCode: deviceCode})
+	oauth2Token, err := oauth2Config.DeviceAccessToken(ctx, &oauth2.DeviceAuthResponse{DeviceCode: deviceCode})
 	if err != nil {
 		return "", err
 	}
