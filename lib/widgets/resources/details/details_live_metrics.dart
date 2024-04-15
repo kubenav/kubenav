@@ -239,26 +239,26 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
         length: 2,
         child: Column(
           children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(Constants.sizeBorderRadius),
-              ),
-              child: SizedBox(
-                height: 32,
-                child: TabBar(
-                  isScrollable: false,
-                  labelColor: theme(context).onPrimary,
-                  unselectedLabelColor: theme(context).primary,
-                  labelPadding: EdgeInsets.zero,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  indicator: BoxDecoration(
-                    color: theme(context).primary,
+            SizedBox(
+              height: 32,
+              child: TabBar(
+                isScrollable: false,
+                tabAlignment: TabAlignment.fill,
+                labelColor: theme(context).onPrimary,
+                unselectedLabelColor: theme(context).primary,
+                labelPadding: EdgeInsets.zero,
+                indicatorPadding: const EdgeInsets.symmetric(horizontal: 5),
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicator: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    Constants.sizeBorderRadius,
                   ),
-                  tabs: const [
-                    Tab(text: 'CPU'),
-                    Tab(text: 'Memory'),
-                  ],
+                  color: theme(context).primary,
                 ),
+                tabs: const [
+                  Tab(text: 'CPU'),
+                  Tab(text: 'Memory'),
+                ],
               ),
             ),
             const SizedBox(height: Constants.spacingMiddle),
