@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 
 /// [Action] defines the structure of a single action for the
@@ -22,23 +21,7 @@ class AppActionsWidgetAction {
 /// [AppActionsWidget] is a widget which can be used within a bottom sheet to
 /// show some additional [actions] for a component, when a user clicks on the
 /// component. The actions are defined as a list of our [AppActionsWidgetAction]
-/// model. The widget can be used as follows:
-///
-/// ```
-/// AppActionsWidget(
-///   actions: [
-///     AppActionsWidgetAction(
-///       title: 'Edit',
-///       onTap: () {},
-///     ),
-///     AppActionsWidgetAction(
-///       title: 'Delete',
-///       color: Constants.error,
-///       onTap: () {},
-///     ),
-///   ],
-/// )
-/// ```
+/// model.
 class AppActionsWidget extends StatelessWidget {
   const AppActionsWidget({
     super.key,
@@ -58,7 +41,7 @@ class AppActionsWidget extends StatelessWidget {
         right: Constants.spacingMiddle,
       ),
       decoration: BoxDecoration(
-        color: theme(context).card,
+        color: Theme.of(context).colorScheme.background,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),

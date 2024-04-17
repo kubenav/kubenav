@@ -5,10 +5,10 @@ import 'package:uuid/uuid.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/providers/aws_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_aws.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
@@ -221,7 +221,7 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
                     value: _region,
                     underline: Container(
                       height: 2,
-                      color: theme(context).primary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     onChanged: (String? newValue) {
                       setState(() {
@@ -234,7 +234,9 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
                         child: Text(
                           value,
                           style: TextStyle(
-                            color: theme(context).textPrimary,
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .textPrimary,
                           ),
                         ),
                       );

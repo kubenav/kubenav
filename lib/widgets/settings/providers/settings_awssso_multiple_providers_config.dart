@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/providers/aws_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/settings/providers/settings_awssso_multiple_providers_select.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
@@ -198,7 +198,7 @@ class _SettingsAWSSSOMultipleProvidersState
                     value: _ssoRegion,
                     underline: Container(
                       height: 2,
-                      color: theme(context).primary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     onChanged: (String? newValue) {
                       setState(() {
@@ -211,7 +211,9 @@ class _SettingsAWSSSOMultipleProvidersState
                         child: Text(
                           value,
                           style: TextStyle(
-                            color: theme(context).textPrimary,
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .textPrimary,
                           ),
                         ),
                       );
@@ -226,8 +228,8 @@ class _SettingsAWSSSOMultipleProvidersState
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: theme(context).primary,
-                  foregroundColor: theme(context).onPrimary,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
@@ -240,7 +242,7 @@ class _SettingsAWSSSOMultipleProvidersState
                   'Sign In',
                   style: primaryTextStyle(
                     context,
-                    color: theme(context).onPrimary,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -252,8 +254,8 @@ class _SettingsAWSSSOMultipleProvidersState
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: theme(context).primary,
-                  foregroundColor: theme(context).onPrimary,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
@@ -266,7 +268,7 @@ class _SettingsAWSSSOMultipleProvidersState
                   'Verify',
                   style: primaryTextStyle(
                     context,
-                    color: theme(context).onPrimary,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                   textAlign: TextAlign.center,
                 ),

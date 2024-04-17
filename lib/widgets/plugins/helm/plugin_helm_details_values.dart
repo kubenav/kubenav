@@ -9,10 +9,10 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/plugins/helm.dart';
 import 'package:kubenav/repositories/app_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/helpers_service.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 /// The [PluginHelmDetailsValues] widget can be used to render the values file
@@ -103,7 +103,10 @@ class _PluginHelmDetailsValuesState extends State<PluginHelmDetailsValues> {
                 vertical: 8,
               ),
               child: CodeTheme(
-                data: CodeThemeData(styles: theme(context).editorTheme),
+                data: CodeThemeData(
+                  styles:
+                      Theme.of(context).extension<EditorColors>()!.getTheme(),
+                ),
                 child: CodeField(
                   controller: _codeController,
                   enabled: false,

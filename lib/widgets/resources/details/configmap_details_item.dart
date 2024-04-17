@@ -5,10 +5,10 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_config_map.dart';
 import 'package:kubenav/models/resource.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/resources/details/details_item.dart';
 import 'package:kubenav/widgets/resources/details/details_resources_preview.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
@@ -92,7 +92,7 @@ class ConfigMapDetailsItem extends StatelessWidget
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: theme(context).primary,
+                        color: Theme.of(context).colorScheme.primary,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),
@@ -134,7 +134,8 @@ class ConfigMapDetailsItem extends StatelessWidget
                     const SizedBox(width: Constants.spacingSmall),
                     Icon(
                       Icons.arrow_forward_ios,
-                      color: theme(context)
+                      color: Theme.of(context)
+                          .extension<CustomColors>()!
                           .textSecondary
                           .withOpacity(Constants.opacityIcon),
                       size: 24,

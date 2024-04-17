@@ -5,12 +5,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_status.dart';
 import 'package:kubenav/models/kubernetes_extensions/pod_metrics.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources/general.dart';
 import 'package:kubenav/utils/resources/pods.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/resources/details/details_item.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
@@ -226,7 +226,7 @@ class DetailsContainer extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: theme(context).primary,
+                          color: Theme.of(context).colorScheme.primary,
                           borderRadius: const BorderRadius.all(
                             Radius.circular(Constants.sizeBorderRadius),
                           ),
@@ -272,7 +272,8 @@ class DetailsContainer extends StatelessWidget {
                       const SizedBox(width: Constants.spacingSmall),
                       Icon(
                         Icons.arrow_forward_ios,
-                        color: theme(context)
+                        color: Theme.of(context)
+                            .extension<CustomColors>()!
                             .textSecondary
                             .withOpacity(Constants.opacityIcon),
                         size: 24,
@@ -298,7 +299,7 @@ class DetailsContainer extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: theme(context).primary,
+                          color: Theme.of(context).colorScheme.primary,
                           borderRadius: const BorderRadius.all(
                             Radius.circular(Constants.sizeBorderRadius),
                           ),
@@ -340,7 +341,8 @@ class DetailsContainer extends StatelessWidget {
                       const SizedBox(width: Constants.spacingSmall),
                       Icon(
                         Icons.arrow_forward_ios,
-                        color: theme(context)
+                        color: Theme.of(context)
+                            .extension<CustomColors>()!
                             .textSecondary
                             .withOpacity(Constants.opacityIcon),
                         size: 24,

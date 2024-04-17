@@ -6,7 +6,6 @@ import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_namespace.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_namespace_list.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
@@ -155,7 +154,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                     ? Icons.radio_button_checked
                     : Icons.radio_button_unchecked,
                 size: 24,
-                color: theme(context).primary,
+                color: Theme.of(context).colorScheme.primary,
               ),
               const SizedBox(width: Constants.spacingSmall),
               Expanded(
@@ -198,7 +197,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                         ? Icons.radio_button_checked
                         : Icons.radio_button_unchecked,
                     size: 24,
-                    color: theme(context).primary,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(width: Constants.spacingSmall),
                   Expanded(
@@ -273,7 +272,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                   ..._buildFavoriteNamespace(),
                   Center(
                     child: CircularProgressIndicator(
-                      color: theme(context).primary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ],
@@ -354,7 +353,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                                     ? Icons.radio_button_checked
                                     : Icons.radio_button_unchecked,
                                 size: 24,
-                                color: theme(context).primary,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                               const SizedBox(width: Constants.spacingSmall),
                               Expanded(

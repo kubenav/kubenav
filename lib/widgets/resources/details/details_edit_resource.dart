@@ -10,12 +10,12 @@ import 'package:yaml/yaml.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/helpers_service.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 /// The [DetailsEditResource] widget displays the provided [item] in a code
@@ -199,7 +199,10 @@ class _DetailsEditResourceState extends State<DetailsEditResource> {
                 vertical: 8,
               ),
               child: CodeTheme(
-                data: CodeThemeData(styles: theme(context).editorTheme),
+                data: CodeThemeData(
+                  styles:
+                      Theme.of(context).extension<EditorColors>()!.getTheme(),
+                ),
                 child: CodeField(
                   controller: _codeController,
                   enabled: true,

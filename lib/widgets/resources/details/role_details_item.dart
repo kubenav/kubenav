@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_rbac_v1_role.dart';
 import 'package:kubenav/models/resource.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources/general.dart';
@@ -50,7 +49,7 @@ class RoleDetailsItem extends StatelessWidget implements IDetailsItemWidget {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: theme(context).primary,
+                        color: Theme.of(context).colorScheme.primary,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),

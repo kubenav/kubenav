@@ -5,12 +5,12 @@ import 'package:uuid/uuid.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/providers/oidc_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_oidc.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
@@ -447,8 +447,8 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           ),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: theme(context).primary,
-              foregroundColor: theme(context).onPrimary,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
               minimumSize: const Size.fromHeight(40),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
@@ -461,7 +461,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
               'Verify',
               style: primaryTextStyle(
                 context,
-                color: theme(context).onPrimary,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -477,7 +477,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
             children: [
               const Text('Use Access Token instead of ID Token'),
               Switch(
-                activeColor: theme(context).primary,
+                activeColor: Theme.of(context).colorScheme.primary,
                 onChanged: (val) => {
                   setState(() {
                     _useAccessToken = !_useAccessToken;
@@ -522,8 +522,8 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           ),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: theme(context).primary,
-              foregroundColor: theme(context).onPrimary,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
               minimumSize: const Size.fromHeight(40),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
@@ -536,7 +536,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
               'Initialize Device Flow',
               style: primaryTextStyle(
                 context,
-                color: theme(context).onPrimary,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -560,7 +560,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
               value: _pkceMethod,
               underline: Container(
                 height: 2,
-                color: theme(context).primary,
+                color: Theme.of(context).colorScheme.primary,
               ),
               onChanged: (String? newValue) {
                 setState(() {
@@ -576,7 +576,9 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                   child: Text(
                     value,
                     style: TextStyle(
-                      color: theme(context).textPrimary,
+                      color: Theme.of(context)
+                          .extension<CustomColors>()!
+                          .textPrimary,
                     ),
                   ),
                 );
@@ -660,7 +662,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           children: [
             const Text('Use Access Token instead of ID Token'),
             Switch(
-              activeColor: theme(context).primary,
+              activeColor: Theme.of(context).colorScheme.primary,
               onChanged: (val) => {
                 setState(() {
                   _useAccessToken = !_useAccessToken;
@@ -677,8 +679,8 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         ),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: theme(context).primary,
-            foregroundColor: theme(context).onPrimary,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
             minimumSize: const Size.fromHeight(40),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
@@ -691,7 +693,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
             'Sign In',
             style: primaryTextStyle(
               context,
-              color: theme(context).onPrimary,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -802,7 +804,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                     value: _flow,
                     underline: Container(
                       height: 2,
-                      color: theme(context).primary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     onChanged: (OIDCFlow? newValue) {
                       setState(() {
@@ -815,7 +817,9 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                         child: Text(
                           value.pretty(),
                           style: TextStyle(
-                            color: theme(context).textPrimary,
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .textPrimary,
                           ),
                         ),
                       );

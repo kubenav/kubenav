@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/themes.dart';
 
 /// [AppHorizontalListCardsModel] is the model, which is used to create a card
 /// in the horizontal list. The [subtitle] of a card is of the type
@@ -32,24 +32,6 @@ class AppHorizontalListCardsModel {
 /// function. To create the list the user must also provide an [title] for the
 /// list and some optional more arguments. When the more prefixed arguments are
 /// provided the [moreText] and [moreIcon] will be displayed next to the title.
-/// The widget can be used as follows:
-///
-/// ```
-/// AppHorizontalListCardsWidget(
-///   title: 'Add Cluster',
-///   cards: List.generate(
-///     controller.providers.length,
-///     (index) => AppHorizontalListCardsModel(
-///       title: controller.providers[index].title,
-///       subtitle: controller.providers[index].subtitle,
-///       image: controller.providers[index].image,
-///       onTap: () {
-///         controller.showAddClusterBottomSheet(index);
-///       },
-///     ),
-///   ),
-/// ),
-///  ```
 class AppHorizontalListCardsWidget extends StatelessWidget {
   const AppHorizontalListCardsWidget({
     super.key,
@@ -84,13 +66,13 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
               moreText,
               style: secondaryTextStyle(
                 context,
-                color: theme(context).primary,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(width: Constants.spacingExtraSmall),
             Icon(
               moreIcon,
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
               size: 16,
             ),
           ],
@@ -173,13 +155,14 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: theme(context).shadow,
+                      color:
+                          Theme.of(context).extension<CustomColors>()!.shadow,
                       blurRadius: Constants.sizeBorderBlurRadius,
                       spreadRadius: Constants.sizeBorderSpreadRadius,
                       offset: const Offset(0.0, 0.0),
                     ),
                   ],
-                  color: theme(context).card,
+                  color: Theme.of(context).colorScheme.background,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(Constants.sizeBorderRadius),
                   ),
@@ -191,7 +174,7 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: theme(context).primary,
+                          color: Theme.of(context).colorScheme.primary,
                           borderRadius: const BorderRadius.only(
                             topLeft:
                                 Radius.circular(Constants.sizeBorderRadius),

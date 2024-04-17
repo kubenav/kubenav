@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/resource.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/resources/list/list_item_actions.dart';
 import 'package:kubenav/widgets/resources/resource_details.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
@@ -72,10 +72,10 @@ class ListItemWidget extends StatelessWidget {
             Icons.radio_button_checked,
             size: 24,
             color: status == Status.success
-                ? theme(context).success
+                ? Theme.of(context).extension<CustomColors>()!.success
                 : status == Status.danger
-                    ? theme(context).error
-                    : theme(context).warning,
+                    ? Theme.of(context).extension<CustomColors>()!.error
+                    : Theme.of(context).extension<CustomColors>()!.warning,
           ),
         ],
       );

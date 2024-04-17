@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
@@ -164,7 +163,7 @@ class _DetailsDeleteResourceState extends State<DetailsDeleteResource> {
                 children: [
                   const Text('Force'),
                   Switch(
-                    activeColor: theme(context).primary,
+                    activeColor: Theme.of(context).colorScheme.primary,
                     onChanged: (value) {
                       setState(() {
                         _force = !_force;

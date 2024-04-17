@@ -11,6 +11,7 @@ import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/settings/settings/settings_info.dart';
 import 'package:kubenav/widgets/settings/settings/settings_prometheus.dart';
 import 'package:kubenav/widgets/settings/settings/settings_proxy.dart';
@@ -90,7 +91,7 @@ class Settings extends StatelessWidget {
                           ? Icons.radio_button_checked
                           : Icons.radio_button_unchecked,
                       size: 24,
-                      color: theme(context).primary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     const SizedBox(width: Constants.spacingSmall),
                     Expanded(
@@ -140,13 +141,13 @@ class Settings extends StatelessWidget {
                   'View all',
                   style: secondaryTextStyle(
                     context,
-                    color: theme(context).primary,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 const SizedBox(width: Constants.spacingExtraSmall),
                 Icon(
                   Icons.keyboard_arrow_right,
-                  color: theme(context).primary,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 16,
                 ),
               ],
@@ -193,7 +194,7 @@ class Settings extends StatelessWidget {
           children: [
             Icon(
               Icons.subject,
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -207,8 +208,10 @@ class Settings extends StatelessWidget {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color:
-                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
+              color: Theme.of(context)
+                  .extension<CustomColors>()!
+                  .textPrimary
+                  .withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -223,7 +226,7 @@ class Settings extends StatelessWidget {
           children: [
             Icon(
               Icons.help,
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -237,8 +240,10 @@ class Settings extends StatelessWidget {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color:
-                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
+              color: Theme.of(context)
+                  .extension<CustomColors>()!
+                  .textPrimary
+                  .withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -287,7 +292,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         CustomIcons.kubernetes,
-                        color: theme(context).primary,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -301,7 +306,8 @@ class Settings extends StatelessWidget {
                       ),
                       Icon(
                         Icons.arrow_forward_ios,
-                        color: theme(context)
+                        color: Theme.of(context)
+                            .extension<CustomColors>()!
                             .textPrimary
                             .withOpacity(Constants.opacityIcon),
                         size: 16,
@@ -318,7 +324,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         CustomIcons.namespaces,
-                        color: theme(context).primary,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -332,7 +338,8 @@ class Settings extends StatelessWidget {
                       ),
                       Icon(
                         Icons.arrow_forward_ios,
-                        color: theme(context)
+                        color: Theme.of(context)
+                            .extension<CustomColors>()!
                             .textPrimary
                             .withOpacity(Constants.opacityIcon),
                         size: 16,
@@ -343,7 +350,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.fingerprint,
-                        color: theme(context).primary,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -356,7 +363,7 @@ class Settings extends StatelessWidget {
                         ),
                       ),
                       Switch(
-                        activeColor: theme(context).primary,
+                        activeColor: Theme.of(context).colorScheme.primary,
                         onChanged: (value) {
                           _toogleAuthentication(context);
                         },
@@ -368,7 +375,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         CustomIcons.clusters,
-                        color: theme(context).primary,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -381,7 +388,7 @@ class Settings extends StatelessWidget {
                         ),
                       ),
                       Switch(
-                        activeColor: theme(context).primary,
+                        activeColor: Theme.of(context).colorScheme.primary,
                         onChanged: (value) {
                           appRepository.setIsShowClustersOnStart(
                             !appRepository.settings.isShowClustersOnStart,
@@ -395,7 +402,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.code,
-                        color: theme(context).primary,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -411,7 +418,7 @@ class Settings extends StatelessWidget {
                         value: themeRepository.themeName,
                         underline: Container(
                           height: 2,
-                          color: theme(context).primary,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                         onChanged: (ThemeName? value) {
                           themeRepository
@@ -423,7 +430,9 @@ class Settings extends StatelessWidget {
                             child: Text(
                               value.toShortString(),
                               style: TextStyle(
-                                color: theme(context).textPrimary,
+                                color: Theme.of(context)
+                                    .extension<CustomColors>()!
+                                    .textPrimary,
                               ),
                             ),
                           );
@@ -435,7 +444,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.code,
-                        color: theme(context).primary,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -451,7 +460,7 @@ class Settings extends StatelessWidget {
                         value: appRepository.settings.editorFormat,
                         underline: Container(
                           height: 2,
-                          color: theme(context).primary,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                         onChanged: (String? newValue) {
                           appRepository.setEditorFormat(newValue ?? 'yaml');
@@ -465,7 +474,9 @@ class Settings extends StatelessWidget {
                             child: Text(
                               value,
                               style: TextStyle(
-                                color: theme(context).textPrimary,
+                                color: Theme.of(context)
+                                    .extension<CustomColors>()!
+                                    .textPrimary,
                               ),
                             ),
                           );
@@ -485,7 +496,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.http,
-                        color: theme(context).primary,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -499,7 +510,8 @@ class Settings extends StatelessWidget {
                       ),
                       Icon(
                         Icons.arrow_forward_ios,
-                        color: theme(context)
+                        color: Theme.of(context)
+                            .extension<CustomColors>()!
                             .textPrimary
                             .withOpacity(Constants.opacityIcon),
                         size: 16,
@@ -518,7 +530,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.schedule,
-                        color: theme(context).primary,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -532,7 +544,8 @@ class Settings extends StatelessWidget {
                       ),
                       Icon(
                         Icons.arrow_forward_ios,
-                        color: theme(context)
+                        color: Theme.of(context)
+                            .extension<CustomColors>()!
                             .textPrimary
                             .withOpacity(Constants.opacityIcon),
                         size: 16,
@@ -551,7 +564,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.extension,
-                        color: theme(context).primary,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
@@ -565,7 +578,8 @@ class Settings extends StatelessWidget {
                       ),
                       Icon(
                         Icons.arrow_forward_ios,
-                        color: theme(context)
+                        color: Theme.of(context)
+                            .extension<CustomColors>()!
                             .textPrimary
                             .withOpacity(Constants.opacityIcon),
                         size: 16,

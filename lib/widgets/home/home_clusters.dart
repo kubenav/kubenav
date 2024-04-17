@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
@@ -42,10 +41,6 @@ class _HomeClustersState extends State<HomeClusters> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeRepository>(
-      context,
-      listen: true,
-    );
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,
@@ -73,7 +68,7 @@ class _HomeClustersState extends State<HomeClusters> {
                   Icon(
                     Icons.radio_button_unchecked,
                     size: 24,
-                    color: theme(context).primary,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(width: Constants.spacingSmall),
                   Expanded(

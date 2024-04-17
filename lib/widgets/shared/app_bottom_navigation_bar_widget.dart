@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/navigate.dart';
@@ -14,19 +13,7 @@ import 'package:kubenav/widgets/settings/settings.dart';
 
 /// [AppBottomNavigationBarWidget] is the global bottom navigation bar for our
 /// app. It provides easy access to the most important pages of the app and
-/// should be used on every page as follows:
-///
-/// ```
-/// Scaffold(
-///   appBar: AppBar(
-///     centerTitle: true,
-///     title: const Text('Settings'),
-///   ),
-///   bottomNavigationBar: const AppBottomNavigationBarWidget(),
-///   floatingActionButton: const AppFloatingActionButtonsWidget(),
-///   body: Container(),
-/// );
-/// ```
+/// should be used on every page.
 class AppBottomNavigationBarWidget extends StatelessWidget {
   const AppBottomNavigationBarWidget({super.key});
 
@@ -43,9 +30,10 @@ class AppBottomNavigationBarWidget extends StatelessWidget {
 
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: theme(context).primary,
-      selectedItemColor: theme(context).onPrimary,
-      unselectedItemColor: theme(context).onPrimary.withOpacity(0.60),
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      selectedItemColor: Theme.of(context).colorScheme.onPrimary,
+      unselectedItemColor:
+          Theme.of(context).colorScheme.onPrimary.withOpacity(0.60),
       selectedFontSize: 14,
       unselectedFontSize: 14,
       currentIndex: appRepository.currentPageIndex,

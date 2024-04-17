@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_aws.dart';
 import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_awssso.dart';
@@ -131,7 +130,7 @@ class SettingsReuseProviderActions extends StatelessWidget {
         .map(
           (p) => AppActionsWidgetAction(
             title: p.name ?? '',
-            color: theme(context).primary,
+            color: Theme.of(context).colorScheme.primary,
             onTap: () {
               Navigator.pop(context);
               showModal(context, buildExistinModal(p));
@@ -143,7 +142,7 @@ class SettingsReuseProviderActions extends StatelessWidget {
     actions.add(
       AppActionsWidgetAction(
         title: 'Add Provider',
-        color: theme(context).primary,
+        color: Theme.of(context).colorScheme.primary,
         onTap: () {
           Navigator.pop(context);
           showModal(context, buildNewModal());
@@ -159,7 +158,7 @@ class SettingsReuseProviderActions extends StatelessWidget {
       actions.add(
         AppActionsWidgetAction(
           title: 'Add Multiple Providers',
-          color: theme(context).primary,
+          color: Theme.of(context).colorScheme.primary,
           onTap: () {
             Navigator.pop(context);
             showModal(context, const SettingsAWSSSOMultipleProviders());

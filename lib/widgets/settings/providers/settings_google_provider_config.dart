@@ -5,7 +5,6 @@ import 'package:uuid/uuid.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/providers/google_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -292,8 +291,8 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: theme(context).primary,
-                  foregroundColor: theme(context).onPrimary,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
@@ -306,7 +305,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
                   'Sign In',
                   style: primaryTextStyle(
                     context,
-                    color: theme(context).onPrimary,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                   textAlign: TextAlign.center,
                 ),

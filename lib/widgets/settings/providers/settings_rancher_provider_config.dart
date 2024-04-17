@@ -5,7 +5,6 @@ import 'package:uuid/uuid.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/providers/rancher_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -244,7 +243,7 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
                 children: [
                   const Text('Allow Insecure Connections'),
                   Switch(
-                    activeColor: theme(context).primary,
+                    activeColor: Theme.of(context).colorScheme.primary,
                     onChanged: (value) {
                       setState(() {
                         _allowInsecureConnections = !_allowInsecureConnections;
@@ -295,8 +294,8 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: theme(context).primary,
-                  foregroundColor: theme(context).onPrimary,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
@@ -309,7 +308,7 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
                   'Sign In',
                   style: primaryTextStyle(
                     context,
-                    color: theme(context).onPrimary,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                   textAlign: TextAlign.center,
                 ),

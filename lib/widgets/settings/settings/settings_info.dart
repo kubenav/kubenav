@@ -6,12 +6,12 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/sponsor_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 
@@ -89,7 +89,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               Icons.policy,
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -103,8 +103,10 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color:
-                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
+              color: Theme.of(context)
+                  .extension<CustomColors>()!
+                  .textPrimary
+                  .withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -121,7 +123,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               Icons.favorite,
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -135,8 +137,10 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color:
-                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
+              color: Theme.of(context)
+                  .extension<CustomColors>()!
+                  .textPrimary
+                  .withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -155,11 +159,6 @@ class _SettingsInfoState extends State<SettingsInfo> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeRepository>(
-      context,
-      listen: true,
-    );
-
     return AppVertialListSimpleWidget(
       title: 'Info',
       items: [
@@ -167,7 +166,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               Icons.code,
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -187,7 +186,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
                 right: 6,
               ),
               decoration: BoxDecoration(
-                color: theme(context).primary,
+                color: Theme.of(context).colorScheme.primary,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(Constants.sizeBorderRadius),
                 ),
@@ -201,7 +200,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
                 style: secondaryTextStyle(
                   context,
                   size: 14,
-                  color: theme(context).onPrimary,
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -215,7 +214,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               Icons.language,
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -229,8 +228,10 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color:
-                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
+              color: Theme.of(context)
+                  .extension<CustomColors>()!
+                  .textPrimary
+                  .withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -242,7 +243,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               CustomIcons.github,
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -256,8 +257,10 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color:
-                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
+              color: Theme.of(context)
+                  .extension<CustomColors>()!
+                  .textPrimary
+                  .withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -269,7 +272,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               CustomIcons.twitter,
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -283,8 +286,10 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color:
-                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
+              color: Theme.of(context)
+                  .extension<CustomColors>()!
+                  .textPrimary
+                  .withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -317,7 +322,9 @@ class _SettingsInfoState extends State<SettingsInfo> {
                         child: Text(
                           licenseText,
                           style: TextStyle(
-                            color: theme(context).textPrimary,
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .textPrimary,
                           ),
                         ),
                       ),
@@ -330,7 +337,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               Icons.copyright,
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -344,8 +351,10 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color:
-                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
+              color: Theme.of(context)
+                  .extension<CustomColors>()!
+                  .textPrimary
+                  .withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -357,7 +366,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
           children: [
             Icon(
               Icons.policy,
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -371,8 +380,10 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color:
-                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
+              color: Theme.of(context)
+                  .extension<CustomColors>()!
+                  .textPrimary
+                  .withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],

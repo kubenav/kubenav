@@ -6,7 +6,6 @@ import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_config_map.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_config_map_list.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
@@ -158,10 +157,6 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeRepository>(
-      context,
-      listen: true,
-    );
     Provider.of<AppRepository>(
       context,
       listen: true,
@@ -243,7 +238,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
                             padding:
                                 const EdgeInsets.all(Constants.spacingMiddle),
                             child: CircularProgressIndicator(
-                              color: theme(context).primary,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],

@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/settings/providers/settings_aws_provider_config.dart';
 import 'package:kubenav/widgets/settings/providers/settings_awssso_provider_config.dart';
 import 'package:kubenav/widgets/settings/providers/settings_azure_provider_config.dart';
@@ -109,7 +109,7 @@ class _SettingsProviderActionsState extends State<SettingsProviderActions> {
       actions: [
         AppActionsWidgetAction(
           title: 'Edit',
-          color: theme(context).primary,
+          color: Theme.of(context).colorScheme.primary,
           onTap: () {
             Navigator.pop(context);
             showModal(context, buildProviderModal());
@@ -117,7 +117,7 @@ class _SettingsProviderActionsState extends State<SettingsProviderActions> {
         ),
         AppActionsWidgetAction(
           title: 'Delete',
-          color: theme(context).error,
+          color: Theme.of(context).extension<CustomColors>()!.error,
           onTap: () {
             deleteProvider();
           },

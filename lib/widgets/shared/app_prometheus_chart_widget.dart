@@ -7,10 +7,10 @@ import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/models/plugins/time.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 
@@ -110,7 +110,7 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                     child: Wrap(
                       children: [
                         CircularProgressIndicator(
-                          color: theme(context).primary,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ],
                     ),
@@ -152,13 +152,15 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: theme(context).shadow,
+                          color: Theme.of(context)
+                              .extension<CustomColors>()!
+                              .shadow,
                           blurRadius: Constants.sizeBorderBlurRadius,
                           spreadRadius: Constants.sizeBorderSpreadRadius,
                           offset: const Offset(0.0, 0.0),
                         ),
                       ],
-                      color: theme(context).card,
+                      color: Theme.of(context).colorScheme.background,
                       borderRadius: const BorderRadius.all(
                         Radius.circular(Constants.sizeBorderRadius),
                       ),
@@ -180,9 +182,9 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                   maxContentWidth:
                                       MediaQuery.of(context).size.width,
                                   getTooltipColor: (LineBarSpot touchedSpot) {
-                                    return theme(
-                                      context,
-                                    ).message;
+                                    return Theme.of(context)
+                                        .extension<CustomColors>()!
+                                        .message;
                                   },
                                   getTooltipItems: (touchedSpots) {
                                     return touchedSpots
@@ -190,7 +192,9 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                       return LineTooltipItem(
                                         '${snapshot.data![touchedSpot.barIndex].label}: ${touchedSpot.y.toStringAsFixed(6)} ${widget.unit}',
                                         TextStyle(
-                                          color: theme(context).onMessage,
+                                          color: Theme.of(context)
+                                              .extension<CustomColors>()!
+                                              .onMessage,
                                           fontWeight: FontWeight.normal,
                                           fontSize: 14,
                                         ),
@@ -207,7 +211,8 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                       dotData: const FlDotData(
                                         show: false,
                                       ),
-                                      color: theme(context).primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                       barWidth: 4,
                                       isCurved: false,
                                     ),
@@ -275,14 +280,18 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                 show: true,
                                 getDrawingHorizontalLine: (value) {
                                   return FlLine(
-                                    color: theme(context).textSecondary,
+                                    color: Theme.of(context)
+                                        .extension<CustomColors>()!
+                                        .textSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );
                                 },
                                 getDrawingVerticalLine: (value) {
                                   return FlLine(
-                                    color: theme(context).textSecondary,
+                                    color: Theme.of(context)
+                                        .extension<CustomColors>()!
+                                        .textSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );

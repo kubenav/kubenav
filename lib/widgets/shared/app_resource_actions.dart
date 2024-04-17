@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 
 /// The [AppResourceActionsMode] enum defines all the modes which are supported
@@ -63,7 +63,7 @@ class AppResourceActions extends StatelessWidget {
           bottom: Constants.spacingExtraLarge,
         ),
         decoration: BoxDecoration(
-          color: theme(context).primary,
+          color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.vertical(
             bottom: Radius.elliptical(MediaQuery.of(context).size.width, 80.0),
           ),
@@ -78,13 +78,13 @@ class AppResourceActions extends StatelessWidget {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: theme(context).shadow,
+                color: Theme.of(context).extension<CustomColors>()!.shadow,
                 blurRadius: Constants.sizeBorderBlurRadius,
                 spreadRadius: Constants.sizeBorderSpreadRadius,
                 offset: const Offset(0.0, 0.0),
               ),
             ],
-            color: theme(context).card,
+            color: Theme.of(context).colorScheme.background,
             borderRadius: const BorderRadius.all(
               Radius.circular(Constants.sizeBorderRadius),
             ),
@@ -111,7 +111,7 @@ class AppResourceActions extends StatelessWidget {
                           children: [
                             Icon(
                               action.icon,
-                              color: theme(context).primary,
+                              color: Theme.of(context).colorScheme.primary,
                               size: 28,
                             ),
                             const SizedBox(
@@ -141,7 +141,7 @@ class AppResourceActions extends StatelessWidget {
           (e) {
             return AppActionsWidgetAction(
               title: e.title,
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
               onTap: () {
                 Navigator.pop(context);
                 e.onTap();

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/bookmarks_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 
 /// The [ResourcesBookmarkActions] can be used to show some additional actions
@@ -29,7 +29,7 @@ class ResourcesBookmarkActions extends StatelessWidget {
       actions: [
         AppActionsWidgetAction(
           title: 'Delete',
-          color: theme(context).error,
+          color: Theme.of(context).extension<CustomColors>()!.error,
           onTap: () {
             final title = bookmarksRepository.bookmarks[index].title;
             bookmarksRepository.removeBookmark(index);

@@ -6,7 +6,6 @@ import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/portforwarding_repository.dart';
 import 'package:kubenav/repositories/terminal_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/shared/app_portforwarding_sessions_widget.dart';
@@ -92,7 +91,7 @@ class _AppFloatingActionButtonsWidgetState
       floatingActionButtons.add(
         FloatingActionButton(
           heroTag: 'terminal',
-          backgroundColor: theme(context).primary,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           onPressed: () {
             showModal(
               context,
@@ -101,7 +100,7 @@ class _AppFloatingActionButtonsWidgetState
           },
           child: Icon(
             Icons.terminal,
-            color: theme(context).onPrimary,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
       );
@@ -111,13 +110,13 @@ class _AppFloatingActionButtonsWidgetState
       floatingActionButtons.add(
         FloatingActionButton(
           heroTag: 'portforwarding',
-          backgroundColor: theme(context).primary,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           onPressed: () {
             _showPortForwardingSessions();
           },
           child: Icon(
             Icons.link,
-            color: theme(context).onPrimary,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
       );

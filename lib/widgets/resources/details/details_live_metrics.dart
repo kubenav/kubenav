@@ -9,13 +9,13 @@ import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
 import 'package:kubenav/models/kubernetes_extensions/pod_metrics.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/resources/general.dart';
 import 'package:kubenav/utils/resources/pods.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 /// The [ContainerMetric] model is used to store the list of data points for the
@@ -244,8 +244,8 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
               child: TabBar(
                 isScrollable: false,
                 tabAlignment: TabAlignment.fill,
-                labelColor: theme(context).onPrimary,
-                unselectedLabelColor: theme(context).primary,
+                labelColor: Theme.of(context).colorScheme.onPrimary,
+                unselectedLabelColor: Theme.of(context).colorScheme.primary,
                 labelPadding: EdgeInsets.zero,
                 indicatorPadding: const EdgeInsets.symmetric(horizontal: 5),
                 indicatorSize: TabBarIndicatorSize.tab,
@@ -253,7 +253,7 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                   borderRadius: BorderRadius.circular(
                     Constants.sizeBorderRadius,
                   ),
-                  color: theme(context).primary,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 tabs: const [
                   Tab(text: 'CPU'),
@@ -279,13 +279,15 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color: theme(context).shadow,
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .shadow,
                             blurRadius: Constants.sizeBorderBlurRadius,
                             spreadRadius: Constants.sizeBorderSpreadRadius,
                             offset: const Offset(0.0, 0.0),
                           ),
                         ],
-                        color: theme(context).card,
+                        color: Theme.of(context).colorScheme.background,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),
@@ -309,10 +311,16 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                           show: false,
                                         ),
                                         color: e.key == 'Requests'
-                                            ? theme(context).warning
+                                            ? Theme.of(context)
+                                                .extension<CustomColors>()!
+                                                .warning
                                             : e.key == 'Limits'
-                                                ? theme(context).error
-                                                : theme(context).primary,
+                                                ? Theme.of(context)
+                                                    .extension<CustomColors>()!
+                                                    .error
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                         barWidth: 4,
                                         isCurved: false,
                                       ),
@@ -381,14 +389,18 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                   show: true,
                                   getDrawingHorizontalLine: (value) {
                                     return FlLine(
-                                      color: theme(context).textSecondary,
+                                      color: Theme.of(context)
+                                          .extension<CustomColors>()!
+                                          .textSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );
                                   },
                                   getDrawingVerticalLine: (value) {
                                     return FlLine(
-                                      color: theme(context).textSecondary,
+                                      color: Theme.of(context)
+                                          .extension<CustomColors>()!
+                                          .textSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );
@@ -441,13 +453,15 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color: theme(context).shadow,
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .shadow,
                             blurRadius: Constants.sizeBorderBlurRadius,
                             spreadRadius: Constants.sizeBorderSpreadRadius,
                             offset: const Offset(0.0, 0.0),
                           ),
                         ],
-                        color: theme(context).card,
+                        color: Theme.of(context).colorScheme.background,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),
@@ -471,10 +485,16 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                           show: false,
                                         ),
                                         color: e.key == 'Requests'
-                                            ? theme(context).warning
+                                            ? Theme.of(context)
+                                                .extension<CustomColors>()!
+                                                .warning
                                             : e.key == 'Limits'
-                                                ? theme(context).error
-                                                : theme(context).primary,
+                                                ? Theme.of(context)
+                                                    .extension<CustomColors>()!
+                                                    .error
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                         barWidth: 4,
                                         isCurved: false,
                                       ),
@@ -543,14 +563,18 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                                   show: true,
                                   getDrawingHorizontalLine: (value) {
                                     return FlLine(
-                                      color: theme(context).textSecondary,
+                                      color: Theme.of(context)
+                                          .extension<CustomColors>()!
+                                          .textSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );
                                   },
                                   getDrawingVerticalLine: (value) {
                                     return FlLine(
-                                      color: theme(context).textSecondary,
+                                      color: Theme.of(context)
+                                          .extension<CustomColors>()!
+                                          .textSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );

@@ -1,26 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/themes.dart';
 
 /// The [AppListItem] widget can be used to render an item in a list.
-///
-/// ```
-/// ListView.separated(
-///   physics: const NeverScrollableScrollPhysics(),
-///   shrinkWrap: true,
-///   separatorBuilder: (context, index) => const SizedBox(
-///     height: Constants.spacingMiddle,
-///   ),
-///   itemCount: items.length,
-///   itemBuilder: (context, index) => AppListItem(
-///     onTap: items[index].onTap,
-///     child: Row(
-///       children: items[index].children,
-///     ),
-///   ),
-/// ),
-/// ```
 class AppListItem extends StatelessWidget {
   const AppListItem({
     super.key,
@@ -43,13 +26,13 @@ class AppListItem extends StatelessWidget {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: theme(context).shadow,
+              color: Theme.of(context).extension<CustomColors>()!.shadow,
               blurRadius: Constants.sizeBorderBlurRadius,
               spreadRadius: Constants.sizeBorderSpreadRadius,
               offset: const Offset(0.0, 0.0),
             ),
           ],
-          color: theme(context).card,
+          color: Theme.of(context).colorScheme.background,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),

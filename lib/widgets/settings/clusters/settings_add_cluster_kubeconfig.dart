@@ -10,7 +10,6 @@ import 'package:yaml/yaml.dart';
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/models/kubernetes_extensions/kubeconfig.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
@@ -163,8 +162,8 @@ class _SettingsAddClusterKubeconfigState
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: theme(context).primary,
-                  foregroundColor: theme(context).onPrimary,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   minimumSize: const Size.fromHeight(40),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
@@ -179,7 +178,7 @@ class _SettingsAddClusterKubeconfigState
                   'Select Kubeconfig',
                   style: primaryTextStyle(
                     context,
-                    color: theme(context).onPrimary,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                   textAlign: TextAlign.center,
                 ),

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/settings/namespaces/settings_add_namespace.dart';
 import 'package:kubenav/widgets/settings/namespaces/settings_delete_namespace.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
@@ -90,7 +90,8 @@ class SettingsNamespaces extends StatelessWidget {
               index: index,
               child: Icon(
                 Icons.drag_handle,
-                color: theme(context)
+                color: Theme.of(context)
+                    .extension<CustomColors>()!
                     .textPrimary
                     .withOpacity(Constants.opacityIcon),
               ),
@@ -103,10 +104,6 @@ class SettingsNamespaces extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeRepository>(
-      context,
-      listen: true,
-    );
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: true,
