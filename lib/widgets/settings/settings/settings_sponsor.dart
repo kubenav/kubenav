@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/sponsor_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
@@ -18,10 +17,6 @@ class SettingsSponsor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SponsorRepository sponsorRepository = Provider.of<SponsorRepository>(
-      context,
-      listen: true,
-    );
-    Provider.of<ThemeRepository>(
       context,
       listen: true,
     );
@@ -63,7 +58,7 @@ class SettingsSponsor extends StatelessWidget {
             ),
             child: Center(
               child: CircularProgressIndicator(
-                color: theme(context).primary,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
           ),
@@ -91,7 +86,7 @@ class SettingsSponsor extends StatelessWidget {
               children: [
                 Icon(
                   Icons.favorite,
-                  color: theme(context).primary,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 const SizedBox(width: Constants.spacingSmall),
                 Expanded(
@@ -111,7 +106,7 @@ class SettingsSponsor extends StatelessWidget {
                     right: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: theme(context).primary,
+                    color: Theme.of(context).colorScheme.primary,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(Constants.sizeBorderRadius),
                     ),
@@ -125,7 +120,7 @@ class SettingsSponsor extends StatelessWidget {
                     style: secondaryTextStyle(
                       context,
                       size: 14,
-                      color: theme(context).onPrimary,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                     textAlign: TextAlign.center,
                   ),

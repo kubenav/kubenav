@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources/general.dart';
@@ -90,7 +89,7 @@ class DetailsItemConditions extends StatelessWidget {
                                     ? Icons.radio_button_checked
                                     : Icons.radio_button_unchecked,
                                 size: 24,
-                                color: theme(context).primary,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                               const SizedBox(width: Constants.spacingSmall),
                               Expanded(

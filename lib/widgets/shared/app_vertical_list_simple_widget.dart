@@ -19,61 +19,10 @@ class AppVertialListSimpleModel {
 }
 
 /// [AppVertialListSimpleWidget] is a widget to render a simple vertical list.
-/// The list items are defined via the [AppVertialListSimpleModel]. The widget
-/// can be used as follows:
+/// The list items are defined via the [AppVertialListSimpleModel].
 ///
-/// ```
-/// AppVertialListSimpleWidget(
-///   title: 'Info',
-///   items: [
-///     AppVertialListSimpleModel(
-///       children: [
-///         const Icon(
-///           CustomIcons.version,
-///           color: theme(context).primary,
-///         ),
-///         const SizedBox(width: Constants.spacingSmall),
-///         Expanded(
-///           child: Text('Version', style: noramlTextStyle()),
-///           flex: 1,
-///         ),
-///         Container(
-///           padding: const EdgeInsets.only(
-///             bottom: 2,
-///             top: 2,
-///             left: 6,
-///             right: 6,
-///           ),
-///           decoration: const BoxDecoration(
-///             color: theme(context).primary,
-///             borderRadius: BorderRadius.all(
-///               Radius.circular(Constants.sizeBorderRadius),
-///             ),
-///           ),
-///           constraints: const BoxConstraints(
-///             minWidth: 16,
-///             minHeight: 16,
-///           ),
-///           child: Obx(
-///             () {
-///               return Text(
-///                 controller.version.value,
-///                 style: secondaryTextStyle(
-///                   size: 14,
-///                 ),
-///                 textAlign: TextAlign.center,
-///               );
-///             },
-///           ),
-///         ),
-///       ],
-///     ),
-///   ],
-/// )
-/// ```
-///
-/// The [smallPadding] argument can be used to minimize the additional padding for the widget, so that it can be used in
-/// other places, like a bottom sheet.
+/// The [smallPadding] argument can be used to minimize the additional padding
+/// for the widget, so that it can be used in other places, like a bottom sheet.
 class AppVertialListSimpleWidget extends StatelessWidget {
   const AppVertialListSimpleWidget({
     super.key,

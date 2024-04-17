@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/themes.dart';
 
 /// [noramlTextStyle] applies our default styles for normal text.
 TextStyle noramlTextStyle(
@@ -15,7 +15,7 @@ TextStyle noramlTextStyle(
 }) {
   return TextStyle(
     fontSize: size ?? Constants.sizeTextPrimary,
-    color: color ?? theme(context).textPrimary,
+    color: color ?? Theme.of(context).extension<CustomColors>()!.textPrimary,
   );
 }
 
@@ -27,7 +27,7 @@ TextStyle primaryTextStyle(
 }) {
   return TextStyle(
     fontSize: size ?? Constants.sizeTextPrimary,
-    color: color ?? theme(context).textPrimary,
+    color: color ?? Theme.of(context).extension<CustomColors>()!.textPrimary,
     fontWeight: FontWeight.bold,
   );
 }
@@ -40,7 +40,7 @@ TextStyle secondaryTextStyle(
 }) {
   return TextStyle(
     fontSize: size ?? Constants.sizeTextSecondary,
-    color: color ?? theme(context).textSecondary,
+    color: color ?? Theme.of(context).extension<CustomColors>()!.textSecondary,
     fontWeight: FontWeight.normal,
   );
 }

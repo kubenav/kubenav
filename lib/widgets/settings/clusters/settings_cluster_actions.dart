@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:kubenav/models/cluster.dart';
 import 'package:kubenav/repositories/bookmarks_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/settings/clusters/settings_edit_cluster.dart';
 import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 
@@ -69,7 +69,7 @@ class _SettingsClusterActionsState extends State<SettingsClusterActions> {
       actions: [
         AppActionsWidgetAction(
           title: 'Edit',
-          color: theme(context).primary,
+          color: Theme.of(context).colorScheme.primary,
           onTap: () {
             Navigator.pop(context);
             showModal(context, SettingsEditCluster(cluster: widget.cluster));
@@ -77,7 +77,7 @@ class _SettingsClusterActionsState extends State<SettingsClusterActions> {
         ),
         AppActionsWidgetAction(
           title: 'Delete',
-          color: theme(context).error,
+          color: Theme.of(context).extension<CustomColors>()!.error,
           onTap: () {
             deleteCluster();
           },

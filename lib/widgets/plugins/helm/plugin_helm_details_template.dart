@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:code_text_field/code_text_field.dart';
 
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 /// The [PluginHelmDetailsTemplate] widget can be used to render a template file
@@ -65,7 +65,10 @@ class _PluginHelmDetailsTemplateState extends State<PluginHelmDetailsTemplate> {
                 vertical: 8,
               ),
               child: CodeTheme(
-                data: CodeThemeData(styles: theme(context).editorTheme),
+                data: CodeThemeData(
+                  styles:
+                      Theme.of(context).extension<EditorColors>()!.getTheme(),
+                ),
                 child: CodeField(
                   controller: _codeController,
                   enabled: false,

@@ -6,7 +6,6 @@ import 'package:kubenav/models/kubernetes/io_k8s_apiextensions_apiserver_pkg_api
 import 'package:kubenav/models/resource.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -182,10 +181,6 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeRepository>(
-      context,
-      listen: true,
-    );
     Provider.of<ClustersRepository>(
       context,
       listen: true,
@@ -245,7 +240,7 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                               Constants.spacingMiddle,
                             ),
                             child: CircularProgressIndicator(
-                              color: theme(context).primary,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],
@@ -285,7 +280,7 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                               left: Constants.spacingMiddle,
                               right: Constants.spacingMiddle,
                             ),
-                            color: theme(context).primary,
+                            color: Theme.of(context).colorScheme.primary,
                             child: TextField(
                               onChanged: (value) {
                                 setState(() {
@@ -293,9 +288,10 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                                 });
                               },
                               style: TextStyle(
-                                color: theme(context).onPrimary,
+                                color: Theme.of(context).colorScheme.onPrimary,
                               ),
-                              cursorColor: theme(context).onPrimary,
+                              cursorColor:
+                                  Theme.of(context).colorScheme.onPrimary,
                               keyboardType: TextInputType.text,
                               autocorrect: false,
                               enableSuggestions: false,
@@ -304,20 +300,23 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                                 border: const OutlineInputBorder(),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                    color: theme(context).onPrimary,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
                                     width: 0.0,
                                   ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                    color: theme(context).onPrimary,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
                                     width: 0.0,
                                   ),
                                 ),
                                 isDense: true,
                                 contentPadding: const EdgeInsets.all(8),
                                 hintStyle: TextStyle(
-                                  color: theme(context).onPrimary,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                 ),
                                 hintText: 'Filter...',
                               ),

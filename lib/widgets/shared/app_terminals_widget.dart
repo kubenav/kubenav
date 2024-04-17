@@ -5,9 +5,9 @@ import 'package:xterm/ui.dart' as xtermui;
 import 'package:xterm/xterm.dart' as xterm;
 
 import 'package:kubenav/repositories/terminal_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/themes.dart';
 
 /// [getColor] returns the correct color from the [colors] list for the provided
 /// [index].
@@ -55,7 +55,7 @@ class AppTerminalsWidget extends StatelessWidget {
                               Constants.spacingExtraSmall,
                             ),
                             decoration: BoxDecoration(
-                              color: theme(context).primary,
+                              color: Theme.of(context).colorScheme.primary,
                               borderRadius: const BorderRadius.all(
                                 Radius.circular(
                                   Constants.sizeBorderRadius,
@@ -66,7 +66,7 @@ class AppTerminalsWidget extends StatelessWidget {
                             width: 54,
                             child: Icon(
                               Icons.terminal,
-                              color: theme(context).onPrimary,
+                              color: Theme.of(context).colorScheme.onPrimary,
                               size: 36,
                             ),
                           ),
@@ -128,8 +128,9 @@ class AppTerminalsWidget extends StatelessWidget {
                         child: TabBar(
                           isScrollable: true,
                           tabAlignment: TabAlignment.center,
-                          labelColor: theme(context).onPrimary,
-                          unselectedLabelColor: theme(context).primary,
+                          labelColor: Theme.of(context).colorScheme.onPrimary,
+                          unselectedLabelColor:
+                              Theme.of(context).colorScheme.primary,
                           indicatorPadding:
                               const EdgeInsets.symmetric(horizontal: 5),
                           indicatorSize: TabBarIndicatorSize.tab,
@@ -137,7 +138,7 @@ class AppTerminalsWidget extends StatelessWidget {
                             borderRadius: BorderRadius.circular(
                               Constants.sizeBorderRadius,
                             ),
-                            color: theme(context).primary,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                           tabs:
                               terminalRepository.terminals.asMap().entries.map(
@@ -171,7 +172,9 @@ class AppTerminalsWidget extends StatelessWidget {
                                   ? terminal.value.terminal != null
                                       ? xtermui.TerminalView(
                                           terminal.value.terminal!.terminal,
-                                          theme: theme(context).terminalTheme,
+                                          theme: Theme.of(context)
+                                              .extension<TerminalColors>()!
+                                              .getTheme(),
                                           textStyle: xterm.TerminalStyle(
                                             fontSize: 14,
                                             fontFamily:
@@ -185,8 +188,9 @@ class AppTerminalsWidget extends StatelessWidget {
                                           ? xtermui.TerminalView(
                                               terminal
                                                   .value.logstream!.terminal,
-                                              theme:
-                                                  theme(context).terminalTheme,
+                                              theme: Theme.of(context)
+                                                  .extension<TerminalColors>()!
+                                                  .getTheme(),
                                               textStyle: xterm.TerminalStyle(
                                                 fontSize: 14,
                                                 fontFamily:
@@ -201,8 +205,8 @@ class AppTerminalsWidget extends StatelessWidget {
                                             padding: const EdgeInsets.all(
                                               Constants.spacingSmall,
                                             ),
-                                            color: theme(context)
-                                                .terminalTheme
+                                            color: Theme.of(context)
+                                                .extension<TerminalColors>()!
                                                 .background,
                                             child: Wrap(
                                               children: terminal.value.logs ==
@@ -217,8 +221,10 @@ class AppTerminalsWidget extends StatelessWidget {
                                                           style: TextStyle(
                                                             color: getColor(
                                                               e.key,
-                                                              theme(context)
-                                                                  .logsTheme,
+                                                              Theme.of(context)
+                                                                  .extension<
+                                                                      LogColors>()!
+                                                                  .getTheme(),
                                                             ),
                                                             fontSize: 14,
                                                             fontFamily:

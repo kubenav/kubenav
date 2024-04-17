@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/home/overview/overview_metric.dart';
 
 /// The [OverviewMetrics] widget shows three icons, one for the CPU, one for the
@@ -39,13 +39,13 @@ class OverviewMetrics extends StatelessWidget {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: theme(context).shadow,
+              color: Theme.of(context).extension<CustomColors>()!.shadow,
               blurRadius: Constants.sizeBorderBlurRadius,
               spreadRadius: Constants.sizeBorderSpreadRadius,
               offset: const Offset(0.0, 0.0),
             ),
           ],
-          color: theme(context).card,
+          color: Theme.of(context).colorScheme.background,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
@@ -54,7 +54,7 @@ class OverviewMetrics extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
               size: 64,
             ),
             const SizedBox(height: Constants.spacingSmall),

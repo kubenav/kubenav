@@ -5,7 +5,6 @@ import 'package:uuid/uuid.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_azure.dart';
@@ -252,7 +251,7 @@ class _SettingsAzureProviderState extends State<SettingsAzureProvider> {
                 children: [
                   const Text('Admin'),
                   Switch(
-                    activeColor: theme(context).primary,
+                    activeColor: Theme.of(context).colorScheme.primary,
                     onChanged: (val) {
                       setState(() {
                         _isAdmin = !_isAdmin;

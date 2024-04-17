@@ -6,7 +6,6 @@ import 'package:kubenav/models/resource.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/bookmarks_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
@@ -209,10 +208,6 @@ class _ResourcesListState extends State<ResourcesList> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeRepository>(
-      context,
-      listen: true,
-    );
     Provider.of<AppRepository>(
       context,
       listen: true,
@@ -332,7 +327,7 @@ class _ResourcesListState extends State<ResourcesList> {
                               Constants.spacingMiddle,
                             ),
                             child: CircularProgressIndicator(
-                              color: theme(context).primary,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],
@@ -383,7 +378,7 @@ class _ResourcesListState extends State<ResourcesList> {
                               left: Constants.spacingMiddle,
                               right: Constants.spacingMiddle,
                             ),
-                            color: theme(context).primary,
+                            color: Theme.of(context).colorScheme.primary,
                             child: TextField(
                               onChanged: (value) {
                                 setState(() {
@@ -391,9 +386,10 @@ class _ResourcesListState extends State<ResourcesList> {
                                 });
                               },
                               style: TextStyle(
-                                color: theme(context).onPrimary,
+                                color: Theme.of(context).colorScheme.onPrimary,
                               ),
-                              cursorColor: theme(context).onPrimary,
+                              cursorColor:
+                                  Theme.of(context).colorScheme.onPrimary,
                               keyboardType: TextInputType.text,
                               autocorrect: false,
                               enableSuggestions: false,
@@ -402,20 +398,23 @@ class _ResourcesListState extends State<ResourcesList> {
                                 border: const OutlineInputBorder(),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                    color: theme(context).onPrimary,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
                                     width: 0.0,
                                   ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                    color: theme(context).onPrimary,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
                                     width: 0.0,
                                   ),
                                 ),
                                 isDense: true,
                                 contentPadding: const EdgeInsets.all(8),
                                 hintStyle: TextStyle(
-                                  color: theme(context).onPrimary,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                 ),
                                 hintText: 'Filter...',
                               ),

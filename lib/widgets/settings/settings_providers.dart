@@ -5,10 +5,10 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/settings/providers/settings_provider_actions.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
@@ -38,7 +38,7 @@ class SettingsProviders extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
               borderRadius: const BorderRadius.all(
                 Radius.circular(Constants.sizeBorderRadius),
               ),
@@ -86,8 +86,10 @@ class SettingsProviders extends StatelessWidget {
           const SizedBox(width: Constants.spacingSmall),
           Icon(
             Icons.arrow_forward_ios,
-            color:
-                theme(context).textSecondary.withOpacity(Constants.opacityIcon),
+            color: Theme.of(context)
+                .extension<CustomColors>()!
+                .textSecondary
+                .withOpacity(Constants.opacityIcon),
             size: 24,
           ),
         ],
@@ -97,10 +99,6 @@ class SettingsProviders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeRepository>(
-      context,
-      listen: true,
-    );
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,

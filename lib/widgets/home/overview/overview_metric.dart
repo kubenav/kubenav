@@ -8,11 +8,11 @@ import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod_list.dart';
 import 'package:kubenav/models/kubernetes_extensions/node_metrics.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 
@@ -297,7 +297,7 @@ class _OverviewMetricState extends State<OverviewMetric> {
         barRods: [
           BarChartRodData(
             toY: data.metrics[widget.metricType]!.allocatable.toDouble(),
-            color: theme(context).primary,
+            color: Theme.of(context).colorScheme.primary,
             width: 25,
             borderRadius: const BorderRadius.all(
               Radius.zero,
@@ -310,7 +310,7 @@ class _OverviewMetricState extends State<OverviewMetric> {
         barRods: [
           BarChartRodData(
             toY: data.metrics[widget.metricType]!.usage.toDouble(),
-            color: theme(context).primary,
+            color: Theme.of(context).colorScheme.primary,
             width: 25,
             borderRadius: const BorderRadius.all(
               Radius.zero,
@@ -328,7 +328,7 @@ class _OverviewMetricState extends State<OverviewMetric> {
             barRods: [
               BarChartRodData(
                 toY: data.metrics[widget.metricType]!.requests.toDouble(),
-                color: theme(context).primary,
+                color: Theme.of(context).colorScheme.primary,
                 width: 25,
                 borderRadius: const BorderRadius.all(
                   Radius.zero,
@@ -341,7 +341,7 @@ class _OverviewMetricState extends State<OverviewMetric> {
             barRods: [
               BarChartRodData(
                 toY: data.metrics[widget.metricType]!.limits.toDouble(),
-                color: theme(context).primary,
+                color: Theme.of(context).colorScheme.primary,
                 width: 25,
                 borderRadius: const BorderRadius.all(
                   Radius.zero,
@@ -489,7 +489,7 @@ class _OverviewMetricState extends State<OverviewMetric> {
                     child: Wrap(
                       children: [
                         CircularProgressIndicator(
-                          color: theme(context).primary,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ],
                     ),
@@ -531,13 +531,15 @@ class _OverviewMetricState extends State<OverviewMetric> {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: theme(context).shadow,
+                          color: Theme.of(context)
+                              .extension<CustomColors>()!
+                              .shadow,
                           blurRadius: Constants.sizeBorderBlurRadius,
                           spreadRadius: Constants.sizeBorderSpreadRadius,
                           offset: const Offset(0.0, 0.0),
                         ),
                       ],
-                      color: theme(context).card,
+                      color: Theme.of(context).colorScheme.background,
                       borderRadius: const BorderRadius.all(
                         Radius.circular(Constants.sizeBorderRadius),
                       ),
@@ -555,7 +557,9 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                   fitInsideHorizontally: true,
                                   fitInsideVertically: true,
                                   getTooltipColor: (BarChartGroupData group) {
-                                    return theme(context).message;
+                                    return Theme.of(context)
+                                        .extension<CustomColors>()!
+                                        .message;
                                   },
                                   getTooltipItem:
                                       (group, groupIndex, rod, rodIndex) {
@@ -580,7 +584,9 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                     return BarTooltipItem(
                                       '$label\n',
                                       TextStyle(
-                                        color: theme(context).onMessage,
+                                        color: Theme.of(context)
+                                            .extension<CustomColors>()!
+                                            .onMessage,
                                         fontWeight: FontWeight.normal,
                                         fontSize: 14,
                                       ),
@@ -588,7 +594,9 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                         TextSpan(
                                           text: formatValue(rod.toY),
                                           style: TextStyle(
-                                            color: theme(context).onMessage,
+                                            color: Theme.of(context)
+                                                .extension<CustomColors>()!
+                                                .onMessage,
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal,
                                           ),
@@ -651,14 +659,18 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                 show: true,
                                 getDrawingHorizontalLine: (value) {
                                   return FlLine(
-                                    color: theme(context).textSecondary,
+                                    color: Theme.of(context)
+                                        .extension<CustomColors>()!
+                                        .textSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );
                                 },
                                 getDrawingVerticalLine: (value) {
                                   return FlLine(
-                                    color: theme(context).textSecondary,
+                                    color: Theme.of(context)
+                                        .extension<CustomColors>()!
+                                        .textSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );

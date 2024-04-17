@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
@@ -147,7 +146,7 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                 children: [
                   const Text('Enabled'),
                   Switch(
-                    activeColor: theme(context).primary,
+                    activeColor: Theme.of(context).colorScheme.primary,
                     onChanged: (value) {
                       setState(() {
                         _enabled = !_enabled;

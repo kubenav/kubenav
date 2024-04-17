@@ -6,11 +6,11 @@ import 'package:web_socket_channel/io.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/terminal_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 import 'package:kubenav/widgets/shared/app_terminals_widget.dart';
 
@@ -197,7 +197,7 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
                     value: _container,
                     underline: Container(
                       height: 2,
-                      color: theme(context).primary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     onChanged: (String? value) {
                       setState(() {
@@ -210,7 +210,9 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
                         child: Text(
                           value,
                           style: TextStyle(
-                            color: theme(context).textPrimary,
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .textPrimary,
                           ),
                         ),
                       );
@@ -232,7 +234,7 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
                     value: _shell,
                     underline: Container(
                       height: 2,
-                      color: theme(context).primary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     onChanged: (String? value) {
                       setState(() {
@@ -250,7 +252,9 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
                         child: Text(
                           value,
                           style: TextStyle(
-                            color: theme(context).textPrimary,
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .textPrimary,
                           ),
                         ),
                       );

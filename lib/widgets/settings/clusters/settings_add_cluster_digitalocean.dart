@@ -8,12 +8,12 @@ import 'package:yaml/yaml.dart';
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/models/kubernetes_extensions/kubeconfig.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/providers/digitalocean_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 
@@ -164,7 +164,7 @@ class _SettingsAddClusterDigitalOceanState
             child: Wrap(
               children: [
                 CircularProgressIndicator(
-                  color: theme(context).primary,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ],
             ),
@@ -207,13 +207,13 @@ class _SettingsAddClusterDigitalOceanState
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: theme(context).shadow,
+                    color: Theme.of(context).extension<CustomColors>()!.shadow,
                     blurRadius: Constants.sizeBorderBlurRadius,
                     spreadRadius: Constants.sizeBorderSpreadRadius,
                     offset: const Offset(0.0, 0.0),
                   ),
                 ],
-                color: theme(context).card,
+                color: Theme.of(context).colorScheme.background,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(Constants.sizeBorderRadius),
                 ),

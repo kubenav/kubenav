@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/resources/details/details_live_metrics.dart';
 import 'package:kubenav/widgets/shared/app_actions_widget.dart';
@@ -31,7 +30,7 @@ class DetailsLiveMetricsContainers extends StatelessWidget {
           title: index == pod.spec!.containers.length
               ? 'All Containers'
               : pod.spec?.containers[index].name ?? '',
-          color: theme(context).primary,
+          color: Theme.of(context).colorScheme.primary,
           onTap: () {
             Navigator.pop(context);
             showModal(

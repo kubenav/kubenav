@@ -6,11 +6,11 @@ import 'package:kubenav/models/cluster.dart';
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
 
 /// The [SettingsClusterItem] widget is used to display a single cluster in the
@@ -145,8 +145,8 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
                         : Icons.radio_button_unchecked,
                     size: 24,
                     color: statusOk
-                        ? theme(context).success
-                        : theme(context).error,
+                        ? Theme.of(context).extension<CustomColors>()!.success
+                        : Theme.of(context).extension<CustomColors>()!.error,
                   ),
                 ),
               ],

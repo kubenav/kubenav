@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/settings/providers/reauthenticate/settings_reauthenticate_awssso_provider_config.dart';
-
-// import 'package:kubenav/pages/providers/widgets/reauthenticate/awssso_provider_config_widget.dart';
 
 /// [AppErrorWidget] is a widget which renders a full width card, to show an
 /// error which occured during an operation in the app. A user must pass in a
@@ -36,14 +34,14 @@ class AppErrorWidget extends StatelessWidget {
     } else if (icon is IconData) {
       return Icon(
         icon,
-        color: theme(context).onPrimary,
+        color: Theme.of(context).colorScheme.onPrimary,
         size: 108,
       );
     }
 
     return Icon(
       CustomIcons.kubenav,
-      color: theme(context).onPrimary,
+      color: Theme.of(context).colorScheme.onPrimary,
       size: 108,
     );
   }
@@ -66,13 +64,13 @@ class AppErrorWidget extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: theme(context).shadow,
+            color: Theme.of(context).extension<CustomColors>()!.shadow,
             blurRadius: Constants.sizeBorderBlurRadius,
             spreadRadius: Constants.sizeBorderSpreadRadius,
             offset: const Offset(0.0, 0.0),
           ),
         ],
-        color: theme(context).card,
+        color: Theme.of(context).colorScheme.background,
         borderRadius: const BorderRadius.all(
           Radius.circular(Constants.sizeBorderRadius),
         ),
@@ -82,7 +80,7 @@ class AppErrorWidget extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(Constants.sizeBorderRadius),
                 topRight: Radius.circular(Constants.sizeBorderRadius),

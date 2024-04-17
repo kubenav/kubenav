@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/themes.dart';
 
 void showModal(BuildContext context, Widget widget) {
   showModalBottomSheet(
@@ -41,7 +41,7 @@ void showSnackbar(BuildContext context, String title, String message) {
     SnackBar(
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 3),
-      backgroundColor: theme(context).message,
+      backgroundColor: Theme.of(context).extension<CustomColors>()!.message,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
           Constants.sizeBorderRadius,
@@ -54,13 +54,13 @@ void showSnackbar(BuildContext context, String title, String message) {
           Text(
             title,
             style: TextStyle(
-              color: theme(context).onMessage,
+              color: Theme.of(context).extension<CustomColors>()!.onMessage,
             ),
           ),
           Text(
             message,
             style: TextStyle(
-              color: theme(context).onMessage,
+              color: Theme.of(context).extension<CustomColors>()!.onMessage,
             ),
           ),
         ],

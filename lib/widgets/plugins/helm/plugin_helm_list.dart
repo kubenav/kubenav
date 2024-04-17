@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:kubenav/models/plugins/helm.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
@@ -191,10 +190,6 @@ class _PluginHelmListState extends State<PluginHelmList> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeRepository>(
-      context,
-      listen: true,
-    );
     Provider.of<AppRepository>(
       context,
       listen: true,
@@ -276,7 +271,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
                             padding:
                                 const EdgeInsets.all(Constants.spacingMiddle),
                             child: CircularProgressIndicator(
-                              color: theme(context).primary,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],

@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_service_account.dart';
 import 'package:kubenav/models/resource.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/resources/details/details_item.dart';
@@ -40,7 +39,7 @@ class ServiceAccountDetailsItem extends StatelessWidget
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: theme(context).primary,
+                        color: Theme.of(context).colorScheme.primary,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(Constants.sizeBorderRadius),
                         ),

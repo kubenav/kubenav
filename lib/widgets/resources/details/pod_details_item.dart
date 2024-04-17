@@ -9,7 +9,6 @@ import 'package:kubenav/models/resource.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/portforwarding_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
@@ -273,7 +272,7 @@ class _PodDetailsItemState extends State<PodDetailsItem> {
               case ConnectionState.none:
               case ConnectionState.waiting:
                 return CircularProgressIndicator(
-                  color: theme(context).primary,
+                  color: Theme.of(context).colorScheme.primary,
                 );
               default:
                 return DetailsContainers(

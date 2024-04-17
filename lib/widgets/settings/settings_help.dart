@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/help.dart' as help_model;
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
@@ -66,7 +65,7 @@ class SettingsHelp extends StatelessWidget {
           children: [
             Icon(
               help_model.Help.list[sectionIndex].items[itemIndex].icon,
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
@@ -80,8 +79,10 @@ class SettingsHelp extends StatelessWidget {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color:
-                  theme(context).textPrimary.withOpacity(Constants.opacityIcon),
+              color: Theme.of(context)
+                  .extension<CustomColors>()!
+                  .textPrimary
+                  .withOpacity(Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -92,11 +93,6 @@ class SettingsHelp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeRepository>(
-      context,
-      listen: true,
-    );
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

@@ -4,11 +4,11 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/bookmarks_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/resources/bookmarks/resources_bookmark_actions.dart';
 import 'package:kubenav/widgets/resources/resource_details.dart';
 import 'package:kubenav/widgets/resources/resources_list.dart';
@@ -121,10 +121,6 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeRepository>(
-      context,
-      listen: true,
-    );
     BookmarksRepository bookmarksRepository = Provider.of<BookmarksRepository>(
       context,
       listen: true,
@@ -277,7 +273,8 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                                   index: index,
                                   child: Icon(
                                     Icons.drag_handle,
-                                    color: theme(context)
+                                    color: Theme.of(context)
+                                        .extension<CustomColors>()!
                                         .textSecondary
                                         .withOpacity(Constants.opacityIcon),
                                     size: 24,

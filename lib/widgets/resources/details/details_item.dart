@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 
 abstract class IDetailsItemWidget {
   const IDetailsItemWidget({
@@ -94,7 +94,7 @@ class DetailsItemWidget extends StatelessWidget {
           child: Text(
             values.toString(),
             style: TextStyle(
-              color: theme(context).textPrimary,
+              color: Theme.of(context).extension<CustomColors>()!.textPrimary,
               decoration: TextDecoration.underline,
             ),
           ),
@@ -106,7 +106,7 @@ class DetailsItemWidget extends StatelessWidget {
       child: Text(
         values.toString(),
         style: TextStyle(
-          color: theme(context).textPrimary,
+          color: Theme.of(context).extension<CustomColors>()!.textPrimary,
         ),
       ),
     );
@@ -124,13 +124,13 @@ class DetailsItemWidget extends StatelessWidget {
               goTo!,
               style: secondaryTextStyle(
                 context,
-                color: theme(context).primary,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(width: Constants.spacingExtraSmall),
             Icon(
               Icons.keyboard_arrow_right,
-              color: theme(context).primary,
+              color: Theme.of(context).colorScheme.primary,
               size: 16,
             ),
           ],
@@ -181,13 +181,13 @@ class DetailsItemWidget extends StatelessWidget {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: theme(context).shadow,
+                color: Theme.of(context).extension<CustomColors>()!.shadow,
                 blurRadius: Constants.sizeBorderBlurRadius,
                 spreadRadius: Constants.sizeBorderSpreadRadius,
                 offset: const Offset(0.0, 0.0),
               ),
             ],
-            color: theme(context).card,
+            color: Theme.of(context).colorScheme.background,
             borderRadius: const BorderRadius.all(
               Radius.circular(Constants.sizeBorderRadius),
             ),

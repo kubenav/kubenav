@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/plugins/time.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
@@ -127,7 +126,7 @@ class _AppTimeRangeSelectorWidgetState
                     ? Icons.radio_button_checked
                     : Icons.radio_button_unchecked,
                 size: 24,
-                color: theme(context).primary,
+                color: Theme.of(context).colorScheme.primary,
               ),
               const SizedBox(width: Constants.spacingSmall),
               Expanded(

@@ -4,10 +4,10 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/sponsor_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/settings/settings/sponsor/settings_sponsor_actions.dart';
 
 class SettingsSponsorBanner extends StatelessWidget {
@@ -15,10 +15,6 @@ class SettingsSponsorBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeRepository>(
-      context,
-      listen: true,
-    );
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: true,
@@ -46,13 +42,13 @@ class SettingsSponsorBanner extends StatelessWidget {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: theme(context).shadow,
+                color: Theme.of(context).extension<CustomColors>()!.shadow,
                 blurRadius: Constants.sizeBorderBlurRadius,
                 spreadRadius: Constants.sizeBorderSpreadRadius,
                 offset: const Offset(0.0, 0.0),
               ),
             ],
-            color: theme(context).card,
+            color: Theme.of(context).colorScheme.background,
             borderRadius: const BorderRadius.all(
               Radius.circular(Constants.sizeBorderRadius),
             ),
@@ -71,7 +67,7 @@ class SettingsSponsorBanner extends StatelessWidget {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: theme(context).primary,
+                    color: Theme.of(context).colorScheme.primary,
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(Constants.sizeBorderRadius),
                       topRight: Radius.circular(Constants.sizeBorderRadius),
@@ -81,7 +77,7 @@ class SettingsSponsorBanner extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   child: Icon(
                     Icons.favorite,
-                    color: theme(context).onPrimary,
+                    color: Theme.of(context).colorScheme.onPrimary,
                     size: 108,
                   ),
                 ),

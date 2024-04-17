@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/sponsor_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/settings/settings/sponsor/settings_sponsor_subscribe.dart';
 import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 
@@ -38,7 +38,7 @@ class SettingsSponsorActions extends StatelessWidget {
               ...sponsorRepository.products.map(
                 (e) => AppActionsWidgetAction(
                   title: titles.containsKey(e.id) ? titles[e.id]! : e.title,
-                  color: theme(context).primary,
+                  color: Theme.of(context).colorScheme.primary,
                   onTap: () {
                     Navigator.pop(context);
                     showModal(
@@ -50,7 +50,7 @@ class SettingsSponsorActions extends StatelessWidget {
               ),
               AppActionsWidgetAction(
                 title: 'Not Now',
-                color: theme(context).error,
+                color: Theme.of(context).extension<CustomColors>()!.error,
                 onTap: () {
                   // For testing we can set the reminder to 1 minute, by default
                   // it is set to 7 days.
@@ -67,7 +67,7 @@ class SettingsSponsorActions extends StatelessWidget {
               .map(
                 (e) => AppActionsWidgetAction(
                   title: titles.containsKey(e.id) ? titles[e.id]! : e.title,
-                  color: theme(context).primary,
+                  color: Theme.of(context).colorScheme.primary,
                   onTap: () {
                     Navigator.pop(context);
                     showModal(

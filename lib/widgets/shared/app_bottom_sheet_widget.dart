@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/themes.dart';
 
 /// [AppBottomSheetWidget] is a widget which can be used within a bottom sheet
 /// to show a bottom sheet with a height of 75% of the display height, for more
@@ -46,7 +46,7 @@ class AppBottomSheetWidget extends StatelessWidget {
           right: Constants.spacingMiddle,
         ),
         decoration: BoxDecoration(
-          color: theme(context).primary,
+          color: Theme.of(context).colorScheme.primary,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
@@ -67,7 +67,7 @@ class AppBottomSheetWidget extends StatelessWidget {
           Constants.spacingExtraSmall,
         ),
         decoration: BoxDecoration(
-          color: theme(context).primary,
+          color: Theme.of(context).colorScheme.primary,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
@@ -76,7 +76,7 @@ class AppBottomSheetWidget extends StatelessWidget {
         width: 54,
         child: Icon(
           icon,
-          color: theme(context).onPrimary,
+          color: Theme.of(context).colorScheme.onPrimary,
           size: 36,
         ),
       );
@@ -143,7 +143,9 @@ class AppBottomSheetWidget extends StatelessWidget {
                     IconButton(
                       icon: Icon(
                         Icons.close_outlined,
-                        color: theme(context).textPrimary,
+                        color: Theme.of(context)
+                            .extension<CustomColors>()!
+                            .textPrimary,
                       ),
                       onPressed: closePressed,
                     ),
@@ -170,8 +172,8 @@ class AppBottomSheetWidget extends StatelessWidget {
                 ),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: theme(context).primary,
-                    foregroundColor: theme(context).onPrimary,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     minimumSize: const Size.fromHeight(40),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
@@ -185,14 +187,14 @@ class AppBottomSheetWidget extends StatelessWidget {
                           height: 24,
                           width: 24,
                           child: CircularProgressIndicator(
-                            color: theme(context).onPrimary,
+                            color: Theme.of(context).colorScheme.onPrimary,
                           ),
                         )
                       : Text(
                           actionText,
                           style: primaryTextStyle(
                             context,
-                            color: theme(context).onPrimary,
+                            color: Theme.of(context).colorScheme.onPrimary,
                           ),
                           textAlign: TextAlign.center,
                         ),

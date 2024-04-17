@@ -5,12 +5,12 @@ import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_list.dart';
 import 'package:kubenav/widgets/plugins/prometheus/plugin_prometheus_list.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
@@ -47,7 +47,7 @@ class Plugins extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: theme(context).primary,
+                  color: Theme.of(context).colorScheme.primary,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(Constants.sizeBorderRadius),
                   ),
@@ -87,7 +87,8 @@ class Plugins extends StatelessWidget {
               const SizedBox(width: Constants.spacingSmall),
               Icon(
                 Icons.arrow_forward_ios,
-                color: theme(context)
+                color: Theme.of(context)
+                    .extension<CustomColors>()!
                     .textSecondary
                     .withOpacity(Constants.opacityIcon),
                 size: 24,
@@ -101,7 +102,7 @@ class Plugins extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: theme(context).primary,
+                  color: Theme.of(context).colorScheme.primary,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(Constants.sizeBorderRadius),
                   ),
@@ -139,7 +140,8 @@ class Plugins extends StatelessWidget {
               const SizedBox(width: Constants.spacingSmall),
               Icon(
                 Icons.arrow_forward_ios,
-                color: theme(context)
+                color: Theme.of(context)
+                    .extension<CustomColors>()!
                     .textSecondary
                     .withOpacity(Constants.opacityIcon),
                 size: 24,
@@ -153,10 +155,6 @@ class Plugins extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeRepository>(
-      context,
-      listen: true,
-    );
     Provider.of<AppRepository>(
       context,
       listen: true,

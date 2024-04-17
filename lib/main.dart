@@ -11,6 +11,7 @@ import 'package:kubenav/repositories/sponsor_repository.dart';
 import 'package:kubenav/repositories/terminal_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/storage.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/home/home.dart';
 
 void main() async {
@@ -74,74 +75,13 @@ class _AppMaterialAppState extends State<AppMaterialApp> {
       listen: true,
     );
 
-    final theme = themeRepository.theme;
-
     return TooltipVisibility(
       visible: false,
       child: MaterialApp(
         title: 'kubenav',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme(
-            brightness: theme.brightness,
-            primary: theme.primary,
-            onPrimary: theme.onPrimary,
-            secondary: theme.primary,
-            onSecondary: theme.onPrimary,
-            error: theme.error,
-            onError: theme.onError,
-            background: theme.background,
-            onBackground: theme.onBackground,
-            surface: theme.surface,
-            onSurface: theme.onSurface,
-          ),
-          canvasColor: theme.canvasColor,
-          appBarTheme: AppBarTheme(
-            backgroundColor: theme.primary,
-            foregroundColor: theme.onPrimary,
-            elevation: 0,
-          ),
-          snackBarTheme: SnackBarThemeData(
-            backgroundColor: theme.surface,
-            contentTextStyle: TextStyle(
-              color: theme.onSurface,
-            ),
-          ),
-          dialogTheme: DialogTheme(
-            backgroundColor: theme.background,
-            surfaceTintColor: theme.background,
-            contentTextStyle: TextStyle(
-              color: theme.onBackground,
-            ),
-          ),
-          popupMenuTheme: PopupMenuThemeData(
-            color: theme.background,
-            surfaceTintColor: theme.background,
-            textStyle: TextStyle(
-              color: theme.onBackground,
-            ),
-          ),
-          drawerTheme: DrawerThemeData(
-            backgroundColor: theme.background,
-            surfaceTintColor: theme.background,
-          ),
-          bottomSheetTheme: BottomSheetThemeData(
-            backgroundColor: theme.background,
-            surfaceTintColor: theme.background,
-          ),
-          dividerColor: theme.divider,
-          dividerTheme: DividerThemeData(
-            color: theme.divider,
-          ),
-          pageTransitionsTheme: const PageTransitionsTheme(
-            builders: {
-              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-            },
-          ),
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-        ),
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: themeRepository.themeMode,
         debugShowCheckedModeBanner: false,
         home: const Home(),
       ),
