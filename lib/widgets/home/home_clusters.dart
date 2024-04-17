@@ -7,7 +7,6 @@ import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/theme_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
-import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
 
 /// The [HomeClusters] can be used to display a list of clusters when the app
@@ -47,17 +46,12 @@ class _HomeClustersState extends State<HomeClusters> {
       context,
       listen: true,
     );
-    AppRepository appRepository = Provider.of<AppRepository>(
-      context,
-      listen: true,
-    );
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,
     );
 
     return Scaffold(
-      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Select Cluster'),

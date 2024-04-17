@@ -26,7 +26,6 @@ import 'package:kubenav/widgets/resources/details/details_scale_resource.dart';
 import 'package:kubenav/widgets/resources/details/details_show_yaml.dart';
 import 'package:kubenav/widgets/resources/details/details_terminal.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
-import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
@@ -403,132 +402,6 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
     ).getRequest(resourcesDetailsUrl);
   }
 
-  /// [_buildLayout] builds the page layout for the details page. This includes
-  /// the scaffold and appbar and is required, because we have to access the
-  /// result of the FutureBuilder which loads the item in the [AppBar].
-  Widget _buildLayout(dynamic item, Widget child) {
-    AppRepository appRepository = Provider.of<AppRepository>(
-      context,
-      listen: false,
-    );
-
-    return Scaffold(
-      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Column(
-          children: [
-            Text(
-              Characters(widget.name)
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            Text(
-              Characters(widget.namespace ?? 'No Namespace')
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-
-        /// When an [item] was provided which is not `null` and the user opt in
-        /// for the classic mode, we show an action in the app bar where the
-        /// actions for the resource can be accessed.
-        actions: item != null && appRepository.settings.classicMode
-            ? [
-                AppResourceActions(
-                  mode: AppResourceActionsMode.menu,
-                  actions: resourceDetailsActions(
-                    context,
-                    widget.title,
-                    widget.resource,
-                    widget.path,
-                    widget.scope,
-                    widget.additionalPrinterColumns,
-                    widget.name,
-                    widget.namespace,
-                    item,
-                    [
-                      AppResourceActionsModel(
-                        title: 'Refresh',
-                        icon: Icons.refresh,
-                        onTap: () {
-                          setState(() {
-                            _futureFetchItem = _fetchItem();
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ]
-            : null,
-      ),
-      bottomNavigationBar: appRepository.settings.classicMode
-          ? null
-          : const AppBottomNavigationBarWidget(),
-      floatingActionButton: const AppFloatingActionButtonsWidget(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [child],
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// [_buildHeaderActions] returns the resource actions as header when the user
-  /// didn't opt in for the classic mode.
-  Widget _buildHeaderActions(dynamic item) {
-    AppRepository appRepository = Provider.of<AppRepository>(
-      context,
-      listen: false,
-    );
-
-    if (!appRepository.settings.classicMode) {
-      return AppResourceActions(
-        mode: AppResourceActionsMode.header,
-        actions: resourceDetailsActions(
-          context,
-          widget.title,
-          widget.resource,
-          widget.path,
-          widget.scope,
-          widget.additionalPrinterColumns,
-          widget.name,
-          widget.namespace,
-          item,
-          [
-            AppResourceActionsModel(
-              title: 'Refresh',
-              icon: Icons.refresh,
-              onTap: () {
-                setState(() {
-                  _futureFetchItem = _fetchItem();
-                });
-              },
-            ),
-          ],
-        ),
-      );
-    }
-
-    return Container();
-  }
-
   /// [_buildDetailsItem] is responsible for showing the correct details item for
   /// the selected resource. If we do not have a dedicated item for a resource
   /// (e.g. Custom Resources) we are showing the events for the resource.
@@ -591,93 +464,153 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
       listen: true,
     );
 
-    return FutureBuilder(
-      future: _futureFetchItem,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<dynamic> snapshot,
-      ) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.waiting:
-            return _buildLayout(
-              null,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(
-                      Constants.spacingMiddle,
-                    ),
-                    child: CircularProgressIndicator(
-                      color: theme(context).primary,
-                    ),
-                  ),
-                ],
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Column(
+          children: [
+            Text(
+              Characters(widget.name)
+                  .replaceAll(Characters(''), Characters('\u{200B}'))
+                  .toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                overflow: TextOverflow.ellipsis,
               ),
-            );
-          default:
-            if (snapshot.hasError) {
-              return _buildLayout(
-                null,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.all(Constants.spacingMiddle),
-                        child: AppErrorWidget(
-                          message: 'Could not load ${widget.title}',
-                          details: snapshot.error.toString(),
-                          icon: Resources.map.containsKey(widget.resource)
-                              ? 'assets/resources/${widget.resource}.svg'
-                              : null,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            Provider.of<BookmarksRepository>(
-              context,
-              listen: true,
-            );
-
-            return _buildLayout(
-              snapshot.data,
-              Column(
-                children: [
-                  _buildHeaderActions(snapshot.data),
-                  DetailsItemMetadata(
-                    item: snapshot.data,
-                  ),
-                  DetailsItemAdditionalPrinterColumns(
-                    additionalPrinterColumns: widget.additionalPrinterColumns,
-                    item: snapshot.data,
-                  ),
-                  DetailsItemConditions(
-                    item: snapshot.data,
-                  ),
-                  const SizedBox(height: Constants.spacingMiddle),
-                  ..._buildDetailsItem(
-                    widget.title,
-                    widget.resource,
-                    widget.path,
-                    widget.scope,
-                    widget.name,
-                    widget.namespace,
-                    snapshot.data,
-                  ),
-                  const SizedBox(height: Constants.spacingExtraLarge),
-                ],
+            ),
+            Text(
+              Characters(widget.namespace ?? 'No Namespace')
+                  .replaceAll(Characters(''), Characters('\u{200B}'))
+                  .toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                overflow: TextOverflow.ellipsis,
               ),
-            );
-        }
-      },
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: const AppBottomNavigationBarWidget(),
+      floatingActionButton: const AppFloatingActionButtonsWidget(),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              FutureBuilder(
+                future: _futureFetchItem,
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<dynamic> snapshot,
+                ) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(
+                              Constants.spacingMiddle,
+                            ),
+                            child: CircularProgressIndicator(
+                              color: theme(context).primary,
+                            ),
+                          ),
+                        ],
+                      );
+                    default:
+                      if (snapshot.hasError) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.all(
+                                  Constants.spacingMiddle,
+                                ),
+                                child: AppErrorWidget(
+                                  message: 'Could not load ${widget.title}',
+                                  details: snapshot.error.toString(),
+                                  icon: Resources.map
+                                          .containsKey(widget.resource)
+                                      ? 'assets/resources/${widget.resource}.svg'
+                                      : null,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+
+                      Provider.of<BookmarksRepository>(
+                        context,
+                        listen: true,
+                      );
+
+                      return Column(
+                        children: [
+                          AppResourceActions(
+                            mode: AppResourceActionsMode.header,
+                            actions: resourceDetailsActions(
+                              context,
+                              widget.title,
+                              widget.resource,
+                              widget.path,
+                              widget.scope,
+                              widget.additionalPrinterColumns,
+                              widget.name,
+                              widget.namespace,
+                              snapshot.data,
+                              [
+                                AppResourceActionsModel(
+                                  title: 'Refresh',
+                                  icon: Icons.refresh,
+                                  onTap: () {
+                                    setState(() {
+                                      _futureFetchItem = _fetchItem();
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          DetailsItemMetadata(
+                            item: snapshot.data,
+                          ),
+                          DetailsItemAdditionalPrinterColumns(
+                            additionalPrinterColumns:
+                                widget.additionalPrinterColumns,
+                            item: snapshot.data,
+                          ),
+                          DetailsItemConditions(
+                            item: snapshot.data,
+                          ),
+                          const SizedBox(height: Constants.spacingMiddle),
+                          ..._buildDetailsItem(
+                            widget.title,
+                            widget.resource,
+                            widget.path,
+                            widget.scope,
+                            widget.name,
+                            widget.namespace,
+                            snapshot.data,
+                          ),
+                          const SizedBox(height: Constants.spacingExtraLarge),
+                        ],
+                      );
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

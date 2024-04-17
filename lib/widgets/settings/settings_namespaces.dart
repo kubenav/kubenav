@@ -10,7 +10,6 @@ import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/settings/namespaces/settings_add_namespace.dart';
 import 'package:kubenav/widgets/settings/namespaces/settings_delete_namespace.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
-import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
 
@@ -114,7 +113,6 @@ class SettingsNamespaces extends StatelessWidget {
     );
 
     return Scaffold(
-      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
         centerTitle: true,
         actions: [
@@ -130,9 +128,7 @@ class SettingsNamespaces extends StatelessWidget {
         ],
         title: const Text('Namespaces'),
       ),
-      bottomNavigationBar: appRepository.settings.classicMode
-          ? null
-          : const AppBottomNavigationBarWidget(),
+      bottomNavigationBar: const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SafeArea(
         child: SingleChildScrollView(

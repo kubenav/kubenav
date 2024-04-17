@@ -32,10 +32,6 @@ void showActions(BuildContext context, Widget widget) {
     backgroundColor: Colors.transparent,
     builder: (BuildContext context) {
       return widget;
-      return Container(
-        margin: const EdgeInsets.all(Constants.spacingMiddle),
-        child: widget,
-      );
     },
   );
 }

@@ -12,7 +12,6 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
-import 'package:kubenav/widgets/shared/app_drawer.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
@@ -111,7 +110,7 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
       context,
       listen: true,
     );
-    AppRepository appRepository = Provider.of<AppRepository>(
+    Provider.of<AppRepository>(
       context,
       listen: true,
     );
@@ -121,7 +120,6 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
     );
 
     return Scaffold(
-      drawer: appRepository.settings.classicMode ? const AppDrawer() : null,
       appBar: AppBar(
         centerTitle: true,
         title: Column(
@@ -151,9 +149,7 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
           ],
         ),
       ),
-      bottomNavigationBar: appRepository.settings.classicMode
-          ? null
-          : const AppBottomNavigationBarWidget(),
+      bottomNavigationBar: const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SafeArea(
         child: SingleChildScrollView(

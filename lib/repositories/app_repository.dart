@@ -325,17 +325,6 @@ class AppRepository with ChangeNotifier {
       notifyListeners();
     } catch (_) {}
   }
-
-  /// [setClassicMode] enables or disables the classic navigation mode known
-  /// from version 3. When the [value] is `true` classic mode will be enabled.
-  /// If the [value] is `false` it will be disabled.
-  Future<void> setClassicMode(bool value) async {
-    try {
-      _settings.classicMode = value;
-      await _save();
-      notifyListeners();
-    } catch (_) {}
-  }
 }
 
 /// The [AppRepositorySettings] model represents all the app settings which can
@@ -345,7 +334,6 @@ class AppRepositorySettings {
   bool isAuthenticationEnabled;
   bool isShowClustersOnStart;
   String editorFormat;
-  bool classicMode;
   String proxy;
   int timeout;
   int sponsorReminder;
@@ -356,7 +344,6 @@ class AppRepositorySettings {
     required this.isAuthenticationEnabled,
     required this.isShowClustersOnStart,
     required this.editorFormat,
-    required this.classicMode,
     required this.proxy,
     required this.timeout,
     required this.sponsorReminder,
@@ -369,7 +356,6 @@ class AppRepositorySettings {
       isAuthenticationEnabled: false,
       isShowClustersOnStart: false,
       editorFormat: 'yaml',
-      classicMode: false,
       proxy: '',
       timeout: 0,
       sponsorReminder: 0,
@@ -394,10 +380,6 @@ class AppRepositorySettings {
           data.containsKey('editorFormat') && data['editorFormat'] != null
               ? data['editorFormat']
               : 'yaml',
-      classicMode:
-          data.containsKey('classicMode') && data['classicMode'] != null
-              ? data['classicMode']
-              : false,
       proxy: data.containsKey('proxy') && data['proxy'] != null
           ? data['proxy']
           : '',
@@ -420,7 +402,6 @@ class AppRepositorySettings {
       'isAuthenticationEnabled': isAuthenticationEnabled,
       'isShowClustersOnStart': isShowClustersOnStart,
       'editorFormat': editorFormat,
-      'classicMode': classicMode,
       'proxy': proxy,
       'timeout': timeout,
       'sponsorReminder': sponsorReminder,
