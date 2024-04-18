@@ -47,10 +47,18 @@ class AppActionsWidget extends StatelessWidget {
         ),
       ),
       child: SingleChildScrollView(
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: List.generate(actions.length, (index) {
+        child: ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(0),
+          separatorBuilder: (context, index) {
+            return const Divider(
+              height: 0,
+              thickness: 1.0,
+            );
+          },
+          itemCount: actions.length,
+          itemBuilder: (context, index) {
             return ListTile(
               onTap: actions[index].onTap,
               title: Text(
@@ -59,7 +67,7 @@ class AppActionsWidget extends StatelessWidget {
                 style: TextStyle(color: actions[index].color),
               ),
             );
-          }),
+          },
         ),
       ),
     );
