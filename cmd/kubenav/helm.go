@@ -359,6 +359,10 @@ func HelmListCharts(clusterServer, clusterCertificateAuthorityData string, clust
 		releases = append(releases, release)
 	}
 
+	sort.Slice(releases, func(i, j int) bool {
+		return releases[i].Name < releases[j].Name
+	})
+
 	releasesBytes, err := json.Marshal(releases)
 	if err != nil {
 		return "", err
