@@ -107,8 +107,4 @@ class ThemeRepository with ChangeNotifier {
 
     return ThemeMode.system;
   }
-
-  void notify() {
-    notifyListeners();
-  }
 }

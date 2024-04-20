@@ -43,30 +43,8 @@ class App extends StatelessWidget {
   }
 }
 
-class AppMaterialApp extends StatefulWidget {
+class AppMaterialApp extends StatelessWidget {
   const AppMaterialApp({super.key});
-
-  @override
-  State<AppMaterialApp> createState() => _AppMaterialAppState();
-}
-
-class _AppMaterialAppState extends State<AppMaterialApp> {
-  @override
-  void initState() {
-    super.initState();
-
-    /// Here we have to listen to OS changes to the users selected theme, so
-    /// that we can notify all listeners of the [ThemeRepository] when the OS
-    /// theme is changed and the user selected the "auto" theme option.
-    final window = WidgetsBinding.instance.window;
-
-    window.onPlatformBrightnessChanged = () {
-      Provider.of<ThemeRepository>(
-        context,
-        listen: false,
-      ).notify();
-    };
-  }
 
   @override
   Widget build(BuildContext context) {
