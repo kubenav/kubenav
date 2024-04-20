@@ -596,7 +596,6 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
                             widget.namespace,
                             snapshot.data,
                           ),
-                          const SizedBox(height: Constants.spacingExtraLarge),
                         ],
                       );
                   }

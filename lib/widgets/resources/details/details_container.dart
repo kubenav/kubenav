@@ -49,7 +49,6 @@ class DetailsContainer extends StatelessWidget {
 
     return [
       DetailsItemWidget(
-        smallPadding: true,
         title: 'Status',
         details: [
           DetailsItemModel(
@@ -93,266 +92,269 @@ class DetailsContainer extends StatelessWidget {
         Navigator.pop(context);
       },
       actionIsLoading: false,
-      child: ListView(
-        shrinkWrap: false,
-        children: [
-          DetailsItemWidget(
-            smallPadding: true,
-            title: 'Configuration',
-            details: [
-              DetailsItemModel(
-                name: 'Image',
-                values: container.image ?? '-',
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            bottom: Constants.spacingMiddle,
+          ),
+          child: Column(
+            children: [
+              DetailsItemWidget(
+                title: 'Configuration',
+                details: [
+                  DetailsItemModel(
+                    name: 'Image',
+                    values: container.image ?? '-',
+                  ),
+                  DetailsItemModel(
+                    name: 'Image Pull Policy',
+                    values: container.imagePullPolicy ?? '-',
+                  ),
+                  DetailsItemModel(
+                    name: 'Command',
+                    values:
+                        container.command.isNotEmpty ? container.command : '-',
+                  ),
+                  DetailsItemModel(
+                    name: 'Arguments',
+                    values: container.args.isNotEmpty ? container.args : '-',
+                  ),
+                  DetailsItemModel(
+                    name: 'Ports',
+                    values: container.ports.isNotEmpty
+                        ? container.ports
+                            .map(
+                              (port) =>
+                                  '${port.containerPort}${port.hostPort != null ? '/${port.hostPort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''}',
+                            )
+                            .toList()
+                        : '-',
+                  ),
+                  DetailsItemModel(
+                    name: 'Readiness Probe',
+                    values: container.readinessProbe != null
+                        ? getProbe(container.readinessProbe!)
+                        : '-',
+                  ),
+                  DetailsItemModel(
+                    name: 'Liveness Probe',
+                    values: container.livenessProbe != null
+                        ? getProbe(container.livenessProbe!)
+                        : '-',
+                  ),
+                  DetailsItemModel(
+                    name: 'Startup Probe',
+                    values: container.startupProbe != null
+                        ? getProbe(container.startupProbe!)
+                        : '-',
+                  ),
+                ],
               ),
-              DetailsItemModel(
-                name: 'Image Pull Policy',
-                values: container.imagePullPolicy ?? '-',
+              const SizedBox(height: Constants.spacingMiddle),
+              ...buildStatus(),
+              DetailsItemWidget(
+                title: 'Resources',
+                details: [
+                  DetailsItemModel(
+                    name: 'CPU Usage',
+                    values: containerMetric.isNotEmpty &&
+                            containerMetric[0].usage?.cpu != null
+                        ? formatCpuMetric(
+                            cpuMetricsStringToDouble(
+                              containerMetric[0].usage!.cpu!,
+                            ),
+                          )
+                        : '-',
+                  ),
+                  DetailsItemModel(
+                    name: 'CPU Requests',
+                    values: container.resources != null &&
+                            container.resources!.requests.containsKey('cpu')
+                        ? container.resources!.requests['cpu']
+                        : '-',
+                  ),
+                  DetailsItemModel(
+                    name: 'CPU Limits',
+                    values: container.resources != null &&
+                            container.resources!.limits.containsKey('cpu')
+                        ? container.resources!.limits['cpu']
+                        : '-',
+                  ),
+                  DetailsItemModel(
+                    name: 'Memory Usage',
+                    values: containerMetric.isNotEmpty &&
+                            containerMetric[0].usage?.memory != null
+                        ? formatMemoryMetric(
+                            memoryMetricsStringToDouble(
+                              containerMetric[0].usage!.memory!,
+                            ),
+                          )
+                        : '-',
+                  ),
+                  DetailsItemModel(
+                    name: 'Memory Requests',
+                    values: container.resources != null &&
+                            container.resources!.requests.containsKey('memory')
+                        ? container.resources!.requests['memory']
+                        : '-',
+                  ),
+                  DetailsItemModel(
+                    name: 'Memory Limits',
+                    values: container.resources != null &&
+                            container.resources!.limits.containsKey('memory')
+                        ? container.resources!.limits['memory']
+                        : '-',
+                  ),
+                ],
               ),
-              DetailsItemModel(
-                name: 'Command',
-                values: container.command.isNotEmpty ? container.command : '-',
+              const SizedBox(height: Constants.spacingMiddle),
+              AppVertialListSimpleWidget(
+                title: 'Environment Variables',
+                items: container.env
+                    .map(
+                      (env) => AppVertialListSimpleModel(
+                        onTap: () {
+                          showSnackbar(
+                            context,
+                            env.name,
+                            env.value != null
+                                ? env.value!
+                                : env.valueFrom != null
+                                    ? getValueFrom(env.valueFrom!)
+                                    : '-',
+                          );
+                        },
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(Constants.sizeBorderRadius),
+                              ),
+                            ),
+                            height: 54,
+                            width: 54,
+                            padding: const EdgeInsets.all(
+                              Constants.spacingIcon54x54,
+                            ),
+                            child: SvgPicture.asset(
+                              'assets/resources/secrets.svg',
+                            ),
+                          ),
+                          const SizedBox(width: Constants.spacingSmall),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  env.name,
+                                  style: primaryTextStyle(
+                                    context,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  env.value != null
+                                      ? env.value!
+                                      : env.valueFrom != null
+                                          ? getValueFrom(env.valueFrom!)
+                                          : '-',
+                                  style: secondaryTextStyle(
+                                    context,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: Constants.spacingSmall),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .textSecondary
+                                .withOpacity(Constants.opacityIcon),
+                            size: 24,
+                          ),
+                        ],
+                      ),
+                    )
+                    .toList(),
               ),
-              DetailsItemModel(
-                name: 'Arguments',
-                values: container.args.isNotEmpty ? container.args : '-',
-              ),
-              DetailsItemModel(
-                name: 'Ports',
-                values: container.ports.isNotEmpty
-                    ? container.ports
-                        .map(
-                          (port) =>
-                              '${port.containerPort}${port.hostPort != null ? '/${port.hostPort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''}',
-                        )
-                        .toList()
-                    : '-',
-              ),
-              DetailsItemModel(
-                name: 'Readiness Probe',
-                values: container.readinessProbe != null
-                    ? getProbe(container.readinessProbe!)
-                    : '-',
-              ),
-              DetailsItemModel(
-                name: 'Liveness Probe',
-                values: container.livenessProbe != null
-                    ? getProbe(container.livenessProbe!)
-                    : '-',
-              ),
-              DetailsItemModel(
-                name: 'Startup Probe',
-                values: container.startupProbe != null
-                    ? getProbe(container.startupProbe!)
-                    : '-',
+              AppVertialListSimpleWidget(
+                title: 'Volume Mounts',
+                items: container.volumeMounts
+                    .map(
+                      (volumeMount) => AppVertialListSimpleModel(
+                        onTap: () {
+                          showSnackbar(
+                            context,
+                            volumeMount.name,
+                            'Path: ${volumeMount.mountPath}\nSub-Path: ${volumeMount.subPath ?? '-'}\nReadonly: ${volumeMount.readOnly == true ? 'True' : 'False'}',
+                          );
+                        },
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(Constants.sizeBorderRadius),
+                              ),
+                            ),
+                            height: 54,
+                            width: 54,
+                            padding: const EdgeInsets.all(
+                              Constants.spacingIcon54x54,
+                            ),
+                            child: SvgPicture.asset(
+                              'assets/resources/persistentvolumes.svg',
+                            ),
+                          ),
+                          const SizedBox(width: Constants.spacingSmall),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  volumeMount.name,
+                                  style: primaryTextStyle(
+                                    context,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  volumeMount.mountPath,
+                                  style: secondaryTextStyle(
+                                    context,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: Constants.spacingSmall),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .textSecondary
+                                .withOpacity(Constants.opacityIcon),
+                            size: 24,
+                          ),
+                        ],
+                      ),
+                    )
+                    .toList(),
               ),
             ],
           ),
-          const SizedBox(height: Constants.spacingMiddle),
-          ...buildStatus(),
-          DetailsItemWidget(
-            smallPadding: true,
-            title: 'Resources',
-            details: [
-              DetailsItemModel(
-                name: 'CPU Usage',
-                values: containerMetric.isNotEmpty &&
-                        containerMetric[0].usage?.cpu != null
-                    ? formatCpuMetric(
-                        cpuMetricsStringToDouble(
-                          containerMetric[0].usage!.cpu!,
-                        ),
-                      )
-                    : '-',
-              ),
-              DetailsItemModel(
-                name: 'CPU Requests',
-                values: container.resources != null &&
-                        container.resources!.requests.containsKey('cpu')
-                    ? container.resources!.requests['cpu']
-                    : '-',
-              ),
-              DetailsItemModel(
-                name: 'CPU Limits',
-                values: container.resources != null &&
-                        container.resources!.limits.containsKey('cpu')
-                    ? container.resources!.limits['cpu']
-                    : '-',
-              ),
-              DetailsItemModel(
-                name: 'Memory Usage',
-                values: containerMetric.isNotEmpty &&
-                        containerMetric[0].usage?.memory != null
-                    ? formatMemoryMetric(
-                        memoryMetricsStringToDouble(
-                          containerMetric[0].usage!.memory!,
-                        ),
-                      )
-                    : '-',
-              ),
-              DetailsItemModel(
-                name: 'Memory Requests',
-                values: container.resources != null &&
-                        container.resources!.requests.containsKey('memory')
-                    ? container.resources!.requests['memory']
-                    : '-',
-              ),
-              DetailsItemModel(
-                name: 'Memory Limits',
-                values: container.resources != null &&
-                        container.resources!.limits.containsKey('memory')
-                    ? container.resources!.limits['memory']
-                    : '-',
-              ),
-            ],
-          ),
-          const SizedBox(height: Constants.spacingMiddle),
-          AppVertialListSimpleWidget(
-            smallPadding: true,
-            title: 'Environment Variables',
-            items: container.env
-                .map(
-                  (env) => AppVertialListSimpleModel(
-                    onTap: () {
-                      showSnackbar(
-                        context,
-                        env.name,
-                        env.value != null
-                            ? env.value!
-                            : env.valueFrom != null
-                                ? getValueFrom(env.valueFrom!)
-                                : '-',
-                      );
-                    },
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(Constants.sizeBorderRadius),
-                          ),
-                        ),
-                        height: 54,
-                        width: 54,
-                        padding: const EdgeInsets.all(
-                          Constants.spacingIcon54x54,
-                        ),
-                        child: SvgPicture.asset(
-                          'assets/resources/secrets.svg',
-                        ),
-                      ),
-                      const SizedBox(width: Constants.spacingSmall),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              env.name,
-                              style: primaryTextStyle(
-                                context,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Text(
-                              env.value != null
-                                  ? env.value!
-                                  : env.valueFrom != null
-                                      ? getValueFrom(env.valueFrom!)
-                                      : '-',
-                              style: secondaryTextStyle(
-                                context,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: Constants.spacingSmall),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: Theme.of(context)
-                            .extension<CustomColors>()!
-                            .textSecondary
-                            .withOpacity(Constants.opacityIcon),
-                        size: 24,
-                      ),
-                    ],
-                  ),
-                )
-                .toList(),
-          ),
-          AppVertialListSimpleWidget(
-            smallPadding: true,
-            title: 'Volume Mounts',
-            items: container.volumeMounts
-                .map(
-                  (volumeMount) => AppVertialListSimpleModel(
-                    onTap: () {
-                      showSnackbar(
-                        context,
-                        volumeMount.name,
-                        'Path: ${volumeMount.mountPath}\nSub-Path: ${volumeMount.subPath ?? '-'}\nReadonly: ${volumeMount.readOnly == true ? 'True' : 'False'}',
-                      );
-                    },
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(Constants.sizeBorderRadius),
-                          ),
-                        ),
-                        height: 54,
-                        width: 54,
-                        padding: const EdgeInsets.all(
-                          Constants.spacingIcon54x54,
-                        ),
-                        child: SvgPicture.asset(
-                          'assets/resources/persistentvolumes.svg',
-                        ),
-                      ),
-                      const SizedBox(width: Constants.spacingSmall),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              volumeMount.name,
-                              style: primaryTextStyle(
-                                context,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Text(
-                              volumeMount.mountPath,
-                              style: secondaryTextStyle(
-                                context,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: Constants.spacingSmall),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: Theme.of(context)
-                            .extension<CustomColors>()!
-                            .textSecondary
-                            .withOpacity(Constants.opacityIcon),
-                        size: 24,
-                      ),
-                    ],
-                  ),
-                )
-                .toList(),
-          ),
-        ],
+        ),
       ),
     );
   }

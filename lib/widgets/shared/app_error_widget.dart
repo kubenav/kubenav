@@ -24,11 +24,11 @@ class AppErrorWidget extends StatelessWidget {
   final String details;
   final dynamic icon;
 
-  /// [buildIcon] creates the icon for the error widget. The [icon] parameter
+  /// [_buildIcon] creates the icon for the error widget. The [icon] parameter
   /// for the widget could be of type `String` or `IconData` to also allow
   /// images from the assets folder as icons. If the icon is null, we use a
   /// default one.
-  Widget buildIcon(BuildContext context, dynamic icon) {
+  Widget _buildIcon(BuildContext context, dynamic icon) {
     if (icon is String) {
       return SvgPicture.asset(icon);
     } else if (icon is IconData) {
@@ -46,7 +46,7 @@ class AppErrorWidget extends StatelessWidget {
     );
   }
 
-  Widget buildReauthWidget(String details) {
+  Widget _buildReauthWidget(String details) {
     if (details.contains('aws_sso_access_token_is_expired')) {
       return const SettingsReauthenticateAWSSSO();
     }
@@ -57,10 +57,6 @@ class AppErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(
-        top: Constants.spacingSmall,
-        bottom: Constants.spacingSmall,
-      ),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -89,7 +85,7 @@ class AppErrorWidget extends StatelessWidget {
             height: 140,
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.all(Constants.spacingMiddle),
-            child: buildIcon(context, icon),
+            child: _buildIcon(context, icon),
           ),
           const SizedBox(height: Constants.spacingSmall),
           Padding(
@@ -116,7 +112,7 @@ class AppErrorWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: Constants.spacingSmall),
-          buildReauthWidget(details),
+          _buildReauthWidget(details),
         ],
       ),
     );

@@ -28,27 +28,18 @@ class AppVertialListSimpleWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.items,
-    this.smallPadding = false,
   });
 
   final String title;
   final List<AppVertialListSimpleModel> items;
-  final bool smallPadding;
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
       children: [
         Padding(
-          padding: EdgeInsets.only(
-            top: Constants.spacingMiddle,
-            left: smallPadding
-                ? Constants.spacingExtraSmall
-                : Constants.spacingMiddle,
-            right: smallPadding
-                ? Constants.spacingExtraSmall
-                : Constants.spacingMiddle,
-            bottom: Constants.spacingMiddle,
+          padding: const EdgeInsets.all(
+            Constants.spacingMiddle,
           ),
           child: Row(
             children: [
@@ -62,14 +53,9 @@ class AppVertialListSimpleWidget extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(
-            left: smallPadding
-                ? Constants.spacingExtraSmall
-                : Constants.spacingMiddle,
-            right: smallPadding
-                ? Constants.spacingExtraSmall
-                : Constants.spacingMiddle,
-            bottom: Constants.spacingMiddle,
+          padding: const EdgeInsets.only(
+            left: Constants.spacingMiddle,
+            right: Constants.spacingMiddle,
           ),
           child: ListView.separated(
             physics: const NeverScrollableScrollPhysics(),

@@ -115,7 +115,7 @@ class SettingsProviders extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: Constants.spacingLarge),
+              const SizedBox(height: Constants.spacingMiddle),
               ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -132,7 +132,7 @@ class SettingsProviders extends StatelessWidget {
                   clustersRepository.providers[index],
                 ),
               ),
-              const SizedBox(height: Constants.spacingSmall),
+              const SizedBox(height: Constants.spacingMiddle),
             ],
           ),
         ),

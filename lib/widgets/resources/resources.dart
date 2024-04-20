@@ -122,13 +122,14 @@ class Resources extends StatelessWidget {
 
     if (clustersRepository.clusters.isEmpty) {
       return [
-        const SizedBox(height: Constants.spacingSmall),
-        const AppNoClustersWidget(),
+        const Padding(
+          padding: EdgeInsets.all(Constants.spacingMiddle),
+          child: AppNoClustersWidget(),
+        ),
       ];
     }
 
     return [
-      const SizedBox(height: Constants.spacingSmall),
       const ResourcesBookmarksPreview(),
       AppVertialListSimpleWidget(
         title: 'Workloads',
@@ -137,6 +138,7 @@ class Resources extends StatelessWidget {
           resource_model.ResourceType.workload,
         ),
       ),
+      const SizedBox(height: Constants.spacingMiddle),
       AppVertialListSimpleWidget(
         title: 'Discovery and Load Balancing',
         items: getItems(
@@ -144,6 +146,7 @@ class Resources extends StatelessWidget {
           resource_model.ResourceType.discoveryandloadbalancing,
         ),
       ),
+      const SizedBox(height: Constants.spacingMiddle),
       AppVertialListSimpleWidget(
         title: 'Config and Storage',
         items: getItems(
@@ -151,6 +154,7 @@ class Resources extends StatelessWidget {
           resource_model.ResourceType.configandstorage,
         ),
       ),
+      const SizedBox(height: Constants.spacingMiddle),
       AppVertialListSimpleWidget(
         title: 'RBAC',
         items: getItems(
@@ -158,6 +162,7 @@ class Resources extends StatelessWidget {
           resource_model.ResourceType.rbac,
         ),
       ),
+      const SizedBox(height: Constants.spacingMiddle),
       AppVertialListSimpleWidget(
         title: 'Cluster',
         items: getItems(
@@ -165,6 +170,7 @@ class Resources extends StatelessWidget {
           resource_model.ResourceType.cluster,
         ),
       ),
+      const SizedBox(height: Constants.spacingMiddle),
     ];
   }
 

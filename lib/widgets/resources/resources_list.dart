@@ -552,12 +552,16 @@ class _ResourcesListState extends State<ResourcesList> {
                               top: Constants.spacingMiddle,
                               bottom: Constants.spacingMiddle,
                             ),
-                            child: ListView.builder(
+                            child: ListView.separated(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               padding: const EdgeInsets.only(
                                 right: Constants.spacingMiddle,
                                 left: Constants.spacingMiddle,
+                              ),
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(
+                                height: Constants.spacingMiddle,
                               ),
                               itemCount: filteredItems.length,
                               itemBuilder: (context, index) {

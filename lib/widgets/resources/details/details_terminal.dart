@@ -72,7 +72,6 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
           final channel = IOWebSocketChannel.connect(
             'ws://localhost:14122/terminal?name=${widget.item['metadata']['name']}&namespace=${widget.item['metadata']['namespace']}&container=$_container&shell=$_shell',
             headers: <String, dynamic>{
-              'X-CONTEXT-NAME': cluster.name,
               'X-CLUSTER-SERVER': cluster.clusterServer,
               'X-CLUSTER-CERTIFICATE-AUTHORITY-DATA':
                   cluster.clusterCertificateAuthorityData,
@@ -181,89 +180,89 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
       actionIsLoading: _isLoading,
       child: Form(
         key: _terminalFormKey,
-        child: ListView(
-          shrinkWrap: false,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text('Container'),
-                  DropdownButton(
-                    value: _container,
-                    underline: Container(
-                      height: 2,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    onChanged: (String? value) {
-                      setState(() {
-                        _container = value ?? '';
-                      });
-                    },
-                    items: _containers.map((value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .extension<CustomColors>()!
-                                .textPrimary,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: Constants.spacingMiddle,
+              bottom: Constants.spacingMiddle,
+              left: Constants.spacingMiddle,
+              right: Constants.spacingMiddle,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text('Shell'),
-                  DropdownButton(
-                    value: _shell,
-                    underline: Container(
-                      height: 2,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    onChanged: (String? value) {
-                      setState(() {
-                        _shell = value ?? 'sh';
-                      });
-                    },
-                    items: [
-                      'sh',
-                      'bash',
-                      'pwsh',
-                      'cmd',
-                    ].map((value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .extension<CustomColors>()!
-                                .textPrimary,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Container'),
+                    DropdownButton(
+                      value: _container,
+                      underline: Container(
+                        height: 2,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onChanged: (String? value) {
+                        setState(() {
+                          _container = value ?? '';
+                        });
+                      },
+                      items: _containers.map((value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .extension<CustomColors>()!
+                                  .textPrimary,
+                            ),
                           ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Shell'),
+                    DropdownButton(
+                      value: _shell,
+                      underline: Container(
+                        height: 2,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onChanged: (String? value) {
+                        setState(() {
+                          _shell = value ?? 'sh';
+                        });
+                      },
+                      items: [
+                        'sh',
+                        'bash',
+                        'pwsh',
+                        'cmd',
+                      ].map((value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .extension<CustomColors>()!
+                                  .textPrimary,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 /// [Logger] is our custom log implementation, which allows us to log messages
@@ -28,20 +29,17 @@ class Logger extends StatelessWidget {
         Navigator.pop(context);
       },
       actionIsLoading: false,
-      child: Form(
-        key: const Key('settings/logs'),
-        child: ListView(
-          shrinkWrap: false,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8,
-              ),
-              child: SelectableText(
-                _Log.list.map((e) => e.toString()).join('\n\n'),
-              ),
-            ),
-          ],
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: Constants.spacingMiddle,
+            bottom: Constants.spacingMiddle,
+            left: Constants.spacingMiddle,
+            right: Constants.spacingMiddle,
+          ),
+          child: SelectableText(
+            _Log.list.map((e) => e.toString()).join('\n\n'),
+          ),
         ),
       ),
     );

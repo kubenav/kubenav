@@ -93,8 +93,7 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(
-        top: Constants.spacingSmall,
-        bottom: Constants.spacingSmall,
+        bottom: Constants.spacingMiddle,
         left: Constants.spacingMiddle,
         right: Constants.spacingMiddle,
       ),

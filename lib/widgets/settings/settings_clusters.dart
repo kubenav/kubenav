@@ -26,23 +26,32 @@ import 'package:kubenav/widgets/shared/app_horizontal_list_cards_widget.dart';
 class SettingsClusters extends StatelessWidget {
   const SettingsClusters({super.key});
 
-  /// [_proxyDecorator] is used to highlight the cluster which is currently
+  /// [_proxyDecorator] is used to highlight the bookmark which is currently
   /// draged by the user.
   Widget _proxyDecorator(
-    BuildContext context,
     Widget child,
     int index,
     Animation<double> animation,
   ) {
-    return AnimatedBuilder(
-      animation: animation,
-      builder: (BuildContext context, Widget? child) {
-        return Material(
-          elevation: 0,
-          child: child,
-        );
-      },
-      child: child,
+    return Material(
+      elevation: 0,
+      color: Colors.transparent,
+      child: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 16,
+            child: Material(
+              borderRadius: BorderRadius.circular(16),
+              elevation: 24,
+              color: Colors.transparent,
+            ),
+          ),
+          child,
+        ],
+      ),
     );
   }
 
@@ -120,13 +129,14 @@ class SettingsClusters extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: Constants.spacingSmall),
-
               buildProviders(context),
 
               Padding(
-                padding: const EdgeInsets.all(
-                  Constants.spacingMiddle,
+                padding: const EdgeInsets.only(
+                  top: Constants.spacingExtraLarge,
+                  bottom: Constants.spacingMiddle,
+                  left: Constants.spacingMiddle,
+                  right: Constants.spacingMiddle,
                 ),
                 child: Row(
                   children: [
@@ -156,7 +166,7 @@ class SettingsClusters extends StatelessWidget {
                   int index,
                   Animation<double> animation,
                 ) {
-                  return _proxyDecorator(context, child, index, animation);
+                  return _proxyDecorator(child, index, animation);
                 },
                 itemCount: clustersRepository.clusters.length,
                 itemBuilder: (
@@ -190,7 +200,6 @@ class SettingsClusters extends StatelessWidget {
                   );
                 },
               ),
-              const SizedBox(height: Constants.spacingSmall),
             ],
           ),
         ),

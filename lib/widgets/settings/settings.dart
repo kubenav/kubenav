@@ -49,7 +49,13 @@ class Settings extends StatelessWidget {
     );
 
     if (clustersRepository.clusters.isEmpty) {
-      return const AppNoClustersWidget();
+      return const Padding(
+        padding: EdgeInsets.only(
+          left: Constants.spacingMiddle,
+          right: Constants.spacingMiddle,
+        ),
+        child: AppNoClustersWidget(),
+      );
     }
 
     int maxClusters = 6;
@@ -64,7 +70,7 @@ class Settings extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         crossAxisCount: 2,
         childAspectRatio: 0.25,
-        mainAxisSpacing: 16.0,
+        mainAxisSpacing: Constants.spacingMiddle,
         children: List.generate(
           clustersRepository.clusters.length <= maxClusters
               ? clustersRepository.clusters.length
@@ -119,11 +125,8 @@ class Settings extends StatelessWidget {
   /// page, where a user can add more clusters or reorder his existing clusters.
   Widget _buildViewAllClusters(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        top: Constants.spacingMiddle,
-        left: Constants.spacingMiddle,
-        right: Constants.spacingMiddle,
-        bottom: Constants.spacingSmall,
+      padding: const EdgeInsets.all(
+        Constants.spacingMiddle,
       ),
       child: Row(
         children: [
@@ -278,10 +281,10 @@ class Settings extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: Constants.spacingSmall),
               const SettingsSponsorBanner(),
               _buildViewAllClusters(context),
               _buildClusters(context),
+              const SizedBox(height: Constants.spacingMiddle),
               AppVertialListSimpleWidget(
                 title: 'Settings',
                 items: [
@@ -588,8 +591,11 @@ class Settings extends StatelessWidget {
                   ),
                 ],
               ),
+              const SizedBox(height: Constants.spacingMiddle),
               const SettingsSponsor(),
+              const SizedBox(height: Constants.spacingMiddle),
               buildHelp(context),
+              const SizedBox(height: Constants.spacingMiddle),
               const SettingsInfo(),
               const SizedBox(height: Constants.spacingMiddle),
             ],

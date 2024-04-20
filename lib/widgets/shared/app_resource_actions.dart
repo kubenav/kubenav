@@ -37,8 +37,6 @@ class AppResourceActionsModel {
 /// - `actions`: The actions will be shown via an [AppActionsWidget]. When this
 ///   mode is selected we will call `Navigator.pop(context)` before the defined
 ///   `onTap` function of an action to close the actions menu.
-/// - `menu`: The actions will be shown via a menu which is accesable via the
-///   [AppBar].
 class AppResourceActions extends StatelessWidget {
   const AppResourceActions({
     super.key,

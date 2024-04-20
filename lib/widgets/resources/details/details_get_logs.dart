@@ -100,7 +100,6 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
             final channel = IOWebSocketChannel.connect(
               'ws://localhost:14122/logs?name=${widget.names}&namespace=${widget.namespace}&container=$_container&since=$_since',
               headers: <String, dynamic>{
-                'X-CONTEXT-NAME': cluster.name,
                 'X-CLUSTER-SERVER': cluster.clusterServer,
                 'X-CLUSTER-CERTIFICATE-AUTHORITY-DATA':
                     cluster.clusterCertificateAuthorityData,
@@ -252,155 +251,143 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
       actionIsLoading: _isLoading,
       child: Form(
         key: _logsFormKey,
-        child: ListView(
-          shrinkWrap: false,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text('Container'),
-                  DropdownButton(
-                    value: _container,
-                    underline: Container(
-                      height: 2,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    onChanged: (String? value) {
-                      setState(() {
-                        _container = value ?? '';
-                      });
-                    },
-                    items: _containers.map((value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .extension<CustomColors>()!
-                                .textPrimary,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: Constants.spacingMiddle,
+              bottom: Constants.spacingMiddle,
+              left: Constants.spacingMiddle,
+              right: Constants.spacingMiddle,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text('Since'),
-                  DropdownButton(
-                    value: _since,
-                    underline: Container(
-                      height: 2,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    onChanged: (String? value) {
-                      setState(() {
-                        _since = value ?? '';
-                      });
-                    },
-                    items: [
-                      '5 Minutes',
-                      '15 Minutes',
-                      '30 Minutes',
-                      '1 Hour',
-                      '3 Hours',
-                      '6 Hours',
-                      '12 Hours',
-                      '1 Day',
-                      '2 Days',
-                      '7 Days',
-                    ].map((value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .extension<CustomColors>()!
-                                .textPrimary,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Container'),
+                    DropdownButton(
+                      value: _container,
+                      underline: Container(
+                        height: 2,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onChanged: (String? value) {
+                        setState(() {
+                          _container = value ?? '';
+                        });
+                      },
+                      items: _containers.map((value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .extension<CustomColors>()!
+                                  .textPrimary,
+                            ),
                           ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: TextFormField(
-                controller: _filterController,
-                keyboardType: TextInputType.text,
-                autocorrect: false,
-                enableSuggestions: false,
-                maxLines: 1,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Filter',
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text('Previous'),
-                  Switch(
-                    activeColor: Theme.of(context).colorScheme.primary,
-                    onChanged: (value) {
-                      setState(() {
-                        _previous = !_previous;
-                      });
-                    },
-                    value: _previous,
+                const SizedBox(height: Constants.spacingMiddle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Since'),
+                    DropdownButton(
+                      value: _since,
+                      underline: Container(
+                        height: 2,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onChanged: (String? value) {
+                        setState(() {
+                          _since = value ?? '';
+                        });
+                      },
+                      items: [
+                        '5 Minutes',
+                        '15 Minutes',
+                        '30 Minutes',
+                        '1 Hour',
+                        '3 Hours',
+                        '6 Hours',
+                        '12 Hours',
+                        '1 Day',
+                        '2 Days',
+                        '7 Days',
+                      ].map((value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .extension<CustomColors>()!
+                                  .textPrimary,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                TextFormField(
+                  controller: _filterController,
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Filter',
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Previous'),
+                    Switch(
+                      activeColor: Theme.of(context).colorScheme.primary,
+                      onChanged: (value) {
+                        setState(() {
+                          _previous = !_previous;
+                        });
+                      },
+                      value: _previous,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Follow'),
+                    Switch(
+                      activeColor: Theme.of(context).colorScheme.primary,
+                      onChanged: widget.names.split(',').length > 1
+                          ? null
+                          : (value) {
+                              setState(() {
+                                _follow = !_follow;
+                              });
+                            },
+                      value: _follow,
+                    ),
+                  ],
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text('Follow'),
-                  Switch(
-                    activeColor: Theme.of(context).colorScheme.primary,
-                    onChanged: widget.names.split(',').length > 1
-                        ? null
-                        : (value) {
-                            setState(() {
-                              _follow = !_follow;
-                            });
-                          },
-                    value: _follow,
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

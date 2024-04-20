@@ -80,35 +80,35 @@ class _SettingsTimeoutState extends State<SettingsTimeout> {
       actionIsLoading: false,
       child: Form(
         key: _timeoutFormKey,
-        child: ListView(
-          shrinkWrap: false,
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Text(
-                'Set the timeout for requests against the Kubernetes API in seconds. A value of "0" means no timeout:',
-              ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: Constants.spacingMiddle,
+              bottom: Constants.spacingMiddle,
+              left: Constants.spacingMiddle,
+              right: Constants.spacingMiddle,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: TextFormField(
-                controller: _timeoutController,
-                keyboardType: TextInputType.url,
-                autocorrect: false,
-                enableSuggestions: false,
-                maxLines: 1,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Timeout',
+            child: Column(
+              children: [
+                const Text(
+                  'Set the timeout for requests against the Kubernetes API in seconds. A value of "0" means no timeout:',
                 ),
-                validator: _validator,
-              ),
+                const SizedBox(height: Constants.spacingMiddle),
+                TextFormField(
+                  controller: _timeoutController,
+                  keyboardType: TextInputType.url,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Timeout',
+                  ),
+                  validator: _validator,
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

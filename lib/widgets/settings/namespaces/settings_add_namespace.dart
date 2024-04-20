@@ -55,35 +55,39 @@ class _SettingsAddNamespaceState extends State<SettingsAddNamespace> {
       actionIsLoading: false,
       child: Form(
         key: _namespaceFormKey,
-        child: ListView(
-          shrinkWrap: false,
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Text(
-                'Enter the name of one of your favorite namespaces for quick access:',
-              ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: Constants.spacingMiddle,
+              bottom: Constants.spacingMiddle,
+              left: Constants.spacingMiddle,
+              right: Constants.spacingMiddle,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: TextFormField(
-                controller: _namespaceController,
-                keyboardType: TextInputType.text,
-                autocorrect: false,
-                enableSuggestions: false,
-                maxLines: 1,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Namespace',
+            child: Column(
+              children: [
+                const Text(
+                  'Enter the name of one of your favorite namespaces for quick access:',
                 ),
-                validator: _validator,
-              ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: Constants.spacingMiddle,
+                  ),
+                  child: TextFormField(
+                    controller: _namespaceController,
+                    keyboardType: TextInputType.text,
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    maxLines: 1,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Namespace',
+                    ),
+                    validator: _validator,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

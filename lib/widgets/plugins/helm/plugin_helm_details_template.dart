@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:code_text_field/code_text_field.dart';
 
+import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
@@ -55,31 +56,28 @@ class _PluginHelmDetailsTemplateState extends State<PluginHelmDetailsTemplate> {
         Navigator.pop(context);
       },
       actionIsLoading: false,
-      child: Form(
-        child: ListView(
-          physics: const ClampingScrollPhysics(),
-          shrinkWrap: false,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8,
-              ),
-              child: CodeTheme(
-                data: CodeThemeData(
-                  styles:
-                      Theme.of(context).extension<EditorColors>()!.getTheme(),
-                ),
-                child: CodeField(
-                  controller: _codeController,
-                  enabled: false,
-                  textStyle: TextStyle(
-                    fontSize: 14,
-                    fontFamily: getMonospaceFontFamily(),
-                  ),
-                ),
+      child: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: Constants.spacingMiddle,
+            bottom: Constants.spacingMiddle,
+            left: Constants.spacingMiddle,
+            right: Constants.spacingMiddle,
+          ),
+          child: CodeTheme(
+            data: CodeThemeData(
+              styles: Theme.of(context).extension<EditorColors>()!.getTheme(),
+            ),
+            child: CodeField(
+              controller: _codeController,
+              enabled: false,
+              textStyle: TextStyle(
+                fontSize: 14,
+                fontFamily: getMonospaceFontFamily(),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

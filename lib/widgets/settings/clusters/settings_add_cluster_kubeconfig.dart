@@ -153,83 +153,78 @@ class _SettingsAddClusterKubeconfigState
       actionIsLoading: _isLoadingAddCluster,
       child: Form(
         key: _addClusterKubeconfigFormKey,
-        child: ListView(
-          shrinkWrap: false,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8,
-              ),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  minimumSize: const Size.fromHeight(40),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      Constants.sizeBorderRadius,
-                    ),
-                  ),
-                ),
-                onPressed: () {
-                  _selectKubeconfigFile();
-                },
-                child: Text(
-                  'Select Kubeconfig',
-                  style: primaryTextStyle(
-                    context,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: Constants.spacingMiddle,
+              bottom: Constants.spacingMiddle,
+              left: Constants.spacingMiddle,
+              right: Constants.spacingMiddle,
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: Constants.spacingMiddle,
-                bottom: Constants.spacingMiddle,
-              ),
-              child: Row(
-                children: [
-                  const Expanded(
-                    child: Divider(
-                      height: 0,
-                      thickness: 1.0,
+            child: Column(
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    minimumSize: const Size.fromHeight(40),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        Constants.sizeBorderRadius,
+                      ),
                     ),
                   ),
-                  Text(
-                    'or paste content',
-                    style: secondaryTextStyle(
+                  onPressed: () {
+                    _selectKubeconfigFile();
+                  },
+                  child: Text(
+                    'Select Kubeconfig',
+                    style: primaryTextStyle(
                       context,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                  const Expanded(
-                    child: Divider(
-                      height: 0,
-                      thickness: 1.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8,
-              ),
-              child: TextFormField(
-                controller: _kubeconfigController,
-                keyboardType: TextInputType.text,
-                autocorrect: false,
-                enableSuggestions: false,
-                maxLines: null,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Kubeconfig',
                 ),
-                validator: _validator,
-              ),
+                const SizedBox(height: Constants.spacingMiddle),
+                Row(
+                  children: [
+                    const Expanded(
+                      child: Divider(
+                        height: 0,
+                        thickness: 1.0,
+                      ),
+                    ),
+                    Text(
+                      'or paste content',
+                      style: secondaryTextStyle(
+                        context,
+                      ),
+                    ),
+                    const Expanded(
+                      child: Divider(
+                        height: 0,
+                        thickness: 1.0,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                TextFormField(
+                  controller: _kubeconfigController,
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Kubeconfig',
+                  ),
+                  validator: _validator,
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

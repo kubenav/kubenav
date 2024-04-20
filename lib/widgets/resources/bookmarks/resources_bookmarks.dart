@@ -36,15 +36,25 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
     int index,
     Animation<double> animation,
   ) {
-    return AnimatedBuilder(
-      animation: animation,
-      builder: (BuildContext context, Widget? child) {
-        return Material(
-          elevation: 0,
-          child: child,
-        );
-      },
-      child: child,
+    return Material(
+      elevation: 0,
+      color: Colors.transparent,
+      child: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 16,
+            child: Material(
+              borderRadius: BorderRadius.circular(16),
+              elevation: 24,
+              color: Colors.transparent,
+            ),
+          ),
+          child,
+        ],
+      ),
     );
   }
 
@@ -141,7 +151,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: Constants.spacingLarge),
+              const SizedBox(height: Constants.spacingMiddle),
               ReorderableListView.builder(
                 shrinkWrap: true,
                 buildDefaultDragHandles: false,
@@ -171,8 +181,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                     ),
                     child: Container(
                       margin: const EdgeInsets.only(
-                        top: Constants.spacingSmall,
-                        bottom: Constants.spacingSmall,
+                        bottom: Constants.spacingMiddle,
                         left: Constants.spacingMiddle,
                         right: Constants.spacingMiddle,
                       ),
@@ -289,7 +298,6 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                   );
                 },
               ),
-              const SizedBox(height: Constants.spacingSmall),
             ],
           ),
         ),

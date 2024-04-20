@@ -166,24 +166,21 @@ class _DetailsScaleResourceState extends State<DetailsScaleResource> {
         _scaleResource();
       },
       actionIsLoading: _isLoading,
-      child: Form(
-        key: _scaleFormKey,
-        child: ListView(
-          shrinkWrap: false,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Text(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: Constants.spacingMiddle,
+            bottom: Constants.spacingMiddle,
+            left: Constants.spacingMiddle,
+            right: Constants.spacingMiddle,
+          ),
+          child: Column(
+            children: [
+              Text(
                 'Change the number of replicas for ${widget.name} in namespace ${widget.namespace}:',
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: TextFormField(
+              const SizedBox(height: Constants.spacingMiddle),
+              TextFormField(
                 controller: _replicasController,
                 keyboardType: TextInputType.number,
                 autocorrect: false,
@@ -195,8 +192,8 @@ class _DetailsScaleResourceState extends State<DetailsScaleResource> {
                 ),
                 validator: _validator,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

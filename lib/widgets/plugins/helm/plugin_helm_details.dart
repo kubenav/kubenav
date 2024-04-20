@@ -242,8 +242,9 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
-                            padding:
-                                const EdgeInsets.all(Constants.spacingMiddle),
+                            padding: const EdgeInsets.all(
+                              Constants.spacingMiddle,
+                            ),
                             child: CircularProgressIndicator(
                               color: Theme.of(context).colorScheme.primary,
                             ),
@@ -348,28 +349,14 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                               BuildContext context,
                               AsyncSnapshot<List<Release>> snapshot,
                             ) {
-                              switch (snapshot.connectionState) {
-                                case ConnectionState.none:
-                                case ConnectionState.waiting:
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(
-                                          Constants.spacingMiddle,
-                                        ),
-                                        child: CircularProgressIndicator(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                default:
-                                  return AppVertialListSimpleWidget(
+                              if (snapshot.data == null ||
+                                  snapshot.data!.isEmpty) {
+                                return Container();
+                              }
+
+                              return Column(
+                                children: [
+                                  AppVertialListSimpleWidget(
                                     title: 'History',
                                     items: (snapshot.data ?? [])
                                         .map(
@@ -490,13 +477,16 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                           ),
                                         )
                                         .toList(),
-                                  );
-                              }
+                                  ),
+                                  const SizedBox(
+                                    height: Constants.spacingMiddle,
+                                  ),
+                                ],
+                              );
                             },
                           ),
-                          const SizedBox(height: Constants.spacingMiddle),
                           _buildTemplates(release),
-                          const SizedBox(height: Constants.spacingExtraLarge),
+                          const SizedBox(height: Constants.spacingMiddle),
                         ],
                       );
                   }

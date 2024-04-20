@@ -151,19 +151,17 @@ class _DetailsCreateJobState extends State<DetailsCreateJob> {
         _createJob();
       },
       actionIsLoading: _isLoading,
-      child: Form(
-        child: ListView(
-          shrinkWrap: false,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Text(
-                'Do you really want to create a Job for the CronJob ${widget.name} in namespace ${widget.namespace}?',
-              ),
-            ),
-          ],
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: Constants.spacingMiddle,
+            bottom: Constants.spacingMiddle,
+            left: Constants.spacingMiddle,
+            right: Constants.spacingMiddle,
+          ),
+          child: Text(
+            'Do you really want to create a Job for the CronJob ${widget.name} in namespace ${widget.namespace}?',
+          ),
         ),
       ),
     );

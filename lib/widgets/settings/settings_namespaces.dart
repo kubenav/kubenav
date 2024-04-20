@@ -24,20 +24,29 @@ class SettingsNamespaces extends StatelessWidget {
   /// [_proxyDecorator] is used to highlight the bookmark which is currently
   /// draged by the user.
   Widget _proxyDecorator(
-    BuildContext context,
     Widget child,
     int index,
     Animation<double> animation,
   ) {
-    return AnimatedBuilder(
-      animation: animation,
-      builder: (BuildContext context, Widget? child) {
-        return Material(
-          elevation: 0,
-          child: child,
-        );
-      },
-      child: child,
+    return Material(
+      elevation: 0,
+      color: Colors.transparent,
+      child: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 16,
+            child: Material(
+              borderRadius: BorderRadius.circular(16),
+              elevation: 24,
+              color: Colors.transparent,
+            ),
+          ),
+          child,
+        ],
+      ),
     );
   }
 
@@ -54,8 +63,7 @@ class SettingsNamespaces extends StatelessWidget {
     return Container(
       key: Key(appRepository.settings.namespaces[index]),
       margin: const EdgeInsets.only(
-        top: Constants.spacingSmall,
-        bottom: Constants.spacingSmall,
+        bottom: Constants.spacingMiddle,
         left: Constants.spacingMiddle,
         right: Constants.spacingMiddle,
       ),
@@ -131,7 +139,7 @@ class SettingsNamespaces extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: Constants.spacingLarge),
+              const SizedBox(height: Constants.spacingMiddle),
               ReorderableListView.builder(
                 shrinkWrap: true,
                 buildDefaultDragHandles: false,
@@ -144,7 +152,7 @@ class SettingsNamespaces extends StatelessWidget {
                   int index,
                   Animation<double> animation,
                 ) {
-                  return _proxyDecorator(context, child, index, animation);
+                  return _proxyDecorator(child, index, animation);
                 },
                 itemCount: appRepository.settings.namespaces.length,
                 itemBuilder: (
@@ -154,7 +162,6 @@ class SettingsNamespaces extends StatelessWidget {
                   return buildNamespace(context, index);
                 },
               ),
-              const SizedBox(height: Constants.spacingSmall),
             ],
           ),
         ),

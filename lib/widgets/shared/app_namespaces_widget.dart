@@ -121,111 +121,110 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
     );
 
     return [
-      Container(
-        margin: const EdgeInsets.only(
-          top: Constants.spacingSmall,
-          bottom: Constants.spacingSmall,
-          left: Constants.spacingExtraSmall,
-          right: Constants.spacingExtraSmall,
-        ),
-        child: Text(
-          'Favorites',
-          style: primaryTextStyle(context, size: 18),
+      Padding(
+        padding: const EdgeInsets.only(bottom: Constants.spacingMiddle),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Favorites',
+                style: primaryTextStyle(context, size: 18),
+              ),
+            ),
+          ],
         ),
       ),
-      Container(
-        margin: const EdgeInsets.only(
-          top: Constants.spacingSmall,
-          bottom: Constants.spacingSmall,
-          left: Constants.spacingExtraSmall,
-          right: Constants.spacingExtraSmall,
-        ),
-        child: AppListItem(
-          onTap: () {
-            _changeNamespace('');
-          },
-          child: Row(
-            children: [
-              Icon(
-                clustersRepository
-                            .getCluster(clustersRepository.activeClusterId)!
-                            .namespace ==
-                        ''
-                    ? Icons.radio_button_checked
-                    : Icons.radio_button_unchecked,
-                size: 24,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              const SizedBox(width: Constants.spacingSmall),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  'All Namespaces',
-                  style: noramlTextStyle(
-                    context,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+      AppListItem(
+        onTap: () {
+          _changeNamespace('');
+        },
+        child: Row(
+          children: [
+            Icon(
+              clustersRepository
+                          .getCluster(clustersRepository.activeClusterId)!
+                          .namespace ==
+                      ''
+                  ? Icons.radio_button_checked
+                  : Icons.radio_button_unchecked,
+              size: 24,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const SizedBox(width: Constants.spacingSmall),
+            Expanded(
+              flex: 1,
+              child: Text(
+                'All Namespaces',
+                style: noramlTextStyle(
+                  context,
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-      ...List.generate(
-        appRepository.settings.namespaces.length,
-        (index) {
+      SizedBox(
+        height: appRepository.settings.namespaces.isEmpty
+            ? 0
+            : Constants.spacingMiddle,
+      ),
+      ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        separatorBuilder: (context, index) {
+          return const SizedBox(
+            height: Constants.spacingMiddle,
+          );
+        },
+        itemCount: appRepository.settings.namespaces.length,
+        itemBuilder: (context, index) {
           final name = appRepository.settings.namespaces[index];
 
-          return Container(
-            margin: const EdgeInsets.only(
-              top: Constants.spacingSmall,
-              bottom: Constants.spacingSmall,
-              left: Constants.spacingExtraSmall,
-              right: Constants.spacingExtraSmall,
-            ),
-            child: AppListItem(
-              onTap: () {
-                _changeNamespace(name);
-              },
-              child: Row(
-                children: [
-                  Icon(
-                    name ==
-                            clustersRepository
-                                .getCluster(clustersRepository.activeClusterId)!
-                                .namespace
-                        ? Icons.radio_button_checked
-                        : Icons.radio_button_unchecked,
-                    size: 24,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const SizedBox(width: Constants.spacingSmall),
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      name,
-                      style: noramlTextStyle(
-                        context,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+          return AppListItem(
+            onTap: () {
+              _changeNamespace(name);
+            },
+            child: Row(
+              children: [
+                Icon(
+                  name ==
+                          clustersRepository
+                              .getCluster(clustersRepository.activeClusterId)!
+                              .namespace
+                      ? Icons.radio_button_checked
+                      : Icons.radio_button_unchecked,
+                  size: 24,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(width: Constants.spacingSmall),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    name,
+                    style: noramlTextStyle(
+                      context,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },
       ),
-      Container(
-        margin: const EdgeInsets.only(
-          top: Constants.spacingSmall,
-          bottom: Constants.spacingSmall,
-          left: Constants.spacingExtraSmall,
-          right: Constants.spacingExtraSmall,
-        ),
-        child: Text(
-          'Namespaces',
-          style: primaryTextStyle(context, size: 18),
+      const SizedBox(height: Constants.spacingExtraLarge),
+      Padding(
+        padding: const EdgeInsets.only(bottom: Constants.spacingMiddle),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Namespaces',
+                style: primaryTextStyle(context, size: 18),
+              ),
+            ),
+          ],
         ),
       ),
     ];
@@ -258,124 +257,131 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
         Navigator.pop(context);
       },
       actionIsLoading: false,
-      child: FutureBuilder(
-        future: _futureFetchNamespaces,
-        builder: (
-          BuildContext context,
-          AsyncSnapshot<List<IoK8sApiCoreV1Namespace>> snapshot,
-        ) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.waiting:
-              return ListView(
-                children: [
-                  ..._buildFavoriteNamespace(),
-                  Center(
-                    child: CircularProgressIndicator(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ],
-              );
-            default:
-              if (snapshot.hasError) {
-                return ListView(
-                  children: [
-                    ..._buildFavoriteNamespace(),
-                    Wrap(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: Constants.spacingMiddle,
+            bottom: Constants.spacingMiddle,
+            left: Constants.spacingMiddle,
+            right: Constants.spacingMiddle,
+          ),
+          child: FutureBuilder(
+            future: _futureFetchNamespaces,
+            builder: (
+              BuildContext context,
+              AsyncSnapshot<List<IoK8sApiCoreV1Namespace>> snapshot,
+            ) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                case ConnectionState.waiting:
+                  return ListView(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      ..._buildFavoriteNamespace(),
+                      Center(
+                        child: CircularProgressIndicator(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                  );
+                default:
+                  if (snapshot.hasError) {
+                    return ListView(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       children: [
-                        AppErrorWidget(
-                          message: 'Could not load Namespaces',
-                          details: snapshot.error.toString(),
-                          icon: CustomIcons.namespaces,
+                        ..._buildFavoriteNamespace(),
+                        Wrap(
+                          children: [
+                            AppErrorWidget(
+                              message: 'Could not load Namespaces',
+                              details: snapshot.error.toString(),
+                              icon: CustomIcons.namespaces,
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                  ],
-                );
-              }
+                    );
+                  }
 
-              final filteredNamespaces = _getFilteredNamespaces(snapshot.data!);
+                  final filteredNamespaces =
+                      _getFilteredNamespaces(snapshot.data!);
 
-              return ListView(
-                children: [
-                  ..._buildFavoriteNamespace(),
-                  Container(
-                    padding: const EdgeInsets.only(
-                      top: Constants.spacingSmall,
-                      bottom: Constants.spacingSmall,
-                      left: Constants.spacingExtraSmall,
-                      right: Constants.spacingExtraSmall,
-                    ),
-                    child: TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          _filter = value;
-                        });
-                      },
-                      keyboardType: TextInputType.text,
-                      autocorrect: false,
-                      enableSuggestions: false,
-                      maxLines: 1,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Filter',
+                  return Column(
+                    children: [
+                      ..._buildFavoriteNamespace(),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            _filter = value;
+                          });
+                        },
+                        keyboardType: TextInputType.text,
+                        autocorrect: false,
+                        enableSuggestions: false,
+                        maxLines: 1,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Filter',
+                        ),
                       ),
-                    ),
-                  ),
-                  ...List.generate(
-                    filteredNamespaces.length,
-                    (index) {
-                      final name = filteredNamespaces[index].metadata?.name;
+                      const SizedBox(height: Constants.spacingMiddle),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(
+                            height: Constants.spacingMiddle,
+                          );
+                        },
+                        itemCount: filteredNamespaces.length,
+                        itemBuilder: (context, index) {
+                          final name = filteredNamespaces[index].metadata?.name;
 
-                      return Container(
-                        margin: const EdgeInsets.only(
-                          top: Constants.spacingSmall,
-                          bottom: Constants.spacingSmall,
-                          left: Constants.spacingExtraSmall,
-                          right: Constants.spacingExtraSmall,
-                        ),
-                        child: AppListItem(
-                          onTap: () {
-                            _changeNamespace(name ?? 'default');
-                          },
-                          child: Row(
-                            children: [
-                              Icon(
-                                name != null &&
-                                        name ==
-                                            clustersRepository
-                                                .getCluster(
-                                                  clustersRepository
-                                                      .activeClusterId,
-                                                )!
-                                                .namespace
-                                    ? Icons.radio_button_checked
-                                    : Icons.radio_button_unchecked,
-                                size: 24,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              const SizedBox(width: Constants.spacingSmall),
-                              Expanded(
-                                flex: 1,
-                                child: Text(
-                                  name ?? '',
-                                  style: noramlTextStyle(
-                                    context,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
+                          return AppListItem(
+                            onTap: () {
+                              _changeNamespace(name ?? 'default');
+                            },
+                            child: Row(
+                              children: [
+                                Icon(
+                                  name != null &&
+                                          name ==
+                                              clustersRepository
+                                                  .getCluster(
+                                                    clustersRepository
+                                                        .activeClusterId,
+                                                  )!
+                                                  .namespace
+                                      ? Icons.radio_button_checked
+                                      : Icons.radio_button_unchecked,
+                                  size: 24,
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              );
-          }
-        },
+                                const SizedBox(width: Constants.spacingSmall),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    name ?? '',
+                                    style: noramlTextStyle(
+                                      context,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+              }
+            },
+          ),
+        ),
       ),
     );
   }

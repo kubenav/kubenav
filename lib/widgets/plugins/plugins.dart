@@ -30,13 +30,14 @@ class Plugins extends StatelessWidget {
 
     if (clustersRepository.clusters.isEmpty) {
       return [
-        const SizedBox(height: Constants.spacingSmall),
-        const AppNoClustersWidget(),
+        const Padding(
+          padding: EdgeInsets.all(Constants.spacingMiddle),
+          child: AppNoClustersWidget(),
+        ),
       ];
     }
 
     return [
-      const SizedBox(height: Constants.spacingSmall),
       AppVertialListSimpleWidget(
         title: 'Plugins',
         items: [

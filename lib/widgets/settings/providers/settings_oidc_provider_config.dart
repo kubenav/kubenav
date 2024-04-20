@@ -393,8 +393,8 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
   Widget _buildPkceMethod() {
     if (_pkceMethod == '') {
       return Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: Constants.spacingSmall,
+        padding: const EdgeInsets.only(
+          top: Constants.spacingMiddle,
         ),
         child: TextFormField(
           controller: _clientSecretController,
@@ -416,77 +416,61 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
   List<Widget> _buildDeviceAuth() {
     if (_deviceAuthData != null) {
       return [
-        const Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: Constants.spacingSmall,
+        const SizedBox(height: Constants.spacingMiddle),
+        const Text(
+          'Copy the code shown in the input field from below and click the verify button to verify your device.',
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        TextFormField(
+          initialValue: _deviceAuthData?.userCode ?? '',
+          keyboardType: TextInputType.text,
+          autocorrect: false,
+          enableSuggestions: false,
+          maxLines: 1,
+          readOnly: true,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: 'Code',
           ),
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            minimumSize: const Size.fromHeight(40),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                Constants.sizeBorderRadius,
+              ),
+            ),
+          ),
+          onPressed: _verifyDeviceFlow,
           child: Text(
-            'Copy the code shown in the input field from below and click the verify button to verify your device.',
+            'Verify',
+            style: primaryTextStyle(
+              context,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+            textAlign: TextAlign.center,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: Constants.spacingSmall,
-          ),
-          child: TextFormField(
-            initialValue: _deviceAuthData?.userCode ?? '',
-            keyboardType: TextInputType.text,
-            autocorrect: false,
-            enableSuggestions: false,
-            maxLines: 1,
-            readOnly: true,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Code',
+        const SizedBox(height: Constants.spacingMiddle),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text('Use Access Token instead of ID Token'),
+            Switch(
+              activeColor: Theme.of(context).colorScheme.primary,
+              onChanged: (val) => {
+                setState(() {
+                  _useAccessToken = !_useAccessToken;
+                }),
+              },
+              value: _useAccessToken,
             ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: Constants.spacingSmall,
-          ),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              minimumSize: const Size.fromHeight(40),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  Constants.sizeBorderRadius,
-                ),
-              ),
-            ),
-            onPressed: _verifyDeviceFlow,
-            child: Text(
-              'Verify',
-              style: primaryTextStyle(
-                context,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: Constants.spacingSmall,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text('Use Access Token instead of ID Token'),
-              Switch(
-                activeColor: Theme.of(context).colorScheme.primary,
-                onChanged: (val) => {
-                  setState(() {
-                    _useAccessToken = !_useAccessToken;
-                  }),
-                },
-                value: _useAccessToken,
-              ),
-            ],
-          ),
+          ],
         ),
       ];
     } else {
@@ -500,46 +484,38 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
   List<Widget> _buildFormForFlow() {
     if (_flow == OIDCFlow.device) {
       return [
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: Constants.spacingSmall,
-          ),
-          child: TextFormField(
-            controller: _scopesController,
-            keyboardType: TextInputType.text,
-            autocorrect: false,
-            enableSuggestions: false,
-            maxLines: 1,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Scopes (optional)',
-            ),
+        const SizedBox(height: Constants.spacingMiddle),
+        TextFormField(
+          controller: _scopesController,
+          keyboardType: TextInputType.text,
+          autocorrect: false,
+          enableSuggestions: false,
+          maxLines: 1,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: 'Scopes (optional)',
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: Constants.spacingSmall,
+        const SizedBox(height: Constants.spacingMiddle),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            minimumSize: const Size.fromHeight(40),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                Constants.sizeBorderRadius,
+              ),
+            ),
           ),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              minimumSize: const Size.fromHeight(40),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  Constants.sizeBorderRadius,
-                ),
-              ),
+          onPressed: _initDeviceFlow,
+          child: Text(
+            'Initialize Device Flow',
+            style: primaryTextStyle(
+              context,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
-            onPressed: _initDeviceFlow,
-            child: Text(
-              'Initialize Device Flow',
-              style: primaryTextStyle(
-                context,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-              textAlign: TextAlign.center,
-            ),
+            textAlign: TextAlign.center,
           ),
         ),
         ..._buildDeviceAuth(),
@@ -771,99 +747,91 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
       actionIsLoading: _isLoading,
       child: Form(
         key: _providerConfigFormKey,
-        child: ListView(
-          shrinkWrap: false,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: TextFormField(
-                controller: _nameController,
-                keyboardType: TextInputType.text,
-                autocorrect: false,
-                enableSuggestions: false,
-                maxLines: 1,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Name',
-                ),
-                validator: _validator,
-              ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: Constants.spacingMiddle,
+              bottom: Constants.spacingMiddle,
+              left: Constants.spacingMiddle,
+              right: Constants.spacingMiddle,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text('Authentication Flow'),
-                  DropdownButton(
-                    value: _flow,
-                    underline: Container(
-                      height: 2,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    onChanged: (OIDCFlow? newValue) {
-                      setState(() {
-                        _flow = newValue ?? OIDCFlow.standard;
-                      });
-                    },
-                    items: OIDCFlow.values.map((value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Text(
-                          value.pretty(),
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .extension<CustomColors>()!
-                                .textPrimary,
-                          ),
-                        ),
-                      );
-                    }).toList(),
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Name',
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: TextFormField(
-                controller: _discoveryURLController,
-                keyboardType: TextInputType.text,
-                autocorrect: false,
-                enableSuggestions: false,
-                maxLines: 1,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Discovery URL',
+                  validator: _validator,
                 ),
-                validator: _validator,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: TextFormField(
-                controller: _clientIDController,
-                keyboardType: TextInputType.text,
-                autocorrect: false,
-                enableSuggestions: false,
-                maxLines: 1,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Client ID',
+                const SizedBox(height: Constants.spacingMiddle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Authentication Flow'),
+                    DropdownButton(
+                      value: _flow,
+                      underline: Container(
+                        height: 2,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onChanged: (OIDCFlow? newValue) {
+                        setState(() {
+                          _flow = newValue ?? OIDCFlow.standard;
+                        });
+                      },
+                      items: OIDCFlow.values.map((value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(
+                            value.pretty(),
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .extension<CustomColors>()!
+                                  .textPrimary,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
-                validator: _validator,
-              ),
+                const SizedBox(height: Constants.spacingMiddle),
+                TextFormField(
+                  controller: _discoveryURLController,
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Discovery URL',
+                  ),
+                  validator: _validator,
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                TextFormField(
+                  controller: _clientIDController,
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Client ID',
+                  ),
+                  validator: _validator,
+                ),
+                ..._buildFormForFlow(),
+              ],
             ),
-            ..._buildFormForFlow(),
-          ],
+          ),
         ),
       ),
     );

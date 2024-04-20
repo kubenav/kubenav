@@ -116,7 +116,7 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
       return Container();
     }
 
-    return Wrap(
+    return Column(
       children: [
         Padding(
           padding: const EdgeInsets.only(
@@ -215,6 +215,7 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
             ),
           ),
         ),
+        const SizedBox(height: Constants.spacingMiddle),
       ],
     );
   }

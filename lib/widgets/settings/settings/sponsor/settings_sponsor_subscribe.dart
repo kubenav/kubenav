@@ -72,8 +72,8 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
   Widget _buildIOSNotes() {
     if (Platform.isIOS) {
       return Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: Constants.spacingSmall,
+        padding: const EdgeInsets.only(
+          top: Constants.spacingMiddle,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -174,36 +174,38 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
         _subscribe();
       },
       actionIsLoading: _isLoading,
-      child: Form(
-        child: ListView(
-          shrinkWrap: false,
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Text(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: Constants.spacingMiddle,
+            bottom: Constants.spacingMiddle,
+            left: Constants.spacingMiddle,
+            right: Constants.spacingMiddle,
+          ),
+          child: Column(
+            children: [
+              const Text(
                 'We believe in open source. This means that we will never put any features behind a paywall. You will always be able to use all features of kubenav for free.',
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
+              const Padding(
+                padding: EdgeInsets.only(
+                  top: Constants.spacingMiddle,
+                ),
+                child: Text(
+                  'With the monthly and yearly sponsoring you can remove the "Sponsor" banner in the settings screen and support the development of kubenav.',
+                ),
               ),
-              child: Text(
-                'With the monthly and yearly sponsoring you can remove the "Sponsor" banner in the settings screen and support the development of kubenav.',
+              const Padding(
+                padding: EdgeInsets.only(
+                  top: Constants.spacingMiddle,
+                ),
+                child: Text(
+                  'You can also support us by reporting bugs, submitting fixes, proposing new features or by becoming a maintainer. For more information you can have a look at the contributing guide in our GitHub repository. The repository is available at https://github.com/kubenav/kubenav.',
+                ),
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Text(
-                'You can also support us by reporting bugs, submitting fixes, proposing new features or by becoming a maintainer. For more information you can have a look at the contributing guide in our GitHub repository. The repository is available at https://github.com/kubenav/kubenav.',
-              ),
-            ),
-            _buildIOSNotes(),
-          ],
+              _buildIOSNotes(),
+            ],
+          ),
         ),
       ),
     );

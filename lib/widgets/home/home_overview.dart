@@ -25,8 +25,10 @@ class HomeOverview extends StatelessWidget {
 
     if (clustersRepository.clusters.isEmpty) {
       return [
-        const SizedBox(height: Constants.spacingSmall),
-        const AppNoClustersWidget(),
+        const Padding(
+          padding: EdgeInsets.all(Constants.spacingMiddle),
+          child: AppNoClustersWidget(),
+        ),
       ];
     }
 
@@ -37,7 +39,7 @@ class HomeOverview extends StatelessWidget {
       ),
       const SizedBox(height: Constants.spacingMiddle),
       const OverviewEvents(),
-      const SizedBox(height: Constants.spacingSmall),
+      const SizedBox(height: Constants.spacingMiddle),
     ];
   }
 

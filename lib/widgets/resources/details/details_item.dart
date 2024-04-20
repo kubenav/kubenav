@@ -41,14 +41,12 @@ class DetailsItemWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.details,
-    this.smallPadding = false,
     this.goTo,
     this.goToOnTap,
   });
 
   final String title;
   final List<DetailsItemModel> details;
-  final bool smallPadding;
   final String? goTo;
   final void Function()? goToOnTap;
 
@@ -145,16 +143,7 @@ class DetailsItemWidget extends StatelessWidget {
     return Wrap(
       children: [
         Padding(
-          padding: EdgeInsets.only(
-            top: Constants.spacingMiddle,
-            left: smallPadding
-                ? Constants.spacingExtraSmall
-                : Constants.spacingMiddle,
-            right: smallPadding
-                ? Constants.spacingExtraSmall
-                : Constants.spacingMiddle,
-            bottom: Constants.spacingMiddle,
-          ),
+          padding: const EdgeInsets.all(Constants.spacingMiddle),
           child: Row(
             children: [
               Expanded(
@@ -169,13 +158,9 @@ class DetailsItemWidget extends StatelessWidget {
         ),
         Container(
           width: double.infinity,
-          margin: EdgeInsets.only(
-            left: smallPadding
-                ? Constants.spacingExtraSmall
-                : Constants.spacingMiddle,
-            right: smallPadding
-                ? Constants.spacingExtraSmall
-                : Constants.spacingMiddle,
+          margin: const EdgeInsets.only(
+            left: Constants.spacingMiddle,
+            right: Constants.spacingMiddle,
           ),
           padding: const EdgeInsets.all(Constants.spacingListItemContent),
           decoration: BoxDecoration(

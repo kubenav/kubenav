@@ -137,27 +137,27 @@ class _DetailsDeleteResourceState extends State<DetailsDeleteResource> {
         _deleteResource();
       },
       actionIsLoading: _isLoading,
-      child: Form(
-        child: ListView(
-          shrinkWrap: false,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: Constants.spacingMiddle,
+            bottom: Constants.spacingMiddle,
+            left: Constants.spacingMiddle,
+            right: Constants.spacingMiddle,
+          ),
+          child: Column(
+            children: [
+              Container(
+                child: widget.namespace != null
+                    ? Text(
+                        'Do you really want to delete ${widget.name} in namespace ${widget.namespace}?',
+                      )
+                    : Text(
+                        'Do you really want to delete ${widget.name}?',
+                      ),
               ),
-              child: widget.namespace != null
-                  ? Text(
-                      'Do you really want to delete ${widget.name} in namespace ${widget.namespace}?',
-                    )
-                  : Text(
-                      'Do you really want to delete ${widget.name}?',
-                    ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Row(
+              const SizedBox(height: Constants.spacingMiddle),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -173,8 +173,8 @@ class _DetailsDeleteResourceState extends State<DetailsDeleteResource> {
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

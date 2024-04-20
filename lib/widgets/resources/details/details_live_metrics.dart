@@ -239,39 +239,45 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
         length: 2,
         child: Column(
           children: [
-            SizedBox(
-              height: 32,
-              child: TabBar(
-                isScrollable: false,
-                tabAlignment: TabAlignment.fill,
-                labelColor: Theme.of(context).colorScheme.onPrimary,
-                unselectedLabelColor: Theme.of(context).colorScheme.primary,
-                labelPadding: EdgeInsets.zero,
-                indicatorPadding: const EdgeInsets.symmetric(horizontal: 5),
-                indicatorSize: TabBarIndicatorSize.tab,
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    Constants.sizeBorderRadius,
+            Padding(
+              padding: const EdgeInsets.only(
+                top: Constants.spacingMiddle,
+                bottom: Constants.spacingMiddle,
+                left: Constants.spacingMiddle,
+                right: Constants.spacingMiddle,
+              ),
+              child: SizedBox(
+                height: 32,
+                child: TabBar(
+                  isScrollable: false,
+                  tabAlignment: TabAlignment.fill,
+                  labelColor: Theme.of(context).colorScheme.onPrimary,
+                  unselectedLabelColor: Theme.of(context).colorScheme.primary,
+                  labelPadding: EdgeInsets.zero,
+                  indicatorPadding: const EdgeInsets.symmetric(horizontal: 5),
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      Constants.sizeBorderRadius,
+                    ),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                  color: Theme.of(context).colorScheme.primary,
+                  tabs: const [
+                    Tab(text: 'CPU'),
+                    Tab(text: 'Memory'),
+                  ],
                 ),
-                tabs: const [
-                  Tab(text: 'CPU'),
-                  Tab(text: 'Memory'),
-                ],
               ),
             ),
-            const SizedBox(height: Constants.spacingMiddle),
             Expanded(
               child: TabBarView(
                 children: [
                   SingleChildScrollView(
                     child: Container(
                       margin: const EdgeInsets.only(
-                        top: Constants.spacingSmall,
                         bottom: Constants.spacingMiddle,
-                        left: Constants.spacingExtraSmall,
-                        right: Constants.spacingExtraSmall,
+                        left: Constants.spacingMiddle,
+                        right: Constants.spacingMiddle,
                       ),
                       padding: const EdgeInsets.all(
                         Constants.spacingListItemContent,
@@ -442,10 +448,9 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
                   SingleChildScrollView(
                     child: Container(
                       margin: const EdgeInsets.only(
-                        top: Constants.spacingSmall,
                         bottom: Constants.spacingMiddle,
-                        left: Constants.spacingExtraSmall,
-                        right: Constants.spacingExtraSmall,
+                        left: Constants.spacingMiddle,
+                        right: Constants.spacingMiddle,
                       ),
                       padding: const EdgeInsets.all(
                         Constants.spacingListItemContent,
