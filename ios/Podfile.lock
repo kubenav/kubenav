@@ -1,5 +1,5 @@
 PODS:
-  - ASN1Swift (1.2.3)
+  - ASN1Swift (1.2.6)
   - file_picker (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -17,10 +17,10 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - TPInAppReceipt (3.3.4):
-    - TPInAppReceipt/Core (= 3.3.4)
-  - TPInAppReceipt/Core (3.3.4):
-    - ASN1Swift (~> 1.2.3)
+  - TPInAppReceipt (3.4.1):
+    - TPInAppReceipt/Core (= 3.4.1)
+  - TPInAppReceipt/Core (3.4.1):
+    - ASN1Swift (~> 1.2.6)
   - url_launcher_ios (0.0.1):
     - Flutter
 
@@ -62,7 +62,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  ASN1Swift: 73ba94f1d97c1c1d059d180708ad42845aeac4f9
+  ASN1Swift: aa0443dd848f4cb46d1d43ca7b2dea0be2ad13c4
   file_picker: c79185e70b9b45728cde2a8d8da454e0cb43f287
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_native_splash: edf599c81f74d093a4daf8e17bd7a018854bc778
@@ -71,7 +71,7 @@ SPEC CHECKSUMS:
   local_auth_darwin: c7e464000a6a89e952235699e32b329457608d98
   package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
-  TPInAppReceipt: 75ff97f2484a463cf46c172fe7f94225612aeda1
+  TPInAppReceipt: 22dbc616bcd6c61672ebe062e60b6329a2af6323
   url_launcher_ios: 6116280ddcfe98ab8820085d8d76ae7449447586
 
 PODFILE CHECKSUM: 5940ec6229ee284fb278e545e561ade0256fc5eb
