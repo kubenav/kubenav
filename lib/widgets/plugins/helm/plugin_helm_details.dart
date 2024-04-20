@@ -13,6 +13,7 @@ import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources/general.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_manifest.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_template.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_values.dart';
 import 'package:kubenav/widgets/resources/details/details_item.dart';
@@ -37,7 +38,34 @@ List<AppResourceActionsModel> helmDetailsActions(
         showModal(
           context,
           PluginHelmDetailsValues(
-            release: release,
+            name: release.name ?? '',
+            values: release.config,
+          ),
+        );
+      },
+    ),
+    AppResourceActionsModel(
+      title: 'Default Values',
+      icon: Icons.description,
+      onTap: () {
+        showModal(
+          context,
+          PluginHelmDetailsValues(
+            name: release.name ?? '',
+            values: release.chart?.values,
+          ),
+        );
+      },
+    ),
+    AppResourceActionsModel(
+      title: 'Manifest',
+      icon: Icons.description,
+      onTap: () {
+        showModal(
+          context,
+          PluginHelmDetailsManifest(
+            name: release.name ?? '',
+            manifest: release.manifest ?? '',
           ),
         );
       },
