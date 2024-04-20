@@ -208,10 +208,6 @@ class _ResourcesListState extends State<ResourcesList> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<AppRepository>(
-      context,
-      listen: true,
-    );
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,

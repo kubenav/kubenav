@@ -450,10 +450,6 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<AppRepository>(
-      context,
-      listen: true,
-    );
     Provider.of<ClustersRepository>(
       context,
       listen: true,
@@ -543,6 +539,10 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
                         );
                       }
 
+                      Provider.of<AppRepository>(
+                        context,
+                        listen: true,
+                      );
                       Provider.of<BookmarksRepository>(
                         context,
                         listen: true,
