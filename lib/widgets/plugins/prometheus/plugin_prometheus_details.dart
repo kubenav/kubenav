@@ -164,8 +164,9 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
-                            padding:
-                                const EdgeInsets.all(Constants.spacingMiddle),
+                            padding: const EdgeInsets.all(
+                              Constants.spacingMiddle,
+                            ),
                             child: CircularProgressIndicator(
                               color: Theme.of(context).colorScheme.primary,
                             ),

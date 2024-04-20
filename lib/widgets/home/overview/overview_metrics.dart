@@ -92,11 +92,8 @@ class OverviewMetrics extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(
-            top: Constants.spacingMiddle,
-            left: Constants.spacingMiddle,
-            right: Constants.spacingMiddle,
-            bottom: Constants.spacingMiddle,
+          padding: const EdgeInsets.all(
+            Constants.spacingMiddle,
           ),
           child: Row(
             children: [
@@ -109,46 +106,52 @@ class OverviewMetrics extends StatelessWidget {
             ],
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            buildCard(
-              context,
-              'CPU',
-              Icons.bar_chart,
-              () {
-                showMetrics(
-                  context,
-                  MetricType.cpu,
-                  Icons.bar_chart,
-                );
-              },
-            ),
-            buildCard(
-              context,
-              'Memory',
-              Icons.area_chart,
-              () {
-                showMetrics(
-                  context,
-                  MetricType.memory,
-                  Icons.area_chart,
-                );
-              },
-            ),
-            buildCard(
-              context,
-              'Pods',
-              Icons.pie_chart,
-              () {
-                showMetrics(
-                  context,
-                  MetricType.pods,
-                  Icons.pie_chart,
-                );
-              },
-            ),
-          ],
+        Padding(
+          padding: const EdgeInsets.only(
+            left: Constants.spacingMiddle,
+            right: Constants.spacingMiddle,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              buildCard(
+                context,
+                'CPU',
+                Icons.bar_chart,
+                () {
+                  showMetrics(
+                    context,
+                    MetricType.cpu,
+                    Icons.bar_chart,
+                  );
+                },
+              ),
+              buildCard(
+                context,
+                'Memory',
+                Icons.area_chart,
+                () {
+                  showMetrics(
+                    context,
+                    MetricType.memory,
+                    Icons.area_chart,
+                  );
+                },
+              ),
+              buildCard(
+                context,
+                'Pods',
+                Icons.pie_chart,
+                () {
+                  showMetrics(
+                    context,
+                    MetricType.pods,
+                    Icons.pie_chart,
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ],
     );

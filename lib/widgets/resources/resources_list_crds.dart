@@ -274,11 +274,8 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                       return Wrap(
                         children: [
                           Container(
-                            padding: const EdgeInsets.only(
-                              top: Constants.spacingMiddle,
-                              bottom: Constants.spacingMiddle,
-                              left: Constants.spacingMiddle,
-                              right: Constants.spacingMiddle,
+                            padding: const EdgeInsets.all(
+                              Constants.spacingMiddle,
                             ),
                             color: Theme.of(context).colorScheme.primary,
                             child: TextField(

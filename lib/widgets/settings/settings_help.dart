@@ -20,74 +20,80 @@ class SettingsHelp extends StatelessWidget {
   const SettingsHelp({super.key});
 
   Widget buildHelpSection(BuildContext context, int sectionIndex) {
-    return AppVertialListSimpleWidget(
-      title: help_model.Help.list[sectionIndex].title,
-      items: List.generate(
-        help_model.Help.list[sectionIndex].items.length,
-        (itemIndex) => AppVertialListSimpleModel(
-          onTap: () {
-            showModal(
-              context,
-              AppBottomSheetWidget(
-                title:
-                    help_model.Help.list[sectionIndex].items[itemIndex].title,
-                subtitle: 'Help',
-                icon: help_model.Help.list[sectionIndex].items[itemIndex].icon,
-                closePressed: () {
-                  Navigator.pop(context);
-                },
-                actionText: 'Close',
-                actionPressed: () {
-                  Navigator.pop(context);
-                },
-                actionIsLoading: false,
-                child: Markdown(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: Constants.spacingSmall,
-                  ),
-                  styleSheet: MarkdownStyleSheet(
-                    code: TextStyle(
-                      fontFamily: getMonospaceFontFamily(),
-                      color: const Color(0xffd8dee9),
-                      backgroundColor: const Color(0xff2e3440),
-                    ),
-                    codeblockDecoration: const BoxDecoration(
-                      color: Color(0xff2e3440),
-                    ),
-                  ),
-                  selectable: true,
-                  data: help_model
-                      .Help.list[sectionIndex].items[itemIndex].markdown,
-                ),
-              ),
-            );
-          },
-          children: [
-            Icon(
-              help_model.Help.list[sectionIndex].items[itemIndex].icon,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(width: Constants.spacingSmall),
-            Expanded(
-              flex: 1,
-              child: Text(
-                help_model.Help.list[sectionIndex].items[itemIndex].title,
-                style: noramlTextStyle(
+    return Column(
+      children: [
+        AppVertialListSimpleWidget(
+          title: help_model.Help.list[sectionIndex].title,
+          items: List.generate(
+            help_model.Help.list[sectionIndex].items.length,
+            (itemIndex) => AppVertialListSimpleModel(
+              onTap: () {
+                showModal(
                   context,
+                  AppBottomSheetWidget(
+                    title: help_model
+                        .Help.list[sectionIndex].items[itemIndex].title,
+                    subtitle: 'Help',
+                    icon: help_model
+                        .Help.list[sectionIndex].items[itemIndex].icon,
+                    closePressed: () {
+                      Navigator.pop(context);
+                    },
+                    actionText: 'Close',
+                    actionPressed: () {
+                      Navigator.pop(context);
+                    },
+                    actionIsLoading: false,
+                    child: Markdown(
+                      padding: const EdgeInsets.all(
+                        Constants.spacingMiddle,
+                      ),
+                      styleSheet: MarkdownStyleSheet(
+                        code: TextStyle(
+                          fontFamily: getMonospaceFontFamily(),
+                          color: const Color(0xffd8dee9),
+                          backgroundColor: const Color(0xff2e3440),
+                        ),
+                        codeblockDecoration: const BoxDecoration(
+                          color: Color(0xff2e3440),
+                        ),
+                      ),
+                      selectable: true,
+                      data: help_model
+                          .Help.list[sectionIndex].items[itemIndex].markdown,
+                    ),
+                  ),
+                );
+              },
+              children: [
+                Icon(
+                  help_model.Help.list[sectionIndex].items[itemIndex].icon,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
-              ),
+                const SizedBox(width: Constants.spacingSmall),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    help_model.Help.list[sectionIndex].items[itemIndex].title,
+                    style: noramlTextStyle(
+                      context,
+                    ),
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  color: Theme.of(context)
+                      .extension<CustomColors>()!
+                      .textPrimary
+                      .withOpacity(Constants.opacityIcon),
+                  size: 16,
+                ),
+              ],
             ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: Theme.of(context)
-                  .extension<CustomColors>()!
-                  .textPrimary
-                  .withOpacity(Constants.opacityIcon),
-              size: 16,
-            ),
-          ],
+          ),
         ),
-      ),
+        const SizedBox(height: Constants.spacingMiddle),
+      ],
     );
   }
 
@@ -103,21 +109,10 @@ class SettingsHelp extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: Constants.spacingMiddle,
-                  bottom: Constants.spacingMiddle,
-                ),
-                child: Column(
-                  children: List.generate(
-                    help_model.Help.list.length,
-                    (index) => buildHelpSection(context, index),
-                  ),
-                ),
-              ),
-              const SizedBox(height: Constants.spacingSmall),
-            ],
+            children: List.generate(
+              help_model.Help.list.length,
+              (index) => buildHelpSection(context, index),
+            ),
           ),
         ),
       ),

@@ -473,58 +473,36 @@ class _OverviewMetricState extends State<OverviewMetric> {
         Navigator.pop(context);
       },
       actionIsLoading: false,
-      child: FutureBuilder(
-        future: _futureFetchMetrics,
-        builder: (
-          BuildContext context,
-          AsyncSnapshot<Metrics> snapshot,
-        ) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.waiting:
-              return Flex(
-                direction: Axis.vertical,
-                children: [
-                  Expanded(
-                    child: Wrap(
-                      children: [
-                        CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            default:
-              if (snapshot.hasError) {
-                return Flex(
-                  direction: Axis.vertical,
-                  children: [
-                    Expanded(
-                      child: Wrap(
-                        children: [
-                          AppErrorWidget(
-                            message: 'Could not load metrics',
-                            details: snapshot.error.toString(),
-                            icon: widget.icon,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              }
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: Constants.spacingMiddle,
+            bottom: Constants.spacingMiddle,
+            left: Constants.spacingMiddle,
+            right: Constants.spacingMiddle,
+          ),
+          child: FutureBuilder(
+            future: _futureFetchMetrics,
+            builder: (
+              BuildContext context,
+              AsyncSnapshot<Metrics> snapshot,
+            ) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                case ConnectionState.waiting:
+                  return CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                  );
+                default:
+                  if (snapshot.hasError) {
+                    return AppErrorWidget(
+                      message: 'Could not load metrics',
+                      details: snapshot.error.toString(),
+                      icon: widget.icon,
+                    );
+                  }
 
-              return ListView(
-                shrinkWrap: false,
-                children: [
-                  const SizedBox(height: Constants.spacingMiddle),
-                  Container(
-                    margin: const EdgeInsets.only(
-                      left: Constants.spacingExtraSmall,
-                      right: Constants.spacingExtraSmall,
-                    ),
+                  return Container(
                     padding: const EdgeInsets.all(
                       Constants.spacingListItemContent,
                     ),
@@ -683,12 +661,11 @@ class _OverviewMetricState extends State<OverviewMetric> {
                         ...buildLegend(snapshot.data!),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: Constants.spacingMiddle),
-                ],
-              );
-          }
-        },
+                  );
+              }
+            },
+          ),
+        ),
       ),
     );
   }

@@ -27,11 +27,8 @@ class DetailsItemConditions extends StatelessWidget {
           Wrap(
             children: [
               Padding(
-                padding: const EdgeInsets.only(
-                  top: Constants.spacingMiddle,
-                  left: Constants.spacingMiddle,
-                  right: Constants.spacingMiddle,
-                  bottom: Constants.spacingMiddle,
+                padding: const EdgeInsets.all(
+                  Constants.spacingMiddle,
                 ),
                 child: Row(
                   children: [
@@ -54,7 +51,7 @@ class DetailsItemConditions extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   crossAxisCount: 2,
                   childAspectRatio: 0.25,
-                  mainAxisSpacing: 16.0,
+                  mainAxisSpacing: Constants.spacingMiddle,
                   children: List.generate(
                     item['status']['conditions'].length,
                     (index) {

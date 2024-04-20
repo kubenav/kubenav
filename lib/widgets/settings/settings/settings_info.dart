@@ -310,25 +310,22 @@ class _SettingsInfoState extends State<SettingsInfo> {
                   Navigator.pop(context);
                 },
                 actionIsLoading: false,
-                child: Form(
-                  key: const Key('settings/license'),
-                  child: ListView(
-                    shrinkWrap: false,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                        ),
-                        child: Text(
-                          licenseText,
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .extension<CustomColors>()!
-                                .textPrimary,
-                          ),
-                        ),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: Constants.spacingMiddle,
+                      bottom: Constants.spacingMiddle,
+                      left: Constants.spacingMiddle,
+                      right: Constants.spacingMiddle,
+                    ),
+                    child: Text(
+                      licenseText,
+                      style: TextStyle(
+                        color: Theme.of(context)
+                            .extension<CustomColors>()!
+                            .textPrimary,
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),

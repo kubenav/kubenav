@@ -30,84 +30,77 @@ class SettingsSponsorBanner extends StatelessWidget {
         DateTime.now().millisecondsSinceEpoch >
             appRepository.settings.sponsorReminder) {
       return Container(
-        padding: const EdgeInsets.only(
-          left: Constants.spacingMiddle,
-          right: Constants.spacingMiddle,
+        margin: const EdgeInsets.all(
+          Constants.spacingMiddle,
         ),
-        child: Container(
-          margin: const EdgeInsets.only(
-            top: Constants.spacingSmall,
-            bottom: Constants.spacingSmall,
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).extension<CustomColors>()!.shadow,
+              blurRadius: Constants.sizeBorderBlurRadius,
+              spreadRadius: Constants.sizeBorderSpreadRadius,
+              offset: const Offset(0.0, 0.0),
+            ),
+          ],
+          color: Theme.of(context).colorScheme.background,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(Constants.sizeBorderRadius),
           ),
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Theme.of(context).extension<CustomColors>()!.shadow,
-                blurRadius: Constants.sizeBorderBlurRadius,
-                spreadRadius: Constants.sizeBorderSpreadRadius,
-                offset: const Offset(0.0, 0.0),
+        ),
+        child: InkWell(
+          onTap: () {
+            showActions(
+              context,
+              const SettingsSponsorActions(
+                showDismiss: true,
               ),
+            );
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(Constants.sizeBorderRadius),
+                    topRight: Radius.circular(Constants.sizeBorderRadius),
+                  ),
+                ),
+                height: 140,
+                width: MediaQuery.of(context).size.width,
+                child: Icon(
+                  Icons.favorite,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  size: 108,
+                ),
+              ),
+              const SizedBox(height: Constants.spacingSmall),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: Constants.spacingSmall,
+                ),
+                child: Text(
+                  'Sponsor',
+                  style: primaryTextStyle(
+                    context,
+                  ),
+                ),
+              ),
+              const SizedBox(height: Constants.spacingExtraSmall),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: Constants.spacingSmall,
+                ),
+                child: Text(
+                  'Support the development of kubenav by becoming a sponsor.',
+                  style: secondaryTextStyle(
+                    context,
+                  ),
+                ),
+              ),
+              const SizedBox(height: Constants.spacingSmall),
             ],
-            color: Theme.of(context).colorScheme.background,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(Constants.sizeBorderRadius),
-            ),
-          ),
-          child: InkWell(
-            onTap: () {
-              showActions(
-                context,
-                const SettingsSponsorActions(
-                  showDismiss: true,
-                ),
-              );
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(Constants.sizeBorderRadius),
-                      topRight: Radius.circular(Constants.sizeBorderRadius),
-                    ),
-                  ),
-                  height: 140,
-                  width: MediaQuery.of(context).size.width,
-                  child: Icon(
-                    Icons.favorite,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    size: 108,
-                  ),
-                ),
-                const SizedBox(height: Constants.spacingSmall),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: Constants.spacingSmall,
-                  ),
-                  child: Text(
-                    'Sponsor',
-                    style: primaryTextStyle(
-                      context,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: Constants.spacingExtraSmall),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: Constants.spacingSmall,
-                  ),
-                  child: Text(
-                    'Support the development of kubenav by becoming a sponsor.',
-                    style: secondaryTextStyle(
-                      context,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: Constants.spacingSmall),
-              ],
-            ),
           ),
         ),
       );

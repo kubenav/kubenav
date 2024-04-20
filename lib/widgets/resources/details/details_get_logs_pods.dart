@@ -86,7 +86,7 @@ class _DetailsGetLogsPodsState extends State<DetailsGetLogsPods> {
     } catch (err) {
       Logger.log(
         'DetailsGetLogsPods _getPods',
-        'Could not get clusters',
+        'Could not get pods',
         err,
       );
       setState(() {
@@ -102,110 +102,80 @@ class _DetailsGetLogsPodsState extends State<DetailsGetLogsPods> {
   /// which can be selected by the user to add them to the app.
   Widget _buildContent() {
     if (_isLoading) {
-      return Flex(
-        direction: Axis.vertical,
-        children: [
-          Expanded(
-            child: Wrap(
-              children: [
-                CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ],
-            ),
-          ),
-        ],
+      return CircularProgressIndicator(
+        color: Theme.of(context).colorScheme.primary,
       );
     }
 
     if (_error != '') {
-      return Flex(
-        direction: Axis.vertical,
-        children: [
-          Expanded(
-            child: Wrap(
-              children: [
-                AppErrorWidget(
-                  message: 'Could not load clusters',
-                  details: _error,
-                  icon: ClusterProviderType.google.icon(),
-                ),
-              ],
-            ),
-          ),
-        ],
+      return AppErrorWidget(
+        message: 'Could not load Pods',
+        details: _error,
+        icon: ClusterProviderType.google.icon(),
       );
     }
 
-    return ListView(
-      children: [
-        ...List.generate(
-          _pods.length,
-          (index) {
-            return Container(
-              margin: const EdgeInsets.only(
-                top: Constants.spacingSmall,
-                bottom: Constants.spacingSmall,
-                left: Constants.spacingExtraSmall,
-                right: Constants.spacingExtraSmall,
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.all(0),
+      separatorBuilder: (context, index) {
+        return const SizedBox(height: Constants.spacingMiddle);
+      },
+      itemCount: _pods.length,
+      itemBuilder: (context, index) {
+        return Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).extension<CustomColors>()!.shadow,
+                blurRadius: Constants.sizeBorderBlurRadius,
+                spreadRadius: Constants.sizeBorderSpreadRadius,
+                offset: const Offset(0.0, 0.0),
               ),
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).extension<CustomColors>()!.shadow,
-                    blurRadius: Constants.sizeBorderBlurRadius,
-                    spreadRadius: Constants.sizeBorderSpreadRadius,
-                    offset: const Offset(0.0, 0.0),
-                  ),
-                ],
-                color: Theme.of(context).colorScheme.background,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(Constants.sizeBorderRadius),
-                ),
+            ],
+            color: Theme.of(context).colorScheme.background,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(Constants.sizeBorderRadius),
+            ),
+          ),
+          child: CheckboxListTile(
+            controlAffinity: ListTileControlAffinity.leading,
+            value: _selectedPods
+                    .where(
+                      (p) => p.metadata?.name == _pods[index].metadata?.name,
+                    )
+                    .toList()
+                    .length ==
+                1,
+            onChanged: (bool? value) {
+              if (value == true) {
+                setState(() {
+                  _selectedPods.add(_pods[index]);
+                });
+              }
+              if (value == false) {
+                setState(() {
+                  _selectedPods = _selectedPods
+                      .where(
+                        (p) => p.metadata?.name != _pods[index].metadata?.name,
+                      )
+                      .toList();
+                });
+              }
+            },
+            title: Text(
+              Characters(
+                _pods[index].metadata?.name ?? '',
+              ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
+              style: noramlTextStyle(
+                context,
               ),
-              child: CheckboxListTile(
-                controlAffinity: ListTileControlAffinity.leading,
-                value: _selectedPods
-                        .where(
-                          (p) =>
-                              p.metadata?.name == _pods[index].metadata?.name,
-                        )
-                        .toList()
-                        .length ==
-                    1,
-                onChanged: (bool? value) {
-                  if (value == true) {
-                    setState(() {
-                      _selectedPods.add(_pods[index]);
-                    });
-                  }
-                  if (value == false) {
-                    setState(() {
-                      _selectedPods = _selectedPods
-                          .where(
-                            (p) =>
-                                p.metadata?.name != _pods[index].metadata?.name,
-                          )
-                          .toList();
-                    });
-                  }
-                },
-                title: Text(
-                  Characters(
-                    _pods[index].metadata?.name ?? '',
-                  )
-                      .replaceAll(Characters(''), Characters('\u{200B}'))
-                      .toString(),
-                  style: noramlTextStyle(
-                    context,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            );
-          },
-        ),
-      ],
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -242,7 +212,17 @@ class _DetailsGetLogsPodsState extends State<DetailsGetLogsPods> {
         }
       },
       actionIsLoading: _isLoading,
-      child: _buildContent(),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: Constants.spacingMiddle,
+            bottom: Constants.spacingMiddle,
+            left: Constants.spacingMiddle,
+            right: Constants.spacingMiddle,
+          ),
+          child: _buildContent(),
+        ),
+      ),
     );
   }
 }

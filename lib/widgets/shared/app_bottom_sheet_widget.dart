@@ -89,119 +89,129 @@ class AppBottomSheetWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.only(
-            left: Constants.spacingMiddle,
-            right: Constants.spacingMiddle,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.only(
-                  top: Constants.spacingMiddle,
-                  bottom: Constants.spacingMiddle,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      child: Row(
-                        children: [
-                          _buildIcon(context, icon),
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  title,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: primaryTextStyle(
-                                    context,
-                                    size: 18,
-                                  ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.only(
+                top: Constants.spacingMiddle,
+                bottom: Constants.spacingMiddle,
+                left: Constants.spacingMiddle,
+                right: Constants.spacingMiddle,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: Row(
+                      children: [
+                        _buildIcon(context, icon),
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                title,
+                                overflow: TextOverflow.ellipsis,
+                                style: primaryTextStyle(
+                                  context,
+                                  size: 18,
                                 ),
-                                Text(
-                                  Characters(subtitle)
-                                      .replaceAll(
-                                        Characters(''),
-                                        Characters('\u{200B}'),
-                                      )
-                                      .toString(),
-                                  overflow: TextOverflow.ellipsis,
-                                  style: secondaryTextStyle(
-                                    context,
-                                  ),
+                              ),
+                              Text(
+                                Characters(subtitle)
+                                    .replaceAll(
+                                      Characters(''),
+                                      Characters('\u{200B}'),
+                                    )
+                                    .toString(),
+                                overflow: TextOverflow.ellipsis,
+                                style: secondaryTextStyle(
+                                  context,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.close_outlined,
-                        color: Theme.of(context)
-                            .extension<CustomColors>()!
-                            .textPrimary,
-                      ),
-                      onPressed: closePressed,
-                    ),
-                  ],
-                ),
-              ),
-              const Divider(
-                height: 0,
-                thickness: 1.0,
-              ),
-              const SizedBox(height: Constants.spacingMiddle),
-              Flexible(
-                child: child,
-              ),
-              const SizedBox(height: Constants.spacingMiddle),
-              const Divider(
-                height: 0,
-                thickness: 1.0,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: Constants.spacingMiddle,
-                  bottom: Constants.spacingMiddle,
-                ),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    minimumSize: const Size.fromHeight(40),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        Constants.sizeBorderRadius,
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                  onPressed: actionIsLoading ? null : actionPressed,
-                  child: actionIsLoading
-                      ? SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: CircularProgressIndicator(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                        )
-                      : Text(
-                          actionText,
-                          style: primaryTextStyle(
-                            context,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.close_outlined,
+                      color: Theme.of(context)
+                          .extension<CustomColors>()!
+                          .textPrimary,
+                    ),
+                    onPressed: closePressed,
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(
+                left: Constants.spacingMiddle,
+                right: Constants.spacingMiddle,
+              ),
+              child: Divider(
+                height: 0,
+                thickness: 1.0,
+              ),
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+            Expanded(
+              child: child,
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+            const Padding(
+              padding: EdgeInsets.only(
+                left: Constants.spacingMiddle,
+                right: Constants.spacingMiddle,
+              ),
+              child: Divider(
+                height: 0,
+                thickness: 1.0,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: Constants.spacingMiddle,
+                bottom: Constants.spacingMiddle,
+                left: Constants.spacingMiddle,
+                right: Constants.spacingMiddle,
+              ),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  minimumSize: const Size.fromHeight(40),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      Constants.sizeBorderRadius,
+                    ),
+                  ),
+                ),
+                onPressed: actionIsLoading ? null : actionPressed,
+                child: actionIsLoading
+                    ? SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      )
+                    : Text(
+                        actionText,
+                        style: primaryTextStyle(
+                          context,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+              ),
+            ),
+          ],
         ),
       ),
     );

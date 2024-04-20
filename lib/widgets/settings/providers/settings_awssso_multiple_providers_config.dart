@@ -165,116 +165,108 @@ class _SettingsAWSSSOMultipleProvidersState
       actionIsLoading: _isLoading,
       child: Form(
         key: _providerConfigFormKey,
-        child: ListView(
-          shrinkWrap: false,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: TextFormField(
-                controller: _startURLController,
-                keyboardType: TextInputType.text,
-                autocorrect: false,
-                enableSuggestions: false,
-                maxLines: 1,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Start URL',
-                ),
-                validator: _validator,
-              ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: Constants.spacingMiddle,
+              bottom: Constants.spacingMiddle,
+              left: Constants.spacingMiddle,
+              right: Constants.spacingMiddle,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text('SSO Region'),
-                  DropdownButton(
-                    value: _ssoRegion,
-                    underline: Container(
-                      height: 2,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _ssoRegion = newValue ?? '';
-                      });
-                    },
-                    items: awsRegions.map((value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .extension<CustomColors>()!
-                                .textPrimary,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _startURLController,
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Start URL',
+                  ),
+                  validator: _validator,
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('SSO Region'),
+                    DropdownButton(
+                      value: _ssoRegion,
+                      underline: Container(
+                        height: 2,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _ssoRegion = newValue ?? '';
+                        });
+                      },
+                      items: awsRegions.map((value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .extension<CustomColors>()!
+                                  .textPrimary,
+                            ),
                           ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  minimumSize: const Size.fromHeight(40),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      Constants.sizeBorderRadius,
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    minimumSize: const Size.fromHeight(40),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        Constants.sizeBorderRadius,
+                      ),
                     ),
                   ),
-                ),
-                onPressed: _startSSOFlow,
-                child: Text(
-                  'Sign In',
-                  style: primaryTextStyle(
-                    context,
-                    color: Theme.of(context).colorScheme.onPrimary,
+                  onPressed: _startSSOFlow,
+                  child: Text(
+                    'Sign In',
+                    style: primaryTextStyle(
+                      context,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Constants.spacingSmall,
-              ),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  minimumSize: const Size.fromHeight(40),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      Constants.sizeBorderRadius,
+                const SizedBox(height: Constants.spacingMiddle),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    minimumSize: const Size.fromHeight(40),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        Constants.sizeBorderRadius,
+                      ),
                     ),
                   ),
-                ),
-                onPressed: _awsSSOConfig == null ? null : _verifyDevice,
-                child: Text(
-                  'Verify',
-                  style: primaryTextStyle(
-                    context,
-                    color: Theme.of(context).colorScheme.onPrimary,
+                  onPressed: _awsSSOConfig == null ? null : _verifyDevice,
+                  child: Text(
+                    'Verify',
+                    style: primaryTextStyle(
+                      context,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

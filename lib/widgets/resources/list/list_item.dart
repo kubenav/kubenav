@@ -109,66 +109,61 @@ class ListItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(
-        bottom: Constants.spacingMiddle,
-      ),
-      child: AppListItem(
-        onTap: () {
-          navigate(
-            context,
-            ResourcesDetails(
-              title: title,
-              resource: resource,
-              path: path,
-              scope: scope,
-              additionalPrinterColumns: additionalPrinterColumns,
-              name: name,
-              namespace: namespace,
-            ),
-          );
-        },
-        onDoubleTap: item == null
-            ? null
-            : () {
-                showActions(
-                  context,
-                  ListItemActions(
-                    title: title,
-                    resource: resource,
-                    path: path,
-                    scope: scope,
-                    additionalPrinterColumns: additionalPrinterColumns,
-                    name: name,
-                    namespace: namespace,
-                    item: item,
+    return AppListItem(
+      onTap: () {
+        navigate(
+          context,
+          ResourcesDetails(
+            title: title,
+            resource: resource,
+            path: path,
+            scope: scope,
+            additionalPrinterColumns: additionalPrinterColumns,
+            name: name,
+            namespace: namespace,
+          ),
+        );
+      },
+      onDoubleTap: item == null
+          ? null
+          : () {
+              showActions(
+                context,
+                ListItemActions(
+                  title: title,
+                  resource: resource,
+                  path: path,
+                  scope: scope,
+                  additionalPrinterColumns: additionalPrinterColumns,
+                  name: name,
+                  namespace: namespace,
+                  item: item,
+                ),
+              );
+            },
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  Characters(name)
+                      .replaceAll(Characters(''), Characters('\u{200B}'))
+                      .toString(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: primaryTextStyle(
+                    context,
                   ),
-                );
-              },
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    Characters(name)
-                        .replaceAll(Characters(''), Characters('\u{200B}'))
-                        .toString(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: primaryTextStyle(
-                      context,
-                    ),
-                  ),
-                  buildInfo(context, info),
-                ],
-              ),
+                ),
+                buildInfo(context, info),
+              ],
             ),
-            buildStatus(context),
-          ],
-        ),
+          ),
+          buildStatus(context),
+        ],
       ),
     );
   }

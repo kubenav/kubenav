@@ -51,10 +51,8 @@ class SettingsSponsor extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-              left: Constants.spacingMiddle,
-              right: Constants.spacingMiddle,
-              bottom: Constants.spacingMiddle,
+            padding: const EdgeInsets.all(
+              Constants.spacingMiddle,
             ),
             child: Center(
               child: CircularProgressIndicator(

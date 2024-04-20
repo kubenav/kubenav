@@ -13,6 +13,7 @@ import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/helpers_service.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
+import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
@@ -205,30 +206,28 @@ class _ListCreateResourceState extends State<ListCreateResource> {
         _createResource();
       },
       actionIsLoading: _isLoading,
-      child: Form(
-        child: ListView(
-          shrinkWrap: false,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8,
-              ),
-              child: CodeTheme(
-                data: CodeThemeData(
-                  styles:
-                      Theme.of(context).extension<EditorColors>()!.getTheme(),
-                ),
-                child: CodeField(
-                  controller: _codeController,
-                  enabled: true,
-                  textStyle: TextStyle(
-                    fontSize: 14,
-                    fontFamily: getMonospaceFontFamily(),
-                  ),
-                ),
+      child: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: Constants.spacingMiddle,
+            bottom: Constants.spacingMiddle,
+            left: Constants.spacingMiddle,
+            right: Constants.spacingMiddle,
+          ),
+          child: CodeTheme(
+            data: CodeThemeData(
+              styles: Theme.of(context).extension<EditorColors>()!.getTheme(),
+            ),
+            child: CodeField(
+              controller: _codeController,
+              enabled: true,
+              textStyle: TextStyle(
+                fontSize: 14,
+                fontFamily: getMonospaceFontFamily(),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

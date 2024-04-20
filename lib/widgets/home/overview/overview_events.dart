@@ -121,6 +121,19 @@ class _OverviewEventsState extends State<OverviewEvents> {
 
     return Column(
       children: [
+        Padding(
+          padding: const EdgeInsets.all(Constants.spacingMiddle),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Warnings',
+                  style: primaryTextStyle(context, size: 18),
+                ),
+              ),
+            ],
+          ),
+        ),
         FutureBuilder(
           future: _futureFetchEvents,
           builder: (
@@ -135,7 +148,10 @@ class _OverviewEventsState extends State<OverviewEvents> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(Constants.spacingMiddle),
+                      padding: const EdgeInsets.only(
+                        left: Constants.spacingMiddle,
+                        right: Constants.spacingMiddle,
+                      ),
                       child: CircularProgressIndicator(
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -150,8 +166,10 @@ class _OverviewEventsState extends State<OverviewEvents> {
                     children: [
                       Flexible(
                         child: Padding(
-                          padding:
-                              const EdgeInsets.all(Constants.spacingMiddle),
+                          padding: const EdgeInsets.only(
+                            left: Constants.spacingMiddle,
+                            right: Constants.spacingMiddle,
+                          ),
                           child: AppErrorWidget(
                             message: 'Could not load events',
                             details: snapshot.error.toString(),
@@ -164,41 +182,22 @@ class _OverviewEventsState extends State<OverviewEvents> {
                   );
                 }
 
-                return Wrap(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: Constants.spacingMiddle,
-                        left: Constants.spacingMiddle,
-                        right: Constants.spacingMiddle,
-                        bottom: Constants.spacingMiddle,
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Warnings',
-                              style: primaryTextStyle(context, size: 18),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.only(
-                        right: Constants.spacingMiddle,
-                        left: Constants.spacingMiddle,
-                      ),
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        return buildEventItem(
-                          snapshot.data![index],
-                        );
-                      },
-                    ),
-                  ],
+                return ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.only(
+                    right: Constants.spacingMiddle,
+                    left: Constants.spacingMiddle,
+                  ),
+                  separatorBuilder: (context, index) => const SizedBox(
+                    height: Constants.spacingMiddle,
+                  ),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return buildEventItem(
+                      snapshot.data![index],
+                    );
+                  },
                 );
             }
           },

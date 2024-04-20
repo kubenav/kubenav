@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/resource.dart';
+import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources/general.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/resources/details/details_item.dart';
@@ -50,9 +51,14 @@ class DetailsItemAdditionalPrinterColumns extends StatelessWidget {
       return Container();
     }
 
-    return DetailsItemWidget(
-      title: 'Additional Information',
-      details: _buildDetailsItems(context),
+    return Column(
+      children: [
+        const SizedBox(height: Constants.spacingMiddle),
+        DetailsItemWidget(
+          title: 'Additional Information',
+          details: _buildDetailsItems(context),
+        ),
+      ],
     );
   }
 }
