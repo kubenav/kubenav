@@ -1,72 +1,40 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
 import 'package:code_text_field/code_text_field.dart';
-import 'package:highlight/languages/json.dart' as highlight_json;
 import 'package:highlight/languages/yaml.dart' as highlight_yaml;
-import 'package:provider/provider.dart';
 
-import 'package:kubenav/repositories/app_repository.dart';
-import 'package:kubenav/services/helpers_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
-import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
-/// The [PluginHelmDetailsValues] widget can be used to render the values file
-/// of a Helm release in a modal bottom sheet. The values file will be displayed
-/// in a code editor as yaml or json document, depending on the users settings.
-class PluginHelmDetailsValues extends StatefulWidget {
-  const PluginHelmDetailsValues({
+/// The [PluginHelmDetailsManifest] widget can be used to show the manifest of a
+/// Helm chart. The manifest is shown as yaml.
+class PluginHelmDetailsManifest extends StatefulWidget {
+  const PluginHelmDetailsManifest({
     super.key,
     required this.name,
-    required this.values,
+    required this.manifest,
   });
 
   final String name;
-  final Map<String, dynamic>? values;
+  final String manifest;
 
   @override
-  State<PluginHelmDetailsValues> createState() =>
-      _PluginHelmDetailsValuesState();
+  State<PluginHelmDetailsManifest> createState() =>
+      _PluginHelmDetailsManifestState();
 }
 
-class _PluginHelmDetailsValuesState extends State<PluginHelmDetailsValues> {
+class _PluginHelmDetailsManifestState extends State<PluginHelmDetailsManifest> {
   CodeController _codeController = CodeController();
 
   /// [_init] is called when the widget is initialized. Within the [_init]
-  /// function we prettify the provided [widget.release] and convert it to
-  /// either a json document or a yaml document depending on the users settings.
+  /// function we set the manifest and highlight it as yaml.
   Future<void> _init() async {
-    AppRepository appRepository = Provider.of<AppRepository>(
-      context,
-      listen: false,
-    );
-
     _codeController = CodeController(
-      text: '',
-      language: appRepository.settings.editorFormat == 'json'
-          ? highlight_json.json
-          : highlight_yaml.yaml,
+      text: widget.manifest,
+      language: highlight_yaml.yaml,
     );
-
-    try {
-      if (appRepository.settings.editorFormat == 'json') {
-        JsonEncoder encoder = const JsonEncoder.withIndent('  ');
-        _codeController.text = encoder.convert(widget.values);
-      } else {
-        final data = await HelpersService().prettifyYAML(widget.values);
-        _codeController.text = data;
-      }
-    } catch (err) {
-      Logger.log(
-        'PluginHelmDetailsValues _init',
-        'An error was returned while prettyfing template',
-        err,
-      );
-    }
   }
 
   @override
