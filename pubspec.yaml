@@ -38,7 +38,7 @@ dependencies:
   code_text_field: ^1.0.2
   file_picker: ^8.0.0+1
   fl_chart: ^0.67.0
-  flutter_markdown: ^0.6.12
+  flutter_markdown: ^0.7.1
   flutter_native_splash: ^2.2.19
   flutter_secure_storage: ^9.0.0
   flutter_svg: ^2.0.1
