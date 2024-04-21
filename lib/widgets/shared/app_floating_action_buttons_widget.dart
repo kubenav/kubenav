@@ -93,9 +93,9 @@ class _AppFloatingActionButtonsWidgetState
           heroTag: 'terminal',
           backgroundColor: Theme.of(context).colorScheme.primary,
           onPressed: () {
-            showModal(
+            showActions(
               context,
-              const AppTerminalsWidget(),
+              const AppTerminalsActionsWidget(),
             );
           },
           child: Icon(

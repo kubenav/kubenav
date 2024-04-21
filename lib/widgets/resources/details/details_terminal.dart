@@ -88,13 +88,14 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
             },
           );
 
-          terminalRepository.addTerminal(
+          final terminalIndex = terminalRepository.addTerminal(
             TerminalType.exec,
             _container,
             null,
             null,
             TerminalBackend(channel),
           );
+
           setState(() {
             _isLoading = false;
           });
@@ -102,7 +103,7 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
             Navigator.pop(context);
             showModal(
               context,
-              const AppTerminalsWidget(),
+              AppTerminalWidget(terminalIndex: terminalIndex),
             );
           }
         } else {
