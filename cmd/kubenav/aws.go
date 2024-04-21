@@ -277,9 +277,11 @@ func AWSGetSSOAccounts(ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode st
 
 		var ssoRoles []string
 
-		if roles != nil || roles.RoleList != nil {
+		if roles != nil {
 			for _, role := range roles.RoleList {
-				ssoRoles = append(ssoRoles, *role.RoleName)
+				if role != nil && role.RoleName != nil {
+					ssoRoles = append(ssoRoles, *role.RoleName)
+				}
 			}
 
 		}
