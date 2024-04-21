@@ -116,13 +116,14 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
               },
             );
 
-            terminalRepository.addTerminal(
+            final terminalIndex = terminalRepository.addTerminal(
               TerminalType.logstream,
               _container,
               null,
               LogStreamBackend(channel),
               null,
             );
+
             setState(() {
               _isLoading = false;
             });
@@ -130,7 +131,9 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
               Navigator.pop(context);
               showModal(
                 context,
-                const AppTerminalsWidget(),
+                AppTerminalWidget(
+                  terminalIndex: terminalIndex,
+                ),
               );
             }
           } else {
@@ -161,24 +164,24 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
             _previous,
           );
 
-          terminalRepository.addTerminal(
+          final terminalIndex = terminalRepository.addTerminal(
             TerminalType.log,
             _container,
             logs,
             null,
             null,
           );
-        }
 
-        setState(() {
-          _isLoading = false;
-        });
-        if (mounted) {
-          Navigator.pop(context);
-          showModal(
-            context,
-            const AppTerminalsWidget(),
-          );
+          setState(() {
+            _isLoading = false;
+          });
+          if (mounted) {
+            Navigator.pop(context);
+            showModal(
+              context,
+              AppTerminalWidget(terminalIndex: terminalIndex),
+            );
+          }
         }
       } catch (err) {
         Logger.log(
