@@ -59,7 +59,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
       cluster: cluster!,
       proxy: appRepository.settings.proxy,
       timeout: appRepository.settings.timeout,
-    ).helmListCharts(cluster.namespace);
+    ).helmListReleases(cluster.namespace);
   }
 
   /// [_buildItem] builds the widget for a single Helm release shown in the list

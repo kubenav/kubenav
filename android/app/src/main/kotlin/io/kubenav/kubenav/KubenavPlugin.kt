@@ -157,7 +157,7 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       } else {
         awsGetSSOAccounts(ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, result)
       }
-    } else if (call.method == "helmListCharts") {
+    } else if (call.method == "helmListReleases") {
       val clusterServer = call.argument<String>("clusterServer")
       val clusterCertificateAuthorityData = call.argument<String>("clusterCertificateAuthorityData")
       val clusterInsecureSkipTLSVerify = call.argument<Boolean>("clusterInsecureSkipTLSVerify")
@@ -173,9 +173,9 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        helmListCharts(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, result)
+        helmListReleases(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, result)
       }
-    } else if (call.method == "helmGetChart") {
+    } else if (call.method == "helmGetRelease") {
       val clusterServer = call.argument<String>("clusterServer")
       val clusterCertificateAuthorityData = call.argument<String>("clusterCertificateAuthorityData")
       val clusterInsecureSkipTLSVerify = call.argument<Boolean>("clusterInsecureSkipTLSVerify")
@@ -193,9 +193,9 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null || name == null || version == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        helmGetChart(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, result)
+        helmGetRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, result)
       }
-    } else if (call.method == "helmGetHistory") {
+    } else if (call.method == "helmListReleaseHistory") {
       val clusterServer = call.argument<String>("clusterServer")
       val clusterCertificateAuthorityData = call.argument<String>("clusterCertificateAuthorityData")
       val clusterInsecureSkipTLSVerify = call.argument<Boolean>("clusterInsecureSkipTLSVerify")
@@ -212,7 +212,28 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null || name == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        helmGetHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, result)
+        helmListReleaseHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, result)
+      }
+    } else if (call.method == "helmRollbackRelease") {
+      val clusterServer = call.argument<String>("clusterServer")
+      val clusterCertificateAuthorityData = call.argument<String>("clusterCertificateAuthorityData")
+      val clusterInsecureSkipTLSVerify = call.argument<Boolean>("clusterInsecureSkipTLSVerify")
+      val userClientCertificateData = call.argument<String>("userClientCertificateData")
+      val userClientKeyData = call.argument<String>("userClientKeyData")
+      val userToken = call.argument<String>("userToken")
+      val userUsername = call.argument<String>("userUsername")
+      val userPassword = call.argument<String>("userPassword")
+      val proxy = call.argument<String>("proxy")
+      val timeout = call.argument<Number>("timeout")?.toLong()
+      val namespace = call.argument<String>("namespace")
+      val name = call.argument<String>("name")
+      val version = call.argument<Number>("version")?.toLong()
+      val options = call.argument<String>("options")
+
+      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null || name == null || version == null || options == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        helmRollbackRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, options, result)
       }
     } else if (call.method == "oidcGetLink") {
       val discoveryURL = call.argument<String>("discoveryURL")
@@ -407,30 +428,39 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun helmListCharts(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, result: MethodChannel.Result) {
+  private fun helmListReleases(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.helmListCharts(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace)
+      val data: String = Kubenav.helmListReleases(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace)
       result.success(data)
     } catch (e: Exception) {
-      result.error("HELM_LIST_CHARTS_FAILED", e.localizedMessage, null)
+      result.error("HELM_LIST_RELEASES_FAILED", e.localizedMessage, null)
     }
   }
 
-  private fun helmGetChart(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, version: Long, result: MethodChannel.Result) {
+  private fun helmGetRelease(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, version: Long, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.helmGetChart(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version)
+      val data: String = Kubenav.helmGetRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version)
       result.success(data)
     } catch (e: Exception) {
-      result.error("HELM_GET_CHART_FAILED", e.localizedMessage, null)
+      result.error("HELM_GET_RELEASES_FAILED", e.localizedMessage, null)
     }
   }
 
-  private fun helmGetHistory(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, result: MethodChannel.Result) {
+  private fun helmListReleaseHistory(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.helmGetHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name)
+      val data: String = Kubenav.helmListReleaseHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name)
       result.success(data)
     } catch (e: Exception) {
-      result.error("HELM_GET_HISTORY_FAILED", e.localizedMessage, null)
+      result.error("HELM_GET_LIST_RELEASE_HISTORY_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun helmRollbackRelease(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, version: Long, options: String, result: MethodChannel.Result) {
+    try {
+      Kubenav.helmRollbackRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, options)
+      result.success("")
+    } catch (e: Exception) {
+      result.error("HELM_ROLLBACK_RELEASE_FAILED", e.localizedMessage, null)
     }
   }
 
