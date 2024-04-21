@@ -464,17 +464,17 @@ class KubernetesService {
     }
   }
 
-  /// [helmListCharts] lists all Helm charts in the provided namespace.
-  Future<List<Release>> helmListCharts(String namespace) async {
+  /// [helmListReleases] lists all Helm releases in the provided namespace.
+  Future<List<Release>> helmListReleases(String namespace) async {
     try {
       Logger.log(
-        'KubernetesService helmListCharts',
-        'Run helmListCharts function',
+        'KubernetesService helmListReleases',
+        'Run helmListReleases function',
         '${cluster.name}, $namespace',
       );
 
       final String result = await platform.invokeMethod(
-        'helmListCharts',
+        'helmListReleases',
         <String, dynamic>{
           'clusterServer': cluster.clusterServer,
           'clusterCertificateAuthorityData':
@@ -492,8 +492,8 @@ class KubernetesService {
       );
 
       Logger.log(
-        'KubernetesService helmListCharts',
-        'List Helm charts was ok',
+        'KubernetesService helmListReleases',
+        'List Helm releases was ok',
         result,
       );
 
@@ -509,29 +509,29 @@ class KubernetesService {
       return releases;
     } catch (err) {
       Logger.log(
-        'KubernetesService helmListCharts',
-        'List Helm charts failed',
+        'KubernetesService helmListReleases',
+        'List Helm releases failed',
         err,
       );
       rethrow;
     }
   }
 
-  /// [helmGetChart] retruns the provided [version] for a Helm chart with the
-  /// provided [name] in the provided [namespace].
-  Future<Release> helmGetChart(
+  /// [helmGetRelease] retruns the provided [version] for a Helm release with
+  /// the provided [name] in the provided [namespace].
+  Future<Release> helmGetRelease(
     String namespace,
     String name,
     int version,
   ) async {
     try {
       Logger.log(
-        'KubernetesService helmGetChart',
-        'Run helmGetChart function',
+        'KubernetesService helmGetRelease',
+        'Run helmGetRelease function',
         '${cluster.name}, $namespace, $name, $version',
       );
       final String result = await platform.invokeMethod(
-        'helmGetChart',
+        'helmGetRelease',
         <String, dynamic>{
           'clusterServer': cluster.clusterServer,
           'clusterCertificateAuthorityData':
@@ -551,8 +551,8 @@ class KubernetesService {
       );
 
       Logger.log(
-        'KubernetesService helmGetChart',
-        'Get Helm chart was ok',
+        'KubernetesService helmGetRelease',
+        'Get Helm release was ok',
         result,
       );
 
@@ -561,29 +561,29 @@ class KubernetesService {
       return release;
     } catch (err) {
       Logger.log(
-        'KubernetesService helmGetChart',
-        'Get Helm chart failed',
+        'KubernetesService helmGetRelease',
+        'Get Helm release failed',
         err,
       );
       rethrow;
     }
   }
 
-  /// [helmGetHistory] returns the history for the Helm chart with the provided
-  /// [name] and [namespace].
-  Future<List<Release>> helmGetHistory(
+  /// [helmListReleaseHistory] returns the history for the Helm release with the
+  /// provided [name] and [namespace].
+  Future<List<Release>> helmListReleaseHistory(
     String namespace,
     String name,
   ) async {
     try {
       Logger.log(
-        'KubernetesService helmGetHistory',
-        'Run helmGetHistory function',
+        'KubernetesService helmListReleaseHistory',
+        'Run helmListReleaseHistory function',
         '${cluster.name}, $namespace, $name',
       );
 
       final String result = await platform.invokeMethod(
-        'helmGetHistory',
+        'helmListReleaseHistory',
         <String, dynamic>{
           'clusterServer': cluster.clusterServer,
           'clusterCertificateAuthorityData':
@@ -602,8 +602,8 @@ class KubernetesService {
       );
 
       Logger.log(
-        'KubernetesService helmGetHistory',
-        'Get Helm history was ok',
+        'KubernetesService helmListReleaseHistory',
+        'Get Helm release history was ok',
         result,
       );
 
@@ -619,8 +619,60 @@ class KubernetesService {
       return releases;
     } catch (err) {
       Logger.log(
-        'KubernetesService helmGetHistory',
-        'Get Helm history failed',
+        'KubernetesService helmListReleaseHistory',
+        'Get Helm release history failed',
+        err,
+      );
+      rethrow;
+    }
+  }
+
+  /// [helmRollbackRelease] rolls back the Helm release with the provided [name]
+  /// and [namespace] to the provided [version].
+  Future<void> helmRollbackRelease(
+    String namespace,
+    String name,
+    int version,
+    String options,
+  ) async {
+    try {
+      Logger.log(
+        'KubernetesService helmRollbackRelease',
+        'Run helmRollbackRelease function',
+        '${cluster.name}, $namespace, $name, $version',
+      );
+
+      await platform.invokeMethod(
+        'helmRollbackRelease',
+        <String, dynamic>{
+          'clusterServer': cluster.clusterServer,
+          'clusterCertificateAuthorityData':
+              cluster.clusterCertificateAuthorityData,
+          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
+          'userClientCertificateData': cluster.userClientCertificateData,
+          'userClientKeyData': cluster.userClientKeyData,
+          'userToken': cluster.userToken,
+          'userUsername': cluster.userUsername,
+          'userPassword': cluster.userPassword,
+          'proxy': proxy,
+          'timeout': timeout,
+          'namespace': namespace,
+          'name': name,
+          'version': version,
+          'options': options,
+        },
+      );
+
+      Logger.log(
+        'KubernetesService helmRollbackRelease',
+        'Rollback was ok',
+      );
+
+      return;
+    } catch (err) {
+      Logger.log(
+        'KubernetesService helmRollbackRelease',
+        'Rollback failed',
         err,
       );
       rethrow;

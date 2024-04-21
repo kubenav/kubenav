@@ -14,6 +14,7 @@ import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources/general.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_manifest.dart';
+import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_rollback.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_template.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_values.dart';
 import 'package:kubenav/widgets/resources/details/details_item.dart';
@@ -70,6 +71,20 @@ List<AppResourceActionsModel> helmDetailsActions(
         );
       },
     ),
+    AppResourceActionsModel(
+      title: 'Rollback',
+      icon: Icons.history,
+      onTap: () {
+        showModal(
+          context,
+          PluginHelmDetailsRollback(
+            namespace: release.namespace ?? '',
+            name: release.name ?? '',
+            version: release.version ?? 0,
+          ),
+        );
+      },
+    ),
     ...additionalActions,
   ];
 }
@@ -117,7 +132,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
       cluster: cluster!,
       proxy: appRepository.settings.proxy,
       timeout: appRepository.settings.timeout,
-    ).helmGetChart(widget.namespace, widget.name, widget.version);
+    ).helmGetRelease(widget.namespace, widget.name, widget.version);
   }
 
   /// [_fetchHistory] fetches the history for the Helm releases provided via the
@@ -141,7 +156,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
         cluster: cluster!,
         proxy: appRepository.settings.proxy,
         timeout: appRepository.settings.timeout,
-      ).helmGetHistory(widget.namespace, widget.name);
+      ).helmListReleaseHistory(widget.namespace, widget.name);
     } catch (err) {
       return [];
     }
@@ -464,7 +479,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                                     ),
                                                     Text(
                                                       Characters(
-                                                        'Chart: ${release.chart?.metadata?.version}',
+                                                        'Chart Version: ${release.chart?.metadata?.version}',
                                                       )
                                                           .replaceAll(
                                                             Characters(''),
@@ -482,7 +497,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                                     ),
                                                     Text(
                                                       Characters(
-                                                        'Chart: ${release.chart?.metadata?.appVersion}',
+                                                        'App Version: ${release.chart?.metadata?.appVersion}',
                                                       )
                                                           .replaceAll(
                                                             Characters(''),

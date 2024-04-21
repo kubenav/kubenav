@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kubenav/utils/showmodal.dart';
-import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 
 import 'package:provider/provider.dart';
 import 'package:xterm/ui.dart' as xtermui;
@@ -9,7 +7,9 @@ import 'package:xterm/xterm.dart' as xterm;
 import 'package:kubenav/repositories/terminal_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/utils/themes.dart';
+import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 
 /// [getColor] returns the correct color from the [colors] list for the provided
 /// [index].
