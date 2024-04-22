@@ -65,7 +65,7 @@ class ResourcesList extends StatefulWidget {
 
 class _ResourcesListState extends State<ResourcesList> {
   late Future<ResourcesListResult> _futureFetchItems;
-  String _filter = '';
+  final _filterController = TextEditingController();
 
   /// [_fetchItems] loads the items for the requested resource and the metrics
   /// when the requested resource is a Pod or Node. When we are able to load the
@@ -145,7 +145,7 @@ class _ResourcesListState extends State<ResourcesList> {
   /// [_filter]. When the [_filter] is not empty the name of an item must
   /// contain the filter keyword.
   List<dynamic> _getFilteredItems(List<dynamic> items) {
-    return _filter == ''
+    return _filterController.text == ''
         ? items
         : items
             .where(
@@ -153,7 +153,8 @@ class _ResourcesListState extends State<ResourcesList> {
                   item['metadata'] != null &&
                   item['metadata']['name'] != null &&
                   item['metadata']['name'] is String &&
-                  item['metadata']['name'].contains(_filter.toLowerCase()),
+                  item['metadata']['name']
+                      .contains(_filterController.text.toLowerCase()),
             )
             .toList();
   }
@@ -199,11 +200,25 @@ class _ResourcesListState extends State<ResourcesList> {
   }
 
   @override
+  void initState() {
+    _filterController.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     setState(() {
       _futureFetchItems = _fetchItems();
     });
+  }
+
+  @override
+  void dispose() {
+    _filterController.dispose();
+    super.dispose();
   }
 
   @override
@@ -376,11 +391,7 @@ class _ResourcesListState extends State<ResourcesList> {
                             ),
                             color: Theme.of(context).colorScheme.primary,
                             child: TextField(
-                              onChanged: (value) {
-                                setState(() {
-                                  _filter = value;
-                                });
-                              },
+                              controller: _filterController,
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.onPrimary,
                               ),
@@ -413,6 +424,16 @@ class _ResourcesListState extends State<ResourcesList> {
                                       Theme.of(context).colorScheme.onPrimary,
                                 ),
                                 hintText: 'Filter...',
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    _filterController.clear();
+                                  },
+                                  icon: Icon(
+                                    Icons.clear,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                ),
                               ),
                             ),
                           ),

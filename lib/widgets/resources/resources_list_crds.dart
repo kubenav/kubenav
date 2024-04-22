@@ -30,7 +30,7 @@ class ResourcesListCRDs extends StatefulWidget {
 
 class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
   late Future<List<Resource>> _futureFetchItems;
-  String _filter = '';
+  final _filterController = TextEditingController();
 
   Future<List<Resource>> _fetchItems() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
@@ -104,12 +104,13 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
   /// [_filter]. When the [_filter] is not empty the title of an item must
   /// contain the filter keyword.
   List<dynamic> _getFilteredItems(List<Resource> items) {
-    return _filter == ''
+    return _filterController.text == ''
         ? items
         : items
             .where(
-              (item) =>
-                  item.title.toLowerCase().contains(_filter.toLowerCase()),
+              (item) => item.title
+                  .toLowerCase()
+                  .contains(_filterController.text.toLowerCase()),
             )
             .toList();
   }
@@ -172,11 +173,25 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
   }
 
   @override
+  void initState() {
+    _filterController.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     setState(() {
       _futureFetchItems = _fetchItems();
     });
+  }
+
+  @override
+  void dispose() {
+    _filterController.dispose();
+    super.dispose();
   }
 
   @override
@@ -279,11 +294,7 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                             ),
                             color: Theme.of(context).colorScheme.primary,
                             child: TextField(
-                              onChanged: (value) {
-                                setState(() {
-                                  _filter = value;
-                                });
-                              },
+                              controller: _filterController,
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.onPrimary,
                               ),
@@ -316,6 +327,16 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
                                       Theme.of(context).colorScheme.onPrimary,
                                 ),
                                 hintText: 'Filter...',
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    _filterController.clear();
+                                  },
+                                  icon: Icon(
+                                    Icons.clear,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
