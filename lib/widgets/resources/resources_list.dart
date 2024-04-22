@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -65,7 +67,9 @@ class ResourcesList extends StatefulWidget {
 
 class _ResourcesListState extends State<ResourcesList> {
   late Future<ResourcesListResult> _futureFetchItems;
-  String _filter = '';
+  final TextEditingController _filterController = TextEditingController();
+  final StreamController<List<dynamic>> _filterItemsStream =
+      StreamController<List<dynamic>>();
 
   /// [_fetchItems] loads the items for the requested resource and the metrics
   /// when the requested resource is a Pod or Node. When we are able to load the
@@ -141,11 +145,11 @@ class _ResourcesListState extends State<ResourcesList> {
     );
   }
 
-  /// [_getFilteredItems] filters the given list of [items] by the setted
-  /// [_filter]. When the [_filter] is not empty the name of an item must
-  /// contain the filter keyword.
-  List<dynamic> _getFilteredItems(List<dynamic> items) {
-    return _filter == ''
+  /// [_filterItems] filters the given list of [items] by the setted
+  /// [_filterController]. When the [_filterController] is not empty the name of
+  /// an item must contain the filter keyword.
+  void _filterItems(List<dynamic> items) async {
+    final filteredItems = _filterController.text == ''
         ? items
         : items
             .where(
@@ -153,9 +157,11 @@ class _ResourcesListState extends State<ResourcesList> {
                   item['metadata'] != null &&
                   item['metadata']['name'] != null &&
                   item['metadata']['name'] is String &&
-                  item['metadata']['name'].contains(_filter.toLowerCase()),
+                  item['metadata']['name']
+                      .contains(_filterController.text.toLowerCase()),
             )
             .toList();
+    _filterItemsStream.add(filteredItems);
   }
 
   /// [_buildListItem] is used to build the widget for a single resource item.
@@ -362,9 +368,6 @@ class _ResourcesListState extends State<ResourcesList> {
                         listen: true,
                       );
 
-                      final filteredItems =
-                          _getFilteredItems(snapshot.data!.items);
-
                       return Wrap(
                         children: [
                           Container(
@@ -376,10 +379,9 @@ class _ResourcesListState extends State<ResourcesList> {
                             ),
                             color: Theme.of(context).colorScheme.primary,
                             child: TextField(
+                              controller: _filterController,
                               onChanged: (value) {
-                                setState(() {
-                                  _filter = value;
-                                });
+                                _filterItems(snapshot.data!.items);
                               },
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.onPrimary,
@@ -413,6 +415,17 @@ class _ResourcesListState extends State<ResourcesList> {
                                       Theme.of(context).colorScheme.onPrimary,
                                 ),
                                 hintText: 'Filter...',
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    _filterController.clear();
+                                    _filterItems(snapshot.data!.items);
+                                  },
+                                  icon: Icon(
+                                    Icons.clear,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -543,35 +556,44 @@ class _ResourcesListState extends State<ResourcesList> {
                               ),
                             ],
                           ),
-                          Container(
-                            padding: const EdgeInsets.only(
-                              top: Constants.spacingMiddle,
-                              bottom: Constants.spacingMiddle,
-                            ),
-                            child: ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: const EdgeInsets.only(
-                                right: Constants.spacingMiddle,
-                                left: Constants.spacingMiddle,
-                              ),
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                height: Constants.spacingMiddle,
-                              ),
-                              itemCount: filteredItems.length,
-                              itemBuilder: (context, index) {
-                                return _buildListItem(
-                                  widget.title,
-                                  widget.resource,
-                                  widget.path,
-                                  widget.scope,
-                                  widget.additionalPrinterColumns,
-                                  filteredItems[index],
-                                  snapshot.data!.metrics,
-                                );
-                              },
-                            ),
+                          StreamBuilder(
+                            stream: _filterItemsStream.stream,
+                            builder: (context, streamSnapshot) {
+                              return Container(
+                                padding: const EdgeInsets.only(
+                                  top: Constants.spacingMiddle,
+                                  bottom: Constants.spacingMiddle,
+                                ),
+                                child: ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  padding: const EdgeInsets.only(
+                                    right: Constants.spacingMiddle,
+                                    left: Constants.spacingMiddle,
+                                  ),
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                    height: Constants.spacingMiddle,
+                                  ),
+                                  itemCount: streamSnapshot.data != null
+                                      ? streamSnapshot.data!.length
+                                      : snapshot.data!.items.length,
+                                  itemBuilder: (context, index) {
+                                    return _buildListItem(
+                                      widget.title,
+                                      widget.resource,
+                                      widget.path,
+                                      widget.scope,
+                                      widget.additionalPrinterColumns,
+                                      streamSnapshot.data != null
+                                          ? streamSnapshot.data![index]
+                                          : snapshot.data!.items[index],
+                                      snapshot.data!.metrics,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
                           ),
                         ],
                       );
