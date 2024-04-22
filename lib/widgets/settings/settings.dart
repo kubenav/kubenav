@@ -12,6 +12,7 @@ import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/utils/themes.dart';
+import 'package:kubenav/widgets/settings/settings/settings_home_page.dart';
 import 'package:kubenav/widgets/settings/settings/settings_info.dart';
 import 'package:kubenav/widgets/settings/settings/settings_prometheus.dart';
 import 'package:kubenav/widgets/settings/settings/settings_proxy.dart';
@@ -484,6 +485,40 @@ class Settings extends StatelessWidget {
                             ),
                           );
                         }).toList(),
+                      ),
+                    ],
+                  ),
+                  AppVertialListSimpleModel(
+                    onTap: () {
+                      showModal(
+                        context,
+                        SettingsHomePage(
+                          currentHome: appRepository.settings.home,
+                        ),
+                      );
+                    },
+                    children: [
+                      Icon(
+                        Icons.home,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(width: Constants.spacingSmall),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'Home Page',
+                          style: noramlTextStyle(
+                            context,
+                          ),
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Theme.of(context)
+                            .extension<CustomColors>()!
+                            .textPrimary
+                            .withOpacity(Constants.opacityIcon),
+                        size: 16,
                       ),
                     ],
                   ),

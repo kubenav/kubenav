@@ -277,6 +277,16 @@ class AppRepository with ChangeNotifier {
     } catch (_) {}
   }
 
+  /// [setHome] changes the users Home page configuration to the provided
+  /// [value].
+  Future<void> setHome(AppRepositorySettingsHome value) async {
+    try {
+      _settings.home = value;
+      await _save();
+      notifyListeners();
+    } catch (_) {}
+  }
+
   /// [setPrometheus] changes the users Prometheus configuration to the provided
   /// [value].
   Future<void> setPrometheus(AppRepositorySettingsPrometheus value) async {
@@ -337,6 +347,7 @@ class AppRepositorySettings {
   String proxy;
   int timeout;
   int sponsorReminder;
+  AppRepositorySettingsHome home;
   AppRepositorySettingsPrometheus prometheus;
 
   AppRepositorySettings({
@@ -347,6 +358,7 @@ class AppRepositorySettings {
     required this.proxy,
     required this.timeout,
     required this.sponsorReminder,
+    required this.home,
     required this.prometheus,
   });
 
@@ -359,6 +371,7 @@ class AppRepositorySettings {
       proxy: '',
       timeout: 0,
       sponsorReminder: 0,
+      home: AppRepositorySettingsHome.fromDefault(),
       prometheus: AppRepositorySettingsPrometheus.fromDefault(),
     );
   }
@@ -390,6 +403,9 @@ class AppRepositorySettings {
           data.containsKey('sponsorReminder') && data['sponsorReminder'] != null
               ? data['sponsorReminder']
               : 0,
+      home: data.containsKey('home') && data['home'] != null
+          ? AppRepositorySettingsHome.fromJson(data['home'])
+          : AppRepositorySettingsHome.fromDefault(),
       prometheus: data.containsKey('prometheus') && data['prometheus'] != null
           ? AppRepositorySettingsPrometheus.fromJson(data['prometheus'])
           : AppRepositorySettingsPrometheus.fromDefault(),
@@ -405,7 +421,55 @@ class AppRepositorySettings {
       'proxy': proxy,
       'timeout': timeout,
       'sponsorReminder': sponsorReminder,
+      'home': home.toJson(),
       'prometheus': prometheus.toJson(),
+    };
+  }
+}
+
+/// The [AppRepositorySettingsHome] model represents all the
+/// configurations which can be set by a user for the home page.
+class AppRepositorySettingsHome {
+  bool useSelectedNamespace;
+  bool showMetrics;
+  bool showWarnings;
+
+  AppRepositorySettingsHome({
+    required this.useSelectedNamespace,
+    required this.showMetrics,
+    required this.showWarnings,
+  });
+
+  factory AppRepositorySettingsHome.fromDefault() {
+    return AppRepositorySettingsHome(
+      useSelectedNamespace: false,
+      showMetrics: true,
+      showWarnings: true,
+    );
+  }
+
+  factory AppRepositorySettingsHome.fromJson(Map<String, dynamic> data) {
+    return AppRepositorySettingsHome(
+      useSelectedNamespace: data.containsKey('useSelectedNamespace') &&
+              data['useSelectedNamespace'] != null
+          ? data['useSelectedNamespace']
+          : false,
+      showMetrics:
+          data.containsKey('showMetrics') && data['showMetrics'] != null
+              ? data['showMetrics']
+              : true,
+      showWarnings:
+          data.containsKey('showWarnings') && data['showWarnings'] != null
+              ? data['showWarnings']
+              : true,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'useSelectedNamespace': useSelectedNamespace,
+      'showMetrics': showMetrics,
+      'showWarnings': showWarnings,
     };
   }
 }
