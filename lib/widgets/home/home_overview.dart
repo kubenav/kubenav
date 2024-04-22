@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
@@ -22,6 +23,10 @@ class HomeOverview extends StatelessWidget {
       context,
       listen: false,
     );
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: false,
+    );
 
     if (clustersRepository.clusters.isEmpty) {
       return [
@@ -32,15 +37,21 @@ class HomeOverview extends StatelessWidget {
       ];
     }
 
-    return [
+    final List<Widget> content = [
       const OverviewActions(),
-      const OverviewMetrics(
-        nodeName: null,
-      ),
-      const SizedBox(height: Constants.spacingMiddle),
-      const OverviewEvents(),
-      const SizedBox(height: Constants.spacingMiddle),
     ];
+
+    if (appRepository.settings.home.showMetrics) {
+      content.add(const OverviewMetrics(nodeName: null));
+      content.add(const SizedBox(height: Constants.spacingMiddle));
+    }
+
+    if (appRepository.settings.home.showWarnings) {
+      content.add(const OverviewEvents());
+      content.add(const SizedBox(height: Constants.spacingMiddle));
+    }
+
+    return content;
   }
 
   @override

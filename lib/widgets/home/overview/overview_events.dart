@@ -49,8 +49,10 @@ class _OverviewEventsState extends State<OverviewEvents> {
       clustersRepository.activeClusterId,
     );
 
-    final resourcesListUrl =
-        '${Resources.map['events']!.path}/${Resources.map['events']!.resource}?fieldSelector=type=Warning';
+    final resourcesListUrl = appRepository.settings.home.useSelectedNamespace &&
+            cluster!.namespace != ''
+        ? '${Resources.map['events']!.path}/namespaces/${cluster.namespace}/${Resources.map['events']!.resource}?fieldSelector=type=Warning'
+        : '${Resources.map['events']!.path}/${Resources.map['events']!.resource}?fieldSelector=type=Warning';
 
     final resourcesList = await KubernetesService(
       cluster: cluster!,
