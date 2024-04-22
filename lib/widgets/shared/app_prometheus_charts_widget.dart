@@ -148,7 +148,7 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
                     ),
                   );
                 },
-                child: Wrap(
+                child: Row(
                   children: [
                     Icon(
                       Icons.schedule,
