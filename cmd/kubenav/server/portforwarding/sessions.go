@@ -7,7 +7,8 @@ import (
 // Sessions holds all active port forwarding sessions.
 var Sessions = SessionMap{Sessions: make(map[string]*Session)}
 
-// SessionMap stores a map of all PortForwardSession objects and a lock to avoid concurrent conflict.
+// SessionMap stores a map of all PortForwardSession objects and a lock to avoid
+// concurrent conflict.
 type SessionMap struct {
 	Sessions map[string]*Session
 	Lock     sync.RWMutex

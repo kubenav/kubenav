@@ -16,14 +16,16 @@ import (
 	"github.com/aws/aws-sdk-go/service/sts"
 )
 
-// AWSSSOConfig is the structure of the returned data from the AWS SSO config call. It contains the client and the
-// registered device, which can be used to continue with the sso flow.
+// AWSSSOConfig is the structure of the returned data from the AWS SSO config
+// call. It contains the client and the registered device, which can be used to
+// continue with the sso flow.
 type AWSSSOConfig struct {
 	Client ssooidc.RegisterClientOutput           `json:"client"`
 	Device ssooidc.StartDeviceAuthorizationOutput `json:"device"`
 }
 
-// AWSSSOCredentials is the structure of the AWS credentials generated via AWS SSO.
+// AWSSSOCredentials is the structure of the AWS credentials generated via AWS
+// SSO.
 type AWSSSOCredentials struct {
 	AccessKeyID       string `json:"accessKeyId"`
 	SecretAccessKey   string `json:"secretAccessKey"`
@@ -38,9 +40,10 @@ type AWSSSOCredentials struct {
 	AccessTokenExpire int64  `json:"accessTokenExpire"`
 }
 
-// AWSSSOAccount represents a single AWS SSO account with it's name and id and all the available roles for an
-// authenticated user. It also contains the access token and expire timestamp which was generated to get the account,
-// so that they can be used to get the sso credentials in a follow up API call.
+// AWSSSOAccount represents a single AWS SSO account with it's name and id and
+// all the available roles for an authenticated user. It also contains the
+// access token and expire timestamp which was generated to get the account, so
+// that they can be used to get the sso credentials in a follow up API call.
 type AWSSSOAccount struct {
 	AccountID         string   `json:"accountId"`
 	AccountName       string   `json:"accountName"`
@@ -49,7 +52,8 @@ type AWSSSOAccount struct {
 	AccessTokenExpire int64    `json:"accessTokenExpire"`
 }
 
-// AWSGetClusters returns all clusters which can be accessed with the given credentials.
+// AWSGetClusters returns all clusters which can be accessed with the given
+// credentials.
 func AWSGetClusters(accessKeyID, secretKey, region, sessionToken, roleArn string) (string, error) {
 	var clusters []*eks.Cluster
 	var names []*string
@@ -102,7 +106,8 @@ func AWSGetClusters(accessKeyID, secretKey, region, sessionToken, roleArn string
 	return string(clustersBytes), nil
 }
 
-// AWSGetToken returns a token, which can be used to access the Kubernetes API of a cluster with the given clusterID.
+// AWSGetToken returns a token, which can be used to access the Kubernetes API
+// of a cluster with the given clusterID.
 // See: https://github.com/kubernetes-sigs/aws-iam-authenticator/blob/7547c74e660f8d34d9980f2c69aa008eed1f48d0/pkg/token/token.go#L310
 func AWSGetToken(accessKeyID, secretKey, region, sessionToken, roleArn, clusterID string) (string, error) {
 	cred := credentials.NewStaticCredentials(accessKeyID, secretKey, sessionToken)
@@ -128,8 +133,9 @@ func AWSGetToken(accessKeyID, secretKey, region, sessionToken, roleArn, clusterI
 	return fmt.Sprintf("k8s-aws-v1.%s", base64.RawURLEncoding.EncodeToString([]byte(presignedURLString))), nil
 }
 
-// AWSGetSSOConfig registers a new AWS SSO client and starts the device authentication. The client and device
-// authentication is returned, so that we can use the information in the following steps of the SSO flow.
+// AWSGetSSOConfig registers a new AWS SSO client and starts the device
+// authentication. The client and device authentication is returned, so that we
+// can use the information in the following steps of the SSO flow.
 func AWSGetSSOConfig(ssoRegion, startURL string) (string, error) {
 	clientName := "kubenav"
 	clientType := "public"
@@ -169,8 +175,9 @@ func AWSGetSSOConfig(ssoRegion, startURL string) (string, error) {
 	return string(ssoConfig), nil
 }
 
-// AWSGetSSOToken is used to request a new token with the client and device information from the former step in the sso
-// flow. The retrieved access token is then used to get the credentials for AWS.
+// AWSGetSSOToken is used to request a new token with the client and device
+// information from the former step in the sso flow. The retrieved access token
+// is then used to get the credentials for AWS.
 func AWSGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, accessToken string, accessTokenExpire int64) (string, error) {
 	grantType := "urn:ietf:params:oauth:grant-type:device_code"
 
@@ -226,8 +233,9 @@ func AWSGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret
 	return string(ssoCredentials), nil
 }
 
-// AWSGetSSOAccounts returns a list of accounts and roles for the currently authenticated user, so that a user does not
-// have to provide these information by his own.
+// AWSGetSSOAccounts returns a list of accounts and roles for the currently
+// authenticated user, so that a user does not have to provide these information
+// by his own.
 func AWSGetSSOAccounts(ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode string) (string, error) {
 	grantType := "urn:ietf:params:oauth:grant-type:device_code"
 

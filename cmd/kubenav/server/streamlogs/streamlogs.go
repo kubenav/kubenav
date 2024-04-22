@@ -10,7 +10,8 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-// StreamLogs opens a log stream for the provided container and writes the stream to the provided WebSocket connection.
+// StreamLogs opens a log stream for the provided container and writes the
+// stream to the provided WebSocket connection.
 func StreamLogs(ctx context.Context, clientset *kubernetes.Clientset, conn *websocket.Conn, namespace, name, container string, since int64) error {
 	options := &corev1.PodLogOptions{
 		Container:    container,

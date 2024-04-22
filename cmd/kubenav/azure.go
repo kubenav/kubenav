@@ -12,14 +12,16 @@ import (
 	"sigs.k8s.io/yaml"
 )
 
-// AzureCluster represents a single Azure cluster, with it's name and kubeconfig.
+// AzureCluster represents a single Azure cluster, with it's name and
+// kubeconfig.
 type AzureCluster struct {
 	Name       string      `json:"name"`
 	Kubeconfig interface{} `json:"kubeconfig"`
 }
 
-// AzureGetClusters returns all clusters wich are available with the provided Azure credentials, the returned JSON
-// encoded string contains all the clusters with there name and kubeconfig.
+// AzureGetClusters returns all clusters wich are available with the provided
+// Azure credentials, the returned JSON encoded string contains all the clusters
+// with there name and kubeconfig.
 func AzureGetClusters(subscriptionID, tenantID, clientID, clientSecret string, isAdmin bool) (string, error) {
 	credentials, err := azidentity.NewClientSecretCredential(tenantID, clientID, clientSecret, nil)
 	if err != nil {
@@ -87,8 +89,8 @@ func AzureGetClusters(subscriptionID, tenantID, clientID, clientSecret string, i
 	return string(clustersBytes), nil
 }
 
-// convert the map[interface{}]interface{} returned from yaml.Unmarshal to a map[string]interface{} for the usage in
-// json.Marshal.
+// convert the map[interface{}]interface{} returned from yaml.Unmarshal to a
+// map[string]interface{} for the usage in json.Marshal.
 // See: https://stackoverflow.com/a/40737676
 func azureConvertKubeconfig(i interface{}) interface{} {
 	switch x := i.(type) {

@@ -24,8 +24,8 @@ type OIDCResponse struct {
 	Verifier     string `json:"verifier"`
 }
 
-// Creates a high-entropy cryptographic random string as per RFC 7636 4.1. Internally it uses a 32-octet sequence from
-// the `crypto/rand` PRNG
+// Creates a high-entropy cryptographic random string as per RFC 7636 4.1.
+// Internally it uses a 32-octet sequence from the `crypto/rand` PRNG
 func createVerifier() (string, error) {
 	r := make([]byte, 32)
 	_, err := rand.Read(r)
@@ -35,7 +35,8 @@ func createVerifier() (string, error) {
 	return base64URLEncode(r), nil
 }
 
-// Creates a code challenge derived from the code verifier using the "S256" code challenge method.
+// Creates a code challenge derived from the code verifier using the "S256" code
+// challenge method.
 //
 //	code_challenge = BASE64URL-ENCODE(SHA256(ASCII(code_verifier)))
 func createS256Challenge(verifier string) string {
@@ -51,11 +52,12 @@ func base64URLEncode(data []byte) string {
 	return encoding.EncodeToString(data)
 }
 
-// oidcContext creates the context for the HTTP requests against the OIDC provider. If the OIDC provider uses a self
-// signed certificate, it will be included in the context.
+// oidcContext creates the context for the HTTP requests against the OIDC
+// provider. If the OIDC provider uses a self signed certificate, it will be
+// included in the context.
 //
-// NOTE: The certificateAuthority field correlates to the idp-certificate-authority field in the Kubeconfig
-// auth-provider section.
+// NOTE: The certificateAuthority field correlates to the
+// idp-certificate-authority field in the Kubeconfig auth-provider section.
 func oidcContext(ctx context.Context, certificateAuthority string) (context.Context, error) {
 	if certificateAuthority == "" {
 		return ctx, nil
@@ -77,7 +79,8 @@ func oidcContext(ctx context.Context, certificateAuthority string) (context.Cont
 	return oidc.ClientContext(ctx, client), nil
 }
 
-// OIDCGetLink returns the link for the configured OIDC provider. The Link can then be used by the user to login.
+// OIDCGetLink returns the link for the configured OIDC provider. The Link can
+// then be used by the user to login.
 func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod string) (string, error) {
 	ctx, err := oidcContext(context.Background(), certificateAuthority)
 	if err != nil {
@@ -134,8 +137,9 @@ func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, sco
 	return string(oidcResponseBytes), nil
 }
 
-// OIDCGetRefreshToken returns a refresh token for the configured OIDC provider. The refresh token can be used to get a
-// new access token via the OIDCGetAccessToken function.
+// OIDCGetRefreshToken returns a refresh token for the configured OIDC provider.
+// The refresh token can be used to get a new access token via the
+// OIDCGetAccessToken function.
 func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, code, verifier string, useAccessToken bool) (string, error) {
 	ctx, err := oidcContext(context.Background(), certificateAuthority)
 	if err != nil {

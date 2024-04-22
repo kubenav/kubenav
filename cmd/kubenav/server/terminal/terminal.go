@@ -1,6 +1,7 @@
-// Package terminal implements the functions for all terminal interactions in the frontend. These includes to get a
-// shell into a Pod, SSH sessions for a Node and the streaming of log files.
-// The implementation is very similar to the implementation in the "Kubernetes Dashboard", you can find the file
+// Package terminal implements the functions for all terminal interactions in
+// the frontend. These includes to get a shell into a Pod, SSH sessions for a
+// Node and the streaming of log files. The implementation is very similar to
+// the implementation in the "Kubernetes Dashboard", you can find the file
 // here: https://github.com/kubernetes/dashboard/blob/master/src/app/backend/handler/terminal.go
 package terminal
 
@@ -43,7 +44,8 @@ type Session struct {
 	DoneChan  chan struct{}
 }
 
-// Next is called in a loop from remotecommand as long as the process is running.
+// Next is called in a loop from remotecommand as long as the process is
+// running.
 // TerminalSize handles pty->process resize events.
 func (t Session) Next() *remotecommand.TerminalSize {
 	select {
@@ -96,8 +98,8 @@ func (t Session) Write(p []byte) (int, error) {
 	return len(p), nil
 }
 
-// StartProcess executes the given command (cmd) in the container specified in the request and connects it up with the
-// ptyHandler (a session).
+// StartProcess executes the given command (cmd) in the container specified in
+// the request and connects it up with the ptyHandler (a session).
 func StartProcess(config *rest.Config, reqURL *url.URL, cmd []string, ptyHandler PtyHandler) error {
 	exec, err := remotecommand.NewSPDYExecutor(config, "POST", reqURL)
 	if err != nil {

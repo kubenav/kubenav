@@ -61,7 +61,8 @@ type datum struct {
 	Y *float64 `json:"y"`
 }
 
-// PrometheusGetData can be used to run a list multiple PromQL queries against a Prometheus instance.
+// PrometheusGetData can be used to run a list multiple PromQL queries against a
+// Prometheus instance.
 func PrometheusGetData(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, request string) (string, error) {
 	restConfig, clientset, err := kube.NewClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
 	if err != nil {
@@ -74,9 +75,10 @@ func PrometheusGetData(clusterServer, clusterCertificateAuthorityData string, cl
 		return "", err
 	}
 
-	// When not Prometheus address is specified, Prometheus is running inside the cluster and we have to establish a
-	// port forwarding session to connect to the Prometheus API. The session is closed as soon as we retrieved the data
-	// from the Prometheus API.
+	// When not Prometheus address is specified, Prometheus is running inside
+	// the cluster and we have to establish a port forwarding session to connect
+	// to the Prometheus API. The session is closed as soon as we retrieved the
+	// data from the Prometheus API.
 	if requestData.Prometheus.Address == "" {
 		pf, err := getPortForwardingSesstion(restConfig, clientset, requestData)
 		if err != nil {
@@ -93,9 +95,11 @@ func PrometheusGetData(clusterServer, clusterCertificateAuthorityData string, cl
 		requestData.Prometheus.Address = fmt.Sprintf("http://localhost:%d%s", pf.LocalPort, requestData.Prometheus.Path)
 	}
 
-	// Create a Prometheus client with the user specified credentials. As address for the Prometheus instance we are
-	// using localhost and the local port created in the port forwarding session.
-	// We also need to set the range for the PromQL query from the start and end time specified in the reuqest data.
+	// Create a Prometheus client with the user specified credentials. As
+	// address for the Prometheus instance we are using localhost and the local
+	// port created in the port forwarding session. We also need to set the
+	// range for the PromQL query from the start and end time specified in the
+	// reuqest data.
 	roundTripper := getRoundTripper(requestData.Prometheus)
 
 	if requestData.Prometheus.Username != "" && requestData.Prometheus.Password != "" {
@@ -130,8 +134,9 @@ func PrometheusGetData(clusterServer, clusterCertificateAuthorityData string, cl
 
 	var metrics []metric
 
-	// Loop through all query and interpolate them with the given manifest. This allows us to use for example the Pod
-	// name or namespace within the PromQL queries. The interpolated queries are then sent to the Prometheus API.
+	// Loop through all query and interpolate them with the given manifest. This
+	// allows us to use for example the Pod name or namespace within the PromQL
+	// queries. The interpolated queries are then sent to the Prometheus API.
 	for _, q := range requestData.Queries {
 		interpolatedQuery, err := queryInterpolation(q.Query, requestData.Manifest)
 		if err != nil {
@@ -144,8 +149,8 @@ func PrometheusGetData(clusterServer, clusterCertificateAuthorityData string, cl
 			return "", err
 		}
 
-		// Here we have to loop though the returned streams to generate our metrics, which we can use in the Dart code
-		// to render the charts.
+		// Here we have to loop though the returned streams to generate our
+		// metrics, which we can use in the Dart code to render the charts.
 		streams, ok := result.(model.Matrix)
 		if !ok {
 			return "", err
@@ -203,8 +208,9 @@ func PrometheusGetData(clusterServer, clusterCertificateAuthorityData string, cl
 }
 
 func getPortForwardingSesstion(restConfig *rest.Config, clientset *kubernetes.Clientset, requestData requestData) (*portforwarding.Session, error) {
-	// Get a list of all Pods, which are matching the users specified namespace and label selector. If the list of Pods
-	// is empty we return an error. If not we continue with establishing the port forwarding session.
+	// Get a list of all Pods, which are matching the users specified namespace
+	// and label selector. If the list of Pods is empty we return an error. If
+	// not we continue with establishing the port forwarding session.
 	cxt := context.Background()
 	podList, err := clientset.CoreV1().Pods(requestData.Prometheus.Namespace).List(cxt, metav1.ListOptions{
 		LabelSelector: requestData.Prometheus.LabelSelector,
@@ -217,8 +223,9 @@ func getPortForwardingSesstion(restConfig *rest.Config, clientset *kubernetes.Cl
 		return nil, fmt.Errorf("no pod found")
 	}
 
-	// Create a port forwarding session with the first Pod in the list of returned Pods from above. To establish the
-	// portforwarding session we also use the user specified container and port.
+	// Create a port forwarding session with the first Pod in the list of
+	// returned Pods from above. To establish the portforwarding session we also
+	// use the user specified container and port.
 	pf, err := portforwarding.CreateSession("plugin_prometheus_", podList.Items[0].Name, podList.Items[0].Namespace, requestData.Prometheus.Container, requestData.Prometheus.Port)
 	if err != nil {
 		return nil, err

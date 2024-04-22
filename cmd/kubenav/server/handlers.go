@@ -20,16 +20,19 @@ import (
 	"k8s.io/client-go/tools/remotecommand"
 )
 
-// healthHandler always returns a status ok response and can be used to check if the server is running or not.
+// healthHandler always returns a status ok response and can be used to check if
+// the server is running or not.
 func healthHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-// portForwardingHandler can be used to establish a new port forwarding connection ("POST"), to get a list of all
-// established connections ("GET") and to close a port forwarding connection ("DELETE").
+// portForwardingHandler can be used to establish a new port forwarding
+// connection ("POST"), to get a list of all established connections ("GET") and
+// to close a port forwarding connection ("DELETE").
 func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
-	// The get method is used to return all user initalized session (prefixed with "_user"). This is required so that
-	// wen can check if the session still exists or if the session was deleted because of an error.
+	// The get method is used to return all user initalized session (prefixed
+	// with "_user"). This is required so that wen can check if the session
+	// still exists or if the session was deleted because of an error.
 	if r.Method == http.MethodGet {
 		var sessions []portforwarding.GetResponse
 
@@ -57,9 +60,11 @@ func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// The POST method is used to create a new port forwarding session. When the session was successfully initialized
-	// and started, we return the session id which can be used to delete a session and the used local port from the
-	// session which can then used by the user to interact with the selected remote port.
+	// The POST method is used to create a new port forwarding session. When the
+	// session was successfully initialized and started, we return the session
+	// id which can be used to delete a session and the used local port from the
+	// session which can then used by the user to interact with the selected
+	// remote port.
 	if r.Method == http.MethodPost {
 		if r.Body == nil {
 			middleware.Errorf(w, r, nil, http.StatusBadRequest, "Request body is empty")
@@ -79,9 +84,11 @@ func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// If the request doesn't contain a pod name, container and port number, we assume that the port forwarding
-		// request was initialized via a service. This means that we have to get all pods for this service via it's
-		// selector and then we have to get the container and port from the pods manifest file.
+		// If the request doesn't contain a pod name, container and port number,
+		// we assume that the port forwarding request was initialized via a
+		// service. This means that we have to get all pods for this service via
+		// it's selector and then we have to get the container and port from the
+		// pods manifest file.
 		if request.PodName == "" && request.PodContainer == "" && request.PodPort == 0 {
 			pods, err := clientset.CoreV1().Pods(request.PodNamespace).List(r.Context(), metav1.ListOptions{
 				LabelSelector: request.ServiceSelector,
@@ -105,8 +112,9 @@ func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		// Create a new session for port forwarding and start the portforwarding request. Then we wait until the
-		// connection is ready, befor we return the request to the user.
+		// Create a new session for port forwarding and start the portforwarding
+		// request. Then we wait until the connection is ready, befor we return
+		// the request to the user.
 		pf, err := portforwarding.CreateSession("user_", request.PodName, request.PodNamespace, request.PodContainer, request.PodPort)
 		if err != nil {
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not initialize port forwarding: %s", err.Error()))
@@ -141,7 +149,8 @@ func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// The DELETE method is used to delete a port forwarding session and to close the underlying port forwarding
+	// The DELETE method is used to delete a port forwarding session and to
+	// close the underlying port forwarding
 	// connection.
 	if r.Method == http.MethodDelete {
 		var request portforwarding.DeleteRequest
@@ -170,8 +179,9 @@ func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 
 // terminalHandler handles exec requests to a container via WebSockets.
 func terminalHandler(w http.ResponseWriter, r *http.Request) {
-	// The Pod data (name and namespace) as well as the container and shell are send via query parameters. While the
-	// credentials required to authenticate against the Kubernetes API must be send via our custom headers.
+	// The Pod data (name and namespace) as well as the container and shell are
+	// send via query parameters. While the credentials required to authenticate
+	// against the Kubernetes API must be send via our custom headers.
 	name := r.URL.Query().Get("name")
 	namespace := r.URL.Query().Get("namespace")
 	container := r.URL.Query().Get("container")
@@ -198,11 +208,12 @@ func terminalHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// After we create a client to interact with the Kubernetes API, we can upgrade the underlying http connection, to
-	// get a shell into the requested container.
+	// After we create a client to interact with the Kubernetes API, we can
+	// upgrade the underlying http connection, to get a shell into the requested
+	// container.
 	//
-	// We also setup the ping and pong handlers, so that the WebSocket connection isn't closed, when the user doesn't
-	// send any data for a while.
+	// We also setup the ping and pong handlers, so that the WebSocket
+	// connection isn't closed, when the user doesn't send any data for a while.
 	var upgrader = websocket.Upgrader{}
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 
@@ -229,10 +240,11 @@ func terminalHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	// After our WebSocket connection is established, we create the request url for the Kubernetes API to get a terminal
-	// into the requested container.
+	// After our WebSocket connection is established, we create the request url
+	// for the Kubernetes API to get a terminal into the requested container.
 	//
-	// We also validating the user defined shell and fallback to "sh" when it was invalid.
+	// We also validating the user defined shell and fallback to "sh" when it
+	// was invalid.
 	reqURL, err := url.Parse(fmt.Sprintf("%s/api/v1/namespaces/%s/pods/%s/exec?container=%s&command=%s&stdin=true&stdout=true&stderr=true&tty=true", restConfig.Host, namespace, name, container, shell))
 	if err != nil {
 		msg, _ := json.Marshal(terminal.Message{
@@ -248,8 +260,9 @@ func terminalHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	cmd := []string{shell}
 
-	// Finally we create a new terminal session and we are starting the terminal process, where the communication
-	// between the user and the container happens via the WebSocket connection we established before.
+	// Finally we create a new terminal session and we are starting the terminal
+	// process, where the communication between the user and the container
+	// happens via the WebSocket connection we established before.
 	session := &terminal.Session{
 		WebSocket: c,
 		SizeChan:  make(chan remotecommand.TerminalSize),
@@ -298,11 +311,12 @@ func logsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// After we create a client to interact with the Kubernetes API, we can upgrade the underlying http connection, to
-	// stream the logs of the requested container.
+	// After we create a client to interact with the Kubernetes API, we can
+	// upgrade the underlying http connection, to stream the logs of the
+	// requested container.
 	//
-	// We also setup the ping and pong handlers, so that the WebSocket connection isn't closed, when the user doesn't
-	// send any data for a while.
+	// We also setup the ping and pong handlers, so that the WebSocket
+	// connection isn't closed, when the user doesn't send any data for a while.
 	var upgrader = websocket.Upgrader{}
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 
@@ -329,7 +343,8 @@ func logsHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	// Stream the logs of the selected container via the created WebSocket connection.
+	// Stream the logs of the selected container via the created WebSocket
+	// connection.
 	err = streamlogs.StreamLogs(r.Context(), clientset, c, namespace, name, container, parsedSince)
 	if err != nil {
 		c.WriteMessage(websocket.TextMessage, []byte("Could not stream logs: "+err.Error()))
