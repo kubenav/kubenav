@@ -173,7 +173,7 @@ class _DetailsShowYamlState extends State<DetailsShowYaml> {
             ),
             child: CodeField(
               controller: _codeController,
-              enabled: false,
+              readOnly: true,
               textStyle: TextStyle(
                 fontSize: 14,
                 fontFamily: getMonospaceFontFamily(),

@@ -110,7 +110,7 @@ class _PluginHelmDetailsValuesState extends State<PluginHelmDetailsValues> {
             ),
             child: CodeField(
               controller: _codeController,
-              enabled: false,
+              readOnly: true,
               textStyle: TextStyle(
                 fontSize: 14,
                 fontFamily: getMonospaceFontFamily(),

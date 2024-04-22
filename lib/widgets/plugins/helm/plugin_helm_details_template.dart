@@ -71,7 +71,7 @@ class _PluginHelmDetailsTemplateState extends State<PluginHelmDetailsTemplate> {
             ),
             child: CodeField(
               controller: _codeController,
-              enabled: false,
+              readOnly: true,
               textStyle: TextStyle(
                 fontSize: 14,
                 fontFamily: getMonospaceFontFamily(),
