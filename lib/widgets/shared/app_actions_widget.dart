@@ -32,42 +32,44 @@ class AppActionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(
-        Constants.spacingMiddle,
-      ),
-      padding: const EdgeInsets.only(
-        left: Constants.spacingMiddle,
-        right: Constants.spacingMiddle,
-      ),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.background,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(Constants.sizeBorderRadius),
+    return SafeArea(
+      child: Container(
+        margin: const EdgeInsets.all(
+          Constants.spacingMiddle,
         ),
-      ),
-      child: SingleChildScrollView(
-        child: ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(0),
-          separatorBuilder: (context, index) {
-            return const Divider(
-              height: 0,
-              thickness: 1.0,
-            );
-          },
-          itemCount: actions.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              onTap: actions[index].onTap,
-              title: Text(
-                actions[index].title,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: actions[index].color),
-              ),
-            );
-          },
+        padding: const EdgeInsets.only(
+          left: Constants.spacingMiddle,
+          right: Constants.spacingMiddle,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.background,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(Constants.sizeBorderRadius),
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(0),
+            separatorBuilder: (context, index) {
+              return const Divider(
+                height: 0,
+                thickness: 1.0,
+              );
+            },
+            itemCount: actions.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                onTap: actions[index].onTap,
+                title: Text(
+                  actions[index].title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: actions[index].color),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
