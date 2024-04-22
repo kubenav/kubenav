@@ -12,6 +12,7 @@ require (
 	github.com/prometheus/client_golang v1.19.0
 	github.com/prometheus/common v0.52.2
 	github.com/wI2L/jsondiff v0.5.1
+	golang.org/x/mobile v0.0.0-20240404231514-09dbf07665ed
 	golang.org/x/oauth2 v0.19.0
 	helm.sh/helm/v3 v3.14.2
 	k8s.io/api v0.29.3
@@ -135,7 +136,6 @@ require (
 	go.opentelemetry.io/otel/trace v1.21.0 // indirect
 	go.starlark.net v0.0.0-20231121155337-90ade8b19d09 // indirect
 	golang.org/x/crypto v0.22.0 // indirect
-	golang.org/x/mobile v0.0.0-20240404231514-09dbf07665ed // indirect
 	golang.org/x/mod v0.17.0 // indirect
 	golang.org/x/net v0.24.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
