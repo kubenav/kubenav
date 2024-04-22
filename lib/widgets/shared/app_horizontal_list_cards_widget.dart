@@ -60,7 +60,7 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
     if (moreText != null && moreIcon != null) {
       return InkWell(
         onTap: moreOnTap,
-        child: Wrap(
+        child: Row(
           children: [
             Text(
               moreText,

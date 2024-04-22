@@ -138,7 +138,7 @@ class Settings extends StatelessWidget {
             onTap: () {
               navigate(context, const SettingsClusters());
             },
-            child: Wrap(
+            child: Row(
               children: [
                 Text(
                   'View all',

@@ -116,7 +116,7 @@ class DetailsItemWidget extends StatelessWidget {
     if (goTo != null && goToOnTap != null) {
       return InkWell(
         onTap: goToOnTap,
-        child: Wrap(
+        child: Row(
           children: [
             Text(
               goTo!,
