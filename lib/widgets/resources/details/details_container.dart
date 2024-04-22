@@ -284,6 +284,7 @@ class DetailsContainer extends StatelessWidget {
                     )
                     .toList(),
               ),
+              const SizedBox(height: Constants.spacingMiddle),
               AppVertialListSimpleWidget(
                 title: 'Volume Mounts',
                 items: container.volumeMounts
