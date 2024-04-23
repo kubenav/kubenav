@@ -228,7 +228,23 @@ class _DetailsGetLogsState extends State<DetailsGetLogs> {
 
     if (tmpContainers.isNotEmpty) {
       _containers = tmpContainers;
-      _container = tmpContainers[0];
+
+      /// When the Pod contains a "kubectl.kubernetes.io/default-container"
+      /// annotation we use this container as initial value for the [_container]
+      /// state. If the annotation is not available we use the first container
+      /// from the list.
+      if (widget.item['metadata'].containsKey('annotations') &&
+          widget.item['metadata']['annotations']
+              .containsKey('kubectl.kubernetes.io/default-container') &&
+          tmpContainers.contains(
+            widget.item['metadata']['annotations']
+                ['kubectl.kubernetes.io/default-container'],
+          )) {
+        _container = widget.item['metadata']['annotations']
+            ['kubectl.kubernetes.io/default-container'];
+      } else {
+        _container = tmpContainers[0];
+      }
     }
   }
 
