@@ -1,4 +1,5 @@
 import 'dart:io' show Platform;
+import 'dart:math' show Random;
 
 import 'package:flutter/material.dart';
 
@@ -65,4 +66,13 @@ String getMonospaceFontFamily() {
   }
 
   return 'monospace';
+}
+
+/// [generateRandomString] generates a random string with the given [len]
+/// length. The generated string contains only lowercase letters and numbers,
+/// so it can be used within Kubernetes resource names.
+String generateRandomString(int len) {
+  var r = Random();
+  const chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
+  return List.generate(len, (index) => chars[r.nextInt(chars.length)]).join();
 }

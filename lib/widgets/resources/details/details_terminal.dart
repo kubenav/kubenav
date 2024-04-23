@@ -157,6 +157,13 @@ class _DetailsTerminalState extends State<DetailsTerminal> {
           tmpContainers.add(container['name']);
         }
       }
+
+      if (widget.item['spec']['ephemeralContainers'] != null) {
+        for (var ephemeralContainer in widget.item['spec']
+            ['ephemeralContainers']) {
+          tmpContainers.add(ephemeralContainer['name']);
+        }
+      }
     }
 
     if (tmpContainers.isNotEmpty) {
