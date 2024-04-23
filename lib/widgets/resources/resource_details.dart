@@ -11,6 +11,7 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/resources/details/details_create_job.dart';
+import 'package:kubenav/widgets/resources/details/details_debug_pod.dart';
 import 'package:kubenav/widgets/resources/details/details_delete_resource.dart';
 import 'package:kubenav/widgets/resources/details/details_edit_resource.dart';
 import 'package:kubenav/widgets/resources/details/details_get_logs.dart';
@@ -287,6 +288,28 @@ List<AppResourceActionsModel> resourceDetailsActions(
             DetailsTerminal(
               name: name,
               namespace: namespace ?? '',
+              item: item,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  if (Resources.map['pods']!.resource == resource &&
+      Resources.map['pods']!.path == path) {
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Debug',
+        icon: Icons.bug_report,
+        onTap: () {
+          showModal(
+            context,
+            DetailsDebugPod(
+              resource: resource,
+              path: path,
+              name: name,
+              namespace: namespace,
               item: item,
             ),
           );
