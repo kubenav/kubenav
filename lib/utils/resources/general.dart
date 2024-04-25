@@ -305,3 +305,30 @@ void Function()? goToReference(
 
   return null;
 }
+
+/// [formatBytes] formates the provided [size] in bytes into a human readable
+/// format. The [round] parameter allows us to round the result to a specific
+/// number of digits.
+String formatBytes(int size, {int round = 2}) {
+  const List<String> affixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+  num divider = 1024;
+  num runningDivider = divider;
+  num runningPreviousDivider = 0;
+  int affix = 0;
+
+  while (size >= runningDivider && affix < affixes.length - 1) {
+    runningPreviousDivider = runningDivider;
+    runningDivider *= divider;
+    affix++;
+  }
+
+  String result =
+      (runningPreviousDivider == 0 ? size : size / runningPreviousDivider)
+          .toStringAsFixed(round);
+
+  if (result.endsWith('0' * round)) {
+    result = result.substring(0, result.length - round - 1);
+  }
+
+  return '$result ${affixes[affix]}';
+}

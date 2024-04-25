@@ -36,6 +36,7 @@ dependencies:
 
   catppuccin_flutter: ^1.0.0
   code_text_field: ^1.0.2
+  collection: ^1.18.0
   file_picker: ^8.0.0+1
   fl_chart: ^0.67.0
   flutter_markdown: ^0.7.1

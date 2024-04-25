@@ -130,6 +130,13 @@ docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli generate \
   -o /local/out/dart
 ```
 
+The swagger file can also be retrieved via the following commands:
+
+```sh
+kubectl proxy --port=8080
+curl localhost:8080/openapi/v2 > swagger.json
+```
+
 #### Update the Icons and Splash Screen
 
 To update the icon for the app or the splash screens the following two commands

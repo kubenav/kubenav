@@ -149,7 +149,8 @@ class _PluginHelmListState extends State<PluginHelmList> {
                       ),
                     ),
                     Text(
-                      Characters('Chart: ${release.chart?.metadata?.version}')
+                      Characters(
+                              'Chart Version: ${release.chart?.metadata?.version}')
                           .replaceAll(Characters(''), Characters('\u{200B}'))
                           .toString(),
                       overflow: TextOverflow.ellipsis,
