@@ -11,6 +11,8 @@
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
+import 'package:collection/collection.dart';
+
 const _delimiters = {'csv': ',', 'ssv': ' ', 'tsv': '\t', 'pipes': '|'};
 const _dateEpochMarker = 'epoch';
 final _regList = RegExp(r'^List<(.*)>$');
@@ -49,3 +51,5 @@ DateTime? mapDateTime(dynamic map, String key, [String? pattern]) {
   }
   return null;
 }
+
+const deepEquality = DeepCollectionEquality();
