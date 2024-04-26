@@ -9,7 +9,7 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
-import 'package:kubenav/widgets/plugins/flux/resources.dart';
+import 'package:kubenav/widgets/plugins/flux/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class PluginFluxDetailsSuspend extends StatefulWidget {
@@ -18,13 +18,13 @@ class PluginFluxDetailsSuspend extends StatefulWidget {
     required this.resource,
     required this.namespace,
     required this.name,
-    required this.manifest,
+    required this.item,
   });
 
-  final Resource resource;
+  final FluxResource resource;
   final String namespace;
   final String name;
-  final Map<String, dynamic> manifest;
+  final Map<String, dynamic> item;
 
   @override
   State<PluginFluxDetailsSuspend> createState() =>
@@ -49,16 +49,16 @@ class _PluginFluxDetailsSuspendState extends State<PluginFluxDetailsSuspend> {
         _isLoading = true;
       });
 
-      final String body = widget.manifest['spec'] != null &&
-              widget.manifest['spec']['suspend'] != null
-          ? '[{ "op": "replace", "path": "/spec/suspend", "value": true }]'
-          : '[{ "op": "add", "path": "/spec/suspend", "value": true }]';
+      final String body =
+          widget.item['spec'] != null && widget.item['spec']['suspend'] != null
+              ? '[{ "op": "replace", "path": "/spec/suspend", "value": true }]'
+              : '[{ "op": "add", "path": "/spec/suspend", "value": true }]';
 
       final cluster = await clustersRepository.getClusterWithCredentials(
         clustersRepository.activeClusterId,
       );
       final url =
-          '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}/${widget.name}';
+          '${widget.resource.api.path}/namespaces/${widget.namespace}/${widget.resource.api.resource}/${widget.name}';
 
       await KubernetesService(
         cluster: cluster!,
@@ -72,8 +72,8 @@ class _PluginFluxDetailsSuspendState extends State<PluginFluxDetailsSuspend> {
       if (mounted) {
         showSnackbar(
           context,
-          '${widget.resource.titleSingular} suspended',
-          'The ${widget.resource.titleSingular} ${widget.name} in namespace ${widget.namespace} was suspended',
+          '${widget.resource.singular} suspended',
+          'The ${widget.resource.singular} ${widget.name} in namespace ${widget.namespace} was suspended',
         );
         Navigator.pop(context);
       }
@@ -89,7 +89,7 @@ class _PluginFluxDetailsSuspendState extends State<PluginFluxDetailsSuspend> {
       if (mounted) {
         showSnackbar(
           context,
-          'Failed to suspend ${widget.resource.titleSingular}',
+          'Failed to suspend ${widget.resource.singular}',
           err.toString(),
         );
       }
@@ -105,7 +105,7 @@ class _PluginFluxDetailsSuspendState extends State<PluginFluxDetailsSuspend> {
       if (mounted) {
         showSnackbar(
           context,
-          'Failed to suspend ${widget.resource.titleSingular}',
+          'Failed to suspend ${widget.resource.singular}',
           err.toString(),
         );
       }
@@ -135,7 +135,7 @@ class _PluginFluxDetailsSuspendState extends State<PluginFluxDetailsSuspend> {
             right: Constants.spacingMiddle,
           ),
           child: Text(
-            'Do you really want to suspend the ${widget.resource.titleSingular} ${widget.namespace}/${widget.name}?',
+            'Do you really want to suspend the ${widget.resource.singular} ${widget.namespace}/${widget.name}?',
           ),
         ),
       ),

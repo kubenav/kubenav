@@ -12,7 +12,7 @@ import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/plugins/flux/plugin_flux_details_reconcile.dart';
 import 'package:kubenav/widgets/plugins/flux/plugin_flux_details_resume.dart';
 import 'package:kubenav/widgets/plugins/flux/plugin_flux_details_suspend.dart';
-import 'package:kubenav/widgets/plugins/flux/resources.dart';
+import 'package:kubenav/widgets/plugins/flux/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/resources/details/details_item.dart';
 import 'package:kubenav/widgets/resources/details/details_item_conditions.dart';
 import 'package:kubenav/widgets/resources/details/details_item_metadata.dart';
@@ -27,8 +27,8 @@ import 'package:kubenav/widgets/shared/app_resource_actions.dart';
 /// resource.
 List<AppResourceActionsModel> fluxDetailsActions(
   BuildContext context,
-  Resource resource,
-  Map<String, dynamic> manifest,
+  FluxResource resource,
+  Map<String, dynamic> item,
   List<AppResourceActionsModel> additionalActions,
 ) {
   AppRepository appRepository = Provider.of<AppRepository>(
@@ -44,7 +44,7 @@ List<AppResourceActionsModel> fluxDetailsActions(
         showModal(
           context,
           DetailsShowYaml(
-            item: manifest,
+            item: item,
           ),
         );
       },
@@ -57,9 +57,9 @@ List<AppResourceActionsModel> fluxDetailsActions(
           context,
           PluginFluxDetailsSuspend(
             resource: resource,
-            namespace: manifest['metadata']['namespace'],
-            name: manifest['metadata']['name'],
-            manifest: manifest,
+            namespace: item['metadata']['namespace'],
+            name: item['metadata']['name'],
+            item: item,
           ),
         );
       },
@@ -72,9 +72,9 @@ List<AppResourceActionsModel> fluxDetailsActions(
           context,
           PluginFluxDetailsResume(
             resource: resource,
-            namespace: manifest['metadata']['namespace'],
-            name: manifest['metadata']['name'],
-            manifest: manifest,
+            namespace: item['metadata']['namespace'],
+            name: item['metadata']['name'],
+            item: item,
           ),
         );
       },
@@ -87,9 +87,9 @@ List<AppResourceActionsModel> fluxDetailsActions(
           context,
           PluginFluxDetailsReconcile(
             resource: resource,
-            namespace: manifest['metadata']['namespace'],
-            name: manifest['metadata']['name'],
-            manifest: manifest,
+            namespace: item['metadata']['namespace'],
+            name: item['metadata']['name'],
+            item: item,
           ),
         );
       },
@@ -111,7 +111,7 @@ class PluginFluxDetails extends StatefulWidget {
 
   final String name;
   final String namespace;
-  final Resource resource;
+  final FluxResource resource;
 
   @override
   State<PluginFluxDetails> createState() => _PluginFluxDetailsState();
@@ -120,7 +120,7 @@ class PluginFluxDetails extends StatefulWidget {
 class _PluginFluxDetailsState extends State<PluginFluxDetails> {
   late Future<Map<String, dynamic>> _futureFetchResource;
 
-  /// [_fetchResource] fetches the manifest for the prvided [widget.resource]
+  /// [_fetchResource] fetches the item for the prvided [widget.resource]
   /// with the given [widget.name] and [widget.namespace].
   Future<Map<String, dynamic>> _fetchResource() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
@@ -137,7 +137,7 @@ class _PluginFluxDetailsState extends State<PluginFluxDetails> {
     );
 
     final url =
-        '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}/${widget.name}';
+        '${widget.resource.api.path}/namespaces/${widget.namespace}/${widget.resource.api.resource}/${widget.name}';
 
     return await KubernetesService(
       cluster: cluster!,
@@ -149,10 +149,10 @@ class _PluginFluxDetailsState extends State<PluginFluxDetails> {
   /// [_buildDetails] is responsible for showing the correct details item for
   /// the selected resource.
   List<Widget> _buildDetails(
-    Resource resource,
-    Map<String, dynamic> manifest,
+    FluxResource resource,
+    Map<String, dynamic> item,
   ) {
-    final details = resource.buildDetails(context, manifest);
+    final details = resource.buildDetails(context, item);
 
     return List.generate(
       details.length,
@@ -257,9 +257,9 @@ class _PluginFluxDetailsState extends State<PluginFluxDetails> {
                         ],
                       );
                     default:
-                      final manifest = snapshot.data;
+                      final item = snapshot.data;
 
-                      if (snapshot.hasError || manifest == null) {
+                      if (snapshot.hasError || item == null) {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -271,7 +271,7 @@ class _PluginFluxDetailsState extends State<PluginFluxDetails> {
                                 ),
                                 child: AppErrorWidget(
                                   message:
-                                      'Could not load ${widget.resource.titleSingular}',
+                                      'Could not load ${widget.resource.singular}',
                                   details: snapshot.error.toString(),
                                   icon: 'assets/plugins/flux.svg',
                                 ),
@@ -288,7 +288,7 @@ class _PluginFluxDetailsState extends State<PluginFluxDetails> {
                             actions: fluxDetailsActions(
                               context,
                               widget.resource,
-                              manifest,
+                              item,
                               [
                                 AppResourceActionsModel(
                                   title: 'Refresh',
