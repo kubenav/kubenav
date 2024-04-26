@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
@@ -101,11 +102,13 @@ class _DetailsLiveMetricsState extends State<DetailsLiveMetrics> {
       final url =
           '/apis/metrics.k8s.io/v1beta1/namespaces/${widget.namespace}/pods/${widget.name}';
 
-      final metricsData = await KubernetesService(
+      final result = await KubernetesService(
         cluster: cluster!,
         proxy: appRepository.settings.proxy,
         timeout: appRepository.settings.timeout,
       ).getRequest(url);
+
+      final metricsData = json.decode(result);
 
       Logger.log(
         'DetailsLiveMetricsRepository _fetchMetrics',

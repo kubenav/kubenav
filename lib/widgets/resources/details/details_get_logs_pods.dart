@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -76,11 +78,13 @@ class _DetailsGetLogsPodsState extends State<DetailsGetLogsPods> {
         '/api/v1/namespaces/${widget.namespace}/pods?${getSelector(IoK8sApimachineryPkgApisMetaV1LabelSelector.fromJson(widget.item['spec']['selector']))}',
       );
 
+      final data = json.decode(result);
+
       setState(() {
         _isLoading = false;
-        _pods = IoK8sApiCoreV1PodList.fromJson(result)!.items;
-        if (result['items'].isNotEmpty) {
-          _podSpec = result['items'][0];
+        _pods = IoK8sApiCoreV1PodList.fromJson(data)!.items;
+        if (data['items'].isNotEmpty) {
+          _podSpec = data['items'][0];
         }
       });
     } catch (err) {

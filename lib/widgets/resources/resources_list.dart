@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -93,11 +95,13 @@ class _ResourcesListState extends State<ResourcesList> {
                 ? '${widget.path}/${widget.resource}?${widget.selector ?? ''}'
                 : '${widget.path}${cluster!.namespace != '' ? '/namespaces/${cluster.namespace}' : ''}/${widget.resource}?${widget.selector ?? ''}';
 
-    final resourcesList = await KubernetesService(
+    final result = await KubernetesService(
       cluster: cluster!,
       proxy: appRepository.settings.proxy,
       timeout: appRepository.settings.timeout,
     ).getRequest(resourcesListUrl);
+
+    final resourcesList = json.decode(result);
 
     Logger.log(
       'ResourcesListRepository _init',

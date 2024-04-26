@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -59,11 +61,13 @@ class _PodDetailsItemState extends State<PodDetailsItem> {
       final url =
           '/apis/metrics.k8s.io/v1beta1/namespaces/${pod!.metadata!.namespace}/pods/${pod.metadata!.name}';
 
-      final metricsData = await KubernetesService(
+      final result = await KubernetesService(
         cluster: cluster!,
         proxy: appRepository.settings.proxy,
         timeout: appRepository.settings.timeout,
       ).getRequest(url);
+
+      final metricsData = json.decode(result);
 
       Logger.log(
         'PodDetailsItem _fetchMetrics',

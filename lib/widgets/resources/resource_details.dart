@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -417,11 +419,12 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
         ? '${widget.path}/${widget.resource}/${widget.name}'
         : '${widget.path}/namespaces/${widget.namespace}/${widget.resource}/${widget.name}';
 
-    return await KubernetesService(
+    final result = await KubernetesService(
       cluster: cluster!,
       proxy: appRepository.settings.proxy,
       timeout: appRepository.settings.timeout,
     ).getRequest(resourcesDetailsUrl);
+    return json.decode(result);
   }
 
   /// [_buildDetailsItem] is responsible for showing the correct details item for

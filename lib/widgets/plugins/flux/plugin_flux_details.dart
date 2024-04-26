@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';
@@ -139,11 +141,12 @@ class _PluginFluxDetailsState extends State<PluginFluxDetails> {
     final url =
         '${widget.resource.api.path}/namespaces/${widget.namespace}/${widget.resource.api.resource}/${widget.name}';
 
-    return await KubernetesService(
+    final result = await KubernetesService(
       cluster: cluster!,
       proxy: appRepository.settings.proxy,
       timeout: appRepository.settings.timeout,
     ).getRequest(url);
+    return json.decode(result);
   }
 
   /// [_buildDetails] is responsible for showing the correct details item for

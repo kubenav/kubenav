@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -62,7 +64,8 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
       timeout: appRepository.settings.timeout,
     ).getRequest(url);
 
-    final configMapsList = IoK8sApiCoreV1ConfigMapList.fromJson(result);
+    final configMapsList =
+        IoK8sApiCoreV1ConfigMapList.fromJson(json.decode(result));
 
     Logger.log(
       'PluginPrometheusListRepository fetchDashboards',

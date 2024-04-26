@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -54,11 +56,12 @@ class _OverviewEventsState extends State<OverviewEvents> {
         ? '${Resources.map['events']!.path}/namespaces/${cluster.namespace}/${Resources.map['events']!.resource}?fieldSelector=type=Warning'
         : '${Resources.map['events']!.path}/${Resources.map['events']!.resource}?fieldSelector=type=Warning';
 
-    final resourcesList = await KubernetesService(
+    final result = await KubernetesService(
       cluster: cluster!,
       proxy: appRepository.settings.proxy,
       timeout: appRepository.settings.timeout,
     ).getRequest(resourcesListUrl);
+    final resourcesList = json.decode(result);
 
     Logger.log(
       'OverviewEventsRepository _fetchEvents',
