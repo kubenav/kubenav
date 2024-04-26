@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -64,7 +66,7 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
       timeout: appRepository.settings.timeout,
     ).getRequest(url);
 
-    final configMap = IoK8sApiCoreV1ConfigMap.fromJson(result);
+    final configMap = IoK8sApiCoreV1ConfigMap.fromJson(json.decode(result));
 
     if (configMap != null &&
         configMap.metadata != null &&

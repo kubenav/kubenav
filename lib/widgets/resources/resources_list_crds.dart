@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -49,11 +51,13 @@ class _ResourcesListCRDsState extends State<ResourcesListCRDs> {
     final resourcesListUrl =
         '${Resources.map['customresourcedefinitions']!.path}/${Resources.map['customresourcedefinitions']!.resource}';
 
-    final resourcesList = await KubernetesService(
+    final result = await KubernetesService(
       cluster: cluster!,
       proxy: appRepository.settings.proxy,
       timeout: appRepository.settings.timeout,
     ).getRequest(resourcesListUrl);
+
+    final resourcesList = json.decode(result);
 
     Logger.log(
       'ResourcesListCRDsRepository _fetchItems',

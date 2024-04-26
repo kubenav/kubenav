@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart' as provider;
@@ -55,11 +57,12 @@ class _PluginFluxListState extends State<PluginFluxList> {
     final url =
         '${widget.resource.api.path}${cluster!.namespace != '' ? '/namespaces/${cluster.namespace}' : ''}/${widget.resource.api.resource}';
 
-    final data = await KubernetesService(
+    final result = await KubernetesService(
       cluster: cluster,
       proxy: appRepository.settings.proxy,
       timeout: appRepository.settings.timeout,
     ).getRequest(url);
+    final data = json.decode(result);
 
     return data['items'];
   }

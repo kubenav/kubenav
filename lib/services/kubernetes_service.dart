@@ -106,7 +106,7 @@ class KubernetesService {
   /// cluster. For that a user can pass in the [url], which should be called,
   /// the function then returns an error or a json object of the response from
   /// the Kubernetes API.
-  Future<Map<String, dynamic>> getRequest(String url) async {
+  Future<String> getRequest(String url) async {
     try {
       final result = await kubernetesRequest(
         cluster,
@@ -116,7 +116,7 @@ class KubernetesService {
         url,
         '',
       );
-      return json.decode(result);
+      return result;
     } catch (err) {
       Logger.log(
         'KubernetesService getRequest',

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -55,7 +57,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
       timeout: appRepository.settings.timeout,
     ).getRequest('/api/v1/namespaces');
 
-    return IoK8sApiCoreV1NamespaceList.fromJson(result)!.items;
+    return IoK8sApiCoreV1NamespaceList.fromJson(json.decode(result))!.items;
   }
 
   /// [_getFilteredNamespaces] filters the given list of [namespaces] by the

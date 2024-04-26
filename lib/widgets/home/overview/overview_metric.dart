@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:fl_chart/fl_chart.dart';
@@ -130,7 +132,9 @@ class _OverviewMetricState extends State<OverviewMetric> {
       '/api/v1/nodes${widget.nodeName != null ? '?fieldSelector=metadata.name=${widget.nodeName}' : ''}',
     );
     final nodesList = IoK8sApiCoreV1NodeList.fromJson(
-      nodesData,
+      json.decode(
+        nodesData,
+      ),
     );
 
     final podsData = await KubernetesService(
@@ -141,7 +145,9 @@ class _OverviewMetricState extends State<OverviewMetric> {
       '/api/v1/pods${widget.nodeName != null ? '?fieldSelector=spec.nodeName=${widget.nodeName}' : ''}',
     );
     final podsList = IoK8sApiCoreV1PodList.fromJson(
-      podsData,
+      json.decode(
+        podsData,
+      ),
     );
 
     final nodeMetricsData = await KubernetesService(
@@ -152,7 +158,9 @@ class _OverviewMetricState extends State<OverviewMetric> {
       '/apis/metrics.k8s.io/v1beta1/nodes${widget.nodeName != null ? '?fieldSelector=metadata.name=${widget.nodeName}' : ''}',
     );
     final nodeMetricsList = ApisMetricsV1beta1NodeMetricsList.fromJson(
-      nodeMetricsData,
+      json.decode(
+        nodeMetricsData,
+      ),
     );
 
     var cpuAllocatable = 0.0;
