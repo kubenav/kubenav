@@ -11,7 +11,7 @@ import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/utils/themes.dart';
-import 'package:kubenav/widgets/plugins/flux/plugin_flux_list.dart';
+import 'package:kubenav/widgets/plugins/flux/plugin_flux.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_list.dart';
 import 'package:kubenav/widgets/plugins/prometheus/plugin_prometheus_list.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
@@ -152,7 +152,7 @@ class Plugins extends StatelessWidget {
           ),
           AppVertialListSimpleModel(
             onTap: () {
-              navigate(context, const PluginFluxList());
+              navigate(context, const PluginFlux());
             },
             children: [
               Container(

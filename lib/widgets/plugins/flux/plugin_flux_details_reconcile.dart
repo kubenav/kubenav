@@ -9,7 +9,7 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
-import 'package:kubenav/widgets/plugins/flux/resources.dart';
+import 'package:kubenav/widgets/plugins/flux/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 String _fourDigits(int n) {
@@ -63,13 +63,13 @@ class PluginFluxDetailsReconcile extends StatefulWidget {
     required this.resource,
     required this.namespace,
     required this.name,
-    required this.manifest,
+    required this.item,
   });
 
-  final Resource resource;
+  final FluxResource resource;
   final String namespace;
   final String name;
-  final Map<String, dynamic> manifest;
+  final Map<String, dynamic> item;
 
   @override
   State<PluginFluxDetailsReconcile> createState() =>
@@ -96,9 +96,9 @@ class _PluginFluxDetailsReconcileState
       });
 
       final now = _rFC3339Nano(DateTime.now());
-      final String body = widget.manifest['metadata'] != null &&
-              widget.manifest['metadata']['annotations'] != null
-          ? widget.manifest['metadata']['annotations']
+      final String body = widget.item['metadata'] != null &&
+              widget.item['metadata']['annotations'] != null
+          ? widget.item['metadata']['annotations']
                       ['reconcile.fluxcd.io/requestedAt'] !=
                   null
               ? '[{"op": "replace", "path": "/metadata/annotations/reconcile.fluxcd.io~1requestedAt", "value": "$now"}]'
@@ -109,7 +109,7 @@ class _PluginFluxDetailsReconcileState
         clustersRepository.activeClusterId,
       );
       final url =
-          '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}/${widget.name}';
+          '${widget.resource.api.path}/namespaces/${widget.namespace}/${widget.resource.api.resource}/${widget.name}';
 
       await KubernetesService(
         cluster: cluster!,
@@ -123,8 +123,8 @@ class _PluginFluxDetailsReconcileState
       if (mounted) {
         showSnackbar(
           context,
-          '${widget.resource.titleSingular} reconciled',
-          'The ${widget.resource.titleSingular} ${widget.name} in namespace ${widget.namespace} was reconciled',
+          '${widget.resource.singular} reconciled',
+          'The ${widget.resource.singular} ${widget.name} in namespace ${widget.namespace} was reconciled',
         );
         Navigator.pop(context);
       }
@@ -140,7 +140,7 @@ class _PluginFluxDetailsReconcileState
       if (mounted) {
         showSnackbar(
           context,
-          'Failed to reconcile ${widget.resource.titleSingular}',
+          'Failed to reconcile ${widget.resource.singular}',
           err.toString(),
         );
       }
@@ -156,7 +156,7 @@ class _PluginFluxDetailsReconcileState
       if (mounted) {
         showSnackbar(
           context,
-          'Failed to reconcile ${widget.resource.titleSingular}',
+          'Failed to reconcile ${widget.resource.singular}',
           err.toString(),
         );
       }
@@ -186,7 +186,7 @@ class _PluginFluxDetailsReconcileState
             right: Constants.spacingMiddle,
           ),
           child: Text(
-            'Do you really want to reconcile the ${widget.resource.titleSingular} ${widget.namespace}/${widget.name}?',
+            'Do you really want to reconcile the ${widget.resource.singular} ${widget.namespace}/${widget.name}?',
           ),
         ),
       ),

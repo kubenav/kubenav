@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:kubenav/widgets/plugins/flux/plugin_flux_details.dart';
-import 'package:kubenav/widgets/plugins/flux/resources.dart';
+import 'package:kubenav/widgets/plugins/flux/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/shared/app_resource_actions.dart';
 
 /// The [PluginFluxListItemActions] widget renders an actions menu, with the
@@ -11,11 +11,11 @@ class PluginFluxListItemActions extends StatefulWidget {
   const PluginFluxListItemActions({
     super.key,
     required this.resource,
-    required this.manifest,
+    required this.item,
   });
 
-  final Resource resource;
-  final Map<String, dynamic> manifest;
+  final FluxResource resource;
+  final Map<String, dynamic> item;
 
   @override
   State<PluginFluxListItemActions> createState() =>
@@ -30,7 +30,7 @@ class _PluginFluxListItemActionsState extends State<PluginFluxListItemActions> {
       actions: fluxDetailsActions(
         context,
         widget.resource,
-        widget.manifest,
+        widget.item,
         [],
       ),
     );
