@@ -236,7 +236,7 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
               return buildContainer(
                 AppErrorWidget(
                   message: 'No ${widget.title} found',
-                  details: 'We could not found any ${widget.title}',
+                  details: 'We could not find any ${widget.title}',
                   icon: Resources.map.containsKey(widget.resource) &&
                           Resources.map[widget.resource]!.path == widget.path
                       ? 'assets/resources/${widget.resource}.svg'
