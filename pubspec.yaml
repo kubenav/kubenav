@@ -37,7 +37,7 @@ dependencies:
   catppuccin_flutter: ^1.0.0
   code_text_field: ^1.0.2
   collection: ^1.18.0
-  file_picker: ^8.0.0+1
+  file_picker: ^8.0.3
   fl_chart: ^0.67.0
   flutter_markdown: ^0.7.1
   flutter_native_splash: ^2.2.19
@@ -49,7 +49,7 @@ dependencies:
   json_path: ^0.7.1
   jwt_decode: ^0.3.1
   local_auth: ^2.1.2
-  package_info_plus: ^7.0.0
+  package_info_plus: ^8.0.0
   path_provider: ^2.0.9
   provider: ^6.0.4
   url_launcher: ^6.0.20
