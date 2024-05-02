@@ -12,7 +12,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_status_conditions_inner.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_status_history_inner.dart';
 
 class IoFluxcdToolkitHelmV2beta2HelmReleaseStatus {
@@ -39,7 +39,7 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseStatus {
   });
 
   /// Conditions holds the conditions for the HelmRelease.
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseStatusConditionsInner> conditions;
+  List<IoK8sApimachineryPkgApisMetaV1Condition>? conditions;
 
   /// Failures is the reconciliation failure count against the latest desired state. It is reset after a successful reconciliation.
   ///
@@ -348,8 +348,8 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseStatus {
       }());
 
       return IoFluxcdToolkitHelmV2beta2HelmReleaseStatus(
-        conditions: IoFluxcdToolkitHelmV2beta1HelmReleaseStatusConditionsInner
-            .listFromJson(json[r'conditions']),
+        conditions: IoK8sApimachineryPkgApisMetaV1Condition.listFromJson(
+            json[r'conditions']),
         failures: mapValueOfType<int>(json, r'failures'),
         helmChart: mapValueOfType<String>(json, r'helmChart'),
         history: IoFluxcdToolkitHelmV2beta1HelmReleaseStatusHistoryInner

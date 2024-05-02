@@ -12,7 +12,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_status_conditions_inner.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_oci_repository_status_artifact.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_oci_repository_status_observed_layer_selector.dart';
 
@@ -38,7 +38,7 @@ class IoFluxcdToolkitSourceV1beta2OCIRepositoryStatus {
   IoFluxcdToolkitSourceV1beta2OCIRepositoryStatusArtifact? artifact;
 
   /// Conditions holds the conditions for the OCIRepository.
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseStatusConditionsInner> conditions;
+  List<IoK8sApimachineryPkgApisMetaV1Condition>? conditions;
 
   /// ContentConfigChecksum is a checksum of all the configurations related to the content of the source artifact: - .spec.ignore - .spec.layerSelector observed in .status.observedGeneration version of the object. This can be used to determine if the content configuration has changed and the artifact needs to be rebuilt. It has the format of `<algo>:<checksum>`, for example: `sha256:<checksum>`.   Deprecated: Replaced with explicit fields for observed artifact content config in the status.
   ///
@@ -189,8 +189,8 @@ class IoFluxcdToolkitSourceV1beta2OCIRepositoryStatus {
         artifact:
             IoFluxcdToolkitSourceV1beta2OCIRepositoryStatusArtifact.fromJson(
                 json[r'artifact']),
-        conditions: IoFluxcdToolkitHelmV2beta1HelmReleaseStatusConditionsInner
-            .listFromJson(json[r'conditions']),
+        conditions: IoK8sApimachineryPkgApisMetaV1Condition.listFromJson(
+            json[r'conditions']),
         contentConfigChecksum:
             mapValueOfType<String>(json, r'contentConfigChecksum'),
         lastHandledReconcileAt:

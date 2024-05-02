@@ -12,7 +12,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_status_conditions_inner.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_kustomize_v1_kustomization_status_inventory.dart';
 
 class IoFluxcdToolkitKustomizeV1KustomizationStatus {
@@ -26,7 +26,7 @@ class IoFluxcdToolkitKustomizeV1KustomizationStatus {
     this.observedGeneration,
   });
 
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseStatusConditionsInner> conditions;
+  List<IoK8sApimachineryPkgApisMetaV1Condition>? conditions;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -150,8 +150,8 @@ class IoFluxcdToolkitKustomizeV1KustomizationStatus {
       }());
 
       return IoFluxcdToolkitKustomizeV1KustomizationStatus(
-        conditions: IoFluxcdToolkitHelmV2beta1HelmReleaseStatusConditionsInner
-            .listFromJson(json[r'conditions']),
+        conditions: IoK8sApimachineryPkgApisMetaV1Condition.listFromJson(
+            json[r'conditions']),
         inventory:
             IoFluxcdToolkitKustomizeV1KustomizationStatusInventory.fromJson(
                 json[r'inventory']),
