@@ -12,7 +12,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_status_conditions_inner.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
 
 class IoFluxcdToolkitImageV1beta2ImagePolicyStatus {
   /// Returns a new [IoFluxcdToolkitImageV1beta2ImagePolicyStatus] instance.
@@ -23,7 +23,7 @@ class IoFluxcdToolkitImageV1beta2ImagePolicyStatus {
     this.observedPreviousImage,
   });
 
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseStatusConditionsInner> conditions;
+  List<IoK8sApimachineryPkgApisMetaV1Condition>? conditions;
 
   /// LatestImage gives the first in the list of images scanned by the image repository, when filtered and ordered according to the policy.
   ///
@@ -114,8 +114,8 @@ class IoFluxcdToolkitImageV1beta2ImagePolicyStatus {
       }());
 
       return IoFluxcdToolkitImageV1beta2ImagePolicyStatus(
-        conditions: IoFluxcdToolkitHelmV2beta1HelmReleaseStatusConditionsInner
-            .listFromJson(json[r'conditions']),
+        conditions: IoK8sApimachineryPkgApisMetaV1Condition.listFromJson(
+            json[r'conditions']),
         latestImage: mapValueOfType<String>(json, r'latestImage'),
         observedGeneration: mapValueOfType<int>(json, r'observedGeneration'),
         observedPreviousImage:

@@ -12,7 +12,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_status_conditions_inner.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
 
 class IoFluxcdToolkitImageV1beta1ImageUpdateAutomationStatus {
   /// Returns a new [IoFluxcdToolkitImageV1beta1ImageUpdateAutomationStatus] instance.
@@ -25,7 +25,7 @@ class IoFluxcdToolkitImageV1beta1ImageUpdateAutomationStatus {
     this.observedGeneration,
   });
 
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseStatusConditionsInner> conditions;
+  List<IoK8sApimachineryPkgApisMetaV1Condition>? conditions;
 
   /// LastAutomationRunTime records the last time the controller ran this automation through to completion (even if no updates were made).
   ///
@@ -150,8 +150,8 @@ class IoFluxcdToolkitImageV1beta1ImageUpdateAutomationStatus {
       }());
 
       return IoFluxcdToolkitImageV1beta1ImageUpdateAutomationStatus(
-        conditions: IoFluxcdToolkitHelmV2beta1HelmReleaseStatusConditionsInner
-            .listFromJson(json[r'conditions']),
+        conditions: IoK8sApimachineryPkgApisMetaV1Condition.listFromJson(
+            json[r'conditions']),
         lastAutomationRunTime: mapDateTime(json, r'lastAutomationRunTime', r''),
         lastHandledReconcileAt:
             mapValueOfType<String>(json, r'lastHandledReconcileAt'),

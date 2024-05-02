@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart' as provider;
@@ -13,8 +12,7 @@ import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/plugins/flux/plugin_flux_details.dart';
-import 'package:kubenav/widgets/plugins/flux/plugin_flux_list_item_actions.dart';
-import 'package:kubenav/widgets/plugins/flux/plugin_flux_resources.dart';
+import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
@@ -22,24 +20,30 @@ import 'package:kubenav/widgets/shared/app_list_item.dart';
 import 'package:kubenav/widgets/shared/app_namespaces_widget.dart';
 import 'package:kubenav/widgets/shared/app_resource_actions.dart';
 
-class PluginFluxList extends StatefulWidget {
+/// The [PluginFluxList] widget is used to show the user a list of the provided
+/// [resource]. The [itemBuilder] function is used to generate the list items
+/// for the provided [resource].
+class PluginFluxList<T> extends StatefulWidget {
   const PluginFluxList({
     super.key,
     required this.resource,
+    required this.itemBuilder,
   });
 
   final FluxResource resource;
+  final Function(T item) itemBuilder;
 
   @override
-  State<PluginFluxList> createState() => _PluginFluxListState();
+  State<PluginFluxList> createState() => _PluginFluxListState<T>();
 }
 
-class _PluginFluxListState extends State<PluginFluxList> {
-  late Future<List<dynamic>> _futureFetchResources;
+class _PluginFluxListState<T> extends State<PluginFluxList> {
+  late Future<List<T>> _futureFetchResources;
 
-  /// [_fetchResources] fetches all the resources for the currently active
-  /// cluster and namespace or all namespaces.
-  Future<List<dynamic>> _fetchResources() async {
+  /// [_fetchResources] is used to fetch the resources for the provided
+  /// [resource]. The function returns a list of [T] items, which is generated
+  /// via the `resource.decodeList` function.
+  Future<List<T>> _fetchResources() async {
     ClustersRepository clustersRepository =
         provider.Provider.of<ClustersRepository>(
       context,
@@ -55,87 +59,17 @@ class _PluginFluxListState extends State<PluginFluxList> {
     );
 
     final url =
-        '${widget.resource.api.path}${cluster!.namespace != '' ? '/namespaces/${cluster.namespace}' : ''}/${widget.resource.api.resource}';
+        '${widget.resource.path}${cluster!.namespace != '' ? '/namespaces/${cluster.namespace}' : ''}/${widget.resource.resource}';
 
     final result = await KubernetesService(
       cluster: cluster,
       proxy: appRepository.settings.proxy,
       timeout: appRepository.settings.timeout,
     ).getRequest(url);
-    final data = json.decode(result);
 
-    return data['items'];
-  }
-
-  /// [_buildItem] builds the widget for a single resource shown in the list of
-  /// resources. When the user clicks on the resource he will be redirected to
-  /// the [PluginFluxDetails] screen.
-  Widget _buildItem(dynamic item) {
-    final listItem = widget.resource.buildListItem(item);
-
-    return AppListItem(
-      onTap: () {
-        navigate(
-          context,
-          PluginFluxDetails(
-            resource: widget.resource,
-            name: listItem.name,
-            namespace: listItem.namespace,
-          ),
-        );
-      },
-      onDoubleTap: () {
-        showActions(
-          context,
-          PluginFluxListItemActions(
-            resource: widget.resource,
-            item: item,
-          ),
-        );
-      },
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  Characters(listItem.title)
-                      .replaceAll(Characters(''), Characters('\u{200B}'))
-                      .toString(),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: primaryTextStyle(
-                    context,
-                  ),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(
-                    listItem.data.length,
-                    (index) {
-                      return Text(
-                        Characters(
-                          '${listItem.data[index].key}: ${listItem.data[index].value}',
-                        )
-                            .replaceAll(Characters(''), Characters('\u{200B}'))
-                            .toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return compute(
+      widget.resource.decodeList as List<T> Function(String),
+      result,
     );
   }
 
@@ -149,10 +83,6 @@ class _PluginFluxListState extends State<PluginFluxList> {
 
   @override
   Widget build(BuildContext context) {
-    provider.Provider.of<AppRepository>(
-      context,
-      listen: true,
-    );
     ClustersRepository clustersRepository =
         provider.Provider.of<ClustersRepository>(
       context,
@@ -218,7 +148,7 @@ class _PluginFluxListState extends State<PluginFluxList> {
                 future: _futureFetchResources,
                 builder: (
                   BuildContext context,
-                  AsyncSnapshot<List<dynamic>> snapshot,
+                  AsyncSnapshot<List<T>> snapshot,
                 ) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.none:
@@ -250,7 +180,7 @@ class _PluginFluxListState extends State<PluginFluxList> {
                                 ),
                                 child: AppErrorWidget(
                                   message:
-                                      'Could not load ${widget.resource.plural}',
+                                      'Failed to Load ${widget.resource.plural}',
                                   details: snapshot.error.toString(),
                                   icon: 'assets/plugins/flux.svg',
                                 ),
@@ -294,7 +224,8 @@ class _PluginFluxListState extends State<PluginFluxList> {
                               ),
                               itemCount: snapshot.data!.length,
                               itemBuilder: (context, index) {
-                                return _buildItem(snapshot.data![index]);
+                                return widget
+                                    .itemBuilder(snapshot.data![index]);
                               },
                             ),
                           ),
@@ -306,6 +237,129 @@ class _PluginFluxListState extends State<PluginFluxList> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// The [PluginFluxListItem] widget is used to display a list item in the
+/// [PluginFluxList]. For each item the name, namespace, resource, item and
+/// details are provided via the `itemBuilder` function of the resources
+/// `resource.detailsWidget`.
+class PluginFluxListItem<T> extends StatelessWidget {
+  const PluginFluxListItem({
+    super.key,
+    required this.name,
+    required this.namespace,
+    required this.resource,
+    required this.item,
+    required this.details,
+  });
+
+  final String name;
+  final String namespace;
+  final FluxResource resource;
+  final T item;
+  final List<String> details;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppListItem(
+      onTap: () {
+        navigate(
+          context,
+          resource.detailsWidget(
+            name,
+            namespace,
+          ),
+        );
+      },
+      onDoubleTap: () {
+        showActions(
+          context,
+          PluginFluxListItemActions(
+            name: name,
+            namespace: namespace,
+            resource: resource,
+            item: item,
+          ),
+        );
+      },
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  Characters(name)
+                      .replaceAll(Characters(''), Characters('\u{200B}'))
+                      .toString(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: primaryTextStyle(
+                    context,
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(
+                    details.length,
+                    (index) {
+                      return Text(
+                        Characters(
+                          details[index],
+                        )
+                            .replaceAll(Characters(''), Characters('\u{200B}'))
+                            .toString(),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: secondaryTextStyle(
+                          context,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The [PluginFluxListItemActions] widget is used to display the actions for a
+/// [PluginFluxListItem]. It reuses the [fluxDetailsActions] function to
+/// generate the actions for the provided [item].
+class PluginFluxListItemActions<T> extends StatelessWidget {
+  const PluginFluxListItemActions({
+    super.key,
+    required this.name,
+    required this.namespace,
+    required this.resource,
+    required this.item,
+  });
+
+  final String name;
+  final String namespace;
+  final FluxResource resource;
+  final T item;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppResourceActions(
+      mode: AppResourceActionsMode.actions,
+      actions: fluxDetailsActions(
+        context,
+        name,
+        namespace,
+        resource,
+        item,
+        [],
       ),
     );
   }

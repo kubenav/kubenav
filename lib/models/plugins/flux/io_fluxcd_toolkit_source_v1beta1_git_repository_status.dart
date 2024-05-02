@@ -12,7 +12,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_status_conditions_inner.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta1_git_repository_status_artifact.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta1_git_repository_status_included_artifacts_inner.dart';
 
@@ -36,7 +36,7 @@ class IoFluxcdToolkitSourceV1beta1GitRepositoryStatus {
   IoFluxcdToolkitSourceV1beta1GitRepositoryStatusArtifact? artifact;
 
   /// Conditions holds the conditions for the GitRepository.
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseStatusConditionsInner> conditions;
+  List<IoK8sApimachineryPkgApisMetaV1Condition>? conditions;
 
   /// IncludedArtifacts represents the included artifacts from the last successful repository sync.
   List<IoFluxcdToolkitSourceV1beta1GitRepositoryStatusIncludedArtifactsInner>
@@ -146,8 +146,8 @@ class IoFluxcdToolkitSourceV1beta1GitRepositoryStatus {
         artifact:
             IoFluxcdToolkitSourceV1beta1GitRepositoryStatusArtifact.fromJson(
                 json[r'artifact']),
-        conditions: IoFluxcdToolkitHelmV2beta1HelmReleaseStatusConditionsInner
-            .listFromJson(json[r'conditions']),
+        conditions: IoK8sApimachineryPkgApisMetaV1Condition.listFromJson(
+            json[r'conditions']),
         includedArtifacts:
             IoFluxcdToolkitSourceV1beta1GitRepositoryStatusIncludedArtifactsInner
                 .listFromJson(json[r'includedArtifacts']),

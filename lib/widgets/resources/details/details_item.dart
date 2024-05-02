@@ -50,6 +50,17 @@ class DetailsItemWidget extends StatelessWidget {
   final String? goTo;
   final void Function()? goToOnTap;
 
+  /// [_filterDetails] filters the details list and removes all items which have
+  /// no values.
+  List<DetailsItemModel> _filterDetails(List<DetailsItemModel> details) {
+    return details.where((e) {
+      if (e.values is List<String>) {
+        return e.values.isNotEmpty;
+      }
+      return e.values != null;
+    }).toList();
+  }
+
   /// [_buildValue] build the values field for a details item. If the value is
   /// of type `List<String>` it will render the values via the [Chip] widget. If
   /// it is of type `String` or has an unknown type it will render the value via
@@ -140,6 +151,8 @@ class DetailsItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final filteredDetails = _filterDetails(details);
+
     return Wrap(
       children: [
         Padding(
@@ -179,7 +192,7 @@ class DetailsItemWidget extends StatelessWidget {
           ),
           child: Column(
             children: List.generate(
-              details.length,
+              filteredDetails.length,
               (index) {
                 return Container(
                   margin: const EdgeInsets.only(
@@ -191,16 +204,16 @@ class DetailsItemWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${details[index].name}:',
+                        '${filteredDetails[index].name}:',
                         style: primaryTextStyle(context, size: 14),
                         maxLines: 2,
                       ),
                       const SizedBox(width: Constants.spacingSmall),
                       _buildValue(
                         context,
-                        details[index].name,
-                        details[index].values,
-                        details[index].onTap,
+                        filteredDetails[index].name,
+                        filteredDetails[index].values,
+                        filteredDetails[index].onTap,
                       ),
                     ],
                   ),

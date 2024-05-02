@@ -4,8 +4,7 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/themes.dart';
-import 'package:kubenav/widgets/plugins/flux/plugin_flux_list.dart';
-import 'package:kubenav/widgets/plugins/flux/plugin_flux_resources.dart';
+import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
@@ -28,9 +27,7 @@ class PluginFlux extends StatelessWidget {
           onTap: () {
             navigate(
               context,
-              PluginFluxList(
-                resource: resource,
-              ),
+              resource.listWidget,
             );
           },
           children: [

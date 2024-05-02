@@ -1,36 +1,39 @@
-import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:collection/collection.dart';
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/resource.dart' show Resources;
+import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/helpers.dart';
+import 'package:kubenav/utils/resources/general.dart';
 import 'package:kubenav/utils/showmodal.dart';
-import 'package:kubenav/widgets/plugins/flux/plugin_flux_details_reconcile.dart';
-import 'package:kubenav/widgets/plugins/flux/plugin_flux_details_resume.dart';
-import 'package:kubenav/widgets/plugins/flux/plugin_flux_details_suspend.dart';
-import 'package:kubenav/widgets/plugins/flux/plugin_flux_resources.dart';
+import 'package:kubenav/widgets/plugins/flux/actions/plugin_flux_reconcile.dart';
+import 'package:kubenav/widgets/plugins/flux/actions/plugin_flux_resume.dart';
+import 'package:kubenav/widgets/plugins/flux/actions/plugin_flux_show_yaml.dart';
+import 'package:kubenav/widgets/plugins/flux/actions/plugin_flux_suspend.dart';
+import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/resources/details/details_item.dart';
-import 'package:kubenav/widgets/resources/details/details_item_conditions.dart';
-import 'package:kubenav/widgets/resources/details/details_item_metadata.dart';
-import 'package:kubenav/widgets/resources/details/details_resources_preview.dart';
-import 'package:kubenav/widgets/resources/details/details_show_yaml.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
+import 'package:kubenav/widgets/shared/app_list_item.dart';
 import 'package:kubenav/widgets/shared/app_resource_actions.dart';
 
-/// [fluxDetailsActions] returns the resource actions for the details of a Flux
-/// resource.
-List<AppResourceActionsModel> fluxDetailsActions(
+/// [fluxDetailsActions] is a helper function to create the actions for the
+/// details view and list items of a Flux resource. At the moment all supported
+/// resources have the same actions, but this can be changed in the future. The
+/// function returns a list of [AppResourceActionsModel] with the actions.
+List<AppResourceActionsModel> fluxDetailsActions<T>(
   BuildContext context,
+  String name,
+  String namespace,
   FluxResource resource,
-  Map<String, dynamic> item,
+  T item,
   List<AppResourceActionsModel> additionalActions,
 ) {
   AppRepository appRepository = Provider.of<AppRepository>(
@@ -45,7 +48,25 @@ List<AppResourceActionsModel> fluxDetailsActions(
       onTap: () {
         showModal(
           context,
-          DetailsShowYaml(
+          PluginFluxShowYaml<T>(
+            name: name,
+            namespace: namespace,
+            item: item,
+            encodeItem: resource.encodeItem,
+          ),
+        );
+      },
+    ),
+    AppResourceActionsModel(
+      title: 'Reconcile',
+      icon: Icons.restart_alt,
+      onTap: () {
+        showModal(
+          context,
+          PluginFluxReconcile(
+            name: name,
+            namespace: namespace,
+            resource: resource,
             item: item,
           ),
         );
@@ -57,10 +78,10 @@ List<AppResourceActionsModel> fluxDetailsActions(
       onTap: () {
         showModal(
           context,
-          PluginFluxDetailsSuspend(
+          PluginFluxSuspend(
+            name: name,
+            namespace: namespace,
             resource: resource,
-            namespace: item['metadata']['namespace'],
-            name: item['metadata']['name'],
             item: item,
           ),
         );
@@ -72,25 +93,10 @@ List<AppResourceActionsModel> fluxDetailsActions(
       onTap: () {
         showModal(
           context,
-          PluginFluxDetailsResume(
+          PluginFluxResume(
+            name: name,
+            namespace: namespace,
             resource: resource,
-            namespace: item['metadata']['namespace'],
-            name: item['metadata']['name'],
-            item: item,
-          ),
-        );
-      },
-    ),
-    AppResourceActionsModel(
-      title: 'Reconcile',
-      icon: Icons.restart_alt,
-      onTap: () {
-        showModal(
-          context,
-          PluginFluxDetailsReconcile(
-            resource: resource,
-            namespace: item['metadata']['namespace'],
-            name: item['metadata']['name'],
             item: item,
           ),
         );
@@ -100,31 +106,32 @@ List<AppResourceActionsModel> fluxDetailsActions(
   ];
 }
 
-/// [PluginFluxDetails] is responsible for showing the details of a Flux
-/// resource. This includes the metadata, conditions, events and the details
-/// of the resource itself.
-class PluginFluxDetails extends StatefulWidget {
+/// The [PluginFluxDetails] widget is used to show the user the details of the
+/// provided Flux resource. The widget fetches the resource from the Kubernetes
+/// API and decodes the item with the `resource.decodeItem` function. The
+/// [itemBuilder] function is used to build the details view of the resource.
+class PluginFluxDetails<T> extends StatefulWidget {
   const PluginFluxDetails({
     super.key,
     required this.name,
     required this.namespace,
     required this.resource,
+    required this.itemBuilder,
   });
 
   final String name;
   final String namespace;
   final FluxResource resource;
+  final Function(T item) itemBuilder;
 
   @override
-  State<PluginFluxDetails> createState() => _PluginFluxDetailsState();
+  State<PluginFluxDetails> createState() => _PluginFluxDetailsState<T>();
 }
 
-class _PluginFluxDetailsState extends State<PluginFluxDetails> {
-  late Future<Map<String, dynamic>> _futureFetchResource;
+class _PluginFluxDetailsState<T> extends State<PluginFluxDetails> {
+  late Future<T?> _futureFetchResource;
 
-  /// [_fetchResource] fetches the item for the prvided [widget.resource]
-  /// with the given [widget.name] and [widget.namespace].
-  Future<Map<String, dynamic>> _fetchResource() async {
+  Future<T?> _fetchResource() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -139,46 +146,15 @@ class _PluginFluxDetailsState extends State<PluginFluxDetails> {
     );
 
     final url =
-        '${widget.resource.api.path}/namespaces/${widget.namespace}/${widget.resource.api.resource}/${widget.name}';
+        '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}/${widget.name}';
 
     final result = await KubernetesService(
       cluster: cluster!,
       proxy: appRepository.settings.proxy,
       timeout: appRepository.settings.timeout,
     ).getRequest(url);
-    return json.decode(result);
-  }
 
-  /// [_buildDetails] is responsible for showing the correct details item for
-  /// the selected resource.
-  List<Widget> _buildDetails(
-    FluxResource resource,
-    Map<String, dynamic> item,
-  ) {
-    final details = resource.buildDetails(context, item);
-
-    return List.generate(
-      details.length,
-      (index) {
-        final detail = details[index];
-        return [
-          DetailsItemWidget(
-            title: detail.title,
-            details: List.generate(
-              detail.data.length,
-              (index) {
-                return DetailsItemModel(
-                  name: detail.data[index].key,
-                  values: detail.data[index].value,
-                  onTap: detail.data[index].onTap,
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: Constants.spacingMiddle),
-        ];
-      },
-    ).flattened.toList();
+    return compute(widget.resource.decodeItem as T? Function(String), result);
   }
 
   @override
@@ -240,7 +216,7 @@ class _PluginFluxDetailsState extends State<PluginFluxDetails> {
                 future: _futureFetchResource,
                 builder: (
                   BuildContext context,
-                  AsyncSnapshot<Map<String, dynamic>> snapshot,
+                  AsyncSnapshot<T?> snapshot,
                 ) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.none:
@@ -260,9 +236,7 @@ class _PluginFluxDetailsState extends State<PluginFluxDetails> {
                         ],
                       );
                     default:
-                      final item = snapshot.data;
-
-                      if (snapshot.hasError || item == null) {
+                      if (snapshot.hasError || snapshot.data == null) {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -274,7 +248,7 @@ class _PluginFluxDetailsState extends State<PluginFluxDetails> {
                                 ),
                                 child: AppErrorWidget(
                                   message:
-                                      'Could not load ${widget.resource.singular}',
+                                      'Failed to Load ${widget.resource.singular} ${widget.namespace}/${widget.name}',
                                   details: snapshot.error.toString(),
                                   icon: 'assets/plugins/flux.svg',
                                 ),
@@ -290,8 +264,10 @@ class _PluginFluxDetailsState extends State<PluginFluxDetails> {
                             mode: AppResourceActionsMode.header,
                             actions: fluxDetailsActions(
                               context,
+                              widget.name,
+                              widget.namespace,
                               widget.resource,
-                              item,
+                              snapshot.data,
                               [
                                 AppResourceActionsModel(
                                   title: 'Refresh',
@@ -305,29 +281,7 @@ class _PluginFluxDetailsState extends State<PluginFluxDetails> {
                               ],
                             ),
                           ),
-                          DetailsItemMetadata(
-                            item: snapshot.data,
-                          ),
-                          DetailsItemConditions(
-                            item: snapshot.data,
-                          ),
-                          const SizedBox(height: Constants.spacingMiddle),
-                          ..._buildDetails(
-                            widget.resource,
-                            snapshot.data!,
-                          ),
-                          DetailsResourcesPreview(
-                            title: Resources.map['events']!.title,
-                            resource: Resources.map['events']!.resource,
-                            path: Resources.map['events']!.path,
-                            scope: Resources.map['events']!.scope,
-                            additionalPrinterColumns: Resources
-                                .map['events']!.additionalPrinterColumns,
-                            namespace: widget.namespace,
-                            selector:
-                                'fieldSelector=involvedObject.name=${widget.name}',
-                          ),
-                          const SizedBox(height: Constants.spacingMiddle),
+                          widget.itemBuilder(snapshot.data),
                         ],
                       );
                   }
@@ -338,5 +292,167 @@ class _PluginFluxDetailsState extends State<PluginFluxDetails> {
         ),
       ),
     );
+  }
+}
+
+/// The [DetailsItemMetadata] widget is used to show the metadata of a
+/// Kubernetes resource.
+class DetailsItemMetadata extends StatelessWidget {
+  const DetailsItemMetadata({
+    super.key,
+    required this.metadata,
+  });
+
+  final IoK8sApimachineryPkgApisMetaV1ObjectMeta? metadata;
+
+  @override
+  Widget build(BuildContext context) {
+    final ownerReferences = metadata?.ownerReferences
+        .map(
+          (ownerReference) => '${ownerReference.kind} (${ownerReference.name})',
+        )
+        .toList();
+
+    return DetailsItemWidget(
+      title: 'Metadata',
+      details: [
+        DetailsItemModel(
+          name: 'Name',
+          values: metadata?.name,
+        ),
+        DetailsItemModel(
+          name: 'Namespace',
+          values: metadata?.namespace,
+        ),
+        DetailsItemModel(
+          name: 'Age',
+          values: getAge(metadata?.creationTimestamp),
+        ),
+        DetailsItemModel(
+          name: 'Labels',
+          values: metadata?.labels.entries
+              .map((e) => '${e.key}: ${e.value}')
+              .toList(),
+        ),
+        DetailsItemModel(
+          name: 'Annotations',
+          values: metadata?.annotations.entries
+              .map((e) => '${e.key}: ${e.value}')
+              .toList(),
+        ),
+        DetailsItemModel(
+          name: 'Controlled by',
+          values: ownerReferences,
+          onTap: (int index) {
+            final goToFunc = goToReference(
+              context,
+              metadata?.ownerReferences[index],
+              metadata?.namespace,
+            );
+            if (goToFunc != null) {
+              goToFunc();
+            } else {
+              showSnackbar(
+                context,
+                'Controlled by',
+                '${metadata?.ownerReferences[index].kind} (${metadata?.ownerReferences[index].name})',
+              );
+            }
+          },
+        ),
+      ],
+    );
+  }
+}
+
+/// The [DetailsItemConditions] widget is used to show the conditions of a
+/// Kubernetes resource.
+class DetailsItemConditions extends StatelessWidget {
+  const DetailsItemConditions({
+    super.key,
+    required this.conditions,
+  });
+
+  final List<IoK8sApimachineryPkgApisMetaV1Condition>? conditions;
+
+  @override
+  Widget build(BuildContext context) {
+    if (conditions != null && conditions!.isNotEmpty) {
+      return Wrap(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(
+              Constants.spacingMiddle,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Conditions',
+                    style: primaryTextStyle(context, size: 18),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(
+              left: Constants.spacingMiddle,
+              right: Constants.spacingMiddle,
+            ),
+            height: 128,
+            child: GridView.count(
+              scrollDirection: Axis.horizontal,
+              crossAxisCount: 2,
+              childAspectRatio: 0.25,
+              mainAxisSpacing: Constants.spacingMiddle,
+              children: List.generate(
+                conditions!.length,
+                (index) {
+                  return Container(
+                    margin: const EdgeInsets.all(
+                      Constants.spacingSmall,
+                    ),
+                    child: AppListItem(
+                      onTap: () {
+                        showSnackbar(
+                          context,
+                          conditions![index].type,
+                          'Status: ${conditions![index].status}\nAge: ${getAge(conditions![index].lastTransitionTime)}\nReason: ${conditions![index].reason}\nMessage: ${conditions![index].message}',
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            conditions![index].status == 'True'
+                                ? Icons.radio_button_checked
+                                : Icons.radio_button_unchecked,
+                            size: 24,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(width: Constants.spacingSmall),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              conditions![index].type,
+                              style: noramlTextStyle(
+                                context,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Container();
   }
 }

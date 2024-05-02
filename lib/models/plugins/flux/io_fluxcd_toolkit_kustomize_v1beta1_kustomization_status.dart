@@ -12,7 +12,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_status_conditions_inner.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_kustomize_v1beta1_kustomization_status_snapshot.dart';
 
 class IoFluxcdToolkitKustomizeV1beta1KustomizationStatus {
@@ -26,7 +26,7 @@ class IoFluxcdToolkitKustomizeV1beta1KustomizationStatus {
     this.snapshot,
   });
 
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseStatusConditionsInner> conditions;
+  List<IoK8sApimachineryPkgApisMetaV1Condition>? conditions;
 
   /// The last successfully applied revision. The revision format for Git sources is <branch|tag>/<commit-sha>.
   ///
@@ -150,8 +150,8 @@ class IoFluxcdToolkitKustomizeV1beta1KustomizationStatus {
       }());
 
       return IoFluxcdToolkitKustomizeV1beta1KustomizationStatus(
-        conditions: IoFluxcdToolkitHelmV2beta1HelmReleaseStatusConditionsInner
-            .listFromJson(json[r'conditions']),
+        conditions: IoK8sApimachineryPkgApisMetaV1Condition.listFromJson(
+            json[r'conditions']),
         lastAppliedRevision:
             mapValueOfType<String>(json, r'lastAppliedRevision'),
         lastAttemptedRevision:
