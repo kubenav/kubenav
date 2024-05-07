@@ -159,7 +159,11 @@ class ClustersRepository with ChangeNotifier {
   /// [setNamespace] sets the namespace for the cluster provided via it's
   /// [clusterId] to the provided [namespace]. If we are not able to find the
   /// cluster with the provided id, we will do nothing.
-  Future<void> setNamespace(String clusterId, String namespace) async {
+  Future<void> setNamespace(String clusterId, String? namespace) async {
+    if (namespace == null) {
+      return;
+    }
+
     for (var i = 0; i < _clusters.length; i++) {
       if (_clusters[i].id == clusterId) {
         _clusters[i].namespace = namespace;
