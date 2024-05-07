@@ -112,11 +112,11 @@ final resourceServiceAccount = Resource(
       children: [
         DetailsItemMetadata(metadata: item.metadata),
         const SizedBox(height: Constants.spacingMiddle),
-        AppVertialListSimpleWidget(
+        AppVerticalListSimpleWidget(
           title: 'Secrets',
           items: item.secrets
               .map(
-                (secret) => AppVertialListSimpleModel(
+                (secret) => AppVerticalListSimpleModel(
                   onTap: () {
                     navigate(
                       context,

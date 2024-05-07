@@ -790,11 +790,11 @@ class DetailsContainer extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: Constants.spacingMiddle),
-              AppVertialListSimpleWidget(
+              AppVerticalListSimpleWidget(
                 title: 'Environment Variables',
                 items: container.env
                     .map(
-                      (env) => AppVertialListSimpleModel(
+                      (env) => AppVerticalListSimpleModel(
                         onTap: () {
                           showSnackbar(
                             context,
@@ -867,11 +867,11 @@ class DetailsContainer extends StatelessWidget {
                     .toList(),
               ),
               const SizedBox(height: Constants.spacingMiddle),
-              AppVertialListSimpleWidget(
+              AppVerticalListSimpleWidget(
                 title: 'Volume Mounts',
                 items: container.volumeMounts
                     .map(
-                      (volumeMount) => AppVertialListSimpleModel(
+                      (volumeMount) => AppVerticalListSimpleModel(
                         onTap: () {
                           showSnackbar(
                             context,

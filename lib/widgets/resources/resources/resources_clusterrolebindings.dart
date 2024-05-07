@@ -133,11 +133,11 @@ final resourceClusterRoleBinding = Resource(
           ],
         ),
         const SizedBox(height: Constants.spacingMiddle),
-        AppVertialListSimpleWidget(
+        AppVerticalListSimpleWidget(
           title: 'Subjects',
           items: item.subjects
               .map(
-                (subject) => AppVertialListSimpleModel(
+                (subject) => AppVerticalListSimpleModel(
                   onTap: kindToResource.containsKey(subject.kind)
                       ? () {
                           navigate(

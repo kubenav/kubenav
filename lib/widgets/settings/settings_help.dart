@@ -22,11 +22,11 @@ class SettingsHelp extends StatelessWidget {
   Widget buildHelpSection(BuildContext context, int sectionIndex) {
     return Column(
       children: [
-        AppVertialListSimpleWidget(
+        AppVerticalListSimpleWidget(
           title: help_model.Help.list[sectionIndex].title,
           items: List.generate(
             help_model.Help.list[sectionIndex].items.length,
-            (itemIndex) => AppVertialListSimpleModel(
+            (itemIndex) => AppVerticalListSimpleModel(
               onTap: () {
                 showModal(
                   context,

@@ -108,11 +108,11 @@ final resourceClusterRole = Resource(
       children: [
         DetailsItemMetadata(metadata: item.metadata),
         const SizedBox(height: Constants.spacingMiddle),
-        AppVertialListSimpleWidget(
+        AppVerticalListSimpleWidget(
           title: 'Rules',
           items: rules
               .map(
-                (rule) => AppVertialListSimpleModel(
+                (rule) => AppVerticalListSimpleModel(
                   onTap: () {
                     showSnackbar(
                       context,
