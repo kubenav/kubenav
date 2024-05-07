@@ -25,7 +25,7 @@ class _SettingsReauthenticateAWSSSOState
   bool _verified = false;
   AWSSSOCredentials? _awsSSOCredentials;
 
-  void _startSSOFlow() async {
+  Future<void> _startSSOFlow() async {
     try {
       final ssoConfig = await AWSService().getSSOConfig(
         _provider!.awssso!.ssoRegion ?? '',
@@ -63,7 +63,7 @@ class _SettingsReauthenticateAWSSSOState
     }
   }
 
-  void _verifyDevice() async {
+  Future<void> _verifyDevice() async {
     try {
       await openUrl(_awsSSOConfig!.device!.verificationUriComplete!);
       setState(() {

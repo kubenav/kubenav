@@ -109,7 +109,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
     }
   }
 
-  void _getSSOCredentials() async {
+  Future<void> _getSSOCredentials() async {
     try {
       final ssoCredentials = await AWSService().getSSOToken(
         _accountIDController.text,
