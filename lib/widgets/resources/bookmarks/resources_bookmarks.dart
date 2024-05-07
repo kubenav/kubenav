@@ -79,7 +79,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
             .setActiveCluster(bookmarksRepository.bookmarks[index].clusterId);
         await clustersRepository.setNamespace(
           bookmarksRepository.bookmarks[index].clusterId,
-          bookmarksRepository.bookmarks[index].namespace ?? '',
+          bookmarksRepository.bookmarks[index].namespace,
         );
 
         if (mounted) {
@@ -102,7 +102,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
             .setActiveCluster(bookmarksRepository.bookmarks[index].clusterId);
         await clustersRepository.setNamespace(
           bookmarksRepository.bookmarks[index].clusterId,
-          bookmarksRepository.bookmarks[index].namespace ?? '',
+          bookmarksRepository.bookmarks[index].namespace,
         );
 
         if (mounted) {
