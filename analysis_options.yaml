@@ -25,6 +25,7 @@ linter:
     avoid_print: true
     prefer_single_quotes: true
     require_trailing_commas: true
+    avoid_void_async: true
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

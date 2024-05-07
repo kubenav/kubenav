@@ -67,7 +67,7 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
   /// case the user defined charts are added to the list of default charts. If
   /// we could not parse the value of the annotation we just use the default
   /// charts and log an error.
-  void _getCharts() async {
+  Future<void> _getCharts() async {
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: false,
