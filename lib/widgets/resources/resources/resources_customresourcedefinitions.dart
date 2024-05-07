@@ -164,11 +164,11 @@ final resourceCustomResourceDefinition = Resource(
           ],
         ),
         const SizedBox(height: Constants.spacingMiddle),
-        AppVertialListSimpleWidget(
+        AppVerticalListSimpleWidget(
           title: 'Versions',
           items: item.spec.versions
               .map(
-                (version) => AppVertialListSimpleModel(
+                (version) => AppVerticalListSimpleModel(
                   onTap: () {
                     final customResource = buildCustomResource(
                       item.spec.names.plural,

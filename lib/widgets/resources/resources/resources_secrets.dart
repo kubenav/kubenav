@@ -113,11 +113,11 @@ final resourceSecret = Resource(
       children: [
         DetailsItemMetadata(metadata: item.metadata),
         const SizedBox(height: Constants.spacingMiddle),
-        AppVertialListSimpleWidget(
+        AppVerticalListSimpleWidget(
           title: 'Data',
           items: item.data.entries
               .map(
-                (data) => AppVertialListSimpleModel(
+                (data) => AppVerticalListSimpleModel(
                   onTap: () {
                     showModal(
                       context,

@@ -4,34 +4,34 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
 
-/// [AppVertialListSimpleModel] represents a single item in the
-/// [AppVertialListSimpleWidget] widget. Each item mist contain a list of
+/// [AppVerticalListSimpleModel] represents a single item in the
+/// [AppVerticalListSimpleWidget] widget. Each item mist contain a list of
 /// [children] and an optional [onTap] function which is called when the user
 /// clicks on the item in the list.
-class AppVertialListSimpleModel {
+class AppVerticalListSimpleModel {
   List<Widget> children;
   void Function()? onTap;
 
-  AppVertialListSimpleModel({
+  AppVerticalListSimpleModel({
     required this.children,
     this.onTap,
   });
 }
 
-/// [AppVertialListSimpleWidget] is a widget to render a simple vertical list.
-/// The list items are defined via the [AppVertialListSimpleModel].
+/// [AppVerticalListSimpleWidget] is a widget to render a simple vertical list.
+/// The list items are defined via the [AppVerticalListSimpleModel].
 ///
 /// The [smallPadding] argument can be used to minimize the additional padding
 /// for the widget, so that it can be used in other places, like a bottom sheet.
-class AppVertialListSimpleWidget extends StatelessWidget {
-  const AppVertialListSimpleWidget({
+class AppVerticalListSimpleWidget extends StatelessWidget {
+  const AppVerticalListSimpleWidget({
     super.key,
     required this.title,
     required this.items,
   });
 
   final String title;
-  final List<AppVertialListSimpleModel> items;
+  final List<AppVerticalListSimpleModel> items;
 
   @override
   Widget build(BuildContext context) {

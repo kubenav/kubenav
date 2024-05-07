@@ -185,10 +185,10 @@ class Settings extends StatelessWidget {
   /// a user can access the help screen [SettingsHelp] or the logs via the
   /// [Logger] which were created during his actions in the app
   Widget buildHelp(BuildContext context) {
-    return AppVertialListSimpleWidget(
+    return AppVerticalListSimpleWidget(
       title: 'Help',
       items: [
-        AppVertialListSimpleModel(
+        AppVerticalListSimpleModel(
           onTap: () {
             showModal(
               context,
@@ -220,7 +220,7 @@ class Settings extends StatelessWidget {
             ),
           ],
         ),
-        AppVertialListSimpleModel(
+        AppVerticalListSimpleModel(
           onTap: () {
             navigate(
               context,
@@ -286,10 +286,10 @@ class Settings extends StatelessWidget {
               _buildViewAllClusters(context),
               _buildClusters(context),
               const SizedBox(height: Constants.spacingMiddle),
-              AppVertialListSimpleWidget(
+              AppVerticalListSimpleWidget(
                 title: 'Settings',
                 items: [
-                  AppVertialListSimpleModel(
+                  AppVerticalListSimpleModel(
                     onTap: () {
                       navigate(context, const SettingsProviders());
                     },
@@ -318,7 +318,7 @@ class Settings extends StatelessWidget {
                       ),
                     ],
                   ),
-                  AppVertialListSimpleModel(
+                  AppVerticalListSimpleModel(
                     onTap: () {
                       navigate(
                         context,
@@ -350,7 +350,7 @@ class Settings extends StatelessWidget {
                       ),
                     ],
                   ),
-                  AppVertialListSimpleModel(
+                  AppVerticalListSimpleModel(
                     children: [
                       Icon(
                         Icons.fingerprint,
@@ -375,7 +375,7 @@ class Settings extends StatelessWidget {
                       ),
                     ],
                   ),
-                  AppVertialListSimpleModel(
+                  AppVerticalListSimpleModel(
                     children: [
                       Icon(
                         CustomIcons.clusters,
@@ -402,7 +402,7 @@ class Settings extends StatelessWidget {
                       ),
                     ],
                   ),
-                  AppVertialListSimpleModel(
+                  AppVerticalListSimpleModel(
                     children: [
                       Icon(
                         Icons.code,
@@ -444,7 +444,7 @@ class Settings extends StatelessWidget {
                       ),
                     ],
                   ),
-                  AppVertialListSimpleModel(
+                  AppVerticalListSimpleModel(
                     children: [
                       Icon(
                         Icons.code,
@@ -488,7 +488,7 @@ class Settings extends StatelessWidget {
                       ),
                     ],
                   ),
-                  AppVertialListSimpleModel(
+                  AppVerticalListSimpleModel(
                     onTap: () {
                       showModal(
                         context,
@@ -522,7 +522,7 @@ class Settings extends StatelessWidget {
                       ),
                     ],
                   ),
-                  AppVertialListSimpleModel(
+                  AppVerticalListSimpleModel(
                     onTap: () {
                       showModal(
                         context,
@@ -556,7 +556,7 @@ class Settings extends StatelessWidget {
                       ),
                     ],
                   ),
-                  AppVertialListSimpleModel(
+                  AppVerticalListSimpleModel(
                     onTap: () {
                       showModal(
                         context,
@@ -590,7 +590,7 @@ class Settings extends StatelessWidget {
                       ),
                     ],
                   ),
-                  AppVertialListSimpleModel(
+                  AppVerticalListSimpleModel(
                     onTap: () {
                       showModal(
                         context,

@@ -167,11 +167,11 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
   /// be opened in a modal bottom sheet.
   Widget _buildTemplates(Release release) {
     if (release.chart != null && release.chart!.templates != null) {
-      return AppVertialListSimpleWidget(
+      return AppVerticalListSimpleWidget(
         title: 'Templates',
         items: release.chart!.templates!
             .map(
-              (template) => AppVertialListSimpleModel(
+              (template) => AppVerticalListSimpleModel(
                 onTap: () {
                   showModal(
                     context,
@@ -403,12 +403,12 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
 
                               return Column(
                                 children: [
-                                  AppVertialListSimpleWidget(
+                                  AppVerticalListSimpleWidget(
                                     title: 'History',
                                     items: (snapshot.data ?? [])
                                         .map(
                                           (release) =>
-                                              AppVertialListSimpleModel(
+                                              AppVerticalListSimpleModel(
                                             onTap: () {
                                               navigate(
                                                 context,

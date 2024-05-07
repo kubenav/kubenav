@@ -12,7 +12,7 @@ import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 class PluginFlux extends StatelessWidget {
   const PluginFlux({super.key});
 
-  List<AppVertialListSimpleModel> _buildItems(
+  List<AppVerticalListSimpleModel> _buildItems(
     BuildContext context,
     FluxResourceCategory resourceCategory,
   ) {
@@ -23,7 +23,7 @@ class PluginFlux extends StatelessWidget {
       resources.length,
       (index) {
         final resource = resources[index];
-        return AppVertialListSimpleModel(
+        return AppVerticalListSimpleModel(
           onTap: () {
             navigate(
               context,
@@ -88,7 +88,7 @@ class PluginFlux extends StatelessWidget {
                 final resourceCategory = FluxResourceCategory.values[index];
                 return Column(
                   children: [
-                    AppVertialListSimpleWidget(
+                    AppVerticalListSimpleWidget(
                       title: resourceCategory.toLocalizedString(),
                       items: _buildItems(context, resourceCategory),
                     ),

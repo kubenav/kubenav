@@ -22,7 +22,7 @@ import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 class Resources extends StatelessWidget {
   const Resources({super.key});
 
-  List<AppVertialListSimpleModel> _buildItems(
+  List<AppVerticalListSimpleModel> _buildItems(
     BuildContext context,
     ResourceCategory resourceCategory,
   ) {
@@ -33,7 +33,7 @@ class Resources extends StatelessWidget {
       resourcesForCategory.length,
       (index) {
         final resource = resourcesForCategory[index];
-        return AppVertialListSimpleModel(
+        return AppVerticalListSimpleModel(
           onTap: () {
             navigate(
               context,
@@ -123,7 +123,7 @@ class Resources extends StatelessWidget {
           final resourceCategory = ResourceCategory.values[index];
           return Column(
             children: [
-              AppVertialListSimpleWidget(
+              AppVerticalListSimpleWidget(
                 title: resourceCategory.toLocalizedString(),
                 items: _buildItems(context, resourceCategory),
               ),

@@ -72,7 +72,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
   /// [buildAdditionalLinks] returns additional links for iOS which must be
   /// present in the app so that the app is not rejected in the App Store
   /// submission.
-  List<AppVertialListSimpleModel> buildAdditionalLinks() {
+  List<AppVerticalListSimpleModel> buildAdditionalLinks() {
     if (Platform.isIOS) {
       SponsorRepository sponsorRepository = Provider.of<SponsorRepository>(
         context,
@@ -80,7 +80,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
       );
 
       return [
-        AppVertialListSimpleModel(
+        AppVerticalListSimpleModel(
           onTap: () {
             openUrl(
               'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
@@ -111,7 +111,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
           ],
         ),
-        AppVertialListSimpleModel(
+        AppVerticalListSimpleModel(
           onTap: () {
             sponsorRepository.restorePurchases();
             showSnackbar(
@@ -159,10 +159,10 @@ class _SettingsInfoState extends State<SettingsInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return AppVertialListSimpleWidget(
+    return AppVerticalListSimpleWidget(
       title: 'Info',
       items: [
-        AppVertialListSimpleModel(
+        AppVerticalListSimpleModel(
           children: [
             Icon(
               Icons.code,
@@ -207,7 +207,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
           ],
         ),
-        AppVertialListSimpleModel(
+        AppVerticalListSimpleModel(
           onTap: () {
             openUrl('https://kubenav.io');
           },
@@ -236,7 +236,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
           ],
         ),
-        AppVertialListSimpleModel(
+        AppVerticalListSimpleModel(
           onTap: () {
             openUrl('https://github.com/kubenav/kubenav');
           },
@@ -265,7 +265,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
           ],
         ),
-        AppVertialListSimpleModel(
+        AppVerticalListSimpleModel(
           onTap: () {
             openUrl('https://twitter.com/kubenav');
           },
@@ -294,7 +294,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
           ],
         ),
-        AppVertialListSimpleModel(
+        AppVerticalListSimpleModel(
           onTap: () {
             showModal(
               context,
@@ -356,7 +356,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
             ),
           ],
         ),
-        AppVertialListSimpleModel(
+        AppVerticalListSimpleModel(
           onTap: () {
             openUrl('https://kubenav.io/privacy.html');
           },

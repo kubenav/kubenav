@@ -68,11 +68,11 @@ class SettingsSponsor extends StatelessWidget {
     /// the corresponding platform API. If the user clicks on one of these
     /// products we open a [SettingsSponsorSubscribe] widget with this product
     /// were a user can buy it.
-    return AppVertialListSimpleWidget(
+    return AppVerticalListSimpleWidget(
       title: 'Sponsor',
       items: sponsorRepository.products
           .map(
-            (e) => AppVertialListSimpleModel(
+            (e) => AppVerticalListSimpleModel(
               onTap: () {
                 showModal(
                   context,

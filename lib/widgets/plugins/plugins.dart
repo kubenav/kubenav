@@ -39,10 +39,10 @@ class Plugins extends StatelessWidget {
     }
 
     return [
-      AppVertialListSimpleWidget(
+      AppVerticalListSimpleWidget(
         title: 'Plugins',
         items: [
-          AppVertialListSimpleModel(
+          AppVerticalListSimpleModel(
             onTap: () {
               navigate(context, const PluginHelmList());
             },
@@ -97,7 +97,7 @@ class Plugins extends StatelessWidget {
               ),
             ],
           ),
-          AppVertialListSimpleModel(
+          AppVerticalListSimpleModel(
             onTap: () {
               navigate(context, const PluginPrometheusList());
             },
@@ -150,7 +150,7 @@ class Plugins extends StatelessWidget {
               ),
             ],
           ),
-          AppVertialListSimpleModel(
+          AppVerticalListSimpleModel(
             onTap: () {
               navigate(context, const PluginFlux());
             },
