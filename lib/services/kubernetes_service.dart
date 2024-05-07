@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'package:http/http.dart' as http;
@@ -731,12 +732,7 @@ class KubernetesService {
         return [];
       }
 
-      List<dynamic> jsonData = json.decode(result);
-      final metrics = <Metric>[];
-      for (var metric in jsonData) {
-        metrics.add(Metric.fromJson(metric));
-      }
-      return metrics;
+      return await compute(_decodePrometheusGetData, result);
     } catch (err) {
       Logger.log(
         'KubernetesService prometheusGetData',
@@ -746,4 +742,16 @@ class KubernetesService {
       rethrow;
     }
   }
+}
+
+/// [_decodePrometheusGetData] is a helper function to decode the result of the
+/// `prometheusGetData` function, within the `compute` function. The functions
+/// takes the [result] as parameter and returns a list of [Metric] objects.
+List<Metric> _decodePrometheusGetData(String result) {
+  List<dynamic> jsonData = json.decode(result);
+  final metrics = <Metric>[];
+  for (var metric in jsonData) {
+    metrics.add(Metric.fromJson(metric));
+  }
+  return metrics;
 }

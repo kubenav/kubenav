@@ -198,7 +198,8 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
                       }
 
                       return AppPrometheusChartsWidget(
-                        manifest: const {},
+                        item: null,
+                        toJson: null,
                         defaultCharts: snapshot.data!,
                       );
                   }

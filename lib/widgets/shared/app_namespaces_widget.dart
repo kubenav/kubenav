@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -16,6 +17,15 @@ import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
+
+/// [_decode] is a helper function to decode the result of the Kubernetes API
+/// call to fetch all Namespaces of the currently active cluster. The function
+/// returns a list of [IoK8sApiCoreV1Namespace] and is used in the [compute]
+/// function to decode the result in an isolate.
+List<IoK8sApiCoreV1Namespace> _decode(String result) {
+  final parsed = json.decode(result);
+  return IoK8sApiCoreV1NamespaceList.fromJson(parsed)!.items;
+}
 
 /// [AppNamespacesWidget] is a widget which can be used to switch the namespace
 /// of the currently active cluster. The widget should be used within a modal
@@ -57,13 +67,13 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
       timeout: appRepository.settings.timeout,
     ).getRequest('/api/v1/namespaces');
 
-    return IoK8sApiCoreV1NamespaceList.fromJson(json.decode(result))!.items;
+    return compute(_decode, result);
   }
 
   /// [_getFilteredNamespaces] filters the given list of [namespaces] by the
   /// setted [_filter]. When the [_filter] is not empty the name of an item must
   /// contain the filter keyword.
-  List<dynamic> _getFilteredNamespaces(
+  List<IoK8sApiCoreV1Namespace> _getFilteredNamespaces(
     List<IoK8sApiCoreV1Namespace> namespaces,
   ) {
     return _filter == ''
@@ -101,7 +111,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
       if (mounted) {
         showSnackbar(
           context,
-          'Namespace was not changed',
+          'Failed to Change Namespace',
           err.toString(),
         );
       }
@@ -249,7 +259,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
 
     return AppBottomSheetWidget(
       title: 'Namespaces',
-      subtitle: 'Select the active namespace',
+      subtitle: 'Select the Active Namespace',
       icon: CustomIcons.namespaces,
       closePressed: () {
         Navigator.pop(context);
@@ -298,7 +308,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                         Wrap(
                           children: [
                             AppErrorWidget(
-                              message: 'Could not load Namespaces',
+                              message: 'Failed to Load Namespaces',
                               details: snapshot.error.toString(),
                               icon: CustomIcons.namespaces,
                             ),

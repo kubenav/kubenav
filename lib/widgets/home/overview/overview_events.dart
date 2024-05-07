@@ -1,21 +1,51 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_event.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_event_list.dart';
-import 'package:kubenav/models/resource.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
-import 'package:kubenav/utils/logger.dart';
-import 'package:kubenav/utils/resources/events.dart';
-import 'package:kubenav/widgets/resources/list/list_item.dart';
+import 'package:kubenav/widgets/resources/resources/resources.dart';
+import 'package:kubenav/widgets/resources/resources/resources_events.dart';
+import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
+
+/// [_decodeResult] decodes the result from the Kubernetes API and returns a
+/// list of [IoK8sApiCoreV1Event]. We only return the first 25 events, if there
+/// are more events available.
+List<IoK8sApiCoreV1Event> _decodeResult(String result) {
+  final parsed = json.decode(result);
+  final events = IoK8sApiCoreV1EventList.fromJson(parsed)?.items ?? [];
+
+  /// Filter all events to only proceed with events, which are having a
+  /// `lastTimestamp` set. If we have less than 25 events, we return all events,
+  /// sorted by their `creationTimestamp`.
+  final filteredEvents = events.where((e) => e.lastTimestamp != null).toList();
+  if (filteredEvents.length <= 25) {
+    events.sort(
+      (a, b) => b.metadata.creationTimestamp!
+          .compareTo(a.metadata.creationTimestamp!),
+    );
+    return events;
+  }
+
+  /// If we have more than 25 events, we sort the events by their
+  /// `lastTimestamp` and return the first 25 events.
+  filteredEvents.sort((a, b) => b.lastTimestamp!.compareTo(a.lastTimestamp!));
+
+  if (filteredEvents.length > 25) {
+    return filteredEvents.sublist(0, 25);
+  } else {
+    return filteredEvents;
+  }
+}
 
 /// The [OverviewEvents] widget can be used to display a list of events on the
 /// overview screen, with the last warning events created in the current active
@@ -53,59 +83,30 @@ class _OverviewEventsState extends State<OverviewEvents> {
 
     final resourcesListUrl = appRepository.settings.home.useSelectedNamespace &&
             cluster!.namespace != ''
-        ? '${Resources.map['events']!.path}/namespaces/${cluster.namespace}/${Resources.map['events']!.resource}?fieldSelector=type=Warning'
-        : '${Resources.map['events']!.path}/${Resources.map['events']!.resource}?fieldSelector=type=Warning';
+        ? '${resourceEvent.path}/namespaces/${cluster.namespace}/${resourceEvent.resource}?fieldSelector=type=Warning'
+        : '${resourceEvent.path}/${resourceEvent.resource}?fieldSelector=type=Warning';
 
     final result = await KubernetesService(
       cluster: cluster!,
       proxy: appRepository.settings.proxy,
       timeout: appRepository.settings.timeout,
     ).getRequest(resourcesListUrl);
-    final resourcesList = json.decode(result);
 
-    Logger.log(
-      'OverviewEventsRepository _fetchEvents',
-      '${resourcesList['items'].length} items were returned',
-      'Request URL: $resourcesListUrl\nManifest: $resourcesList',
-    );
-
-    final eventsList = IoK8sApiCoreV1EventList.fromJson(resourcesList);
-
-    if (eventsList != null) {
-      final eventItems = eventsList.items;
-      eventItems.sort(
-        (a, b) => a.lastTimestamp != null && b.lastTimestamp != null
-            ? b.lastTimestamp!.compareTo(a.lastTimestamp!)
-            : 0,
-      );
-
-      if (eventItems.length > 25) {
-        return eventItems.sublist(0, 25);
-      } else {
-        return eventItems;
-      }
-    }
-
-    return [];
+    return await compute(_decodeResult, result);
   }
 
   /// [buildEventItem] builds the widget for a single event using the
   /// [ListItemWidget] from the resources page.
   Widget buildEventItem(IoK8sApiCoreV1Event event) {
-    final info = buildInfoText(event);
-
-    return ListItemWidget(
-      title: Resources.map['events']!.title,
-      resource: Resources.map['events']!.resource,
-      path: Resources.map['events']!.path,
-      scope: Resources.map['events']!.scope,
-      additionalPrinterColumns:
-          Resources.map['events']!.additionalPrinterColumns,
+    return ResourcesListItem(
       name: event.metadata.name ?? '',
       namespace: event.metadata.namespace,
-      item: null,
-      info: info,
-      status: event.type == 'Normal' ? Status.success : Status.warning,
+      resource: resourceEvent,
+      item: event,
+      status: event.type == 'Normal'
+          ? ResourceStatus.success
+          : ResourceStatus.warning,
+      details: resourceEvent.previewItemBuilder(event),
     );
   }
 
@@ -176,10 +177,9 @@ class _OverviewEventsState extends State<OverviewEvents> {
                             right: Constants.spacingMiddle,
                           ),
                           child: AppErrorWidget(
-                            message: 'Could not load events',
+                            message: 'Failed to Load ${resourceEvent.plural}',
                             details: snapshot.error.toString(),
-                            icon:
-                                'assets/resources/${Resources.map['events']!.resource}.svg',
+                            icon: 'assets/resources/${resourceEvent.icon}.svg',
                           ),
                         ),
                       ),

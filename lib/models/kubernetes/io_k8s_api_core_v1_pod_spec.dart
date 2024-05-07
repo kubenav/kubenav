@@ -35,7 +35,7 @@ class IoK8sApiCoreV1PodSpec {
     this.dnsConfig,
     this.dnsPolicy,
     this.enableServiceLinks,
-    this.ephemeralContainers = const [],
+    this.ephemeralContainers,
     this.hostAliases = const [],
     this.hostIPC,
     this.hostNetwork,
@@ -123,7 +123,12 @@ class IoK8sApiCoreV1PodSpec {
   bool? enableServiceLinks;
 
   /// List of ephemeral containers run in this pod. Ephemeral containers may be run in an existing pod to perform user-initiated actions such as debugging. This list cannot be specified when creating a pod, and it cannot be modified by updating the pod spec. In order to add an ephemeral container to an existing pod, use the pod's ephemeralcontainers subresource.
-  List<IoK8sApiCoreV1EphemeralContainer> ephemeralContainers;
+  ///
+  /// NOTE: The `ephemeralContainers` field should be nullable, so that we can
+  /// generate a proper JSON patch when adding or removing an ephemeral
+  /// container. This also requires us to do some hacks in the [toJson]
+  /// function.
+  List<IoK8sApiCoreV1EphemeralContainer>? ephemeralContainers;
 
   /// HostAliases is an optional list of hosts and IPs that will be injected into the pod's hosts file if specified. This is only valid for non-hostNetwork pods.
   List<IoK8sApiCoreV1HostAlias> hostAliases;
@@ -455,7 +460,10 @@ class IoK8sApiCoreV1PodSpec {
     } else {
       json[r'enableServiceLinks'] = null;
     }
-    json[r'ephemeralContainers'] = this.ephemeralContainers;
+    json[r'ephemeralContainers'] =
+        this.ephemeralContainers != null && this.ephemeralContainers!.isEmpty
+            ? null
+            : this.ephemeralContainers;
     json[r'hostAliases'] = this.hostAliases;
     if (this.hostIPC != null) {
       json[r'hostIPC'] = this.hostIPC;

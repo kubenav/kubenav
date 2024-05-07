@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
@@ -15,33 +14,31 @@ class HelpersService {
 
   /// [prettifyYAML] can be used to pretty print the given json object. This is
   /// implemented in Go, because Dart lacks a good package to work with YAML.
-  Future<String> prettifyYAML(dynamic jsonObj) async {
+  Future<String> prettifyYAML(String json) async {
     try {
-      final jsonStr = jsonObj is String ? jsonObj : json.encode(jsonObj);
-
       Logger.log(
         'HelperService prettifyYAML',
-        'Run prettifyYAML function',
-        jsonStr,
+        'Run prettifyYAML',
+        json,
       );
 
       final String result = await platform.invokeMethod(
         'prettifyYAML',
         <String, dynamic>{
-          'jsonStr': jsonStr,
+          'jsonStr': json,
         },
       );
 
       Logger.log(
         'HelperService prettifyYAML',
-        'Yaml was prettifyed',
+        'prettifyYAML Succeeded',
         result,
       );
       return result;
     } catch (err) {
       Logger.log(
         'HelpersService prettifyYAML',
-        'Could not prettify',
+        'prettifyYAML Failed',
         err,
       );
       rethrow;
@@ -52,35 +49,32 @@ class HelpersService {
   /// document by computing the diff between the two json documents via
   /// github.com/wI2L/jsondiff. The returned patch can then be send to the
   /// Kubernetes API server to change a edit a resource.
-  Future<String> createJSONPatch(dynamic source, dynamic target) async {
+  Future<String> createJSONPatch(String source, String target) async {
     try {
-      final sourceStr = json.encode(source);
-      final targetStr = json.encode(target);
-
       Logger.log(
         'HelperService createJSONPatch',
-        'Run createJSONPatch function',
-        '$sourceStr, $targetStr',
+        'Run createJSONPatch',
+        '$source, $target',
       );
 
       final String result = await platform.invokeMethod(
         'createJSONPatch',
         <String, dynamic>{
-          'source': sourceStr,
-          'target': targetStr,
+          'source': source,
+          'target': target,
         },
       );
 
       Logger.log(
         'HelperService createJSONPatch',
-        'Json patch was created',
+        'createJSONPatch Succeeded',
         result,
       );
       return result;
     } catch (err) {
       Logger.log(
         'HelpersService createJSONPatch',
-        'Could not create json patch',
+        'createJSONPatch Failed',
         err,
       );
       rethrow;

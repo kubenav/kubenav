@@ -20,7 +20,7 @@ enum FluxResourceCategory {
   helmController,
 }
 
-extension FluxResourceTypeExtension on FluxResourceCategory {
+extension FluxResourceCategoryExtension on FluxResourceCategory {
   /// [toLocalizedString] returns a string for the Flux resource category, which
   /// can be used in the UI.
   String toLocalizedString() {

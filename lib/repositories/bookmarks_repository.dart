@@ -1,10 +1,11 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
-import 'package:kubenav/models/resource.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/storage.dart';
+import 'package:kubenav/widgets/resources/resources/resources.dart';
+import 'package:kubenav/widgets/resources/resources/resources_customresourcedefinitions.dart';
 
 class BookmarksRepository with ChangeNotifier {
   List<Bookmark> _bookmarks = [];
@@ -14,13 +15,13 @@ class BookmarksRepository with ChangeNotifier {
   Future<void> _save() async {
     try {
       await Storage().write(
-        'kubenav-bookmarks',
+        'kubenav-bookmarks-v5',
         json.encode(_bookmarks.map((e) => e.toJson()).toList()),
       );
     } catch (err) {
       Logger.log(
         'BookmarksRepository _save',
-        'Could not save bookmarks',
+        'Failed to Save Bookmarks',
         err,
       );
     }
@@ -28,7 +29,7 @@ class BookmarksRepository with ChangeNotifier {
 
   Future<void> init() async {
     try {
-      final data = await Storage().read('kubenav-bookmarks');
+      final data = await Storage().read('kubenav-bookmarks-v5');
       if (data != null) {
         _bookmarks = List<Bookmark>.from(
           json.decode(data).map((e) => Bookmark.fromJson(e)),
@@ -38,7 +39,7 @@ class BookmarksRepository with ChangeNotifier {
     } catch (err) {
       Logger.log(
         'BookmarksRepository _init',
-        'Could not load bookmarks',
+        'Failed to Load Bookmarks',
         err,
       );
     }
@@ -47,25 +48,17 @@ class BookmarksRepository with ChangeNotifier {
   Future<void> addBookmark(
     BookmarkType type,
     String clusterId,
-    String title,
-    String resource,
-    String path,
-    ResourceScope scope,
-    List<AdditionalPrinterColumns> additionalPrinterColumns,
     String? name,
     String? namespace,
+    Resource resource,
   ) async {
     _bookmarks.add(
       Bookmark(
         type: type,
         clusterId: clusterId,
-        title: title,
-        resource: resource,
-        path: path,
-        scope: scope,
-        additionalPrinterColumns: additionalPrinterColumns,
         name: name,
         namespace: namespace,
+        resource: resource,
       ),
     );
     await _save();
@@ -90,22 +83,16 @@ class BookmarksRepository with ChangeNotifier {
   int isBookmarked(
     BookmarkType type,
     String clusterId,
-    String title,
-    String resource,
-    String path,
-    ResourceScope scope,
     String? name,
     String? namespace,
+    Resource resource,
   ) {
     for (var i = 0; i < _bookmarks.length; i++) {
       if (_bookmarks[i].type == type &&
           _bookmarks[i].clusterId == clusterId &&
-          _bookmarks[i].title == title &&
-          _bookmarks[i].resource == resource &&
-          _bookmarks[i].path == path &&
-          _bookmarks[i].scope == scope &&
           _bookmarks[i].name == name &&
-          _bookmarks[i].namespace == namespace) {
+          _bookmarks[i].namespace == namespace &&
+          _resourcesEqual(_bookmarks[i].resource.id(), resource.id())) {
         return i;
       }
     }
@@ -173,67 +160,82 @@ BookmarkType getBookmarkTypeFromString(String? type) {
 
 /// A [Bookmark] represents a single bookmark. Bookmarks can be used to proivde
 /// easier access to the users most used resources. Bookmarks must have a
-/// [cluster], [type], [title], [resource], [scope] and an optionsl [name] and
-/// [namespace].
+/// [type], [cluster], [name], [namespace] and [resource] so that we can
+/// identify the resource which was bookmarked.
 class Bookmark {
   BookmarkType type;
   String clusterId;
-  String title;
-  String resource;
-  String path;
-  ResourceScope scope;
-  List<AdditionalPrinterColumns> additionalPrinterColumns;
   String? name;
   String? namespace;
+  Resource resource;
 
   Bookmark({
     required this.type,
     required this.clusterId,
-    required this.title,
-    required this.resource,
-    required this.path,
-    required this.scope,
-    required this.additionalPrinterColumns,
     required this.name,
     required this.namespace,
+    required this.resource,
   });
 
   factory Bookmark.fromJson(Map<String, dynamic> data) {
-    return Bookmark(
-      type: getBookmarkTypeFromString(data['type']),
-      clusterId: data['clusterId'],
-      title: data['title'],
-      resource: data['resource'],
-      path: data['path'],
-      scope: getResourceScopeFromString(data['scope']),
-      additionalPrinterColumns: data.containsKey('additionalPrinterColumns') &&
-              data['additionalPrinterColumns'] != null
-          ? List<AdditionalPrinterColumns>.from(
-              data['additionalPrinterColumns']
-                  .map((v) => AdditionalPrinterColumns.fromJson(v)),
-            )
-          : [],
-      name: data.containsKey('name') && data['name'] != null
-          ? data['name']
-          : null,
-      namespace: data.containsKey('namespace') && data['namespace'] != null
-          ? data['namespace']
-          : null,
-    );
+    final resource = resources
+        .where((e) => _resourcesEqual(e.id(), data['resource']))
+        .toList();
+
+    if (resource.isEmpty) {
+      return Bookmark(
+        type: getBookmarkTypeFromString(data['type']),
+        clusterId: data['clusterId'],
+        name: data.containsKey('name') && data['name'] != null
+            ? data['name']
+            : null,
+        namespace: data.containsKey('namespace') && data['namespace'] != null
+            ? data['namespace']
+            : null,
+        resource: buildCustomResource(
+          data['resource']['plural'],
+          data['resource']['singular'],
+          data['resource']['description'],
+          data['resource']['path'],
+          data['resource']['resource'],
+          data['resource']['scope'],
+          List<AdditionalPrinterColumns>.from(
+            data['resource']['additionalPrinterColumns']
+                .map((e) => AdditionalPrinterColumns.fromJson(e)),
+          ),
+        ),
+      );
+    } else {
+      return Bookmark(
+        type: getBookmarkTypeFromString(data['type']),
+        clusterId: data['clusterId'],
+        name: data.containsKey('name') && data['name'] != null
+            ? data['name']
+            : null,
+        namespace: data.containsKey('namespace') && data['namespace'] != null
+            ? data['namespace']
+            : null,
+        resource: resource[0],
+      );
+    }
   }
 
   Map<String, dynamic> toJson() {
     return {
       'type': type.toShortString(),
       'clusterId': clusterId,
-      'title': title,
-      'resource': resource,
-      'path': path,
-      'scope': scope.toShortString(),
-      'additionalPrinterColumns':
-          additionalPrinterColumns.map((e) => e.toJson()).toList(),
       'name': name,
       'namespace': namespace,
+      'resource': resource.id(),
     };
   }
+}
+
+_resourcesEqual(Map<String, dynamic> a, Map<String, dynamic> b) {
+  return a['plural'] == b['plural'] &&
+      a['singular'] == b['singular'] &&
+      a['description'] == b['description'] &&
+      a['path'] == b['path'] &&
+      a['resource'] == b['resource'] &&
+      a['scope'] == b['scope'];
 }

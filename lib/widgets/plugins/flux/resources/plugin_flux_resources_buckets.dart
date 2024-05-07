@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_bucket.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_bucket_list.dart';
-import 'package:kubenav/models/resource.dart';
 import 'package:kubenav/utils/constants.dart';
-import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/plugins/flux/plugin_flux_details.dart';
 import 'package:kubenav/widgets/plugins/flux/plugin_flux_list.dart';
 import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
-import 'package:kubenav/widgets/resources/details/details_item.dart';
-import 'package:kubenav/widgets/resources/details/details_resources_preview.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
+import 'package:kubenav/widgets/resources/resources/resources_events.dart';
 
 final fluxResourceBucket = FluxResource<IoFluxcdToolkitSourceV1beta2Bucket>(
   category: FluxResourceCategory.sourceController,
@@ -31,20 +33,19 @@ final fluxResourceBucket = FluxResource<IoFluxcdToolkitSourceV1beta2Bucket>(
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
-    return encoder
-        .convert((item as IoFluxcdToolkitSourceV1beta2Bucket).toJson());
+    return encoder.convert(item);
   },
-  listWidget: const KustomizationsList(),
+  listWidget: const ListWidget(),
   detailsWidget: (String name, String namespace) {
-    return KustomizationsDetails(
+    return DetailsWidget(
       name: name,
       namespace: namespace,
     );
   },
 );
 
-class KustomizationsList extends StatelessWidget {
-  const KustomizationsList({super.key});
+class ListWidget extends StatelessWidget {
+  const ListWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -70,8 +71,8 @@ class KustomizationsList extends StatelessWidget {
   }
 }
 
-class KustomizationsDetails extends StatelessWidget {
-  const KustomizationsDetails({
+class DetailsWidget extends StatelessWidget {
+  const DetailsWidget({
     super.key,
     required this.name,
     required this.namespace,
@@ -95,7 +96,7 @@ class KustomizationsDetails extends StatelessWidget {
             const SizedBox(height: Constants.spacingMiddle),
             DetailsItemConditions(conditions: item.status?.conditions),
             const SizedBox(height: Constants.spacingMiddle),
-            DetailsItemWidget(
+            DetailsItem(
               title: 'Configuration',
               details: [
                 DetailsItemModel(
@@ -137,7 +138,7 @@ class KustomizationsDetails extends StatelessWidget {
               ],
             ),
             const SizedBox(height: Constants.spacingMiddle),
-            DetailsItemWidget(
+            DetailsItem(
               title: 'Artifact',
               details: [
                 DetailsItemModel(
@@ -170,14 +171,11 @@ class KustomizationsDetails extends StatelessWidget {
             ),
             const SizedBox(height: Constants.spacingMiddle),
             DetailsResourcesPreview(
-              title: Resources.map['events']!.title,
-              resource: Resources.map['events']!.resource,
-              path: Resources.map['events']!.path,
-              scope: Resources.map['events']!.scope,
-              additionalPrinterColumns:
-                  Resources.map['events']!.additionalPrinterColumns,
-              namespace: namespace,
-              selector: 'fieldSelector=involvedObject.name=$name',
+              resource: resourceEvent,
+              namespace: item.metadata?.namespace,
+              selector:
+                  'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
+              filter: null,
             ),
             const SizedBox(height: Constants.spacingMiddle),
           ],

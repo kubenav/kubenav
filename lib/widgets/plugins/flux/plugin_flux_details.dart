@@ -3,25 +3,19 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
-import 'package:kubenav/utils/helpers.dart';
-import 'package:kubenav/utils/resources/general.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/plugins/flux/actions/plugin_flux_reconcile.dart';
 import 'package:kubenav/widgets/plugins/flux/actions/plugin_flux_resume.dart';
-import 'package:kubenav/widgets/plugins/flux/actions/plugin_flux_show_yaml.dart';
 import 'package:kubenav/widgets/plugins/flux/actions/plugin_flux_suspend.dart';
 import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
-import 'package:kubenav/widgets/resources/details/details_item.dart';
+import 'package:kubenav/widgets/resources/actions/show_yaml.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
-import 'package:kubenav/widgets/shared/app_list_item.dart';
 import 'package:kubenav/widgets/shared/app_resource_actions.dart';
 
 /// [fluxDetailsActions] is a helper function to create the actions for the
@@ -48,7 +42,7 @@ List<AppResourceActionsModel> fluxDetailsActions<T>(
       onTap: () {
         showModal(
           context,
-          PluginFluxShowYaml<T>(
+          ShowYaml(
             name: name,
             namespace: namespace,
             item: item,
@@ -292,167 +286,5 @@ class _PluginFluxDetailsState<T> extends State<PluginFluxDetails> {
         ),
       ),
     );
-  }
-}
-
-/// The [DetailsItemMetadata] widget is used to show the metadata of a
-/// Kubernetes resource.
-class DetailsItemMetadata extends StatelessWidget {
-  const DetailsItemMetadata({
-    super.key,
-    required this.metadata,
-  });
-
-  final IoK8sApimachineryPkgApisMetaV1ObjectMeta? metadata;
-
-  @override
-  Widget build(BuildContext context) {
-    final ownerReferences = metadata?.ownerReferences
-        .map(
-          (ownerReference) => '${ownerReference.kind} (${ownerReference.name})',
-        )
-        .toList();
-
-    return DetailsItemWidget(
-      title: 'Metadata',
-      details: [
-        DetailsItemModel(
-          name: 'Name',
-          values: metadata?.name,
-        ),
-        DetailsItemModel(
-          name: 'Namespace',
-          values: metadata?.namespace,
-        ),
-        DetailsItemModel(
-          name: 'Age',
-          values: getAge(metadata?.creationTimestamp),
-        ),
-        DetailsItemModel(
-          name: 'Labels',
-          values: metadata?.labels.entries
-              .map((e) => '${e.key}: ${e.value}')
-              .toList(),
-        ),
-        DetailsItemModel(
-          name: 'Annotations',
-          values: metadata?.annotations.entries
-              .map((e) => '${e.key}: ${e.value}')
-              .toList(),
-        ),
-        DetailsItemModel(
-          name: 'Controlled by',
-          values: ownerReferences,
-          onTap: (int index) {
-            final goToFunc = goToReference(
-              context,
-              metadata?.ownerReferences[index],
-              metadata?.namespace,
-            );
-            if (goToFunc != null) {
-              goToFunc();
-            } else {
-              showSnackbar(
-                context,
-                'Controlled by',
-                '${metadata?.ownerReferences[index].kind} (${metadata?.ownerReferences[index].name})',
-              );
-            }
-          },
-        ),
-      ],
-    );
-  }
-}
-
-/// The [DetailsItemConditions] widget is used to show the conditions of a
-/// Kubernetes resource.
-class DetailsItemConditions extends StatelessWidget {
-  const DetailsItemConditions({
-    super.key,
-    required this.conditions,
-  });
-
-  final List<IoK8sApimachineryPkgApisMetaV1Condition>? conditions;
-
-  @override
-  Widget build(BuildContext context) {
-    if (conditions != null && conditions!.isNotEmpty) {
-      return Wrap(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(
-              Constants.spacingMiddle,
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'Conditions',
-                    style: primaryTextStyle(context, size: 18),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(
-              left: Constants.spacingMiddle,
-              right: Constants.spacingMiddle,
-            ),
-            height: 128,
-            child: GridView.count(
-              scrollDirection: Axis.horizontal,
-              crossAxisCount: 2,
-              childAspectRatio: 0.25,
-              mainAxisSpacing: Constants.spacingMiddle,
-              children: List.generate(
-                conditions!.length,
-                (index) {
-                  return Container(
-                    margin: const EdgeInsets.all(
-                      Constants.spacingSmall,
-                    ),
-                    child: AppListItem(
-                      onTap: () {
-                        showSnackbar(
-                          context,
-                          conditions![index].type,
-                          'Status: ${conditions![index].status}\nAge: ${getAge(conditions![index].lastTransitionTime)}\nReason: ${conditions![index].reason}\nMessage: ${conditions![index].message}',
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          Icon(
-                            conditions![index].status == 'True'
-                                ? Icons.radio_button_checked
-                                : Icons.radio_button_unchecked,
-                            size: 24,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          const SizedBox(width: Constants.spacingSmall),
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              conditions![index].type,
-                              style: noramlTextStyle(
-                                context,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-
-    return Container();
   }
 }
