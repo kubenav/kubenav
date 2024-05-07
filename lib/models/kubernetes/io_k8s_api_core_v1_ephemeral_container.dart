@@ -12,7 +12,6 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_port.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_env_from_source.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_env_var.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_lifecycle.dart';
@@ -34,7 +33,6 @@ class IoK8sApiCoreV1EphemeralContainer {
     this.lifecycle,
     this.livenessProbe,
     required this.name,
-    this.ports = const [],
     this.readinessProbe,
     this.resources,
     this.securityContext,
@@ -98,9 +96,6 @@ class IoK8sApiCoreV1EphemeralContainer {
 
   /// Name of the ephemeral container specified as a DNS_LABEL. This name must be unique among all containers, init containers and ephemeral containers.
   String name;
-
-  /// Ports are not allowed for ephemeral containers.
-  List<IoK8sApiCoreV1ContainerPort> ports;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -216,7 +211,6 @@ class IoK8sApiCoreV1EphemeralContainer {
           other.lifecycle == lifecycle &&
           other.livenessProbe == livenessProbe &&
           other.name == name &&
-          other.ports == ports &&
           other.readinessProbe == readinessProbe &&
           other.resources == resources &&
           other.securityContext == securityContext &&
@@ -243,7 +237,6 @@ class IoK8sApiCoreV1EphemeralContainer {
       (lifecycle == null ? 0 : lifecycle!.hashCode) +
       (livenessProbe == null ? 0 : livenessProbe!.hashCode) +
       (name.hashCode) +
-      (ports.hashCode) +
       (readinessProbe == null ? 0 : readinessProbe!.hashCode) +
       (resources == null ? 0 : resources!.hashCode) +
       (securityContext == null ? 0 : securityContext!.hashCode) +
@@ -262,7 +255,7 @@ class IoK8sApiCoreV1EphemeralContainer {
 
   @override
   String toString() =>
-      'IoK8sApiCoreV1EphemeralContainer[args=$args, command=$command, env=$env, envFrom=$envFrom, image=$image, imagePullPolicy=$imagePullPolicy, lifecycle=$lifecycle, livenessProbe=$livenessProbe, name=$name, ports=$ports, readinessProbe=$readinessProbe, resources=$resources, securityContext=$securityContext, startupProbe=$startupProbe, stdin=$stdin, stdinOnce=$stdinOnce, targetContainerName=$targetContainerName, terminationMessagePath=$terminationMessagePath, terminationMessagePolicy=$terminationMessagePolicy, tty=$tty, volumeDevices=$volumeDevices, volumeMounts=$volumeMounts, workingDir=$workingDir]';
+      'IoK8sApiCoreV1EphemeralContainer[args=$args, command=$command, env=$env, envFrom=$envFrom, image=$image, imagePullPolicy=$imagePullPolicy, lifecycle=$lifecycle, livenessProbe=$livenessProbe, name=$name, readinessProbe=$readinessProbe, resources=$resources, securityContext=$securityContext, startupProbe=$startupProbe, stdin=$stdin, stdinOnce=$stdinOnce, targetContainerName=$targetContainerName, terminationMessagePath=$terminationMessagePath, terminationMessagePolicy=$terminationMessagePolicy, tty=$tty, volumeDevices=$volumeDevices, volumeMounts=$volumeMounts, workingDir=$workingDir]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -291,7 +284,6 @@ class IoK8sApiCoreV1EphemeralContainer {
       json[r'livenessProbe'] = null;
     }
     json[r'name'] = this.name;
-    json[r'ports'] = this.ports;
     if (this.readinessProbe != null) {
       json[r'readinessProbe'] = this.readinessProbe;
     } else {
@@ -387,8 +379,6 @@ class IoK8sApiCoreV1EphemeralContainer {
         lifecycle: IoK8sApiCoreV1Lifecycle.fromJson(json[r'lifecycle']),
         livenessProbe: IoK8sApiCoreV1Probe.fromJson(json[r'livenessProbe']),
         name: mapValueOfType<String>(json, r'name')!,
-        ports: IoK8sApiCoreV1ContainerPort.listFromJson(json[r'ports']) ??
-            const [],
         readinessProbe: IoK8sApiCoreV1Probe.fromJson(json[r'readinessProbe']),
         resources:
             IoK8sApiCoreV1ResourceRequirements.fromJson(json[r'resources']),

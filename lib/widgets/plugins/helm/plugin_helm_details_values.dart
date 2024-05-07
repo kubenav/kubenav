@@ -57,7 +57,8 @@ class _PluginHelmDetailsValuesState extends State<PluginHelmDetailsValues> {
         JsonEncoder encoder = const JsonEncoder.withIndent('  ');
         _codeController.text = encoder.convert(widget.values);
       } else {
-        final data = await HelpersService().prettifyYAML(widget.values);
+        final data =
+            await HelpersService().prettifyYAML(json.encode(widget.values));
         _codeController.text = data;
       }
     } catch (err) {

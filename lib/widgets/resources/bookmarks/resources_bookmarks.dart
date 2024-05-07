@@ -10,7 +10,7 @@ import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/resources/bookmarks/resources_bookmark_actions.dart';
-import 'package:kubenav/widgets/resources/resource_details.dart';
+import 'package:kubenav/widgets/resources/resources_details.dart';
 import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
@@ -86,12 +86,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
           navigate(
             context,
             ResourcesList(
-              title: bookmarksRepository.bookmarks[index].title,
               resource: bookmarksRepository.bookmarks[index].resource,
-              path: bookmarksRepository.bookmarks[index].path,
-              scope: bookmarksRepository.bookmarks[index].scope,
-              additionalPrinterColumns:
-                  bookmarksRepository.bookmarks[index].additionalPrinterColumns,
               namespace: bookmarksRepository.bookmarks[index].namespace,
               selector: null,
             ),
@@ -114,12 +109,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
           navigate(
             context,
             ResourcesDetails(
-              title: bookmarksRepository.bookmarks[index].title,
               resource: bookmarksRepository.bookmarks[index].resource,
-              path: bookmarksRepository.bookmarks[index].path,
-              scope: bookmarksRepository.bookmarks[index].scope,
-              additionalPrinterColumns:
-                  bookmarksRepository.bookmarks[index].additionalPrinterColumns,
               name: bookmarksRepository.bookmarks[index].name!,
               namespace: bookmarksRepository.bookmarks[index].namespace,
             ),
@@ -177,7 +167,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
 
                   return Container(
                     key: Key(
-                      '${bookmarksRepository.bookmarks[index].type} ${bookmarksRepository.bookmarks[index].clusterId} ${bookmarksRepository.bookmarks[index].title} ${bookmarksRepository.bookmarks[index].resource} ${bookmarksRepository.bookmarks[index].path} ${bookmarksRepository.bookmarks[index].scope} ${bookmarksRepository.bookmarks[index].name} ${bookmarksRepository.bookmarks[index].namespace}',
+                      '${bookmarksRepository.bookmarks[index].type} ${bookmarksRepository.bookmarks[index].clusterId} ${bookmarksRepository.bookmarks[index].name} ${bookmarksRepository.bookmarks[index].namespace} ${bookmarksRepository.bookmarks[index].resource}',
                     ),
                     child: Container(
                       margin: const EdgeInsets.only(
@@ -210,7 +200,16 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                                     children: [
                                       Text(
                                         bookmarksRepository
-                                            .bookmarks[index].title,
+                                                    .bookmarks[index].type ==
+                                                BookmarkType.list
+                                            ? bookmarksRepository
+                                                .bookmarks[index]
+                                                .resource
+                                                .plural
+                                            : bookmarksRepository
+                                                .bookmarks[index]
+                                                .resource
+                                                .singular,
                                         style: primaryTextStyle(
                                           context,
                                         ),
@@ -238,7 +237,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                                           ),
                                           Text(
                                             Characters(
-                                              'Namespace: ${bookmarksRepository.bookmarks[index].namespace}',
+                                              'Namespace: ${bookmarksRepository.bookmarks[index].namespace ?? '-'}',
                                             )
                                                 .replaceAll(
                                                   Characters(''),
@@ -251,28 +250,23 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                           ),
-                                          bookmarksRepository
-                                                      .bookmarks[index].name !=
-                                                  null
-                                              ? Text(
+                                          Text(
+                                            Characters(
+                                              'Name: ${bookmarksRepository.bookmarks[index].name ?? '-'}',
+                                            )
+                                                .replaceAll(
+                                                  Characters(''),
                                                   Characters(
-                                                    'Name: ${bookmarksRepository.bookmarks[index].name}',
-                                                  )
-                                                      .replaceAll(
-                                                        Characters(''),
-                                                        Characters(
-                                                          '\u{200B}',
-                                                        ),
-                                                      )
-                                                      .toString(),
-                                                  style: secondaryTextStyle(
-                                                    context,
+                                                    '\u{200B}',
                                                   ),
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
                                                 )
-                                              : Container(),
+                                                .toString(),
+                                            style: secondaryTextStyle(
+                                              context,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         ],
                                       ),
                                     ],

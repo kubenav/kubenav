@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/resource.dart' as resource_model;
 import 'package:kubenav/repositories/bookmarks_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/widgets/resources/bookmarks/resources_bookmarks.dart';
-import 'package:kubenav/widgets/resources/resource_details.dart';
+import 'package:kubenav/widgets/resources/resources_details.dart';
 import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_horizontal_list_cards_widget.dart';
 
@@ -54,12 +53,7 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
           navigate(
             context,
             ResourcesList(
-              title: bookmarksRepository.bookmarks[index].title,
               resource: bookmarksRepository.bookmarks[index].resource,
-              path: bookmarksRepository.bookmarks[index].path,
-              scope: bookmarksRepository.bookmarks[index].scope,
-              additionalPrinterColumns:
-                  bookmarksRepository.bookmarks[index].additionalPrinterColumns,
               namespace: bookmarksRepository.bookmarks[index].namespace,
               selector: null,
             ),
@@ -82,12 +76,7 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
           navigate(
             context,
             ResourcesDetails(
-              title: bookmarksRepository.bookmarks[index].title,
               resource: bookmarksRepository.bookmarks[index].resource,
-              path: bookmarksRepository.bookmarks[index].path,
-              scope: bookmarksRepository.bookmarks[index].scope,
-              additionalPrinterColumns:
-                  bookmarksRepository.bookmarks[index].additionalPrinterColumns,
               name: bookmarksRepository.bookmarks[index].name!,
               namespace: bookmarksRepository.bookmarks[index].namespace,
             ),
@@ -124,32 +113,17 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
           );
 
           return AppHorizontalListCardsModel(
-            title: bookmarksRepository.bookmarks[index].title,
-            subtitle: bookmarksRepository.bookmarks[index].name == null
-                ? [
-                    'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
-                    'Namespace: ${bookmarksRepository.bookmarks[index].namespace}',
-                  ]
-                : [
-                    'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
-                    'Namespace: ${bookmarksRepository.bookmarks[index].namespace}',
-                    'Name: ${bookmarksRepository.bookmarks[index].name}',
-                  ],
-            image: resource_model.Resources.map.containsKey(
-                      bookmarksRepository.bookmarks[index].resource,
-                    ) &&
-                    resource_model
-                            .Resources
-                            .map[bookmarksRepository.bookmarks[index].resource]!
-                            .resource ==
-                        bookmarksRepository.bookmarks[index].resource &&
-                    resource_model
-                            .Resources
-                            .map[bookmarksRepository.bookmarks[index].resource]!
-                            .path ==
-                        bookmarksRepository.bookmarks[index].path
-                ? 'assets/resources/${bookmarksRepository.bookmarks[index].resource}.svg'
-                : 'assets/resources/customresourcedefinitions.svg',
+            title:
+                bookmarksRepository.bookmarks[index].type == BookmarkType.list
+                    ? bookmarksRepository.bookmarks[index].resource.plural
+                    : bookmarksRepository.bookmarks[index].resource.singular,
+            subtitle: [
+              'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
+              'Namespace: ${bookmarksRepository.bookmarks[index].namespace ?? '-'}',
+              'Name: ${bookmarksRepository.bookmarks[index].name ?? '-'}',
+            ],
+            image:
+                'assets/resources/${bookmarksRepository.bookmarks[index].resource.icon}.svg',
             imageFit: BoxFit.none,
             onTap: () {
               openBookmark(index);

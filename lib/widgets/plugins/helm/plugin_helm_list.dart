@@ -10,7 +10,7 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
-import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_list_item_actions.dart';

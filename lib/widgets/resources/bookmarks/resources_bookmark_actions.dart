@@ -31,12 +31,15 @@ class ResourcesBookmarkActions extends StatelessWidget {
           title: 'Delete',
           color: Theme.of(context).extension<CustomColors>()!.error,
           onTap: () {
-            final title = bookmarksRepository.bookmarks[index].title;
+            final title =
+                bookmarksRepository.bookmarks[index].type == BookmarkType.list
+                    ? bookmarksRepository.bookmarks[index].resource.plural
+                    : bookmarksRepository.bookmarks[index].resource.singular;
             bookmarksRepository.removeBookmark(index);
             showSnackbar(
               context,
-              'Bookmark deleted',
-              'Bookmakr $title was deleted',
+              'Bookmark Deleted',
+              'Bookmark $title was deleted',
             );
             Navigator.pop(context);
           },

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/resource.dart' as resource_model;
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/custom_icons.dart';
@@ -12,8 +11,8 @@ import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/resources/bookmarks/resources_bookmarks_preview.dart';
+import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources_list.dart';
-import 'package:kubenav/widgets/resources/resources_list_crds.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_clusters_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
@@ -23,98 +22,85 @@ import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 class Resources extends StatelessWidget {
   const Resources({super.key});
 
-  List<AppVertialListSimpleModel> getItems(
+  List<AppVertialListSimpleModel> _buildItems(
     BuildContext context,
-    resource_model.ResourceType resourceType,
+    ResourceCategory resourceCategory,
   ) {
-    List<AppVertialListSimpleModel> items = [];
+    final resourcesForCategory =
+        resources.where((e) => e.category == resourceCategory).toList();
 
-    resource_model.Resources.map.forEach(
-      (key, value) {
-        if (value.resourceType == resourceType) {
-          items.add(
-            AppVertialListSimpleModel(
-              onTap: () {
-                if (value.resource == 'customresourcedefinitions') {
-                  navigate(
-                    context,
-                    const ResourcesListCRDs(),
-                  );
-                } else {
-                  navigate(
-                    context,
-                    ResourcesList(
-                      title: value.title,
-                      resource: value.resource,
-                      path: value.path,
-                      scope: value.scope,
-                      namespace: null,
-                      selector: null,
-                      additionalPrinterColumns: value.additionalPrinterColumns,
-                    ),
-                  );
-                }
-              },
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(Constants.sizeBorderRadius),
-                    ),
-                  ),
-                  height: 54,
-                  width: 54,
-                  padding: const EdgeInsets.all(
-                    Constants.spacingIcon54x54,
-                  ),
-                  child: SvgPicture.asset('assets/resources/$key.svg'),
+    return List.generate(
+      resourcesForCategory.length,
+      (index) {
+        final resource = resourcesForCategory[index];
+        return AppVertialListSimpleModel(
+          onTap: () {
+            navigate(
+              context,
+              ResourcesList(
+                resource: resource,
+                namespace: null,
+                selector: null,
+              ),
+            );
+          },
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(Constants.sizeBorderRadius),
                 ),
-                const SizedBox(width: Constants.spacingSmall),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        value.title,
-                        style: primaryTextStyle(
-                          context,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        value.description,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: Constants.spacingSmall),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  color: Theme.of(context)
-                      .extension<CustomColors>()!
-                      .textSecondary
-                      .withOpacity(Constants.opacityIcon),
-                  size: 24,
-                ),
-              ],
+              ),
+              height: 54,
+              width: 54,
+              padding: const EdgeInsets.all(
+                Constants.spacingIcon54x54,
+              ),
+              child:
+                  SvgPicture.asset('assets/resources/${resource.resource}.svg'),
             ),
-          );
-        }
+            const SizedBox(width: Constants.spacingSmall),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    resource.plural,
+                    style: primaryTextStyle(
+                      context,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    resource.description,
+                    style: secondaryTextStyle(
+                      context,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: Constants.spacingSmall),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: Theme.of(context)
+                  .extension<CustomColors>()!
+                  .textSecondary
+                  .withOpacity(Constants.opacityIcon),
+              size: 24,
+            ),
+          ],
+        );
       },
     );
-
-    return items;
   }
 
-  List<Widget> buildContent(BuildContext context) {
+  List<Widget> _buildContent(BuildContext context) {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -131,46 +117,21 @@ class Resources extends StatelessWidget {
 
     return [
       const ResourcesBookmarksPreview(),
-      AppVertialListSimpleWidget(
-        title: 'Workloads',
-        items: getItems(
-          context,
-          resource_model.ResourceType.workload,
-        ),
+      ...List.generate(
+        ResourceCategory.values.length,
+        (index) {
+          final resourceCategory = ResourceCategory.values[index];
+          return Column(
+            children: [
+              AppVertialListSimpleWidget(
+                title: resourceCategory.toLocalizedString(),
+                items: _buildItems(context, resourceCategory),
+              ),
+              const SizedBox(height: Constants.spacingMiddle),
+            ],
+          );
+        },
       ),
-      const SizedBox(height: Constants.spacingMiddle),
-      AppVertialListSimpleWidget(
-        title: 'Discovery and Load Balancing',
-        items: getItems(
-          context,
-          resource_model.ResourceType.discoveryandloadbalancing,
-        ),
-      ),
-      const SizedBox(height: Constants.spacingMiddle),
-      AppVertialListSimpleWidget(
-        title: 'Config and Storage',
-        items: getItems(
-          context,
-          resource_model.ResourceType.configandstorage,
-        ),
-      ),
-      const SizedBox(height: Constants.spacingMiddle),
-      AppVertialListSimpleWidget(
-        title: 'RBAC',
-        items: getItems(
-          context,
-          resource_model.ResourceType.rbac,
-        ),
-      ),
-      const SizedBox(height: Constants.spacingMiddle),
-      AppVertialListSimpleWidget(
-        title: 'Cluster',
-        items: getItems(
-          context,
-          resource_model.ResourceType.cluster,
-        ),
-      ),
-      const SizedBox(height: Constants.spacingMiddle),
     ];
   }
 
@@ -226,7 +187,7 @@ class Resources extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            children: buildContent(context),
+            children: _buildContent(context),
           ),
         ),
       ),

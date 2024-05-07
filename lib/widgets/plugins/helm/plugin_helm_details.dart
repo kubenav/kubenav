@@ -11,13 +11,13 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
-import 'package:kubenav/utils/resources/general.dart';
+import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_manifest.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_rollback.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_template.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_values.dart';
-import 'package:kubenav/widgets/resources/details/details_item.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
@@ -340,7 +340,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                               ],
                             ),
                           ),
-                          DetailsItemWidget(
+                          DetailsItem(
                             title: 'Details',
                             details: [
                               DetailsItemModel(
@@ -365,19 +365,23 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                               ),
                               DetailsItemModel(
                                 name: 'First Deployed',
-                                values: formatTime(
-                                  DateTime.parse(
-                                    release.info?.firstDeployed ?? '',
-                                  ),
-                                ),
+                                values: release.info?.firstDeployed != null
+                                    ? formatTime(
+                                        DateTime.parse(
+                                          release.info!.firstDeployed!,
+                                        ),
+                                      )
+                                    : null,
                               ),
                               DetailsItemModel(
                                 name: 'Last Deployed',
-                                values: formatTime(
-                                  DateTime.parse(
-                                    release.info?.lastDeployed ?? '',
-                                  ),
-                                ),
+                                values: release.info?.lastDeployed != null
+                                    ? formatTime(
+                                        DateTime.parse(
+                                          release.info!.lastDeployed!,
+                                        ),
+                                      )
+                                    : null,
                               ),
                               DetailsItemModel(
                                 name: 'Notes',
