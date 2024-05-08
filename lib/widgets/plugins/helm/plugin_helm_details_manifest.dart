@@ -52,7 +52,7 @@ class _PluginHelmDetailsManifestState extends State<PluginHelmDetailsManifest> {
   @override
   Widget build(BuildContext context) {
     return AppBottomSheetWidget(
-      title: 'Values',
+      title: 'Manifest',
       subtitle: widget.name,
       icon: Icons.description,
       closePressed: () {
