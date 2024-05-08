@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/widgets/plugins/flux/actions/plugin_flux_reconcile.dart';
+import 'package:kubenav/widgets/plugins/flux/actions/plugin_flux_resume.dart';
+import 'package:kubenav/widgets/plugins/flux/actions/plugin_flux_suspend.dart';
 import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources_buckets.dart';
 import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources_gitrepositories.dart';
 import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources_helmcharts.dart';
@@ -7,67 +10,29 @@ import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources_hel
 import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources_helmrepositories.dart';
 import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources_kustomizations.dart';
 import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources_ocirepositories.dart';
+import 'package:kubenav/widgets/resources/resources/resources.dart';
+import 'package:kubenav/widgets/shared/app_resource_actions.dart';
 
-/// [FluxResourceCategory] is a `enum`, which defines the different categories
-/// of resources supported by the Flux plugin. At the moment we are only
-/// supporting the Flux resources of the Source, Kuzstomize and Helm
-/// controllers.
+/// [FluxResourceCategories] defines the different categories of resources
+/// supported by the Flux plugin. At the moment we are only supporting the Flux
+/// resources of the Source, Kuzstomize and Helm controllers.
 ///
 /// TODO: Add support for the Notification and Image Automation controllers.
-enum FluxResourceCategory {
-  sourceController,
-  kustomizeController,
-  helmController,
+class FluxResourceCategories {
+  static const sourceController = 'Source Controller';
+  static const kustomizeController = 'Kustomize Controller';
+  static const helmController = 'Helm Controller';
 }
 
-extension FluxResourceCategoryExtension on FluxResourceCategory {
-  /// [toLocalizedString] returns a string for the Flux resource category, which
-  /// can be used in the UI.
-  String toLocalizedString() {
-    switch (this) {
-      case FluxResourceCategory.sourceController:
-        return 'Source Controller';
-      case FluxResourceCategory.kustomizeController:
-        return 'Kustomize Controller';
-      case FluxResourceCategory.helmController:
-        return 'Helm Controller';
-    }
-  }
-}
-
-/// The [FluxResource] model represents a single Flux resource, with all the
-/// information we need to get and display the resource.
-class FluxResource<T> {
-  FluxResourceCategory category;
-  String plural;
-  String singular;
-  String description;
-  String path;
-  String resource;
-  List<T> Function(String data) decodeList;
-  T? Function(String data) decodeItem;
-  String Function(T item) encodeItem;
-  Widget listWidget;
-  Widget Function(String name, String namespace) detailsWidget;
-
-  FluxResource({
-    required this.category,
-    required this.plural,
-    required this.singular,
-    required this.description,
-    required this.path,
-    required this.resource,
-    required this.decodeList,
-    required this.decodeItem,
-    required this.encodeItem,
-    required this.listWidget,
-    required this.detailsWidget,
-  });
-}
+final List<String> fluxResourceCategories = [
+  FluxResourceCategories.sourceController,
+  FluxResourceCategories.kustomizeController,
+  FluxResourceCategories.helmController,
+];
 
 /// [fluxResources] is a list of all supported Flux resources, which are
 /// implementing the [FluxResource] model.
-final List<FluxResource> fluxResources = [
+final List<Resource> fluxResources = [
   fluxResourceGitRepository,
   fluxResourceOCIRepository,
   fluxResourceBucket,
@@ -88,3 +53,76 @@ final kindToFluxResource = {
   'Kustomization': fluxResourceKustomization,
   'HelmRelease': fluxResourceHelmRelease,
 };
+
+List<AppResourceActionsModel> fluxResourceActions(
+  BuildContext context,
+  String name,
+  String? namespace,
+  Resource resource,
+  dynamic item,
+) {
+  if ((resource.resource == fluxResourceGitRepository.resource &&
+          resource.path == fluxResourceGitRepository.path) ||
+      (resource.resource == fluxResourceOCIRepository.resource &&
+          resource.path == fluxResourceOCIRepository.path) ||
+      (resource.resource == fluxResourceBucket.resource &&
+          resource.path == fluxResourceBucket.path) ||
+      (resource.resource == fluxResourceHelmRepository.resource &&
+          resource.path == fluxResourceHelmRepository.path) ||
+      (resource.resource == fluxResourceHelmChart.resource &&
+          resource.path == fluxResourceHelmChart.path) ||
+      (resource.resource == fluxResourceKustomization.resource &&
+          resource.path == fluxResourceKustomization.path) ||
+      (resource.resource == fluxResourceHelmRelease.resource &&
+          resource.path == fluxResourceHelmRelease.path)) {
+    return [
+      AppResourceActionsModel(
+        title: 'Reconcile',
+        icon: Icons.restart_alt,
+        onTap: () {
+          showModal(
+            context,
+            PluginFluxReconcile(
+              name: name,
+              namespace: namespace ?? 'default',
+              resource: resource,
+              item: item,
+            ),
+          );
+        },
+      ),
+      AppResourceActionsModel(
+        title: 'Suspend',
+        icon: Icons.pause,
+        onTap: () {
+          showModal(
+            context,
+            PluginFluxSuspend(
+              name: name,
+              namespace: namespace ?? 'default',
+              resource: resource,
+              item: item,
+            ),
+          );
+        },
+      ),
+      AppResourceActionsModel(
+        title: 'Resume',
+        icon: Icons.play_arrow,
+        onTap: () {
+          showModal(
+            context,
+            PluginFluxResume(
+              name: name,
+              namespace: namespace ?? 'default',
+              resource: resource,
+              item: item,
+            ),
+          );
+        },
+      ),
+    ];
+  }
+
+  return [];
+}

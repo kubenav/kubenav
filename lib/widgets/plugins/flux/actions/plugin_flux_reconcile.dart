@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:kubenav/widgets/resources/resources/resources.dart';
 
 import 'package:provider/provider.dart';
 
@@ -15,14 +17,13 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
-import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 /// The [PluginFluxReconcile] widget is used to trigger the reconciliation of a
 /// Flux resource. When the user presses the action button, the resource is
 /// reconciled by setting the `reconcile.fluxcd.io/requestedAt` annotation to
 /// the current time for the provided [item].
-class PluginFluxReconcile<T> extends StatefulWidget {
+class PluginFluxReconcile extends StatefulWidget {
   const PluginFluxReconcile({
     super.key,
     required this.name,
@@ -33,14 +34,14 @@ class PluginFluxReconcile<T> extends StatefulWidget {
 
   final String name;
   final String namespace;
-  final FluxResource resource;
-  final T item;
+  final Resource resource;
+  final dynamic item;
 
   @override
-  State<PluginFluxReconcile> createState() => _PluginFluxReconcileState<T>();
+  State<PluginFluxReconcile> createState() => _PluginFluxReconcileState();
 }
 
-class _PluginFluxReconcileState<T> extends State<PluginFluxReconcile> {
+class _PluginFluxReconcileState extends State<PluginFluxReconcile> {
   bool _isLoading = false;
 
   /// [_reconcile] is used to reconcile the provided [item]. The reconciliation
@@ -73,13 +74,14 @@ class _PluginFluxReconcileState<T> extends State<PluginFluxReconcile> {
         throw 'Unsupported Resource';
       }
 
+      final item = await compute(widget.resource.toJson, widget.item);
       final now = _rFC3339Nano(DateTime.now());
 
-      final String body = widget.item.metadata != null &&
-              widget.item.metadata.annotations != null
-          ? widget.item.metadata
-                      .annotations['reconcile.fluxcd.io/requestedAt'] !=
-                  null
+      final String body = item['metadata'] != null &&
+              item['metadata']['annotations'] != null &&
+              !item['metadata']['annotations'].isEmpty
+          ? item['metadata']['annotations']
+                  .containsKey('reconcile.fluxcd.io/requestedAt')
               ? '[{"op": "replace", "path": "/metadata/annotations/reconcile.fluxcd.io~1requestedAt", "value": "$now"}]'
               : '[{"op": "add", "path": "/metadata/annotations/reconcile.fluxcd.io~1requestedAt", "value": "$now"}]'
           : '[{"op": "add", "path": "/metadata/annotations", "value": {"reconcile.fluxcd.io/requestedAt": "$now"}}]';

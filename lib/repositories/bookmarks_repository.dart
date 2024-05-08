@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/storage.dart';
+import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_customresourcedefinitions.dart';
 
@@ -178,7 +179,7 @@ class Bookmark {
   });
 
   factory Bookmark.fromJson(Map<String, dynamic> data) {
-    final resource = resources
+    final resource = [...resources, ...fluxResources]
         .where((e) => _resourcesEqual(e.id(), data['resource']))
         .toList();
 

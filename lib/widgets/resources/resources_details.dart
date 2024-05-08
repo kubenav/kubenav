@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
 
 import 'package:provider/provider.dart';
 
@@ -343,6 +344,16 @@ List<AppResourceActionsModel> resourceDetailsActions(
       ),
     );
   }
+
+  actions.addAll(
+    fluxResourceActions(
+      context,
+      name,
+      namespace,
+      resource,
+      item,
+    ),
+  );
 
   return actions;
 }

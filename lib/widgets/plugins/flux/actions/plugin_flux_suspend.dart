@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kubenav/widgets/resources/resources/resources.dart';
 
 import 'package:provider/provider.dart';
 
@@ -15,13 +16,12 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
-import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 /// The [PluginFluxSuspend] is used to suspend a Flux resource. When the user
 /// presses the action button, the resource is suspended by setting the
 /// `spec.suspend` field to `true` for the provided [item].
-class PluginFluxSuspend<T> extends StatefulWidget {
+class PluginFluxSuspend extends StatefulWidget {
   const PluginFluxSuspend({
     super.key,
     required this.name,
@@ -32,14 +32,14 @@ class PluginFluxSuspend<T> extends StatefulWidget {
 
   final String name;
   final String namespace;
-  final FluxResource resource;
-  final T item;
+  final Resource resource;
+  final dynamic item;
 
   @override
-  State<PluginFluxSuspend> createState() => _PluginFluxSuspendState<T>();
+  State<PluginFluxSuspend> createState() => _PluginFluxSuspendState();
 }
 
-class _PluginFluxSuspendState<T> extends State<PluginFluxSuspend> {
+class _PluginFluxSuspendState extends State<PluginFluxSuspend> {
   bool _isLoading = false;
 
   /// [_suspend] is used to suspend the provided [item]. The suspension is done
