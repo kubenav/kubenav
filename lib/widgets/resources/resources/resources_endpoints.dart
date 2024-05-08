@@ -17,7 +17,7 @@ import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 
 final resourceEndpoint = Resource(
-  category: ResourceCategory.discoveryandloadbalancing,
+  category: ResourceCategories.discoveryandloadbalancing,
   plural: 'Endpoints',
   singular: 'Endpoint',
   description:

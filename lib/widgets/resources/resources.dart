@@ -24,7 +24,7 @@ class Resources extends StatelessWidget {
 
   List<AppVerticalListSimpleModel> _buildItems(
     BuildContext context,
-    ResourceCategory resourceCategory,
+    String resourceCategory,
   ) {
     final resourcesForCategory =
         resources.where((e) => e.category == resourceCategory).toList();
@@ -118,13 +118,13 @@ class Resources extends StatelessWidget {
     return [
       const ResourcesBookmarksPreview(),
       ...List.generate(
-        ResourceCategory.values.length,
+        resourceCategories.length,
         (index) {
-          final resourceCategory = ResourceCategory.values[index];
+          final resourceCategory = resourceCategories[index];
           return Column(
             children: [
               AppVerticalListSimpleWidget(
-                title: resourceCategory.toLocalizedString(),
+                title: resourceCategory,
                 items: _buildItems(context, resourceCategory),
               ),
               const SizedBox(height: Constants.spacingMiddle),

@@ -22,7 +22,7 @@ import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 
 final resourceSecret = Resource(
-  category: ResourceCategory.configandstorage,
+  category: ResourceCategories.configAndStorage,
   plural: 'Secrets',
   singular: 'Secret',
   description:

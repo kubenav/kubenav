@@ -19,7 +19,7 @@ import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 
 final resourceClusterRole = Resource(
-  category: ResourceCategory.rbac,
+  category: ResourceCategories.rbac,
   plural: 'ClusterRoles',
   singular: 'ClusterRole',
   description:

@@ -42,7 +42,7 @@ import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 
 final resourcePod = Resource(
-  category: ResourceCategory.workload,
+  category: ResourceCategories.workload,
   plural: 'Pods',
   singular: 'Pod',
   description:

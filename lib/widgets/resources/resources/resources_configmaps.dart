@@ -22,7 +22,7 @@ import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 
 final resourceConfigMap = Resource(
-  category: ResourceCategory.configandstorage,
+  category: ResourceCategories.configAndStorage,
   plural: 'ConfigMaps',
   singular: 'ConfigMap',
   description:

@@ -19,7 +19,7 @@ import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 
 final resourceDaemonSet = Resource(
-  category: ResourceCategory.workload,
+  category: ResourceCategories.workload,
   plural: 'DaemonSets',
   singular: 'DaemonSet',
   description:

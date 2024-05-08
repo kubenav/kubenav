@@ -18,7 +18,7 @@ import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 
 final resourcePodDisruptionBudget = Resource(
-  category: ResourceCategory.configandstorage,
+  category: ResourceCategories.configAndStorage,
   plural: 'PodDisruptionBudgets',
   singular: 'PodDisruptionBudget',
   description:

@@ -22,7 +22,7 @@ import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 
 final resourceServiceAccount = Resource(
-  category: ResourceCategory.configandstorage,
+  category: ResourceCategories.configAndStorage,
   plural: 'ServiceAccounts',
   singular: 'ServiceAccount',
   description:

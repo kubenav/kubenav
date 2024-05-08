@@ -29,35 +29,23 @@ import 'package:kubenav/widgets/resources/resources/resources_statefulsets.dart'
 import 'package:kubenav/widgets/resources/resources/resources_storageclasses.dart';
 import 'package:kubenav/widgets/resources/resources_list.dart';
 
-/// [ResourceCategory] is a `enum`, which defines the different categories of
-/// Kubernetes resources. The categories are used to group the resources within
-/// the UI.
-enum ResourceCategory {
-  workload,
-  discoveryandloadbalancing,
-  configandstorage,
-  rbac,
-  cluster,
+/// [ResourceCategories] defines the different categories of Kubernetes
+/// resources. The categories are used to group the resources within the UI.
+class ResourceCategories {
+  static const workload = 'Workloads';
+  static const discoveryandloadbalancing = 'Discovery and Load Balancing';
+  static const configAndStorage = 'Config and Storage';
+  static const rbac = 'RBAC';
+  static const cluster = 'Cluster';
 }
 
-extension ResourceCategoryExtension on ResourceCategory {
-  /// [toLocalizedString] returns a string for the Kubernetes resource category,
-  /// which can be used in the UI.
-  String toLocalizedString() {
-    switch (this) {
-      case ResourceCategory.workload:
-        return 'Workloads';
-      case ResourceCategory.discoveryandloadbalancing:
-        return 'Discovery and Load Balancing';
-      case ResourceCategory.configandstorage:
-        return 'Config and Storage';
-      case ResourceCategory.rbac:
-        return 'RBAC';
-      case ResourceCategory.cluster:
-        return 'Cluster';
-    }
-  }
-}
+final List<String> resourceCategories = [
+  ResourceCategories.workload,
+  ResourceCategories.discoveryandloadbalancing,
+  ResourceCategories.configAndStorage,
+  ResourceCategories.rbac,
+  ResourceCategories.cluster,
+];
 
 /// [ResourceScope] is a `enum` for the scope of the Kubernetes resource. A
 /// Kubernetes resource can be `namespaced` (e.g. Pods, Deployments, etc.) or
@@ -90,7 +78,7 @@ ResourceScope getResourceScopeFromString(String? scope) {
 /// The [Resource] model represents a single Kubernetes resource, with all the
 /// information we need to get and display the resource.
 class Resource {
-  ResourceCategory category;
+  String category;
   String plural;
   String singular;
   String description;

@@ -17,7 +17,7 @@ import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 
 final resourceCronJob = Resource(
-  category: ResourceCategory.workload,
+  category: ResourceCategories.workload,
   plural: 'CronJobs',
   singular: 'CronJob',
   description: 'A CronJob creates Jobs on a repeating schedule.',
