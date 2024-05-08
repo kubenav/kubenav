@@ -34,7 +34,7 @@ class ClustersRepository with ChangeNotifier {
     try {
       Logger.log(
         'ClustersRepository _save',
-        'Call save function',
+        'Save',
       );
       await Storage().write(
         'kubenavClustersRepository',
@@ -49,7 +49,7 @@ class ClustersRepository with ChangeNotifier {
     } catch (err) {
       Logger.log(
         'ClustersRepository _save',
-        'Could not save clusters',
+        'Failed to Save Clusters',
         err,
       );
     }
@@ -73,7 +73,7 @@ class ClustersRepository with ChangeNotifier {
     } catch (err) {
       Logger.log(
         'ClustersRepository init',
-        'Could not init clusters repository',
+        'Failed to Load Clusters',
         err,
       );
     }
@@ -193,7 +193,7 @@ class ClustersRepository with ChangeNotifier {
   Future<Cluster?> getClusterWithCredentials(String clusterId) async {
     try {
       if (_clusters.isEmpty) {
-        throw 'No clusters were found';
+        throw 'No Clusters Found';
       }
 
       final cluster = _clusters
@@ -236,7 +236,7 @@ class ClustersRepository with ChangeNotifier {
             await editClusterWithoutNotify(cluster);
             return cluster;
           } else {
-            throw Exception('Could not get access token');
+            throw Exception('Failed to Get Access Token');
           }
         }
       } else if (cluster.clusterProviderType == ClusterProviderType.awssso) {
@@ -293,7 +293,7 @@ class ClustersRepository with ChangeNotifier {
             await editClusterWithoutNotify(cluster);
             return cluster;
           } else {
-            throw Exception('could not get access token');
+            throw Exception('Failed to Get Access Token');
           }
         }
       } else if (cluster.clusterProviderType == ClusterProviderType.google) {

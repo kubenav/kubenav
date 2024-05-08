@@ -93,7 +93,7 @@ class _SettingsDigitalOceanProviderState
     } catch (err) {
       Logger.log(
         'SettingsDigitalOceanProvider _saveProvider',
-        'Could not save provider configuration',
+        'Failed to Save Provider Configuration',
         err,
       );
       setState(() {
@@ -102,7 +102,7 @@ class _SettingsDigitalOceanProviderState
       if (mounted) {
         showSnackbar(
           context,
-          'Could not save provider configuration',
+          'Failed to Save Provider Configuration',
           err.toString(),
         );
       }
@@ -134,7 +134,7 @@ class _SettingsDigitalOceanProviderState
       closePressed: () {
         Navigator.pop(context);
       },
-      actionText: widget.provider == null ? 'Save and add cluster(s)' : 'Save',
+      actionText: widget.provider == null ? 'Save and Add Cluster(s)' : 'Save',
       actionPressed: () {
         _saveProvider();
       },

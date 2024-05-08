@@ -106,7 +106,7 @@ class _SettingsAzureProviderState extends State<SettingsAzureProvider> {
       if (mounted) {
         showSnackbar(
           context,
-          'Could not save provider configuration',
+          'Failed to Save Provider Configuration',
           err.toString(),
         );
       }
@@ -146,7 +146,7 @@ class _SettingsAzureProviderState extends State<SettingsAzureProvider> {
       closePressed: () {
         Navigator.pop(context);
       },
-      actionText: widget.provider == null ? 'Save and add cluster(s)' : 'Save',
+      actionText: widget.provider == null ? 'Save and Add Cluster(s)' : 'Save',
       actionPressed: () {
         _saveProviderConfig();
       },

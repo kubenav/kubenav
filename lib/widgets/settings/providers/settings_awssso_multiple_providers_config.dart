@@ -47,7 +47,7 @@ class _SettingsAWSSSOMultipleProvidersState
 
       Logger.log(
         'SettingsAWSSSOMultipleProviders _startSSOFlow',
-        'SSO config was returned',
+        'SSO Config',
         ssoConfig,
       );
       setState(() {
@@ -56,20 +56,20 @@ class _SettingsAWSSSOMultipleProvidersState
       if (mounted) {
         showSnackbar(
           context,
-          'Sing in completed',
+          'Sing in Completed',
           'You can now click on the verify button',
         );
       }
     } catch (err) {
       Logger.log(
         'SettingsAWSSSOMultipleProviders _startSSOFlow',
-        'Could not get SSO configuration',
+        'Failed to Get SSO Configuration',
         err,
       );
       if (mounted) {
         showSnackbar(
           context,
-          'Could not get SSO configuration',
+          'Failed to Get SSO Configuration',
           err.toString(),
         );
       }
@@ -82,13 +82,13 @@ class _SettingsAWSSSOMultipleProvidersState
     } catch (err) {
       Logger.log(
         'SettingsAWSSSOMultipleProviders _verifyDevice',
-        'Could not verify device',
+        'Failed to Verify Device',
         err,
       );
       if (mounted) {
         showSnackbar(
           context,
-          'Could not verify device',
+          'Failed to Verify Device',
           err.toString(),
         );
       }
@@ -136,7 +136,7 @@ class _SettingsAWSSSOMultipleProvidersState
       if (mounted) {
         showSnackbar(
           context,
-          'Could not load accounts and roles',
+          'Failed to Load Accounts and Roles',
           err.toString(),
         );
       }

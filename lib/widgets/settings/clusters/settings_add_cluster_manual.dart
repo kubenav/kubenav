@@ -95,7 +95,7 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
           Navigator.pop(context);
           showSnackbar(
             context,
-            'Cluster added',
+            'Cluster Added',
             'The cluster ${cluster.name} was added',
           );
         }
@@ -107,7 +107,7 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
       if (mounted) {
         showSnackbar(
           context,
-          'Could not add cluster',
+          'Failed to Add Cluster',
           err.toString(),
         );
       }

@@ -14,7 +14,7 @@ class Logger extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBottomSheetWidget(
       title: 'Logs',
-      subtitle: 'Debug logs for kubenav',
+      subtitle: 'Debug Logs',
       icon: Icons.subject,
       closePressed: () {
         Navigator.pop(context);

@@ -62,7 +62,7 @@ class _SettingsAddClusterAzureState extends State<SettingsAddClusterAzure> {
 
         Logger.log(
           'SettingsAddClusterAzure _getClusters',
-          'Clusters were returned',
+          'Clusters',
           tmpClusters,
         );
         setState(() {
@@ -72,13 +72,13 @@ class _SettingsAddClusterAzureState extends State<SettingsAddClusterAzure> {
       } else {
         setState(() {
           _isLoading = false;
-          _error = 'Provider configuration is invalid';
+          _error = 'Provider Configuration is Invalid';
         });
       }
     } catch (err) {
       Logger.log(
         'SettingsAddClusterAzure _getClusters',
-        'Could not get clusters',
+        'Failed to Get Clusters',
         err,
       );
       setState(() {
@@ -126,7 +126,7 @@ class _SettingsAddClusterAzureState extends State<SettingsAddClusterAzure> {
       if (mounted) {
         showSnackbar(
           context,
-          'Could not add clusters',
+          'Failed to Add Clusters',
           err.toString(),
         );
       }
@@ -146,7 +146,7 @@ class _SettingsAddClusterAzureState extends State<SettingsAddClusterAzure> {
 
     if (_error != '') {
       return AppErrorWidget(
-        message: 'Could not load clusters',
+        message: 'Failed to Load Clusters',
         details: _error,
         icon: ClusterProviderType.azure.icon(),
       );

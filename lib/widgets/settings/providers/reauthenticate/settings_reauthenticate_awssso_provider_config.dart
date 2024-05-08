@@ -34,7 +34,7 @@ class _SettingsReauthenticateAWSSSOState
 
       Logger.log(
         'SettingsReauthenticateAWSSSO _startSSOFlow',
-        'SSO config was returned',
+        'SSO Config',
         ssoConfig,
       );
       setState(() {
@@ -43,20 +43,20 @@ class _SettingsReauthenticateAWSSSOState
       if (mounted) {
         showSnackbar(
           context,
-          'Sing in completed',
+          'Sing in Completed',
           'You can now click on the verify button',
         );
       }
     } catch (err) {
       Logger.log(
         'SettingsReauthenticateAWSSSO _startSSOFlow',
-        'Could not get SSO configuration',
+        'Failed to Get SSO Configuration',
         err,
       );
       if (mounted) {
         showSnackbar(
           context,
-          'Could not get SSO configuration',
+          'Failed to Get SSO Configuration',
           err.toString(),
         );
       }
@@ -72,13 +72,13 @@ class _SettingsReauthenticateAWSSSOState
     } catch (err) {
       Logger.log(
         'SettingsReauthenticateAWSSSO _verifyDevice',
-        'Could not verify device',
+        'Failed to Verify Device',
         err,
       );
       if (mounted) {
         showSnackbar(
           context,
-          'Could not verify device',
+          'Failed to Verify Device',
           err.toString(),
         );
       }
@@ -105,7 +105,7 @@ class _SettingsReauthenticateAWSSSOState
 
       Logger.log(
         'SettingsReauthenticateAWSSSO _getSSOCredentials',
-        'SSO config was returned',
+        'SSO Credentials',
         ssoCredentials,
       );
 
@@ -120,20 +120,20 @@ class _SettingsReauthenticateAWSSSOState
       if (mounted) {
         showSnackbar(
           context,
-          'Provider configuration saved',
+          'Provider Configuration Saved',
           'Refresh the view to use the new credentials',
         );
       }
     } catch (err) {
       Logger.log(
         'SettingsReauthenticateAWSSSO _startSSOFlow',
-        'Could not get SSO credentials',
+        'Failed to Get SSO Credentials',
         err,
       );
       if (mounted) {
         showSnackbar(
           context,
-          'Could not get SSO credentials',
+          'Failed to Get SSO Credentials',
           err.toString(),
         );
       }

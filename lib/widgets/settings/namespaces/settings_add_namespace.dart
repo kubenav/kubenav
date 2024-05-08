@@ -39,7 +39,7 @@ class _SettingsAddNamespaceState extends State<SettingsAddNamespace> {
 
     return AppBottomSheetWidget(
       title: 'Add Namespace',
-      subtitle: 'Add one of your favorite namespaces for quick access',
+      subtitle: 'Add one of your favorite Namespaces for faster access',
       icon: Icons.difference,
       closePressed: () {
         Navigator.pop(context);
@@ -66,7 +66,7 @@ class _SettingsAddNamespaceState extends State<SettingsAddNamespace> {
             child: Column(
               children: [
                 const Text(
-                  'Enter the name of one of your favorite namespaces for quick access:',
+                  'Enter the name of one of your favorite namespaces for faster access:',
                 ),
                 Padding(
                   padding: const EdgeInsets.only(

@@ -91,7 +91,7 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
         if (mounted) {
           showSnackbar(
             context,
-            'Changes were saved',
+            'Cluster Saved',
             'The cluster ${_nameController.text} was saved',
           );
           Navigator.pop(context);
@@ -104,7 +104,7 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
       if (mounted) {
         showSnackbar(
           context,
-          'Could not save cluster',
+          'Failed to Save Cluster',
           err.toString(),
         );
       }

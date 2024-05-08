@@ -61,7 +61,7 @@ class _SettingsAddClusterDigitalOceanState
 
         Logger.log(
           'SettingsAddClusterDigitalOcean _getClusters',
-          'Clusters were returned',
+          'Clusters',
           tmpClusters,
         );
 
@@ -88,13 +88,13 @@ class _SettingsAddClusterDigitalOceanState
       } else {
         setState(() {
           _isLoading = false;
-          _error = 'Provider configuration is invalid';
+          _error = 'Provider Configuration is Invalid';
         });
       }
     } catch (err) {
       Logger.log(
         'SettingsAddClusterDigitalOcean _getClusters',
-        'Could not get clusters',
+        'Failed to Get Clusters',
         err,
       );
       setState(() {
@@ -143,7 +143,7 @@ class _SettingsAddClusterDigitalOceanState
       if (mounted) {
         showSnackbar(
           context,
-          'Could not add clusters',
+          'Failed to Add Clusters',
           err.toString(),
         );
       }
@@ -164,7 +164,7 @@ class _SettingsAddClusterDigitalOceanState
 
     if (_error != '') {
       return AppErrorWidget(
-        message: 'Could not load clusters',
+        message: 'Failed to Load Clusters',
         details: _error,
         icon: ClusterProviderType.digitalocean.icon(),
       );

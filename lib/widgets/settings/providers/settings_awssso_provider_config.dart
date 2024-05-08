@@ -58,7 +58,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
 
       Logger.log(
         'SettingsAWSSSOProvider _startSSOFlow',
-        'SSO config was returned',
+        'SSO Config',
         ssoConfig,
       );
       setState(() {
@@ -67,20 +67,20 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
       if (mounted) {
         showSnackbar(
           context,
-          'Sing in completed',
+          'Sing in Completed',
           'You can now click on the verify button',
         );
       }
     } catch (err) {
       Logger.log(
         'SettingsAWSSSOProvider _startSSOFlow',
-        'Could not get SSO configuration',
+        'Failed to Get SSO Configuration',
         err,
       );
       if (mounted) {
         showSnackbar(
           context,
-          'Could not get SSO configuration',
+          'Failed to Get SSO Configuration',
           err.toString(),
         );
       }
@@ -96,13 +96,13 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
     } catch (err) {
       Logger.log(
         'SettingsAWSSSOProvider _verifyDevice',
-        'Could not verify device',
+        'Failed to Verify Device',
         err,
       );
       if (mounted) {
         showSnackbar(
           context,
-          'Could not verify device',
+          'Failed to Verify Device',
           err.toString(),
         );
       }
@@ -124,7 +124,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
 
       Logger.log(
         'SettingsAWSSSOProvider _getSSOCredentials',
-        'SSO config was returned',
+        'SSO Config was returned',
         ssoCredentials,
       );
       setState(() {
@@ -133,20 +133,20 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
       if (mounted) {
         showSnackbar(
           context,
-          'Credentials are created',
+          'Credentials Created',
           'You can now click on the save button',
         );
       }
     } catch (err) {
       Logger.log(
         'SettingsAWSSSOProvider _getSSOCredentials',
-        'Could not get SSO credentials',
+        'Failed to Get SSO Credentials',
         err,
       );
       if (mounted) {
         showSnackbar(
           context,
-          'Could not get SSO credentials',
+          'Failed to Get SSO Credentials',
           err.toString(),
         );
       }
@@ -221,7 +221,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
       if (mounted) {
         showSnackbar(
           context,
-          'Could not add provider configuration',
+          'Failed to Save Provider Configuration',
           err.toString(),
         );
       }
@@ -259,7 +259,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
       closePressed: () {
         Navigator.pop(context);
       },
-      actionText: widget.provider == null ? 'Save and add cluster(s)' : 'Save',
+      actionText: widget.provider == null ? 'Save and Add Cluster(s)' : 'Save',
       actionPressed: () {
         _saveProvider();
       },

@@ -112,8 +112,11 @@ class RancherService {
         client.badCertificateCallback =
             ((X509Certificate cert, String host, int port) => true);
       }
-      HttpClientRequest request = await client.postUrl(Uri.parse(
-          '$serverAddress/v3-public/localProviders/local?action=login',),);
+      HttpClientRequest request = await client.postUrl(
+        Uri.parse(
+          '$serverAddress/v3-public/localProviders/local?action=login',
+        ),
+      );
       request.headers.set('content-type', 'application/json');
       request.add(
         utf8.encode(
@@ -203,7 +206,7 @@ class RancherService {
     } catch (err) {
       Logger.log(
         'RancherService getClusters',
-        'Could not get clusters',
+        'Failed to Get Clusters',
         err,
       );
       rethrow;

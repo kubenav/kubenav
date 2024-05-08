@@ -43,7 +43,7 @@ class _AppClustersWidgetState extends State<AppClustersWidget> {
 
     return AppBottomSheetWidget(
       title: 'Clusters',
-      subtitle: 'Select the active cluster',
+      subtitle: 'Select the Active Cluster',
       icon: CustomIcons.clusters,
       closePressed: () {
         Navigator.pop(context);

@@ -73,13 +73,13 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
       } else {
         setState(() {
           _isLoading = false;
-          _error = 'Provider configuration is invalid';
+          _error = 'Provider Configuration is Invalid';
         });
       }
     } catch (err) {
       Logger.log(
         'SettingsAddClusterGoogle _getClusters',
-        'Could not get clusters',
+        'Failed to Get Clusters',
         err,
       );
       setState(() {
@@ -135,7 +135,7 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
       if (mounted) {
         showSnackbar(
           context,
-          'Could not add clusters',
+          'Failed to Add Clusters',
           err.toString(),
         );
       }
@@ -155,7 +155,7 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
 
     if (_error != '') {
       return AppErrorWidget(
-        message: 'Could not load clusters',
+        message: 'Failed to Load Clusters',
         details: _error,
         icon: ClusterProviderType.google.icon(),
       );

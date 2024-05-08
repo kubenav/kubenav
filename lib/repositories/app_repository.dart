@@ -47,7 +47,7 @@ class AppRepository with ChangeNotifier {
     } catch (err) {
       Logger.log(
         'AppRepository _save',
-        'Could not save settings',
+        'Failed to Save Settings',
         err,
       );
     }
@@ -86,7 +86,7 @@ class AppRepository with ChangeNotifier {
     } catch (err) {
       Logger.log(
         'AppRepository _init',
-        'Could not load settings',
+        'Failed to Load Settings',
         err,
       );
     }
@@ -121,7 +121,7 @@ class AppRepository with ChangeNotifier {
             notifyListeners();
           } else {
             Logger.log(
-              'Enable / disable Authentication failed',
+              'Enable / Disable Authentication Failed',
               'Authentication could not be enabled, because the device hasn\'t any biometrics enrolled.',
             );
             throw Exception(
@@ -130,7 +130,7 @@ class AppRepository with ChangeNotifier {
           }
         } else {
           Logger.log(
-            'Enable / disable Authentication failed',
+            'Enable / Disable Authentication Failed',
             'Authentication could not be enabled, because the device is not supported.',
           );
           throw Exception(
@@ -140,7 +140,7 @@ class AppRepository with ChangeNotifier {
       }
     } catch (err) {
       Logger.log(
-        'Enable / disable Authentication failed',
+        'Enable / Disable Authentication Failed',
         err.toString(),
       );
       rethrow;

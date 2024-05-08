@@ -66,7 +66,8 @@ class _SettingsAddClusterKubeconfigState
     } catch (err) {
       Logger.log(
         'SettingsAddClusterKubeconfig _selectKubeconfigFile',
-        'Could not select file: $err',
+        'Failed to Select File',
+        err,
       );
     }
   }
@@ -111,7 +112,7 @@ class _SettingsAddClusterKubeconfigState
         if (mounted) {
           showSnackbar(
             context,
-            'Clusters were added',
+            'Clusters Added',
             '$count clusters were added',
           );
           Navigator.pop(context);
@@ -123,7 +124,7 @@ class _SettingsAddClusterKubeconfigState
         if (mounted) {
           showSnackbar(
             context,
-            'Could not add clusters',
+            'Failed to Add Clusters',
             err.toString(),
           );
         }

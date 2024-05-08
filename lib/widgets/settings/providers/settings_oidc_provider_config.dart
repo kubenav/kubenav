@@ -81,13 +81,13 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
     } catch (err) {
       Logger.log(
         'SettingsOIDCProvider signIn',
-        'Could not open sign in url',
+        'Failed to Open Sign In Url',
         err,
       );
       if (mounted) {
         showSnackbar(
           context,
-          'Could not generate and open sign in url',
+          'Failed to Open Sign In Url',
           err.toString(),
         );
       }
@@ -112,13 +112,13 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
     } catch (err) {
       Logger.log(
         'SettingsOIDCProvider _initDeviceFlow',
-        'Could not initialize device flow',
+        'Failed to Initialize Device Flow',
         err,
       );
       if (mounted) {
         showSnackbar(
           context,
-          'Could not initialize device flow',
+          'Failed to Initialize Device Flow',
           err.toString(),
         );
       }
@@ -136,13 +136,13 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
     } catch (err) {
       Logger.log(
         'SettingsOIDCProvider _verfiyDeviceFlow',
-        'Could not verify device flow',
+        'Failed to Verify Device',
         err,
       );
       if (mounted) {
         showSnackbar(
           context,
-          'Could not verify device flow',
+          'Failed to Verify Device',
           err.toString(),
         );
       }
@@ -240,7 +240,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         } catch (err) {
           Logger.log(
             'OIDCProviderConfigController _saveProvider',
-            'Could not save provider configuration',
+            'Failed to Save Provider Configuration',
             err,
           );
           setState(() {
@@ -249,7 +249,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           if (mounted) {
             showSnackbar(
               context,
-              'Could not save provider configuration',
+              'Failed to Save Provider Configuration',
               err.toString(),
             );
           }
@@ -372,7 +372,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         } catch (err) {
           Logger.log(
             'OIDCProviderConfigController _saveProvider',
-            'Could not save provider configuration',
+            'Failed to Save Provider Configuration',
             err,
           );
           setState(() {
@@ -381,7 +381,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           if (mounted) {
             showSnackbar(
               context,
-              'Could not save provider configuration',
+              'Failed to Save Provider Configuration',
               err.toString(),
             );
           }
@@ -740,7 +740,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
       closePressed: () {
         Navigator.pop(context);
       },
-      actionText: widget.provider == null ? 'Save and add cluster(s)' : 'Save',
+      actionText: widget.provider == null ? 'Save and Add Cluster(s)' : 'Save',
       actionPressed: () {
         _saveProvider();
       },

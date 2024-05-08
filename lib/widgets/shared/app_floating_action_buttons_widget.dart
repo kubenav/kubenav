@@ -63,7 +63,7 @@ class _AppFloatingActionButtonsWidgetState
       if (mounted) {
         showSnackbar(
           context,
-          'Port Forwarding Session could not be shown',
+          'Failed to Show Port Forwarding Sessions',
           err.toString(),
         );
       }

@@ -174,7 +174,7 @@ class Settings extends StatelessWidget {
       if (context.mounted) {
         showSnackbar(
           context,
-          'Could not enabled authentication',
+          'Failed to Enable Authentication',
           err.toString(),
         );
       }

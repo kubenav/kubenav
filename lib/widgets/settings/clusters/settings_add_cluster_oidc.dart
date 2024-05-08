@@ -91,7 +91,7 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
           Navigator.pop(context);
           showSnackbar(
             context,
-            'Cluster added',
+            'Cluster Added',
             'The cluster ${cluster.name} was added',
           );
         }
@@ -103,7 +103,7 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
       if (mounted) {
         showSnackbar(
           context,
-          'Could not add cluster',
+          'Failed to Add Cluster',
           err.toString(),
         );
       }

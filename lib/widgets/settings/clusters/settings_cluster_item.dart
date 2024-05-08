@@ -65,7 +65,7 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
       ).checkHealth();
       Logger.log(
         'SettingsClusterItem getClusterStatus',
-        'Cluster status was returned successfully',
+        'Cluster Status',
         result,
       );
       setState(() {
@@ -74,7 +74,7 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
     } catch (err) {
       Logger.log(
         'SettingsClusterItem getClusterStatus',
-        'There was an error while returning the cluster status',
+        'Failed to Get Cluster Status',
         err,
       );
       setState(() {

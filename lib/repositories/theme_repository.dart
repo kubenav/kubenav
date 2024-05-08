@@ -68,7 +68,7 @@ class ThemeRepository with ChangeNotifier {
     } catch (err) {
       Logger.log(
         'ThemeRepository _save',
-        'Could not save theme',
+        'Failed to Save Theme',
         err,
       );
     }
@@ -88,7 +88,7 @@ class ThemeRepository with ChangeNotifier {
     } catch (err) {
       Logger.log(
         'ThemeRepository _init',
-        'Could not load theme',
+        'Failed to Load Theme',
         err,
       );
     }

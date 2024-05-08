@@ -47,7 +47,7 @@ class _SettingsClusterActionsState extends State<SettingsClusterActions> {
         Navigator.pop(context);
         showSnackbar(
           context,
-          'Cluster deleted',
+          'Cluster Deleted',
           'The cluster ${widget.cluster.name} was deleted',
         );
       }
@@ -56,7 +56,7 @@ class _SettingsClusterActionsState extends State<SettingsClusterActions> {
         Navigator.pop(context);
         showSnackbar(
           context,
-          'Cluster was not deleted',
+          'Failed to Delete Cluster',
           err.toString(),
         );
       }

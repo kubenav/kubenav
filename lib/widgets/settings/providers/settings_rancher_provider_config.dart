@@ -66,7 +66,7 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
     } catch (err) {
       Logger.log(
         'SettingsRancherProvider _signin',
-        'Sign in failed',
+        'Sign In Failed',
         err,
       );
       setState(() {
@@ -75,7 +75,7 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
       if (mounted) {
         showSnackbar(
           context,
-          'Sign in failed',
+          'Sign In Failed',
           err.toString(),
         );
       }
@@ -139,7 +139,7 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
     } catch (err) {
       Logger.log(
         'SettingsRancherProvider _saveProvider',
-        'Could not save provider configuration',
+        'Failed to Save Provider Configuration',
         err,
       );
       setState(() {
@@ -148,7 +148,7 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
       if (mounted) {
         showSnackbar(
           context,
-          'Could not save provider configuration',
+          'Failed to Save Provider Configuration',
           err.toString(),
         );
       }
@@ -189,7 +189,7 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
       closePressed: () {
         Navigator.pop(context);
       },
-      actionText: widget.provider == null ? 'Save and add cluster(s)' : 'Save',
+      actionText: widget.provider == null ? 'Save and Add Cluster(s)' : 'Save',
       actionPressed: () {
         _saveProvider();
       },

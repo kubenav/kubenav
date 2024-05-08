@@ -33,8 +33,8 @@ class SettingsDeleteNamespace extends StatelessWidget {
             appRepository.deleteNamespace(namespace);
             showSnackbar(
               context,
-              'Namespace deleted',
-              'The namespace $namespace was deleted',
+              'Namespace Deleted',
+              'The Namespace $namespace was deleted',
             );
             Navigator.pop(context);
           },

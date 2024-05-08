@@ -52,13 +52,13 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
     } catch (err) {
       Logger.log(
         'SettingsGoogleProvider _signIn',
-        'Could not open sign in url',
+        'Failed to Open Sign In Url',
         err,
       );
       if (mounted) {
         showSnackbar(
           context,
-          'Could not open sign in url',
+          'Failed to Open Sign In Url',
           err.toString(),
         );
       }
@@ -138,7 +138,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
       } else {
         Logger.log(
           'SettingsGoogleProvider _saveProvider',
-          'Could not get credentials',
+          'Failed to Get Credentials',
           'Access Token: ${googleTokens.accessToken}, Expires In: ${googleTokens.expiresIn}, Refresh Token: ${googleTokens.refreshToken}',
         );
         setState(() {
@@ -148,7 +148,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
         if (mounted) {
           showSnackbar(
             context,
-            'Could not get credentials',
+            'Failed to Get Credentials',
             'Access Token: ${googleTokens.accessToken}, Expires In: ${googleTokens.expiresIn}, Refresh Token: ${googleTokens.refreshToken}',
           );
         }
@@ -156,7 +156,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
     } catch (err) {
       Logger.log(
         'SettingsGoogleProvider _saveProvider',
-        'Could not save provider configuration',
+        'Failed to Save Provider Configuration',
         err,
       );
       setState(() {
@@ -165,7 +165,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
       if (mounted) {
         showSnackbar(
           context,
-          'Could not save provider configuration',
+          'Failed to Save Provider Configuration',
           err.toString(),
         );
       }
@@ -207,7 +207,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
       closePressed: () {
         Navigator.pop(context);
       },
-      actionText: widget.provider == null ? 'Save and add cluster(s)' : 'Save',
+      actionText: widget.provider == null ? 'Save and Add Cluster(s)' : 'Save',
       actionPressed: () {
         _saveProvider();
       },

@@ -62,7 +62,7 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
 
         Logger.log(
           'SettingsAddClusterAWSSSO _getClusters',
-          'Clusters were returned',
+          'Clusters',
           tmpClusters,
         );
 
@@ -73,13 +73,13 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
       } else {
         setState(() {
           _isLoading = false;
-          _error = 'Provider configuration is invalid';
+          _error = 'Provider Configuration is Invalid';
         });
       }
     } catch (err) {
       Logger.log(
         'SettingsAddClusterAWSSSO _getClusters',
-        'Could not get clusters',
+        'Failed to Get Clusters',
         err,
       );
       setState(() {
@@ -141,7 +141,7 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
       if (mounted) {
         showSnackbar(
           context,
-          'Could not add clusters',
+          'Failed to Add Clusters',
           err.toString(),
         );
       }
@@ -162,7 +162,7 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
 
     if (_error != '') {
       return AppErrorWidget(
-        message: 'Could not load clusters',
+        message: 'Failed to Load Clusters',
         details: _error,
         icon: ClusterProviderType.awssso.icon(),
       );

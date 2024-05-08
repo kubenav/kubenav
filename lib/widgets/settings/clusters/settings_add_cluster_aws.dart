@@ -62,7 +62,7 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
 
         Logger.log(
           'SettingsAddClusterAWS _getClusters',
-          'Clusters were returned',
+          'Clusters',
           tmpClusters,
         );
 
@@ -73,13 +73,13 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
       } else {
         setState(() {
           _isLoading = false;
-          _error = 'Provider configuration is invalid';
+          _error = 'Provider Configuration is Invalid';
         });
       }
     } catch (err) {
       Logger.log(
         'SettingsAddClusterAWS _getClusters',
-        'Could not get clusters',
+        'Failed to Get Clusters',
         err,
       );
       setState(() {
@@ -137,7 +137,7 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
       if (mounted) {
         showSnackbar(
           context,
-          'Could not add clusters',
+          'Failed to Add Clusters',
           err.toString(),
         );
       }
@@ -157,7 +157,7 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
 
     if (_error != '') {
       return AppErrorWidget(
-        message: 'Could not load clusters',
+        message: 'Failed to Load Clusters',
         details: _error,
         icon: ClusterProviderType.aws.icon(),
       );

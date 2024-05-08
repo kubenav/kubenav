@@ -87,7 +87,7 @@ class _SettingsProviderActionsState extends State<SettingsProviderActions> {
         Navigator.pop(context);
         showSnackbar(
           context,
-          'Provider deleted',
+          'Provider Deleted',
           'The provider ${widget.provider.name} was deleted',
         );
       }
@@ -96,7 +96,7 @@ class _SettingsProviderActionsState extends State<SettingsProviderActions> {
         Navigator.pop(context);
         showSnackbar(
           context,
-          'Provider was not deleted',
+          'Failed to Delete Provider',
           err.toString(),
         );
       }

@@ -128,7 +128,7 @@ class _SettingsAWSSSOMultipleProvidersSelectState
       if (mounted) {
         showSnackbar(
           context,
-          'Could not add providers',
+          'Failed to Save Provider Configuration',
           err.toString(),
         );
       }
