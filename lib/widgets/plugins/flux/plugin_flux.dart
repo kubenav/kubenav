@@ -5,6 +5,7 @@ import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
+import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
@@ -14,7 +15,7 @@ class PluginFlux extends StatelessWidget {
 
   List<AppVerticalListSimpleModel> _buildItems(
     BuildContext context,
-    FluxResourceCategory resourceCategory,
+    String resourceCategory,
   ) {
     final resources =
         fluxResources.where((e) => e.category == resourceCategory).toList();
@@ -27,7 +28,11 @@ class PluginFlux extends StatelessWidget {
           onTap: () {
             navigate(
               context,
-              resource.listWidget,
+              ResourcesList(
+                resource: resource,
+                namespace: null,
+                selector: null,
+              ),
             );
           },
           children: [
@@ -83,14 +88,16 @@ class PluginFlux extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: List.generate(
-              FluxResourceCategory.values.length,
+              fluxResourceCategories.length,
               (index) {
-                final resourceCategory = FluxResourceCategory.values[index];
                 return Column(
                   children: [
                     AppVerticalListSimpleWidget(
-                      title: resourceCategory.toLocalizedString(),
-                      items: _buildItems(context, resourceCategory),
+                      title: fluxResourceCategories[index],
+                      items: _buildItems(
+                        context,
+                        fluxResourceCategories[index],
+                      ),
                     ),
                     const SizedBox(height: Constants.spacingMiddle),
                   ],

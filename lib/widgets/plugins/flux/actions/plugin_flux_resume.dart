@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kubenav/widgets/resources/resources/resources.dart';
 
 import 'package:provider/provider.dart';
 
@@ -15,13 +16,12 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
-import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 /// The [PluginFluxResume] is used to resume a Flux resource. When the user
 /// presses the action button, the resource is resumed by setting the
 /// `spec.suspend` field to `false` for the provided [item].
-class PluginFluxResume<T> extends StatefulWidget {
+class PluginFluxResume extends StatefulWidget {
   const PluginFluxResume({
     super.key,
     required this.name,
@@ -32,14 +32,14 @@ class PluginFluxResume<T> extends StatefulWidget {
 
   final String name;
   final String namespace;
-  final FluxResource resource;
-  final T item;
+  final Resource resource;
+  final dynamic item;
 
   @override
-  State<PluginFluxResume> createState() => _PluginFluxResumeState<T>();
+  State<PluginFluxResume> createState() => _PluginFluxResumeState();
 }
 
-class _PluginFluxResumeState<T> extends State<PluginFluxResume> {
+class _PluginFluxResumeState extends State<PluginFluxResume> {
   bool _isLoading = false;
 
   /// [_resume] is used to resume the provided [item]. The resumption is done
