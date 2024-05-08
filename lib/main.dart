@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/bookmarks_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
+import 'package:kubenav/repositories/crd_cache_repository.dart';
 import 'package:kubenav/repositories/portforwarding_repository.dart';
 import 'package:kubenav/repositories/sponsor_repository.dart';
 import 'package:kubenav/repositories/terminal_repository.dart';
@@ -19,6 +20,7 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await Storage().init();
+  await CRDsCacheRepository().init();
 
   runApp(const App());
 }

@@ -6,8 +6,11 @@ import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_object_reference.da
 import 'package:kubenav/models/kubernetes/io_k8s_api_rbac_v1_policy_rule.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_label_selector.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_owner_reference.dart';
+import 'package:kubenav/repositories/crd_cache_repository.dart';
+import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
+import 'package:kubenav/widgets/resources/resources/resources_customresourcedefinitions.dart';
 import 'package:kubenav/widgets/resources/resources_details.dart';
 
 /// [getAge] returns the age of a Kubernetes resources in a human readable
@@ -253,10 +256,7 @@ String getAdditionalPrinterColumnValue(
 /// reference can be a [IoK8sApiCoreV1ObjectReference] as it is used in events
 /// or a [IoK8sApimachineryPkgApisMetaV1OwnerReference] as it is used in other
 /// manifests. If the reference is a owner reference we also need a [namespace].
-///
-/// TODO: Currently this only supports resources we have defined in the
-/// [kindToResource] map, but it would be nice if we can also use this for CRDs.
-void Function()? goToReference(
+void Function() goToReference(
   BuildContext context,
   dynamic reference,
   String? namespace,
@@ -291,7 +291,69 @@ void Function()? goToReference(
     }
   }
 
-  return null;
+  return () async {
+    try {
+      final crd = await CRDsCacheRepository().getCRD(
+        context,
+        reference.kind,
+        reference.apiVersion,
+      );
+
+      if (crd != null) {
+        if (reference.kind == crd.spec.names.kind) {
+          for (var version in crd.spec.versions) {
+            if (reference.apiVersion == '${crd.spec.group}/${version.name}') {
+              if (context.mounted) {
+                final customResource = buildCustomResource(
+                  crd.spec.names.plural,
+                  crd.spec.names.singular ?? crd.spec.names.plural,
+                  '${crd.spec.group}/${version.name}',
+                  '/apis/${crd.spec.group}/${version.name}',
+                  crd.spec.names.plural,
+                  crd.spec.scope,
+                  version.additionalPrinterColumns
+                      .where((e) => e.priority == null || e.priority == 0)
+                      .map(
+                        (e) => AdditionalPrinterColumns(
+                          description: e.description ?? '',
+                          jsonPath: e.jsonPath,
+                          name: e.name,
+                          type: e.type,
+                        ),
+                      )
+                      .toList(),
+                );
+
+                String? ns;
+                if (reference is IoK8sApiCoreV1ObjectReference) {
+                  ns = reference.namespace;
+                }
+                if (reference is IoK8sApimachineryPkgApisMetaV1OwnerReference) {
+                  ns = namespace;
+                }
+
+                navigate(
+                  context,
+                  ResourcesDetails(
+                    namespace: ns,
+                    name: reference.name,
+                    resource: customResource,
+                  ),
+                );
+                return;
+              }
+            }
+          }
+        }
+      }
+    } catch (err) {
+      Logger.log(
+        'goToReference',
+        'Failed to Go To Reference',
+        err,
+      );
+    }
+  };
 }
 
 /// [formatBytes] formates the provided [size] in bytes into a human readable

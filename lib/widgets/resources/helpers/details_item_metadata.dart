@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
 import 'package:kubenav/utils/resources.dart';
-import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
 
 /// The [DetailsItemMetadata] widget is used to show the metadata of a
@@ -59,15 +58,8 @@ class DetailsItemMetadata extends StatelessWidget {
               metadata?.ownerReferences[index],
               metadata?.namespace,
             );
-            if (goToFunc != null) {
-              goToFunc();
-            } else {
-              showSnackbar(
-                context,
-                'Owner References',
-                '${metadata?.ownerReferences[index].kind} (${metadata?.ownerReferences[index].name})',
-              );
-            }
+
+            goToFunc();
           },
         ),
       ],
