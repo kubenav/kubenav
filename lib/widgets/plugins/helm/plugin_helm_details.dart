@@ -39,6 +39,7 @@ List<AppResourceActionsModel> helmDetailsActions(
         showModal(
           context,
           PluginHelmDetailsValues(
+            title: 'Values',
             name: release.name ?? '',
             values: release.config,
           ),
@@ -52,6 +53,7 @@ List<AppResourceActionsModel> helmDetailsActions(
         showModal(
           context,
           PluginHelmDetailsValues(
+            title: 'Default Values',
             name: release.name ?? '',
             values: release.chart?.values,
           ),
@@ -308,7 +310,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                   Constants.spacingMiddle,
                                 ),
                                 child: AppErrorWidget(
-                                  message: 'Could not load Helm chart',
+                                  message: 'Failed to Load Helm Release',
                                   details: snapshot.error.toString(),
                                   icon: 'assets/plugins/helm.svg',
                                 ),

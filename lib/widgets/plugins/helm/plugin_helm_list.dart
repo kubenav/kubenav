@@ -291,7 +291,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
                                   Constants.spacingMiddle,
                                 ),
                                 child: AppErrorWidget(
-                                  message: 'Could not load Helm charts',
+                                  message: 'Failed to Load Helm Releases',
                                   details: snapshot.error.toString(),
                                   icon: 'assets/plugins/helm.svg',
                                 ),

@@ -494,7 +494,7 @@ class KubernetesService {
 
       Logger.log(
         'KubernetesService helmListReleases',
-        'List Helm releases was ok',
+        'Helm Releases',
         result,
       );
 
@@ -502,16 +502,11 @@ class KubernetesService {
         return [];
       }
 
-      List<dynamic> jsonData = json.decode(result);
-      final releases = <Release>[];
-      for (var release in jsonData) {
-        releases.add(Release.fromJson(release));
-      }
-      return releases;
+      return compute(_decodeHelmListReleases, result);
     } catch (err) {
       Logger.log(
         'KubernetesService helmListReleases',
-        'List Helm releases failed',
+        'Failed to Get Helm Releases',
         err,
       );
       rethrow;
@@ -553,17 +548,15 @@ class KubernetesService {
 
       Logger.log(
         'KubernetesService helmGetRelease',
-        'Get Helm release was ok',
+        'Helm Release',
         result,
       );
 
-      Map<String, dynamic> jsonData = json.decode(result);
-      Release release = Release.fromJson(jsonData);
-      return release;
+      return compute(_decodeHelmGetRelease, result);
     } catch (err) {
       Logger.log(
         'KubernetesService helmGetRelease',
-        'Get Helm release failed',
+        'Failed to Get Helm Release',
         err,
       );
       rethrow;
@@ -604,7 +597,7 @@ class KubernetesService {
 
       Logger.log(
         'KubernetesService helmListReleaseHistory',
-        'Get Helm release history was ok',
+        'Helm Release History',
         result,
       );
 
@@ -612,16 +605,11 @@ class KubernetesService {
         return [];
       }
 
-      List<dynamic> jsonData = json.decode(result);
-      final releases = <Release>[];
-      for (var release in jsonData) {
-        releases.add(Release.fromJson(release));
-      }
-      return releases;
+      return compute(_decodeHelmListReleases, result);
     } catch (err) {
       Logger.log(
         'KubernetesService helmListReleaseHistory',
-        'Get Helm release history failed',
+        'Failed to Get Helm Release History',
         err,
       );
       rethrow;
@@ -666,14 +654,14 @@ class KubernetesService {
 
       Logger.log(
         'KubernetesService helmRollbackRelease',
-        'Rollback was ok',
+        'Rollback Succeeded',
       );
 
       return;
     } catch (err) {
       Logger.log(
         'KubernetesService helmRollbackRelease',
-        'Rollback failed',
+        'Rollback Failed',
         err,
       );
       rethrow;
@@ -754,4 +742,26 @@ List<Metric> _decodePrometheusGetData(String result) {
     metrics.add(Metric.fromJson(metric));
   }
   return metrics;
+}
+
+/// [_decodeHelmListReleases] is a helper function to decode the result of the
+/// `helmListReleases` and `helmListReleaseHistory` function, within the
+/// `compute` function. The functions takes the [result] as parameter and
+/// returns a list of [Release] objects.
+List<Release> _decodeHelmListReleases(String result) {
+  List<dynamic> jsonData = json.decode(result);
+  final releases = <Release>[];
+  for (var release in jsonData) {
+    releases.add(Release.fromJson(release));
+  }
+  return releases;
+}
+
+/// [_decodeHelmGetRelease] is a helper function to decode the result of the
+/// `helmGetRelease` function, within the `compute` function. The functions
+/// takes the [result] as parameter and returns a [Release] object.
+Release _decodeHelmGetRelease(String result) {
+  Map<String, dynamic> jsonData = json.decode(result);
+  Release release = Release.fromJson(jsonData);
+  return release;
 }

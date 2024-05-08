@@ -136,8 +136,8 @@ class _PluginHelmDetailsRollbackState extends State<PluginHelmDetailsRollback> {
       }
     } catch (err) {
       Logger.log(
-        'PluginHelmDetails _rollback',
-        'Failed to rollback release',
+        'PluginHelmDetailsRollback _rollback',
+        'Rollback Failed',
         err,
       );
       setState(() {
@@ -147,7 +147,7 @@ class _PluginHelmDetailsRollbackState extends State<PluginHelmDetailsRollback> {
         Navigator.pop(context);
         showSnackbar(
           context,
-          'Rollback of Helm Release Failed',
+          'Rollback Failed',
           err.toString(),
         );
       }

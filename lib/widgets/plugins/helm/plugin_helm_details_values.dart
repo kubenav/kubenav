@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:code_text_field/code_text_field.dart';
@@ -15,16 +16,23 @@ import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
+String _encodeValues(Map<String, dynamic>? values) {
+  JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+  return encoder.convert(values);
+}
+
 /// The [PluginHelmDetailsValues] widget can be used to render the values file
 /// of a Helm release in a modal bottom sheet. The values file will be displayed
 /// in a code editor as yaml or json document, depending on the users settings.
 class PluginHelmDetailsValues extends StatefulWidget {
   const PluginHelmDetailsValues({
     super.key,
+    required this.title,
     required this.name,
     required this.values,
   });
 
+  final String title;
   final String name;
   final Map<String, dynamic>? values;
 
@@ -36,9 +44,10 @@ class PluginHelmDetailsValues extends StatefulWidget {
 class _PluginHelmDetailsValuesState extends State<PluginHelmDetailsValues> {
   CodeController _codeController = CodeController();
 
-  /// [_init] is called when the widget is initialized. Within the [_init]
-  /// function we prettify the provided [widget.release] and convert it to
-  /// either a json document or a yaml document depending on the users settings.
+  /// [_init] is used to initialize the [_codeController] with the encoded
+  /// [widget.values]. The encoding is done with the [_encodeValues] function.
+  /// When the encoding is done the result is displayed in the [CodeField]
+  /// widget.
   Future<void> _init() async {
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
@@ -53,18 +62,18 @@ class _PluginHelmDetailsValuesState extends State<PluginHelmDetailsValues> {
     );
 
     try {
+      final jsonStr = await compute(_encodeValues, widget.values);
+
       if (appRepository.settings.editorFormat == 'json') {
-        JsonEncoder encoder = const JsonEncoder.withIndent('  ');
-        _codeController.text = encoder.convert(widget.values);
+        _codeController.text = jsonStr;
       } else {
-        final data =
-            await HelpersService().prettifyYAML(json.encode(widget.values));
+        final data = await HelpersService().prettifyYAML(jsonStr);
         _codeController.text = data;
       }
     } catch (err) {
       Logger.log(
         'PluginHelmDetailsValues _init',
-        'An error was returned while prettyfing template',
+        'Encoding Failed',
         err,
       );
     }
@@ -85,7 +94,7 @@ class _PluginHelmDetailsValuesState extends State<PluginHelmDetailsValues> {
   @override
   Widget build(BuildContext context) {
     return AppBottomSheetWidget(
-      title: 'Values',
+      title: widget.title,
       subtitle: widget.name,
       icon: Icons.description,
       closePressed: () {
