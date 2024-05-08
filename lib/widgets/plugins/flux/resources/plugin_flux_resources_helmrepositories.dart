@@ -34,15 +34,24 @@ final Resource fluxResourceHelmRepository = Resource(
                 ?.items ??
             [];
 
-    return items
-        .map(
-          (e) => ResourceItem(
-            item: e,
-            metrics: null,
-            status: ResourceStatus.undefined,
-          ),
-        )
-        .toList();
+    return items.map(
+      (e) {
+        final status = e.status?.conditions != null &&
+                e.status!.conditions!.isNotEmpty
+            ? e.status!.conditions!.where((e) => e.type == 'Ready').first.status
+            : 'Unknown';
+
+        return ResourceItem(
+          item: e,
+          metrics: null,
+          status: status == 'True'
+              ? ResourceStatus.success
+              : status == 'False'
+                  ? ResourceStatus.danger
+                  : ResourceStatus.warning,
+        );
+      },
+    ).toList();
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
