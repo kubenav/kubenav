@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
 
 import 'package:provider/provider.dart';
 
@@ -10,6 +9,7 @@ import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/resources/actions/create_debug_container.dart';
 import 'package:kubenav/widgets/resources/actions/create_job.dart';
 import 'package:kubenav/widgets/resources/actions/delete_resource.dart';

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -11,11 +12,31 @@ import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
-import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
+
+List<Chart> _decodeResult(String result) {
+  final parsed = json.decode(result);
+  final configMap = IoK8sApiCoreV1ConfigMap.fromJson(parsed);
+
+  if (configMap != null &&
+      configMap.metadata != null &&
+      configMap.metadata!.name != null) {
+    if (configMap.data.containsKey('charts')) {
+      final parsedCharts = loadYaml(configMap.data['charts']!);
+
+      final List<Chart> charts = [];
+      for (var parsedChart in parsedCharts as List<dynamic>) {
+        charts.add(Chart.fromYaml(parsedChart));
+      }
+      return charts;
+    }
+  }
+
+  return [];
+}
 
 /// The [PluginPrometheusDetails] widget lists all charts of a single Prometheus
 /// dashboard. The dashboard is identified by it's [namespace] and [name]. The
@@ -66,35 +87,7 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
       timeout: appRepository.settings.timeout,
     ).getRequest(url);
 
-    final configMap = IoK8sApiCoreV1ConfigMap.fromJson(json.decode(result));
-
-    if (configMap != null &&
-        configMap.metadata != null &&
-        configMap.metadata!.name != null) {
-      Logger.log(
-        'PluginPrometheusDetailsRepository _fetchDashboard',
-        'ConfigMap  ${configMap.metadata?.name} was returned',
-        configMap,
-      );
-
-      if (configMap.data.containsKey('charts')) {
-        final parsedCharts = loadYaml(configMap.data['charts']!);
-
-        Logger.log(
-          'PluginPrometheusDetailsRepository _fetchDashboard',
-          'Charts were loaded from ConfigMap ${configMap.metadata?.name}',
-          parsedCharts,
-        );
-
-        final List<Chart> charts = [];
-        for (var parsedChart in parsedCharts as List<dynamic>) {
-          charts.add(Chart.fromYaml(parsedChart));
-        }
-        return charts;
-      }
-    }
-
-    return [];
+    return compute(_decodeResult, result);
   }
 
   @override
