@@ -25,7 +25,7 @@ import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 
 final resourceCustomResourceDefinition = Resource(
-  category: ResourceCategory.cluster,
+  category: ResourceCategories.cluster,
   plural: 'CustomResourceDefinitions',
   singular: 'CustomResourceDefinition',
   description: 'Custom resources are extensions of the Kubernetes API.',
@@ -271,7 +271,7 @@ Resource buildCustomResource(
   List<AdditionalPrinterColumns> additionalPrinterColumns,
 ) {
   return Resource(
-    category: ResourceCategory.cluster,
+    category: ResourceCategories.cluster,
     plural: plural,
     singular: singular,
     description: description,

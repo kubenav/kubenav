@@ -22,7 +22,7 @@ import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 
 final resourceNamespace = Resource(
-  category: ResourceCategory.cluster,
+  category: ResourceCategories.cluster,
   plural: 'Namespaces',
   singular: 'Namespace',
   description:
