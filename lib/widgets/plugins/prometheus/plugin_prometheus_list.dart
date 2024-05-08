@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -16,12 +17,18 @@ import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/plugins/prometheus/plugin_prometheus_details.dart';
+import 'package:kubenav/widgets/resources/resources/resources_configmaps.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
 import 'package:kubenav/widgets/shared/app_namespaces_widget.dart';
 import 'package:kubenav/widgets/shared/app_resource_actions.dart';
+
+IoK8sApiCoreV1ConfigMapList? _decodeResult(String result) {
+  final parsed = json.decode(result);
+  return IoK8sApiCoreV1ConfigMapList.fromJson(parsed);
+}
 
 /// The [PluginPrometheusList] widget is used to render a list of Prometheus
 /// dashboards, which can be created by users via ConfigMaps with a
@@ -56,7 +63,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
     );
 
     final url =
-        '/api/v1${cluster!.namespace != '' ? '/namespaces/${cluster.namespace}' : ''}/configmaps?labelSelector=kubenav.io/prometheus=dashboard';
+        '${resourceConfigMap.path}${cluster!.namespace != '' ? '/namespaces/${cluster.namespace}' : ''}/${resourceConfigMap.resource}?labelSelector=kubenav.io/prometheus=dashboard';
 
     final result = await KubernetesService(
       cluster: cluster,
@@ -64,12 +71,11 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
       timeout: appRepository.settings.timeout,
     ).getRequest(url);
 
-    final configMapsList =
-        IoK8sApiCoreV1ConfigMapList.fromJson(json.decode(result));
+    final configMapsList = await compute(_decodeResult, result);
 
     Logger.log(
-      'PluginPrometheusListRepository fetchDashboards',
-      '${configMapsList?.items.length} ConfigMaps were returned',
+      'PluginPrometheusList fetchDashboards',
+      '${configMapsList?.items.length} ConfigMaps Returned',
     );
 
     final List<IoK8sApiCoreV1ConfigMap> configMaps = [];
@@ -259,7 +265,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
                                   Constants.spacingMiddle,
                                 ),
                                 child: AppErrorWidget(
-                                  message: 'Could not load dashboards',
+                                  message: 'Failed to Load Dashboards',
                                   details: snapshot.error.toString(),
                                   icon: 'assets/plugins/prometheus.svg',
                                 ),

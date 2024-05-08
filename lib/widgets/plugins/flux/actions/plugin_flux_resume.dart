@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kubenav/widgets/resources/resources/resources.dart';
 
 import 'package:provider/provider.dart';
 
@@ -16,6 +15,7 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 /// The [PluginFluxResume] is used to resume a Flux resource. When the user
