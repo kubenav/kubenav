@@ -128,7 +128,10 @@ final resourceCustomResourceDefinition = Resource(
 
     return Column(
       children: [
-        DetailsItemMetadata(metadata: item.metadata),
+        DetailsItemMetadata(
+          kind: item.kind,
+          metadata: item.metadata,
+        ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Configuration',
@@ -483,7 +486,12 @@ class CustomResourceItem extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                 );
               default:
-                return DetailsItemMetadata(metadata: snapshot.data);
+                return DetailsItemMetadata(
+                  kind: item != null && item.containsKey('kind')
+                      ? item['kind']
+                      : null,
+                  metadata: snapshot.data,
+                );
             }
           },
         ),
