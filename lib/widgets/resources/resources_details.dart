@@ -34,16 +34,16 @@ import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_resource_actions.dart';
 
 /// [resourceDetailsActions] defines all the actions for the resources in the
-/// details view. The [additionalActions] argument can be used to render an
-/// additional refresh button, which should not be available when the actions
-/// are rendered as actions sheet in the list view.
+/// details view. If the [refresh] function is defined we add an additional
+/// refresh button, which should not be available when the actions are rendered
+/// as actions sheet in the list view.
 List<AppResourceActionsModel> resourceDetailsActions(
   BuildContext context,
   String name,
   String? namespace,
   Resource resource,
   dynamic item,
-  List<AppResourceActionsModel> additionalActions,
+  void Function()? refresh,
 ) {
   AppRepository appRepository = Provider.of<AppRepository>(
     context,
@@ -103,7 +103,19 @@ List<AppResourceActionsModel> resourceDetailsActions(
         );
       },
     ),
-    ...additionalActions,
+  ];
+
+  if (refresh != null) {
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Refresh',
+        icon: Icons.refresh,
+        onTap: refresh,
+      ),
+    );
+  }
+
+  actions.add(
     AppResourceActionsModel(
       title: bookmarksRepository.isBookmarked(
                 BookmarkType.details,
@@ -146,7 +158,7 @@ List<AppResourceActionsModel> resourceDetailsActions(
         }
       },
     ),
-  ];
+  );
 
   if ((resource.resource == resourceDeployment.resource &&
           resource.path == resourceDeployment.path) ||
@@ -502,37 +514,18 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
                         );
                       }
 
-                      Provider.of<AppRepository>(
-                        context,
-                        listen: true,
-                      );
-                      Provider.of<BookmarksRepository>(
-                        context,
-                        listen: true,
-                      );
-
                       return Column(
                         children: [
-                          AppResourceActions(
-                            mode: AppResourceActionsMode.header,
-                            actions: resourceDetailsActions(
-                              context,
-                              widget.name,
-                              widget.namespace,
-                              widget.resource,
-                              snapshot.data,
-                              [
-                                AppResourceActionsModel(
-                                  title: 'Refresh',
-                                  icon: Icons.refresh,
-                                  onTap: () {
-                                    setState(() {
-                                      _futureFetchItem = _fetchItem();
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
+                          ResourcesDetailsActions(
+                            name: widget.name,
+                            namespace: widget.namespace,
+                            resource: widget.resource,
+                            item: snapshot.data,
+                            refresh: () {
+                              setState(() {
+                                _futureFetchItem = _fetchItem();
+                              });
+                            },
                           ),
                           widget.resource.detailsItemBuilder(
                             context,
@@ -547,6 +540,50 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// The [ResourcesDetailsActions] widget is used to render the actions for the
+/// resources in the details view. The [ResourcesDetailsActions] widget is used
+/// in the [ResourcesDetails] widget.
+class ResourcesDetailsActions extends StatelessWidget {
+  const ResourcesDetailsActions({
+    super.key,
+    required this.name,
+    required this.namespace,
+    required this.resource,
+    required this.item,
+    required this.refresh,
+  });
+
+  final String name;
+  final String? namespace;
+  final Resource resource;
+  final dynamic item;
+  final void Function() refresh;
+
+  @override
+  Widget build(BuildContext context) {
+    Provider.of<AppRepository>(
+      context,
+      listen: true,
+    );
+    Provider.of<BookmarksRepository>(
+      context,
+      listen: true,
+    );
+
+    return AppResourceActions(
+      mode: AppResourceActionsMode.header,
+      actions: resourceDetailsActions(
+        context,
+        name,
+        namespace,
+        resource,
+        item,
+        refresh,
       ),
     );
   }

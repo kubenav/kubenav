@@ -28,7 +28,7 @@ class _PluginHelmListItemActionsState extends State<PluginHelmListItemActions> {
       actions: helmDetailsActions(
         context,
         widget.release,
-        [],
+        null,
       ),
     );
   }

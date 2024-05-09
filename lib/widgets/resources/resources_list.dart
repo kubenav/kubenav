@@ -353,12 +353,6 @@ class _ResourcesListState extends State<ResourcesList> {
                         );
                       }
 
-                      BookmarksRepository bookmarksRepository =
-                          Provider.of<BookmarksRepository>(
-                        context,
-                        listen: true,
-                      );
-
                       final filteredItems = _getFilteredItems(snapshot.data!);
 
                       return Wrap(
@@ -439,93 +433,13 @@ class _ResourcesListState extends State<ResourcesList> {
                               ],
                             ),
                           ),
-                          AppResourceActions(
-                            mode: AppResourceActionsMode.header,
-                            actions: [
-                              AppResourceActionsModel(
-                                title: 'Create',
-                                icon: Icons.create,
-                                onTap: () {
-                                  showModal(
-                                    context,
-                                    ResourcesListItemCreateResource(
-                                      resource: widget.resource,
-                                    ),
-                                  );
-                                },
-                              ),
-                              AppResourceActionsModel(
-                                title: 'Refresh',
-                                icon: Icons.refresh,
-                                onTap: () {
-                                  setState(() {
-                                    _futureFetchItems = _fetchItems();
-                                  });
-                                },
-                              ),
-                              AppResourceActionsModel(
-                                title: bookmarksRepository.isBookmarked(
-                                          BookmarkType.list,
-                                          clustersRepository.activeClusterId,
-                                          null,
-                                          clustersRepository
-                                              .getCluster(
-                                                clustersRepository
-                                                    .activeClusterId,
-                                              )
-                                              ?.namespace,
-                                          widget.resource,
-                                        ) >
-                                        -1
-                                    ? 'Remove Bookmark'
-                                    : 'Add Bookmark',
-                                icon: bookmarksRepository.isBookmarked(
-                                          BookmarkType.list,
-                                          clustersRepository.activeClusterId,
-                                          null,
-                                          clustersRepository
-                                              .getCluster(
-                                                clustersRepository
-                                                    .activeClusterId,
-                                              )
-                                              ?.namespace,
-                                          widget.resource,
-                                        ) >
-                                        -1
-                                    ? Icons.bookmark
-                                    : Icons.bookmark_border,
-                                onTap: () {
-                                  final bookmarkIndex =
-                                      bookmarksRepository.isBookmarked(
-                                    BookmarkType.list,
-                                    clustersRepository.activeClusterId,
-                                    null,
-                                    clustersRepository
-                                        .getCluster(
-                                          clustersRepository.activeClusterId,
-                                        )
-                                        ?.namespace,
-                                    widget.resource,
-                                  );
-                                  if (bookmarkIndex > -1) {
-                                    bookmarksRepository
-                                        .removeBookmark(bookmarkIndex);
-                                  } else {
-                                    bookmarksRepository.addBookmark(
-                                      BookmarkType.list,
-                                      clustersRepository.activeClusterId,
-                                      null,
-                                      clustersRepository
-                                          .getCluster(
-                                            clustersRepository.activeClusterId,
-                                          )
-                                          ?.namespace,
-                                      widget.resource,
-                                    );
-                                  }
-                                },
-                              ),
-                            ],
+                          ResourcesListActions(
+                            resource: widget.resource,
+                            refresh: () {
+                              setState(() {
+                                _futureFetchItems = _fetchItems();
+                              });
+                            },
                           ),
                           Container(
                             padding: const EdgeInsets.only(
@@ -562,6 +476,113 @@ class _ResourcesListState extends State<ResourcesList> {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// The [ResourcesListActions] widget is used to render the actions for the
+/// resources in the list view. The [ResourcesListActions] widget is used in the
+/// [ResourcesList] widget.
+class ResourcesListActions extends StatelessWidget {
+  const ResourcesListActions({
+    super.key,
+    required this.resource,
+    required this.refresh,
+  });
+
+  final Resource resource;
+  final void Function() refresh;
+
+  @override
+  Widget build(BuildContext context) {
+    ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
+      context,
+      listen: true,
+    );
+    BookmarksRepository bookmarksRepository = Provider.of<BookmarksRepository>(
+      context,
+      listen: true,
+    );
+
+    return AppResourceActions(
+      mode: AppResourceActionsMode.header,
+      actions: [
+        AppResourceActionsModel(
+          title: 'Create',
+          icon: Icons.create,
+          onTap: () {
+            showModal(
+              context,
+              ResourcesListItemCreateResource(
+                resource: resource,
+              ),
+            );
+          },
+        ),
+        AppResourceActionsModel(
+          title: 'Refresh',
+          icon: Icons.refresh,
+          onTap: refresh,
+        ),
+        AppResourceActionsModel(
+          title: bookmarksRepository.isBookmarked(
+                    BookmarkType.list,
+                    clustersRepository.activeClusterId,
+                    null,
+                    clustersRepository
+                        .getCluster(
+                          clustersRepository.activeClusterId,
+                        )
+                        ?.namespace,
+                    resource,
+                  ) >
+                  -1
+              ? 'Remove Bookmark'
+              : 'Add Bookmark',
+          icon: bookmarksRepository.isBookmarked(
+                    BookmarkType.list,
+                    clustersRepository.activeClusterId,
+                    null,
+                    clustersRepository
+                        .getCluster(
+                          clustersRepository.activeClusterId,
+                        )
+                        ?.namespace,
+                    resource,
+                  ) >
+                  -1
+              ? Icons.bookmark
+              : Icons.bookmark_border,
+          onTap: () {
+            final bookmarkIndex = bookmarksRepository.isBookmarked(
+              BookmarkType.list,
+              clustersRepository.activeClusterId,
+              null,
+              clustersRepository
+                  .getCluster(
+                    clustersRepository.activeClusterId,
+                  )
+                  ?.namespace,
+              resource,
+            );
+            if (bookmarkIndex > -1) {
+              bookmarksRepository.removeBookmark(bookmarkIndex);
+            } else {
+              bookmarksRepository.addBookmark(
+                BookmarkType.list,
+                clustersRepository.activeClusterId,
+                null,
+                clustersRepository
+                    .getCluster(
+                      clustersRepository.activeClusterId,
+                    )
+                    ?.namespace,
+                resource,
+              );
+            }
+          },
+        ),
+      ],
     );
   }
 }
@@ -773,7 +794,7 @@ class ResourcesListItemActions<T> extends StatelessWidget {
         namespace,
         resource,
         item,
-        [],
+        null,
       ),
     );
   }

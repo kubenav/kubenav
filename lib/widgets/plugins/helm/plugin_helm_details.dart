@@ -29,9 +29,9 @@ import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 List<AppResourceActionsModel> helmDetailsActions(
   BuildContext context,
   Release release,
-  List<AppResourceActionsModel> additionalActions,
+  void Function()? refresh,
 ) {
-  return [
+  final actions = [
     AppResourceActionsModel(
       title: 'Values',
       icon: Icons.description,
@@ -87,8 +87,19 @@ List<AppResourceActionsModel> helmDetailsActions(
         );
       },
     ),
-    ...additionalActions,
   ];
+
+  if (refresh != null) {
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Refresh',
+        icon: Icons.refresh,
+        onTap: refresh,
+      ),
+    );
+  }
+
+  return actions;
 }
 
 /// The [PluginHelmDetails] widget can be used to show the details of a Helm
@@ -327,19 +338,12 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                             actions: helmDetailsActions(
                               context,
                               release,
-                              [
-                                AppResourceActionsModel(
-                                  title: 'Refresh',
-                                  icon: Icons.refresh,
-                                  onTap: () {
-                                    setState(() {
-                                      _futureFetchHelmRelease =
-                                          _fetchHelmRelease();
-                                      _futureFetchHistory = _fetchHistory();
-                                    });
-                                  },
-                                ),
-                              ],
+                              () {
+                                setState(() {
+                                  _futureFetchHelmRelease = _fetchHelmRelease();
+                                  _futureFetchHistory = _fetchHistory();
+                                });
+                              },
                             ),
                           ),
                           DetailsItem(
