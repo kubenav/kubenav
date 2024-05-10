@@ -216,7 +216,10 @@ class ServiceItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        DetailsItemMetadata(metadata: service.metadata),
+        DetailsItemMetadata(
+          kind: service.kind,
+          metadata: service.metadata,
+        ),
         DetailsItemConditions(conditions: service.status?.conditions),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(

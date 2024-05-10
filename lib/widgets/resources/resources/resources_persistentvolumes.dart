@@ -120,7 +120,10 @@ final Resource resourcePersistentVolume = Resource(
 
     return Column(
       children: [
-        DetailsItemMetadata(metadata: item.metadata),
+        DetailsItemMetadata(
+          kind: item.kind,
+          metadata: item.metadata,
+        ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Configuration',

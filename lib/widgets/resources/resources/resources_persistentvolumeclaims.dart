@@ -121,7 +121,10 @@ final Resource resourcePersistentVolumeClaim = Resource(
 
     return Column(
       children: [
-        DetailsItemMetadata(metadata: item.metadata),
+        DetailsItemMetadata(
+          kind: item.kind,
+          metadata: item.metadata,
+        ),
         DetailsItemConditions(
           conditions: item.status?.conditions
               .map(

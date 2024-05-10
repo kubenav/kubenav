@@ -269,7 +269,10 @@ class PodItem extends StatelessWidget {
 
     return Column(
       children: [
-        DetailsItemMetadata(metadata: pod.metadata),
+        DetailsItemMetadata(
+          kind: pod.kind,
+          metadata: pod.metadata,
+        ),
         DetailsItemConditions(
           conditions: pod.status?.conditions
               .map(

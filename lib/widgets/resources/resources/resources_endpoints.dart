@@ -120,7 +120,10 @@ final resourceEndpoint = Resource(
 
     return Column(
       children: [
-        DetailsItemMetadata(metadata: item.metadata),
+        DetailsItemMetadata(
+          kind: item.kind,
+          metadata: item.metadata,
+        ),
         ..._buildSubsets(context, item),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsResourcesPreview(

@@ -9,9 +9,11 @@ import 'package:kubenav/widgets/resources/helpers/details_item.dart';
 class DetailsItemMetadata extends StatelessWidget {
   const DetailsItemMetadata({
     super.key,
+    required this.kind,
     required this.metadata,
   });
 
+  final String? kind;
   final IoK8sApimachineryPkgApisMetaV1ObjectMeta? metadata;
 
   @override
@@ -25,6 +27,10 @@ class DetailsItemMetadata extends StatelessWidget {
     return DetailsItem(
       title: 'Metadata',
       details: [
+        DetailsItemModel(
+          name: 'Kind',
+          values: kind,
+        ),
         DetailsItemModel(
           name: 'Name',
           values: metadata?.name,

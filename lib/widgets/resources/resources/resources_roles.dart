@@ -106,7 +106,10 @@ final resourceRole = Resource(
 
     return Column(
       children: [
-        DetailsItemMetadata(metadata: item.metadata),
+        DetailsItemMetadata(
+          kind: item.kind,
+          metadata: item.metadata,
+        ),
         const SizedBox(height: Constants.spacingMiddle),
         AppVerticalListSimpleWidget(
           title: 'Rules',
