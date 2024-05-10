@@ -10,6 +10,7 @@ import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/home/overview/overview_actions.dart';
 import 'package:kubenav/widgets/home/overview/overview_events.dart';
 import 'package:kubenav/widgets/home/overview/overview_metrics.dart';
+import 'package:kubenav/widgets/home/overview/overview_workloads.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
 import 'package:kubenav/widgets/shared/app_clusters_widget.dart';
 import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
@@ -40,6 +41,8 @@ class HomeOverview extends StatelessWidget {
     final List<Widget> content = [
       const OverviewActions(),
     ];
+
+    content.add(const OverviewWorkloads());
 
     if (appRepository.settings.home.showMetrics) {
       content.add(const OverviewMetrics(nodeName: null));

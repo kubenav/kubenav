@@ -26,6 +26,11 @@ class _SettingsHomePageState extends State<SettingsHomePage> {
   bool _useSelectedNamespace = false;
   bool _showMetrics = false;
   bool _showWarnings = false;
+  bool _showWorkloadPods = false;
+  bool _showWorkloadDeployments = false;
+  bool _showWorkloadStatefulSets = false;
+  bool _showWorkloadDaemonSets = false;
+  bool _showWorkloadJobs = false;
 
   @override
   void initState() {
@@ -33,6 +38,11 @@ class _SettingsHomePageState extends State<SettingsHomePage> {
     _useSelectedNamespace = widget.currentHome.useSelectedNamespace;
     _showMetrics = widget.currentHome.showMetrics;
     _showWarnings = widget.currentHome.showWarnings;
+    _showWorkloadPods = widget.currentHome.showWorkloadPods;
+    _showWorkloadDeployments = widget.currentHome.showWorkloadDeployments;
+    _showWorkloadStatefulSets = widget.currentHome.showWorkloadStatefulSets;
+    _showWorkloadDaemonSets = widget.currentHome.showWorkloadDaemonSets;
+    _showWorkloadJobs = widget.currentHome.showWorkloadJobs;
   }
 
   @override
@@ -58,6 +68,11 @@ class _SettingsHomePageState extends State<SettingsHomePage> {
               useSelectedNamespace: _useSelectedNamespace,
               showMetrics: _showMetrics,
               showWarnings: _showWarnings,
+              showWorkloadPods: _showWorkloadPods,
+              showWorkloadDeployments: _showWorkloadDeployments,
+              showWorkloadStatefulSets: _showWorkloadStatefulSets,
+              showWorkloadDaemonSets: _showWorkloadDaemonSets,
+              showWorkloadJobs: _showWorkloadJobs,
             ),
           );
           Navigator.pop(context);
@@ -150,6 +165,115 @@ class _SettingsHomePageState extends State<SettingsHomePage> {
                         });
                       },
                       value: _showWarnings,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Constants.spacingExtraLarge),
+                Row(
+                  children: [
+                    const Expanded(
+                      child: Divider(
+                        height: 0,
+                        thickness: 1.0,
+                      ),
+                    ),
+                    Text(
+                      'Workloads',
+                      style: secondaryTextStyle(
+                        context,
+                      ),
+                    ),
+                    const Expanded(
+                      child: Divider(
+                        height: 0,
+                        thickness: 1.0,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Show Pods'),
+                    Switch(
+                      activeColor: Theme.of(context).colorScheme.primary,
+                      onChanged: (value) {
+                        setState(() {
+                          _showWorkloadPods = !_showWorkloadPods;
+                        });
+                      },
+                      value: _showWorkloadPods,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Show Deployments'),
+                    Switch(
+                      activeColor: Theme.of(context).colorScheme.primary,
+                      onChanged: (value) {
+                        setState(() {
+                          _showWorkloadDeployments = !_showWorkloadDeployments;
+                        });
+                      },
+                      value: _showWorkloadDeployments,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Show StatefulSets'),
+                    Switch(
+                      activeColor: Theme.of(context).colorScheme.primary,
+                      onChanged: (value) {
+                        setState(() {
+                          _showWorkloadStatefulSets =
+                              !_showWorkloadStatefulSets;
+                        });
+                      },
+                      value: _showWorkloadStatefulSets,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Show DaemonSets'),
+                    Switch(
+                      activeColor: Theme.of(context).colorScheme.primary,
+                      onChanged: (value) {
+                        setState(() {
+                          _showWorkloadDaemonSets = !_showWorkloadDaemonSets;
+                        });
+                      },
+                      value: _showWorkloadDaemonSets,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Show Jobs'),
+                    Switch(
+                      activeColor: Theme.of(context).colorScheme.primary,
+                      onChanged: (value) {
+                        setState(() {
+                          _showWorkloadJobs = !_showWorkloadJobs;
+                        });
+                      },
+                      value: _showWorkloadJobs,
                     ),
                   ],
                 ),

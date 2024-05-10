@@ -57,8 +57,7 @@ class Resources extends StatelessWidget {
               padding: const EdgeInsets.all(
                 Constants.spacingIcon54x54,
               ),
-              child:
-                  SvgPicture.asset('assets/resources/${resource.resource}.svg'),
+              child: SvgPicture.asset('assets/resources/${resource.icon}.svg'),
             ),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
