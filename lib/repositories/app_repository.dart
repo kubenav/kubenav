@@ -433,11 +433,21 @@ class AppRepositorySettingsHome {
   bool useSelectedNamespace;
   bool showMetrics;
   bool showWarnings;
+  bool showWorkloadPods;
+  bool showWorkloadDeployments;
+  bool showWorkloadStatefulSets;
+  bool showWorkloadDaemonSets;
+  bool showWorkloadJobs;
 
   AppRepositorySettingsHome({
     required this.useSelectedNamespace,
     required this.showMetrics,
     required this.showWarnings,
+    required this.showWorkloadPods,
+    required this.showWorkloadDeployments,
+    required this.showWorkloadStatefulSets,
+    required this.showWorkloadDaemonSets,
+    required this.showWorkloadJobs,
   });
 
   factory AppRepositorySettingsHome.fromDefault() {
@@ -445,6 +455,11 @@ class AppRepositorySettingsHome {
       useSelectedNamespace: false,
       showMetrics: true,
       showWarnings: true,
+      showWorkloadPods: false,
+      showWorkloadDeployments: false,
+      showWorkloadStatefulSets: false,
+      showWorkloadDaemonSets: false,
+      showWorkloadJobs: false,
     );
   }
 
@@ -462,6 +477,26 @@ class AppRepositorySettingsHome {
           data.containsKey('showWarnings') && data['showWarnings'] != null
               ? data['showWarnings']
               : true,
+      showWorkloadPods: data.containsKey('showWorkloadPods') &&
+              data['showWorkloadPods'] != null
+          ? data['showWorkloadPods']
+          : true,
+      showWorkloadDeployments: data.containsKey('showWorkloadDeployments') &&
+              data['showWorkloadDeployments'] != null
+          ? data['showWorkloadDeployments']
+          : true,
+      showWorkloadStatefulSets: data.containsKey('showWorkloadStatefulSets') &&
+              data['showWorkloadStatefulSets'] != null
+          ? data['showWorkloadStatefulSets']
+          : true,
+      showWorkloadDaemonSets: data.containsKey('showWorkloadDaemonSets') &&
+              data['showWorkloadDaemonSets'] != null
+          ? data['showWorkloadDaemonSets']
+          : true,
+      showWorkloadJobs: data.containsKey('showWorkloadJobs') &&
+              data['showWorkloadJobs'] != null
+          ? data['showWorkloadJobs']
+          : true,
     );
   }
 
@@ -470,6 +505,11 @@ class AppRepositorySettingsHome {
       'useSelectedNamespace': useSelectedNamespace,
       'showMetrics': showMetrics,
       'showWarnings': showWarnings,
+      'showWorkloadPods': showWorkloadPods,
+      'showWorkloadDeployments': showWorkloadDeployments,
+      'showWorkloadStatefulSets': showWorkloadStatefulSets,
+      'showWorkloadDaemonSets': showWorkloadDaemonSets,
+      'showWorkloadJobs': showWorkloadJobs,
     };
   }
 }

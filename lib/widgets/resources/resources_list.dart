@@ -59,11 +59,13 @@ class ResourcesList extends StatefulWidget {
     required this.resource,
     required this.namespace,
     required this.selector,
+    this.status = ResourceStatus.undefined,
   });
 
   final Resource resource;
   final String? namespace;
   final String? selector;
+  final ResourceStatus status;
 
   @override
   State<ResourcesList> createState() => _ResourcesListState();
@@ -187,10 +189,12 @@ class _ResourcesListState extends State<ResourcesList> {
 
   @override
   void initState() {
+    super.initState();
+
     _filterController.addListener(() {
       setState(() {});
     });
-    super.initState();
+    _status = widget.status;
   }
 
   @override
@@ -770,7 +774,7 @@ class ResourcesListItem extends StatelessWidget {
 /// The [ResourcesListItemActions] widget is used to display the actions for a
 /// [ResourcesListItem]. It reuses the [resourceDetailsActions] function to
 /// generate the actions for the provided [item].
-class ResourcesListItemActions<T> extends StatelessWidget {
+class ResourcesListItemActions extends StatelessWidget {
   const ResourcesListItemActions({
     super.key,
     required this.name,
@@ -782,7 +786,7 @@ class ResourcesListItemActions<T> extends StatelessWidget {
   final String name;
   final String? namespace;
   final Resource resource;
-  final T item;
+  final dynamic item;
 
   @override
   Widget build(BuildContext context) {
