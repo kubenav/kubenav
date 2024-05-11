@@ -76,7 +76,8 @@ final resourceEvent = Resource(
       item: item,
       status: status,
       details: [
-        'Last Seen: ${getAge(item.lastTimestamp)}',
+        'Namespace: ${item.metadata.namespace ?? '-'}',
+        'Last Seen: ${getAge(item.lastTimestamp ?? item.eventTime ?? item.metadata.creationTimestamp)}',
         'Type: ${item.type ?? '-'}',
         'Reason: ${item.reason ?? '-'}',
         'Object: ${item.involvedObject.kind ?? '-'}/${item.involvedObject.name ?? '-'}',
@@ -90,7 +91,8 @@ final resourceEvent = Resource(
     final item = listItem as IoK8sApiCoreV1Event;
 
     return [
-      'Last Seen: ${getAge(item.lastTimestamp)}',
+      'Namespace: ${item.metadata.namespace ?? '-'}',
+      'Last Seen: ${getAge(item.lastTimestamp ?? item.eventTime ?? item.metadata.creationTimestamp)}',
       'Type: ${item.type ?? '-'}',
       'Reason: ${item.reason ?? '-'}',
       'Object: ${item.involvedObject.kind ?? '-'}/${item.involvedObject.name ?? '-'}',
@@ -125,6 +127,10 @@ final resourceEvent = Resource(
             DetailsItemModel(
               name: 'Message',
               values: item.message,
+            ),
+            DetailsItemModel(
+              name: 'Event Time',
+              values: getAge(item.eventTime),
             ),
             DetailsItemModel(
               name: 'Last Seen',
