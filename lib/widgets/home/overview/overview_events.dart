@@ -24,26 +24,17 @@ List<IoK8sApiCoreV1Event> _decodeResult(String result) {
   final parsed = json.decode(result);
   final events = IoK8sApiCoreV1EventList.fromJson(parsed)?.items ?? [];
 
-  /// Filter all events to only proceed with events, which are having a
-  /// `lastTimestamp` set. If we have less than 25 events, we return all events,
-  /// sorted by their `creationTimestamp`.
-  final filteredEvents = events.where((e) => e.lastTimestamp != null).toList();
-  if (filteredEvents.length <= 25) {
-    events.sort(
-      (a, b) => b.metadata.creationTimestamp!
-          .compareTo(a.metadata.creationTimestamp!),
-    );
-    return events;
-  }
+  events.sort(
+    (a, b) => (b.lastTimestamp ?? b.eventTime ?? b.metadata.creationTimestamp)!
+        .compareTo(
+      (a.lastTimestamp ?? a.eventTime ?? a.metadata.creationTimestamp)!,
+    ),
+  );
 
-  /// If we have more than 25 events, we sort the events by their
-  /// `lastTimestamp` and return the first 25 events.
-  filteredEvents.sort((a, b) => b.lastTimestamp!.compareTo(a.lastTimestamp!));
-
-  if (filteredEvents.length > 25) {
-    return filteredEvents.sublist(0, 25);
+  if (events.length > 25) {
+    return events.sublist(0, 25);
   } else {
-    return filteredEvents;
+    return events;
   }
 }
 
@@ -179,6 +170,29 @@ class _OverviewEventsState extends State<OverviewEvents> {
                           child: AppErrorWidget(
                             message: 'Failed to Load ${resourceEvent.plural}',
                             details: snapshot.error.toString(),
+                            icon: 'assets/resources/${resourceEvent.icon}.svg',
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+
+                if (snapshot.data == null || snapshot.data!.isEmpty) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: Constants.spacingMiddle,
+                            right: Constants.spacingMiddle,
+                          ),
+                          child: AppErrorWidget(
+                            message: 'No ${resourceEvent.plural} Found',
+                            details:
+                                'No warnings were found in the current context.',
                             icon: 'assets/resources/${resourceEvent.icon}.svg',
                           ),
                         ),
