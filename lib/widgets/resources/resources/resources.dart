@@ -20,6 +20,7 @@ import 'package:kubenav/widgets/resources/resources/resources_persistentvolumes.
 import 'package:kubenav/widgets/resources/resources/resources_poddisruptionbudgets.dart';
 import 'package:kubenav/widgets/resources/resources/resources_pods.dart';
 import 'package:kubenav/widgets/resources/resources/resources_replicasets.dart';
+import 'package:kubenav/widgets/resources/resources/resources_resourcequotas.dart';
 import 'package:kubenav/widgets/resources/resources/resources_rolebindings.dart';
 import 'package:kubenav/widgets/resources/resources/resources_roles.dart';
 import 'package:kubenav/widgets/resources/resources/resources_secrets.dart';
@@ -260,6 +261,7 @@ final List<Resource> resources = [
   resourcePersistentVolume,
   resourcePersistentVolumeClaim,
   resourcePodDisruptionBudget,
+  resourceResourceQuota,
   resourceSecret,
   resourceServiceAccount,
   resourceStorageClass,
@@ -292,6 +294,7 @@ final Map<String, Resource> kindToResource = {
   'PersistentVolume': resourcePersistentVolume,
   'PersistentVolumeClaim': resourcePersistentVolumeClaim,
   'PodDisruptionBudget': resourcePodDisruptionBudget,
+  'ResourceQuota': resourceResourceQuota,
   'Secret': resourceSecret,
   'ServiceAccount': resourceServiceAccount,
   'StorageClass': resourceStorageClass,
