@@ -260,7 +260,7 @@ class _OverviewWorkloadState extends State<OverviewWorkload> {
                       Row(
                         children: [
                           Text(
-                            'All: ${snapshot.data?.all ?? 0}\nHealthy: ${snapshot.data?.success ?? 0}',
+                            'All: ${snapshot.data?.all ?? '-'}\nHealthy: ${snapshot.data?.success ?? '-'}',
                             style: secondaryTextStyle(
                               context,
                             ),
@@ -269,7 +269,7 @@ class _OverviewWorkloadState extends State<OverviewWorkload> {
                           ),
                           const SizedBox(width: Constants.spacingMiddle),
                           Text(
-                            'Warning: ${snapshot.data?.warning ?? 0}\nUnhealthy: ${snapshot.data?.danger ?? 0}',
+                            'Warning: ${snapshot.data?.warning ?? '-'}\nUnhealthy: ${snapshot.data?.danger ?? '-'}',
                             style: secondaryTextStyle(
                               context,
                             ),
