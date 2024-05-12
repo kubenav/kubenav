@@ -12,6 +12,7 @@ import 'package:kubenav/widgets/resources/resources/resources_events.dart';
 import 'package:kubenav/widgets/resources/resources/resources_horizontalpodautoscalers.dart';
 import 'package:kubenav/widgets/resources/resources/resources_ingresses.dart';
 import 'package:kubenav/widgets/resources/resources/resources_jobs.dart';
+import 'package:kubenav/widgets/resources/resources/resources_limitranges.dart';
 import 'package:kubenav/widgets/resources/resources/resources_namespaces.dart';
 import 'package:kubenav/widgets/resources/resources/resources_networkpolicies.dart';
 import 'package:kubenav/widgets/resources/resources/resources_nodes.dart';
@@ -258,6 +259,7 @@ final List<Resource> resources = [
   resourceNetworkPolicy,
   resourceService,
   resourceConfigMap,
+  resourceLimitRange,
   resourcePersistentVolume,
   resourcePersistentVolumeClaim,
   resourcePodDisruptionBudget,
@@ -291,6 +293,7 @@ final Map<String, Resource> kindToResource = {
   'NetworkPolicy': resourceNetworkPolicy,
   'Service': resourceService,
   'ConfigMap': resourceConfigMap,
+  'LimitRange': resourceLimitRange,
   'PersistentVolume': resourcePersistentVolume,
   'PersistentVolumeClaim': resourcePersistentVolumeClaim,
   'PodDisruptionBudget': resourcePodDisruptionBudget,
