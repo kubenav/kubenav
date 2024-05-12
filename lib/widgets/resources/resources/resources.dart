@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:kubenav/widgets/resources/resources/resources_certificatesigningrequests.dart';
 import 'package:kubenav/widgets/resources/resources/resources_clusterrolebindings.dart';
 import 'package:kubenav/widgets/resources/resources/resources_clusterroles.dart';
 import 'package:kubenav/widgets/resources/resources/resources_configmaps.dart';
@@ -271,6 +272,7 @@ final List<Resource> resources = [
   resourceClusterRoleBinding,
   resourceRole,
   resourceRoleBinding,
+  resourceCertificateSigningRequest,
   resourceEvent,
   resourceCustomResourceDefinition,
   resourceNamespace,
@@ -305,6 +307,7 @@ final Map<String, Resource> kindToResource = {
   'ClusterRoleBinding': resourceClusterRoleBinding,
   'Role': resourceRole,
   'RoleBinding': resourceRoleBinding,
+  'CertificateSigningRequest': resourceCertificateSigningRequest,
   'Event': resourceEvent,
   'CustomResourceDefinition': resourceCustomResourceDefinition,
   'Namespace': resourceNamespace,

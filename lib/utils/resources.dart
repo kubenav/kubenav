@@ -382,3 +382,26 @@ String formatBytes(int size, {int round = 2}) {
 
   return '$result ${affixes[affix]}';
 }
+
+/// [formatSeconds] formats the provided [seconds] into a human readable format.
+String formatSeconds(int? seconds) {
+  if (seconds == null) {
+    return '-';
+  }
+
+  final duration = Duration(seconds: seconds);
+
+  if (duration.inDays > 3) {
+    return '${duration.inDays}d';
+  }
+
+  if (duration.inHours > 3) {
+    return '${duration.inHours}h';
+  }
+
+  if (duration.inMinutes > 3) {
+    return '${duration.inMinutes}m';
+  }
+
+  return '${duration.inSeconds}s';
+}

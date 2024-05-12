@@ -12,6 +12,8 @@ import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/resources/actions/create_debug_container.dart';
 import 'package:kubenav/widgets/resources/actions/create_job.dart';
+import 'package:kubenav/widgets/resources/actions/csr_approve.dart';
+import 'package:kubenav/widgets/resources/actions/csr_deny.dart';
 import 'package:kubenav/widgets/resources/actions/delete_resource.dart';
 import 'package:kubenav/widgets/resources/actions/edit_resource.dart';
 import 'package:kubenav/widgets/resources/actions/get_logs.dart';
@@ -22,6 +24,7 @@ import 'package:kubenav/widgets/resources/actions/restart_resource.dart';
 import 'package:kubenav/widgets/resources/actions/scale_resource.dart';
 import 'package:kubenav/widgets/resources/actions/show_yaml.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
+import 'package:kubenav/widgets/resources/resources/resources_certificatesigningrequests.dart';
 import 'package:kubenav/widgets/resources/resources/resources_cronjobs.dart';
 import 'package:kubenav/widgets/resources/resources/resources_daemonsets.dart';
 import 'package:kubenav/widgets/resources/resources/resources_deployments.dart';
@@ -352,6 +355,42 @@ List<AppResourceActionsModel> resourceDetailsActions(
           } else {
             appRepository.deleteNamespace(name);
           }
+        },
+      ),
+    );
+  }
+
+  if (resource.resource == resourceCertificateSigningRequest.resource &&
+      resource.path == resourceCertificateSigningRequest.path) {
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Approve',
+        icon: Icons.task_alt,
+        onTap: () {
+          showModal(
+            context,
+            CSRApprove(
+              name: name,
+              csr: item,
+              resource: resource,
+            ),
+          );
+        },
+      ),
+    );
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Deny',
+        icon: Icons.block,
+        onTap: () {
+          showModal(
+            context,
+            CSRDeny(
+              name: name,
+              csr: item,
+              resource: resource,
+            ),
+          );
         },
       ),
     );
