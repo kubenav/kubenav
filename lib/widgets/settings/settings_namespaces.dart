@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 
@@ -69,6 +70,16 @@ class SettingsNamespaces extends StatelessWidget {
       ),
       child: AppListItem(
         onTap: () {
+          showActions(
+            context,
+            SettingsDeleteNamespace(
+              namespace: appRepository.settings.namespaces[index],
+            ),
+          );
+        },
+        onLongPress: () {
+          HapticFeedback.vibrate();
+
           showActions(
             context,
             SettingsDeleteNamespace(

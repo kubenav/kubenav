@@ -8,19 +8,19 @@ class AppListItem extends StatelessWidget {
   const AppListItem({
     super.key,
     this.onTap,
-    this.onDoubleTap,
+    this.onLongPress,
     required this.child,
   });
 
   final void Function()? onTap;
-  final void Function()? onDoubleTap;
+  final void Function()? onLongPress;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      onDoubleTap: onDoubleTap,
+      onLongPress: onLongPress,
       child: Container(
         padding: const EdgeInsets.all(Constants.spacingListItemContent),
         decoration: BoxDecoration(

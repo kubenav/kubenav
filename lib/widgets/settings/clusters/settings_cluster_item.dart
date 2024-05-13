@@ -23,14 +23,14 @@ class SettingsClusterItem extends StatefulWidget {
     required this.cluster,
     required this.isActiveCluster,
     this.onTap,
-    this.onDoubleTap,
+    this.onLongPress,
   });
 
   final int index;
   final Cluster cluster;
   final bool isActiveCluster;
   final void Function()? onTap;
-  final void Function()? onDoubleTap;
+  final void Function()? onLongPress;
 
   @override
   State<SettingsClusterItem> createState() => _SettingsClusterItemState();
@@ -99,7 +99,7 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
       ),
       child: AppListItem(
         onTap: widget.onTap,
-        onDoubleTap: widget.onDoubleTap,
+        onLongPress: widget.onLongPress,
         child: Column(
           children: [
             Row(

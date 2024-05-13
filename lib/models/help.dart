@@ -47,7 +47,7 @@ On the following page you can select one of the cluster providers on the top, to
           title: 'Edit a Cluster',
           icon: CustomIcons.clusters,
           markdown: '''
-To edit a cluster you have to go to **Clusters** page (**Settings** -> **View all**). Then **double tap** on the cluster name and select **Edit** from the opened modal.
+To edit a cluster you have to go to **Clusters** page (**Settings** -> **View all**). Then **long tap** on the cluster name and select **Edit** from the opened modal.
 
 ![Edit a Cluster](resource:assets/help/clusters-options-cluster-1.png)
 
@@ -69,7 +69,7 @@ You can edit the following properties of a cluster:
           title: 'Delete a Cluster',
           icon: CustomIcons.clusters,
           markdown: '''
-To edit a cluster you have to go to **Clusters** page (**Settings** -> **View all**). Then **double tap** on the cluster name and select **Delete** from the opened modal.
+To edit a cluster you have to go to **Clusters** page (**Settings** -> **View all**). Then **long tap** on the cluster name and select **Delete** from the opened modal.
 
 ![Delete a Cluster](resource:assets/help/clusters-options-cluster-1.png)
           ''',
@@ -386,7 +386,7 @@ Bookmarks can be deleted from a resources list or details page, by clicking on t
 
 ![Delete a Bookmark](resource:assets/help/bookmarks-delete-bookmark-2.png)
 
-You can also delete bookmarks by click on **View all** in the **Bookmarks** section. On the bookmarks page you can then **double tap** on a bookmark. In the opened modal click on **Delete**.
+You can also delete bookmarks by click on **View all** in the **Bookmarks** section. On the bookmarks page you can then **long tap** on a bookmark. In the opened modal click on **Delete**.
 
 ![Delete a Bookmark](resource:assets/help/bookmarks-delete-bookmark-3.png)
           ''',
@@ -417,7 +417,7 @@ In the opened modal select the container and the time range for which you want t
 
 ![Logs](resource:assets/help/logs-2.png)
 
-To close the opened terminal with the logs you have to **double tap** on the terminal tab.
+To close the opened terminal with the logs you have to **long tap** on the terminal tab.
 
 ![Logs](resource:assets/help/logs-3.png)
           ''',
@@ -434,7 +434,7 @@ In the opened modal select the container and the shell and click on **Get Termin
 
 ![Terminals](resource:assets/help/terminals-2.png)
 
-To close the opened terminal you have to **double tap** on the terminal tab.
+To close the opened terminal you have to **long tap** on the terminal tab.
 
 ![Terminals](resource:assets/help/terminals-3.png)
 
