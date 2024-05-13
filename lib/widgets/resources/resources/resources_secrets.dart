@@ -234,10 +234,14 @@ Widget _buildBottomSheet(
           left: Constants.spacingMiddle,
           right: Constants.spacingMiddle,
         ),
-        child: Text(
-          utf8.fuse(base64).decode(value),
-          style: TextStyle(
-            fontFamily: getMonospaceFontFamily(),
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: SelectableText(
+            utf8.fuse(base64).decode(value),
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontFamily: getMonospaceFontFamily(),
+            ),
           ),
         ),
       ),
