@@ -180,21 +180,21 @@ final resourceNamespace = Resource(
           defaultCharts: [
             Chart(
               title: 'Total CPU Usage',
-              unit: 'Cores',
+              unit: 'm',
               queries: [
                 Query(
                   query:
-                      'sum(rate(container_cpu_usage_seconds_total{namespace="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", container!="", container!="POD"}[2m]))',
+                      'sum(rate(container_cpu_usage_seconds_total{namespace="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", container!="", container!="POD"}[2m])) * 1000',
                   label: 'Usage',
                 ),
                 Query(
                   query:
-                      'sum(kube_pod_container_resource_requests{namespace="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="cpu", container!="", container!="POD"})',
+                      'sum(kube_pod_container_resource_requests{namespace="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="cpu", container!="", container!="POD"}) * 1000',
                   label: 'Requests',
                 ),
                 Query(
                   query:
-                      'sum(kube_pod_container_resource_limits{namespace="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="cpu", container!="", container!="POD"})',
+                      'sum(kube_pod_container_resource_limits{namespace="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="cpu", container!="", container!="POD"}) * 1000',
                   label: 'Limits',
                 ),
               ],

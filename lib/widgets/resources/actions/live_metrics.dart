@@ -392,8 +392,36 @@ class _LiveMetricsState extends State<LiveMetrics> {
                             child: LineChart(
                               LineChartData(
                                 minY: 0,
-                                lineTouchData:
-                                    const LineTouchData(enabled: false),
+                                lineTouchData: LineTouchData(
+                                  enabled: true,
+                                  handleBuiltInTouches: true,
+                                  touchTooltipData: LineTouchTooltipData(
+                                    fitInsideHorizontally: true,
+                                    fitInsideVertically: true,
+                                    maxContentWidth:
+                                        MediaQuery.of(context).size.width,
+                                    getTooltipColor: (LineBarSpot touchedSpot) {
+                                      return Theme.of(context)
+                                          .extension<CustomColors>()!
+                                          .message;
+                                    },
+                                    getTooltipItems: (touchedSpots) {
+                                      return touchedSpots
+                                          .map((LineBarSpot touchedSpot) {
+                                        return LineTooltipItem(
+                                          '${_containerMetrics.keys.elementAt(touchedSpot.barIndex)}: ${touchedSpot.y > 1000000000 ? formatCpuMetric(touchedSpot.y) : formatCpuMetric(touchedSpot.y, 0)}',
+                                          TextStyle(
+                                            color: Theme.of(context)
+                                                .extension<CustomColors>()!
+                                                .onMessage,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 14,
+                                          ),
+                                        );
+                                      }).toList();
+                                    },
+                                  ),
+                                ),
                                 clipData: const FlClipData.all(),
                                 lineBarsData: _containerMetrics.entries
                                     .map(
@@ -433,7 +461,7 @@ class _LiveMetricsState extends State<LiveMetrics> {
                                   leftTitles: AxisTitles(
                                     sideTitles: SideTitles(
                                       showTitles: true,
-                                      reservedSize: 42,
+                                      reservedSize: 64,
                                       getTitlesWidget: (
                                         double value,
                                         TitleMeta meta,
@@ -508,11 +536,19 @@ class _LiveMetricsState extends State<LiveMetrics> {
                             (e) => Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  e.key,
-                                  style: noramlTextStyle(
-                                    context,
-                                    size: Constants.sizeTextSecondary,
+                                Flexible(
+                                  child: Text(
+                                    Characters(e.key)
+                                        .replaceAll(
+                                          Characters(''),
+                                          Characters('\u{200B}'),
+                                        )
+                                        .toString(),
+                                    style: noramlTextStyle(
+                                      context,
+                                      size: Constants.sizeTextSecondary,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                                 Text(
@@ -565,8 +601,36 @@ class _LiveMetricsState extends State<LiveMetrics> {
                             child: LineChart(
                               LineChartData(
                                 minY: 0,
-                                lineTouchData:
-                                    const LineTouchData(enabled: false),
+                                lineTouchData: LineTouchData(
+                                  enabled: true,
+                                  handleBuiltInTouches: true,
+                                  touchTooltipData: LineTouchTooltipData(
+                                    fitInsideHorizontally: true,
+                                    fitInsideVertically: true,
+                                    maxContentWidth:
+                                        MediaQuery.of(context).size.width,
+                                    getTooltipColor: (LineBarSpot touchedSpot) {
+                                      return Theme.of(context)
+                                          .extension<CustomColors>()!
+                                          .message;
+                                    },
+                                    getTooltipItems: (touchedSpots) {
+                                      return touchedSpots
+                                          .map((LineBarSpot touchedSpot) {
+                                        return LineTooltipItem(
+                                          '${_containerMetrics.keys.elementAt(touchedSpot.barIndex)}: ${touchedSpot.y > 1048576 ? formatMemoryMetric(touchedSpot.y, 2) : formatMemoryMetric(touchedSpot.y, 0)}',
+                                          TextStyle(
+                                            color: Theme.of(context)
+                                                .extension<CustomColors>()!
+                                                .onMessage,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 14,
+                                          ),
+                                        );
+                                      }).toList();
+                                    },
+                                  ),
+                                ),
                                 clipData: const FlClipData.all(),
                                 lineBarsData: _containerMetrics.entries
                                     .map(
@@ -606,7 +670,7 @@ class _LiveMetricsState extends State<LiveMetrics> {
                                   leftTitles: AxisTitles(
                                     sideTitles: SideTitles(
                                       showTitles: true,
-                                      reservedSize: 42,
+                                      reservedSize: 64,
                                       getTitlesWidget: (
                                         double value,
                                         TitleMeta meta,
@@ -681,11 +745,19 @@ class _LiveMetricsState extends State<LiveMetrics> {
                             (e) => Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  e.key,
-                                  style: noramlTextStyle(
-                                    context,
-                                    size: Constants.sizeTextSecondary,
+                                Flexible(
+                                  child: Text(
+                                    Characters(e.key)
+                                        .replaceAll(
+                                          Characters(''),
+                                          Characters('\u{200B}'),
+                                        )
+                                        .toString(),
+                                    style: noramlTextStyle(
+                                      context,
+                                      size: Constants.sizeTextSecondary,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                                 Text(

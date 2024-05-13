@@ -13,10 +13,12 @@ TextStyle noramlTextStyle(
   BuildContext context, {
   double? size,
   Color? color,
+  TextDecoration? decoration,
 }) {
   return TextStyle(
     fontSize: size ?? Constants.sizeTextPrimary,
     color: color ?? Theme.of(context).extension<CustomColors>()!.textPrimary,
+    decoration: decoration,
   );
 }
 
@@ -25,11 +27,13 @@ TextStyle primaryTextStyle(
   BuildContext context, {
   double? size,
   Color? color,
+  TextDecoration? decoration,
 }) {
   return TextStyle(
     fontSize: size ?? Constants.sizeTextPrimary,
     color: color ?? Theme.of(context).extension<CustomColors>()!.textPrimary,
     fontWeight: FontWeight.bold,
+    decoration: decoration,
   );
 }
 
@@ -38,11 +42,13 @@ TextStyle secondaryTextStyle(
   BuildContext context, {
   double? size,
   Color? color,
+  TextDecoration? decoration,
 }) {
   return TextStyle(
     fontSize: size ?? Constants.sizeTextSecondary,
     color: color ?? Theme.of(context).extension<CustomColors>()!.textSecondary,
     fontWeight: FontWeight.normal,
+    decoration: decoration,
   );
 }
 

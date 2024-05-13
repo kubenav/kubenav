@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:fl_chart/fl_chart.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/plugins/prometheus.dart';
@@ -39,6 +40,7 @@ class AppPrometheusChartWidget extends StatefulWidget {
 
 class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
   late Future<List<Metric>> _futureFetchMetrics;
+  String _selectedLabel = '';
 
   Future<List<Metric>> _fetchMetrics() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
@@ -117,7 +119,7 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                 default:
                   if (snapshot.hasError) {
                     return AppErrorWidget(
-                      message: 'Could not load metrics',
+                      message: 'Failed to Load Metrics',
                       details: snapshot.error.toString(),
                       icon: 'assets/plugins/prometheus.svg',
                     );
@@ -150,7 +152,6 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                           width: double.infinity,
                           child: LineChart(
                             LineChartData(
-                              minY: 0,
                               lineTouchData: LineTouchData(
                                 enabled: true,
                                 handleBuiltInTouches: true,
@@ -168,7 +169,7 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                     return touchedSpots
                                         .map((LineBarSpot touchedSpot) {
                                       return LineTooltipItem(
-                                        '${snapshot.data![touchedSpot.barIndex].label}: ${touchedSpot.y.toStringAsFixed(6)} ${widget.unit}',
+                                        '${_selectedLabel == '' ? snapshot.data![touchedSpot.barIndex].label : _selectedLabel}: ${NumberFormat.compact(locale: "en_US").format(touchedSpot.y)} ${widget.unit}',
                                         TextStyle(
                                           color: Theme.of(context)
                                               .extension<CustomColors>()!
@@ -183,6 +184,11 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                               ),
                               clipData: const FlClipData.all(),
                               lineBarsData: snapshot.data!
+                                  .where(
+                                    (e) =>
+                                        _selectedLabel == '' ||
+                                        e.label == _selectedLabel,
+                                  )
                                   .map(
                                     (e) => LineChartBarData(
                                       spots: e.toSpots(),
@@ -215,7 +221,7 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                     getTitlesWidget:
                                         (double value, TitleMeta meta) {
                                       return Text(
-                                        '${value.toStringAsFixed(2)} ${widget.unit}',
+                                        '${NumberFormat.compact(locale: "en_US").format(value)} ${widget.unit}',
                                         style: secondaryTextStyle(
                                           context,
                                         ),
@@ -228,7 +234,7 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                     showTitles: true,
                                     interval:
                                         (widget.time.end - widget.time.start) /
-                                            5 *
+                                            3 *
                                             1000,
                                     reservedSize: 32,
                                     getTitlesWidget: (value, titleMeta) {
@@ -243,7 +249,7 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                           right: 42,
                                         ),
                                         child: Text(
-                                          '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}',
+                                          '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}',
                                           style: secondaryTextStyle(
                                             context,
                                           ),
@@ -282,27 +288,54 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                           height: Constants.spacingMiddle,
                         ),
                         ...snapshot.data!.map(
-                          (e) => Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                e.label ?? '',
-                                style: noramlTextStyle(
-                                  context,
-                                  size: Constants.sizeTextSecondary,
+                          (e) => InkWell(
+                            onTap: () {
+                              if (_selectedLabel == e.label) {
+                                setState(() {
+                                  _selectedLabel = '';
+                                });
+                              } else {
+                                setState(() {
+                                  _selectedLabel = e.label ?? '';
+                                });
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    Characters(e.label ?? '')
+                                        .replaceAll(
+                                          Characters(''),
+                                          Characters('\u{200B}'),
+                                        )
+                                        .toString(),
+                                    style: noramlTextStyle(
+                                      context,
+                                      size: Constants.sizeTextSecondary,
+                                      decoration: _selectedLabel == e.label
+                                          ? TextDecoration.underline
+                                          : null,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                e.data != null &&
-                                        e.data!.isNotEmpty &&
-                                        e.data![e.data!.length - 1].y != null
-                                    ? '${e.data![e.data!.length - 1].y!.toStringAsFixed(4)} ${widget.unit}'
-                                    : '',
-                                style: secondaryTextStyle(
-                                  context,
+                                Text(
+                                  e.data != null &&
+                                          e.data!.isNotEmpty &&
+                                          e.data![e.data!.length - 1].y != null
+                                      ? '${NumberFormat.compact(locale: "en_US").format(e.data![e.data!.length - 1].y!)} ${widget.unit}'
+                                      : '',
+                                  style: secondaryTextStyle(
+                                    context,
+                                    decoration: _selectedLabel == e.label
+                                        ? TextDecoration.underline
+                                        : null,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ],

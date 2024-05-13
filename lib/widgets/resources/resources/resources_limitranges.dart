@@ -121,19 +121,22 @@ final resourceLimitRange = Resource(
         AppPrometheusChartsWidget(
           item: item,
           toJson: resource.toJson,
-          defaultCharts: [
-            Chart(
-              title: 'Limits',
-              unit: '',
-              queries: [
-                Query(
-                  query:
-                      'sum(kube_limitrange{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", limitrange="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}) by (type, resource, constraint)',
-                  label: '{{ .type }} - {{ .resource }} - {{ .constraint }}',
+          defaultCharts: _buildMetrics(item.spec?.limits)
+              .entries
+              .map(
+                (e) => Chart(
+                  title: e.key,
+                  unit: '',
+                  queries: [
+                    Query(
+                      query:
+                          'sum(kube_limitrange{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", limitrange="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", type="${e.value[0]}", resource="${e.value[1]}"}) by (type, resource, constraint)',
+                      label: '{{ .constraint }}',
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ],
+              )
+              .toList(),
         ),
       ],
     );
@@ -187,4 +190,29 @@ List<Widget> _buildLimits(List<IoK8sApiCoreV1LimitRangeItem>? limits) {
   }
 
   return widgets;
+}
+
+/// [_buildMetrics] returns a map of metrics for the defined limits. The map
+/// contains all unique combinations of the used types and resources in the
+/// limits definition as key. The value is a list of two elements, with the type
+/// as the first element and the resource as the second element.
+Map<String, List<String>> _buildMetrics(
+  List<IoK8sApiCoreV1LimitRangeItem>? limits,
+) {
+  if (limits == null) {
+    return {};
+  }
+
+  final metrics = <String, List<String>>{};
+
+  for (var i = 0; i < limits.length; i++) {
+    final type = limits[i].type;
+
+    for (var j = 0; j < limits[i].default_.keys.length; j++) {
+      final resource = limits[i].default_.keys.elementAt(j);
+      metrics['$type: $resource'] = [type, resource];
+    }
+  }
+
+  return metrics;
 }
