@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +33,18 @@ class SettingsProviders extends StatelessWidget {
   Widget buildProvider(BuildContext context, ClusterProvider provider) {
     return AppListItem(
       onTap: () {
-        showActions(context, SettingsProviderActions(provider: provider));
+        showActions(
+          context,
+          SettingsProviderActions(provider: provider),
+        );
+      },
+      onLongPress: () {
+        HapticFeedback.vibrate();
+
+        showActions(
+          context,
+          SettingsProviderActions(provider: provider),
+        );
       },
       child: Row(
         children: [

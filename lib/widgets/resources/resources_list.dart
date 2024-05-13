@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:code_text_field/code_text_field.dart';
 import 'package:highlight/languages/json.dart' as highlight_json;
@@ -712,7 +713,9 @@ class ResourcesListItem extends StatelessWidget {
           ),
         );
       },
-      onDoubleTap: () {
+      onLongPress: () {
+        HapticFeedback.vibrate();
+
         showActions(
           context,
           ResourcesListItemActions(
