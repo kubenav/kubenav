@@ -132,19 +132,22 @@ final resourceResourceQuota = Resource(
         AppPrometheusChartsWidget(
           item: item,
           toJson: resource.toJson,
-          defaultCharts: [
-            Chart(
-              title: 'Quotas',
-              unit: '',
-              queries: [
-                Query(
-                  query:
-                      'sum(kube_resourcequota{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", resourcequota="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}) by (resource, type)',
-                  label: '{{ .resource }} - {{ .type }}',
-                ),
-              ],
-            ),
-          ],
+          defaultCharts: item.status?.hard.keys
+                  .map(
+                    (e) => Chart(
+                      title: e,
+                      unit: '',
+                      queries: [
+                        Query(
+                          query:
+                              'sum(kube_resourcequota{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", resourcequota="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}", resource="$e"}) by (resource, type)',
+                          label: '{{ .type }}',
+                        ),
+                      ],
+                    ),
+                  )
+                  .toList() ??
+              [],
         ),
       ],
     );

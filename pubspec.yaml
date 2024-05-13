@@ -46,6 +46,7 @@ dependencies:
   highlight: ^0.7.0
   http: ^1.1.0
   in_app_purchase: ^3.1.1
+  intl: ^0.19.0
   json_path: ^0.7.1
   jwt_decode: ^0.3.1
   local_auth: ^2.1.2

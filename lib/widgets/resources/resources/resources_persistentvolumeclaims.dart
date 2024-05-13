@@ -228,7 +228,7 @@ final Resource resourcePersistentVolumeClaim = Resource(
           defaultCharts: [
             Chart(
               title: 'Volume Space Usage',
-              unit: '',
+              unit: 'GiB',
               queries: [
                 Query(
                   query:
