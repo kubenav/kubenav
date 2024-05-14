@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_ingress.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_ingress_list.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
+import 'package:kubenav/widgets/resources/resources/resources_ingressclasses.dart';
+import 'package:kubenav/widgets/resources/resources_details.dart';
 import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 
@@ -138,6 +141,18 @@ final resourceIngress = Resource(
             DetailsItemModel(
               name: 'Ingress Class',
               values: item.spec?.ingressClassName,
+              onTap: item.spec?.ingressClassName == null
+                  ? null
+                  : (int index) {
+                      navigate(
+                        context,
+                        ResourcesDetails(
+                          name: item.spec!.ingressClassName!,
+                          namespace: null,
+                          resource: resourceIngressClass,
+                        ),
+                      );
+                    },
             ),
             DetailsItemModel(
               name: 'Address',

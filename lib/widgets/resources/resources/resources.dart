@@ -11,6 +11,7 @@ import 'package:kubenav/widgets/resources/resources/resources_deployments.dart';
 import 'package:kubenav/widgets/resources/resources/resources_endpoints.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
 import 'package:kubenav/widgets/resources/resources/resources_horizontalpodautoscalers.dart';
+import 'package:kubenav/widgets/resources/resources/resources_ingressclasses.dart';
 import 'package:kubenav/widgets/resources/resources/resources_ingresses.dart';
 import 'package:kubenav/widgets/resources/resources/resources_jobs.dart';
 import 'package:kubenav/widgets/resources/resources/resources_limitranges.dart';
@@ -257,6 +258,7 @@ final List<Resource> resources = [
   resourceEndpoint,
   resourceHorizontalPodAutoscaler,
   resourceIngress,
+  resourceIngressClass,
   resourceNetworkPolicy,
   resourceService,
   resourceConfigMap,
@@ -292,6 +294,7 @@ final Map<String, Resource> kindToResource = {
   'Endpoint': resourceEndpoint,
   'HorizontalPodAutoscaler': resourceHorizontalPodAutoscaler,
   'Ingress': resourceIngress,
+  'IngressClass': resourceIngressClass,
   'NetworkPolicy': resourceNetworkPolicy,
   'Service': resourceService,
   'ConfigMap': resourceConfigMap,
