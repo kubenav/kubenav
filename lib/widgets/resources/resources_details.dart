@@ -20,6 +20,8 @@ import 'package:kubenav/widgets/resources/actions/get_logs.dart';
 import 'package:kubenav/widgets/resources/actions/get_logs_pods.dart';
 import 'package:kubenav/widgets/resources/actions/get_terminal.dart';
 import 'package:kubenav/widgets/resources/actions/live_metrics.dart';
+import 'package:kubenav/widgets/resources/actions/node_cordon.dart';
+import 'package:kubenav/widgets/resources/actions/node_uncordon.dart';
 import 'package:kubenav/widgets/resources/actions/restart_resource.dart';
 import 'package:kubenav/widgets/resources/actions/scale_resource.dart';
 import 'package:kubenav/widgets/resources/actions/show_yaml.dart';
@@ -29,6 +31,7 @@ import 'package:kubenav/widgets/resources/resources/resources_cronjobs.dart';
 import 'package:kubenav/widgets/resources/resources/resources_daemonsets.dart';
 import 'package:kubenav/widgets/resources/resources/resources_deployments.dart';
 import 'package:kubenav/widgets/resources/resources/resources_namespaces.dart';
+import 'package:kubenav/widgets/resources/resources/resources_nodes.dart';
 import 'package:kubenav/widgets/resources/resources/resources_pods.dart';
 import 'package:kubenav/widgets/resources/resources/resources_statefulsets.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
@@ -388,6 +391,42 @@ List<AppResourceActionsModel> resourceDetailsActions(
             CSRDeny(
               name: name,
               csr: item,
+              resource: resource,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  if (resource.resource == resourceNode.resource &&
+      resource.path == resourceNode.path) {
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Cordon',
+        icon: Icons.stop,
+        onTap: () {
+          showModal(
+            context,
+            NodeCordon(
+              name: name,
+              node: item,
+              resource: resource,
+            ),
+          );
+        },
+      ),
+    );
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Uncordon',
+        icon: Icons.play_arrow,
+        onTap: () {
+          showModal(
+            context,
+            NodeUncordon(
+              name: name,
+              node: item,
               resource: resource,
             ),
           );
