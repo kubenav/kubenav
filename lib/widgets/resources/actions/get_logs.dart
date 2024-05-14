@@ -135,6 +135,7 @@ class _GetLogsState extends State<GetLogs> {
                 AppTerminalWidget(
                   terminalIndex: terminalIndex,
                 ),
+                fullScreen: true,
               );
             }
           } else {
@@ -180,7 +181,10 @@ class _GetLogsState extends State<GetLogs> {
             Navigator.pop(context);
             showModal(
               context,
-              AppTerminalWidget(terminalIndex: terminalIndex),
+              AppTerminalWidget(
+                terminalIndex: terminalIndex,
+              ),
+              fullScreen: true,
             );
           }
         }

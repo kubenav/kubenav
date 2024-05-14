@@ -76,6 +76,7 @@ class AppTerminalActionsWidget extends StatelessWidget {
               AppTerminalWidget(
                 terminalIndex: terminalIndex,
               ),
+              fullScreen: true,
             );
           },
         ),

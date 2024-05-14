@@ -112,7 +112,10 @@ class _GetTerminalState extends State<GetTerminal> {
             Navigator.pop(context);
             showModal(
               context,
-              AppTerminalWidget(terminalIndex: terminalIndex),
+              AppTerminalWidget(
+                terminalIndex: terminalIndex,
+              ),
+              fullScreen: true,
             );
           }
         } else {
