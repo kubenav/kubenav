@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/themes.dart';
 
-void showModal(BuildContext context, Widget widget) {
+void showModal(BuildContext context, Widget widget, {bool fullScreen = false}) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -16,6 +16,11 @@ void showModal(BuildContext context, Widget widget) {
       ),
     ),
     clipBehavior: Clip.antiAliasWithSaveLayer,
+    constraints: fullScreen == false
+        ? null
+        : BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+          ),
     builder: (BuildContext context) {
       return widget;
     },
