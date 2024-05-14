@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_object_reference.dart';
 
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_object_reference.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_ingress_class.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_ingress_class_list.dart';
 import 'package:kubenav/utils/constants.dart';
