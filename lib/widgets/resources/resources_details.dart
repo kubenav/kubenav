@@ -13,6 +13,7 @@ import 'package:kubenav/widgets/plugins/cert-manager/resources/plugin_cert_manag
 import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/resources/actions/create_debug_container.dart';
 import 'package:kubenav/widgets/resources/actions/create_job.dart';
+import 'package:kubenav/widgets/resources/actions/create_ssh_pod.dart';
 import 'package:kubenav/widgets/resources/actions/csr_approve.dart';
 import 'package:kubenav/widgets/resources/actions/csr_deny.dart';
 import 'package:kubenav/widgets/resources/actions/delete_resource.dart';
@@ -426,6 +427,22 @@ List<AppResourceActionsModel> resourceDetailsActions(
           showModal(
             context,
             NodeUncordon(
+              name: name,
+              node: item,
+              resource: resource,
+            ),
+          );
+        },
+      ),
+    );
+    actions.add(
+      AppResourceActionsModel(
+        title: 'SSH',
+        icon: Icons.terminal,
+        onTap: () {
+          showModal(
+            context,
+            CreateSSHPod(
               name: name,
               node: item,
               resource: resource,
