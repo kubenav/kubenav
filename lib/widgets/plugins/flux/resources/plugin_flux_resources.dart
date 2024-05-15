@@ -32,7 +32,7 @@ final List<String> fluxResourceCategories = [
 ];
 
 /// [fluxResources] is a list of all supported Flux resources, which are
-/// implementing the [FluxResource] model.
+/// implementing the [Resource] model.
 final List<Resource> fluxResources = [
   fluxResourceGitRepository,
   fluxResourceOCIRepository,
@@ -44,7 +44,7 @@ final List<Resource> fluxResources = [
 ];
 
 /// [kindToFluxResource] is a map, which maps the kind of a Flux resource to
-/// the [FluxResource] model.
+/// the [Resource] model.
 final kindToFluxResource = {
   'GitRepository': fluxResourceGitRepository,
   'OCIRepository': fluxResourceOCIRepository,

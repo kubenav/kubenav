@@ -11,6 +11,7 @@ import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/utils/themes.dart';
+import 'package:kubenav/widgets/plugins/cert-manager/plugin_cert_manager.dart';
 import 'package:kubenav/widgets/plugins/flux/plugin_flux.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_list.dart';
 import 'package:kubenav/widgets/plugins/prometheus/plugin_prometheus_list.dart';
@@ -183,6 +184,59 @@ class Plugins extends StatelessWidget {
                     ),
                     Text(
                       'The GitOps family of projects',
+                      style: secondaryTextStyle(
+                        context,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: Constants.spacingSmall),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context)
+                    .extension<CustomColors>()!
+                    .textSecondary
+                    .withOpacity(Constants.opacityIcon),
+                size: 24,
+              ),
+            ],
+          ),
+          AppVerticalListSimpleModel(
+            onTap: () {
+              navigate(context, const PluginCertManager());
+            },
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(Constants.sizeBorderRadius),
+                  ),
+                ),
+                height: 54,
+                width: 54,
+                padding: const EdgeInsets.all(Constants.spacingIcon54x54),
+                child: SvgPicture.asset('assets/plugins/cert-manager.svg'),
+              ),
+              const SizedBox(width: Constants.spacingSmall),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'cert-manager',
+                      style: primaryTextStyle(
+                        context,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      'cert-manager is a powerful and extensible X.509 certificate controller for Kubernetes and OpenShift workloads',
                       style: secondaryTextStyle(
                         context,
                       ),
