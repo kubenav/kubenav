@@ -2,68 +2,53 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_deployment.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_stateful_set.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_node.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
+import 'package:kubenav/widgets/resources/resources/resources_pods.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
-/// The [ScaleResource] widget can be used to scale a Deployment or StatefulSet
-/// bv adjusting the number of replicas via a JSON patch which is send to the
-/// Kubernetes API.
-class ScaleResource extends StatefulWidget {
-  const ScaleResource({
+class CreateSSHPod extends StatefulWidget {
+  const CreateSSHPod({
     super.key,
     required this.name,
-    required this.namespace,
-    required this.item,
+    required this.node,
     required this.resource,
   });
 
   final String name;
-  final String namespace;
-  final dynamic item;
+  final IoK8sApiCoreV1Node node;
   final Resource resource;
 
   @override
-  State<ScaleResource> createState() => _ScaleResourceState();
+  State<CreateSSHPod> createState() => _CreateSSHPodState();
 }
 
-class _ScaleResourceState extends State<ScaleResource> {
-  final _scaleFormKey = GlobalKey<FormState>();
-  final _replicasController = TextEditingController();
+class _CreateSSHPodState extends State<CreateSSHPod> {
+  final podName = 'ssh-node-${generateRandomString(6)}';
+  final _createFormKey = GlobalKey<FormState>();
+  final _namespaceController = TextEditingController();
   bool _isLoading = false;
 
-  /// [_validator] is used to validate the required field [_replicasController].
-  /// If the value is empty or not a number the validation fails.
+  /// [_validator] is used to validate the required field
+  /// [_namespaceController]. If the value is empty the validation fails.
   String? _validator(String? value) {
     if (value == null || value.isEmpty) {
       return 'This field is required';
     }
 
-    final parsedValue = int.tryParse(value);
-    if (parsedValue == null) {
-      return 'The field must be a number';
-    }
-
-    if (parsedValue < 0) {
-      return 'The field must be a positive number';
-    }
-
     return null;
   }
 
-  /// [_scale] scales the provided Deployment or StatefulSet by sending a JSON
-  /// patch to the Kubernetes API. The user gets a snackbar message if the
-  /// scaling was successful or failed.
-  Future<void> _scale() async {
-    if (_scaleFormKey.currentState != null &&
-        _scaleFormKey.currentState!.validate()) {
+  Future<void> _create() async {
+    if (_createFormKey.currentState != null &&
+        _createFormKey.currentState!.validate()) {
       ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
         context,
         listen: false,
@@ -82,15 +67,17 @@ class _ScaleResourceState extends State<ScaleResource> {
           clustersRepository.activeClusterId,
         );
         final url =
-            '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}/${widget.name}';
+            '${resourcePod.path}/namespaces/${_namespaceController.text}/${resourcePod.resource}';
+        final body =
+            '{"apiVersion":"v1","kind":"Pod","metadata":{"name":"$podName","namespace":"${_namespaceController.text}"},"spec":{"nodeName":"${widget.name}","containers":[{"name":"ssh-node","image":"busybox","imagePullPolicy":"IfNotPresent","command":["chroot","/host"],"tty":true,"stdin":true,"stdinOnce":true,"securityContext":{"privileged":true},"volumeMounts":[{"name":"host","mountPath":"/host"}]}],"volumes":[{"name":"host","hostPath":{"path":"/"}}],"hostNetwork":true,"hostIPC":true,"hostPID":true,"restartPolicy":"Never","tolerations":[{"effect":"NoSchedule","key":"node-role.kubernetes.io/master"},{"effect":"NoExecute","operator":"Exists"}]}}';
 
         await KubernetesService(
           cluster: cluster!,
           proxy: appRepository.settings.proxy,
           timeout: appRepository.settings.timeout,
-        ).patchRequest(
+        ).postRequest(
           url,
-          '[{"op": "replace", "path": "/spec/replicas", "value": ${int.parse(_replicasController.text)}}]',
+          body,
         );
 
         setState(() {
@@ -99,15 +86,15 @@ class _ScaleResourceState extends State<ScaleResource> {
         if (mounted) {
           showSnackbar(
             context,
-            '${widget.resource.singular} Scaled',
-            'The ${widget.resource.singular} ${widget.namespace}/${widget.name} was scaled to ${_replicasController.text} replicas.',
+            '$podName Created',
+            'The $podName Pod was create in the Namespace ${_namespaceController.text} on the Node ${widget.name}.',
           );
           Navigator.pop(context);
         }
       } catch (err) {
         Logger.log(
-          'ScaleResource _scale',
-          'Failed to Scale ${widget.resource.singular}',
+          'CreateSSHPod _create',
+          'Failed to Create Pod $podName',
           err,
         );
         setState(() {
@@ -116,7 +103,7 @@ class _ScaleResourceState extends State<ScaleResource> {
         if (mounted) {
           showSnackbar(
             context,
-            'Failed to Scale ${widget.resource.singular}',
+            'Failed to Create Pod $podName',
             err.toString(),
           );
         }
@@ -125,44 +112,27 @@ class _ScaleResourceState extends State<ScaleResource> {
   }
 
   @override
-  void initState() {
-    super.initState();
-
-    /// Set the initial value for the [_replicasController] based on the
-    /// provided item, which should be a Deployment or StatefulSet.
-    if (widget.item is IoK8sApiAppsV1Deployment) {
-      _replicasController.text =
-          '${(widget.item as IoK8sApiAppsV1Deployment).spec?.replicas ?? 0}';
-    } else if (widget.item is IoK8sApiAppsV1StatefulSet) {
-      _replicasController.text =
-          '${(widget.item as IoK8sApiAppsV1StatefulSet).spec?.replicas ?? 0}';
-    } else {
-      _replicasController.text = '0';
-    }
-  }
-
-  @override
   void dispose() {
-    _replicasController.dispose();
+    _namespaceController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return AppBottomSheetWidget(
-      title: 'Scale',
-      subtitle: '${widget.namespace}/${widget.name}',
-      icon: Icons.difference,
+      title: 'SSH',
+      subtitle: widget.name,
+      icon: Icons.terminal,
       closePressed: () {
         Navigator.pop(context);
       },
-      actionText: 'Scale',
+      actionText: 'Create Pod',
       actionPressed: () {
-        _scale();
+        _create();
       },
       actionIsLoading: _isLoading,
       child: Form(
-        key: _scaleFormKey,
+        key: _createFormKey,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(
@@ -174,18 +144,18 @@ class _ScaleResourceState extends State<ScaleResource> {
             child: Column(
               children: [
                 Text(
-                  'Change the number of replicas for ${widget.resource.singular} ${widget.namespace}/${widget.name}:',
+                  'Create a SSH Pod $podName on Node ${widget.name} in the provided Namespace:',
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
-                  controller: _replicasController,
-                  keyboardType: TextInputType.number,
+                  controller: _namespaceController,
+                  keyboardType: TextInputType.text,
                   autocorrect: false,
                   enableSuggestions: false,
                   maxLines: 1,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Replicas',
+                    labelText: 'Namespace',
                   ),
                   validator: _validator,
                 ),
