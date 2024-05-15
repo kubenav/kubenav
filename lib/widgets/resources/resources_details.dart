@@ -9,6 +9,7 @@ import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/widgets/plugins/cert-manager/resources/plugin_cert_manager_resources.dart';
 import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/resources/actions/create_debug_container.dart';
 import 'package:kubenav/widgets/resources/actions/create_job.dart';
@@ -437,6 +438,16 @@ List<AppResourceActionsModel> resourceDetailsActions(
 
   actions.addAll(
     fluxResourceActions(
+      context,
+      name,
+      namespace,
+      resource,
+      item,
+    ),
+  );
+
+  actions.addAll(
+    certManagerResourceActions(
       context,
       name,
       namespace,
