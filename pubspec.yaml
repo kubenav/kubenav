@@ -38,7 +38,7 @@ dependencies:
   code_text_field: ^1.0.2
   collection: ^1.18.0
   file_picker: ^8.0.3
-  fl_chart: ^0.67.0
+  fl_chart: ^0.68.0
   flutter_markdown: ^0.7.1
   flutter_native_splash: ^2.2.19
   flutter_secure_storage: ^9.0.0
@@ -55,7 +55,7 @@ dependencies:
   provider: ^6.0.4
   url_launcher: ^6.0.20
   uuid: ^4.2.1
-  web_socket_channel: ^2.1.0
+  web_socket_channel: ^3.0.0
   xterm: ^4.0.0
   yaml: ^3.1.0
 
@@ -68,7 +68,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.1
+  flutter_lints: ^4.0.0
 
   flutter_launcher_icons: ^0.13.1
   import_sorter: ^4.6.0

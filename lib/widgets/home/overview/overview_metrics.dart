@@ -45,7 +45,7 @@ class OverviewMetrics extends StatelessWidget {
               offset: const Offset(0.0, 0.0),
             ),
           ],
-          color: Theme.of(context).colorScheme.background,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
