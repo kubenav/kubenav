@@ -218,7 +218,7 @@ class AppTerminalWidget extends StatelessWidget {
 
     if (terminalRepository.terminals[terminalIndex].type == TerminalType.exec) {
       return Icon(
-        Icons.list,
+        Icons.terminal,
         color: Theme.of(context).colorScheme.onPrimary,
         size: 36,
       );

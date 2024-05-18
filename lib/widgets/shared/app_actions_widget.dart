@@ -42,7 +42,7 @@ class AppActionsWidget extends StatelessWidget {
           right: Constants.spacingMiddle,
         ),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.background,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: const BorderRadius.all(
             Radius.circular(Constants.sizeBorderRadius),
           ),
