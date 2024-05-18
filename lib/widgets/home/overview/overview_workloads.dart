@@ -87,24 +87,22 @@ class OverviewWorkloads extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          padding: const EdgeInsets.only(
-            left: Constants.spacingMiddle,
-            right: Constants.spacingMiddle,
-          ),
+        SizedBox(
           height: 206,
           child: GridView.count(
             scrollDirection: Axis.horizontal,
             cacheExtent: 1024,
             crossAxisCount: 2,
             childAspectRatio: 0.30,
-            mainAxisSpacing: Constants.spacingMiddle,
             children: List.generate(
               resources.length,
               (index) {
                 return Container(
-                  margin: const EdgeInsets.all(
-                    Constants.spacingSmall,
+                  margin: const EdgeInsets.only(
+                    top: Constants.spacingSmall,
+                    bottom: Constants.spacingSmall,
+                    left: Constants.spacingMiddle,
+                    right: Constants.spacingMiddle,
                   ),
                   child: OverviewWorkload(resource: resources[index]),
                 );

@@ -38,23 +38,21 @@ class DetailsItemConditions extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.only(
-              left: Constants.spacingMiddle,
-              right: Constants.spacingMiddle,
-            ),
+          SizedBox(
             height: 128,
             child: GridView.count(
               scrollDirection: Axis.horizontal,
               crossAxisCount: 2,
               childAspectRatio: 0.25,
-              mainAxisSpacing: Constants.spacingMiddle,
               children: List.generate(
                 conditions!.length,
                 (index) {
                   return Container(
-                    margin: const EdgeInsets.all(
-                      Constants.spacingSmall,
+                    margin: const EdgeInsets.only(
+                      top: Constants.spacingSmall,
+                      bottom: Constants.spacingSmall,
+                      left: Constants.spacingMiddle,
+                      right: Constants.spacingMiddle,
                     ),
                     child: AppListItem(
                       onTap: () {
