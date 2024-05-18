@@ -112,7 +112,9 @@ class OverviewMetrics extends StatelessWidget {
             right: Constants.spacingMiddle,
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: isTablet(context)
+                ? MainAxisAlignment.spaceEvenly
+                : MainAxisAlignment.spaceBetween,
             children: [
               buildCard(
                 context,
