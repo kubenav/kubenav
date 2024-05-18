@@ -82,3 +82,9 @@ String generateRandomString(int len) {
   const chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
   return List.generate(len, (index) => chars[r.nextInt(chars.length)]).join();
 }
+
+/// [isTablet] returns `true` if the current screen size is is a table. For that
+/// we check if the width of the screen is greater than 600.
+bool isTablet(BuildContext context) {
+  return MediaQuery.of(context).size.width > 600;
+}
