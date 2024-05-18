@@ -337,6 +337,7 @@ class _LiveMetricsState extends State<LiveMetrics> {
                 child: TabBar(
                   isScrollable: false,
                   tabAlignment: TabAlignment.fill,
+                  dividerHeight: 0,
                   labelColor: Theme.of(context).colorScheme.onPrimary,
                   unselectedLabelColor: Theme.of(context).colorScheme.primary,
                   labelPadding: EdgeInsets.zero,
