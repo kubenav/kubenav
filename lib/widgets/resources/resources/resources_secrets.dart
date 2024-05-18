@@ -12,6 +12,7 @@ import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/utils/themes.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
@@ -116,76 +117,28 @@ final resourceSecret = Resource(
           metadata: item.metadata,
         ),
         const SizedBox(height: Constants.spacingMiddle),
-        AppVerticalListSimpleWidget(
-          title: 'Data',
-          items: item.data.entries
-              .map(
-                (data) => AppVerticalListSimpleModel(
-                  onTap: () {
-                    showModal(
-                      context,
-                      _buildBottomSheet(
-                        context,
-                        data.key,
-                        data.value,
-                      ),
-                    );
-                  },
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(Constants.sizeBorderRadius),
-                        ),
-                      ),
-                      height: 54,
-                      width: 54,
-                      padding: const EdgeInsets.all(
-                        Constants.spacingIcon54x54,
-                      ),
-                      child: SvgPicture.asset('assets/resources/secrets.svg'),
-                    ),
-                    const SizedBox(width: Constants.spacingSmall),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            data.key,
-                            style: primaryTextStyle(
-                              context,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            data.value,
-                            style: secondaryTextStyle(
-                              context,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: Constants.spacingSmall),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      color: Theme.of(context)
-                          .extension<CustomColors>()!
-                          .textSecondary
-                          .withOpacity(Constants.opacityIcon),
-                      size: 24,
-                    ),
-                  ],
-                ),
-              )
-              .toList(),
+        DetailsItem(
+          title: 'Configuration',
+          details: [
+            DetailsItemModel(
+              name: 'Type',
+              values: item.type ?? '-',
+            ),
+          ],
         ),
         const SizedBox(height: Constants.spacingMiddle),
+        ..._buildData(
+          context,
+          'Data',
+          item.data,
+          true,
+        ),
+        ..._buildData(
+          context,
+          'String Data',
+          item.stringData,
+          false,
+        ),
         DetailsResourcesPreview(
           resource: resourceEvent,
           namespace: item.metadata?.namespace,
@@ -204,10 +157,96 @@ final resourceSecret = Resource(
   },
 );
 
+List<Widget> _buildData(
+  BuildContext context,
+  String title,
+  Map<String, String> data,
+  bool isBase64,
+) {
+  if (data.keys.isEmpty) {
+    return [];
+  }
+
+  return [
+    AppVerticalListSimpleWidget(
+      title: title,
+      items: data.entries
+          .map(
+            (data) => AppVerticalListSimpleModel(
+              onTap: () {
+                showModal(
+                  context,
+                  _buildBottomSheet(
+                    context,
+                    data.key,
+                    data.value,
+                    true,
+                  ),
+                );
+              },
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(Constants.sizeBorderRadius),
+                    ),
+                  ),
+                  height: 54,
+                  width: 54,
+                  padding: const EdgeInsets.all(
+                    Constants.spacingIcon54x54,
+                  ),
+                  child: SvgPicture.asset('assets/resources/secrets.svg'),
+                ),
+                const SizedBox(width: Constants.spacingSmall),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data.key,
+                        style: primaryTextStyle(
+                          context,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        data.value,
+                        style: secondaryTextStyle(
+                          context,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: Constants.spacingSmall),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  color: Theme.of(context)
+                      .extension<CustomColors>()!
+                      .textSecondary
+                      .withOpacity(Constants.opacityIcon),
+                  size: 24,
+                ),
+              ],
+            ),
+          )
+          .toList(),
+    ),
+    const SizedBox(height: Constants.spacingMiddle),
+  ];
+}
+
 Widget _buildBottomSheet(
   BuildContext context,
   String key,
   String value,
+  bool isBase64,
 ) {
   return AppBottomSheetWidget(
     title: key,
@@ -237,7 +276,7 @@ Widget _buildBottomSheet(
         child: Align(
           alignment: Alignment.topLeft,
           child: SelectableText(
-            utf8.fuse(base64).decode(value),
+            isBase64 ? utf8.fuse(base64).decode(value) : value,
             textAlign: TextAlign.left,
             style: TextStyle(
               fontFamily: getMonospaceFontFamily(),
