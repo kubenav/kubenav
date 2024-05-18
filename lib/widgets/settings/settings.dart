@@ -61,17 +61,12 @@ class Settings extends StatelessWidget {
 
     int maxClusters = 6;
 
-    return Container(
-      padding: const EdgeInsets.only(
-        left: Constants.spacingMiddle,
-        right: Constants.spacingMiddle,
-      ),
+    return SizedBox(
       height: 128,
       child: GridView.count(
         scrollDirection: Axis.horizontal,
         crossAxisCount: 2,
         childAspectRatio: 0.25,
-        mainAxisSpacing: Constants.spacingMiddle,
         children: List.generate(
           clustersRepository.clusters.length <= maxClusters
               ? clustersRepository.clusters.length
@@ -81,8 +76,8 @@ class Settings extends StatelessWidget {
               margin: const EdgeInsets.only(
                 top: Constants.spacingSmall,
                 bottom: Constants.spacingSmall,
-                left: Constants.spacingSmall,
-                right: Constants.spacingSmall,
+                left: Constants.spacingMiddle,
+                right: Constants.spacingMiddle,
               ),
               child: AppListItem(
                 onTap: () {
