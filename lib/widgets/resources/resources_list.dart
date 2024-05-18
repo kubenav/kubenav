@@ -439,6 +439,7 @@ class _ResourcesListState extends State<ResourcesList> {
                             ),
                           ),
                           ResourcesListActions(
+                            items: filteredItems,
                             resource: widget.resource,
                             refresh: () {
                               setState(() {
@@ -491,10 +492,12 @@ class _ResourcesListState extends State<ResourcesList> {
 class ResourcesListActions extends StatelessWidget {
   const ResourcesListActions({
     super.key,
+    required this.items,
     required this.resource,
     required this.refresh,
   });
 
+  final List<ResourceItem> items;
   final Resource resource;
   final void Function() refresh;
 
@@ -519,6 +522,19 @@ class ResourcesListActions extends StatelessWidget {
             showModal(
               context,
               ResourcesListItemCreateResource(
+                resource: resource,
+              ),
+            );
+          },
+        ),
+        AppResourceActionsModel(
+          title: 'Delete',
+          icon: Icons.delete,
+          onTap: () {
+            showModal(
+              context,
+              ResourcesListItemDeleteResources(
+                items: items,
                 resource: resource,
               ),
             );
@@ -1021,6 +1037,281 @@ class _ResourcesListItemCreateResourceState
                 fontFamily: getMonospaceFontFamily(),
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The [ResourcesListItemDeleteResources] widget is used to delete multiple
+/// [items] of a [resource]. The widget displays a list of [items] and the user
+/// can select the items which should be deleted. The user can also enable the
+/// `force` option to delete the items immediately.
+class ResourcesListItemDeleteResources extends StatefulWidget {
+  const ResourcesListItemDeleteResources({
+    super.key,
+    required this.items,
+    required this.resource,
+  });
+
+  final List<ResourceItem> items;
+  final Resource resource;
+
+  @override
+  State<ResourcesListItemDeleteResources> createState() =>
+      _ResourcesListItemDeleteResourcesState();
+}
+
+class _ResourcesListItemDeleteResourcesState
+    extends State<ResourcesListItemDeleteResources> {
+  bool _isLoading = false;
+  bool _force = false;
+  List<ResourceItem> _selectedItems = <ResourceItem>[];
+
+  /// [_delete] is used to delete the selected [items] of the [resource]. The
+  /// function runs a delete request against the Kubernetes API to delete the
+  /// selected items.
+  Future<void> _delete() async {
+    ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
+      context,
+      listen: false,
+    );
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: false,
+    );
+
+    String? body;
+    if (_force) {
+      body = '{"gracePeriodSeconds": 0}';
+    }
+
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final cluster = await clustersRepository.getClusterWithCredentials(
+        clustersRepository.activeClusterId,
+      );
+
+      for (final selectedItem in _selectedItems) {
+        final name = widget.resource.getName(selectedItem.item);
+        final namespace = widget.resource.getNamespace(selectedItem.item);
+
+        final url = namespace == null
+            ? '${widget.resource.path}/${widget.resource.resource}/$name'
+            : '${widget.resource.path}/namespaces/$namespace/${widget.resource.resource}/$name';
+
+        await KubernetesService(
+          cluster: cluster!,
+          proxy: appRepository.settings.proxy,
+          timeout: appRepository.settings.timeout,
+        ).deleteRequest(url, body);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+      if (mounted) {
+        showSnackbar(
+          context,
+          '${widget.resource.plural} Deleted',
+          'The selected ${widget.resource.plural} were deleted',
+        );
+        Navigator.pop(context);
+      }
+    } catch (err) {
+      Logger.log(
+        'DeleteResource _delete',
+        'Failed to Delete ${widget.resource.plural}',
+        err,
+      );
+      setState(() {
+        _isLoading = false;
+      });
+      if (mounted) {
+        showSnackbar(
+          context,
+          'Failed to Delete ${widget.resource.plural}',
+          err.toString(),
+        );
+      }
+    }
+  }
+
+  /// [_buildStatus] is a helper function to display the status of the resource.
+  /// The status can be `success`, `danger` or `warning`. The function returns
+  /// an icon with the color of the status. If the status is `undefined` the
+  /// function returns an empty container.
+  Widget _buildStatus(BuildContext context, ResourceStatus status) {
+    if (status != ResourceStatus.undefined) {
+      return Wrap(
+        children: [
+          const SizedBox(width: Constants.spacingSmall),
+          Icon(
+            Icons.radio_button_checked,
+            size: 24,
+            color: status == ResourceStatus.success
+                ? Theme.of(context).extension<CustomColors>()!.success
+                : status == ResourceStatus.danger
+                    ? Theme.of(context).extension<CustomColors>()!.error
+                    : Theme.of(context).extension<CustomColors>()!.warning,
+          ),
+        ],
+      );
+    }
+
+    return Container();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBottomSheetWidget(
+      title: 'Delete',
+      subtitle: 'Select the ${widget.resource.plural} you want to delete',
+      icon: Icons.delete,
+      closePressed: () {
+        Navigator.pop(context);
+      },
+      actionText: 'Delete ${widget.resource.plural}',
+      actionPressed: () {
+        _delete();
+      },
+      actionIsLoading: _isLoading,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: Constants.spacingMiddle,
+            bottom: Constants.spacingMiddle,
+            left: Constants.spacingMiddle,
+            right: Constants.spacingMiddle,
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text('Force'),
+                  Switch(
+                    activeColor: Theme.of(context).colorScheme.primary,
+                    onChanged: (value) {
+                      setState(() {
+                        _force = !_force;
+                      });
+                    },
+                    value: _force,
+                  ),
+                ],
+              ),
+              const SizedBox(height: Constants.spacingExtraLarge),
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                separatorBuilder: (context, index) {
+                  return const SizedBox(
+                    height: Constants.spacingMiddle,
+                  );
+                },
+                itemCount: widget.items.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(context)
+                              .extension<CustomColors>()!
+                              .shadow,
+                          blurRadius: Constants.sizeBorderBlurRadius,
+                          spreadRadius: Constants.sizeBorderSpreadRadius,
+                          offset: const Offset(0.0, 0.0),
+                        ),
+                      ],
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(Constants.sizeBorderRadius),
+                      ),
+                    ),
+                    child: CheckboxListTile(
+                      controlAffinity: ListTileControlAffinity.leading,
+                      value: _selectedItems
+                              .where(
+                                (e) =>
+                                    widget.resource.getName(e.item) ==
+                                        widget.resource.getName(
+                                          widget.items[index].item,
+                                        ) &&
+                                    widget.resource.getNamespace(e.item) ==
+                                        widget.resource.getNamespace(
+                                          widget.items[index].item,
+                                        ),
+                              )
+                              .toList()
+                              .length ==
+                          1,
+                      onChanged: (bool? value) {
+                        if (value == true) {
+                          setState(() {
+                            _selectedItems.add(widget.items[index]);
+                          });
+                        }
+                        if (value == false) {
+                          setState(() {
+                            _selectedItems = _selectedItems
+                                .where(
+                                  (e) => !(widget.resource.getName(e.item) ==
+                                          widget.resource.getName(
+                                            widget.items[index].item,
+                                          ) &&
+                                      widget.resource.getNamespace(e.item) ==
+                                          widget.resource.getNamespace(
+                                            widget.items[index].item,
+                                          )),
+                                )
+                                .toList();
+                          });
+                        }
+                      },
+                      title: Text(
+                        Characters(
+                          widget.resource.getName(widget.items[index].item),
+                        )
+                            .replaceAll(Characters(''), Characters('\u{200B}'))
+                            .toString(),
+                        style: noramlTextStyle(
+                          context,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: widget.resource
+                                  .getNamespace(widget.items[index].item) ==
+                              null
+                          ? null
+                          : Text(
+                              Characters(
+                                widget.resource.getNamespace(
+                                        widget.items[index].item) ??
+                                    '',
+                              )
+                                  .replaceAll(
+                                      Characters(''), Characters('\u{200B}'))
+                                  .toString(),
+                              style: noramlTextStyle(
+                                context,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                      secondary: _buildStatus(
+                        context,
+                        widget.items[index].status,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ),
