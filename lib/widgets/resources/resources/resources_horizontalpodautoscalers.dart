@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_autoscaling_v2_horizontal_pod_autoscaler.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_autoscaling_v2_horizontal_pod_autoscaler_list.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
+import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_owner_reference.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -163,6 +164,20 @@ final resourceHorizontalPodAutoscaler = Resource(
               name: 'Reference',
               values:
                   '${item.spec?.scaleTargetRef.kind ?? '-'}/${item.spec?.scaleTargetRef.name ?? '-'}',
+              onTap: (int index) {
+                final goToFunc = goToReference(
+                  context,
+                  IoK8sApimachineryPkgApisMetaV1OwnerReference(
+                    apiVersion: item.spec?.scaleTargetRef.apiVersion ?? '',
+                    kind: item.spec?.scaleTargetRef.kind ?? '',
+                    name: item.spec?.scaleTargetRef.name ?? '',
+                    uid: '',
+                  ),
+                  item.metadata?.namespace,
+                );
+
+                goToFunc();
+              },
             ),
           ],
         ),
