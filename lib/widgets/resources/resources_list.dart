@@ -1292,11 +1292,14 @@ class _ResourcesListItemDeleteResourcesState
                           : Text(
                               Characters(
                                 widget.resource.getNamespace(
-                                        widget.items[index].item) ??
+                                      widget.items[index].item,
+                                    ) ??
                                     '',
                               )
                                   .replaceAll(
-                                      Characters(''), Characters('\u{200B}'))
+                                    Characters(''),
+                                    Characters('\u{200B}'),
+                                  )
                                   .toString(),
                               style: secondaryTextStyle(
                                 context,
