@@ -124,7 +124,7 @@ final resourceIngressClass = Resource(
               onTap: item.spec?.parameters == null
                   ? null
                   : (int index) {
-                      final goToFunc = goToReference(
+                      goToReference(
                         context,
                         IoK8sApiCoreV1ObjectReference(
                           apiVersion: item.spec?.parameters?.apiGroup,
@@ -134,8 +134,6 @@ final resourceIngressClass = Resource(
                         ),
                         item.spec?.parameters?.namespace,
                       );
-
-                      goToFunc();
                     },
             ),
           ],

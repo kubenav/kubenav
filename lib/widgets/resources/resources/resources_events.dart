@@ -158,11 +158,13 @@ final resourceEvent = Resource(
         DetailsItem(
           title: 'Involved Object',
           goTo: 'View',
-          goToOnTap: goToReference(
-            context,
-            item.involvedObject,
-            null,
-          ),
+          goToOnTap: () {
+            goToReference(
+              context,
+              item.involvedObject,
+              null,
+            );
+          },
           details: [
             DetailsItemModel(
               name: 'API Version',

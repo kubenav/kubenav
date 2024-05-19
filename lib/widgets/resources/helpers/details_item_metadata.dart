@@ -59,13 +59,11 @@ class DetailsItemMetadata extends StatelessWidget {
           name: 'Owner References',
           values: ownerReferences,
           onTap: (int index) {
-            final goToFunc = goToReference(
+            goToReference(
               context,
               metadata?.ownerReferences[index],
               metadata?.namespace,
             );
-
-            goToFunc();
           },
         ),
       ],

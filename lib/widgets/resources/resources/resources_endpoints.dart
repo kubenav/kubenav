@@ -184,13 +184,11 @@ List<Widget> _buildSubsets(
                 .toList(),
             onTap: (int index) {
               if (endpoint.subsets[i].addresses[index].targetRef != null) {
-                final goToFunc = goToReference(
+                goToReference(
                   context,
                   endpoint.subsets[i].addresses[index].targetRef,
                   endpoint.metadata?.namespace,
                 );
-
-                goToFunc();
               }
             },
           ),

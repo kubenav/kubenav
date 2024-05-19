@@ -165,7 +165,7 @@ final resourceHorizontalPodAutoscaler = Resource(
               values:
                   '${item.spec?.scaleTargetRef.kind ?? '-'}/${item.spec?.scaleTargetRef.name ?? '-'}',
               onTap: (int index) {
-                final goToFunc = goToReference(
+                goToReference(
                   context,
                   IoK8sApimachineryPkgApisMetaV1OwnerReference(
                     apiVersion: item.spec?.scaleTargetRef.apiVersion ?? '',
@@ -175,8 +175,6 @@ final resourceHorizontalPodAutoscaler = Resource(
                   ),
                   item.metadata?.namespace,
                 );
-
-                goToFunc();
               },
             ),
           ],
