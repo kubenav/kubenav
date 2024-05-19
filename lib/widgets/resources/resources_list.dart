@@ -1298,7 +1298,7 @@ class _ResourcesListItemDeleteResourcesState
                                   .replaceAll(
                                       Characters(''), Characters('\u{200B}'))
                                   .toString(),
-                              style: noramlTextStyle(
+                              style: secondaryTextStyle(
                                 context,
                               ),
                               overflow: TextOverflow.ellipsis,
