@@ -21,6 +21,49 @@ import 'package:kubenav/widgets/shared/app_floating_action_buttons_widget.dart';
 import 'package:kubenav/widgets/shared/app_no_clusters_widget.dart';
 import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 
+class Plugin {
+  String title;
+  String description;
+  String icon;
+  Widget widget;
+
+  Plugin({
+    required this.title,
+    required this.description,
+    required this.icon,
+    required this.widget,
+  });
+}
+
+final _plugins = [
+  Plugin(
+    title: 'cert-manager',
+    description:
+        'cert-manager is a powerful and extensible X.509 certificate controller for Kubernetes and OpenShift workloads',
+    icon: 'assets/plugins/cert-manager.svg',
+    widget: const PluginCertManager(),
+  ),
+  Plugin(
+    title: 'Flux',
+    description: 'The GitOps family of projects',
+    icon: 'assets/plugins/flux.svg',
+    widget: const PluginFlux(),
+  ),
+  Plugin(
+    title: 'Helm',
+    description: 'The package manager for Kubernetes',
+    icon: 'assets/plugins/helm.svg',
+    widget: const PluginHelmList(),
+  ),
+  Plugin(
+    title: 'Prometheus',
+    description:
+        'From metrics to insight: Power your metrics and alerting with the leading open-source monitoring solution',
+    icon: 'assets/plugins/prometheus.svg',
+    widget: const PluginPrometheusList(),
+  ),
+];
+
 class Plugins extends StatelessWidget {
   const Plugins({super.key});
 
@@ -42,222 +85,66 @@ class Plugins extends StatelessWidget {
     return [
       AppVerticalListSimpleWidget(
         title: 'Plugins',
-        items: [
-          AppVerticalListSimpleModel(
-            onTap: () {
-              navigate(context, const PluginHelmList());
-            },
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(Constants.sizeBorderRadius),
+        items: List.generate(
+          _plugins.length,
+          (index) {
+            return AppVerticalListSimpleModel(
+              onTap: () {
+                navigate(context, _plugins[index].widget);
+              },
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(Constants.sizeBorderRadius),
+                    ),
+                  ),
+                  height: 54,
+                  width: 54,
+                  padding: const EdgeInsets.all(
+                    Constants.spacingIcon54x54,
+                  ),
+                  child: SvgPicture.asset(_plugins[index].icon),
+                ),
+                const SizedBox(width: Constants.spacingSmall),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _plugins[index].title,
+                        style: primaryTextStyle(
+                          context,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        _plugins[index].description,
+                        style: secondaryTextStyle(
+                          context,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
                 ),
-                height: 54,
-                width: 54,
-                padding: const EdgeInsets.all(
-                  Constants.spacingIcon54x54,
+                const SizedBox(width: Constants.spacingSmall),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  color: Theme.of(context)
+                      .extension<CustomColors>()!
+                      .textSecondary
+                      .withOpacity(Constants.opacityIcon),
+                  size: 24,
                 ),
-                child: SvgPicture.asset('assets/plugins/helm.svg'),
-              ),
-              const SizedBox(width: Constants.spacingSmall),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Helm',
-                      style: primaryTextStyle(
-                        context,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      'The package manager for Kubernetes',
-                      style: secondaryTextStyle(
-                        context,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: Constants.spacingSmall),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: Theme.of(context)
-                    .extension<CustomColors>()!
-                    .textSecondary
-                    .withOpacity(Constants.opacityIcon),
-                size: 24,
-              ),
-            ],
-          ),
-          AppVerticalListSimpleModel(
-            onTap: () {
-              navigate(context, const PluginPrometheusList());
-            },
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(Constants.sizeBorderRadius),
-                  ),
-                ),
-                height: 54,
-                width: 54,
-                padding: const EdgeInsets.all(Constants.spacingIcon54x54),
-                child: SvgPicture.asset('assets/plugins/prometheus.svg'),
-              ),
-              const SizedBox(width: Constants.spacingSmall),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Prometheus',
-                      style: primaryTextStyle(
-                        context,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      'From metrics to insight: Power your metrics and alerting with the leading open-source monitoring solution',
-                      style: secondaryTextStyle(
-                        context,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: Constants.spacingSmall),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: Theme.of(context)
-                    .extension<CustomColors>()!
-                    .textSecondary
-                    .withOpacity(Constants.opacityIcon),
-                size: 24,
-              ),
-            ],
-          ),
-          AppVerticalListSimpleModel(
-            onTap: () {
-              navigate(context, const PluginFlux());
-            },
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(Constants.sizeBorderRadius),
-                  ),
-                ),
-                height: 54,
-                width: 54,
-                padding: const EdgeInsets.all(Constants.spacingIcon54x54),
-                child: SvgPicture.asset('assets/plugins/flux.svg'),
-              ),
-              const SizedBox(width: Constants.spacingSmall),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Flux',
-                      style: primaryTextStyle(
-                        context,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      'The GitOps family of projects',
-                      style: secondaryTextStyle(
-                        context,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: Constants.spacingSmall),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: Theme.of(context)
-                    .extension<CustomColors>()!
-                    .textSecondary
-                    .withOpacity(Constants.opacityIcon),
-                size: 24,
-              ),
-            ],
-          ),
-          AppVerticalListSimpleModel(
-            onTap: () {
-              navigate(context, const PluginCertManager());
-            },
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(Constants.sizeBorderRadius),
-                  ),
-                ),
-                height: 54,
-                width: 54,
-                padding: const EdgeInsets.all(Constants.spacingIcon54x54),
-                child: SvgPicture.asset('assets/plugins/cert-manager.svg'),
-              ),
-              const SizedBox(width: Constants.spacingSmall),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'cert-manager',
-                      style: primaryTextStyle(
-                        context,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      'cert-manager is a powerful and extensible X.509 certificate controller for Kubernetes and OpenShift workloads',
-                      style: secondaryTextStyle(
-                        context,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: Constants.spacingSmall),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: Theme.of(context)
-                    .extension<CustomColors>()!
-                    .textSecondary
-                    .withOpacity(Constants.opacityIcon),
-                size: 24,
-              ),
-            ],
-          ),
-        ],
+              ],
+            );
+          },
+        ),
       ),
     ];
   }
