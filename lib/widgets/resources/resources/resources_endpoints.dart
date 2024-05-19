@@ -7,7 +7,6 @@ import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_endpoints_list.dart
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
-import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
@@ -180,15 +179,19 @@ List<Widget> _buildSubsets(
             values: endpoint.subsets[i].addresses
                 .map(
                   (address) =>
-                      '${address.ip}${address.hostname != null ? ' (${address.hostname})' : ''}',
+                      '${address.ip}${address.hostname != null ? ' (${address.hostname})' : address.targetRef?.name != null ? ' (${address.targetRef!.name})' : address.nodeName != null ? ' (${address.nodeName})' : ''}',
                 )
                 .toList(),
-            onTap: (index) {
-              showSnackbar(
-                context,
-                endpoint.subsets[i].addresses[i].ip,
-                'Hostname: ${endpoint.subsets[i].addresses[i].hostname ?? '-'}\nNode Name: ${endpoint.subsets[i].addresses[i].nodeName ?? '-'}\nTarget: ${endpoint.subsets[i].addresses[i].targetRef != null ? '${endpoint.subsets[i].addresses[i].targetRef!.kind ?? '-'}/${endpoint.subsets[i].addresses[i].targetRef!.name ?? '-'}' : '-'}',
-              );
+            onTap: (int index) {
+              if (endpoint.subsets[i].addresses[index].targetRef != null) {
+                final goToFunc = goToReference(
+                  context,
+                  endpoint.subsets[i].addresses[index].targetRef,
+                  endpoint.metadata?.namespace,
+                );
+
+                goToFunc();
+              }
             },
           ),
           DetailsItemModel(
