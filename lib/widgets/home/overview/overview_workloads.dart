@@ -223,6 +223,12 @@ class _OverviewWorkloadState extends State<OverviewWorkload> {
             BuildContext context,
             AsyncSnapshot<ResourceStatusCounts> snapshot,
           ) {
+            final isLoading =
+                snapshot.connectionState == ConnectionState.none ||
+                        snapshot.connectionState == ConnectionState.waiting
+                    ? true
+                    : false;
+
             return Row(
               children: [
                 Container(
@@ -258,7 +264,7 @@ class _OverviewWorkloadState extends State<OverviewWorkload> {
                       Row(
                         children: [
                           Text(
-                            'All: ${snapshot.data?.all ?? '-'}\nHealthy: ${snapshot.data?.success ?? '-'}',
+                            'All: ${isLoading ? '-' : snapshot.data?.all ?? '-'}\nHealthy: ${isLoading ? '-' : snapshot.data?.success ?? '-'}',
                             style: secondaryTextStyle(
                               context,
                             ),
@@ -267,7 +273,7 @@ class _OverviewWorkloadState extends State<OverviewWorkload> {
                           ),
                           const SizedBox(width: Constants.spacingMiddle),
                           Text(
-                            'Warning: ${snapshot.data?.warning ?? '-'}\nUnhealthy: ${snapshot.data?.danger ?? '-'}',
+                            'Warning: ${isLoading ? '-' : snapshot.data?.warning ?? '-'}\nUnhealthy: ${isLoading ? '-' : snapshot.data?.danger ?? '-'}',
                             style: secondaryTextStyle(
                               context,
                             ),
