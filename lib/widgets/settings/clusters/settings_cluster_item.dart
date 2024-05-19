@@ -22,6 +22,7 @@ class SettingsClusterItem extends StatefulWidget {
     required this.index,
     required this.cluster,
     required this.isActiveCluster,
+    required this.isSortable,
     this.onTap,
     this.onLongPress,
   });
@@ -29,6 +30,7 @@ class SettingsClusterItem extends StatefulWidget {
   final int index;
   final Cluster cluster;
   final bool isActiveCluster;
+  final bool isSortable;
   final void Function()? onTap;
   final void Function()? onLongPress;
 
@@ -81,6 +83,34 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
         statusOk = false;
       });
     }
+  }
+
+  /// [_buildIcon] returns an icon widget, which indicates the status of the
+  /// cluster. If the [sort] argument is `true`, we return a drag handle icon,
+  /// which can be used to reorder the clusters.
+  Widget _buildIcon() {
+    if (widget.isSortable) {
+      return ReorderableDragStartListener(
+        index: widget.index,
+        child: Icon(
+          Icons.drag_handle,
+          color: Theme.of(context)
+              .extension<CustomColors>()!
+              .textPrimary
+              .withOpacity(Constants.opacityIcon),
+        ),
+      );
+    }
+
+    return Icon(
+      widget.isActiveCluster
+          ? Icons.radio_button_checked
+          : Icons.radio_button_unchecked,
+      size: 24,
+      color: statusOk
+          ? Theme.of(context).extension<CustomColors>()!.success
+          : Theme.of(context).extension<CustomColors>()!.error,
+    );
   }
 
   @override
@@ -136,18 +166,7 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
                     ],
                   ),
                 ),
-                ReorderableDragStartListener(
-                  index: widget.index,
-                  child: Icon(
-                    widget.isActiveCluster
-                        ? Icons.radio_button_checked
-                        : Icons.radio_button_unchecked,
-                    size: 24,
-                    color: statusOk
-                        ? Theme.of(context).extension<CustomColors>()!.success
-                        : Theme.of(context).extension<CustomColors>()!.error,
-                  ),
-                ),
+                _buildIcon(),
               ],
             ),
           ],

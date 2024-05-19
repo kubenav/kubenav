@@ -24,8 +24,15 @@ import 'package:kubenav/widgets/shared/app_horizontal_list_cards_widget.dart';
 /// Below the list of providers we display the users added clusters. We also add
 /// the status to each cluster item, so a user sees if we are able to reach the
 /// cluster.
-class SettingsClusters extends StatelessWidget {
+class SettingsClusters extends StatefulWidget {
   const SettingsClusters({super.key});
+
+  @override
+  State<SettingsClusters> createState() => _SettingsClustersState();
+}
+
+class _SettingsClustersState extends State<SettingsClusters> {
+  bool isSortable = false;
 
   /// [_proxyDecorator] is used to highlight the bookmark which is currently
   /// draged by the user.
@@ -147,6 +154,30 @@ class SettingsClusters extends StatelessWidget {
                         style: primaryTextStyle(context, size: 18),
                       ),
                     ),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          isSortable = !isSortable;
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.sort,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 16,
+                          ),
+                          const SizedBox(width: Constants.spacingExtraSmall),
+                          Text(
+                            'Sort',
+                            style: secondaryTextStyle(
+                              context,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -184,21 +215,26 @@ class SettingsClusters extends StatelessWidget {
                       cluster: clustersRepository.clusters[index],
                       isActiveCluster: clustersRepository.clusters[index].id ==
                           clustersRepository.activeClusterId,
-                      onTap: () {
-                        clustersRepository.setActiveCluster(
-                          clustersRepository.clusters[index].id,
-                        );
-                      },
-                      onLongPress: () {
-                        HapticFeedback.vibrate();
+                      isSortable: isSortable,
+                      onTap: isSortable
+                          ? null
+                          : () {
+                              clustersRepository.setActiveCluster(
+                                clustersRepository.clusters[index].id,
+                              );
+                            },
+                      onLongPress: isSortable
+                          ? null
+                          : () {
+                              HapticFeedback.vibrate();
 
-                        showActions(
-                          context,
-                          SettingsClusterActions(
-                            cluster: clustersRepository.clusters[index],
-                          ),
-                        );
-                      },
+                              showActions(
+                                context,
+                                SettingsClusterActions(
+                                  cluster: clustersRepository.clusters[index],
+                                ),
+                              );
+                            },
                     ),
                   );
                 },

@@ -93,7 +93,7 @@ There are multiple ways to switch between clusters:
           markdown: '''
 You can sort your clusters on the **Clusters** page (**Settings** -> **View all**), so that your the cluster which you have to access the most is always on the top.
 
-To sort the clusters you have to **press on the status icon** of the cluster and move it up or down.
+To sort the clusters you have to **press on the sort icon**. Afterwards you can move the clusters up or down.
           ''',
         ),
       ],
