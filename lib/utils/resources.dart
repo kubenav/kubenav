@@ -256,104 +256,100 @@ String getAdditionalPrinterColumnValue(
 /// reference can be a [IoK8sApiCoreV1ObjectReference] as it is used in events
 /// or a [IoK8sApimachineryPkgApisMetaV1OwnerReference] as it is used in other
 /// manifests. If the reference is a owner reference we also need a [namespace].
-void Function() goToReference(
+Future<void> goToReference(
   BuildContext context,
   dynamic reference,
   String? namespace,
-) {
+) async {
   if (reference is IoK8sApiCoreV1ObjectReference) {
     if (kindToResource.containsKey(reference.kind)) {
-      return () {
-        navigate(
-          context,
-          ResourcesDetails(
-            name: reference.name ?? '',
-            namespace: reference.namespace,
-            resource: kindToResource[reference.kind]!,
-          ),
-        );
-      };
+      navigate(
+        context,
+        ResourcesDetails(
+          name: reference.name ?? '',
+          namespace: reference.namespace,
+          resource: kindToResource[reference.kind]!,
+        ),
+      );
+      return;
     }
   }
 
   if (reference is IoK8sApimachineryPkgApisMetaV1OwnerReference) {
     if (kindToResource.containsKey(reference.kind)) {
-      return () {
-        navigate(
-          context,
-          ResourcesDetails(
-            resource: kindToResource[reference.kind]!,
-            name: reference.name,
-            namespace: namespace,
-          ),
-        );
-      };
+      navigate(
+        context,
+        ResourcesDetails(
+          resource: kindToResource[reference.kind]!,
+          name: reference.name,
+          namespace: namespace,
+        ),
+      );
+      return;
     }
   }
 
-  return () async {
-    try {
-      final crd = await CRDsCacheRepository().getCRD(
-        context,
-        reference.kind,
-        reference.apiVersion,
-      );
+  try {
+    final crd = await CRDsCacheRepository().getCRD(
+      context,
+      reference.kind,
+      reference.apiVersion,
+    );
 
-      if (crd != null) {
-        if (reference.kind == crd.spec.names.kind) {
-          for (var version in crd.spec.versions) {
-            if (reference.apiVersion == '${crd.spec.group}/${version.name}') {
-              if (context.mounted) {
-                final customResource = buildCustomResource(
-                  crd.spec.names.plural,
-                  crd.spec.names.singular ?? crd.spec.names.plural,
-                  '${crd.spec.group}/${version.name}',
-                  '/apis/${crd.spec.group}/${version.name}',
-                  crd.spec.names.plural,
-                  crd.spec.scope,
-                  version.additionalPrinterColumns
-                      .where((e) => e.priority == null || e.priority == 0)
-                      .map(
-                        (e) => AdditionalPrinterColumns(
-                          description: e.description ?? '',
-                          jsonPath: e.jsonPath,
-                          name: e.name,
-                          type: e.type,
-                        ),
-                      )
-                      .toList(),
-                );
+    if (crd != null) {
+      if (reference.kind == crd.spec.names.kind) {
+        for (var version in crd.spec.versions) {
+          if (reference.apiVersion == '${crd.spec.group}/${version.name}') {
+            if (context.mounted) {
+              final customResource = buildCustomResource(
+                crd.spec.names.plural,
+                crd.spec.names.singular ?? crd.spec.names.plural,
+                '${crd.spec.group}/${version.name}',
+                '/apis/${crd.spec.group}/${version.name}',
+                crd.spec.names.plural,
+                crd.spec.scope,
+                version.additionalPrinterColumns
+                    .where((e) => e.priority == null || e.priority == 0)
+                    .map(
+                      (e) => AdditionalPrinterColumns(
+                        description: e.description ?? '',
+                        jsonPath: e.jsonPath,
+                        name: e.name,
+                        type: e.type,
+                      ),
+                    )
+                    .toList(),
+              );
 
-                String? ns;
-                if (reference is IoK8sApiCoreV1ObjectReference) {
-                  ns = reference.namespace;
-                }
-                if (reference is IoK8sApimachineryPkgApisMetaV1OwnerReference) {
-                  ns = namespace;
-                }
-
-                navigate(
-                  context,
-                  ResourcesDetails(
-                    namespace: ns,
-                    name: reference.name,
-                    resource: customResource,
-                  ),
-                );
-                return;
+              String? ns;
+              if (reference is IoK8sApiCoreV1ObjectReference) {
+                ns = reference.namespace;
               }
+              if (reference is IoK8sApimachineryPkgApisMetaV1OwnerReference) {
+                ns = namespace;
+              }
+
+              navigate(
+                context,
+                ResourcesDetails(
+                  namespace: ns,
+                  name: reference.name,
+                  resource: customResource,
+                ),
+              );
+              return;
             }
           }
         }
       }
-    } catch (err) {
-      Logger.log(
-        'goToReference',
-        'Failed to Go To Reference',
-        err,
-      );
     }
-  };
+  } catch (err) {
+    Logger.log(
+      'goToReference',
+      'Failed to Go To Reference',
+      err,
+    );
+  }
 }
 
 /// [formatBytes] formates the provided [size] in bytes into a human readable
