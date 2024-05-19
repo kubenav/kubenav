@@ -1145,7 +1145,7 @@ class _ResourcesListItemDeleteResourcesState
   /// The status can be `success`, `danger` or `warning`. The function returns
   /// an icon with the color of the status. If the status is `undefined` the
   /// function returns an empty container.
-  Widget _buildStatus(BuildContext context, ResourceStatus status) {
+  Widget? _buildStatus(BuildContext context, ResourceStatus status) {
     if (status != ResourceStatus.undefined) {
       return Wrap(
         children: [
@@ -1163,7 +1163,7 @@ class _ResourcesListItemDeleteResourcesState
       );
     }
 
-    return Container();
+    return null;
   }
 
   @override
