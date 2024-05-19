@@ -148,7 +148,7 @@ class RancherService {
       } else {
         Logger.log(
           'RancherService signin',
-          'Could not get token, requests returned status code ${response.statusCode}',
+          'Failed to Get Token, Requests Returned Status Code ${response.statusCode}',
           jsonData,
         );
         throw Exception(jsonData);
@@ -156,7 +156,7 @@ class RancherService {
     } catch (err) {
       Logger.log(
         'RancherService signin',
-        'Could not get token',
+        'Failed to Get Token',
         err,
       );
       rethrow;
@@ -183,7 +183,7 @@ class RancherService {
 
       Logger.log(
         'RancherService getClusters',
-        'Response status: ${response.statusCode}',
+        'Response Status: ${response.statusCode}',
         responseData,
       );
 
@@ -198,7 +198,7 @@ class RancherService {
       } else {
         Logger.log(
           'RancherService getClusters',
-          'Could not get clusters, requests returned status code ${response.statusCode}',
+          'Failed to Get Clusters, Requests Returned Status Code ${response.statusCode}',
           jsonData,
         );
         throw Exception(jsonData);
@@ -237,7 +237,7 @@ class RancherService {
 
       Logger.log(
         'RancherService getKubeconfig',
-        'Response status: ${response.statusCode}',
+        'Response Status: ${response.statusCode}',
         responseData,
       );
 
@@ -248,7 +248,7 @@ class RancherService {
       } else {
         Logger.log(
           'RancherService getKubeconfig',
-          'Could not get Kubeconfig for $clusterId, requests returned status code ${response.statusCode}',
+          'Failed to Get Kubeconfig for $clusterId, Requests Returned Status Code ${response.statusCode}',
           jsonData,
         );
         throw Exception(jsonData);
@@ -256,7 +256,7 @@ class RancherService {
     } catch (err) {
       Logger.log(
         'RancherService getKubeconfig',
-        'Could not get Kubeconfig for $clusterId',
+        'Failed to Get Kubeconfig for $clusterId',
         err,
       );
       rethrow;

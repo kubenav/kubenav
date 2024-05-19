@@ -63,7 +63,7 @@ class DigitalOceanService {
 
       Logger.log(
         'DigitalOceanService getClusters',
-        'Response status: ${response.statusCode}',
+        'Response Status: ${response.statusCode}',
         response.body,
       );
 
@@ -85,7 +85,7 @@ class DigitalOceanService {
       } else {
         Logger.log(
           'DigitalOceanService getClusters',
-          'Could not get clusters with status code ${response.statusCode}',
+          'Failed to Get Clusters, Requests Returned Status Code ${response.statusCode}',
           jsonData,
         );
         throw Exception(jsonData ?? 'An unknown error occured');
@@ -93,7 +93,7 @@ class DigitalOceanService {
     } catch (err) {
       Logger.log(
         'DigitalOceanService getClusters',
-        'Could not get DigitalOcean clusters',
+        'Failed to get Clusters',
         err,
       );
       rethrow;
@@ -109,7 +109,8 @@ class DigitalOceanService {
     try {
       final response = await http.get(
         Uri.parse(
-            'https://api.digitalocean.com/v2/kubernetes/clusters/$id/kubeconfig',),
+          'https://api.digitalocean.com/v2/kubernetes/clusters/$id/kubeconfig',
+        ),
         headers: {
           'Authorization': 'Bearer $token',
         },
@@ -117,7 +118,7 @@ class DigitalOceanService {
 
       Logger.log(
         'DigitalOceanService getKubeconfig',
-        'Response status: ${response.statusCode}',
+        'Response Status: ${response.statusCode}',
         response.body,
       );
 
@@ -128,7 +129,7 @@ class DigitalOceanService {
 
         Logger.log(
           'DigitalOceanService getKubeconfig',
-          'Could not get clusters with status code ${response.statusCode}',
+          'Failed to Get Kubeconfig, Requests Returned Status Code ${response.statusCode}',
           jsonData,
         );
         throw Exception(jsonData);
@@ -136,7 +137,7 @@ class DigitalOceanService {
     } catch (err) {
       Logger.log(
         'DigitalOceanService getKubeconfig',
-        'Could not get DigitalOcean clusters',
+        'Failed to get Kubeconfig',
         err,
       );
       rethrow;

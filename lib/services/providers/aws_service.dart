@@ -330,7 +330,7 @@ class AWSService {
 
       Logger.log(
         'AWSService getClusters',
-        'Clusters were returned',
+        'Clusters Returned',
         result,
       );
 
@@ -343,7 +343,7 @@ class AWSService {
     } catch (err) {
       Logger.log(
         'AWSService getClusters',
-        'Could not get AWS clusters',
+        'Failed to Get AWS Clusters',
         err,
       );
       rethrow;
@@ -375,14 +375,14 @@ class AWSService {
 
       Logger.log(
         'AWSService getToken',
-        'A new access token was returned',
+        'New Access Token Returned',
         result,
       );
       return result;
     } catch (err) {
       Logger.log(
         'AWSService getToken',
-        'Could not get access token',
+        'Failed to Get Access Token',
         err,
       );
       rethrow;
@@ -406,7 +406,7 @@ class AWSService {
 
       Logger.log(
         'AWSService getSSOConfig',
-        'SSO config was returned',
+        'SSO Config Returned',
         result,
       );
 
@@ -416,7 +416,7 @@ class AWSService {
     } catch (err) {
       Logger.log(
         'AWSService getSSOConfig',
-        'Could not get SSO config',
+        'Failed to Get SSO Config',
         err,
       );
       rethrow;
@@ -451,7 +451,7 @@ class AWSService {
 
       Logger.log(
         'AWSService getSSOToken',
-        'SSO token was returned',
+        'SSO Token Returned',
         result,
       );
 
@@ -462,7 +462,7 @@ class AWSService {
     } catch (err) {
       Logger.log(
         'AWSService getSSOToken',
-        'Could not get SSO token',
+        'Failed to Get SSO Token',
         err,
       );
       rethrow;
@@ -490,7 +490,7 @@ class AWSService {
 
       Logger.log(
         'AWSService getSSOAccounts',
-        'Accounts were returned',
+        'Accounts Returned',
         result,
       );
 
@@ -503,7 +503,7 @@ class AWSService {
     } catch (err) {
       Logger.log(
         'AWSService getSSOAccounts',
-        'Could not get AWS SSO accounts',
+        'Failed to Get AWS SSO Accounts',
         err,
       );
       rethrow;

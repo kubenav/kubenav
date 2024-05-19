@@ -65,7 +65,7 @@ class AzureService {
 
       Logger.log(
         'AzureService getClusters',
-        'Clusters were returned',
+        'Clusters Returned',
         result,
       );
 
@@ -78,7 +78,7 @@ class AzureService {
     } catch (err) {
       Logger.log(
         'AzureService getClusters',
-        'Could not get Azure clusters',
+        'Failed to Get Azure Clusters',
         err,
       );
       rethrow;

@@ -195,7 +195,7 @@ class GoogleService {
         if (googleTokens.error != null && googleTokens.error != '') {
           Logger.log(
             'GoogleService getTokensFromCode',
-            'Could not get access token ${googleTokens.error}',
+            'Failed to get Access Token ${googleTokens.error}',
             jsonData,
           );
           throw Exception(jsonData);
@@ -203,7 +203,7 @@ class GoogleService {
 
         Logger.log(
           'GoogleService getTokensFromCode',
-          'Could not get access token, requests returned status code ${response.statusCode}',
+          'Failed to Get Access Token, Requests Returned Status Code ${response.statusCode}',
           jsonData,
         );
         throw Exception(jsonData);
@@ -211,7 +211,7 @@ class GoogleService {
     } catch (err) {
       Logger.log(
         'GoogleService getTokensFromCode',
-        'Could not get access token',
+        'Failed to Get Access Token',
         err,
       );
       rethrow;
@@ -234,7 +234,7 @@ class GoogleService {
 
       Logger.log(
         'GoogleService getTokensFromRefreshToken',
-        'Response status: ${response.statusCode}',
+        'Response Status: ${response.statusCode}',
         response.body,
       );
 
@@ -247,7 +247,7 @@ class GoogleService {
         if (googleTokens.error != null && googleTokens.error != '') {
           Logger.log(
             'GoogleService getTokensFromRefreshToken',
-            'Could not get access token ${googleTokens.error}',
+            'Failed to Get Access Token ${googleTokens.error}',
             jsonData,
           );
           throw Exception(jsonData);
@@ -255,7 +255,7 @@ class GoogleService {
 
         Logger.log(
           'GoogleService getTokensFromRefreshToken',
-          'Could not get access token, requests returned status code ${response.statusCode}',
+          'Failed to Get Access Token, Requests Returned Status Code ${response.statusCode}',
           jsonData,
         );
         throw Exception(jsonData);
@@ -263,7 +263,7 @@ class GoogleService {
     } catch (err) {
       Logger.log(
         'GoogleService getTokensFromRefreshToken',
-        'Could not get access token',
+        'Failed to Get Access Token',
         err,
       );
       rethrow;
@@ -289,7 +289,7 @@ class GoogleService {
 
       Logger.log(
         'GoogleService isGoogleAPIEnabled',
-        'Response status: ${response.statusCode}',
+        'Response Status: ${response.statusCode}',
         response.body,
       );
 
@@ -304,7 +304,7 @@ class GoogleService {
       } else {
         Logger.log(
           'GoogleService isGoogleAPIEnabled',
-          'Could not check if API is enabled, requests returned status code ${response.statusCode}',
+          'Failed to Check if API is Enabled, Requests Returned Status Code ${response.statusCode}',
           jsonData,
         );
         return false;
@@ -312,7 +312,7 @@ class GoogleService {
     } catch (err) {
       Logger.log(
         'GoogleService isGoogleAPIEnabled',
-        'Could not check if API is enabled',
+        'Failed to Check if API is Enabled',
         err,
       );
       return false;
@@ -335,7 +335,7 @@ class GoogleService {
 
       Logger.log(
         'GoogleService getProjects',
-        'Response status: ${response.statusCode}',
+        'Response Status: ${response.statusCode}',
         response.body,
       );
 
@@ -366,7 +366,7 @@ class GoogleService {
       } else {
         Logger.log(
           'GoogleService getProjects',
-          'Could not get projects, requests returned status code ${response.statusCode}',
+          'Failed to Get Projects, Requests Returned Status Code ${response.statusCode}',
           jsonData,
         );
         throw Exception(jsonData ?? 'An unknown error occured');
@@ -374,7 +374,7 @@ class GoogleService {
     } catch (err) {
       Logger.log(
         'GoogleService getProjects',
-        'Could not get projects',
+        'Failed to Get Projects',
         err,
       );
       rethrow;
@@ -398,7 +398,7 @@ class GoogleService {
 
       Logger.log(
         'GoogleService getClusters',
-        'Response status: ${response.statusCode}',
+        'Response Status: ${response.statusCode}',
         response.body,
       );
 
@@ -420,7 +420,7 @@ class GoogleService {
       } else {
         Logger.log(
           'GoogleService getClusters',
-          'Could not get clusters, requests returned status code ${response.statusCode}',
+          'Failed to Get Clusters, Requests Returned Status Code ${response.statusCode}',
           jsonData,
         );
         throw Exception(jsonData ?? 'An unknown error occured');

@@ -162,7 +162,7 @@ class OIDCService {
     } catch (err) {
       Logger.log(
         'OIDCService getLink',
-        'Could not get OIDC login url',
+        'Failed to Get OIDC Login Url',
         err,
       );
       rethrow;
@@ -202,7 +202,7 @@ class OIDCService {
 
       Logger.log(
         'OIDCService getRefreshToken',
-        'Refresh token was returned',
+        'Refresh Token Returned',
         result,
       );
 
@@ -211,7 +211,7 @@ class OIDCService {
     } catch (err) {
       Logger.log(
         'OIDCService getRefreshToken',
-        'Could not get refresh token',
+        'Failed to Get Refresh Token',
         err,
       );
       rethrow;
@@ -247,7 +247,7 @@ class OIDCService {
 
       Logger.log(
         'OIDCService getAccessToken',
-        'Access token was returned',
+        'Access Token Returned',
         result,
       );
 
@@ -256,7 +256,7 @@ class OIDCService {
     } catch (err) {
       Logger.log(
         'OIDCService getAccessToken',
-        'Could not get access token',
+        'Failed to Get Access Token',
         err,
       );
       rethrow;
@@ -287,7 +287,7 @@ class OIDCService {
 
       Logger.log(
         'OIDCService deviceAuth',
-        'Device auth data was returned',
+        'Device Auth Data Returned',
         result,
       );
 
@@ -296,7 +296,7 @@ class OIDCService {
     } catch (err) {
       Logger.log(
         'OIDCService deviceAuth',
-        'Could not get device auth data',
+        'Failed to Get Device Auth Data',
         err,
       );
       rethrow;
@@ -330,7 +330,7 @@ class OIDCService {
 
       Logger.log(
         'OIDCService deviceAuthGetRefreshToken',
-        'Refresh token was returned',
+        'Refresh Token Returned',
         result,
       );
 
@@ -339,7 +339,7 @@ class OIDCService {
     } catch (err) {
       Logger.log(
         'OIDCService deviceAuthGetRefreshToken',
-        'Could not get refresh token',
+        'Failed to Get Refresh Token',
         err,
       );
       rethrow;
