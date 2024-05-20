@@ -23,7 +23,7 @@ final resourceCertificateSigningRequest = Resource(
       'A CertificateSigningRequest (CSR) resource is used to request that a certificate be signed by a denoted signer, after which the request may be approved or denied before finally being signed.',
   path: '/apis/certificates.k8s.io/v1',
   resource: 'certificatesigningrequests',
-  scope: ResourceScope.namespaced,
+  scope: ResourceScope.cluster,
   additionalPrinterColumns: [],
   icon: 'certificatesigningrequests',
   template: resourceDefaultTemplate,
