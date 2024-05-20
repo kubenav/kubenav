@@ -76,7 +76,6 @@ final resourceIngressClass = Resource(
       item: item,
       status: status,
       details: [
-        'Namespace: ${item.metadata?.namespace ?? '-'}',
         'Controller: ${item.spec?.controller ?? '-'}',
         'Parameters: ${item.spec?.parameters != null ? '${item.spec?.parameters?.namespace != null ? '${item.spec?.parameters?.namespace}/' : ''}${item.spec?.parameters?.name}' : '-'}',
         'Age: ${getAge(item.metadata?.creationTimestamp)}',
@@ -89,7 +88,6 @@ final resourceIngressClass = Resource(
     final item = listItem as IoK8sApiNetworkingV1IngressClass;
 
     return [
-      'Namespace: ${item.metadata?.namespace ?? '-'}',
       'Controller: ${item.spec?.controller ?? '-'}',
       'Parameters: ${item.spec?.parameters != null ? '${item.spec?.parameters?.namespace != null ? '${item.spec?.parameters?.namespace}/' : ''}${item.spec?.parameters?.name}' : '-'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
