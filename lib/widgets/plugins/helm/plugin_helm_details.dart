@@ -13,6 +13,7 @@ import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_manifest.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_rollback.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_template.dart';
@@ -453,7 +454,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                                     ),
                                                     Text(
                                                       Characters(
-                                                        'Updated: ${formatTime(DateTime.parse(release.info?.lastDeployed ?? ''))}',
+                                                        'Updated: ${formatTime(DateTime.parse(release.info?.lastDeployed ?? '-'))}',
                                                       )
                                                           .replaceAll(
                                                             Characters(''),
@@ -471,7 +472,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                                     ),
                                                     Text(
                                                       Characters(
-                                                        'Status: ${release.info?.status}',
+                                                        'Status: ${release.info?.status ?? '-'}',
                                                       )
                                                           .replaceAll(
                                                             Characters(''),
@@ -489,7 +490,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                                     ),
                                                     Text(
                                                       Characters(
-                                                        'Chart Version: ${release.chart?.metadata?.version}',
+                                                        'Chart Version: ${release.chart?.metadata?.version ?? '-'}',
                                                       )
                                                           .replaceAll(
                                                             Characters(''),
@@ -507,7 +508,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                                     ),
                                                     Text(
                                                       Characters(
-                                                        'App Version: ${release.chart?.metadata?.appVersion}',
+                                                        'App Version: ${release.chart?.metadata?.appVersion ?? '-'}',
                                                       )
                                                           .replaceAll(
                                                             Characters(''),
@@ -525,6 +526,42 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                                     ),
                                                   ],
                                                 ),
+                                              ),
+                                              Wrap(
+                                                children: [
+                                                  const SizedBox(
+                                                    width:
+                                                        Constants.spacingSmall,
+                                                  ),
+                                                  Icon(
+                                                    Icons.radio_button_checked,
+                                                    size: 24,
+                                                    color: release.info
+                                                                    ?.status ==
+                                                                'deployed' ||
+                                                            release.info
+                                                                    ?.status ==
+                                                                'superseded' ||
+                                                            release.info
+                                                                    ?.status ==
+                                                                'uninstalled'
+                                                        ? Theme.of(context)
+                                                            .extension<
+                                                                CustomColors>()!
+                                                            .success
+                                                        : release.info
+                                                                    ?.status ==
+                                                                'failed'
+                                                            ? Theme.of(context)
+                                                                .extension<
+                                                                    CustomColors>()!
+                                                                .error
+                                                            : Theme.of(context)
+                                                                .extension<
+                                                                    CustomColors>()!
+                                                                .warning,
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),

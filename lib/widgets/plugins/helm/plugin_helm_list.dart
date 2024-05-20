@@ -13,6 +13,7 @@ import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_list_item_actions.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
@@ -131,7 +132,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
                     ),
                     Text(
                       Characters(
-                        'Updated: ${formatTime(DateTime.parse(release.info?.lastDeployed ?? ''))}',
+                        'Updated: ${formatTime(DateTime.parse(release.info?.lastDeployed ?? '-'))}',
                       )
                           .replaceAll(Characters(''), Characters('\u{200B}'))
                           .toString(),
@@ -142,7 +143,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
                       ),
                     ),
                     Text(
-                      Characters('Status: ${release.info?.status}')
+                      Characters('Status: ${release.info?.status ?? '-'}')
                           .replaceAll(Characters(''), Characters('\u{200B}'))
                           .toString(),
                       overflow: TextOverflow.ellipsis,
@@ -153,7 +154,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
                     ),
                     Text(
                       Characters(
-                        'Chart Version: ${release.chart?.metadata?.version}',
+                        'Chart Version: ${release.chart?.metadata?.version ?? '-'}',
                       )
                           .replaceAll(Characters(''), Characters('\u{200B}'))
                           .toString(),
@@ -165,7 +166,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
                     ),
                     Text(
                       Characters(
-                        'App Version: ${release.chart?.metadata?.appVersion}',
+                        'App Version: ${release.chart?.metadata?.appVersion ?? '-'}',
                       )
                           .replaceAll(Characters(''), Characters('\u{200B}'))
                           .toString(),
@@ -179,6 +180,22 @@ class _PluginHelmListState extends State<PluginHelmList> {
                 ),
               ],
             ),
+          ),
+          Wrap(
+            children: [
+              const SizedBox(width: Constants.spacingSmall),
+              Icon(
+                Icons.radio_button_checked,
+                size: 24,
+                color: release.info?.status == 'deployed' ||
+                        release.info?.status == 'superseded' ||
+                        release.info?.status == 'uninstalled'
+                    ? Theme.of(context).extension<CustomColors>()!.success
+                    : release.info?.status == 'failed'
+                        ? Theme.of(context).extension<CustomColors>()!.error
+                        : Theme.of(context).extension<CustomColors>()!.warning,
+              ),
+            ],
           ),
         ],
       ),
