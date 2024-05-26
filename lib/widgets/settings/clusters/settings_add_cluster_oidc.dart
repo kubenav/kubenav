@@ -147,6 +147,9 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
                     labelText: 'Name',
                   ),
                   validator: _validator,
+                  onFieldSubmitted: (String value) {
+                    _addCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -160,6 +163,9 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
                     labelText: 'Server',
                   ),
                   validator: _validator,
+                  onFieldSubmitted: (String value) {
+                    _addCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -172,6 +178,9 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
                     border: OutlineInputBorder(),
                     labelText: 'Certificate Authority Data',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _addCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 Row(
@@ -202,6 +211,9 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
                     border: OutlineInputBorder(),
                     labelText: 'Namespace',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _addCluster();
+                  },
                 ),
               ],
             ),

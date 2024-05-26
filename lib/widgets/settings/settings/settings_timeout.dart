@@ -73,7 +73,9 @@ class _SettingsTimeoutState extends State<SettingsTimeout> {
       actionPressed: () {
         if (_timeoutFormKey.currentState != null &&
             _timeoutFormKey.currentState!.validate()) {
-          appRepository.setTimeout(int.tryParse(_timeoutController.text) ?? 0);
+          appRepository.setTimeout(
+            int.tryParse(_timeoutController.text) ?? 0,
+          );
           Navigator.pop(context);
         }
       },
@@ -105,6 +107,15 @@ class _SettingsTimeoutState extends State<SettingsTimeout> {
                     labelText: 'Timeout',
                   ),
                   validator: _validator,
+                  onFieldSubmitted: (String value) {
+                    if (_timeoutFormKey.currentState != null &&
+                        _timeoutFormKey.currentState!.validate()) {
+                      appRepository.setTimeout(
+                        int.tryParse(_timeoutController.text) ?? 0,
+                      );
+                      Navigator.pop(context);
+                    }
+                  },
                 ),
               ],
             ),

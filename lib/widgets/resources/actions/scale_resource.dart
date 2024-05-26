@@ -188,6 +188,9 @@ class _ScaleResourceState extends State<ScaleResource> {
                     labelText: 'Replicas',
                   ),
                   validator: _validator,
+                  onFieldSubmitted: (String value) {
+                    _scale();
+                  },
                 ),
               ],
             ),

@@ -179,6 +179,9 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
                     labelText: 'Name',
                   ),
                   validator: _validator,
+                  onFieldSubmitted: (String value) {
+                    _editCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -192,6 +195,9 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
                     labelText: 'Server',
                   ),
                   validator: _validator,
+                  onFieldSubmitted: (String value) {
+                    _editCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -204,6 +210,9 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
                     border: OutlineInputBorder(),
                     labelText: 'Certificate Authority Data',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _editCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 Row(
@@ -234,6 +243,9 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
                     border: OutlineInputBorder(),
                     labelText: 'Client Certificate Data',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _editCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -246,6 +258,9 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
                     border: OutlineInputBorder(),
                     labelText: 'Client Key Data',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _editCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -258,6 +273,9 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
                     border: OutlineInputBorder(),
                     labelText: 'Token',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _editCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -270,6 +288,9 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
                     border: OutlineInputBorder(),
                     labelText: 'Username',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _editCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -282,6 +303,9 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
                     border: OutlineInputBorder(),
                     labelText: 'Password',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _editCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -294,6 +318,9 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
                     border: OutlineInputBorder(),
                     labelText: 'Namespace',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _editCluster();
+                  },
                 ),
               ],
             ),

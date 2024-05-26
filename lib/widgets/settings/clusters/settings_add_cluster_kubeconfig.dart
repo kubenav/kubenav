@@ -222,6 +222,9 @@ class _SettingsAddClusterKubeconfigState
                     labelText: 'Kubeconfig',
                   ),
                   validator: _validator,
+                  onFieldSubmitted: (String value) {
+                    _addCluster();
+                  },
                 ),
               ],
             ),

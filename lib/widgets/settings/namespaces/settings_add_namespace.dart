@@ -45,11 +45,16 @@ class _SettingsAddNamespaceState extends State<SettingsAddNamespace> {
         Navigator.pop(context);
       },
       actionText: 'Add Namespace',
-      actionPressed: () {
+      actionPressed: () async {
         if (_namespaceFormKey.currentState != null &&
             _namespaceFormKey.currentState!.validate()) {
-          appRepository.addNamespace(_namespaceController.text);
-          Navigator.pop(context);
+          await appRepository.addNamespace(
+            _namespaceController.text,
+          );
+
+          if (context.mounted) {
+            Navigator.pop(context);
+          }
         }
       },
       actionIsLoading: false,
@@ -83,6 +88,18 @@ class _SettingsAddNamespaceState extends State<SettingsAddNamespace> {
                       labelText: 'Namespace',
                     ),
                     validator: _validator,
+                    onFieldSubmitted: (String value) async {
+                      if (_namespaceFormKey.currentState != null &&
+                          _namespaceFormKey.currentState!.validate()) {
+                        await appRepository.addNamespace(
+                          _namespaceController.text,
+                        );
+
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                        }
+                      }
+                    },
                   ),
                 ),
               ],

@@ -165,6 +165,9 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
                     labelText: 'Name',
                   ),
                   validator: _validator,
+                  onFieldSubmitted: (String value) {
+                    _addCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -178,6 +181,9 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
                     labelText: 'Server',
                   ),
                   validator: _validator,
+                  onFieldSubmitted: (String value) {
+                    _addCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -190,6 +196,9 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
                     border: OutlineInputBorder(),
                     labelText: 'Certificate Authority Data',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _addCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 Row(
@@ -220,6 +229,9 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
                     border: OutlineInputBorder(),
                     labelText: 'Client Certificate Data',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _addCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -232,6 +244,9 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
                     border: OutlineInputBorder(),
                     labelText: 'Client Key Data',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _addCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -244,6 +259,9 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
                     border: OutlineInputBorder(),
                     labelText: 'Token',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _addCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -256,6 +274,9 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
                     border: OutlineInputBorder(),
                     labelText: 'Username',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _addCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -268,6 +289,9 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
                     border: OutlineInputBorder(),
                     labelText: 'Password',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _addCluster();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -280,6 +304,9 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
                     border: OutlineInputBorder(),
                     labelText: 'Namespace',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _addCluster();
+                  },
                 ),
               ],
             ),
