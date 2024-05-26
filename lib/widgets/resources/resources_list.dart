@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:code_text_field/code_text_field.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:highlight/languages/json.dart' as highlight_json;
 import 'package:highlight/languages/yaml.dart' as highlight_yaml;
 import 'package:provider/provider.dart';
@@ -719,101 +718,95 @@ class ResourcesListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      key: Key('$namespace-$name'),
-      endActionPane: ActionPane(
-        motion: const DrawerMotion(),
-        extentRatio: 0.2,
-        children: [
-          SlidableAction(
-            onPressed: (BuildContext context) {
-              showActions(
-                context,
-                ResourcesListItemActions(
-                  name: name,
-                  namespace: namespace,
-                  resource: resource,
-                  item: item,
-                ),
-              );
-            },
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            icon: Icons.more_horiz,
+    return AppListItem(
+      onTap: () {
+        navigate(
+          context,
+          ResourcesDetails(
+            name: name,
+            namespace: namespace,
+            resource: resource,
           ),
-        ],
-      ),
-      child: AppListItem(
-        onTap: () {
-          navigate(
-            context,
-            ResourcesDetails(
-              name: name,
-              namespace: namespace,
-              resource: resource,
-            ),
-          );
-        },
-        onLongPress: () {
-          HapticFeedback.vibrate();
+        );
+      },
+      onLongPress: () {
+        HapticFeedback.vibrate();
 
-          showActions(
-            context,
-            ResourcesListItemActions(
-              name: name,
-              namespace: namespace,
-              resource: resource,
-              item: item,
-            ),
-          );
-        },
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    Characters(name)
-                        .replaceAll(Characters(''), Characters('\u{200B}'))
-                        .toString(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: primaryTextStyle(
-                      context,
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: List.generate(
-                      details.length,
-                      (index) {
-                        return Text(
-                          Characters(
-                            details[index],
-                          )
-                              .replaceAll(
-                                Characters(''),
-                                Characters('\u{200B}'),
-                              )
-                              .toString(),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: secondaryTextStyle(
-                            context,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+        showActions(
+          context,
+          ResourcesListItemActions(
+            name: name,
+            namespace: namespace,
+            resource: resource,
+            item: item,
+          ),
+        );
+      },
+      slidableActions: [
+        AppListItemSlidableAction(
+          icon: Icons.more_horiz,
+          label: 'More',
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+          onTap: (BuildContext context) {
+            showActions(
+              context,
+              ResourcesListItemActions(
+                name: name,
+                namespace: namespace,
+                resource: resource,
+                item: item,
               ),
-            ),
-            _buildStatus(context, status),
-          ],
+            );
+          },
         ),
+      ],
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  Characters(name)
+                      .replaceAll(Characters(''), Characters('\u{200B}'))
+                      .toString(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: primaryTextStyle(
+                    context,
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(
+                    details.length,
+                    (index) {
+                      return Text(
+                        Characters(
+                          details[index],
+                        )
+                            .replaceAll(
+                              Characters(''),
+                              Characters('\u{200B}'),
+                            )
+                            .toString(),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: secondaryTextStyle(
+                          context,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          _buildStatus(context, status),
+        ],
       ),
     );
   }
