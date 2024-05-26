@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/app_repository.dart';
@@ -61,61 +62,85 @@ class SettingsNamespaces extends StatelessWidget {
       listen: false,
     );
 
+    final namespace = appRepository.settings.namespaces[index];
+
     return Container(
-      key: Key(appRepository.settings.namespaces[index]),
+      key: Key(namespace),
       margin: const EdgeInsets.only(
         bottom: Constants.spacingMiddle,
         left: Constants.spacingMiddle,
         right: Constants.spacingMiddle,
       ),
-      child: AppListItem(
-        onTap: () {
-          showActions(
-            context,
-            SettingsDeleteNamespace(
-              namespace: appRepository.settings.namespaces[index],
-            ),
-          );
-        },
-        onLongPress: () {
-          HapticFeedback.vibrate();
-
-          showActions(
-            context,
-            SettingsDeleteNamespace(
-              namespace: appRepository.settings.namespaces[index],
-            ),
-          );
-        },
-        child: Row(
+      child: Slidable(
+        key: Key(namespace),
+        endActionPane: ActionPane(
+          motion: const DrawerMotion(),
+          extentRatio: 0.2,
           children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    appRepository.settings.namespaces[index],
-                    style: primaryTextStyle(
-                      context,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            ReorderableDragStartListener(
-              index: index,
-              child: Icon(
-                Icons.drag_handle,
-                color: Theme.of(context)
-                    .extension<CustomColors>()!
-                    .textPrimary
-                    .withOpacity(Constants.opacityIcon),
-              ),
+            SlidableAction(
+              onPressed: (BuildContext context) {
+                appRepository.deleteNamespace(namespace);
+                showSnackbar(
+                  context,
+                  'Namespace Deleted',
+                  'The Namespace $namespace was deleted',
+                );
+              },
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+              icon: Icons.delete,
             ),
           ],
+        ),
+        child: AppListItem(
+          onTap: () {
+            showActions(
+              context,
+              SettingsDeleteNamespace(
+                namespace: namespace,
+              ),
+            );
+          },
+          onLongPress: () {
+            HapticFeedback.vibrate();
+
+            showActions(
+              context,
+              SettingsDeleteNamespace(
+                namespace: namespace,
+              ),
+            );
+          },
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      namespace,
+                      style: primaryTextStyle(
+                        context,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              ReorderableDragStartListener(
+                index: index,
+                child: Icon(
+                  Icons.drag_handle,
+                  color: Theme.of(context)
+                      .extension<CustomColors>()!
+                      .textPrimary
+                      .withOpacity(Constants.opacityIcon),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
