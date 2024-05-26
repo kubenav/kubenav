@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/repositories/bookmarks_repository.dart';
@@ -176,119 +177,157 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                         left: Constants.spacingMiddle,
                         right: Constants.spacingMiddle,
                       ),
-                      child: AppListItem(
-                        onTap: () {
-                          openBookmark(index);
-                        },
-                        onLongPress: () {
-                          HapticFeedback.vibrate();
-
-                          showActions(
-                            context,
-                            ResourcesBookmarkActions(
-                              index: index,
-                            ),
-                          );
-                        },
-                        child: Column(
+                      child: Slidable(
+                        key: Key(
+                          '${bookmarksRepository.bookmarks[index].type} ${bookmarksRepository.bookmarks[index].clusterId} ${bookmarksRepository.bookmarks[index].name} ${bookmarksRepository.bookmarks[index].namespace} ${bookmarksRepository.bookmarks[index].resource}',
+                        ),
+                        endActionPane: ActionPane(
+                          motion: const DrawerMotion(),
+                          extentRatio: 0.2,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        bookmarksRepository
-                                                    .bookmarks[index].type ==
-                                                BookmarkType.list
-                                            ? bookmarksRepository
-                                                .bookmarks[index]
-                                                .resource
-                                                .plural
-                                            : bookmarksRepository
-                                                .bookmarks[index]
-                                                .resource
-                                                .singular,
-                                        style: primaryTextStyle(
-                                          context,
-                                        ),
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            Characters(
-                                              'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
-                                            )
-                                                .replaceAll(
-                                                  Characters(''),
-                                                  Characters('\u{200B}'),
-                                                )
-                                                .toString(),
-                                            style: secondaryTextStyle(
-                                              context,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          Text(
-                                            Characters(
-                                              'Namespace: ${bookmarksRepository.bookmarks[index].namespace ?? '-'}',
-                                            )
-                                                .replaceAll(
-                                                  Characters(''),
-                                                  Characters('\u{200B}'),
-                                                )
-                                                .toString(),
-                                            style: secondaryTextStyle(
-                                              context,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          Text(
-                                            Characters(
-                                              'Name: ${bookmarksRepository.bookmarks[index].name ?? '-'}',
-                                            )
-                                                .replaceAll(
-                                                  Characters(''),
-                                                  Characters(
-                                                    '\u{200B}',
-                                                  ),
-                                                )
-                                                .toString(),
-                                            style: secondaryTextStyle(
-                                              context,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                ReorderableDragStartListener(
-                                  index: index,
-                                  child: Icon(
-                                    Icons.drag_handle,
-                                    color: Theme.of(context)
-                                        .extension<CustomColors>()!
-                                        .textSecondary
-                                        .withOpacity(Constants.opacityIcon),
-                                    size: 24,
-                                  ),
-                                ),
-                              ],
+                            SlidableAction(
+                              onPressed: (BuildContext context) async {
+                                final title =
+                                    bookmarksRepository.bookmarks[index].type ==
+                                            BookmarkType.list
+                                        ? bookmarksRepository
+                                            .bookmarks[index].resource.plural
+                                        : bookmarksRepository
+                                            .bookmarks[index].resource.singular;
+                                await bookmarksRepository.removeBookmark(index);
+
+                                if (context.mounted) {
+                                  showSnackbar(
+                                    context,
+                                    'Bookmark Deleted',
+                                    'Bookmark $title was deleted',
+                                  );
+                                }
+                              },
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.error,
+                              foregroundColor:
+                                  Theme.of(context).colorScheme.onError,
+                              icon: Icons.delete,
                             ),
                           ],
+                        ),
+                        child: AppListItem(
+                          onTap: () {
+                            openBookmark(index);
+                          },
+                          onLongPress: () {
+                            HapticFeedback.vibrate();
+
+                            showActions(
+                              context,
+                              ResourcesBookmarkActions(
+                                index: index,
+                              ),
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          bookmarksRepository
+                                                      .bookmarks[index].type ==
+                                                  BookmarkType.list
+                                              ? bookmarksRepository
+                                                  .bookmarks[index]
+                                                  .resource
+                                                  .plural
+                                              : bookmarksRepository
+                                                  .bookmarks[index]
+                                                  .resource
+                                                  .singular,
+                                          style: primaryTextStyle(
+                                            context,
+                                          ),
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              Characters(
+                                                'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
+                                              )
+                                                  .replaceAll(
+                                                    Characters(''),
+                                                    Characters('\u{200B}'),
+                                                  )
+                                                  .toString(),
+                                              style: secondaryTextStyle(
+                                                context,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            Text(
+                                              Characters(
+                                                'Namespace: ${bookmarksRepository.bookmarks[index].namespace ?? '-'}',
+                                              )
+                                                  .replaceAll(
+                                                    Characters(''),
+                                                    Characters('\u{200B}'),
+                                                  )
+                                                  .toString(),
+                                              style: secondaryTextStyle(
+                                                context,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            Text(
+                                              Characters(
+                                                'Name: ${bookmarksRepository.bookmarks[index].name ?? '-'}',
+                                              )
+                                                  .replaceAll(
+                                                    Characters(''),
+                                                    Characters(
+                                                      '\u{200B}',
+                                                    ),
+                                                  )
+                                                  .toString(),
+                                              style: secondaryTextStyle(
+                                                context,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  ReorderableDragStartListener(
+                                    index: index,
+                                    child: Icon(
+                                      Icons.drag_handle,
+                                      color: Theme.of(context)
+                                          .extension<CustomColors>()!
+                                          .textSecondary
+                                          .withOpacity(Constants.opacityIcon),
+                                      size: 24,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
