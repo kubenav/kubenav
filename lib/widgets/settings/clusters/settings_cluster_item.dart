@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/cluster.dart';
 import 'package:kubenav/models/cluster_provider.dart';
 import 'package:kubenav/repositories/app_repository.dart';
+import 'package:kubenav/repositories/bookmarks_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/logger.dart';
+import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/utils/themes.dart';
+import 'package:kubenav/widgets/settings/clusters/settings_edit_cluster.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
 
 /// The [SettingsClusterItem] widget is used to display a single cluster in the
@@ -127,49 +131,110 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
         left: Constants.spacingMiddle,
         right: Constants.spacingMiddle,
       ),
-      child: AppListItem(
-        onTap: widget.onTap,
-        onLongPress: widget.onLongPress,
-        child: Column(
+      child: Slidable(
+        key: Key(widget.cluster.id),
+        endActionPane: ActionPane(
+          motion: const DrawerMotion(),
+          extentRatio: 0.4,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        Characters(widget.cluster.name)
-                            .replaceAll(Characters(''), Characters('\u{200B}'))
-                            .toString(),
-                        style: primaryTextStyle(
-                          context,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        Characters(widget.cluster.clusterProviderType.title())
-                            .replaceAll(
-                              Characters(''),
-                              Characters('\u{200B}'),
-                            )
-                            .toString(),
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                _buildIcon(),
-              ],
+            SlidableAction(
+              onPressed: (BuildContext context) {
+                showModal(
+                  context,
+                  SettingsEditCluster(cluster: widget.cluster),
+                );
+              },
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              icon: Icons.edit,
+            ),
+            SlidableAction(
+              onPressed: (BuildContext context) async {
+                ClustersRepository clustersRepository =
+                    Provider.of<ClustersRepository>(
+                  context,
+                  listen: false,
+                );
+                BookmarksRepository bookmarksRepository =
+                    Provider.of<BookmarksRepository>(
+                  context,
+                  listen: false,
+                );
+
+                try {
+                  await clustersRepository.deleteCluster(widget.cluster.id);
+                  await bookmarksRepository
+                      .removeBookmarksForCluster(widget.cluster.id);
+                  if (context.mounted) {
+                    showSnackbar(
+                      context,
+                      'Cluster Deleted',
+                      'The cluster ${widget.cluster.name} was deleted',
+                    );
+                  }
+                } catch (err) {
+                  if (context.mounted) {
+                    showSnackbar(
+                      context,
+                      'Failed to Delete Cluster',
+                      err.toString(),
+                    );
+                  }
+                }
+              },
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+              icon: Icons.delete,
             ),
           ],
+        ),
+        child: AppListItem(
+          onTap: widget.onTap,
+          onLongPress: widget.onLongPress,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          Characters(widget.cluster.name)
+                              .replaceAll(
+                                Characters(''),
+                                Characters('\u{200B}'),
+                              )
+                              .toString(),
+                          style: primaryTextStyle(
+                            context,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          Characters(widget.cluster.clusterProviderType.title())
+                              .replaceAll(
+                                Characters(''),
+                                Characters('\u{200B}'),
+                              )
+                              .toString(),
+                          style: secondaryTextStyle(
+                            context,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  _buildIcon(),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
