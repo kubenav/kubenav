@@ -30,18 +30,21 @@ class ResourcesBookmarkActions extends StatelessWidget {
         AppActionsWidgetAction(
           title: 'Delete',
           color: Theme.of(context).extension<CustomColors>()!.error,
-          onTap: () {
+          onTap: () async {
             final title =
                 bookmarksRepository.bookmarks[index].type == BookmarkType.list
                     ? bookmarksRepository.bookmarks[index].resource.plural
                     : bookmarksRepository.bookmarks[index].resource.singular;
-            bookmarksRepository.removeBookmark(index);
-            showSnackbar(
-              context,
-              'Bookmark Deleted',
-              'Bookmark $title was deleted',
-            );
-            Navigator.pop(context);
+            await bookmarksRepository.removeBookmark(index);
+
+            if (context.mounted) {
+              showSnackbar(
+                context,
+                'Bookmark Deleted',
+                'Bookmark $title was deleted',
+              );
+              Navigator.pop(context);
+            }
           },
         ),
       ],
