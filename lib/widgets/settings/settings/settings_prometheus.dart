@@ -55,6 +55,33 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
     return null;
   }
 
+  void _save() {
+    AppRepository appRepository = Provider.of<AppRepository>(
+      context,
+      listen: false,
+    );
+
+    if (_prometheusFormKey.currentState != null &&
+        _prometheusFormKey.currentState!.validate()) {
+      appRepository.setPrometheus(
+        AppRepositorySettingsPrometheus(
+          enabled: _enabled,
+          address: _addressController.text,
+          namespace: _namespaceController.text,
+          labelSelector: _labelSelectorController.text,
+          container: _containerController.text,
+          port: int.tryParse(_portController.text) ?? 9090,
+          path: _pathController.text,
+          username: _usernameController.text,
+          password: _passwordController.text,
+          token: _tokenController.text,
+          certificate: _certificateController.text,
+        ),
+      );
+      Navigator.pop(context);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -88,11 +115,6 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
 
   @override
   Widget build(BuildContext context) {
-    AppRepository appRepository = Provider.of<AppRepository>(
-      context,
-      listen: false,
-    );
-
     return AppBottomSheetWidget(
       title: 'Prometheus',
       subtitle: 'Prometheus configuration',
@@ -102,25 +124,7 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
       },
       actionText: 'Save',
       actionPressed: () {
-        if (_prometheusFormKey.currentState != null &&
-            _prometheusFormKey.currentState!.validate()) {
-          appRepository.setPrometheus(
-            AppRepositorySettingsPrometheus(
-              enabled: _enabled,
-              address: _addressController.text,
-              namespace: _namespaceController.text,
-              labelSelector: _labelSelectorController.text,
-              container: _containerController.text,
-              port: int.tryParse(_portController.text) ?? 9090,
-              path: _pathController.text,
-              username: _usernameController.text,
-              password: _passwordController.text,
-              token: _tokenController.text,
-              certificate: _certificateController.text,
-            ),
-          );
-          Navigator.pop(context);
-        }
+        _save();
       },
       actionIsLoading: false,
       child: Form(
@@ -166,6 +170,9 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                     border: OutlineInputBorder(),
                     labelText: 'Address',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _save();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingExtraLarge),
                 Row(
@@ -201,6 +208,9 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                     border: OutlineInputBorder(),
                     labelText: 'Namespace',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _save();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -213,6 +223,9 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                     border: OutlineInputBorder(),
                     labelText: 'Label Selector',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _save();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -225,6 +238,9 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                     border: OutlineInputBorder(),
                     labelText: 'Container',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _save();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -238,6 +254,9 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                     labelText: 'Port',
                   ),
                   validator: _portValidator,
+                  onFieldSubmitted: (String value) {
+                    _save();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -250,6 +269,9 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                     border: OutlineInputBorder(),
                     labelText: 'Path',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _save();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingExtraLarge),
                 Row(
@@ -285,6 +307,9 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                     border: OutlineInputBorder(),
                     labelText: 'Username',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _save();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -297,6 +322,9 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                     border: OutlineInputBorder(),
                     labelText: 'Password',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _save();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -309,6 +337,9 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                     border: OutlineInputBorder(),
                     labelText: 'Token',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _save();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
@@ -321,6 +352,9 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                     border: OutlineInputBorder(),
                     labelText: 'Certificate',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _save();
+                  },
                 ),
               ],
             ),

@@ -207,6 +207,9 @@ class _PluginHelmDetailsRollbackState extends State<PluginHelmDetailsRollback> {
                     border: OutlineInputBorder(),
                     labelText: 'Version',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _rollback();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 Row(
@@ -270,6 +273,9 @@ class _PluginHelmDetailsRollbackState extends State<PluginHelmDetailsRollback> {
                     border: OutlineInputBorder(),
                     labelText: 'Max History',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _rollback();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 Row(
@@ -316,6 +322,9 @@ class _PluginHelmDetailsRollbackState extends State<PluginHelmDetailsRollback> {
                     border: OutlineInputBorder(),
                     labelText: 'Timeout',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _rollback();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 Row(

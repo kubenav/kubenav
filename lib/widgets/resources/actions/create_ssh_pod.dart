@@ -158,6 +158,9 @@ class _CreateSSHPodState extends State<CreateSSHPod> {
                     labelText: 'Namespace',
                   ),
                   validator: _validator,
+                  onFieldSubmitted: (String value) {
+                    _create();
+                  },
                 ),
               ],
             ),

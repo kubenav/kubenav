@@ -360,6 +360,9 @@ class _GetLogsState extends State<GetLogs> {
                     border: OutlineInputBorder(),
                     labelText: 'Filter',
                   ),
+                  onFieldSubmitted: (String value) {
+                    _getLogs();
+                  },
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 Row(
