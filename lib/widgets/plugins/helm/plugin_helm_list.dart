@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/plugins/helm.dart';
@@ -69,160 +68,152 @@ class _PluginHelmListState extends State<PluginHelmList> {
   /// of releases. When the user clicks on the release he will be redirected to
   /// the [PluginHelmDetails] screen.
   Widget _buildItem(Release release) {
-    return Slidable(
-      key: Key('${release.namespace}-${release.name}-${release.version}'),
-      endActionPane: ActionPane(
-        motion: const DrawerMotion(),
-        extentRatio: 0.2,
-        children: [
-          SlidableAction(
-            onPressed: (BuildContext context) {
-              showActions(
-                context,
-                PluginHelmListItemActions(
-                  release: release,
-                ),
-              );
-            },
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            icon: Icons.more_horiz,
+    return AppListItem(
+      onTap: () {
+        navigate(
+          context,
+          PluginHelmDetails(
+            name: release.name!,
+            namespace: release.namespace!,
+            version: release.version!,
           ),
-        ],
-      ),
-      child: AppListItem(
-        onTap: () {
-          navigate(
-            context,
-            PluginHelmDetails(
-              name: release.name!,
-              namespace: release.namespace!,
-              version: release.version!,
-            ),
-          );
-        },
-        onLongPress: () {
-          HapticFeedback.vibrate();
+        );
+      },
+      onLongPress: () {
+        HapticFeedback.vibrate();
 
-          showActions(
-            context,
-            PluginHelmListItemActions(
-              release: release,
-            ),
-          );
-        },
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    Characters(release.name ?? '')
-                        .replaceAll(Characters(''), Characters('\u{200B}'))
-                        .toString(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: primaryTextStyle(
-                      context,
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        Characters('Namespace: ${release.namespace}')
-                            .replaceAll(Characters(''), Characters('\u{200B}'))
-                            .toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                      ),
-                      Text(
-                        Characters('Revision: ${release.version}')
-                            .replaceAll(Characters(''), Characters('\u{200B}'))
-                            .toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                      ),
-                      Text(
-                        Characters(
-                          'Updated: ${formatTime(DateTime.parse(release.info?.lastDeployed ?? '-'))}',
-                        )
-                            .replaceAll(Characters(''), Characters('\u{200B}'))
-                            .toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                      ),
-                      Text(
-                        Characters('Status: ${release.info?.status ?? '-'}')
-                            .replaceAll(Characters(''), Characters('\u{200B}'))
-                            .toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                      ),
-                      Text(
-                        Characters(
-                          'Chart Version: ${release.chart?.metadata?.version ?? '-'}',
-                        )
-                            .replaceAll(Characters(''), Characters('\u{200B}'))
-                            .toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                      ),
-                      Text(
-                        Characters(
-                          'App Version: ${release.chart?.metadata?.appVersion ?? '-'}',
-                        )
-                            .replaceAll(Characters(''), Characters('\u{200B}'))
-                            .toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+        showActions(
+          context,
+          PluginHelmListItemActions(
+            release: release,
+          ),
+        );
+      },
+      slidableActions: [
+        AppListItemSlidableAction(
+          icon: Icons.more_horiz,
+          label: 'More',
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+          onTap: (BuildContext context) {
+            showActions(
+              context,
+              PluginHelmListItemActions(
+                release: release,
               ),
-            ),
-            Wrap(
+            );
+          },
+        ),
+      ],
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(width: Constants.spacingSmall),
-                Icon(
-                  Icons.radio_button_checked,
-                  size: 24,
-                  color: release.info?.status == 'deployed' ||
-                          release.info?.status == 'superseded' ||
-                          release.info?.status == 'uninstalled'
-                      ? Theme.of(context).extension<CustomColors>()!.success
-                      : release.info?.status == 'failed'
-                          ? Theme.of(context).extension<CustomColors>()!.error
-                          : Theme.of(context)
-                              .extension<CustomColors>()!
-                              .warning,
+                Text(
+                  Characters(release.name ?? '')
+                      .replaceAll(Characters(''), Characters('\u{200B}'))
+                      .toString(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: primaryTextStyle(
+                    context,
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      Characters('Namespace: ${release.namespace}')
+                          .replaceAll(Characters(''), Characters('\u{200B}'))
+                          .toString(),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: secondaryTextStyle(
+                        context,
+                      ),
+                    ),
+                    Text(
+                      Characters('Revision: ${release.version}')
+                          .replaceAll(Characters(''), Characters('\u{200B}'))
+                          .toString(),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: secondaryTextStyle(
+                        context,
+                      ),
+                    ),
+                    Text(
+                      Characters(
+                        'Updated: ${formatTime(DateTime.parse(release.info?.lastDeployed ?? '-'))}',
+                      )
+                          .replaceAll(Characters(''), Characters('\u{200B}'))
+                          .toString(),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: secondaryTextStyle(
+                        context,
+                      ),
+                    ),
+                    Text(
+                      Characters('Status: ${release.info?.status ?? '-'}')
+                          .replaceAll(Characters(''), Characters('\u{200B}'))
+                          .toString(),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: secondaryTextStyle(
+                        context,
+                      ),
+                    ),
+                    Text(
+                      Characters(
+                        'Chart Version: ${release.chart?.metadata?.version ?? '-'}',
+                      )
+                          .replaceAll(Characters(''), Characters('\u{200B}'))
+                          .toString(),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: secondaryTextStyle(
+                        context,
+                      ),
+                    ),
+                    Text(
+                      Characters(
+                        'App Version: ${release.chart?.metadata?.appVersion ?? '-'}',
+                      )
+                          .replaceAll(Characters(''), Characters('\u{200B}'))
+                          .toString(),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: secondaryTextStyle(
+                        context,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+          Wrap(
+            children: [
+              const SizedBox(width: Constants.spacingSmall),
+              Icon(
+                Icons.radio_button_checked,
+                size: 24,
+                color: release.info?.status == 'deployed' ||
+                        release.info?.status == 'superseded' ||
+                        release.info?.status == 'uninstalled'
+                    ? Theme.of(context).extension<CustomColors>()!.success
+                    : release.info?.status == 'failed'
+                        ? Theme.of(context).extension<CustomColors>()!.error
+                        : Theme.of(context).extension<CustomColors>()!.warning,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

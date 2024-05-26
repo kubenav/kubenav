@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/cluster.dart';
@@ -131,110 +130,105 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
         left: Constants.spacingMiddle,
         right: Constants.spacingMiddle,
       ),
-      child: Slidable(
-        key: Key(widget.cluster.id),
-        endActionPane: ActionPane(
-          motion: const DrawerMotion(),
-          extentRatio: 0.4,
-          children: [
-            SlidableAction(
-              onPressed: (BuildContext context) {
-                showModal(
-                  context,
-                  SettingsEditCluster(cluster: widget.cluster),
-                );
-              },
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              icon: Icons.edit,
-            ),
-            SlidableAction(
-              onPressed: (BuildContext context) async {
-                ClustersRepository clustersRepository =
-                    Provider.of<ClustersRepository>(
-                  context,
-                  listen: false,
-                );
-                BookmarksRepository bookmarksRepository =
-                    Provider.of<BookmarksRepository>(
-                  context,
-                  listen: false,
-                );
+      child: AppListItem(
+        onTap: widget.onTap,
+        onLongPress: widget.onLongPress,
+        slidableActions: [
+          AppListItemSlidableAction(
+            icon: Icons.edit,
+            label: 'Edit',
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            onTap: (BuildContext context) {
+              showModal(
+                context,
+                SettingsEditCluster(cluster: widget.cluster),
+              );
+            },
+          ),
+          AppListItemSlidableAction(
+            icon: Icons.delete,
+            label: 'Delete',
+            backgroundColor: Theme.of(context).colorScheme.error,
+            foregroundColor: Theme.of(context).colorScheme.onError,
+            onTap: (BuildContext context) async {
+              ClustersRepository clustersRepository =
+                  Provider.of<ClustersRepository>(
+                context,
+                listen: false,
+              );
+              BookmarksRepository bookmarksRepository =
+                  Provider.of<BookmarksRepository>(
+                context,
+                listen: false,
+              );
 
-                try {
-                  await clustersRepository.deleteCluster(widget.cluster.id);
-                  await bookmarksRepository
-                      .removeBookmarksForCluster(widget.cluster.id);
-                  if (context.mounted) {
-                    showSnackbar(
-                      context,
-                      'Cluster Deleted',
-                      'The cluster ${widget.cluster.name} was deleted',
-                    );
-                  }
-                } catch (err) {
-                  if (context.mounted) {
-                    showSnackbar(
-                      context,
-                      'Failed to Delete Cluster',
-                      err.toString(),
-                    );
-                  }
+              try {
+                await clustersRepository.deleteCluster(widget.cluster.id);
+                await bookmarksRepository
+                    .removeBookmarksForCluster(widget.cluster.id);
+                if (context.mounted) {
+                  showSnackbar(
+                    context,
+                    'Cluster Deleted',
+                    'The cluster ${widget.cluster.name} was deleted',
+                  );
                 }
-              },
-              backgroundColor: Theme.of(context).colorScheme.error,
-              foregroundColor: Theme.of(context).colorScheme.onError,
-              icon: Icons.delete,
+              } catch (err) {
+                if (context.mounted) {
+                  showSnackbar(
+                    context,
+                    'Failed to Delete Cluster',
+                    err.toString(),
+                  );
+                }
+              }
+            },
+          ),
+        ],
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        Characters(widget.cluster.name)
+                            .replaceAll(
+                              Characters(''),
+                              Characters('\u{200B}'),
+                            )
+                            .toString(),
+                        style: primaryTextStyle(
+                          context,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        Characters(widget.cluster.clusterProviderType.title())
+                            .replaceAll(
+                              Characters(''),
+                              Characters('\u{200B}'),
+                            )
+                            .toString(),
+                        style: secondaryTextStyle(
+                          context,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                _buildIcon(),
+              ],
             ),
           ],
-        ),
-        child: AppListItem(
-          onTap: widget.onTap,
-          onLongPress: widget.onLongPress,
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          Characters(widget.cluster.name)
-                              .replaceAll(
-                                Characters(''),
-                                Characters('\u{200B}'),
-                              )
-                              .toString(),
-                          style: primaryTextStyle(
-                            context,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          Characters(widget.cluster.clusterProviderType.title())
-                              .replaceAll(
-                                Characters(''),
-                                Characters('\u{200B}'),
-                              )
-                              .toString(),
-                          style: secondaryTextStyle(
-                            context,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                  _buildIcon(),
-                ],
-              ),
-            ],
-          ),
         ),
       ),
     );

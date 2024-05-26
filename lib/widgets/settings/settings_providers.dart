@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
@@ -37,122 +36,117 @@ class SettingsProviders extends StatelessWidget {
       listen: false,
     );
 
-    return Slidable(
-      key: Key(provider.name ?? ''),
-      endActionPane: ActionPane(
-        motion: const DrawerMotion(),
-        extentRatio: 0.4,
-        children: [
-          SlidableAction(
-            onPressed: (BuildContext context) {
-              showModal(context, buildProviderModal(provider));
-            },
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            icon: Icons.edit,
-          ),
-          SlidableAction(
-            onPressed: (BuildContext context) async {
-              try {
-                await clustersRepository.deleteProvider(provider.id!);
-                if (context.mounted) {
-                  showSnackbar(
-                    context,
-                    'Provider Deleted',
-                    'The provider ${provider.name} was deleted',
-                  );
-                }
-              } catch (err) {
-                if (context.mounted) {
-                  showSnackbar(
-                    context,
-                    'Failed to Delete Provider',
-                    err.toString(),
-                  );
-                }
+    return AppListItem(
+      onTap: () {
+        showActions(
+          context,
+          SettingsProviderActions(provider: provider),
+        );
+      },
+      onLongPress: () {
+        HapticFeedback.vibrate();
+
+        showActions(
+          context,
+          SettingsProviderActions(provider: provider),
+        );
+      },
+      slidableActions: [
+        AppListItemSlidableAction(
+          icon: Icons.edit,
+          label: 'Edit',
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+          onTap: (BuildContext context) {
+            showModal(context, buildProviderModal(provider));
+          },
+        ),
+        AppListItemSlidableAction(
+          icon: Icons.delete,
+          label: 'Delete',
+          backgroundColor: Theme.of(context).colorScheme.error,
+          foregroundColor: Theme.of(context).colorScheme.onError,
+          onTap: (BuildContext context) async {
+            try {
+              await clustersRepository.deleteProvider(provider.id!);
+              if (context.mounted) {
+                showSnackbar(
+                  context,
+                  'Provider Deleted',
+                  'The provider ${provider.name} was deleted',
+                );
               }
-            },
-            backgroundColor: Theme.of(context).colorScheme.error,
-            foregroundColor: Theme.of(context).colorScheme.onError,
-            icon: Icons.delete,
+            } catch (err) {
+              if (context.mounted) {
+                showSnackbar(
+                  context,
+                  'Failed to Delete Provider',
+                  err.toString(),
+                );
+              }
+            }
+          },
+        ),
+      ],
+      child: Row(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(Constants.sizeBorderRadius),
+              ),
+            ),
+            height: 54,
+            width: 54,
+            padding: const EdgeInsets.all(
+              Constants.spacingIcon54x54,
+            ),
+            child: SvgPicture.asset(provider.type!.icon()),
+          ),
+          const SizedBox(width: Constants.spacingSmall),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  provider.name!,
+                  style: primaryTextStyle(
+                    context,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  provider.type!.title(),
+                  style: secondaryTextStyle(
+                    context,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  provider.type!.subtitle(),
+                  style: secondaryTextStyle(
+                    context,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: Constants.spacingSmall),
+          Icon(
+            Icons.arrow_forward_ios,
+            color: Theme.of(context)
+                .extension<CustomColors>()!
+                .textSecondary
+                .withOpacity(Constants.opacityIcon),
+            size: 24,
           ),
         ],
-      ),
-      child: AppListItem(
-        onTap: () {
-          showActions(
-            context,
-            SettingsProviderActions(provider: provider),
-          );
-        },
-        onLongPress: () {
-          HapticFeedback.vibrate();
-
-          showActions(
-            context,
-            SettingsProviderActions(provider: provider),
-          );
-        },
-        child: Row(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(Constants.sizeBorderRadius),
-                ),
-              ),
-              height: 54,
-              width: 54,
-              padding: const EdgeInsets.all(
-                Constants.spacingIcon54x54,
-              ),
-              child: SvgPicture.asset(provider.type!.icon()),
-            ),
-            const SizedBox(width: Constants.spacingSmall),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    provider.name!,
-                    style: primaryTextStyle(
-                      context,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    provider.type!.title(),
-                    style: secondaryTextStyle(
-                      context,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    provider.type!.subtitle(),
-                    style: secondaryTextStyle(
-                      context,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: Constants.spacingSmall),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: Theme.of(context)
-                  .extension<CustomColors>()!
-                  .textSecondary
-                  .withOpacity(Constants.opacityIcon),
-              size: 24,
-            ),
-          ],
-        ),
       ),
     );
   }
