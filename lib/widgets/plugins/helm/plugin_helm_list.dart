@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 
@@ -80,7 +79,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
         );
       },
       onLongPress: () {
-        HapticFeedback.vibrate();
+        hapticFeedback();
 
         showActions(
           context,
