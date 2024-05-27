@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 import 'dart:math' show Random;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -87,4 +88,12 @@ String generateRandomString(int len) {
 /// we check if the width of the screen is greater than 600.
 bool isTablet(BuildContext context) {
   return MediaQuery.of(context).size.width > 600;
+}
+
+Future<void> hapticFeedback() async {
+  if (Platform.isIOS) {
+    await HapticFeedback.heavyImpact();
+  } else {
+    await HapticFeedback.vibrate();
+  }
 }
