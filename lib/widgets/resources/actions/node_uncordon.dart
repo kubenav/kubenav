@@ -97,7 +97,7 @@ class _NodeUncordonState extends State<NodeUncordon> {
     return AppBottomSheetWidget(
       title: 'Uncordon',
       subtitle: widget.name,
-      icon: Icons.play_arrow,
+      icon: Icons.update,
       closePressed: () {
         Navigator.pop(context);
       },

@@ -97,7 +97,7 @@ class _NodeCordonState extends State<NodeCordon> {
     return AppBottomSheetWidget(
       title: 'Cordon',
       subtitle: widget.name,
-      icon: Icons.stop,
+      icon: Icons.update_disabled,
       closePressed: () {
         Navigator.pop(context);
       },
