@@ -61,12 +61,15 @@ void showSnackbar(BuildContext context, String title, String message) {
             style: TextStyle(
               color: Theme.of(context).extension<CustomColors>()!.onMessage,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           Text(
             message,
             style: TextStyle(
               color: Theme.of(context).extension<CustomColors>()!.onMessage,
             ),
+            maxLines: 5,
           ),
         ],
       ),
