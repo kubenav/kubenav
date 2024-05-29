@@ -406,7 +406,7 @@ List<AppResourceActionsModel> resourceDetailsActions(
     actions.add(
       AppResourceActionsModel(
         title: 'Cordon',
-        icon: Icons.stop,
+        icon: Icons.update_disabled,
         onTap: () {
           showModal(
             context,
@@ -422,7 +422,7 @@ List<AppResourceActionsModel> resourceDetailsActions(
     actions.add(
       AppResourceActionsModel(
         title: 'Uncordon',
-        icon: Icons.play_arrow,
+        icon: Icons.update,
         onTap: () {
           showModal(
             context,
