@@ -18,6 +18,7 @@ import 'package:kubenav/widgets/resources/actions/csr_approve.dart';
 import 'package:kubenav/widgets/resources/actions/csr_deny.dart';
 import 'package:kubenav/widgets/resources/actions/delete_resource.dart';
 import 'package:kubenav/widgets/resources/actions/edit_resource.dart';
+import 'package:kubenav/widgets/resources/actions/evict_pod.dart';
 import 'package:kubenav/widgets/resources/actions/get_logs.dart';
 import 'package:kubenav/widgets/resources/actions/get_logs_pods.dart';
 import 'package:kubenav/widgets/resources/actions/get_terminal.dart';
@@ -112,6 +113,26 @@ List<AppResourceActionsModel> resourceDetailsActions(
       },
     ),
   ];
+
+  if (resource.resource == resourcePod.resource &&
+      resource.path == resourcePod.path) {
+    actions.add(
+      AppResourceActionsModel(
+        title: 'Evict',
+        icon: Icons.delete_forever,
+        onTap: () {
+          showModal(
+            context,
+            EvictPod(
+              name: name,
+              namespace: namespace ?? 'default',
+              resource: resource,
+            ),
+          );
+        },
+      ),
+    );
+  }
 
   if (refresh != null) {
     actions.add(
