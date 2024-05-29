@@ -55,7 +55,9 @@ class AppResourceActions extends StatelessWidget {
             ? 90
             : actions.length <= 6
                 ? 180
-                : 270,
+                : actions.length <= 9
+                    ? 270
+                    : 360,
         width: MediaQuery.of(context).size.width,
         margin: const EdgeInsets.only(
           bottom: Constants.spacingExtraLarge,
