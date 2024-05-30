@@ -97,3 +97,29 @@ Future<void> hapticFeedback() async {
     await HapticFeedback.vibrate();
   }
 }
+
+/// [removeNull] removes all null values from the given [params] map or list.
+dynamic removeNull(dynamic params) {
+  if (params is Map) {
+    var map = {};
+    params.forEach((key, val) {
+      var value = removeNull(val);
+      if (value != null) {
+        map[key] = value;
+      }
+    });
+    if (map.isNotEmpty) return map;
+  } else if (params is List) {
+    var list = [];
+    for (var val in params) {
+      var value = removeNull(val);
+      if (value != null) {
+        list.add(value);
+      }
+    }
+    if (list.isNotEmpty) return list;
+  } else if (params != null) {
+    return params;
+  }
+  return null;
+}
