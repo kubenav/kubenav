@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+import 'package:flutter_svg/svg.dart';
+
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_node.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_node_condition.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_node_list.dart';
@@ -9,8 +11,10 @@ import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_c
 import 'package:kubenav/models/kubernetes_extensions/node_metrics.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/home/overview/overview_metrics.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
@@ -21,6 +25,7 @@ import 'package:kubenav/widgets/resources/resources/resources_events.dart';
 import 'package:kubenav/widgets/resources/resources/resources_pods.dart';
 import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
+import 'package:kubenav/widgets/shared/app_vertical_list_simple_widget.dart';
 
 final resourceNode = Resource(
   category: ResourceCategories.cluster,
@@ -244,6 +249,78 @@ final resourceNode = Resource(
                           'Allocatable: ${allocatable.value}\nCapacity: ${item.status!.capacity.containsKey(allocatable.key) ? item.status?.capacity[allocatable.key] : '-'}',
                         );
                       },
+                    ),
+                  )
+                  .toList() ??
+              [],
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
+        AppVerticalListSimpleWidget(
+          title: 'Images',
+          items: item.status?.images
+                  .map(
+                    (image) => AppVerticalListSimpleModel(
+                      onTap: () {
+                        showSnackbar(
+                          context,
+                          'Names',
+                          image.names.join('\n'),
+                        );
+                      },
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(Constants.sizeBorderRadius),
+                            ),
+                          ),
+                          height: 54,
+                          width: 54,
+                          padding: const EdgeInsets.all(
+                            Constants.spacingIcon54x54,
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/resources/containers.svg',
+                          ),
+                        ),
+                        const SizedBox(width: Constants.spacingSmall),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                image.names.firstOrNull ?? '-',
+                                style: primaryTextStyle(
+                                  context,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                image.sizeBytes != null
+                                    ? formatBytes(image.sizeBytes!)
+                                    : '-',
+                                style: secondaryTextStyle(
+                                  context,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: Constants.spacingSmall),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Theme.of(context)
+                              .extension<CustomColors>()!
+                              .textSecondary
+                              .withOpacity(Constants.opacityIcon),
+                          size: 24,
+                        ),
+                      ],
                     ),
                   )
                   .toList() ??
