@@ -14,6 +14,8 @@ import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dar
 import 'package:kubenav/widgets/resources/actions/create_debug_container.dart';
 import 'package:kubenav/widgets/resources/actions/create_job.dart';
 import 'package:kubenav/widgets/resources/actions/create_ssh_pod.dart';
+import 'package:kubenav/widgets/resources/actions/cronjob_resume.dart';
+import 'package:kubenav/widgets/resources/actions/cronjob_suspend.dart';
 import 'package:kubenav/widgets/resources/actions/csr_approve.dart';
 import 'package:kubenav/widgets/resources/actions/csr_deny.dart';
 import 'package:kubenav/widgets/resources/actions/delete_resource.dart';
@@ -239,21 +241,53 @@ List<AppResourceActionsModel> resourceDetailsActions(
 
   if (resource.resource == resourceCronJob.resource &&
       resource.path == resourceCronJob.path) {
-    actions.add(
-      AppResourceActionsModel(
-        title: 'Create Job',
-        icon: Icons.play_arrow,
-        onTap: () {
-          showModal(
-            context,
-            CreateJob(
-              name: name,
-              namespace: namespace ?? 'default',
-              cronJob: item,
-            ),
-          );
-        },
-      ),
+    actions.addAll(
+      [
+        AppResourceActionsModel(
+          title: 'Create Job',
+          icon: Icons.start,
+          onTap: () {
+            showModal(
+              context,
+              CreateJob(
+                name: name,
+                namespace: namespace ?? 'default',
+                cronJob: item,
+              ),
+            );
+          },
+        ),
+        AppResourceActionsModel(
+          title: 'Suspend',
+          icon: Icons.pause,
+          onTap: () {
+            showModal(
+              context,
+              CronJobSuspend(
+                name: name,
+                namespace: namespace ?? 'default',
+                resource: resource,
+                cronJob: item,
+              ),
+            );
+          },
+        ),
+        AppResourceActionsModel(
+          title: 'Resume',
+          icon: Icons.play_arrow,
+          onTap: () {
+            showModal(
+              context,
+              CronJobResume(
+                name: name,
+                namespace: namespace ?? 'default',
+                resource: resource,
+                cronJob: item,
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 
