@@ -168,7 +168,7 @@ class _CreateJobState extends State<CreateJob> {
     return AppBottomSheetWidget(
       title: 'Create Job',
       subtitle: '${widget.namespace}/${widget.name}',
-      icon: Icons.play_arrow,
+      icon: Icons.start,
       closePressed: () {
         Navigator.pop(context);
       },
