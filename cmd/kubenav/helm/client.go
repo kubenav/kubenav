@@ -16,6 +16,7 @@ type Client interface {
 	GetRelease(name string, version int64) (*release.Release, error)
 	ListReleaseHistory(name string) ([]*release.Release, error)
 	RollbackRelease(name string, version int64, cleanupOnFail bool, dryRun bool, force bool, maxHistory int, disableHooks bool, recreate bool, timeout time.Duration, wait bool, waitForJobs bool) error
+	UninstallRelease(name string, cascade string, dryRun bool, keepHistory bool, disableHooks bool, timeout time.Duration, wait bool) (string, error)
 }
 
 type client struct {
@@ -36,6 +37,13 @@ func (c *client) GetRelease(name string, version int64) (*release.Release, error
 	return getReleaseClient.Run(name)
 }
 
+func (c *client) ListReleaseHistory(name string) ([]*release.Release, error) {
+	client := action.NewHistory(c.ActionConfig)
+	client.Max = 10
+
+	return client.Run(name)
+}
+
 func (c *client) RollbackRelease(name string, version int64, cleanupOnFail bool, dryRun bool, force bool, maxHistory int, disableHooks bool, recreate bool, timeout time.Duration, wait bool, waitForJobs bool) error {
 	rollbackClient := action.NewRollback(c.ActionConfig)
 	rollbackClient.Version = int(version)
@@ -53,11 +61,21 @@ func (c *client) RollbackRelease(name string, version int64, cleanupOnFail bool,
 	return rollbackClient.Run(name)
 }
 
-func (c *client) ListReleaseHistory(name string) ([]*release.Release, error) {
-	client := action.NewHistory(c.ActionConfig)
-	client.Max = 10
+func (c *client) UninstallRelease(name string, cascade string, dryRun bool, keepHistory bool, disableHooks bool, timeout time.Duration, wait bool) (string, error) {
+	uninstallClient := action.NewUninstall(c.ActionConfig)
 
-	return client.Run(name)
+	uninstallClient.DeletionPropagation = cascade
+	uninstallClient.DryRun = dryRun
+	uninstallClient.KeepHistory = keepHistory
+	uninstallClient.DisableHooks = disableHooks
+	uninstallClient.Timeout = timeout
+	uninstallClient.Wait = wait
+
+	resp, err := uninstallClient.Run(name)
+	if err != nil {
+		return "", err
+	}
+	return resp.Info, nil
 }
 
 func NewClient(restConfig *rest.Config, namespace string) (Client, error) {

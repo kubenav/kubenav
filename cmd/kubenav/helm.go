@@ -21,6 +21,15 @@ type RollbackOptions struct {
 	WaitForJobs   bool  `json:"waitForJobs"`
 }
 
+type UninstallOptions struct {
+	Cascade      string `json:"cascade"`
+	DryRun       bool   `json:"dryRun"`
+	KeepHistory  bool   `json:"keepHistory"`
+	DisableHooks bool   `json:"disableHooks"`
+	Timeout      int64  `json:"timeout"`
+	Wait         bool   `json:"wait"`
+}
+
 // HelmListReleases returns a list of Helm releases for the given cluster and
 // namespace. If an error occures during the process the error is returned.
 func HelmListReleases(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace string) (string, error) {
@@ -132,4 +141,30 @@ func HelmRollbackRelease(clusterServer, clusterCertificateAuthorityData string, 
 	rollbackTimeout := time.Duration(rollbackOptions.Timeout) * time.Second
 
 	return client.RollbackRelease(name, version, rollbackOptions.CleanupOnFail, rollbackOptions.DryRun, rollbackOptions.Force, rollbackOptions.MaxHistory, rollbackOptions.DisableHooks, rollbackOptions.Recreate, rollbackTimeout, rollbackOptions.Wait, rollbackOptions.WaitForJobs)
+}
+
+// HelmUninstallRelease uninstalls a Helm release. The Helm release is
+// identified by it's namespace and name. If an error occures during the process
+// the error is returned. If the operation was successful the uninstall message
+// is returned.
+func HelmUninstallRelease(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace, name string, options string) (string, error) {
+	restConfig, _, err := kube.NewClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
+	if err != nil {
+		return "", err
+	}
+
+	client, err := helm.NewClient(restConfig, namespace)
+	if err != nil {
+		return "", err
+	}
+
+	var uninstallOptions UninstallOptions
+	err = json.Unmarshal([]byte(options), &uninstallOptions)
+	if err != nil {
+		return "", err
+	}
+
+	rollbackTimeout := time.Duration(uninstallOptions.Timeout) * time.Second
+
+	return client.UninstallRelease(name, uninstallOptions.Cascade, uninstallOptions.DryRun, uninstallOptions.KeepHistory, uninstallOptions.DisableHooks, rollbackTimeout, uninstallOptions.Wait)
 }

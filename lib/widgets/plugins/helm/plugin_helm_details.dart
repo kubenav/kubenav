@@ -17,6 +17,7 @@ import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_manifest.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_rollback.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_template.dart';
+import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_uninstall.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_details_values.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
 import 'package:kubenav/widgets/shared/app_bottom_navigation_bar_widget.dart';
@@ -84,6 +85,19 @@ List<AppResourceActionsModel> helmDetailsActions(
             namespace: release.namespace ?? '',
             name: release.name ?? '',
             version: release.version ?? 0,
+          ),
+        );
+      },
+    ),
+    AppResourceActionsModel(
+      title: 'Uninstall',
+      icon: Icons.delete,
+      onTap: () {
+        showModal(
+          context,
+          PluginHelmDetailsUninstall(
+            namespace: release.namespace ?? '',
+            name: release.name ?? '',
           ),
         );
       },

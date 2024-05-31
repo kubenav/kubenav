@@ -235,6 +235,26 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       } else {
         helmRollbackRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, options, result)
       }
+    } else if (call.method == "helmUninstallRelease") {
+      val clusterServer = call.argument<String>("clusterServer")
+      val clusterCertificateAuthorityData = call.argument<String>("clusterCertificateAuthorityData")
+      val clusterInsecureSkipTLSVerify = call.argument<Boolean>("clusterInsecureSkipTLSVerify")
+      val userClientCertificateData = call.argument<String>("userClientCertificateData")
+      val userClientKeyData = call.argument<String>("userClientKeyData")
+      val userToken = call.argument<String>("userToken")
+      val userUsername = call.argument<String>("userUsername")
+      val userPassword = call.argument<String>("userPassword")
+      val proxy = call.argument<String>("proxy")
+      val timeout = call.argument<Number>("timeout")?.toLong()
+      val namespace = call.argument<String>("namespace")
+      val name = call.argument<String>("name")
+      val options = call.argument<String>("options")
+
+      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null || name == null || options == null) {
+        result.error("BAD_ARGUMENTS", null, null)
+      } else {
+        helmUninstallRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, options, result)
+      }
     } else if (call.method == "oidcGetLink") {
       val discoveryURL = call.argument<String>("discoveryURL")
       val clientID = call.argument<String>("clientID")
@@ -461,6 +481,15 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       result.success("")
     } catch (e: Exception) {
       result.error("HELM_ROLLBACK_RELEASE_FAILED", e.localizedMessage, null)
+    }
+  }
+
+  private fun helmUninstallRelease(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, options: String, result: MethodChannel.Result) {
+    try {
+      val data: String = Kubenav.helmUninstallRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, options)
+      result.success(data)
+    } catch (e: Exception) {
+      result.error("HELM_UNINSTALL_RELEASE_FAILED", e.localizedMessage, null)
     }
   }
 
