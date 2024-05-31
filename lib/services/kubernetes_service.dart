@@ -668,6 +668,55 @@ class KubernetesService {
     }
   }
 
+  Future<String> helmUninstallRelease(
+    String namespace,
+    String name,
+    String options,
+  ) async {
+    try {
+      Logger.log(
+        'KubernetesService helmUninstallRelease',
+        'Run helmUninstallRelease function',
+        '${cluster.name}, $namespace, $name',
+      );
+
+      final message = await platform.invokeMethod(
+        'helmUninstallRelease',
+        <String, dynamic>{
+          'clusterServer': cluster.clusterServer,
+          'clusterCertificateAuthorityData':
+              cluster.clusterCertificateAuthorityData,
+          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
+          'userClientCertificateData': cluster.userClientCertificateData,
+          'userClientKeyData': cluster.userClientKeyData,
+          'userToken': cluster.userToken,
+          'userUsername': cluster.userUsername,
+          'userPassword': cluster.userPassword,
+          'proxy': proxy,
+          'timeout': timeout,
+          'namespace': namespace,
+          'name': name,
+          'options': options,
+        },
+      );
+
+      Logger.log(
+        'KubernetesService helmUninstallRelease',
+        'Uninstall Succeeded',
+        message,
+      );
+
+      return message;
+    } catch (err) {
+      Logger.log(
+        'KubernetesService helmUninstallRelease',
+        'Uninstall Failed',
+        err,
+      );
+      rethrow;
+    }
+  }
+
   /// [prometheusGetData] returns the data for a PromQL query, which can be used
   /// to render a chart for the query.
   Future<List<Metric>> prometheusGetData(
