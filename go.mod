@@ -8,7 +8,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.11.1
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.5.2
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/containerservice/armcontainerservice v1.0.0
-	github.com/aws/aws-sdk-go v1.53.5
+	github.com/aws/aws-sdk-go v1.53.14
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/gorilla/websocket v1.5.1
 	github.com/prometheus/client_golang v1.19.1
@@ -16,7 +16,7 @@ require (
 	github.com/wI2L/jsondiff v0.5.2
 	golang.org/x/mobile v0.0.0-20240506190922-a1a533f289d3
 	golang.org/x/oauth2 v0.20.0
-	helm.sh/helm/v3 v3.15.0
+	helm.sh/helm/v3 v3.15.1
 	k8s.io/api v0.30.1
 	k8s.io/apimachinery v0.30.1
 	k8s.io/cli-runtime v0.30.1
