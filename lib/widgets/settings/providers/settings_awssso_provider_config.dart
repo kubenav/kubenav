@@ -32,6 +32,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
   final _startURLController = TextEditingController();
   final _accountIDController = TextEditingController();
   final _roleNameController = TextEditingController();
+  final _roleArnController = TextEditingController();
   String _ssoRegion = 'us-east-1';
   String _region = 'us-east-1';
   AWSSSOConfig? _awsSSOConfig;
@@ -174,6 +175,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
               startURL: _startURLController.text,
               accountID: _accountIDController.text,
               roleName: _roleNameController.text,
+              roleArn: _roleArnController.text,
               ssoRegion: _ssoRegion,
               region: _region,
               ssoConfig: _awsSSOConfig!,
@@ -236,6 +238,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
       _startURLController.text = widget.provider!.awssso!.startURL ?? '';
       _accountIDController.text = widget.provider!.awssso!.accountID ?? '';
       _roleNameController.text = widget.provider!.awssso!.roleName ?? '';
+      _roleArnController.text = widget.provider!.awssso!.roleArn ?? '';
       _ssoRegion = widget.provider!.awssso!.ssoRegion ?? '';
       _region = widget.provider!.awssso!.region ?? '';
     }
@@ -247,6 +250,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
     _startURLController.dispose();
     _accountIDController.dispose();
     _roleNameController.dispose();
+    _roleArnController.dispose();
     super.dispose();
   }
 
@@ -326,6 +330,18 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                     labelText: 'Role Name',
                   ),
                   validator: _validator,
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                TextFormField(
+                  controller: _roleArnController,
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Role ARN (optional)',
+                  ),
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 Row(

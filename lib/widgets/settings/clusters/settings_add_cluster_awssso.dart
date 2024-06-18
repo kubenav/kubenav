@@ -57,7 +57,7 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
           widget.provider.awssso?.ssoCredentials?.secretAccessKey ?? '',
           widget.provider.awssso?.region ?? '',
           widget.provider.awssso?.ssoCredentials?.sessionToken ?? '',
-          '',
+          widget.provider.awssso?.roleArn ?? '',
         );
 
         Logger.log(

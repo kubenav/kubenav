@@ -24,6 +24,7 @@ class _SettingsAWSSSOMultipleProvidersState
     extends State<SettingsAWSSSOMultipleProviders> {
   final _providerConfigFormKey = GlobalKey<FormState>();
   final _startURLController = TextEditingController();
+  final _roleArnController = TextEditingController();
   String _ssoRegion = 'us-east-1';
   AWSSSOConfig? _awsSSOConfig;
   bool _isLoading = false;
@@ -122,6 +123,7 @@ class _SettingsAWSSSOMultipleProvidersState
             context,
             SettingsAWSSSOMultipleProvidersSelect(
               startURL: _startURLController.text,
+              roleArn: _roleArnController.text,
               ssoRegion: _ssoRegion,
               ssoConfig: _awsSSOConfig!,
               accounts: accounts,
@@ -146,6 +148,7 @@ class _SettingsAWSSSOMultipleProvidersState
   @override
   void dispose() {
     _startURLController.dispose();
+    _roleArnController.dispose();
     super.dispose();
   }
 
@@ -186,6 +189,18 @@ class _SettingsAWSSSOMultipleProvidersState
                     labelText: 'Start URL',
                   ),
                   validator: _validator,
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                TextFormField(
+                  controller: _roleArnController,
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Role ARN (optional)',
+                  ),
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 Row(
