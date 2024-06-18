@@ -128,6 +128,7 @@ class ClusterProviderAWSSSO {
   String? startURL;
   String? accountID;
   String? roleName;
+  String? roleArn;
   String? ssoRegion;
   String? region;
   AWSSSOConfig? ssoConfig;
@@ -137,6 +138,7 @@ class ClusterProviderAWSSSO {
     required this.startURL,
     required this.accountID,
     required this.roleName,
+    required this.roleArn,
     required this.ssoRegion,
     required this.region,
     required this.ssoConfig,
@@ -148,6 +150,7 @@ class ClusterProviderAWSSSO {
       startURL: data.containsKey('startURL') ? data['startURL'] : null,
       accountID: data.containsKey('accountID') ? data['accountID'] : null,
       roleName: data.containsKey('roleName') ? data['roleName'] : null,
+      roleArn: data.containsKey('roleArn') ? data['roleArn'] : null,
       ssoRegion: data.containsKey('ssoRegion') ? data['ssoRegion'] : null,
       region: data.containsKey('region') ? data['region'] : null,
       ssoConfig: data.containsKey('ssoConfig') && data['ssoConfig'] != null
@@ -165,6 +168,7 @@ class ClusterProviderAWSSSO {
       'startURL': startURL,
       'accountID': accountID,
       'roleName': roleName,
+      'roleArn': roleArn,
       'ssoRegion': ssoRegion,
       'region': region,
       'ssoConfig': ssoConfig?.toJson(),

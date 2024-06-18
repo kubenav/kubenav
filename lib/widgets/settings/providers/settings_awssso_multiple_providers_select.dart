@@ -39,12 +39,14 @@ class SettingsAWSSSOMultipleProvidersSelect extends StatefulWidget {
   const SettingsAWSSSOMultipleProvidersSelect({
     super.key,
     required this.startURL,
+    required this.roleArn,
     required this.ssoRegion,
     required this.ssoConfig,
     required this.accounts,
   });
 
   final String startURL;
+  final String roleArn;
   final String ssoRegion;
   final AWSSSOConfig ssoConfig;
   final List<AWSSSOAccount> accounts;
@@ -94,6 +96,7 @@ class _SettingsAWSSSOMultipleProvidersSelectState
             startURL: widget.startURL,
             accountID: account.accountId,
             roleName: account.role,
+            roleArn: widget.roleArn,
             ssoRegion: widget.ssoRegion,
             // NOTE: Currently we are using the provided SSO region also for the
             // cluster region. This may not be perfect but regarding
