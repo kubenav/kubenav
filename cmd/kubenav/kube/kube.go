@@ -12,6 +12,13 @@ import (
 )
 
 func NewClient(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64) (*rest.Config, *kubernetes.Clientset, error) {
+	// If a token is provided, we must ensure that the username and password are
+	// empty. Otherwise the app would crash in such cases.
+	if userToken != "" {
+		userUsername = ""
+		userPassword = ""
+	}
+
 	config, err := clientcmd.NewClientConfigFromBytes([]byte(`apiVersion: v1
 clusters:
   - cluster:
