@@ -44,6 +44,8 @@ func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, cl
 		responseResult = clientset.RESTClient().Patch(types.JSONPatchType).RequestURI(requestURL).Body([]byte(requestBody)).Do(ctx)
 	} else if requestMethod == http.MethodPost {
 		responseResult = clientset.RESTClient().Post().RequestURI(requestURL).Body([]byte(requestBody)).Do(ctx)
+	} else if requestMethod == http.MethodPut {
+		responseResult = clientset.RESTClient().Put().RequestURI(requestURL).Body([]byte(requestBody)).Do(ctx)
 	}
 
 	if responseResult.Error() != nil {

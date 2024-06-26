@@ -82,15 +82,15 @@ class _ScaleResourceState extends State<ScaleResource> {
           clustersRepository.activeClusterId,
         );
         final url =
-            '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}/${widget.name}';
+            '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}/${widget.name}/scale';
 
         await KubernetesService(
           cluster: cluster!,
           proxy: appRepository.settings.proxy,
           timeout: appRepository.settings.timeout,
-        ).patchRequest(
+        ).putRequest(
           url,
-          '[{"op": "replace", "path": "/spec/replicas", "value": ${int.parse(_replicasController.text)}}]',
+          '{"kind":"Scale","apiVersion":"autoscaling/v1","metadata":{"name":"${widget.name}","namespace":"${widget.namespace}"},"spec":{"replicas":${int.parse(_replicasController.text)}}}',
         );
 
         setState(() {

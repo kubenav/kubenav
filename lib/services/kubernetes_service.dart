@@ -204,6 +204,31 @@ class KubernetesService {
     }
   }
 
+  /// [putRequest] can be used to run a put request against a Kubernetes
+  /// cluster. Besides the [url] of the resource, which should be updated, we
+  /// also have to pass a [body] to the function. The [body] must be contain the
+  /// Kubernetes manifest which is used for the update.
+  Future<void> putRequest(String url, String body) async {
+    try {
+      await kubernetesRequest(
+        cluster,
+        proxy,
+        timeout,
+        'PUT',
+        url,
+        body,
+      );
+      return;
+    } catch (err) {
+      Logger.log(
+        'KubernetesService putRequest',
+        'Put request failed',
+        err,
+      );
+      rethrow;
+    }
+  }
+
   /// [getLogs] returns the logs for a list of pods (containers). The pod names
   /// are must be provided via the [names] argument, which should be a commans
   /// separated list of pod names.
