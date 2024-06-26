@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -13,7 +13,7 @@
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_status_history_inner.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_status_history_inner.dart';
 
 class IoFluxcdToolkitHelmV2beta1HelmReleaseStatus {
   /// Returns a new [IoFluxcdToolkitHelmV2beta1HelmReleaseStatus] instance.
@@ -34,6 +34,7 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseStatus {
     this.lastHandledResetAt,
     this.lastReleaseRevision,
     this.observedGeneration,
+    this.observedPostRenderersDigest,
     this.storageNamespace,
     this.upgradeFailures,
   });
@@ -60,7 +61,7 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseStatus {
   String? helmChart;
 
   /// History holds the history of Helm releases performed for this HelmRelease up to the last successfully completed release.   Note: this field is provisional to the v2beta2 API, and not actively used by v2beta1 HelmReleases.
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseStatusHistoryInner> history;
+  List<IoFluxcdToolkitHelmV2HelmReleaseStatusHistoryInner> history;
 
   /// InstallFailures is the install failure count against the latest desired state. It is reset after a successful reconciliation.
   ///
@@ -170,6 +171,15 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseStatus {
   ///
   int? observedGeneration;
 
+  /// ObservedPostRenderersDigest is the digest for the post-renderers of the last successful reconciliation attempt.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? observedPostRenderersDigest;
+
   /// StorageNamespace is the namespace of the Helm release storage for the current release.   Note: this field is provisional to the v2beta2 API, and not actively used by v2beta1 HelmReleases.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -208,6 +218,7 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseStatus {
           other.lastHandledResetAt == lastHandledResetAt &&
           other.lastReleaseRevision == lastReleaseRevision &&
           other.observedGeneration == observedGeneration &&
+          other.observedPostRenderersDigest == observedPostRenderersDigest &&
           other.storageNamespace == storageNamespace &&
           other.upgradeFailures == upgradeFailures;
 
@@ -238,12 +249,15 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseStatus {
       (lastHandledResetAt == null ? 0 : lastHandledResetAt!.hashCode) +
       (lastReleaseRevision == null ? 0 : lastReleaseRevision!.hashCode) +
       (observedGeneration == null ? 0 : observedGeneration!.hashCode) +
+      (observedPostRenderersDigest == null
+          ? 0
+          : observedPostRenderersDigest!.hashCode) +
       (storageNamespace == null ? 0 : storageNamespace!.hashCode) +
       (upgradeFailures == null ? 0 : upgradeFailures!.hashCode);
 
   @override
   String toString() =>
-      'IoFluxcdToolkitHelmV2beta1HelmReleaseStatus[conditions=$conditions, failures=$failures, helmChart=$helmChart, history=$history, installFailures=$installFailures, lastAppliedRevision=$lastAppliedRevision, lastAttemptedConfigDigest=$lastAttemptedConfigDigest, lastAttemptedGeneration=$lastAttemptedGeneration, lastAttemptedReleaseAction=$lastAttemptedReleaseAction, lastAttemptedRevision=$lastAttemptedRevision, lastAttemptedValuesChecksum=$lastAttemptedValuesChecksum, lastHandledForceAt=$lastHandledForceAt, lastHandledReconcileAt=$lastHandledReconcileAt, lastHandledResetAt=$lastHandledResetAt, lastReleaseRevision=$lastReleaseRevision, observedGeneration=$observedGeneration, storageNamespace=$storageNamespace, upgradeFailures=$upgradeFailures]';
+      'IoFluxcdToolkitHelmV2beta1HelmReleaseStatus[conditions=$conditions, failures=$failures, helmChart=$helmChart, history=$history, installFailures=$installFailures, lastAppliedRevision=$lastAppliedRevision, lastAttemptedConfigDigest=$lastAttemptedConfigDigest, lastAttemptedGeneration=$lastAttemptedGeneration, lastAttemptedReleaseAction=$lastAttemptedReleaseAction, lastAttemptedRevision=$lastAttemptedRevision, lastAttemptedValuesChecksum=$lastAttemptedValuesChecksum, lastHandledForceAt=$lastHandledForceAt, lastHandledReconcileAt=$lastHandledReconcileAt, lastHandledResetAt=$lastHandledResetAt, lastReleaseRevision=$lastReleaseRevision, observedGeneration=$observedGeneration, observedPostRenderersDigest=$observedPostRenderersDigest, storageNamespace=$storageNamespace, upgradeFailures=$upgradeFailures]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -319,6 +333,11 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseStatus {
     } else {
       json[r'observedGeneration'] = null;
     }
+    if (this.observedPostRenderersDigest != null) {
+      json[r'observedPostRenderersDigest'] = this.observedPostRenderersDigest;
+    } else {
+      json[r'observedPostRenderersDigest'] = null;
+    }
     if (this.storageNamespace != null) {
       json[r'storageNamespace'] = this.storageNamespace;
     } else {
@@ -357,8 +376,9 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseStatus {
             json[r'conditions']),
         failures: mapValueOfType<int>(json, r'failures'),
         helmChart: mapValueOfType<String>(json, r'helmChart'),
-        history: IoFluxcdToolkitHelmV2beta1HelmReleaseStatusHistoryInner
-            .listFromJson(json[r'history']),
+        history:
+            IoFluxcdToolkitHelmV2HelmReleaseStatusHistoryInner.listFromJson(
+                json[r'history']),
         installFailures: mapValueOfType<int>(json, r'installFailures'),
         lastAppliedRevision:
             mapValueOfType<String>(json, r'lastAppliedRevision'),
@@ -378,6 +398,8 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseStatus {
         lastHandledResetAt: mapValueOfType<String>(json, r'lastHandledResetAt'),
         lastReleaseRevision: mapValueOfType<int>(json, r'lastReleaseRevision'),
         observedGeneration: mapValueOfType<int>(json, r'observedGeneration'),
+        observedPostRenderersDigest:
+            mapValueOfType<String>(json, r'observedPostRenderersDigest'),
         storageNamespace: mapValueOfType<String>(json, r'storageNamespace'),
         upgradeFailures: mapValueOfType<int>(json, r'upgradeFailures'),
       );

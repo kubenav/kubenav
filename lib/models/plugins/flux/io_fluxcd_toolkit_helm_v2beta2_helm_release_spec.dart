@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -12,22 +12,24 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_depends_on_inner.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_kube_config.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_rollback.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_uninstall.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_upgrade.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_depends_on_inner.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_drift_detection.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_install.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_kube_config.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_rollback.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_test.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_uninstall.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_upgrade.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_values_from_inner.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta2_helm_release_spec_chart.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta2_helm_release_spec_drift_detection.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta2_helm_release_spec_install.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta2_helm_release_spec_chart_ref.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta2_helm_release_spec_post_renderers_inner.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta2_helm_release_spec_test.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta2_helm_release_spec_values_from_inner.dart';
 
 class IoFluxcdToolkitHelmV2beta2HelmReleaseSpec {
   /// Returns a new [IoFluxcdToolkitHelmV2beta2HelmReleaseSpec] instance.
   IoFluxcdToolkitHelmV2beta2HelmReleaseSpec({
-    required this.chart,
+    this.chart,
+    this.chartRef,
     this.dependsOn = const [],
     this.driftDetection,
     this.install,
@@ -50,10 +52,24 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpec {
     this.valuesFrom = const [],
   });
 
-  IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChart chart;
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChart? chart;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartRef? chartRef;
 
   /// DependsOn may contain a meta.NamespacedObjectReference slice with references to HelmRelease resources that must be ready before this HelmRelease can be reconciled.
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseSpecDependsOnInner> dependsOn;
+  List<IoFluxcdToolkitHelmV2HelmReleaseSpecDependsOnInner> dependsOn;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -61,7 +77,7 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpec {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitHelmV2beta2HelmReleaseSpecDriftDetection? driftDetection;
+  IoFluxcdToolkitHelmV2HelmReleaseSpecDriftDetection? driftDetection;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -69,7 +85,7 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpec {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitHelmV2beta2HelmReleaseSpecInstall? install;
+  IoFluxcdToolkitHelmV2HelmReleaseSpecInstall? install;
 
   /// Interval at which to reconcile the Helm release.
   String interval;
@@ -80,7 +96,7 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpec {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitHelmV2beta1HelmReleaseSpecKubeConfig? kubeConfig;
+  IoFluxcdToolkitHelmV2HelmReleaseSpecKubeConfig? kubeConfig;
 
   /// MaxHistory is the number of revisions saved by Helm for this HelmRelease. Use '0' for an unlimited number of revisions; defaults to '5'.
   ///
@@ -119,7 +135,7 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpec {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitHelmV2beta1HelmReleaseSpecRollback? rollback;
+  IoFluxcdToolkitHelmV2HelmReleaseSpecRollback? rollback;
 
   /// The name of the Kubernetes service account to impersonate when reconciling this HelmRelease.
   ///
@@ -163,7 +179,7 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpec {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitHelmV2beta2HelmReleaseSpecTest? test;
+  IoFluxcdToolkitHelmV2HelmReleaseSpecTest? test;
 
   /// Timeout is the time to wait for any individual Kubernetes operation (like Jobs for hooks) during the performance of a Helm action. Defaults to '5m0s'.
   ///
@@ -180,7 +196,7 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpec {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitHelmV2beta1HelmReleaseSpecUninstall? uninstall;
+  IoFluxcdToolkitHelmV2HelmReleaseSpecUninstall? uninstall;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -188,7 +204,7 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpec {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitHelmV2beta1HelmReleaseSpecUpgrade? upgrade;
+  IoFluxcdToolkitHelmV2HelmReleaseSpecUpgrade? upgrade;
 
   /// Values holds the values for this Helm release.
   ///
@@ -200,13 +216,14 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpec {
   Object? values;
 
   /// ValuesFrom holds references to resources containing Helm values for this HelmRelease, and information about how they should be merged.
-  List<IoFluxcdToolkitHelmV2beta2HelmReleaseSpecValuesFromInner> valuesFrom;
+  List<IoFluxcdToolkitHelmV2HelmReleaseSpecValuesFromInner> valuesFrom;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is IoFluxcdToolkitHelmV2beta2HelmReleaseSpec &&
           other.chart == chart &&
+          other.chartRef == chartRef &&
           deepEquality.equals(other.dependsOn, dependsOn) &&
           other.driftDetection == driftDetection &&
           other.install == install &&
@@ -231,7 +248,8 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpec {
   @override
   int get hashCode =>
       // ignore: unnecessary_parenthesis
-      (chart.hashCode) +
+      (chart == null ? 0 : chart!.hashCode) +
+      (chartRef == null ? 0 : chartRef!.hashCode) +
       (dependsOn.hashCode) +
       (driftDetection == null ? 0 : driftDetection!.hashCode) +
       (install == null ? 0 : install!.hashCode) +
@@ -255,11 +273,20 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpec {
 
   @override
   String toString() =>
-      'IoFluxcdToolkitHelmV2beta2HelmReleaseSpec[chart=$chart, dependsOn=$dependsOn, driftDetection=$driftDetection, install=$install, interval=$interval, kubeConfig=$kubeConfig, maxHistory=$maxHistory, persistentClient=$persistentClient, postRenderers=$postRenderers, releaseName=$releaseName, rollback=$rollback, serviceAccountName=$serviceAccountName, storageNamespace=$storageNamespace, suspend=$suspend, targetNamespace=$targetNamespace, test=$test, timeout=$timeout, uninstall=$uninstall, upgrade=$upgrade, values=$values, valuesFrom=$valuesFrom]';
+      'IoFluxcdToolkitHelmV2beta2HelmReleaseSpec[chart=$chart, chartRef=$chartRef, dependsOn=$dependsOn, driftDetection=$driftDetection, install=$install, interval=$interval, kubeConfig=$kubeConfig, maxHistory=$maxHistory, persistentClient=$persistentClient, postRenderers=$postRenderers, releaseName=$releaseName, rollback=$rollback, serviceAccountName=$serviceAccountName, storageNamespace=$storageNamespace, suspend=$suspend, targetNamespace=$targetNamespace, test=$test, timeout=$timeout, uninstall=$uninstall, upgrade=$upgrade, values=$values, valuesFrom=$valuesFrom]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'chart'] = this.chart;
+    if (this.chart != null) {
+      json[r'chart'] = this.chart;
+    } else {
+      json[r'chart'] = null;
+    }
+    if (this.chartRef != null) {
+      json[r'chartRef'] = this.chartRef;
+    } else {
+      json[r'chartRef'] = null;
+    }
     json[r'dependsOn'] = this.dependsOn;
     if (this.driftDetection != null) {
       json[r'driftDetection'] = this.driftDetection;
@@ -369,40 +396,42 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpec {
 
       return IoFluxcdToolkitHelmV2beta2HelmReleaseSpec(
         chart: IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChart.fromJson(
-            json[r'chart'])!,
-        dependsOn: IoFluxcdToolkitHelmV2beta1HelmReleaseSpecDependsOnInner
-            .listFromJson(json[r'dependsOn']),
+            json[r'chart']),
+        chartRef: IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartRef.fromJson(
+            json[r'chartRef']),
+        dependsOn:
+            IoFluxcdToolkitHelmV2HelmReleaseSpecDependsOnInner.listFromJson(
+                json[r'dependsOn']),
         driftDetection:
-            IoFluxcdToolkitHelmV2beta2HelmReleaseSpecDriftDetection.fromJson(
+            IoFluxcdToolkitHelmV2HelmReleaseSpecDriftDetection.fromJson(
                 json[r'driftDetection']),
-        install: IoFluxcdToolkitHelmV2beta2HelmReleaseSpecInstall.fromJson(
+        install: IoFluxcdToolkitHelmV2HelmReleaseSpecInstall.fromJson(
             json[r'install']),
         interval: mapValueOfType<String>(json, r'interval')!,
-        kubeConfig:
-            IoFluxcdToolkitHelmV2beta1HelmReleaseSpecKubeConfig.fromJson(
-                json[r'kubeConfig']),
+        kubeConfig: IoFluxcdToolkitHelmV2HelmReleaseSpecKubeConfig.fromJson(
+            json[r'kubeConfig']),
         maxHistory: mapValueOfType<int>(json, r'maxHistory'),
         persistentClient: mapValueOfType<bool>(json, r'persistentClient'),
         postRenderers:
             IoFluxcdToolkitHelmV2beta2HelmReleaseSpecPostRenderersInner
                 .listFromJson(json[r'postRenderers']),
         releaseName: mapValueOfType<String>(json, r'releaseName'),
-        rollback: IoFluxcdToolkitHelmV2beta1HelmReleaseSpecRollback.fromJson(
+        rollback: IoFluxcdToolkitHelmV2HelmReleaseSpecRollback.fromJson(
             json[r'rollback']),
         serviceAccountName: mapValueOfType<String>(json, r'serviceAccountName'),
         storageNamespace: mapValueOfType<String>(json, r'storageNamespace'),
         suspend: mapValueOfType<bool>(json, r'suspend'),
         targetNamespace: mapValueOfType<String>(json, r'targetNamespace'),
-        test: IoFluxcdToolkitHelmV2beta2HelmReleaseSpecTest.fromJson(
-            json[r'test']),
+        test: IoFluxcdToolkitHelmV2HelmReleaseSpecTest.fromJson(json[r'test']),
         timeout: mapValueOfType<String>(json, r'timeout'),
-        uninstall: IoFluxcdToolkitHelmV2beta1HelmReleaseSpecUninstall.fromJson(
+        uninstall: IoFluxcdToolkitHelmV2HelmReleaseSpecUninstall.fromJson(
             json[r'uninstall']),
-        upgrade: IoFluxcdToolkitHelmV2beta1HelmReleaseSpecUpgrade.fromJson(
+        upgrade: IoFluxcdToolkitHelmV2HelmReleaseSpecUpgrade.fromJson(
             json[r'upgrade']),
         values: mapValueOfType<Object>(json, r'values'),
-        valuesFrom: IoFluxcdToolkitHelmV2beta2HelmReleaseSpecValuesFromInner
-            .listFromJson(json[r'valuesFrom']),
+        valuesFrom:
+            IoFluxcdToolkitHelmV2HelmReleaseSpecValuesFromInner.listFromJson(
+                json[r'valuesFrom']),
       );
     }
     return null;
@@ -462,7 +491,6 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpec {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
-    'chart',
     'interval',
   };
 }

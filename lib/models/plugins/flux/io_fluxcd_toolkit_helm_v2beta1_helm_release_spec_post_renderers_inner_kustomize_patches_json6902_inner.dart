@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -12,7 +12,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_post_renderers_inner_kustomize_patches_inner_target.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_post_renderers_inner_kustomize_patches_inner_target.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_post_renderers_inner_kustomize_patches_json6902_inner_patch_inner.dart';
 
 class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizePatchesJson6902Inner {
@@ -26,7 +26,7 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizePatche
   List<IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizePatchesJson6902InnerPatchInner>
       patch_;
 
-  IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizePatchesInnerTarget
+  IoFluxcdToolkitHelmV2HelmReleaseSpecPostRenderersInnerKustomizePatchesInnerTarget
       target;
 
   @override
@@ -78,7 +78,7 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizePatche
             IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizePatchesJson6902InnerPatchInner
                 .listFromJson(json[r'patch']),
         target:
-            IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizePatchesInnerTarget
+            IoFluxcdToolkitHelmV2HelmReleaseSpecPostRenderersInnerKustomizePatchesInnerTarget
                 .fromJson(json[r'target'])!,
       );
     }

@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -13,8 +13,8 @@
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_helm_chart_status.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_helm_chart_spec.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_helm_chart_status.dart';
 
 class IoFluxcdToolkitSourceV1beta2HelmChart {
   /// Returns a new [IoFluxcdToolkitSourceV1beta2HelmChart] instance.
@@ -66,7 +66,7 @@ class IoFluxcdToolkitSourceV1beta2HelmChart {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitSourceV1beta2HelmChartStatus? status;
+  IoFluxcdToolkitSourceV1HelmChartStatus? status;
 
   @override
   bool operator ==(Object other) =>
@@ -147,8 +147,8 @@ class IoFluxcdToolkitSourceV1beta2HelmChart {
         metadata: IoK8sApimachineryPkgApisMetaV1ObjectMeta.fromJson(
             json[r'metadata']),
         spec: IoFluxcdToolkitSourceV1beta2HelmChartSpec.fromJson(json[r'spec']),
-        status: IoFluxcdToolkitSourceV1beta2HelmChartStatus.fromJson(
-            json[r'status']),
+        status:
+            IoFluxcdToolkitSourceV1HelmChartStatus.fromJson(json[r'status']),
       );
     }
     return null;

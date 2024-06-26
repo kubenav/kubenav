@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -11,7 +11,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_chart_metadata.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_chart_metadata.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta2_helm_release_spec_chart_spec.dart';
 
 class IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChart {
@@ -27,7 +27,7 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChart {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitHelmV2beta1HelmReleaseSpecChartMetadata? metadata;
+  IoFluxcdToolkitHelmV2HelmReleaseSpecChartMetadata? metadata;
 
   IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec spec;
 
@@ -80,9 +80,8 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChart {
       }());
 
       return IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChart(
-        metadata:
-            IoFluxcdToolkitHelmV2beta1HelmReleaseSpecChartMetadata.fromJson(
-                json[r'metadata']),
+        metadata: IoFluxcdToolkitHelmV2HelmReleaseSpecChartMetadata.fromJson(
+            json[r'metadata']),
         spec: IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec.fromJson(
             json[r'spec'])!,
       );

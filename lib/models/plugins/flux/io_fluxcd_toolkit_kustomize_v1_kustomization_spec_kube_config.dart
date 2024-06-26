@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -11,7 +11,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_kube_config_secret_ref.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_kube_config_secret_ref.dart';
 
 class IoFluxcdToolkitKustomizeV1KustomizationSpecKubeConfig {
   /// Returns a new [IoFluxcdToolkitKustomizeV1KustomizationSpecKubeConfig] instance.
@@ -19,7 +19,7 @@ class IoFluxcdToolkitKustomizeV1KustomizationSpecKubeConfig {
     required this.secretRef,
   });
 
-  IoFluxcdToolkitHelmV2beta1HelmReleaseSpecKubeConfigSecretRef secretRef;
+  IoFluxcdToolkitHelmV2HelmReleaseSpecKubeConfigSecretRef secretRef;
 
   @override
   bool operator ==(Object other) =>
@@ -64,8 +64,9 @@ class IoFluxcdToolkitKustomizeV1KustomizationSpecKubeConfig {
       }());
 
       return IoFluxcdToolkitKustomizeV1KustomizationSpecKubeConfig(
-        secretRef: IoFluxcdToolkitHelmV2beta1HelmReleaseSpecKubeConfigSecretRef
-            .fromJson(json[r'secretRef'])!,
+        secretRef:
+            IoFluxcdToolkitHelmV2HelmReleaseSpecKubeConfigSecretRef.fromJson(
+                json[r'secretRef'])!,
       );
     }
     return null;

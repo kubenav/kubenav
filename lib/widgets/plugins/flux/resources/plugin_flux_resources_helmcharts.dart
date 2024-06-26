@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_helm_chart.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_helm_chart_list.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_helm_chart.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_helm_chart_list.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -24,7 +24,7 @@ final Resource fluxResourceHelmChart = Resource(
   singular: 'Helm Chart',
   description:
       'The HelmChart API defines a Source to produce an Artifact for a Helm chart archive with a set of specific configurations',
-  path: '/apis/source.toolkit.fluxcd.io/v1beta2',
+  path: '/apis/source.toolkit.fluxcd.io/v1',
   resource: 'helmcharts',
   scope: ResourceScope.namespaced,
   additionalPrinterColumns: [],
@@ -33,14 +33,17 @@ final Resource fluxResourceHelmChart = Resource(
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
     final items =
-        IoFluxcdToolkitSourceV1beta2HelmChartList.fromJson(parsed)?.items ?? [];
+        IoFluxcdToolkitSourceV1HelmChartList.fromJson(parsed)?.items ?? [];
 
     return items.map(
       (e) {
-        final status = e.status?.conditions != null &&
-                e.status!.conditions!.isNotEmpty
-            ? e.status!.conditions!.where((e) => e.type == 'Ready').first.status
-            : 'Unknown';
+        final status =
+            e.status?.conditions != null && e.status!.conditions!.isNotEmpty
+                ? e.status!.conditions!
+                    .where((e) => e.type == 'Ready')
+                    .firstOrNull
+                    ?.status
+                : 'Unknown';
 
         return ResourceItem(
           item: e,
@@ -56,18 +59,17 @@ final Resource fluxResourceHelmChart = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitSourceV1beta2HelmChartList.fromJson(parsed)?.items ??
-        [];
+    return IoFluxcdToolkitSourceV1HelmChartList.fromJson(parsed)?.items ?? [];
   },
   getName: (dynamic item) {
-    return (item as IoFluxcdToolkitSourceV1beta2HelmChart).metadata?.name ?? '';
+    return (item as IoFluxcdToolkitSourceV1HelmChart).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoFluxcdToolkitSourceV1beta2HelmChart).metadata?.namespace;
+    return (item as IoFluxcdToolkitSourceV1HelmChart).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitSourceV1beta2HelmChart.fromJson(parsed);
+    return IoFluxcdToolkitSourceV1HelmChart.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -81,7 +83,7 @@ final Resource fluxResourceHelmChart = Resource(
     Resource resource,
     ResourceItem listItem,
   ) {
-    final item = listItem.item as IoFluxcdToolkitSourceV1beta2HelmChart;
+    final item = listItem.item as IoFluxcdToolkitSourceV1HelmChart;
     final status = listItem.status;
 
     return ResourcesListItem(
@@ -92,8 +94,8 @@ final Resource fluxResourceHelmChart = Resource(
       status: status,
       details: [
         'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').first.status : '-'}',
-        'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').first.message : '-'}',
+        'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.status : '-'}',
+        'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.message : '-'}',
         'Age: ${getAge(item.metadata?.creationTimestamp)}',
       ],
     );
@@ -101,12 +103,12 @@ final Resource fluxResourceHelmChart = Resource(
   previewItemBuilder: (
     dynamic listItem,
   ) {
-    final item = listItem as IoFluxcdToolkitSourceV1beta2HelmChart;
+    final item = listItem as IoFluxcdToolkitSourceV1HelmChart;
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
-      'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').first.status : '-'}',
-      'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').first.message : '-'}',
+      'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.status : '-'}',
+      'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.message : '-'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
@@ -115,7 +117,7 @@ final Resource fluxResourceHelmChart = Resource(
     Resource resource,
     dynamic detailsItem,
   ) {
-    final item = detailsItem as IoFluxcdToolkitSourceV1beta2HelmChart;
+    final item = detailsItem as IoFluxcdToolkitSourceV1HelmChart;
 
     return Column(
       children: [

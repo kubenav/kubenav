@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_helm_repository.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_helm_repository_list.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_helm_repository.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_helm_repository_list.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
@@ -21,7 +21,7 @@ final Resource fluxResourceHelmRepository = Resource(
   singular: 'Helm Repository',
   description:
       'The HelmRepository API defines a Source to produce an Artifact for a Helm repository index file or OCI Helm repository',
-  path: '/apis/source.toolkit.fluxcd.io/v1beta2',
+  path: '/apis/source.toolkit.fluxcd.io/v1',
   resource: 'helmrepositories',
   scope: ResourceScope.namespaced,
   additionalPrinterColumns: [],
@@ -30,16 +30,17 @@ final Resource fluxResourceHelmRepository = Resource(
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
     final items =
-        IoFluxcdToolkitSourceV1beta2HelmRepositoryList.fromJson(parsed)
-                ?.items ??
-            [];
+        IoFluxcdToolkitSourceV1HelmRepositoryList.fromJson(parsed)?.items ?? [];
 
     return items.map(
       (e) {
-        final status = e.status?.conditions != null &&
-                e.status!.conditions!.isNotEmpty
-            ? e.status!.conditions!.where((e) => e.type == 'Ready').first.status
-            : 'Unknown';
+        final status =
+            e.status?.conditions != null && e.status!.conditions!.isNotEmpty
+                ? e.status!.conditions!
+                    .where((e) => e.type == 'Ready')
+                    .firstOrNull
+                    ?.status
+                : 'Unknown';
 
         return ResourceItem(
           item: e,
@@ -55,24 +56,18 @@ final Resource fluxResourceHelmRepository = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitSourceV1beta2HelmRepositoryList.fromJson(parsed)
-            ?.items ??
+    return IoFluxcdToolkitSourceV1HelmRepositoryList.fromJson(parsed)?.items ??
         [];
   },
   getName: (dynamic item) {
-    return (item as IoFluxcdToolkitSourceV1beta2HelmRepository)
-            .metadata
-            ?.name ??
-        '';
+    return (item as IoFluxcdToolkitSourceV1HelmRepository).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoFluxcdToolkitSourceV1beta2HelmRepository)
-        .metadata
-        ?.namespace;
+    return (item as IoFluxcdToolkitSourceV1HelmRepository).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitSourceV1beta2HelmRepository.fromJson(parsed);
+    return IoFluxcdToolkitSourceV1HelmRepository.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -86,7 +81,7 @@ final Resource fluxResourceHelmRepository = Resource(
     Resource resource,
     ResourceItem listItem,
   ) {
-    final item = listItem.item as IoFluxcdToolkitSourceV1beta2HelmRepository;
+    final item = listItem.item as IoFluxcdToolkitSourceV1HelmRepository;
     final status = listItem.status;
 
     return ResourcesListItem(
@@ -97,8 +92,8 @@ final Resource fluxResourceHelmRepository = Resource(
       status: status,
       details: [
         'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').first.status : '-'}',
-        'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').first.message : '-'}',
+        'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.status : '-'}',
+        'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.message : '-'}',
         'Age: ${getAge(item.metadata?.creationTimestamp)}',
       ],
     );
@@ -106,12 +101,12 @@ final Resource fluxResourceHelmRepository = Resource(
   previewItemBuilder: (
     dynamic listItem,
   ) {
-    final item = listItem as IoFluxcdToolkitSourceV1beta2HelmRepository;
+    final item = listItem as IoFluxcdToolkitSourceV1HelmRepository;
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
-      'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').first.status : '-'}',
-      'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').first.message : '-'}',
+      'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.status : '-'}',
+      'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.message : '-'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
@@ -120,7 +115,7 @@ final Resource fluxResourceHelmRepository = Resource(
     Resource resource,
     dynamic detailsItem,
   ) {
-    final item = detailsItem as IoFluxcdToolkitSourceV1beta2HelmRepository;
+    final item = detailsItem as IoFluxcdToolkitSourceV1HelmRepository;
 
     return Column(
       children: [

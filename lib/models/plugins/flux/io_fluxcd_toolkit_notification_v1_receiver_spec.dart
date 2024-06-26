@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -233,6 +233,8 @@ class IoFluxcdToolkitNotificationV1ReceiverSpecTypeEnum {
       IoFluxcdToolkitNotificationV1ReceiverSpecTypeEnum._(r'nexus');
   static const acr =
       IoFluxcdToolkitNotificationV1ReceiverSpecTypeEnum._(r'acr');
+  static const cdevents =
+      IoFluxcdToolkitNotificationV1ReceiverSpecTypeEnum._(r'cdevents');
 
   /// List of all possible values in this [enum][IoFluxcdToolkitNotificationV1ReceiverSpecTypeEnum].
   static const values = <IoFluxcdToolkitNotificationV1ReceiverSpecTypeEnum>[
@@ -247,6 +249,7 @@ class IoFluxcdToolkitNotificationV1ReceiverSpecTypeEnum {
     gcr,
     nexus,
     acr,
+    cdevents,
   ];
 
   static IoFluxcdToolkitNotificationV1ReceiverSpecTypeEnum? fromJson(
@@ -319,6 +322,8 @@ class IoFluxcdToolkitNotificationV1ReceiverSpecTypeEnumTypeTransformer {
           return IoFluxcdToolkitNotificationV1ReceiverSpecTypeEnum.nexus;
         case r'acr':
           return IoFluxcdToolkitNotificationV1ReceiverSpecTypeEnum.acr;
+        case r'cdevents':
+          return IoFluxcdToolkitNotificationV1ReceiverSpecTypeEnum.cdevents;
         default:
           if (!allowNull) {
             throw ArgumentError('Unknown enum value to decode: $data');

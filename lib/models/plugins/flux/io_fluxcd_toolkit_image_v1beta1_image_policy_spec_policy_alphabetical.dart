@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -10,7 +10,6 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
-
 
 class IoFluxcdToolkitImageV1beta1ImagePolicySpecPolicyAlphabetical {
   /// Returns a new [IoFluxcdToolkitImageV1beta1ImagePolicySpecPolicyAlphabetical] instance.

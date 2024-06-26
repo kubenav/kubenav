@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -13,8 +13,8 @@
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_kustomize_v1_kustomization_status.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_kustomize_v1beta2_kustomization_spec.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_kustomize_v1beta2_kustomization_status.dart';
 
 class IoFluxcdToolkitKustomizeV1beta2Kustomization {
   /// Returns a new [IoFluxcdToolkitKustomizeV1beta2Kustomization] instance.
@@ -66,7 +66,7 @@ class IoFluxcdToolkitKustomizeV1beta2Kustomization {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitKustomizeV1KustomizationStatus? status;
+  IoFluxcdToolkitKustomizeV1beta2KustomizationStatus? status;
 
   @override
   bool operator ==(Object other) =>
@@ -148,7 +148,7 @@ class IoFluxcdToolkitKustomizeV1beta2Kustomization {
             json[r'metadata']),
         spec: IoFluxcdToolkitKustomizeV1beta2KustomizationSpec.fromJson(
             json[r'spec']),
-        status: IoFluxcdToolkitKustomizeV1KustomizationStatus.fromJson(
+        status: IoFluxcdToolkitKustomizeV1beta2KustomizationStatus.fromJson(
             json[r'status']),
       );
     }
