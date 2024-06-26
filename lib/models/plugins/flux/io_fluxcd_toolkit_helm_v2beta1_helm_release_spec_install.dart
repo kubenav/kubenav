@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -12,7 +12,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_install_remediation.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_install_remediation.dart';
 
 class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecInstall {
   /// Returns a new [IoFluxcdToolkitHelmV2beta1HelmReleaseSpecInstall] instance.
@@ -83,7 +83,7 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecInstall {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitHelmV2beta1HelmReleaseSpecInstallRemediation? remediation;
+  IoFluxcdToolkitHelmV2HelmReleaseSpecInstallRemediation? remediation;
 
   /// Replace tells the Helm install action to re-use the 'ReleaseName', but only if that name is a deleted release which remains in the history.
   ///
@@ -232,8 +232,9 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecInstall {
             mapValueOfType<bool>(json, r'disableOpenAPIValidation'),
         disableWait: mapValueOfType<bool>(json, r'disableWait'),
         disableWaitForJobs: mapValueOfType<bool>(json, r'disableWaitForJobs'),
-        remediation: IoFluxcdToolkitHelmV2beta1HelmReleaseSpecInstallRemediation
-            .fromJson(json[r'remediation']),
+        remediation:
+            IoFluxcdToolkitHelmV2HelmReleaseSpecInstallRemediation.fromJson(
+                json[r'remediation']),
         replace: mapValueOfType<bool>(json, r'replace'),
         skipCRDs: mapValueOfType<bool>(json, r'skipCRDs'),
         timeout: mapValueOfType<String>(json, r'timeout'),

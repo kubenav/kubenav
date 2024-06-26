@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -12,8 +12,8 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_chart_spec_verify_secret_ref.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_helm_chart_spec_verify_match_oidc_identity_inner.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_chart_spec_verify_secret_ref.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_helm_chart_spec_verify_match_oidc_identity_inner.dart';
 
 class IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerify {
   /// Returns a new [IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerify] instance.
@@ -24,7 +24,7 @@ class IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerify {
   });
 
   /// MatchOIDCIdentity specifies the identity matching criteria to use while verifying an OCI artifact which was signed using Cosign keyless signing. The artifact's identity is deemed to be verified if any of the specified matchers match against the identity.
-  List<IoFluxcdToolkitSourceV1beta2HelmChartSpecVerifyMatchOIDCIdentityInner>
+  List<IoFluxcdToolkitSourceV1HelmChartSpecVerifyMatchOIDCIdentityInner>
       matchOIDCIdentity;
 
   /// Provider specifies the technology used to sign the OCI Artifact.
@@ -36,7 +36,7 @@ class IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerify {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitHelmV2beta1HelmReleaseSpecChartSpecVerifySecretRef? secretRef;
+  IoFluxcdToolkitHelmV2HelmReleaseSpecChartSpecVerifySecretRef? secretRef;
 
   @override
   bool operator ==(Object other) =>
@@ -92,14 +92,13 @@ class IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerify {
 
       return IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerify(
         matchOIDCIdentity:
-            IoFluxcdToolkitSourceV1beta2HelmChartSpecVerifyMatchOIDCIdentityInner
+            IoFluxcdToolkitSourceV1HelmChartSpecVerifyMatchOIDCIdentityInner
                 .listFromJson(json[r'matchOIDCIdentity']),
         provider:
             IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerifyProviderEnum
                 .fromJson(json[r'provider'])!,
-        secretRef:
-            IoFluxcdToolkitHelmV2beta1HelmReleaseSpecChartSpecVerifySecretRef
-                .fromJson(json[r'secretRef']),
+        secretRef: IoFluxcdToolkitHelmV2HelmReleaseSpecChartSpecVerifySecretRef
+            .fromJson(json[r'secretRef']),
       );
     }
     return null;
@@ -184,11 +183,15 @@ class IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerifyProviderEnum {
   static const cosign =
       IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerifyProviderEnum._(
           r'cosign');
+  static const notation =
+      IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerifyProviderEnum._(
+          r'notation');
 
   /// List of all possible values in this [enum][IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerifyProviderEnum].
   static const values =
       <IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerifyProviderEnum>[
     cosign,
+    notation,
   ];
 
   static IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerifyProviderEnum? fromJson(
@@ -248,6 +251,9 @@ class IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerifyProviderEnumTypeTransfo
         case r'cosign':
           return IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerifyProviderEnum
               .cosign;
+        case r'notation':
+          return IoFluxcdToolkitSourceV1beta2OCIRepositorySpecVerifyProviderEnum
+              .notation;
         default:
           if (!allowNull) {
             throw ArgumentError('Unknown enum value to decode: $data');

@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -12,9 +12,9 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_depends_on_inner.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_post_renderers_inner_kustomize_images_inner.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_post_renderers_inner_kustomize_patches_inner.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_depends_on_inner.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_post_renderers_inner_kustomize_images_inner.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_post_renderers_inner_kustomize_patches_inner.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_post_renderers_inner_kustomize_patches_json6902_inner.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_kustomize_v1_kustomization_spec_decryption.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_kustomize_v1_kustomization_spec_health_checks_inner.dart';
@@ -56,7 +56,7 @@ class IoFluxcdToolkitKustomizeV1beta1KustomizationSpec {
   IoFluxcdToolkitKustomizeV1KustomizationSpecDecryption? decryption;
 
   /// DependsOn may contain a meta.NamespacedObjectReference slice with references to Kustomization resources that must be ready before this Kustomization can be reconciled.
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseSpecDependsOnInner> dependsOn;
+  List<IoFluxcdToolkitHelmV2HelmReleaseSpecDependsOnInner> dependsOn;
 
   /// Force instructs the controller to recreate resources when patching fails due to an immutable field change.
   ///
@@ -72,7 +72,7 @@ class IoFluxcdToolkitKustomizeV1beta1KustomizationSpec {
       healthChecks;
 
   /// Images is a list of (image name, new name, new tag or digest) for changing image names, tags or digests. This can also be achieved with a patch, but this operator is simpler to specify.
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizeImagesInner>
+  List<IoFluxcdToolkitHelmV2HelmReleaseSpecPostRenderersInnerKustomizeImagesInner>
       images;
 
   /// The interval at which to reconcile the Kustomization.
@@ -87,7 +87,7 @@ class IoFluxcdToolkitKustomizeV1beta1KustomizationSpec {
   IoFluxcdToolkitKustomizeV1beta1KustomizationSpecKubeConfig? kubeConfig;
 
   /// Strategic merge and JSON patches, defined as inline YAML objects, capable of targeting objects based on kind, label and annotation selectors.
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizePatchesInner>
+  List<IoFluxcdToolkitHelmV2HelmReleaseSpecPostRenderersInnerKustomizePatchesInner>
       patches;
 
   /// JSON 6902 patches, defined as inline YAML objects.
@@ -95,7 +95,7 @@ class IoFluxcdToolkitKustomizeV1beta1KustomizationSpec {
       patchesJson6902;
 
   /// Strategic merge patches, defined as inline YAML objects.
-  List<dynamic> patchesStrategicMerge;
+  List<Object> patchesStrategicMerge;
 
   /// Path to the directory containing the kustomization.yaml file, or the set of plain YAMLs a kustomization.yaml should be generated for. Defaults to 'None', which translates to the root path of the SourceRef.
   ///
@@ -315,21 +315,22 @@ class IoFluxcdToolkitKustomizeV1beta1KustomizationSpec {
         decryption:
             IoFluxcdToolkitKustomizeV1KustomizationSpecDecryption.fromJson(
                 json[r'decryption']),
-        dependsOn: IoFluxcdToolkitHelmV2beta1HelmReleaseSpecDependsOnInner
-            .listFromJson(json[r'dependsOn']),
+        dependsOn:
+            IoFluxcdToolkitHelmV2HelmReleaseSpecDependsOnInner.listFromJson(
+                json[r'dependsOn']),
         force: mapValueOfType<bool>(json, r'force'),
         healthChecks:
             IoFluxcdToolkitKustomizeV1KustomizationSpecHealthChecksInner
                 .listFromJson(json[r'healthChecks']),
         images:
-            IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizeImagesInner
+            IoFluxcdToolkitHelmV2HelmReleaseSpecPostRenderersInnerKustomizeImagesInner
                 .listFromJson(json[r'images']),
         interval: mapValueOfType<String>(json, r'interval')!,
         kubeConfig:
             IoFluxcdToolkitKustomizeV1beta1KustomizationSpecKubeConfig.fromJson(
                 json[r'kubeConfig']),
         patches:
-            IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizePatchesInner
+            IoFluxcdToolkitHelmV2HelmReleaseSpecPostRenderersInnerKustomizePatchesInner
                 .listFromJson(json[r'patches']),
         patchesJson6902:
             IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizePatchesJson6902Inner

@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -12,9 +12,9 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_depends_on_inner.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_post_renderers_inner_kustomize_images_inner.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_post_renderers_inner_kustomize_patches_inner.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_depends_on_inner.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_post_renderers_inner_kustomize_images_inner.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_post_renderers_inner_kustomize_patches_inner.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_kustomize_v1_kustomization_spec_common_metadata.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_kustomize_v1_kustomization_spec_decryption.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_kustomize_v1_kustomization_spec_health_checks_inner.dart';
@@ -34,6 +34,8 @@ class IoFluxcdToolkitKustomizeV1KustomizationSpec {
     this.images = const [],
     required this.interval,
     this.kubeConfig,
+    this.namePrefix,
+    this.nameSuffix,
     this.patches = const [],
     this.path,
     this.postBuild,
@@ -67,7 +69,7 @@ class IoFluxcdToolkitKustomizeV1KustomizationSpec {
   IoFluxcdToolkitKustomizeV1KustomizationSpecDecryption? decryption;
 
   /// DependsOn may contain a meta.NamespacedObjectReference slice with references to Kustomization resources that must be ready before this Kustomization can be reconciled.
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseSpecDependsOnInner> dependsOn;
+  List<IoFluxcdToolkitHelmV2HelmReleaseSpecDependsOnInner> dependsOn;
 
   /// Force instructs the controller to recreate resources when patching fails due to an immutable field change.
   ///
@@ -83,7 +85,7 @@ class IoFluxcdToolkitKustomizeV1KustomizationSpec {
       healthChecks;
 
   /// Images is a list of (image name, new name, new tag or digest) for changing image names, tags or digests. This can also be achieved with a patch, but this operator is simpler to specify.
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizeImagesInner>
+  List<IoFluxcdToolkitHelmV2HelmReleaseSpecPostRenderersInnerKustomizeImagesInner>
       images;
 
   /// The interval at which to reconcile the Kustomization. This interval is approximate and may be subject to jitter to ensure efficient use of resources.
@@ -97,8 +99,26 @@ class IoFluxcdToolkitKustomizeV1KustomizationSpec {
   ///
   IoFluxcdToolkitKustomizeV1KustomizationSpecKubeConfig? kubeConfig;
 
+  /// NamePrefix will prefix the names of all managed resources.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? namePrefix;
+
+  /// NameSuffix will suffix the names of all managed resources.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? nameSuffix;
+
   /// Strategic merge and JSON patches, defined as inline YAML objects, capable of targeting objects based on kind, label and annotation selectors.
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizePatchesInner>
+  List<IoFluxcdToolkitHelmV2HelmReleaseSpecPostRenderersInnerKustomizePatchesInner>
       patches;
 
   /// Path to the directory containing the kustomization.yaml file, or the set of plain YAMLs a kustomization.yaml should be generated for. Defaults to 'None', which translates to the root path of the SourceRef.
@@ -190,6 +210,8 @@ class IoFluxcdToolkitKustomizeV1KustomizationSpec {
           deepEquality.equals(other.images, images) &&
           other.interval == interval &&
           other.kubeConfig == kubeConfig &&
+          other.namePrefix == namePrefix &&
+          other.nameSuffix == nameSuffix &&
           deepEquality.equals(other.patches, patches) &&
           other.path == path &&
           other.postBuild == postBuild &&
@@ -214,6 +236,8 @@ class IoFluxcdToolkitKustomizeV1KustomizationSpec {
       (images.hashCode) +
       (interval.hashCode) +
       (kubeConfig == null ? 0 : kubeConfig!.hashCode) +
+      (namePrefix == null ? 0 : namePrefix!.hashCode) +
+      (nameSuffix == null ? 0 : nameSuffix!.hashCode) +
       (patches.hashCode) +
       (path == null ? 0 : path!.hashCode) +
       (postBuild == null ? 0 : postBuild!.hashCode) +
@@ -228,7 +252,7 @@ class IoFluxcdToolkitKustomizeV1KustomizationSpec {
 
   @override
   String toString() =>
-      'IoFluxcdToolkitKustomizeV1KustomizationSpec[commonMetadata=$commonMetadata, components=$components, decryption=$decryption, dependsOn=$dependsOn, force=$force, healthChecks=$healthChecks, images=$images, interval=$interval, kubeConfig=$kubeConfig, patches=$patches, path=$path, postBuild=$postBuild, prune=$prune, retryInterval=$retryInterval, serviceAccountName=$serviceAccountName, sourceRef=$sourceRef, suspend=$suspend, targetNamespace=$targetNamespace, timeout=$timeout, wait=$wait]';
+      'IoFluxcdToolkitKustomizeV1KustomizationSpec[commonMetadata=$commonMetadata, components=$components, decryption=$decryption, dependsOn=$dependsOn, force=$force, healthChecks=$healthChecks, images=$images, interval=$interval, kubeConfig=$kubeConfig, namePrefix=$namePrefix, nameSuffix=$nameSuffix, patches=$patches, path=$path, postBuild=$postBuild, prune=$prune, retryInterval=$retryInterval, serviceAccountName=$serviceAccountName, sourceRef=$sourceRef, suspend=$suspend, targetNamespace=$targetNamespace, timeout=$timeout, wait=$wait]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -256,6 +280,16 @@ class IoFluxcdToolkitKustomizeV1KustomizationSpec {
       json[r'kubeConfig'] = this.kubeConfig;
     } else {
       json[r'kubeConfig'] = null;
+    }
+    if (this.namePrefix != null) {
+      json[r'namePrefix'] = this.namePrefix;
+    } else {
+      json[r'namePrefix'] = null;
+    }
+    if (this.nameSuffix != null) {
+      json[r'nameSuffix'] = this.nameSuffix;
+    } else {
+      json[r'nameSuffix'] = null;
     }
     json[r'patches'] = this.patches;
     if (this.path != null) {
@@ -335,21 +369,24 @@ class IoFluxcdToolkitKustomizeV1KustomizationSpec {
         decryption:
             IoFluxcdToolkitKustomizeV1KustomizationSpecDecryption.fromJson(
                 json[r'decryption']),
-        dependsOn: IoFluxcdToolkitHelmV2beta1HelmReleaseSpecDependsOnInner
-            .listFromJson(json[r'dependsOn']),
+        dependsOn:
+            IoFluxcdToolkitHelmV2HelmReleaseSpecDependsOnInner.listFromJson(
+                json[r'dependsOn']),
         force: mapValueOfType<bool>(json, r'force'),
         healthChecks:
             IoFluxcdToolkitKustomizeV1KustomizationSpecHealthChecksInner
                 .listFromJson(json[r'healthChecks']),
         images:
-            IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizeImagesInner
+            IoFluxcdToolkitHelmV2HelmReleaseSpecPostRenderersInnerKustomizeImagesInner
                 .listFromJson(json[r'images']),
         interval: mapValueOfType<String>(json, r'interval')!,
         kubeConfig:
             IoFluxcdToolkitKustomizeV1KustomizationSpecKubeConfig.fromJson(
                 json[r'kubeConfig']),
+        namePrefix: mapValueOfType<String>(json, r'namePrefix'),
+        nameSuffix: mapValueOfType<String>(json, r'nameSuffix'),
         patches:
-            IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizePatchesInner
+            IoFluxcdToolkitHelmV2HelmReleaseSpecPostRenderersInnerKustomizePatchesInner
                 .listFromJson(json[r'patches']),
         path: mapValueOfType<String>(json, r'path'),
         postBuild:

@@ -38,10 +38,13 @@ final Resource fluxResourceKustomization = Resource(
 
     return items.map(
       (e) {
-        final status = e.status?.conditions != null &&
-                e.status!.conditions!.isNotEmpty
-            ? e.status!.conditions!.where((e) => e.type == 'Ready').first.status
-            : 'Unknown';
+        final status =
+            e.status?.conditions != null && e.status!.conditions!.isNotEmpty
+                ? e.status!.conditions!
+                    .where((e) => e.type == 'Ready')
+                    .firstOrNull
+                    ?.status
+                : 'Unknown';
 
         return ResourceItem(
           item: e,
@@ -97,8 +100,8 @@ final Resource fluxResourceKustomization = Resource(
       status: status,
       details: [
         'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').first.status : '-'}',
-        'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').first.message : '-'}',
+        'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.status : '-'}',
+        'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.message : '-'}',
         'Age: ${getAge(item.metadata?.creationTimestamp)}',
       ],
     );
@@ -110,8 +113,8 @@ final Resource fluxResourceKustomization = Resource(
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
-      'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').first.status : '-'}',
-      'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').first.message : '-'}',
+      'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.status : '-'}',
+      'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.message : '-'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },

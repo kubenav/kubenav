@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -18,6 +18,7 @@ class IoFluxcdToolkitSourceV1beta2OCIRepositorySpecRef {
   IoFluxcdToolkitSourceV1beta2OCIRepositorySpecRef({
     this.digest,
     this.semver,
+    this.semverFilter,
     this.tag,
   });
 
@@ -39,6 +40,15 @@ class IoFluxcdToolkitSourceV1beta2OCIRepositorySpecRef {
   ///
   String? semver;
 
+  /// SemverFilter is a regex pattern to filter the tags within the SemVer range.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? semverFilter;
+
   /// Tag is the image tag to pull, defaults to latest.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -54,6 +64,7 @@ class IoFluxcdToolkitSourceV1beta2OCIRepositorySpecRef {
       other is IoFluxcdToolkitSourceV1beta2OCIRepositorySpecRef &&
           other.digest == digest &&
           other.semver == semver &&
+          other.semverFilter == semverFilter &&
           other.tag == tag;
 
   @override
@@ -61,11 +72,12 @@ class IoFluxcdToolkitSourceV1beta2OCIRepositorySpecRef {
       // ignore: unnecessary_parenthesis
       (digest == null ? 0 : digest!.hashCode) +
       (semver == null ? 0 : semver!.hashCode) +
+      (semverFilter == null ? 0 : semverFilter!.hashCode) +
       (tag == null ? 0 : tag!.hashCode);
 
   @override
   String toString() =>
-      'IoFluxcdToolkitSourceV1beta2OCIRepositorySpecRef[digest=$digest, semver=$semver, tag=$tag]';
+      'IoFluxcdToolkitSourceV1beta2OCIRepositorySpecRef[digest=$digest, semver=$semver, semverFilter=$semverFilter, tag=$tag]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -78,6 +90,11 @@ class IoFluxcdToolkitSourceV1beta2OCIRepositorySpecRef {
       json[r'semver'] = this.semver;
     } else {
       json[r'semver'] = null;
+    }
+    if (this.semverFilter != null) {
+      json[r'semverFilter'] = this.semverFilter;
+    } else {
+      json[r'semverFilter'] = null;
     }
     if (this.tag != null) {
       json[r'tag'] = this.tag;
@@ -111,6 +128,7 @@ class IoFluxcdToolkitSourceV1beta2OCIRepositorySpecRef {
       return IoFluxcdToolkitSourceV1beta2OCIRepositorySpecRef(
         digest: mapValueOfType<String>(json, r'digest'),
         semver: mapValueOfType<String>(json, r'semver'),
+        semverFilter: mapValueOfType<String>(json, r'semverFilter'),
         tag: mapValueOfType<String>(json, r'tag'),
       );
     }

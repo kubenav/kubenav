@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -12,15 +12,16 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_bucket_spec_access_from.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_helm_chart_spec_source_ref.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_helm_chart_spec_verify.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_helm_chart_spec_source_ref.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_helm_chart_spec_verify.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_helm_repository_spec_access_from.dart';
 
 class IoFluxcdToolkitSourceV1beta2HelmChartSpec {
   /// Returns a new [IoFluxcdToolkitSourceV1beta2HelmChartSpec] instance.
   IoFluxcdToolkitSourceV1beta2HelmChartSpec({
     this.accessFrom,
     required this.chart,
+    this.ignoreMissingValuesFiles,
     required this.interval,
     this.reconcileStrategy,
     required this.sourceRef,
@@ -37,10 +38,19 @@ class IoFluxcdToolkitSourceV1beta2HelmChartSpec {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitSourceV1beta2BucketSpecAccessFrom? accessFrom;
+  IoFluxcdToolkitSourceV1HelmRepositorySpecAccessFrom? accessFrom;
 
   /// Chart is the name or path the Helm chart is available at in the SourceRef.
   String chart;
+
+  /// IgnoreMissingValuesFiles controls whether to silently ignore missing values files rather than failing.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  bool? ignoreMissingValuesFiles;
 
   /// Interval at which the HelmChart SourceRef is checked for updates. This interval is approximate and may be subject to jitter to ensure efficient use of resources.
   String interval;
@@ -49,7 +59,7 @@ class IoFluxcdToolkitSourceV1beta2HelmChartSpec {
   IoFluxcdToolkitSourceV1beta2HelmChartSpecReconcileStrategyEnum?
       reconcileStrategy;
 
-  IoFluxcdToolkitSourceV1beta2HelmChartSpecSourceRef sourceRef;
+  IoFluxcdToolkitSourceV1HelmChartSpecSourceRef sourceRef;
 
   /// Suspend tells the controller to suspend the reconciliation of this source.
   ///
@@ -78,7 +88,7 @@ class IoFluxcdToolkitSourceV1beta2HelmChartSpec {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitSourceV1beta2HelmChartSpecVerify? verify;
+  IoFluxcdToolkitSourceV1HelmChartSpecVerify? verify;
 
   /// Version is the chart version semver expression, ignored for charts from GitRepository and Bucket sources. Defaults to latest when omitted.
   ///
@@ -95,6 +105,7 @@ class IoFluxcdToolkitSourceV1beta2HelmChartSpec {
       other is IoFluxcdToolkitSourceV1beta2HelmChartSpec &&
           other.accessFrom == accessFrom &&
           other.chart == chart &&
+          other.ignoreMissingValuesFiles == ignoreMissingValuesFiles &&
           other.interval == interval &&
           other.reconcileStrategy == reconcileStrategy &&
           other.sourceRef == sourceRef &&
@@ -109,6 +120,9 @@ class IoFluxcdToolkitSourceV1beta2HelmChartSpec {
       // ignore: unnecessary_parenthesis
       (accessFrom == null ? 0 : accessFrom!.hashCode) +
       (chart.hashCode) +
+      (ignoreMissingValuesFiles == null
+          ? 0
+          : ignoreMissingValuesFiles!.hashCode) +
       (interval.hashCode) +
       (reconcileStrategy == null ? 0 : reconcileStrategy!.hashCode) +
       (sourceRef.hashCode) +
@@ -120,7 +134,7 @@ class IoFluxcdToolkitSourceV1beta2HelmChartSpec {
 
   @override
   String toString() =>
-      'IoFluxcdToolkitSourceV1beta2HelmChartSpec[accessFrom=$accessFrom, chart=$chart, interval=$interval, reconcileStrategy=$reconcileStrategy, sourceRef=$sourceRef, suspend=$suspend, valuesFile=$valuesFile, valuesFiles=$valuesFiles, verify=$verify, version=$version]';
+      'IoFluxcdToolkitSourceV1beta2HelmChartSpec[accessFrom=$accessFrom, chart=$chart, ignoreMissingValuesFiles=$ignoreMissingValuesFiles, interval=$interval, reconcileStrategy=$reconcileStrategy, sourceRef=$sourceRef, suspend=$suspend, valuesFile=$valuesFile, valuesFiles=$valuesFiles, verify=$verify, version=$version]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -130,6 +144,11 @@ class IoFluxcdToolkitSourceV1beta2HelmChartSpec {
       json[r'accessFrom'] = null;
     }
     json[r'chart'] = this.chart;
+    if (this.ignoreMissingValuesFiles != null) {
+      json[r'ignoreMissingValuesFiles'] = this.ignoreMissingValuesFiles;
+    } else {
+      json[r'ignoreMissingValuesFiles'] = null;
+    }
     json[r'interval'] = this.interval;
     if (this.reconcileStrategy != null) {
       json[r'reconcileStrategy'] = this.reconcileStrategy;
@@ -182,14 +201,17 @@ class IoFluxcdToolkitSourceV1beta2HelmChartSpec {
       }());
 
       return IoFluxcdToolkitSourceV1beta2HelmChartSpec(
-        accessFrom: IoFluxcdToolkitSourceV1beta2BucketSpecAccessFrom.fromJson(
-            json[r'accessFrom']),
+        accessFrom:
+            IoFluxcdToolkitSourceV1HelmRepositorySpecAccessFrom.fromJson(
+                json[r'accessFrom']),
         chart: mapValueOfType<String>(json, r'chart')!,
+        ignoreMissingValuesFiles:
+            mapValueOfType<bool>(json, r'ignoreMissingValuesFiles'),
         interval: mapValueOfType<String>(json, r'interval')!,
         reconcileStrategy:
             IoFluxcdToolkitSourceV1beta2HelmChartSpecReconcileStrategyEnum
                 .fromJson(json[r'reconcileStrategy']),
-        sourceRef: IoFluxcdToolkitSourceV1beta2HelmChartSpecSourceRef.fromJson(
+        sourceRef: IoFluxcdToolkitSourceV1HelmChartSpecSourceRef.fromJson(
             json[r'sourceRef'])!,
         suspend: mapValueOfType<bool>(json, r'suspend'),
         valuesFile: mapValueOfType<String>(json, r'valuesFile'),
@@ -198,7 +220,7 @@ class IoFluxcdToolkitSourceV1beta2HelmChartSpec {
                 .cast<String>()
                 .toList(growable: false)
             : const [],
-        verify: IoFluxcdToolkitSourceV1beta2HelmChartSpecVerify.fromJson(
+        verify: IoFluxcdToolkitSourceV1HelmChartSpecVerify.fromJson(
             json[r'verify']),
         version: mapValueOfType<String>(json, r'version'),
       );

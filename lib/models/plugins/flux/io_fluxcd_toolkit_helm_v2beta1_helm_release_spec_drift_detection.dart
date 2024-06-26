@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -12,7 +12,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_drift_detection_ignore_inner.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_drift_detection_ignore_inner.dart';
 
 class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecDriftDetection {
   /// Returns a new [IoFluxcdToolkitHelmV2beta1HelmReleaseSpecDriftDetection] instance.
@@ -22,8 +22,7 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecDriftDetection {
   });
 
   /// Ignore contains a list of rules for specifying which changes to ignore during diffing.
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseSpecDriftDetectionIgnoreInner>
-      ignore;
+  List<IoFluxcdToolkitHelmV2HelmReleaseSpecDriftDetectionIgnoreInner> ignore;
 
   /// Mode defines how differences should be handled between the Helm manifest and the manifest currently applied to the cluster. If not explicitly set, it defaults to DiffModeDisabled.
   IoFluxcdToolkitHelmV2beta1HelmReleaseSpecDriftDetectionModeEnum? mode;
@@ -77,9 +76,8 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecDriftDetection {
       }());
 
       return IoFluxcdToolkitHelmV2beta1HelmReleaseSpecDriftDetection(
-        ignore:
-            IoFluxcdToolkitHelmV2beta1HelmReleaseSpecDriftDetectionIgnoreInner
-                .listFromJson(json[r'ignore']),
+        ignore: IoFluxcdToolkitHelmV2HelmReleaseSpecDriftDetectionIgnoreInner
+            .listFromJson(json[r'ignore']),
         mode: IoFluxcdToolkitHelmV2beta1HelmReleaseSpecDriftDetectionModeEnum
             .fromJson(json[r'mode']),
       );

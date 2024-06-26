@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -11,7 +11,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_chart_spec_verify_secret_ref.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_chart_spec_verify_secret_ref.dart';
 
 class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecChartSpecVerify {
   /// Returns a new [IoFluxcdToolkitHelmV2beta1HelmReleaseSpecChartSpecVerify] instance.
@@ -29,7 +29,7 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecChartSpecVerify {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitHelmV2beta1HelmReleaseSpecChartSpecVerifySecretRef? secretRef;
+  IoFluxcdToolkitHelmV2HelmReleaseSpecChartSpecVerifySecretRef? secretRef;
 
   @override
   bool operator ==(Object other) =>
@@ -83,9 +83,8 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecChartSpecVerify {
         provider:
             IoFluxcdToolkitHelmV2beta1HelmReleaseSpecChartSpecVerifyProviderEnum
                 .fromJson(json[r'provider'])!,
-        secretRef:
-            IoFluxcdToolkitHelmV2beta1HelmReleaseSpecChartSpecVerifySecretRef
-                .fromJson(json[r'secretRef']),
+        secretRef: IoFluxcdToolkitHelmV2HelmReleaseSpecChartSpecVerifySecretRef
+            .fromJson(json[r'secretRef']),
       );
     }
     return null;

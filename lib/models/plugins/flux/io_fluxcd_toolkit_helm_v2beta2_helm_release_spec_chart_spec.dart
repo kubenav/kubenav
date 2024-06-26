@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -12,13 +12,14 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_chart_spec_verify.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta2_helm_release_spec_chart_spec_source_ref.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_chart_spec_source_ref.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_chart_spec_verify.dart';
 
 class IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec {
   /// Returns a new [IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec] instance.
   IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec({
     required this.chart,
+    this.ignoreMissingValuesFiles,
     this.interval,
     this.reconcileStrategy,
     required this.sourceRef,
@@ -30,6 +31,15 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec {
 
   /// The name or path the Helm chart is available at in the SourceRef.
   String chart;
+
+  /// IgnoreMissingValuesFiles controls whether to silently ignore missing values files rather than failing.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  bool? ignoreMissingValuesFiles;
 
   /// Interval at which to check the v1.Source for updates. Defaults to 'HelmReleaseSpec.Interval'.
   ///
@@ -44,7 +54,7 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec {
   IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpecReconcileStrategyEnum?
       reconcileStrategy;
 
-  IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpecSourceRef sourceRef;
+  IoFluxcdToolkitHelmV2HelmReleaseSpecChartSpecSourceRef sourceRef;
 
   /// Alternative values file to use as the default chart values, expected to be a relative path in the SourceRef. Deprecated in favor of ValuesFiles, for backwards compatibility the file defined here is merged before the ValuesFiles items. Ignored when omitted.
   ///
@@ -64,7 +74,7 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitHelmV2beta1HelmReleaseSpecChartSpecVerify? verify;
+  IoFluxcdToolkitHelmV2HelmReleaseSpecChartSpecVerify? verify;
 
   /// Version semver expression, ignored for charts from v1beta2.GitRepository and v1beta2.Bucket sources. Defaults to latest when omitted.
   ///
@@ -80,6 +90,7 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec {
       identical(this, other) ||
       other is IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec &&
           other.chart == chart &&
+          other.ignoreMissingValuesFiles == ignoreMissingValuesFiles &&
           other.interval == interval &&
           other.reconcileStrategy == reconcileStrategy &&
           other.sourceRef == sourceRef &&
@@ -92,6 +103,9 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec {
   int get hashCode =>
       // ignore: unnecessary_parenthesis
       (chart.hashCode) +
+      (ignoreMissingValuesFiles == null
+          ? 0
+          : ignoreMissingValuesFiles!.hashCode) +
       (interval == null ? 0 : interval!.hashCode) +
       (reconcileStrategy == null ? 0 : reconcileStrategy!.hashCode) +
       (sourceRef.hashCode) +
@@ -102,11 +116,16 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec {
 
   @override
   String toString() =>
-      'IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec[chart=$chart, interval=$interval, reconcileStrategy=$reconcileStrategy, sourceRef=$sourceRef, valuesFile=$valuesFile, valuesFiles=$valuesFiles, verify=$verify, version=$version]';
+      'IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec[chart=$chart, ignoreMissingValuesFiles=$ignoreMissingValuesFiles, interval=$interval, reconcileStrategy=$reconcileStrategy, sourceRef=$sourceRef, valuesFile=$valuesFile, valuesFiles=$valuesFiles, verify=$verify, version=$version]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
     json[r'chart'] = this.chart;
+    if (this.ignoreMissingValuesFiles != null) {
+      json[r'ignoreMissingValuesFiles'] = this.ignoreMissingValuesFiles;
+    } else {
+      json[r'ignoreMissingValuesFiles'] = null;
+    }
     if (this.interval != null) {
       json[r'interval'] = this.interval;
     } else {
@@ -160,21 +179,23 @@ class IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec {
 
       return IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpec(
         chart: mapValueOfType<String>(json, r'chart')!,
+        ignoreMissingValuesFiles:
+            mapValueOfType<bool>(json, r'ignoreMissingValuesFiles'),
         interval: mapValueOfType<String>(json, r'interval'),
         reconcileStrategy:
             IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpecReconcileStrategyEnum
                 .fromJson(json[r'reconcileStrategy']),
-        sourceRef: IoFluxcdToolkitHelmV2beta2HelmReleaseSpecChartSpecSourceRef
-            .fromJson(json[r'sourceRef'])!,
+        sourceRef:
+            IoFluxcdToolkitHelmV2HelmReleaseSpecChartSpecSourceRef.fromJson(
+                json[r'sourceRef'])!,
         valuesFile: mapValueOfType<String>(json, r'valuesFile'),
         valuesFiles: json[r'valuesFiles'] is Iterable
             ? (json[r'valuesFiles'] as Iterable)
                 .cast<String>()
                 .toList(growable: false)
             : const [],
-        verify:
-            IoFluxcdToolkitHelmV2beta1HelmReleaseSpecChartSpecVerify.fromJson(
-                json[r'verify']),
+        verify: IoFluxcdToolkitHelmV2HelmReleaseSpecChartSpecVerify.fromJson(
+            json[r'verify']),
         version: mapValueOfType<String>(json, r'version'),
       );
     }

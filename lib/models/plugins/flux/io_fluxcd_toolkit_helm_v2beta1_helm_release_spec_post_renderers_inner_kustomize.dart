@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -12,8 +12,8 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_post_renderers_inner_kustomize_images_inner.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_post_renderers_inner_kustomize_patches_inner.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_post_renderers_inner_kustomize_images_inner.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_spec_post_renderers_inner_kustomize_patches_inner.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta1_helm_release_spec_post_renderers_inner_kustomize_patches_json6902_inner.dart';
 
 class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomize {
@@ -26,11 +26,11 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomize {
   });
 
   /// Images is a list of (image name, new name, new tag or digest) for changing image names, tags or digests. This can also be achieved with a patch, but this operator is simpler to specify.
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizeImagesInner>
+  List<IoFluxcdToolkitHelmV2HelmReleaseSpecPostRenderersInnerKustomizeImagesInner>
       images;
 
   /// Strategic merge and JSON patches, defined as inline YAML objects, capable of targeting objects based on kind, label and annotation selectors.
-  List<IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizePatchesInner>
+  List<IoFluxcdToolkitHelmV2HelmReleaseSpecPostRenderersInnerKustomizePatchesInner>
       patches;
 
   /// JSON 6902 patches, defined as inline YAML objects.
@@ -38,7 +38,7 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomize {
       patchesJson6902;
 
   /// Strategic merge patches, defined as inline YAML objects.
-  List<dynamic> patchesStrategicMerge;
+  List<Object> patchesStrategicMerge;
 
   @override
   bool operator ==(Object other) =>
@@ -94,10 +94,10 @@ class IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomize {
 
       return IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomize(
         images:
-            IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizeImagesInner
+            IoFluxcdToolkitHelmV2HelmReleaseSpecPostRenderersInnerKustomizeImagesInner
                 .listFromJson(json[r'images']),
         patches:
-            IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizePatchesInner
+            IoFluxcdToolkitHelmV2HelmReleaseSpecPostRenderersInnerKustomizePatchesInner
                 .listFromJson(json[r'patches']),
         patchesJson6902:
             IoFluxcdToolkitHelmV2beta1HelmReleaseSpecPostRenderersInnerKustomizePatchesJson6902Inner

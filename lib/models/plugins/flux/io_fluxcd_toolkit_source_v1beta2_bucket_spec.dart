@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -12,7 +12,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_bucket_spec_access_from.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_helm_repository_spec_access_from.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_bucket_spec_secret_ref.dart';
 
 class IoFluxcdToolkitSourceV1beta2BucketSpec {
@@ -38,7 +38,7 @@ class IoFluxcdToolkitSourceV1beta2BucketSpec {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitSourceV1beta2BucketSpecAccessFrom? accessFrom;
+  IoFluxcdToolkitSourceV1HelmRepositorySpecAccessFrom? accessFrom;
 
   /// BucketName is the name of the object storage bucket.
   String bucketName;
@@ -225,8 +225,9 @@ class IoFluxcdToolkitSourceV1beta2BucketSpec {
       }());
 
       return IoFluxcdToolkitSourceV1beta2BucketSpec(
-        accessFrom: IoFluxcdToolkitSourceV1beta2BucketSpecAccessFrom.fromJson(
-            json[r'accessFrom']),
+        accessFrom:
+            IoFluxcdToolkitSourceV1HelmRepositorySpecAccessFrom.fromJson(
+                json[r'accessFrom']),
         bucketName: mapValueOfType<String>(json, r'bucketName')!,
         endpoint: mapValueOfType<String>(json, r'endpoint')!,
         ignore: mapValueOfType<String>(json, r'ignore'),

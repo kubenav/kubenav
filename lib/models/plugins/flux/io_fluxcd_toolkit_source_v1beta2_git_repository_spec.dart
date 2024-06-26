@@ -1,7 +1,7 @@
 //
 // AUTO-GENERATED FILE, DO NOT MODIFY!
 //
-// @dart=2.12
+// @dart=2.18
 
 // ignore_for_file: require_trailing_commas
 // ignore_for_file: unused_element
@@ -15,7 +15,7 @@ import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_git_repository_spec_include_inner.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_git_repository_spec_ref.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_git_repository_spec_secret_ref.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_bucket_spec_access_from.dart';
+import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_helm_repository_spec_access_from.dart';
 import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_git_repository_spec_verify.dart';
 
 class IoFluxcdToolkitSourceV1beta2GitRepositorySpec {
@@ -41,7 +41,7 @@ class IoFluxcdToolkitSourceV1beta2GitRepositorySpec {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoFluxcdToolkitSourceV1beta2BucketSpecAccessFrom? accessFrom;
+  IoFluxcdToolkitSourceV1HelmRepositorySpecAccessFrom? accessFrom;
 
   /// GitImplementation specifies which Git client library implementation to use. Defaults to 'go-git', valid values are ('go-git', 'libgit2'). Deprecated: gitImplementation is deprecated now that 'go-git' is the only supported implementation.
   IoFluxcdToolkitSourceV1beta2GitRepositorySpecGitImplementationEnum?
@@ -228,8 +228,9 @@ class IoFluxcdToolkitSourceV1beta2GitRepositorySpec {
       }());
 
       return IoFluxcdToolkitSourceV1beta2GitRepositorySpec(
-        accessFrom: IoFluxcdToolkitSourceV1beta2BucketSpecAccessFrom.fromJson(
-            json[r'accessFrom']),
+        accessFrom:
+            IoFluxcdToolkitSourceV1HelmRepositorySpecAccessFrom.fromJson(
+                json[r'accessFrom']),
         gitImplementation:
             IoFluxcdToolkitSourceV1beta2GitRepositorySpecGitImplementationEnum
                 .fromJson(json[r'gitImplementation']),
