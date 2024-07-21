@@ -290,3 +290,8 @@ img {
   text-decoration: none;
   display: inline-block;
 }
+
+.code-state-container {
+  padding: 12px;
+  word-break: break-all;
+}

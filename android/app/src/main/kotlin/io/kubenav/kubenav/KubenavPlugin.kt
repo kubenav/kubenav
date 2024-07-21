@@ -263,11 +263,12 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val scopes = call.argument<String>("scopes")
       val redirectURL = call.argument<String>("redirectURL")
       val pkceMethod = call.argument<String>("pkceMethod")
+      val state = call.argument<String>("state")
 
-      if (discoveryURL == null || clientID == null || clientSecret == null || certificateAuthority == null || scopes == null || redirectURL == null || pkceMethod == null) {
+      if (discoveryURL == null || clientID == null || clientSecret == null || certificateAuthority == null || scopes == null || redirectURL == null || pkceMethod == null || state == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        oidcGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, result)
+        oidcGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, state, result)
       }
     } else if (call.method == "oidcGetRefreshToken") {
       val discoveryURL = call.argument<String>("discoveryURL")
@@ -493,9 +494,9 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun oidcGetLink(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, pkceMethod: String, result: MethodChannel.Result) {
+  private fun oidcGetLink(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, pkceMethod: String, state: String, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.oidcGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod)
+      val data: String = Kubenav.oidcGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, state)
       result.success(data)
     } catch (e: Exception) {
       result.error("OIDC_GET_LINK_FAILED", e.localizedMessage, null)

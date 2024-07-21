@@ -252,9 +252,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let certificateAuthority = args["certificateAuthority"] as? String,
         let scopes = args["scopes"] as? String,
         let redirectURL = args["redirectURL"] as? String,
-        let pkceMethod = args["pkceMethod"] as? String
+        let pkceMethod = args["pkceMethod"] as? String,
+        let state = args["state"] as? String
       {
-        oidcGetLink(discoveryURL: discoveryURL, clientID: clientID, clientSecret: clientSecret, certificateAuthority: certificateAuthority, scopes: scopes, redirectURL: redirectURL, pkceMethod: pkceMethod, result: result)
+        oidcGetLink(discoveryURL: discoveryURL, clientID: clientID, clientSecret: clientSecret, certificateAuthority: certificateAuthority, scopes: scopes, redirectURL: redirectURL, pkceMethod: pkceMethod, state: state, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -511,10 +512,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func oidcGetLink(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, pkceMethod: String, result: FlutterResult) {
+  private func oidcGetLink(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, pkceMethod: String, state: String, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavOIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, &error)
+    let data = KubenavOIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, state, &error)
     if error != nil {
       result(FlutterError(code: "OIDC_GET_LINK_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {

@@ -39,6 +39,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
   final _refreshTokenController = TextEditingController();
   final _redirectURLController = TextEditingController();
   final _codeController = TextEditingController();
+  final _stateController = TextEditingController();
   String _verifier = '';
   bool _useAccessToken = false;
   bool _isLoading = false;
@@ -67,6 +68,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         _scopesController.text,
         _redirectURLController.text,
         _pkceMethod,
+        _stateController.text,
       );
 
       if (oidcResponse.url != null) {
@@ -393,8 +395,8 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
   Widget _buildPkceMethod() {
     if (_pkceMethod == '') {
       return Padding(
-        padding: const EdgeInsets.only(
-          top: Constants.spacingMiddle,
+        padding: const EdgeInsets.symmetric(
+          vertical: Constants.spacingSmall,
         ),
         child: TextFormField(
           controller: _clientSecretController,
@@ -632,6 +634,24 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         padding: const EdgeInsets.symmetric(
           vertical: Constants.spacingSmall,
         ),
+        child: TextFormField(
+          controller: _stateController,
+          keyboardType: TextInputType.text,
+          enabled: false,
+          autocorrect: false,
+          enableSuggestions: false,
+          maxLines: 1,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: 'State',
+          ),
+          validator: _validator,
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: Constants.spacingSmall,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -715,6 +735,8 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
     } else {
       _redirectURLController.text = Constants.oidcRedirectURI;
     }
+
+    _stateController.text = generateRandomString(6);
   }
 
   @override
@@ -728,6 +750,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
     _refreshTokenController.dispose();
     _redirectURLController.dispose();
     _codeController.dispose();
+    _stateController.dispose();
     super.dispose();
   }
 

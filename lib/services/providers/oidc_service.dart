@@ -136,6 +136,7 @@ class OIDCService {
     String scopes,
     String redirectURL,
     String pkceMethod,
+    String state,
   ) async {
     try {
       final String result = await platform.invokeMethod(
@@ -148,6 +149,7 @@ class OIDCService {
           'scopes': scopes,
           'redirectURL': redirectURL,
           'pkceMethod': pkceMethod,
+          'state': state,
         },
       );
 
