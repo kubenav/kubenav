@@ -81,7 +81,7 @@ func oidcContext(ctx context.Context, certificateAuthority string) (context.Cont
 
 // OIDCGetLink returns the link for the configured OIDC provider. The Link can
 // then be used by the user to login.
-func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod string) (string, error) {
+func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, state string) (string, error) {
 	ctx, err := oidcContext(context.Background(), certificateAuthority)
 	if err != nil {
 		return "", err
@@ -115,7 +115,8 @@ func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, sco
 		challenge := createS256Challenge(verifier)
 
 		oidcResponse = OIDCResponse{
-			URL: oauth2Config.AuthCodeURL("",
+			URL: oauth2Config.AuthCodeURL(
+				state,
 				oauth2.AccessTypeOffline,
 				oauth2.ApprovalForce,
 				oauth2.SetAuthURLParam("code_challenge", challenge),
@@ -125,7 +126,11 @@ func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, sco
 		}
 	} else {
 		oidcResponse = OIDCResponse{
-			URL: oauth2Config.AuthCodeURL("", oauth2.AccessTypeOffline, oauth2.ApprovalForce),
+			URL: oauth2Config.AuthCodeURL(
+				state,
+				oauth2.AccessTypeOffline,
+				oauth2.ApprovalForce,
+			),
 		}
 	}
 

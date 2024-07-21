@@ -43,7 +43,19 @@
   <div class="open-app">
     <br/><br/><br/><br/><br/>
     <button onClick="copyCodeToClipboard()">Copy Code</button>
+    <br/><br/>
+    <div class="code-state-container">
+      <strong>Code:</strong> <span id="code"></span>
+      <br/>
+      <strong>State:</strong> <span id="state"></span>
+    </div>
   </div>
+
+  <script type="text/javascript">
+    const params = new URLSearchParams(window.location.search);
+    document.getElementById("code").innerText = params.get("code");
+    document.getElementById("state").innerText = params.get("state");
+  </script>
 
   <script type="text/javascript">
     function copyCodeToClipboard() {
