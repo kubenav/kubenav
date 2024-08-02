@@ -8,6 +8,7 @@ import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/showmodal.dart';
+import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
@@ -32,6 +33,7 @@ class DeleteResource extends StatefulWidget {
 
 class _DeleteResourceState extends State<DeleteResource> {
   bool _force = false;
+  String? _propagationPolicy;
   bool _isLoading = false;
 
   /// [_delete] deletes the resource. If the [_force] parameter is set
@@ -48,10 +50,8 @@ class _DeleteResourceState extends State<DeleteResource> {
       listen: false,
     );
 
-    String? body;
-    if (_force) {
-      body = '{"gracePeriodSeconds": 0}';
-    }
+    final body =
+        '{"gracePeriodSeconds": ${_force ? 0 : null}, "propagationPolicy": ${_propagationPolicy != null ? '"$_propagationPolicy"' : null}}';
 
     try {
       setState(() {
@@ -152,6 +152,72 @@ class _DeleteResourceState extends State<DeleteResource> {
                       });
                     },
                     value: _force,
+                  ),
+                ],
+              ),
+              const SizedBox(height: Constants.spacingMiddle),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text('Propagation Policy'),
+                  DropdownButton<String?>(
+                    value: _propagationPolicy,
+                    underline: Container(
+                      height: 2,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _propagationPolicy = value ?? '';
+                      });
+                    },
+                    items: [
+                      DropdownMenuItem(
+                        value: null,
+                        child: Text(
+                          '',
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .textPrimary,
+                          ),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Background',
+                        child: Text(
+                          'Background',
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .textPrimary,
+                          ),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Foreground',
+                        child: Text(
+                          'Foreground',
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .textPrimary,
+                          ),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Orphan',
+                        child: Text(
+                          'Orphan',
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .textPrimary,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
