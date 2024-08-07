@@ -53,10 +53,10 @@ use the following commands to check your installed version:
 ```sh
 $ flutter --version
 
-Flutter 3.22.1 • channel stable • https://github.com/flutter/flutter.git
-Framework • revision a14f74ff3a (10 days ago) • 2024-05-22 11:08:21 -0500
-Engine • revision 55eae6864b
-Tools • Dart 3.4.1 • DevTools 2.34.3
+Flutter 3.24.0 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision 80c2e84975 (8 days ago) • 2024-07-30 23:06:49 +0700
+Engine • revision b8800d88be
+Tools • Dart 3.5.0 • DevTools 2.37.2
 
 $ go version
 
@@ -78,7 +78,7 @@ go get -d golang.org/x/mobile/cmd/gomobile
 
 To build the code via the `gomobile` command the `ANDROID_HOME` and
 `ANDROID_NDK_HOME` environment variables must be set. We are using NDK Version
-25.2.9519653.
+`27.0.12077973`.
 
 The Android and iOS bindings can then be build using the following Make
 commands:
