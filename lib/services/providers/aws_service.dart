@@ -12,6 +12,8 @@ const awsRegions = [
   'us-east-2',
   'us-west-1',
   'us-west-2',
+  'us-gov-west-1',
+  'us-gov-west-2',
   'af-south-1',
   'ap-east-1',
   'ap-south-1',
