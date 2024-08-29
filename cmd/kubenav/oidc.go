@@ -94,7 +94,9 @@ func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, sco
 
 	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
 	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
-	parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+	if discoveryURL != "https://accounts.google.com" {
+		parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+	}
 
 	oauth2Config := oauth2.Config{
 		ClientID:     clientID,
@@ -158,7 +160,9 @@ func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthor
 
 	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
 	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
-	parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+	if discoveryURL != "https://accounts.google.com" {
+		parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+	}
 
 	oauth2Config := oauth2.Config{
 		ClientID:     clientID,
@@ -214,7 +218,9 @@ func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthori
 
 	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
 	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
-	parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+	if discoveryURL != "https://accounts.google.com" {
+		parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+	}
 
 	oauth2Config := oauth2.Config{
 		ClientID:     clientID,
@@ -273,7 +279,9 @@ func OIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes string)
 
 	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
 	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
-	parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+	if discoveryURL != "https://accounts.google.com" {
+		parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+	}
 
 	oauth2Config := oauth2.Config{
 		ClientID: clientID,
@@ -319,7 +327,9 @@ func OIDCDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority,
 
 	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
 	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
-	parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+	if discoveryURL != "https://accounts.google.com" {
+		parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+	}
 
 	oauth2Config := oauth2.Config{
 		ClientID: clientID,
