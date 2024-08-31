@@ -4,6 +4,8 @@ go 1.22.0
 
 toolchain go1.22.2
 
+replace golang.org/x/oauth2 => github.com/kubenav/oauth2 v0.0.0-20240830072915-86aad6e7f9f3
+
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.13.0
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.7.0
