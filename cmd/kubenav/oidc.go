@@ -95,6 +95,9 @@ func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, sco
 	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
 	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
 	if discoveryURL != "https://accounts.google.com" {
+		// Google doesn't support the `offline_access` scope, so that we only
+		// add it for non-Google providers.
+		// See: https://github.com/kubenav/kubenav/issues/718
 		parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
 	}
 
@@ -331,6 +334,13 @@ func OIDCDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority,
 		parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
 	}
 
+	opts := []oauth2.AuthCodeOption{}
+	if strings.HasPrefix(discoveryURL, "https://sts.windows.net/") {
+		// Azure Entra ID requires to pass the device code via the `code`
+		// parameter instead of the `device_code` parameter.
+		opts = append(opts, oauth2.SetAuthURLParam("code", deviceCode))
+	}
+
 	oauth2Config := oauth2.Config{
 		ClientID: clientID,
 		Endpoint: oauth2.Endpoint{
@@ -341,7 +351,7 @@ func OIDCDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority,
 		Scopes: parsedScopes,
 	}
 
-	oauth2Token, err := oauth2Config.DeviceAccessToken(ctx, &oauth2.DeviceAuthResponse{DeviceCode: deviceCode})
+	oauth2Token, err := oauth2Config.DeviceAccessToken(ctx, &oauth2.DeviceAuthResponse{DeviceCode: deviceCode}, opts...)
 	if err != nil {
 		return "", err
 	}
