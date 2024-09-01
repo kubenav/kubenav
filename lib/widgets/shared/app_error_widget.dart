@@ -7,6 +7,7 @@ import 'package:kubenav/utils/custom_icons.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/settings/providers/reauthenticate/settings_reauthenticate_awssso_provider_config.dart';
+import 'package:kubenav/widgets/settings/providers/reauthenticate/settings_reauthenticate_oidc_provider_config.dart';
 
 /// [AppErrorWidget] is a widget which renders a full width card, to show an
 /// error which occured during an operation in the app. A user must pass in a
@@ -49,6 +50,10 @@ class AppErrorWidget extends StatelessWidget {
   Widget _buildReauthWidget(String details) {
     if (details.contains('aws_sso_access_token_is_expired')) {
       return const SettingsReauthenticateAWSSSO();
+    }
+
+    if (details.contains('oidc_access_token_is_expired_and_no_refresh_token')) {
+      return const SettingsReauthenticateOIDC();
     }
 
     return Container();

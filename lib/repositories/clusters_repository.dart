@@ -349,6 +349,13 @@ class ClustersRepository with ChangeNotifier {
         DateTime? expiryDate = Jwt.getExpiryDate(provider?.oidc?.idToken ?? '');
 
         if (expiryDate != null && expiryDate.isBefore(DateTime.now())) {
+          if (provider?.oidc?.refreshToken == null ||
+              provider?.oidc?.refreshToken == '') {
+            throw Exception(
+              'oidc_access_token_is_expired_and_no_refresh_token',
+            );
+          }
+
           final oidcResponse = await OIDCService().getAccessToken(
             provider?.oidc?.discoveryURL ?? '',
             provider?.oidc?.clientID ?? '',
