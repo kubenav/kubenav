@@ -37,8 +37,8 @@ dependencies:
   catppuccin_flutter: ^1.0.0
   code_text_field: ^1.0.2
   collection: ^1.18.0
-  file_picker: ^8.0.6
-  fl_chart: ^0.68.0
+  file_picker: ^8.1.2
+  fl_chart: ^0.69.0
   flutter_markdown: ^0.7.3
   flutter_native_splash: ^2.4.1
   flutter_secure_storage: ^9.2.2
@@ -48,14 +48,14 @@ dependencies:
   http: ^1.2.2
   in_app_purchase: ^3.1.1
   intl: ^0.19.0
-  json_path: ^0.7.2
+  json_path: ^0.7.4
   jwt_decode: ^0.3.1
-  local_auth: ^2.1.2
+  local_auth: ^2.3.0
   package_info_plus: ^8.0.1
   path_provider: ^2.1.4
   provider: ^6.0.4
   url_launcher: ^6.3.0
-  uuid: ^4.4.2
+  uuid: ^4.5.0
   web_socket_channel: ^3.0.1
   xterm: ^4.0.0
   yaml: ^3.1.0
