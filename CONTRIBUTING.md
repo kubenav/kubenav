@@ -53,14 +53,14 @@ use the following commands to check your installed version:
 ```sh
 $ flutter --version
 
-Flutter 3.24.0 • channel stable • https://github.com/flutter/flutter.git
-Framework • revision 80c2e84975 (8 days ago) • 2024-07-30 23:06:49 +0700
-Engine • revision b8800d88be
-Tools • Dart 3.5.0 • DevTools 2.37.2
+Flutter 3.24.1 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision 5874a72aa4 (12 days ago) • 2024-08-20 16:46:00 -0500
+Engine • revision c9b9d5780d
+Tools • Dart 3.5.1 • DevTools 2.37.2
 
 $ go version
 
-go version go1.22.0 darwin/arm64
+go version go1.23.0 darwin/arm64
 ```
 
 ### Working with the Go Code
@@ -73,7 +73,7 @@ installed by running the following two commands:
 go install golang.org/x/mobile/cmd/gomobile@latest
 gomobile init
 
-go get -d golang.org/x/mobile/cmd/gomobile
+go get golang.org/x/mobile/cmd/gomobile
 ```
 
 To build the code via the `gomobile` command the `ANDROID_HOME` and
