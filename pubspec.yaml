@@ -55,7 +55,7 @@ dependencies:
   path_provider: ^2.1.4
   provider: ^6.0.4
   url_launcher: ^6.3.0
-  uuid: ^4.5.0
+  uuid: ^4.5.1
   web_socket_channel: ^3.0.1
   xterm: ^4.0.0
   yaml: ^3.1.0
@@ -69,9 +69,9 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.1
   import_sorter: ^4.6.0
 
 # For information on the generic Dart part of this file, see the
