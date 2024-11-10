@@ -101,21 +101,7 @@ class _OverviewEventsState extends State<OverviewEvents> {
     );
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    setState(() {
-      _futureFetchEvents = _fetchEvents();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Provider.of<ClustersRepository>(
-      context,
-      listen: true,
-    );
-
+  Widget buildContainer(Widget content) {
     return Column(
       children: [
         Padding(
@@ -131,97 +117,102 @@ class _OverviewEventsState extends State<OverviewEvents> {
             ],
           ),
         ),
-        FutureBuilder(
-          future: _futureFetchEvents,
-          builder: (
-            BuildContext context,
-            AsyncSnapshot<List<IoK8sApiCoreV1Event>> snapshot,
-          ) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return Row(
+        content,
+      ],
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {
+      _futureFetchEvents = _fetchEvents();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Provider.of<ClustersRepository>(
+      context,
+      listen: true,
+    );
+
+    return FutureBuilder(
+      future: _futureFetchEvents,
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<List<IoK8sApiCoreV1Event>> snapshot,
+      ) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return buildContainer(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: Constants.spacingMiddle,
+                      right: Constants.spacingMiddle,
+                    ),
+                    child: CircularProgressIndicator(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          default:
+            if (snapshot.hasError) {
+              return buildContainer(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: Constants.spacingMiddle,
-                        right: Constants.spacingMiddle,
-                      ),
-                      child: CircularProgressIndicator(
-                        color: Theme.of(context).colorScheme.primary,
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: Constants.spacingMiddle,
+                          right: Constants.spacingMiddle,
+                        ),
+                        child: AppErrorWidget(
+                          message: 'Failed to Load ${resourceEvent.plural}',
+                          details: snapshot.error.toString(),
+                          icon: 'assets/resources/${resourceEvent.icon}.svg',
+                        ),
                       ),
                     ),
                   ],
-                );
-              default:
-                if (snapshot.hasError) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: Constants.spacingMiddle,
-                            right: Constants.spacingMiddle,
-                          ),
-                          child: AppErrorWidget(
-                            message: 'Failed to Load ${resourceEvent.plural}',
-                            details: snapshot.error.toString(),
-                            icon: 'assets/resources/${resourceEvent.icon}.svg',
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                }
-
-                if (snapshot.data == null || snapshot.data!.isEmpty) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: Constants.spacingMiddle,
-                            right: Constants.spacingMiddle,
-                          ),
-                          child: AppErrorWidget(
-                            message: 'No ${resourceEvent.plural} Found',
-                            details:
-                                'No warnings were found in the current context.',
-                            icon: 'assets/resources/${resourceEvent.icon}.svg',
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                }
-
-                return ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: const EdgeInsets.only(
-                    right: Constants.spacingMiddle,
-                    left: Constants.spacingMiddle,
-                  ),
-                  separatorBuilder: (context, index) => const SizedBox(
-                    height: Constants.spacingMiddle,
-                  ),
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    return buildEventItem(
-                      snapshot.data![index],
-                    );
-                  },
-                );
+                ),
+              );
             }
-          },
-        ),
-      ],
+
+            if (snapshot.data == null || snapshot.data!.isEmpty) {
+              return Container();
+            }
+
+            return buildContainer(
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.only(
+                  right: Constants.spacingMiddle,
+                  left: Constants.spacingMiddle,
+                ),
+                separatorBuilder: (context, index) => const SizedBox(
+                  height: Constants.spacingMiddle,
+                ),
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  return buildEventItem(
+                    snapshot.data![index],
+                  );
+                },
+              ),
+            );
+        }
+      },
     );
   }
 }
