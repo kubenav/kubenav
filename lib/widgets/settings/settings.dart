@@ -380,7 +380,7 @@ class Settings extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: Text(
-                          'Show Cluster on Start',
+                          'Show Clusters on Start',
                           style: noramlTextStyle(
                             context,
                           ),
