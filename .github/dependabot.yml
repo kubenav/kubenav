@@ -1,9 +1,14 @@
+---
 version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "monthly"
+    reviewers:
+      - "ricoberger"
+    assignees:
+      - "ricoberger"
     groups:
       github-actions:
         patterns:
@@ -13,6 +18,10 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    reviewers:
+      - "ricoberger"
+    assignees:
+      - "ricoberger"
     groups:
       pub:
         patterns:
@@ -22,6 +31,10 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    reviewers:
+      - "ricoberger"
+    assignees:
+      - "ricoberger"
     groups:
       gomod:
         patterns:
