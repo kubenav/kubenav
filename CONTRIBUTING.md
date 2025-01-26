@@ -53,10 +53,10 @@ use the following commands to check your installed version:
 ```sh
 $ flutter --version
 
-Flutter 3.24.4 • channel stable • https://github.com/flutter/flutter.git
-Framework • revision 603104015d (2 weeks ago) • 2024-10-24 08:01:25 -0700
-Engine • revision db49896cf2
-Tools • Dart 3.5.4 • DevTools 2.37.3
+Flutter 3.27.3 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision c519ee916e (5 days ago) • 2025-01-21 10:32:23 -0800
+Engine • revision e672b006cb
+Tools • Dart 3.6.1 • DevTools 2.40.2
 
 $ go version
 
