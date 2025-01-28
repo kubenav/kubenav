@@ -85,7 +85,7 @@ class SettingsHelp extends StatelessWidget {
                   color: Theme.of(context)
                       .extension<CustomColors>()!
                       .textPrimary
-                      .withOpacity(Constants.opacityIcon),
+                      .withValues(alpha: Constants.opacityIcon),
                   size: 16,
                 ),
               ],

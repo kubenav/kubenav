@@ -210,7 +210,7 @@ class Settings extends StatelessWidget {
               color: Theme.of(context)
                   .extension<CustomColors>()!
                   .textPrimary
-                  .withOpacity(Constants.opacityIcon),
+                  .withValues(alpha: Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -242,7 +242,7 @@ class Settings extends StatelessWidget {
               color: Theme.of(context)
                   .extension<CustomColors>()!
                   .textPrimary
-                  .withOpacity(Constants.opacityIcon),
+                  .withValues(alpha: Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -308,7 +308,7 @@ class Settings extends StatelessWidget {
                         color: Theme.of(context)
                             .extension<CustomColors>()!
                             .textPrimary
-                            .withOpacity(Constants.opacityIcon),
+                            .withValues(alpha: Constants.opacityIcon),
                         size: 16,
                       ),
                     ],
@@ -340,7 +340,7 @@ class Settings extends StatelessWidget {
                         color: Theme.of(context)
                             .extension<CustomColors>()!
                             .textPrimary
-                            .withOpacity(Constants.opacityIcon),
+                            .withValues(alpha: Constants.opacityIcon),
                         size: 16,
                       ),
                     ],
@@ -512,7 +512,7 @@ class Settings extends StatelessWidget {
                         color: Theme.of(context)
                             .extension<CustomColors>()!
                             .textPrimary
-                            .withOpacity(Constants.opacityIcon),
+                            .withValues(alpha: Constants.opacityIcon),
                         size: 16,
                       ),
                     ],
@@ -546,7 +546,7 @@ class Settings extends StatelessWidget {
                         color: Theme.of(context)
                             .extension<CustomColors>()!
                             .textPrimary
-                            .withOpacity(Constants.opacityIcon),
+                            .withValues(alpha: Constants.opacityIcon),
                         size: 16,
                       ),
                     ],
@@ -580,7 +580,7 @@ class Settings extends StatelessWidget {
                         color: Theme.of(context)
                             .extension<CustomColors>()!
                             .textPrimary
-                            .withOpacity(Constants.opacityIcon),
+                            .withValues(alpha: Constants.opacityIcon),
                         size: 16,
                       ),
                     ],
@@ -614,7 +614,7 @@ class Settings extends StatelessWidget {
                         color: Theme.of(context)
                             .extension<CustomColors>()!
                             .textPrimary
-                            .withOpacity(Constants.opacityIcon),
+                            .withValues(alpha: Constants.opacityIcon),
                         size: 16,
                       ),
                     ],

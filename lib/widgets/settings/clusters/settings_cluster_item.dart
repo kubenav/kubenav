@@ -100,7 +100,7 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
           color: Theme.of(context)
               .extension<CustomColors>()!
               .textPrimary
-              .withOpacity(Constants.opacityIcon),
+              .withValues(alpha: Constants.opacityIcon),
         ),
       );
     }

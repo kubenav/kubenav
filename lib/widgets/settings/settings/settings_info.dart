@@ -106,7 +106,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
               color: Theme.of(context)
                   .extension<CustomColors>()!
                   .textPrimary
-                  .withOpacity(Constants.opacityIcon),
+                  .withValues(alpha: Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -140,7 +140,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
               color: Theme.of(context)
                   .extension<CustomColors>()!
                   .textPrimary
-                  .withOpacity(Constants.opacityIcon),
+                  .withValues(alpha: Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -231,7 +231,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
               color: Theme.of(context)
                   .extension<CustomColors>()!
                   .textPrimary
-                  .withOpacity(Constants.opacityIcon),
+                  .withValues(alpha: Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -260,7 +260,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
               color: Theme.of(context)
                   .extension<CustomColors>()!
                   .textPrimary
-                  .withOpacity(Constants.opacityIcon),
+                  .withValues(alpha: Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -289,7 +289,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
               color: Theme.of(context)
                   .extension<CustomColors>()!
                   .textPrimary
-                  .withOpacity(Constants.opacityIcon),
+                  .withValues(alpha: Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -351,7 +351,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
               color: Theme.of(context)
                   .extension<CustomColors>()!
                   .textPrimary
-                  .withOpacity(Constants.opacityIcon),
+                  .withValues(alpha: Constants.opacityIcon),
               size: 16,
             ),
           ],
@@ -380,7 +380,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
               color: Theme.of(context)
                   .extension<CustomColors>()!
                   .textPrimary
-                  .withOpacity(Constants.opacityIcon),
+                  .withValues(alpha: Constants.opacityIcon),
               size: 16,
             ),
           ],
