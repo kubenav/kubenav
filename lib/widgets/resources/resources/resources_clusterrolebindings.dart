@@ -229,7 +229,7 @@ List<Widget> _buildIcon(BuildContext context, String kind) {
         color: Theme.of(context)
             .extension<CustomColors>()!
             .textSecondary
-            .withOpacity(Constants.opacityIcon),
+            .withValues(alpha: Constants.opacityIcon),
         size: 24,
       ),
     ];
