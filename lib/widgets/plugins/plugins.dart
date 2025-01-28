@@ -11,6 +11,7 @@ import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/utils/themes.dart';
+import 'package:kubenav/widgets/plugins/argo/plugin_argo.dart';
 import 'package:kubenav/widgets/plugins/cert-manager/plugin_cert_manager.dart';
 import 'package:kubenav/widgets/plugins/flux/plugin_flux.dart';
 import 'package:kubenav/widgets/plugins/helm/plugin_helm_list.dart';
@@ -36,6 +37,12 @@ class Plugin {
 }
 
 final _plugins = [
+  Plugin(
+    title: 'Argo',
+    description: 'Declarative GitOps CD for Kubernetes',
+    icon: 'assets/plugins/argo.svg',
+    widget: const PluginArgo(),
+  ),
   Plugin(
     title: 'cert-manager',
     description:

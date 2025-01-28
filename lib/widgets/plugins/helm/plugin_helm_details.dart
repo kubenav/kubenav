@@ -377,7 +377,7 @@ class _PluginHelmDetailsState extends State<PluginHelmDetails> {
                                 values: release.version,
                               ),
                               DetailsItemModel(
-                                name: 'Staus',
+                                name: 'Status',
                                 values: release.info?.status,
                               ),
                               DetailsItemModel(
