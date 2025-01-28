@@ -195,6 +195,9 @@ final Resource argoResourceApplication = Resource(
               name: 'URLs',
               values: item.status?.summary?.externalURLs,
             ),
+            // TODO: this list should link to the customResource widgets for
+            // non-supported resource kinds, it would also be useful to see
+            // health and sync status per resource.
             DetailsItemModel(
               name: 'Resources',
               values: item.status?.resources.map(

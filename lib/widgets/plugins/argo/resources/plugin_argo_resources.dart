@@ -7,6 +7,10 @@ import 'package:kubenav/widgets/plugins/argo/resources/plugin_argo_resources_pro
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/shared/app_resource_actions.dart';
 
+// TODO: Implements Application and Project (AppProject), but we could implement
+// ApplicationSet as well.
+// TODO: There are also additional addons like argo-rollouts, argo-workflows and
+// argo-events with their own resources.
 class ArgoResourceCategories {
   static const resources = 'Resources';
 }
@@ -20,7 +24,6 @@ final List<String> argoResourceCategories = [
 final List<Resource> argoResources = [
   argoResourceApplication,
   argoResourceProject,
-//  argoResourceRollout,
 ];
 
 /// [kindToArgoResource] is a map, which maps the kind of a Argo resource to
@@ -28,7 +31,6 @@ final List<Resource> argoResources = [
 final kindToArgoResource = {
   'Application': argoResourceApplication,
   'AppProject': argoResourceProject,
-//  'Rollout': argoResourceRollout,
 };
 
 List<AppResourceActionsModel> argoResourceActions(

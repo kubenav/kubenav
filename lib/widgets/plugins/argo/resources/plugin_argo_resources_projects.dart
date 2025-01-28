@@ -112,7 +112,7 @@ final Resource argoResourceProject = Resource(
               name: 'Description',
               values: item.spec.description,
             ),
-            // TODO need to flesh this out
+            // TODO: There are more details to show than just enabled or not
             DetailsItemModel(
               name: 'SyncWindows',
               values: item.spec.syncWindows.isEmpty
