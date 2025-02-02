@@ -24,8 +24,6 @@ extension TerminalTypeExtension on TerminalType {
         return 'Logs Stream';
       case TerminalType.exec:
         return 'Terminal';
-      default:
-        return 'Invalid';
     }
   }
 }
