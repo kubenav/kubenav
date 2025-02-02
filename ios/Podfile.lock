@@ -64,7 +64,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   ASN1Swift: bbd56c299b2084ba71bd7d7769c6202451598948
-  file_picker: 8272ff2f2365937598e2407f4f2ff55c723f084a
+  file_picker: fb04e739ae6239a76ce1f571863a196a922c87d4
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_native_splash: 6cad9122ea0fad137d23137dd14b937f3e90b145
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
