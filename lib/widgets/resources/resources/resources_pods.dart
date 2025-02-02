@@ -861,7 +861,7 @@ class DetailsContainer extends StatelessWidget {
                             color: Theme.of(context)
                                 .extension<CustomColors>()!
                                 .textSecondary
-                                .withOpacity(Constants.opacityIcon),
+                                .withValues(alpha: Constants.opacityIcon),
                             size: 24,
                           ),
                         ],
@@ -930,7 +930,7 @@ class DetailsContainer extends StatelessWidget {
                             color: Theme.of(context)
                                 .extension<CustomColors>()!
                                 .textSecondary
-                                .withOpacity(Constants.opacityIcon),
+                                .withValues(alpha: Constants.opacityIcon),
                             size: 24,
                           ),
                         ],
