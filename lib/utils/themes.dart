@@ -699,7 +699,7 @@ final lightTheme = ThemeData(
     ),
     TerminalColors(
       cursor: catppuccin.latte.rosewater,
-      selection: catppuccin.latte.rosewater.withOpacity(0.5),
+      selection: catppuccin.latte.rosewater.withValues(alpha: 0.5),
       foreground: catppuccin.latte.text,
       background: catppuccin.latte.mantle,
       black: catppuccin.latte.surface1,
@@ -854,7 +854,7 @@ final darkTheme = ThemeData(
     ),
     TerminalColors(
       cursor: catppuccin.macchiato.rosewater,
-      selection: catppuccin.macchiato.rosewater.withOpacity(0.5),
+      selection: catppuccin.macchiato.rosewater.withValues(alpha: 0.5),
       foreground: catppuccin.macchiato.text,
       background: catppuccin.macchiato.mantle,
       black: catppuccin.macchiato.surface1,

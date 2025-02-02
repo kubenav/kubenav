@@ -464,8 +464,6 @@ extension ClusterProviderTypeExtension on ClusterProviderType {
         return 'Rancher';
       case ClusterProviderType.manual:
         return 'Manual';
-      default:
-        return 'Manual';
     }
   }
 
@@ -490,8 +488,6 @@ extension ClusterProviderTypeExtension on ClusterProviderType {
         return 'Import your Rancher Clusters';
       case ClusterProviderType.manual:
         return 'Manual Cluster Configuration';
-      default:
-        return 'Manual Cluster Configuration';
     }
   }
 
@@ -515,8 +511,6 @@ extension ClusterProviderTypeExtension on ClusterProviderType {
       case ClusterProviderType.rancher:
         return 'assets/providers/rancher.svg';
       case ClusterProviderType.manual:
-        return 'assets/providers/manual.svg';
-      default:
         return 'assets/providers/manual.svg';
     }
   }

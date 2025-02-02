@@ -38,26 +38,26 @@ dependencies:
   catppuccin_flutter: ^1.0.0
   code_text_field: ^1.0.2
   collection: ^1.19.0
-  file_picker: ^8.1.7
-  fl_chart: ^0.70.0
-  flutter_markdown: ^0.7.4+1
+  file_picker: ^8.3.1
+  fl_chart: ^0.70.2
+  flutter_markdown: ^0.7.6
   flutter_native_splash: ^2.4.4
-  flutter_secure_storage: ^9.2.2
-  flutter_slidable: ^3.1.2
-  flutter_svg: ^2.0.16
+  flutter_secure_storage: ^9.2.4
+  flutter_slidable: ^4.0.0
+  flutter_svg: ^2.0.17
   highlight: ^0.7.0
-  http: ^1.2.2
-  in_app_purchase: ^3.1.1
+  http: ^1.3.0
+  in_app_purchase: ^3.2.1
   intl: ^0.19.0
-  json_path: ^0.7.4
+  json_path: ^0.7.5
   jwt_decode: ^0.3.1
   local_auth: ^2.3.0
-  package_info_plus: ^8.1.2
+  package_info_plus: ^8.1.4
   path_provider: ^2.1.5
   provider: ^6.0.4
   url_launcher: ^6.3.1
   uuid: ^4.5.1
-  web_socket_channel: ^3.0.1
+  web_socket_channel: ^3.0.2
   xterm: ^4.0.0
   yaml: ^3.1.3
 
@@ -72,7 +72,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
 
-  flutter_launcher_icons: ^0.14.2
+  flutter_launcher_icons: ^0.14.3
   import_sorter: ^4.6.0
 
 # For information on the generic Dart part of this file, see the
