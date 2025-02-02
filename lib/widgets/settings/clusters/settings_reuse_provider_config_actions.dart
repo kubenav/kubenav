@@ -113,8 +113,6 @@ class SettingsReuseProviderActions extends StatelessWidget {
         return const SettingsRancherProvider(
           provider: null,
         );
-      default:
-        return const SettingsAddClusterManual();
     }
   }
 
