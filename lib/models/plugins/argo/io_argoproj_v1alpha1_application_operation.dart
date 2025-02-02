@@ -3,13 +3,16 @@
 //
 // @dart=2.18
 
-// ignore_for_file: unused_element, unused_import, require_trailing_commas, unnecessary_this, avoid_function_literals_in_foreach_calls
+// ignore_for_file: require_trailing_commas
+// ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_analysis_run_spec_metrics_inner_provider_job_spec_template_spec_containers_inner_lifecycle_post_start_http_get_http_headers_inner.dart';
+import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_operation_info_inner.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_operation_initiated_by.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_operation_retry.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_operation_sync.dart';
@@ -24,8 +27,7 @@ class IoArgoprojV1alpha1ApplicationOperation {
   });
 
   /// Info is a list of informational items for this operation
-  List<IoArgoprojV1alpha1AnalysisRunSpecMetricsInnerProviderJobSpecTemplateSpecContainersInnerLifecyclePostStartHttpGetHttpHeadersInner>
-      info;
+  List<IoArgoprojV1alpha1ApplicationOperationInfoInner> info;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -114,9 +116,8 @@ class IoArgoprojV1alpha1ApplicationOperation {
       }());
 
       return IoArgoprojV1alpha1ApplicationOperation(
-        info:
-            IoArgoprojV1alpha1AnalysisRunSpecMetricsInnerProviderJobSpecTemplateSpecContainersInnerLifecyclePostStartHttpGetHttpHeadersInner
-                .listFromJson(json[r'info']),
+        info: IoArgoprojV1alpha1ApplicationOperationInfoInner.listFromJson(
+            json[r'info']),
         initiatedBy: IoArgoprojV1alpha1ApplicationOperationInitiatedBy.fromJson(
             json[r'initiatedBy']),
         retry: IoArgoprojV1alpha1ApplicationOperationRetry.fromJson(

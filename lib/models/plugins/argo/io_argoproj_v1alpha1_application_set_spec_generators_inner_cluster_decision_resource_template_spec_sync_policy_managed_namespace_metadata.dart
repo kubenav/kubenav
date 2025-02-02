@@ -13,9 +13,9 @@
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 
-class IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata {
-  /// Returns a new [IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata] instance.
-  IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata({
+class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata {
+  /// Returns a new [IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata] instance.
+  IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata({
     this.annotations = const {},
     this.labels = const {},
   });
@@ -27,7 +27,7 @@ class IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespac
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata &&
+      other is IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata &&
           deepEquality.equals(other.annotations, annotations) &&
           deepEquality.equals(other.labels, labels);
 
@@ -38,7 +38,7 @@ class IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespac
 
   @override
   String toString() =>
-      'IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata[annotations=$annotations, labels=$labels]';
+      'IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata[annotations=$annotations, labels=$labels]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -47,10 +47,10 @@ class IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespac
     return json;
   }
 
-  /// Returns a new [IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata] instance and imports its values from
+  /// Returns a new [IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata?
+  static IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata?
       fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
@@ -61,14 +61,14 @@ class IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespac
       assert(() {
         requiredKeys.forEach((key) {
           assert(json.containsKey(key),
-              'Required key "IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata[$key]" is missing from JSON.');
+              'Required key "IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata[$key]" is missing from JSON.');
           assert(json[key] != null,
-              'Required key "IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata[$key]" has a null value in JSON.');
+              'Required key "IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata(
+      return IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata(
         annotations:
             mapCastOfType<String, String>(json, r'annotations') ?? const {},
         labels: mapCastOfType<String, String>(json, r'labels') ?? const {},
@@ -78,17 +78,17 @@ class IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespac
   }
 
   static List<
-          IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata>
+          IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata>
       listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
     final result =
-        <IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata>[];
+        <IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
         final value =
-            IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata
+            IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata
                 .fromJson(row);
         if (value != null) {
           result.add(value);
@@ -99,15 +99,15 @@ class IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespac
   }
 
   static Map<String,
-          IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata>
+          IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata>
       mapFromJson(dynamic json) {
     final map = <String,
-        IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata>{};
+        IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
         final value =
-            IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata
+            IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata
                 .fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
@@ -117,24 +117,24 @@ class IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespac
     return map;
   }
 
-  // maps a json object with a list of IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata-objects as value to a dart map
+  // maps a json object with a list of IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata-objects as value to a dart map
   static Map<
           String,
           List<
-              IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata>>
+              IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata>>
       mapListFromJson(
     dynamic json, {
     bool growable = false,
   }) {
     final map = <String,
         List<
-            IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata>>{};
+            IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
         map[entry.key] =
-            IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultManagedNamespaceMetadata
+            IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata
                 .listFromJson(
           entry.value,
           growable: growable,

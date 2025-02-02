@@ -3,19 +3,24 @@
 //
 // @dart=2.18
 
-// ignore_for_file: unused_element, unused_import, unnecessary_this, avoid_function_literals_in_foreach_calls, require_trailing_commas
+// ignore_for_file: require_trailing_commas
+// ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_set_spec_generators_inner_matrix_generators_inner_pull_request_azuredevops_token_ref.dart';
+import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_set_spec_generators_inner_matrix_generators_inner_pull_request_bitbucket_server_ca_ref.dart';
 
 class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerScmProviderGitlab {
   /// Returns a new [IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerScmProviderGitlab] instance.
   IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerScmProviderGitlab({
     this.allBranches,
     this.api,
+    this.caRef,
     required this.group,
     this.includeSharedProjects,
     this.includeSubgroups,
@@ -39,6 +44,15 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerSc
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
   String? api;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPullRequestBitbucketServerCaRef?
+      caRef;
 
   String group;
 
@@ -89,6 +103,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerSc
       other is IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerScmProviderGitlab &&
           other.allBranches == allBranches &&
           other.api == api &&
+          other.caRef == caRef &&
           other.group == group &&
           other.includeSharedProjects == includeSharedProjects &&
           other.includeSubgroups == includeSubgroups &&
@@ -101,6 +116,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerSc
       // ignore: unnecessary_parenthesis
       (allBranches == null ? 0 : allBranches!.hashCode) +
       (api == null ? 0 : api!.hashCode) +
+      (caRef == null ? 0 : caRef!.hashCode) +
       (group.hashCode) +
       (includeSharedProjects == null ? 0 : includeSharedProjects!.hashCode) +
       (includeSubgroups == null ? 0 : includeSubgroups!.hashCode) +
@@ -110,7 +126,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerSc
 
   @override
   String toString() =>
-      'IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerScmProviderGitlab[allBranches=$allBranches, api=$api, group=$group, includeSharedProjects=$includeSharedProjects, includeSubgroups=$includeSubgroups, insecure=$insecure, tokenRef=$tokenRef, topic=$topic]';
+      'IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerScmProviderGitlab[allBranches=$allBranches, api=$api, caRef=$caRef, group=$group, includeSharedProjects=$includeSharedProjects, includeSubgroups=$includeSubgroups, insecure=$insecure, tokenRef=$tokenRef, topic=$topic]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -123,6 +139,11 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerSc
       json[r'api'] = this.api;
     } else {
       json[r'api'] = null;
+    }
+    if (this.caRef != null) {
+      json[r'caRef'] = this.caRef;
+    } else {
+      json[r'caRef'] = null;
     }
     json[r'group'] = this.group;
     if (this.includeSharedProjects != null) {
@@ -177,6 +198,9 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerSc
       return IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerScmProviderGitlab(
         allBranches: mapValueOfType<bool>(json, r'allBranches'),
         api: mapValueOfType<String>(json, r'api'),
+        caRef:
+            IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPullRequestBitbucketServerCaRef
+                .fromJson(json[r'caRef']),
         group: mapValueOfType<String>(json, r'group')!,
         includeSharedProjects:
             mapValueOfType<bool>(json, r'includeSharedProjects'),

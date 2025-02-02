@@ -3,13 +3,18 @@
 //
 // @dart=2.18
 
-// ignore_for_file: unused_element, unused_import, unnecessary_this, avoid_function_literals_in_foreach_calls, require_trailing_commas
+// ignore_for_file: require_trailing_commas
+// ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_set_spec_generators_inner_matrix_generators_inner_pull_request_bitbucket_basic_auth.dart';
+import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_set_spec_generators_inner_matrix_generators_inner_pull_request_bitbucket_bearer_token.dart';
+import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_set_spec_generators_inner_matrix_generators_inner_pull_request_bitbucket_server_ca_ref.dart';
 
 class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerScmProviderBitbucketServer {
   /// Returns a new [IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerScmProviderBitbucketServer] instance.
@@ -17,6 +22,9 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerSc
     this.allBranches,
     required this.api,
     this.basicAuth,
+    this.bearerToken,
+    this.caRef,
+    this.insecure,
     required this.project,
   });
 
@@ -39,6 +47,32 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerSc
   IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPullRequestBitbucketBasicAuth?
       basicAuth;
 
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPullRequestBitbucketBearerToken?
+      bearerToken;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPullRequestBitbucketServerCaRef?
+      caRef;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  bool? insecure;
+
   String project;
 
   @override
@@ -48,6 +82,9 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerSc
           other.allBranches == allBranches &&
           other.api == api &&
           other.basicAuth == basicAuth &&
+          other.bearerToken == bearerToken &&
+          other.caRef == caRef &&
+          other.insecure == insecure &&
           other.project == project;
 
   @override
@@ -56,11 +93,14 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerSc
       (allBranches == null ? 0 : allBranches!.hashCode) +
       (api.hashCode) +
       (basicAuth == null ? 0 : basicAuth!.hashCode) +
+      (bearerToken == null ? 0 : bearerToken!.hashCode) +
+      (caRef == null ? 0 : caRef!.hashCode) +
+      (insecure == null ? 0 : insecure!.hashCode) +
       (project.hashCode);
 
   @override
   String toString() =>
-      'IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerScmProviderBitbucketServer[allBranches=$allBranches, api=$api, basicAuth=$basicAuth, project=$project]';
+      'IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerScmProviderBitbucketServer[allBranches=$allBranches, api=$api, basicAuth=$basicAuth, bearerToken=$bearerToken, caRef=$caRef, insecure=$insecure, project=$project]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -74,6 +114,21 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerSc
       json[r'basicAuth'] = this.basicAuth;
     } else {
       json[r'basicAuth'] = null;
+    }
+    if (this.bearerToken != null) {
+      json[r'bearerToken'] = this.bearerToken;
+    } else {
+      json[r'bearerToken'] = null;
+    }
+    if (this.caRef != null) {
+      json[r'caRef'] = this.caRef;
+    } else {
+      json[r'caRef'] = null;
+    }
+    if (this.insecure != null) {
+      json[r'insecure'] = this.insecure;
+    } else {
+      json[r'insecure'] = null;
     }
     json[r'project'] = this.project;
     return json;
@@ -106,6 +161,13 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerSc
         basicAuth:
             IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPullRequestBitbucketBasicAuth
                 .fromJson(json[r'basicAuth']),
+        bearerToken:
+            IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPullRequestBitbucketBearerToken
+                .fromJson(json[r'bearerToken']),
+        caRef:
+            IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPullRequestBitbucketServerCaRef
+                .fromJson(json[r'caRef']),
+        insecure: mapValueOfType<bool>(json, r'insecure'),
         project: mapValueOfType<String>(json, r'project')!,
       );
     }

@@ -3,10 +3,13 @@
 //
 // @dart=2.18
 
-// ignore_for_file: unused_element, unused_import, avoid_function_literals_in_foreach_calls, require_trailing_commas, unnecessary_this
+// ignore_for_file: require_trailing_commas
+// ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_app_project_spec_roles_inner_jwt_tokens_inner.dart';

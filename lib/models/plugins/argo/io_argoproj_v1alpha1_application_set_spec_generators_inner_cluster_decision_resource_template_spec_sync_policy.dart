@@ -3,14 +3,17 @@
 //
 // @dart=2.18
 
-// ignore_for_file: unused_element, unused_import, unnecessary_this, require_trailing_commas, avoid_function_literals_in_foreach_calls
+// ignore_for_file: require_trailing_commas
+// ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_analysis_run_spec_metrics_inner_provider_job_metadata.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_set_spec_generators_inner_cluster_decision_resource_template_spec_sync_policy_automated.dart';
+import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_set_spec_generators_inner_cluster_decision_resource_template_spec_sync_policy_managed_namespace_metadata.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_set_spec_generators_inner_cluster_decision_resource_template_spec_sync_policy_retry.dart';
 
 class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicy {
@@ -37,7 +40,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  IoArgoprojV1alpha1AnalysisRunSpecMetricsInnerProviderJobMetadata?
+  IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata?
       managedNamespaceMetadata;
 
   ///
@@ -121,7 +124,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
             IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyAutomated
                 .fromJson(json[r'automated']),
         managedNamespaceMetadata:
-            IoArgoprojV1alpha1AnalysisRunSpecMetricsInnerProviderJobMetadata
+            IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyManagedNamespaceMetadata
                 .fromJson(json[r'managedNamespaceMetadata']),
         retry:
             IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSyncPolicyRetry

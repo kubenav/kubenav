@@ -3,10 +3,13 @@
 //
 // @dart=2.18
 
-// ignore_for_file: unused_element, unused_import, unnecessary_this, require_trailing_commas, avoid_function_literals_in_foreach_calls
+// ignore_for_file: require_trailing_commas
+// ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_operation_sync_source_kustomize_patches_inner.dart';
@@ -15,6 +18,7 @@ import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_set
 class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSourceKustomize {
   /// Returns a new [IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSourceKustomize] instance.
   IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSourceKustomize({
+    this.apiVersions = const [],
     this.commonAnnotations = const {},
     this.commonAnnotationsEnvsubst,
     this.commonLabels = const {},
@@ -22,6 +26,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
     this.forceCommonAnnotations,
     this.forceCommonLabels,
     this.images = const [],
+    this.kubeVersion,
     this.labelWithoutSelector,
     this.namePrefix,
     this.nameSuffix,
@@ -30,6 +35,8 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
     this.replicas = const [],
     this.version,
   });
+
+  List<String> apiVersions;
 
   Map<String, String> commonAnnotations;
 
@@ -62,6 +69,14 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
   bool? forceCommonLabels;
 
   List<String> images;
+
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? kubeVersion;
 
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
@@ -113,6 +128,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSourceKustomize &&
+          deepEquality.equals(other.apiVersions, apiVersions) &&
           deepEquality.equals(other.commonAnnotations, commonAnnotations) &&
           other.commonAnnotationsEnvsubst == commonAnnotationsEnvsubst &&
           deepEquality.equals(other.commonLabels, commonLabels) &&
@@ -120,6 +136,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
           other.forceCommonAnnotations == forceCommonAnnotations &&
           other.forceCommonLabels == forceCommonLabels &&
           deepEquality.equals(other.images, images) &&
+          other.kubeVersion == kubeVersion &&
           other.labelWithoutSelector == labelWithoutSelector &&
           other.namePrefix == namePrefix &&
           other.nameSuffix == nameSuffix &&
@@ -131,6 +148,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
   @override
   int get hashCode =>
       // ignore: unnecessary_parenthesis
+      (apiVersions.hashCode) +
       (commonAnnotations.hashCode) +
       (commonAnnotationsEnvsubst == null
           ? 0
@@ -140,6 +158,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
       (forceCommonAnnotations == null ? 0 : forceCommonAnnotations!.hashCode) +
       (forceCommonLabels == null ? 0 : forceCommonLabels!.hashCode) +
       (images.hashCode) +
+      (kubeVersion == null ? 0 : kubeVersion!.hashCode) +
       (labelWithoutSelector == null ? 0 : labelWithoutSelector!.hashCode) +
       (namePrefix == null ? 0 : namePrefix!.hashCode) +
       (nameSuffix == null ? 0 : nameSuffix!.hashCode) +
@@ -150,10 +169,11 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
 
   @override
   String toString() =>
-      'IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSourceKustomize[commonAnnotations=$commonAnnotations, commonAnnotationsEnvsubst=$commonAnnotationsEnvsubst, commonLabels=$commonLabels, components=$components, forceCommonAnnotations=$forceCommonAnnotations, forceCommonLabels=$forceCommonLabels, images=$images, labelWithoutSelector=$labelWithoutSelector, namePrefix=$namePrefix, nameSuffix=$nameSuffix, namespace=$namespace, patches=$patches, replicas=$replicas, version=$version]';
+      'IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSourceKustomize[apiVersions=$apiVersions, commonAnnotations=$commonAnnotations, commonAnnotationsEnvsubst=$commonAnnotationsEnvsubst, commonLabels=$commonLabels, components=$components, forceCommonAnnotations=$forceCommonAnnotations, forceCommonLabels=$forceCommonLabels, images=$images, kubeVersion=$kubeVersion, labelWithoutSelector=$labelWithoutSelector, namePrefix=$namePrefix, nameSuffix=$nameSuffix, namespace=$namespace, patches=$patches, replicas=$replicas, version=$version]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
+    json[r'apiVersions'] = this.apiVersions;
     json[r'commonAnnotations'] = this.commonAnnotations;
     if (this.commonAnnotationsEnvsubst != null) {
       json[r'commonAnnotationsEnvsubst'] = this.commonAnnotationsEnvsubst;
@@ -173,6 +193,11 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
       json[r'forceCommonLabels'] = null;
     }
     json[r'images'] = this.images;
+    if (this.kubeVersion != null) {
+      json[r'kubeVersion'] = this.kubeVersion;
+    } else {
+      json[r'kubeVersion'] = null;
+    }
     if (this.labelWithoutSelector != null) {
       json[r'labelWithoutSelector'] = this.labelWithoutSelector;
     } else {
@@ -225,6 +250,11 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
       }());
 
       return IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpecSourceKustomize(
+        apiVersions: json[r'apiVersions'] is Iterable
+            ? (json[r'apiVersions'] as Iterable)
+                .cast<String>()
+                .toList(growable: false)
+            : const [],
         commonAnnotations:
             mapCastOfType<String, String>(json, r'commonAnnotations') ??
                 const {},
@@ -245,6 +275,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
                 .cast<String>()
                 .toList(growable: false)
             : const [],
+        kubeVersion: mapValueOfType<String>(json, r'kubeVersion'),
         labelWithoutSelector:
             mapValueOfType<bool>(json, r'labelWithoutSelector'),
         namePrefix: mapValueOfType<String>(json, r'namePrefix'),

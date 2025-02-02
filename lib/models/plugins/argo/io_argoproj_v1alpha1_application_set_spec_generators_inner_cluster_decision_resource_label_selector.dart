@@ -3,13 +3,16 @@
 //
 // @dart=2.18
 
-// ignore_for_file: unused_element, unused_import, unnecessary_this, require_trailing_commas, avoid_function_literals_in_foreach_calls
+// ignore_for_file: require_trailing_commas
+// ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_analysis_run_spec_metrics_inner_provider_job_spec_selector_match_expressions_inner.dart';
+import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_set_spec_generators_inner_cluster_decision_resource_label_selector_match_expressions_inner.dart';
 
 class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceLabelSelector {
   /// Returns a new [IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceLabelSelector] instance.
@@ -18,7 +21,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
     this.matchLabels = const {},
   });
 
-  List<IoArgoprojV1alpha1AnalysisRunSpecMetricsInnerProviderJobSpecSelectorMatchExpressionsInner>
+  List<IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceLabelSelectorMatchExpressionsInner>
       matchExpressions;
 
   Map<String, String> matchLabels;
@@ -69,7 +72,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
 
       return IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceLabelSelector(
         matchExpressions:
-            IoArgoprojV1alpha1AnalysisRunSpecMetricsInnerProviderJobSpecSelectorMatchExpressionsInner
+            IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceLabelSelectorMatchExpressionsInner
                 .listFromJson(json[r'matchExpressions']),
         matchLabels:
             mapCastOfType<String, String>(json, r'matchLabels') ?? const {},

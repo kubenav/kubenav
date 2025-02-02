@@ -3,10 +3,13 @@
 //
 // @dart=2.18
 
-// ignore_for_file: unused_element, unused_import, unnecessary_this
+// ignore_for_file: require_trailing_commas
+// ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 
@@ -165,16 +168,12 @@ class IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultResourcesInner 
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
       assert(() {
-        for (var key in requiredKeys) {
-          assert(
-            json.containsKey(key),
-            'Required key "IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultResourcesInner[$key]" is missing from JSON.',
-          );
-          assert(
-            json[key] != null,
-            'Required key "IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultResourcesInner[$key]" has a null value in JSON.',
-          );
-        }
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key),
+              'Required key "IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultResourcesInner[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "IoArgoprojV1alpha1ApplicationStatusOperationStateSyncResultResourcesInner[$key]" has a null value in JSON.');
+        });
         return true;
       }());
 

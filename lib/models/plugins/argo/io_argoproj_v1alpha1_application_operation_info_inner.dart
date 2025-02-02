@@ -12,41 +12,45 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_app_project_spec_roles_inner_jwt_tokens_inner.dart';
 
-class IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue {
-  /// Returns a new [IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue] instance.
-  IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue({
-    this.items = const [],
+class IoArgoprojV1alpha1ApplicationOperationInfoInner {
+  /// Returns a new [IoArgoprojV1alpha1ApplicationOperationInfoInner] instance.
+  IoArgoprojV1alpha1ApplicationOperationInfoInner({
+    required this.name,
+    required this.value,
   });
 
-  List<IoArgoprojV1alpha1AppProjectSpecRolesInnerJwtTokensInner> items;
+  String name;
+
+  String value;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue &&
-          deepEquality.equals(other.items, items);
+      other is IoArgoprojV1alpha1ApplicationOperationInfoInner &&
+          other.name == name &&
+          other.value == value;
 
   @override
   int get hashCode =>
       // ignore: unnecessary_parenthesis
-      (items.hashCode);
+      (name.hashCode) + (value.hashCode);
 
   @override
   String toString() =>
-      'IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue[items=$items]';
+      'IoArgoprojV1alpha1ApplicationOperationInfoInner[name=$name, value=$value]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'items'] = this.items;
+    json[r'name'] = this.name;
+    json[r'value'] = this.value;
     return json;
   }
 
-  /// Returns a new [IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue] instance and imports its values from
+  /// Returns a new [IoArgoprojV1alpha1ApplicationOperationInfoInner] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue? fromJson(
+  static IoArgoprojV1alpha1ApplicationOperationInfoInner? fromJson(
       dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
@@ -57,32 +61,30 @@ class IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue {
       assert(() {
         requiredKeys.forEach((key) {
           assert(json.containsKey(key),
-              'Required key "IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue[$key]" is missing from JSON.');
+              'Required key "IoArgoprojV1alpha1ApplicationOperationInfoInner[$key]" is missing from JSON.');
           assert(json[key] != null,
-              'Required key "IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue[$key]" has a null value in JSON.');
+              'Required key "IoArgoprojV1alpha1ApplicationOperationInfoInner[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue(
-        items: IoArgoprojV1alpha1AppProjectSpecRolesInnerJwtTokensInner
-            .listFromJson(json[r'items']),
+      return IoArgoprojV1alpha1ApplicationOperationInfoInner(
+        name: mapValueOfType<String>(json, r'name')!,
+        value: mapValueOfType<String>(json, r'value')!,
       );
     }
     return null;
   }
 
-  static List<IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue>
-      listFromJson(
+  static List<IoArgoprojV1alpha1ApplicationOperationInfoInner> listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final result = <IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue>[];
+    final result = <IoArgoprojV1alpha1ApplicationOperationInfoInner>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
         final value =
-            IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue.fromJson(
-                row);
+            IoArgoprojV1alpha1ApplicationOperationInfoInner.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -91,16 +93,14 @@ class IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue {
     return result.toList(growable: growable);
   }
 
-  static Map<String, IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue>
+  static Map<String, IoArgoprojV1alpha1ApplicationOperationInfoInner>
       mapFromJson(dynamic json) {
-    final map =
-        <String, IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue>{};
+    final map = <String, IoArgoprojV1alpha1ApplicationOperationInfoInner>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value =
-            IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue.fromJson(
-                entry.value);
+        final value = IoArgoprojV1alpha1ApplicationOperationInfoInner.fromJson(
+            entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -109,21 +109,20 @@ class IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue {
     return map;
   }
 
-  // maps a json object with a list of IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue-objects as value to a dart map
-  static Map<String,
-          List<IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue>>
+  // maps a json object with a list of IoArgoprojV1alpha1ApplicationOperationInfoInner-objects as value to a dart map
+  static Map<String, List<IoArgoprojV1alpha1ApplicationOperationInfoInner>>
       mapListFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final map = <String,
-        List<IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue>>{};
+    final map =
+        <String, List<IoArgoprojV1alpha1ApplicationOperationInfoInner>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
         map[entry.key] =
-            IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue.listFromJson(
+            IoArgoprojV1alpha1ApplicationOperationInfoInner.listFromJson(
           entry.value,
           growable: growable,
         );
@@ -133,5 +132,8 @@ class IoArgoprojV1alpha1AppProjectStatusJwtTokensByRoleValue {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{};
+  static const requiredKeys = <String>{
+    'name',
+    'value',
+  };
 }

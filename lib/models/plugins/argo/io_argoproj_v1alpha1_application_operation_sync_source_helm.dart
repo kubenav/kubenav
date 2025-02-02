@@ -3,10 +3,13 @@
 //
 // @dart=2.18
 
-// ignore_for_file: unused_element, unused_import, require_trailing_commas, unnecessary_this, avoid_function_literals_in_foreach_calls
+// ignore_for_file: require_trailing_commas
+// ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_operation_sync_source_helm_file_parameters_inner.dart';
@@ -15,8 +18,11 @@ import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_ope
 class IoArgoprojV1alpha1ApplicationOperationSyncSourceHelm {
   /// Returns a new [IoArgoprojV1alpha1ApplicationOperationSyncSourceHelm] instance.
   IoArgoprojV1alpha1ApplicationOperationSyncSourceHelm({
+    this.apiVersions = const [],
     this.fileParameters = const [],
     this.ignoreMissingValueFiles,
+    this.kubeVersion,
+    this.namespace,
     this.parameters = const [],
     this.passCredentials,
     this.releaseName,
@@ -26,6 +32,9 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceHelm {
     this.valuesObject,
     this.version,
   });
+
+  /// APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default, Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+  List<String> apiVersions;
 
   /// FileParameters are file parameters to the helm template
   List<IoArgoprojV1alpha1ApplicationOperationSyncSourceHelmFileParametersInner>
@@ -39,6 +48,24 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceHelm {
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
   bool? ignoreMissingValueFiles;
+
+  /// KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD uses the Kubernetes version of the target cluster.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? kubeVersion;
+
+  /// Namespace is an optional namespace to template with. If left empty, defaults to the app's destination namespace.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? namespace;
 
   /// Parameters is a list of Helm parameters which are passed to the helm template command upon manifest generation
   List<IoArgoprojV1alpha1ApplicationOperationSyncSourceHelmParametersInner>
@@ -105,8 +132,11 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceHelm {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is IoArgoprojV1alpha1ApplicationOperationSyncSourceHelm &&
+          deepEquality.equals(other.apiVersions, apiVersions) &&
           deepEquality.equals(other.fileParameters, fileParameters) &&
           other.ignoreMissingValueFiles == ignoreMissingValueFiles &&
+          other.kubeVersion == kubeVersion &&
+          other.namespace == namespace &&
           deepEquality.equals(other.parameters, parameters) &&
           other.passCredentials == passCredentials &&
           other.releaseName == releaseName &&
@@ -119,10 +149,13 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceHelm {
   @override
   int get hashCode =>
       // ignore: unnecessary_parenthesis
+      (apiVersions.hashCode) +
       (fileParameters.hashCode) +
       (ignoreMissingValueFiles == null
           ? 0
           : ignoreMissingValueFiles!.hashCode) +
+      (kubeVersion == null ? 0 : kubeVersion!.hashCode) +
+      (namespace == null ? 0 : namespace!.hashCode) +
       (parameters.hashCode) +
       (passCredentials == null ? 0 : passCredentials!.hashCode) +
       (releaseName == null ? 0 : releaseName!.hashCode) +
@@ -134,15 +167,26 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceHelm {
 
   @override
   String toString() =>
-      'IoArgoprojV1alpha1ApplicationOperationSyncSourceHelm[fileParameters=$fileParameters, ignoreMissingValueFiles=$ignoreMissingValueFiles, parameters=$parameters, passCredentials=$passCredentials, releaseName=$releaseName, skipCrds=$skipCrds, valueFiles=$valueFiles, values=$values, valuesObject=$valuesObject, version=$version]';
+      'IoArgoprojV1alpha1ApplicationOperationSyncSourceHelm[apiVersions=$apiVersions, fileParameters=$fileParameters, ignoreMissingValueFiles=$ignoreMissingValueFiles, kubeVersion=$kubeVersion, namespace=$namespace, parameters=$parameters, passCredentials=$passCredentials, releaseName=$releaseName, skipCrds=$skipCrds, valueFiles=$valueFiles, values=$values, valuesObject=$valuesObject, version=$version]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
+    json[r'apiVersions'] = this.apiVersions;
     json[r'fileParameters'] = this.fileParameters;
     if (this.ignoreMissingValueFiles != null) {
       json[r'ignoreMissingValueFiles'] = this.ignoreMissingValueFiles;
     } else {
       json[r'ignoreMissingValueFiles'] = null;
+    }
+    if (this.kubeVersion != null) {
+      json[r'kubeVersion'] = this.kubeVersion;
+    } else {
+      json[r'kubeVersion'] = null;
+    }
+    if (this.namespace != null) {
+      json[r'namespace'] = this.namespace;
+    } else {
+      json[r'namespace'] = null;
     }
     json[r'parameters'] = this.parameters;
     if (this.passCredentials != null) {
@@ -201,11 +245,18 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceHelm {
       }());
 
       return IoArgoprojV1alpha1ApplicationOperationSyncSourceHelm(
+        apiVersions: json[r'apiVersions'] is Iterable
+            ? (json[r'apiVersions'] as Iterable)
+                .cast<String>()
+                .toList(growable: false)
+            : const [],
         fileParameters:
             IoArgoprojV1alpha1ApplicationOperationSyncSourceHelmFileParametersInner
                 .listFromJson(json[r'fileParameters']),
         ignoreMissingValueFiles:
             mapValueOfType<bool>(json, r'ignoreMissingValueFiles'),
+        kubeVersion: mapValueOfType<String>(json, r'kubeVersion'),
+        namespace: mapValueOfType<String>(json, r'namespace'),
         parameters:
             IoArgoprojV1alpha1ApplicationOperationSyncSourceHelmParametersInner
                 .listFromJson(json[r'parameters']),

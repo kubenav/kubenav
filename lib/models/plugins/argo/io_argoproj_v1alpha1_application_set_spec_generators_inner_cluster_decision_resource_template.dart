@@ -3,12 +3,15 @@
 //
 // @dart=2.18
 
-// ignore_for_file: unused_element, unused_import, unnecessary_this, require_trailing_commas, avoid_function_literals_in_foreach_calls
+// ignore_for_file: require_trailing_commas
+// ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
-import 'package:kubenav/models/plugins/argo/dev_summerwind_actions_v1alpha1_runner_deployment_spec_template_metadata.dart';
+import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_set_spec_generators_inner_cluster_decision_resource_template_metadata.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_set_spec_generators_inner_cluster_decision_resource_template_spec.dart';
 
 class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplate {
@@ -18,7 +21,8 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
     required this.spec,
   });
 
-  DevSummerwindActionsV1alpha1RunnerDeploymentSpecTemplateMetadata metadata;
+  IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateMetadata
+      metadata;
 
   IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpec
       spec;
@@ -69,7 +73,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResource
 
       return IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplate(
         metadata:
-            DevSummerwindActionsV1alpha1RunnerDeploymentSpecTemplateMetadata
+            IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateMetadata
                 .fromJson(json[r'metadata'])!,
         spec:
             IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerClusterDecisionResourceTemplateSpec

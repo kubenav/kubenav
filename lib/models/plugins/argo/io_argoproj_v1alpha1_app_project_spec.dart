@@ -3,13 +3,17 @@
 //
 // @dart=2.18
 
-// ignore_for_file: unused_element, unused_import, require_trailing_commas, avoid_function_literals_in_foreach_calls, unnecessary_this
+// ignore_for_file: require_trailing_commas
+// ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_app_project_spec_cluster_resource_blacklist_inner.dart';
+import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_app_project_spec_destination_service_accounts_inner.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_app_project_spec_destinations_inner.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_app_project_spec_orphaned_resources.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_app_project_spec_roles_inner.dart';
@@ -22,6 +26,7 @@ class IoArgoprojV1alpha1AppProjectSpec {
     this.clusterResourceBlacklist = const [],
     this.clusterResourceWhitelist = const [],
     this.description,
+    this.destinationServiceAccounts = const [],
     this.destinations = const [],
     this.namespaceResourceBlacklist = const [],
     this.namespaceResourceWhitelist = const [],
@@ -50,6 +55,10 @@ class IoArgoprojV1alpha1AppProjectSpec {
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
   String? description;
+
+  /// DestinationServiceAccounts holds information about the service accounts to be impersonated for the application sync operation for each destination.
+  List<IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner>
+      destinationServiceAccounts;
 
   /// Destinations contains list of destinations available for deployment
   List<IoArgoprojV1alpha1AppProjectSpecDestinationsInner> destinations;
@@ -103,6 +112,8 @@ class IoArgoprojV1alpha1AppProjectSpec {
           deepEquality.equals(
               other.clusterResourceWhitelist, clusterResourceWhitelist) &&
           other.description == description &&
+          deepEquality.equals(
+              other.destinationServiceAccounts, destinationServiceAccounts) &&
           deepEquality.equals(other.destinations, destinations) &&
           deepEquality.equals(
               other.namespaceResourceBlacklist, namespaceResourceBlacklist) &&
@@ -123,6 +134,7 @@ class IoArgoprojV1alpha1AppProjectSpec {
       (clusterResourceBlacklist.hashCode) +
       (clusterResourceWhitelist.hashCode) +
       (description == null ? 0 : description!.hashCode) +
+      (destinationServiceAccounts.hashCode) +
       (destinations.hashCode) +
       (namespaceResourceBlacklist.hashCode) +
       (namespaceResourceWhitelist.hashCode) +
@@ -138,7 +150,7 @@ class IoArgoprojV1alpha1AppProjectSpec {
 
   @override
   String toString() =>
-      'IoArgoprojV1alpha1AppProjectSpec[clusterResourceBlacklist=$clusterResourceBlacklist, clusterResourceWhitelist=$clusterResourceWhitelist, description=$description, destinations=$destinations, namespaceResourceBlacklist=$namespaceResourceBlacklist, namespaceResourceWhitelist=$namespaceResourceWhitelist, orphanedResources=$orphanedResources, permitOnlyProjectScopedClusters=$permitOnlyProjectScopedClusters, roles=$roles, signatureKeys=$signatureKeys, sourceNamespaces=$sourceNamespaces, sourceRepos=$sourceRepos, syncWindows=$syncWindows]';
+      'IoArgoprojV1alpha1AppProjectSpec[clusterResourceBlacklist=$clusterResourceBlacklist, clusterResourceWhitelist=$clusterResourceWhitelist, description=$description, destinationServiceAccounts=$destinationServiceAccounts, destinations=$destinations, namespaceResourceBlacklist=$namespaceResourceBlacklist, namespaceResourceWhitelist=$namespaceResourceWhitelist, orphanedResources=$orphanedResources, permitOnlyProjectScopedClusters=$permitOnlyProjectScopedClusters, roles=$roles, signatureKeys=$signatureKeys, sourceNamespaces=$sourceNamespaces, sourceRepos=$sourceRepos, syncWindows=$syncWindows]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -149,6 +161,7 @@ class IoArgoprojV1alpha1AppProjectSpec {
     } else {
       json[r'description'] = null;
     }
+    json[r'destinationServiceAccounts'] = this.destinationServiceAccounts;
     json[r'destinations'] = this.destinations;
     json[r'namespaceResourceBlacklist'] = this.namespaceResourceBlacklist;
     json[r'namespaceResourceWhitelist'] = this.namespaceResourceWhitelist;
@@ -199,6 +212,9 @@ class IoArgoprojV1alpha1AppProjectSpec {
             IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner
                 .listFromJson(json[r'clusterResourceWhitelist']),
         description: mapValueOfType<String>(json, r'description'),
+        destinationServiceAccounts:
+            IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner
+                .listFromJson(json[r'destinationServiceAccounts']),
         destinations:
             IoArgoprojV1alpha1AppProjectSpecDestinationsInner.listFromJson(
                 json[r'destinations']),

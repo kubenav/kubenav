@@ -3,10 +3,13 @@
 //
 // @dart=2.18
 
-// ignore_for_file: unused_element, unused_import, require_trailing_commas, unnecessary_this, avoid_function_literals_in_foreach_calls
+// ignore_for_file: require_trailing_commas
+// ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_operation_sync_source_kustomize_patches_inner.dart';
@@ -15,6 +18,7 @@ import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_ope
 class IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize {
   /// Returns a new [IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize] instance.
   IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize({
+    this.apiVersions = const [],
     this.commonAnnotations = const {},
     this.commonAnnotationsEnvsubst,
     this.commonLabels = const {},
@@ -22,6 +26,7 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize {
     this.forceCommonAnnotations,
     this.forceCommonLabels,
     this.images = const [],
+    this.kubeVersion,
     this.labelWithoutSelector,
     this.namePrefix,
     this.nameSuffix,
@@ -30,6 +35,9 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize {
     this.replicas = const [],
     this.version,
   });
+
+  /// APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default, Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+  List<String> apiVersions;
 
   /// CommonAnnotations is a list of additional annotations to add to rendered manifests
   Map<String, String> commonAnnotations;
@@ -69,6 +77,15 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize {
 
   /// Images is a list of Kustomize image override specifications
   List<String> images;
+
+  /// KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD uses the Kubernetes version of the target cluster.
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? kubeVersion;
 
   /// LabelWithoutSelector specifies whether to apply common labels to resource selectors or not
   ///
@@ -127,6 +144,7 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize &&
+          deepEquality.equals(other.apiVersions, apiVersions) &&
           deepEquality.equals(other.commonAnnotations, commonAnnotations) &&
           other.commonAnnotationsEnvsubst == commonAnnotationsEnvsubst &&
           deepEquality.equals(other.commonLabels, commonLabels) &&
@@ -134,6 +152,7 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize {
           other.forceCommonAnnotations == forceCommonAnnotations &&
           other.forceCommonLabels == forceCommonLabels &&
           deepEquality.equals(other.images, images) &&
+          other.kubeVersion == kubeVersion &&
           other.labelWithoutSelector == labelWithoutSelector &&
           other.namePrefix == namePrefix &&
           other.nameSuffix == nameSuffix &&
@@ -145,6 +164,7 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize {
   @override
   int get hashCode =>
       // ignore: unnecessary_parenthesis
+      (apiVersions.hashCode) +
       (commonAnnotations.hashCode) +
       (commonAnnotationsEnvsubst == null
           ? 0
@@ -154,6 +174,7 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize {
       (forceCommonAnnotations == null ? 0 : forceCommonAnnotations!.hashCode) +
       (forceCommonLabels == null ? 0 : forceCommonLabels!.hashCode) +
       (images.hashCode) +
+      (kubeVersion == null ? 0 : kubeVersion!.hashCode) +
       (labelWithoutSelector == null ? 0 : labelWithoutSelector!.hashCode) +
       (namePrefix == null ? 0 : namePrefix!.hashCode) +
       (nameSuffix == null ? 0 : nameSuffix!.hashCode) +
@@ -164,10 +185,11 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize {
 
   @override
   String toString() =>
-      'IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize[commonAnnotations=$commonAnnotations, commonAnnotationsEnvsubst=$commonAnnotationsEnvsubst, commonLabels=$commonLabels, components=$components, forceCommonAnnotations=$forceCommonAnnotations, forceCommonLabels=$forceCommonLabels, images=$images, labelWithoutSelector=$labelWithoutSelector, namePrefix=$namePrefix, nameSuffix=$nameSuffix, namespace=$namespace, patches=$patches, replicas=$replicas, version=$version]';
+      'IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize[apiVersions=$apiVersions, commonAnnotations=$commonAnnotations, commonAnnotationsEnvsubst=$commonAnnotationsEnvsubst, commonLabels=$commonLabels, components=$components, forceCommonAnnotations=$forceCommonAnnotations, forceCommonLabels=$forceCommonLabels, images=$images, kubeVersion=$kubeVersion, labelWithoutSelector=$labelWithoutSelector, namePrefix=$namePrefix, nameSuffix=$nameSuffix, namespace=$namespace, patches=$patches, replicas=$replicas, version=$version]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
+    json[r'apiVersions'] = this.apiVersions;
     json[r'commonAnnotations'] = this.commonAnnotations;
     if (this.commonAnnotationsEnvsubst != null) {
       json[r'commonAnnotationsEnvsubst'] = this.commonAnnotationsEnvsubst;
@@ -187,6 +209,11 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize {
       json[r'forceCommonLabels'] = null;
     }
     json[r'images'] = this.images;
+    if (this.kubeVersion != null) {
+      json[r'kubeVersion'] = this.kubeVersion;
+    } else {
+      json[r'kubeVersion'] = null;
+    }
     if (this.labelWithoutSelector != null) {
       json[r'labelWithoutSelector'] = this.labelWithoutSelector;
     } else {
@@ -239,6 +266,11 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize {
       }());
 
       return IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize(
+        apiVersions: json[r'apiVersions'] is Iterable
+            ? (json[r'apiVersions'] as Iterable)
+                .cast<String>()
+                .toList(growable: false)
+            : const [],
         commonAnnotations:
             mapCastOfType<String, String>(json, r'commonAnnotations') ??
                 const {},
@@ -259,6 +291,7 @@ class IoArgoprojV1alpha1ApplicationOperationSyncSourceKustomize {
                 .cast<String>()
                 .toList(growable: false)
             : const [],
+        kubeVersion: mapValueOfType<String>(json, r'kubeVersion'),
         labelWithoutSelector:
             mapValueOfType<bool>(json, r'labelWithoutSelector'),
         namePrefix: mapValueOfType<String>(json, r'namePrefix'),

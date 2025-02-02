@@ -3,14 +3,17 @@
 //
 // @dart=2.18
 
-// ignore_for_file: unused_element, unused_import, unnecessary_this, avoid_function_literals_in_foreach_calls, require_trailing_commas
+// ignore_for_file: require_trailing_commas
+// ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
-import 'package:kubenav/models/plugins/argo/dev_summerwind_actions_v1alpha1_horizontal_runner_autoscaler_spec_github_api_credentials_from_secret_ref.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_set_spec_generators_inner_cluster_decision_resource_template.dart';
+import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_set_spec_generators_inner_matrix_generators_inner_plugin_config_map_ref.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_set_spec_generators_inner_matrix_generators_inner_plugin_input.dart';
 
 class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPlugin {
@@ -23,7 +26,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPl
     this.values = const {},
   });
 
-  DevSummerwindActionsV1alpha1HorizontalRunnerAutoscalerSpecGithubAPICredentialsFromSecretRef
+  IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef
       configMapRef;
 
   ///
@@ -122,7 +125,7 @@ class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPl
 
       return IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPlugin(
         configMapRef:
-            DevSummerwindActionsV1alpha1HorizontalRunnerAutoscalerSpecGithubAPICredentialsFromSecretRef
+            IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef
                 .fromJson(json[r'configMapRef'])!,
         input:
             IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginInput

@@ -3,10 +3,13 @@
 //
 // @dart=2.18
 
-// ignore_for_file: unused_element, unused_import, require_trailing_commas, unnecessary_this, avoid_function_literals_in_foreach_calls
+// ignore_for_file: require_trailing_commas
+// ignore_for_file: unused_element
+// ignore_for_file: unnecessary_this
 // ignore_for_file: always_put_required_named_parameters_first
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_operation_sync_resources_inner.dart';
@@ -17,6 +20,7 @@ import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_ope
 class IoArgoprojV1alpha1ApplicationOperationSync {
   /// Returns a new [IoArgoprojV1alpha1ApplicationOperationSync] instance.
   IoArgoprojV1alpha1ApplicationOperationSync({
+    this.autoHealAttemptsCount,
     this.dryRun,
     this.manifests = const [],
     this.prune,
@@ -28,6 +32,15 @@ class IoArgoprojV1alpha1ApplicationOperationSync {
     this.syncOptions = const [],
     this.syncStrategy,
   });
+
+  /// SelfHealAttemptsCount contains the number of auto-heal attempts
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? autoHealAttemptsCount;
 
   /// DryRun specifies to perform a `kubectl apply --dry-run` without actually performing the sync
   ///
@@ -91,6 +104,7 @@ class IoArgoprojV1alpha1ApplicationOperationSync {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is IoArgoprojV1alpha1ApplicationOperationSync &&
+          other.autoHealAttemptsCount == autoHealAttemptsCount &&
           other.dryRun == dryRun &&
           deepEquality.equals(other.manifests, manifests) &&
           other.prune == prune &&
@@ -105,6 +119,7 @@ class IoArgoprojV1alpha1ApplicationOperationSync {
   @override
   int get hashCode =>
       // ignore: unnecessary_parenthesis
+      (autoHealAttemptsCount == null ? 0 : autoHealAttemptsCount!.hashCode) +
       (dryRun == null ? 0 : dryRun!.hashCode) +
       (manifests.hashCode) +
       (prune == null ? 0 : prune!.hashCode) +
@@ -118,10 +133,15 @@ class IoArgoprojV1alpha1ApplicationOperationSync {
 
   @override
   String toString() =>
-      'IoArgoprojV1alpha1ApplicationOperationSync[dryRun=$dryRun, manifests=$manifests, prune=$prune, resources=$resources, revision=$revision, revisions=$revisions, source_=$source_, sources=$sources, syncOptions=$syncOptions, syncStrategy=$syncStrategy]';
+      'IoArgoprojV1alpha1ApplicationOperationSync[autoHealAttemptsCount=$autoHealAttemptsCount, dryRun=$dryRun, manifests=$manifests, prune=$prune, resources=$resources, revision=$revision, revisions=$revisions, source_=$source_, sources=$sources, syncOptions=$syncOptions, syncStrategy=$syncStrategy]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
+    if (this.autoHealAttemptsCount != null) {
+      json[r'autoHealAttemptsCount'] = this.autoHealAttemptsCount;
+    } else {
+      json[r'autoHealAttemptsCount'] = null;
+    }
     if (this.dryRun != null) {
       json[r'dryRun'] = this.dryRun;
     } else {
@@ -176,6 +196,8 @@ class IoArgoprojV1alpha1ApplicationOperationSync {
       }());
 
       return IoArgoprojV1alpha1ApplicationOperationSync(
+        autoHealAttemptsCount:
+            mapValueOfType<int>(json, r'autoHealAttemptsCount'),
         dryRun: mapValueOfType<bool>(json, r'dryRun'),
         manifests: json[r'manifests'] is Iterable
             ? (json[r'manifests'] as Iterable)

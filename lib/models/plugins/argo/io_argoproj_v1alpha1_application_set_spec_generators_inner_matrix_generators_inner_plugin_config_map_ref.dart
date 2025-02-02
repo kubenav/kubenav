@@ -13,44 +13,39 @@
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 
-class IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner {
-  /// Returns a new [IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner] instance.
-  IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner({
-    required this.group,
-    required this.kind,
+class IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef {
+  /// Returns a new [IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef] instance.
+  IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef({
+    required this.name,
   });
 
-  String group;
-
-  String kind;
+  String name;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner &&
-          other.group == group &&
-          other.kind == kind;
+      other is IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef &&
+          other.name == name;
 
   @override
   int get hashCode =>
       // ignore: unnecessary_parenthesis
-      (group.hashCode) + (kind.hashCode);
+      (name.hashCode);
 
   @override
   String toString() =>
-      'IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner[group=$group, kind=$kind]';
+      'IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef[name=$name]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    json[r'group'] = this.group;
-    json[r'kind'] = this.kind;
+    json[r'name'] = this.name;
     return json;
   }
 
-  /// Returns a new [IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner] instance and imports its values from
+  /// Returns a new [IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner?
+  static IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef?
       fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
@@ -61,32 +56,32 @@ class IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner {
       assert(() {
         requiredKeys.forEach((key) {
           assert(json.containsKey(key),
-              'Required key "IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner[$key]" is missing from JSON.');
+              'Required key "IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef[$key]" is missing from JSON.');
           assert(json[key] != null,
-              'Required key "IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner[$key]" has a null value in JSON.');
+              'Required key "IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner(
-        group: mapValueOfType<String>(json, r'group')!,
-        kind: mapValueOfType<String>(json, r'kind')!,
+      return IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef(
+        name: mapValueOfType<String>(json, r'name')!,
       );
     }
     return null;
   }
 
-  static List<IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner>
+  static List<
+          IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef>
       listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
     final result =
-        <IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner>[];
+        <IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
         final value =
-            IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner
+            IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef
                 .fromJson(row);
         if (value != null) {
           result.add(value);
@@ -97,15 +92,15 @@ class IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner {
   }
 
   static Map<String,
-          IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner>
+          IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef>
       mapFromJson(dynamic json) {
     final map = <String,
-        IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner>{};
+        IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
         final value =
-            IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner
+            IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef
                 .fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
@@ -115,21 +110,24 @@ class IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner {
     return map;
   }
 
-  // maps a json object with a list of IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner-objects as value to a dart map
-  static Map<String,
-          List<IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner>>
+  // maps a json object with a list of IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef-objects as value to a dart map
+  static Map<
+          String,
+          List<
+              IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef>>
       mapListFromJson(
     dynamic json, {
     bool growable = false,
   }) {
     final map = <String,
-        List<IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner>>{};
+        List<
+            IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
         map[entry.key] =
-            IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner
+            IoArgoprojV1alpha1ApplicationSetSpecGeneratorsInnerMatrixGeneratorsInnerPluginConfigMapRef
                 .listFromJson(
           entry.value,
           growable: growable,
@@ -141,7 +139,6 @@ class IoArgoprojV1alpha1AppProjectSpecClusterResourceBlacklistInner {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
-    'group',
-    'kind',
+    'name',
   };
 }

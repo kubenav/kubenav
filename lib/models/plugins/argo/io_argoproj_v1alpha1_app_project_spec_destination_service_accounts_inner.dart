@@ -13,27 +13,18 @@
 
 import 'package:kubenav/models/kubernetes/helpers.dart';
 
-class IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner {
-  /// Returns a new [IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner] instance.
-  IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner({
-    this.group,
-    required this.kind,
-    required this.name,
+class IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner {
+  /// Returns a new [IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner] instance.
+  IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner({
+    required this.defaultServiceAccount,
     this.namespace,
+    required this.server,
   });
 
-  ///
-  /// Please note: This property should have been non-nullable! Since the specification file
-  /// does not include a default value (using the "default:" property), however, the generated
-  /// source code must fall back to having a nullable type.
-  /// Consider adding a "default:" property in the specification file to hide this note.
-  ///
-  String? group;
+  /// DefaultServiceAccount to be used for impersonation during the sync operation
+  String defaultServiceAccount;
 
-  String kind;
-
-  String name;
-
+  /// Namespace specifies the target namespace for the application's resources.
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -42,49 +33,45 @@ class IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner {
   ///
   String? namespace;
 
+  /// Server specifies the URL of the target cluster's Kubernetes control plane API.
+  String server;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner &&
-          other.group == group &&
-          other.kind == kind &&
-          other.name == name &&
-          other.namespace == namespace;
+      other is IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner &&
+          other.defaultServiceAccount == defaultServiceAccount &&
+          other.namespace == namespace &&
+          other.server == server;
 
   @override
   int get hashCode =>
       // ignore: unnecessary_parenthesis
-      (group == null ? 0 : group!.hashCode) +
-      (kind.hashCode) +
-      (name.hashCode) +
-      (namespace == null ? 0 : namespace!.hashCode);
+      (defaultServiceAccount.hashCode) +
+      (namespace == null ? 0 : namespace!.hashCode) +
+      (server.hashCode);
 
   @override
   String toString() =>
-      'IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner[group=$group, kind=$kind, name=$name, namespace=$namespace]';
+      'IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner[defaultServiceAccount=$defaultServiceAccount, namespace=$namespace, server=$server]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (this.group != null) {
-      json[r'group'] = this.group;
-    } else {
-      json[r'group'] = null;
-    }
-    json[r'kind'] = this.kind;
-    json[r'name'] = this.name;
+    json[r'defaultServiceAccount'] = this.defaultServiceAccount;
     if (this.namespace != null) {
       json[r'namespace'] = this.namespace;
     } else {
       json[r'namespace'] = null;
     }
+    json[r'server'] = this.server;
     return json;
   }
 
-  /// Returns a new [IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner] instance and imports its values from
+  /// Returns a new [IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner? fromJson(
-      dynamic value) {
+  static IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner?
+      fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -94,34 +81,35 @@ class IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner {
       assert(() {
         requiredKeys.forEach((key) {
           assert(json.containsKey(key),
-              'Required key "IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner[$key]" is missing from JSON.');
+              'Required key "IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner[$key]" is missing from JSON.');
           assert(json[key] != null,
-              'Required key "IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner[$key]" has a null value in JSON.');
+              'Required key "IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner(
-        group: mapValueOfType<String>(json, r'group'),
-        kind: mapValueOfType<String>(json, r'kind')!,
-        name: mapValueOfType<String>(json, r'name')!,
+      return IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner(
+        defaultServiceAccount:
+            mapValueOfType<String>(json, r'defaultServiceAccount')!,
         namespace: mapValueOfType<String>(json, r'namespace'),
+        server: mapValueOfType<String>(json, r'server')!,
       );
     }
     return null;
   }
 
-  static List<IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner>
+  static List<IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner>
       listFromJson(
     dynamic json, {
     bool growable = false,
   }) {
-    final result = <IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner>[];
+    final result =
+        <IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
         final value =
-            IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner.fromJson(
-                row);
+            IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner
+                .fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -130,16 +118,17 @@ class IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner {
     return result.toList(growable: growable);
   }
 
-  static Map<String, IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner>
+  static Map<String,
+          IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner>
       mapFromJson(dynamic json) {
-    final map =
-        <String, IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner>{};
+    final map = <String,
+        IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
         final value =
-            IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner.fromJson(
-                entry.value);
+            IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner
+                .fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -148,21 +137,22 @@ class IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner {
     return map;
   }
 
-  // maps a json object with a list of IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner-objects as value to a dart map
+  // maps a json object with a list of IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner-objects as value to a dart map
   static Map<String,
-          List<IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner>>
+          List<IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner>>
       mapListFromJson(
     dynamic json, {
     bool growable = false,
   }) {
     final map = <String,
-        List<IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner>>{};
+        List<
+            IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
         map[entry.key] =
-            IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner
+            IoArgoprojV1alpha1AppProjectSpecDestinationServiceAccountsInner
                 .listFromJson(
           entry.value,
           growable: growable,
@@ -174,7 +164,7 @@ class IoArgoprojV1alpha1ApplicationOperationSyncResourcesInner {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
-    'kind',
-    'name',
+    'defaultServiceAccount',
+    'server',
   };
 }
