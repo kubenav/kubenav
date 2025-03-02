@@ -81,7 +81,7 @@ func oidcContext(ctx context.Context, certificateAuthority string) (context.Cont
 
 // OIDCGetLink returns the link for the configured OIDC provider. The Link can
 // then be used by the user to login.
-func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, state string) (string, error) {
+func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes string, addDefaultScopes bool, redirectURL, pkceMethod, state string) (string, error) {
 	ctx, err := oidcContext(context.Background(), certificateAuthority)
 	if err != nil {
 		return "", err
@@ -93,12 +93,14 @@ func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, sco
 	}
 
 	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
-	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
-	if discoveryURL != "https://accounts.google.com" {
-		// Google doesn't support the `offline_access` scope, so that we only
-		// add it for non-Google providers.
-		// See: https://github.com/kubenav/kubenav/issues/718
-		parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+	if addDefaultScopes {
+		parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
+		if discoveryURL != "https://accounts.google.com" {
+			// Google doesn't support the `offline_access` scope, so that we
+			// only add it for non-Google providers.
+			// See: https://github.com/kubenav/kubenav/issues/718
+			parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+		}
 	}
 
 	oauth2Config := oauth2.Config{
@@ -150,7 +152,7 @@ func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, sco
 // OIDCGetRefreshToken returns a refresh token for the configured OIDC provider.
 // The refresh token can be used to get a new access token via the
 // OIDCGetAccessToken function.
-func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, code, verifier string, useAccessToken bool) (string, error) {
+func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes string, addDefaultScopes bool, redirectURL, pkceMethod, code, verifier string, useAccessToken bool) (string, error) {
 	ctx, err := oidcContext(context.Background(), certificateAuthority)
 	if err != nil {
 		return "", err
@@ -162,9 +164,11 @@ func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthor
 	}
 
 	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
-	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
-	if discoveryURL != "https://accounts.google.com" {
-		parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+	if addDefaultScopes {
+		parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
+		if discoveryURL != "https://accounts.google.com" {
+			parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+		}
 	}
 
 	oauth2Config := oauth2.Config{
@@ -208,7 +212,7 @@ func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthor
 }
 
 // OIDCGetAccessToken is used to retrieve an access token from a refresh token.
-func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, refreshToken string, useAccessToken bool) (string, error) {
+func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes string, addDefaultScopes bool, redirectURL, refreshToken string, useAccessToken bool) (string, error) {
 	ctx, err := oidcContext(context.Background(), certificateAuthority)
 	if err != nil {
 		return "", err
@@ -220,9 +224,11 @@ func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthori
 	}
 
 	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
-	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
-	if discoveryURL != "https://accounts.google.com" {
-		parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+	if addDefaultScopes {
+		parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
+		if discoveryURL != "https://accounts.google.com" {
+			parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+		}
 	}
 
 	oauth2Config := oauth2.Config{
@@ -261,7 +267,7 @@ func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthori
 	return string(oidcResponseBytes), nil
 }
 
-func OIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes string) (string, error) {
+func OIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes string, addDefaultScopes bool) (string, error) {
 	ctx, err := oidcContext(context.Background(), certificateAuthority)
 	if err != nil {
 		return "", err
@@ -281,9 +287,11 @@ func OIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes string)
 	}
 
 	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
-	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
-	if discoveryURL != "https://accounts.google.com" {
-		parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+	if addDefaultScopes {
+		parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
+		if discoveryURL != "https://accounts.google.com" {
+			parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+		}
 	}
 
 	oauth2Config := oauth2.Config{
@@ -309,7 +317,7 @@ func OIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes string)
 	return string(deviceAuthData), nil
 }
 
-func OIDCDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority, scopes, deviceCode string, useAccessToken bool) (string, error) {
+func OIDCDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority, scopes string, addDefaultScopes bool, deviceCode string, useAccessToken bool) (string, error) {
 	ctx, err := oidcContext(context.Background(), certificateAuthority)
 	if err != nil {
 		return "", err
@@ -329,9 +337,11 @@ func OIDCDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority,
 	}
 
 	parsedScopes := strings.Split(strings.ReplaceAll(scopes, " ", ""), ",")
-	parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
-	if discoveryURL != "https://accounts.google.com" {
-		parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+	if addDefaultScopes {
+		parsedScopes = append(parsedScopes, oidc.ScopeOpenID)
+		if discoveryURL != "https://accounts.google.com" {
+			parsedScopes = append(parsedScopes, oidc.ScopeOfflineAccess)
+		}
 	}
 
 	opts := []oauth2.AuthCodeOption{}

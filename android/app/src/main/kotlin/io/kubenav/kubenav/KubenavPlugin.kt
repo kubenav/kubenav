@@ -261,14 +261,15 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val clientSecret = call.argument<String>("clientSecret")
       val certificateAuthority = call.argument<String>("certificateAuthority")
       val scopes = call.argument<String>("scopes")
+      val addDefaultScopes = call.argument<Boolean>("addDefaultScopes")
       val redirectURL = call.argument<String>("redirectURL")
       val pkceMethod = call.argument<String>("pkceMethod")
       val state = call.argument<String>("state")
 
-      if (discoveryURL == null || clientID == null || clientSecret == null || certificateAuthority == null || scopes == null || redirectURL == null || pkceMethod == null || state == null) {
+      if (discoveryURL == null || clientID == null || clientSecret == null || certificateAuthority == null || scopes == null || addDefaultScopes == null || redirectURL == null || pkceMethod == null || state == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        oidcGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, state, result)
+        oidcGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, addDefaultScopes, redirectURL, pkceMethod, state, result)
       }
     } else if (call.method == "oidcGetRefreshToken") {
       val discoveryURL = call.argument<String>("discoveryURL")
@@ -276,16 +277,17 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val clientSecret = call.argument<String>("clientSecret")
       val certificateAuthority = call.argument<String>("certificateAuthority")
       val scopes = call.argument<String>("scopes")
+      val addDefaultScopes = call.argument<Boolean>("addDefaultScopes")
       val redirectURL = call.argument<String>("redirectURL")
       val pkceMethod = call.argument<String>("pkceMethod")
       val code = call.argument<String>("code")
       val verifier = call.argument<String>("verifier")
       val useAccessToken = call.argument<Boolean>("useAccessToken")
 
-      if (discoveryURL == null || clientID == null || clientSecret == null || certificateAuthority == null || scopes == null || redirectURL == null || pkceMethod == null || code == null || verifier == null || useAccessToken == null) {
+      if (discoveryURL == null || clientID == null || clientSecret == null || certificateAuthority == null || scopes == null || addDefaultScopes == null || redirectURL == null || pkceMethod == null || code == null || verifier == null || useAccessToken == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        oidcGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, code, verifier, useAccessToken, result)
+        oidcGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, addDefaultScopes, redirectURL, pkceMethod, code, verifier, useAccessToken, result)
       }
     } else if (call.method == "oidcGetAccessToken") {
       val discoveryURL = call.argument<String>("discoveryURL")
@@ -293,38 +295,41 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val clientSecret = call.argument<String>("clientSecret")
       val certificateAuthority = call.argument<String>("certificateAuthority")
       val scopes = call.argument<String>("scopes")
+      val addDefaultScopes = call.argument<Boolean>("addDefaultScopes")
       val redirectURL = call.argument<String>("redirectURL")
       val refreshToken = call.argument<String>("refreshToken")
       val useAccessToken = call.argument<Boolean>("useAccessToken")
 
-      if (discoveryURL == null || clientID == null || clientSecret == null || certificateAuthority == null || scopes == null || redirectURL == null || refreshToken == null || useAccessToken == null) {
+      if (discoveryURL == null || clientID == null || clientSecret == null || certificateAuthority == null || scopes == null || addDefaultScopes == null || redirectURL == null || refreshToken == null || useAccessToken == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        oidcGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, refreshToken, useAccessToken, result)
+        oidcGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, addDefaultScopes , redirectURL, refreshToken, useAccessToken, result)
       }
     } else if (call.method == "oidcDeviceAuth") {
       val discoveryURL = call.argument<String>("discoveryURL")
       val clientID = call.argument<String>("clientID")
       val certificateAuthority = call.argument<String>("certificateAuthority")
       val scopes = call.argument<String>("scopes")
+      val addDefaultScopes = call.argument<Boolean>("addDefaultScopes")
 
-      if (discoveryURL == null || clientID == null || certificateAuthority == null || scopes == null) {
+      if (discoveryURL == null || clientID == null || certificateAuthority == null || scopes == null || addDefaultScopes == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        oidcDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes, result)
+        oidcDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes, addDefaultScopes, result)
       }
     } else if (call.method == "oidcDeviceAuthGetRefreshToken") {
       val discoveryURL = call.argument<String>("discoveryURL")
       val clientID = call.argument<String>("clientID")
       val certificateAuthority = call.argument<String>("certificateAuthority")
       val scopes = call.argument<String>("scopes")
+      val addDefaultScopes = call.argument<Boolean>("addDefaultScopes")
       val deviceCode = call.argument<String>("deviceCode")
       val useAccessToken = call.argument<Boolean>("useAccessToken")
 
-      if (discoveryURL == null || clientID == null || certificateAuthority == null || scopes == null || deviceCode == null || useAccessToken == null) {
+      if (discoveryURL == null || clientID == null || certificateAuthority == null || scopes == null || addDefaultScopes == null || deviceCode == null || useAccessToken == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        oidcDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority, scopes, deviceCode, useAccessToken, result)
+        oidcDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority, scopes, addDefaultScopes, deviceCode, useAccessToken, result)
       }
     } else if (call.method == "prometheusGetData") {
       val clusterServer = call.argument<String>("clusterServer")
@@ -494,45 +499,45 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun oidcGetLink(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, pkceMethod: String, state: String, result: MethodChannel.Result) {
+  private fun oidcGetLink(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, addDefaultScopes: Boolean, redirectURL: String, pkceMethod: String, state: String, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.oidcGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, state)
+      val data: String = Kubenav.oidcGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, addDefaultScopes, redirectURL, pkceMethod, state)
       result.success(data)
     } catch (e: Exception) {
       result.error("OIDC_GET_LINK_FAILED", e.localizedMessage, null)
     }
   }
 
-  private fun oidcGetRefreshToken(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, pkceMethod: String, code: String, verifier: String, useAccessToken: Boolean, result: MethodChannel.Result) {
+  private fun oidcGetRefreshToken(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, addDefaultScopes: Boolean, redirectURL: String, pkceMethod: String, code: String, verifier: String, useAccessToken: Boolean, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.oidcGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, code, verifier, useAccessToken)
+      val data: String = Kubenav.oidcGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, addDefaultScopes, redirectURL, pkceMethod, code, verifier, useAccessToken)
       result.success(data)
     } catch (e: Exception) {
       result.error("OIDC_GET_REFRESH_TOKEN_FAILED", e.localizedMessage, null)
     }
   }
 
-  private fun oidcGetAccessToken(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, refreshToken: String, useAccessToken: Boolean, result: MethodChannel.Result) {
+  private fun oidcGetAccessToken(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, addDefaultScopes: Boolean, redirectURL: String, refreshToken: String, useAccessToken: Boolean, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.oidcGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, refreshToken, useAccessToken)
+      val data: String = Kubenav.oidcGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, addDefaultScopes, redirectURL, refreshToken, useAccessToken)
       result.success(data)
     } catch (e: Exception) {
       result.error("OIDC_GET_ACCESS_TOKEN_FAILED", e.localizedMessage, null)
     }
   }
 
-  private fun oidcDeviceAuth(discoveryURL: String, clientID: String, certificateAuthority: String, scopes: String, result: MethodChannel.Result) {
+  private fun oidcDeviceAuth(discoveryURL: String, clientID: String, certificateAuthority: String, scopes: String, addDefaultScopes: Boolean, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.oidcDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes)
+      val data: String = Kubenav.oidcDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes, addDefaultScopes)
       result.success(data)
     } catch (e: Exception) {
       result.error("OIDC_DEVICE_AUTH_FAILED", e.localizedMessage, null)
     }
   }
 
-  private fun oidcDeviceAuthGetRefreshToken(discoveryURL: String, clientID: String, certificateAuthority: String, scopes: String, deviceCode: String, useAccessToken: Boolean, result: MethodChannel.Result) {
+  private fun oidcDeviceAuthGetRefreshToken(discoveryURL: String, clientID: String, certificateAuthority: String, scopes: String, addDefaultScopes: Boolean, deviceCode: String, useAccessToken: Boolean, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.oidcDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority, scopes, deviceCode, useAccessToken)
+      val data: String = Kubenav.oidcDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority, scopes, addDefaultScopes, deviceCode, useAccessToken)
       result.success(data)
     } catch (e: Exception) {
       result.error("OIDC_DEVICE_AUTH_GET_REFRESH_TOKEN_FAILED", e.localizedMessage, null)

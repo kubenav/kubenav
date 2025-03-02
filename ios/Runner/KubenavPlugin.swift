@@ -251,11 +251,12 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let clientSecret = args["clientSecret"] as? String,
         let certificateAuthority = args["certificateAuthority"] as? String,
         let scopes = args["scopes"] as? String,
+        let addDefaultScopes = args["addDefaultScopes"] as? Bool,
         let redirectURL = args["redirectURL"] as? String,
         let pkceMethod = args["pkceMethod"] as? String,
         let state = args["state"] as? String
       {
-        oidcGetLink(discoveryURL: discoveryURL, clientID: clientID, clientSecret: clientSecret, certificateAuthority: certificateAuthority, scopes: scopes, redirectURL: redirectURL, pkceMethod: pkceMethod, state: state, result: result)
+        oidcGetLink(discoveryURL: discoveryURL, clientID: clientID, clientSecret: clientSecret, certificateAuthority: certificateAuthority, scopes: scopes, addDefaultScopes: addDefaultScopes, redirectURL: redirectURL, pkceMethod: pkceMethod, state: state, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -266,13 +267,14 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let clientSecret = args["clientSecret"] as? String,
         let certificateAuthority = args["certificateAuthority"] as? String,
         let scopes = args["scopes"] as? String,
+        let addDefaultScopes = args["addDefaultScopes"] as? Bool,
         let redirectURL = args["redirectURL"] as? String,
         let pkceMethod = args["pkceMethod"] as? String,
         let code = args["code"] as? String,
         let verifier = args["verifier"] as? String,
         let useAccessToken = args["useAccessToken"] as? Bool
       {
-        oidcGetRefreshToken(discoveryURL: discoveryURL, clientID: clientID, clientSecret: clientSecret, certificateAuthority: certificateAuthority, scopes: scopes, redirectURL: redirectURL, pkceMethod: pkceMethod, code: code, verifier: verifier, useAccessToken: useAccessToken, result: result)
+        oidcGetRefreshToken(discoveryURL: discoveryURL, clientID: clientID, clientSecret: clientSecret, certificateAuthority: certificateAuthority, scopes: scopes, addDefaultScopes: addDefaultScopes, redirectURL: redirectURL, pkceMethod: pkceMethod, code: code, verifier: verifier, useAccessToken: useAccessToken, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -283,11 +285,12 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let clientSecret = args["clientSecret"] as? String,
         let certificateAuthority = args["certificateAuthority"] as? String,
         let scopes = args["scopes"] as? String,
+        let addDefaultScopes = args["addDefaultScopes"] as? Bool,
         let redirectURL = args["redirectURL"] as? String,
         let refreshToken = args["refreshToken"] as? String,
         let useAccessToken = args["useAccessToken"] as? Bool
       {
-        oidcGetAccessToken(discoveryURL: discoveryURL, clientID: clientID, clientSecret: clientSecret, certificateAuthority: certificateAuthority, scopes: scopes, redirectURL: redirectURL, refreshToken: refreshToken, useAccessToken: useAccessToken, result: result)
+        oidcGetAccessToken(discoveryURL: discoveryURL, clientID: clientID, clientSecret: clientSecret, certificateAuthority: certificateAuthority, scopes: scopes, addDefaultScopes: addDefaultScopes, redirectURL: redirectURL, refreshToken: refreshToken, useAccessToken: useAccessToken, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -296,9 +299,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let discoveryURL = args["discoveryURL"] as? String,
         let clientID = args["clientID"] as? String,
         let certificateAuthority = args["certificateAuthority"] as? String,
-        let scopes = args["scopes"] as? String
+        let scopes = args["scopes"] as? String,
+        let addDefaultScopes = args["addDefaultScopes"] as? Bool
       {
-        oidcDeviceAuth(discoveryURL: discoveryURL, clientID: clientID, certificateAuthority: certificateAuthority, scopes: scopes, result: result)
+        oidcDeviceAuth(discoveryURL: discoveryURL, clientID: clientID, certificateAuthority: certificateAuthority, scopes: scopes, addDefaultScopes: addDefaultScopes, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -308,10 +312,11 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let clientID = args["clientID"] as? String,
         let certificateAuthority = args["certificateAuthority"] as? String,
         let scopes = args["scopes"] as? String,
+        let addDefaultScopes = args["addDefaultScopes"] as? Bool,
         let deviceCode = args["deviceCode"] as? String,
         let useAccessToken = args["useAccessToken"] as? Bool
       {
-        oidcDeviceAuthGetRefreshToken(discoveryURL: discoveryURL, clientID: clientID, certificateAuthority: certificateAuthority, scopes: scopes, deviceCode: deviceCode, useAccessToken: useAccessToken, result: result)
+        oidcDeviceAuthGetRefreshToken(discoveryURL: discoveryURL, clientID: clientID, certificateAuthority: certificateAuthority, scopes: scopes, addDefaultScopes: addDefaultScopes, deviceCode: deviceCode, useAccessToken: useAccessToken, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -512,10 +517,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func oidcGetLink(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, pkceMethod: String, state: String, result: FlutterResult) {
+  private func oidcGetLink(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, addDefaultScopes: Bool, redirectURL: String, pkceMethod: String, state: String, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavOIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, state, &error)
+    let data = KubenavOIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, addDefaultScopes, redirectURL, pkceMethod, state, &error)
     if error != nil {
       result(FlutterError(code: "OIDC_GET_LINK_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
@@ -523,10 +528,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func oidcGetRefreshToken(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, pkceMethod: String, code: String, verifier: String, useAccessToken: Bool, result: FlutterResult) {
+  private func oidcGetRefreshToken(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, addDefaultScopes: Bool, redirectURL: String, pkceMethod: String, code: String, verifier: String, useAccessToken: Bool, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavOIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, pkceMethod, code, verifier, useAccessToken, &error)
+    let data = KubenavOIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, addDefaultScopes, redirectURL, pkceMethod, code, verifier, useAccessToken, &error)
     if error != nil {
       result(FlutterError(code: "OIDC_GET_REFRESH_TOKEN_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
@@ -534,10 +539,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func oidcGetAccessToken(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, redirectURL: String, refreshToken: String, useAccessToken: Bool, result: FlutterResult) {
+  private func oidcGetAccessToken(discoveryURL: String, clientID: String, clientSecret: String, certificateAuthority: String, scopes: String, addDefaultScopes: Bool, redirectURL: String, refreshToken: String, useAccessToken: Bool, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavOIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, redirectURL, refreshToken, useAccessToken, &error)
+    let data = KubenavOIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes, addDefaultScopes, redirectURL, refreshToken, useAccessToken, &error)
     if error != nil {
       result(FlutterError(code: "OIDC_GET_ACCESS_TOKEN_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
@@ -545,10 +550,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func oidcDeviceAuth(discoveryURL: String, clientID: String, certificateAuthority: String, scopes: String, result: FlutterResult) {
+  private func oidcDeviceAuth(discoveryURL: String, clientID: String, certificateAuthority: String, scopes: String, addDefaultScopes: Bool, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavOIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes, &error)
+    let data = KubenavOIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes, addDefaultScopes, &error)
     if error != nil {
       result(FlutterError(code: "OIDC_DEVICE_AUTH_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
@@ -556,10 +561,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func oidcDeviceAuthGetRefreshToken(discoveryURL: String, clientID: String, certificateAuthority: String, scopes: String, deviceCode: String, useAccessToken: Bool, result: FlutterResult) {
+  private func oidcDeviceAuthGetRefreshToken(discoveryURL: String, clientID: String, certificateAuthority: String, scopes: String, addDefaultScopes: Bool, deviceCode: String, useAccessToken: Bool, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavOIDCDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority, scopes, deviceCode, useAccessToken, &error)
+    let data = KubenavOIDCDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority, scopes, addDefaultScopes, deviceCode, useAccessToken, &error)
     if error != nil {
       result(FlutterError(code: "OIDC_DEVICE_AUTH_GET_REFRESH_TOKEN_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {

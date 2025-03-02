@@ -15,10 +15,7 @@ import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_oidc.dart
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class SettingsOIDCProvider extends StatefulWidget {
-  const SettingsOIDCProvider({
-    super.key,
-    required this.provider,
-  });
+  const SettingsOIDCProvider({super.key, required this.provider});
 
   final ClusterProvider? provider;
 
@@ -28,6 +25,7 @@ class SettingsOIDCProvider extends StatefulWidget {
 
 class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
   final _providerConfigFormKey = GlobalKey<FormState>();
+  final _addDefaultScopesTooltipKey = GlobalKey<TooltipState>();
   final _nameController = TextEditingController();
   OIDCFlow _flow = OIDCFlow.standard;
   final _discoveryURLController = TextEditingController();
@@ -35,6 +33,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
   String _pkceMethod = '';
   final _clientSecretController = TextEditingController();
   final _scopesController = TextEditingController();
+  bool _addDefaultScopes = true;
   final _certificateAuthorityController = TextEditingController();
   final _refreshTokenController = TextEditingController();
   final _redirectURLController = TextEditingController();
@@ -66,6 +65,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         _clientSecretController.text,
         _certificateAuthorityController.text,
         _scopesController.text,
+        _addDefaultScopes,
         _redirectURLController.text,
         _pkceMethod,
         _stateController.text,
@@ -87,11 +87,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         err,
       );
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Open Sign In Url',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Open Sign In Url', err.toString());
       }
     }
   }
@@ -106,6 +102,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         _clientIDController.text,
         _certificateAuthorityController.text,
         _scopesController.text,
+        _addDefaultScopes,
       );
 
       setState(() {
@@ -142,11 +139,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         err,
       );
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Verify Device',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Verify Device', err.toString());
       }
     }
   }
@@ -174,6 +167,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
             _clientIDController.text,
             _certificateAuthorityController.text,
             _scopesController.text,
+            _addDefaultScopes,
             _deviceAuthData?.deviceCode ?? '',
             _useAccessToken,
           );
@@ -190,6 +184,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                 clientSecret: _clientSecretController.text,
                 certificateAuthority: _certificateAuthorityController.text,
                 scopes: _scopesController.text,
+                addDefaultScopes: _addDefaultScopes,
                 pkceMethod: _pkceMethod,
                 verifier: _verifier,
                 code: _codeController.text,
@@ -206,12 +201,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
             });
             if (mounted) {
               Navigator.pop(context);
-              showModal(
-                context,
-                SettingsAddClusterOIDC(
-                  provider: provider,
-                ),
-              );
+              showModal(context, SettingsAddClusterOIDC(provider: provider));
             }
           } else {
             final provider = widget.provider!;
@@ -223,6 +213,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
             provider.oidc!.certificateAuthority =
                 _certificateAuthorityController.text;
             provider.oidc!.scopes = _scopesController.text;
+            provider.oidc!.addDefaultScopes = _addDefaultScopes;
             provider.oidc!.pkceMethod = _pkceMethod;
             provider.oidc!.verifier = _verifier;
             provider.oidc!.code = _codeController.text;
@@ -273,6 +264,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
               _clientSecretController.text,
               _certificateAuthorityController.text,
               _scopesController.text,
+              _addDefaultScopes,
               _redirectURLController.text,
               _pkceMethod,
               _codeController.text,
@@ -295,6 +287,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
               _clientSecretController.text,
               _certificateAuthorityController.text,
               _scopesController.text,
+              _addDefaultScopes,
               _redirectURLController.text,
               _refreshTokenController.text,
               _useAccessToken,
@@ -322,6 +315,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                 clientSecret: _clientSecretController.text,
                 certificateAuthority: _certificateAuthorityController.text,
                 scopes: _scopesController.text,
+                addDefaultScopes: _addDefaultScopes,
                 pkceMethod: _pkceMethod,
                 verifier: _verifier,
                 code: _codeController.text,
@@ -338,12 +332,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
             });
             if (mounted) {
               Navigator.pop(context);
-              showModal(
-                context,
-                SettingsAddClusterOIDC(
-                  provider: provider,
-                ),
-              );
+              showModal(context, SettingsAddClusterOIDC(provider: provider));
             }
           } else {
             final provider = widget.provider!;
@@ -355,6 +344,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
             provider.oidc!.certificateAuthority =
                 _certificateAuthorityController.text;
             provider.oidc!.scopes = _scopesController.text;
+            provider.oidc!.addDefaultScopes = _addDefaultScopes;
             provider.oidc!.pkceMethod = _pkceMethod;
             provider.oidc!.verifier = _verifier;
             provider.oidc!.code = _codeController.text;
@@ -395,9 +385,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
   Widget _buildPkceMethod() {
     if (_pkceMethod == '') {
       return Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: Constants.spacingSmall,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: Constants.spacingSmall),
         child: TextFormField(
           controller: _clientSecretController,
           keyboardType: TextInputType.text,
@@ -442,9 +430,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
             foregroundColor: Theme.of(context).colorScheme.onPrimary,
             minimumSize: const Size.fromHeight(40),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                Constants.sizeBorderRadius,
-              ),
+              borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
             ),
           ),
           onPressed: _verifyDeviceFlow,
@@ -465,11 +451,12 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
             const Text('Use Access Token instead of ID Token'),
             Switch(
               activeColor: Theme.of(context).colorScheme.primary,
-              onChanged: (val) => {
-                setState(() {
-                  _useAccessToken = !_useAccessToken;
-                }),
-              },
+              onChanged:
+                  (val) => {
+                    setState(() {
+                      _useAccessToken = !_useAccessToken;
+                    }),
+                  },
               value: _useAccessToken,
             ),
           ],
@@ -499,15 +486,50 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           ),
         ),
         const SizedBox(height: Constants.spacingMiddle),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                const Text('Add Default Scopes'),
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => AlertDialog(
+                            title: Text('Add Default Scopes'),
+                            content: Text(
+                              'Add the "openid" and "offline_access" scopes.',
+                            ),
+                          ),
+                    );
+                  },
+                  icon: Icon(Icons.info),
+                ),
+              ],
+            ),
+            Switch(
+              activeColor: Theme.of(context).colorScheme.primary,
+              onChanged:
+                  (val) => {
+                    setState(() {
+                      _addDefaultScopes = !_addDefaultScopes;
+                    }),
+                  },
+              value: _addDefaultScopes,
+            ),
+          ],
+        ),
+        const SizedBox(height: Constants.spacingMiddle),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: Theme.of(context).colorScheme.primary,
             foregroundColor: Theme.of(context).colorScheme.onPrimary,
             minimumSize: const Size.fromHeight(40),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                Constants.sizeBorderRadius,
-              ),
+              borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
             ),
           ),
           onPressed: _initDeviceFlow,
@@ -526,9 +548,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
 
     return [
       Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: Constants.spacingSmall,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: Constants.spacingSmall),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -545,31 +565,28 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                   _pkceMethod = newValue ?? '';
                 });
               },
-              items: [
-                '',
-                'S256',
-              ].map((value) {
-                return DropdownMenuItem(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: TextStyle(
-                      color: Theme.of(context)
-                          .extension<CustomColors>()!
-                          .textPrimary,
-                    ),
-                  ),
-                );
-              }).toList(),
+              items:
+                  ['', 'S256'].map((value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          color:
+                              Theme.of(
+                                context,
+                              ).extension<CustomColors>()!.textPrimary,
+                        ),
+                      ),
+                    );
+                  }).toList(),
             ),
           ],
         ),
       ),
       _buildPkceMethod(),
       Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: Constants.spacingSmall,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: Constants.spacingSmall),
         child: TextFormField(
           controller: _scopesController,
           keyboardType: TextInputType.text,
@@ -583,9 +600,47 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: Constants.spacingSmall,
+        padding: const EdgeInsets.symmetric(vertical: Constants.spacingSmall),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                const Text('Add Default Scopes'),
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => AlertDialog(
+                            title: Text('Add Default Scopes'),
+                            content: Text(
+                              'Add the "openid" and "offline_access" scopes.',
+                            ),
+                          ),
+                    );
+                  },
+                  icon: Icon(Icons.info),
+                ),
+              ],
+            ),
+
+            Switch(
+              activeColor: Theme.of(context).colorScheme.primary,
+              onChanged:
+                  (val) => {
+                    setState(() {
+                      _addDefaultScopes = !_addDefaultScopes;
+                    }),
+                  },
+              value: _addDefaultScopes,
+            ),
+          ],
         ),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: Constants.spacingSmall),
         child: TextFormField(
           controller: _certificateAuthorityController,
           keyboardType: TextInputType.text,
@@ -599,9 +654,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: Constants.spacingSmall,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: Constants.spacingSmall),
         child: TextFormField(
           controller: _refreshTokenController,
           keyboardType: TextInputType.text,
@@ -615,9 +668,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: Constants.spacingSmall,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: Constants.spacingSmall),
         child: TextFormField(
           controller: _redirectURLController,
           keyboardType: TextInputType.text,
@@ -631,9 +682,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: Constants.spacingSmall,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: Constants.spacingSmall),
         child: TextFormField(
           controller: _stateController,
           keyboardType: TextInputType.text,
@@ -649,9 +698,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: Constants.spacingSmall,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: Constants.spacingSmall),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -659,29 +706,26 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
             const Text('Use Access Token instead of ID Token'),
             Switch(
               activeColor: Theme.of(context).colorScheme.primary,
-              onChanged: (val) => {
-                setState(() {
-                  _useAccessToken = !_useAccessToken;
-                }),
-              },
+              onChanged:
+                  (val) => {
+                    setState(() {
+                      _useAccessToken = !_useAccessToken;
+                    }),
+                  },
               value: _useAccessToken,
             ),
           ],
         ),
       ),
       Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: Constants.spacingSmall,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: Constants.spacingSmall),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: Theme.of(context).colorScheme.primary,
             foregroundColor: Theme.of(context).colorScheme.onPrimary,
             minimumSize: const Size.fromHeight(40),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                Constants.sizeBorderRadius,
-              ),
+              borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
             ),
           ),
           onPressed: _signIn,
@@ -696,9 +740,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: Constants.spacingSmall,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: Constants.spacingSmall),
         child: TextFormField(
           controller: _codeController,
           keyboardType: TextInputType.text,
@@ -725,6 +767,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
       _pkceMethod = widget.provider?.oidc?.pkceMethod ?? '';
       _clientSecretController.text = widget.provider?.oidc?.clientSecret ?? '';
       _scopesController.text = widget.provider?.oidc?.scopes ?? '';
+      _addDefaultScopes = widget.provider?.oidc?.addDefaultScopes ?? true;
       _certificateAuthorityController.text =
           widget.provider?.oidc?.certificateAuthority ?? '';
       _refreshTokenController.text = widget.provider?.oidc?.refreshToken ?? '';
@@ -809,19 +852,21 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                           _flow = newValue ?? OIDCFlow.standard;
                         });
                       },
-                      items: OIDCFlow.values.map((value) {
-                        return DropdownMenuItem(
-                          value: value,
-                          child: Text(
-                            value.pretty(),
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                  .extension<CustomColors>()!
-                                  .textPrimary,
-                            ),
-                          ),
-                        );
-                      }).toList(),
+                      items:
+                          OIDCFlow.values.map((value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(
+                                value.pretty(),
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(
+                                        context,
+                                      ).extension<CustomColors>()!.textPrimary,
+                                ),
+                              ),
+                            );
+                          }).toList(),
                     ),
                   ],
                 ),

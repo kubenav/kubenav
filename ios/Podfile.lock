@@ -66,7 +66,7 @@ SPEC CHECKSUMS:
   ASN1Swift: bbd56c299b2084ba71bd7d7769c6202451598948
   file_picker: fb04e739ae6239a76ce1f571863a196a922c87d4
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_native_splash: 6cad9122ea0fad137d23137dd14b937f3e90b145
+  flutter_native_splash: c32d145d68aeda5502d5f543ee38c192065986cf
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
   in_app_purchase_storekit: e126ef1b89e4a9fdf07e28f005f82632b4609437
   local_auth_darwin: 553ce4f9b16d3fdfeafce9cf042e7c9f77c1c391
