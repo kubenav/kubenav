@@ -7,10 +7,7 @@ import 'package:kubenav/utils/logger.dart';
 
 /// [OIDCFlow] is a `enum` for the OIDC flow which should be used within a OIDC
 /// provider.
-enum OIDCFlow {
-  standard,
-  device,
-}
+enum OIDCFlow { standard, device }
 
 extension OIDCFlowExtension on OIDCFlow {
   /// [toShortString] returns a short string of the OIDC flow, so that we
@@ -57,9 +54,7 @@ class OIDCResponse {
     required this.verifier,
   });
 
-  factory OIDCResponse.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory OIDCResponse.fromJson(Map<String, dynamic> data) {
     return OIDCResponse(
       url: data.containsKey('url') ? data['url'] : null,
       idToken: data.containsKey('idToken') ? data['idToken'] : null,
@@ -95,18 +90,18 @@ class OIDCDeviceAuth {
     required this.verificationURIComplete,
   });
 
-  factory OIDCDeviceAuth.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory OIDCDeviceAuth.fromJson(Map<String, dynamic> data) {
     return OIDCDeviceAuth(
       deviceCode: data.containsKey('device_code') ? data['device_code'] : null,
       userCode: data.containsKey('user_code') ? data['user_code'] : null,
-      verificationURI: data.containsKey('verification_uri')
-          ? data['verification_uri']
-          : null,
-      verificationURIComplete: data.containsKey('verification_uri_complete')
-          ? data['verification_uri_complete']
-          : null,
+      verificationURI:
+          data.containsKey('verification_uri')
+              ? data['verification_uri']
+              : null,
+      verificationURIComplete:
+          data.containsKey('verification_uri_complete')
+              ? data['verification_uri_complete']
+              : null,
     );
   }
 
@@ -134,39 +129,31 @@ class OIDCService {
     String clientSecret,
     String certificateAuthority,
     String scopes,
+    bool addDefaultScopes,
     String redirectURL,
     String pkceMethod,
     String state,
   ) async {
     try {
-      final String result = await platform.invokeMethod(
-        'oidcGetLink',
-        <String, dynamic>{
-          'discoveryURL': discoveryURL,
-          'clientID': clientID,
-          'clientSecret': clientSecret,
-          'certificateAuthority': certificateAuthority,
-          'scopes': scopes,
-          'redirectURL': redirectURL,
-          'pkceMethod': pkceMethod,
-          'state': state,
-        },
-      );
+      final String result = await platform
+          .invokeMethod('oidcGetLink', <String, dynamic>{
+            'discoveryURL': discoveryURL,
+            'clientID': clientID,
+            'clientSecret': clientSecret,
+            'certificateAuthority': certificateAuthority,
+            'scopes': scopes,
+            'addDefaultScopes': addDefaultScopes,
+            'redirectURL': redirectURL,
+            'pkceMethod': pkceMethod,
+            'state': state,
+          });
 
-      Logger.log(
-        'OIDCService getLink',
-        'Link was generated',
-        result,
-      );
+      Logger.log('OIDCService getLink', 'Link was generated', result);
 
       Map<String, dynamic> jsonData = json.decode(result);
       return OIDCResponse.fromJson(jsonData);
     } catch (err) {
-      Logger.log(
-        'OIDCService getLink',
-        'Failed to Get OIDC Login Url',
-        err,
-      );
+      Logger.log('OIDCService getLink', 'Failed to Get OIDC Login Url', err);
       rethrow;
     }
   }
@@ -179,6 +166,7 @@ class OIDCService {
     String clientSecret,
     String certificateAuthority,
     String scopes,
+    bool addDefaultScopes,
     String redirectURL,
     String pkceMethod,
     String code,
@@ -186,21 +174,20 @@ class OIDCService {
     bool useAccessToken,
   ) async {
     try {
-      final String result = await platform.invokeMethod(
-        'oidcGetRefreshToken',
-        <String, dynamic>{
-          'discoveryURL': discoveryURL,
-          'clientID': clientID,
-          'clientSecret': clientSecret,
-          'certificateAuthority': certificateAuthority,
-          'scopes': scopes,
-          'redirectURL': redirectURL,
-          'pkceMethod': pkceMethod,
-          'code': code,
-          'verifier': verifier,
-          'useAccessToken': useAccessToken,
-        },
-      );
+      final String result = await platform
+          .invokeMethod('oidcGetRefreshToken', <String, dynamic>{
+            'discoveryURL': discoveryURL,
+            'clientID': clientID,
+            'clientSecret': clientSecret,
+            'certificateAuthority': certificateAuthority,
+            'scopes': scopes,
+            'addDefaultScopes': addDefaultScopes,
+            'redirectURL': redirectURL,
+            'pkceMethod': pkceMethod,
+            'code': code,
+            'verifier': verifier,
+            'useAccessToken': useAccessToken,
+          });
 
       Logger.log(
         'OIDCService getRefreshToken',
@@ -228,30 +215,26 @@ class OIDCService {
     String clientSecret,
     String certificateAuthority,
     String scopes,
+    bool addDefaultScopes,
     String redirectURL,
     String refreshToken,
     bool useAccessToken,
   ) async {
     try {
-      final String result = await platform.invokeMethod(
-        'oidcGetAccessToken',
-        <String, dynamic>{
-          'discoveryURL': discoveryURL,
-          'clientID': clientID,
-          'clientSecret': clientSecret,
-          'certificateAuthority': certificateAuthority,
-          'scopes': scopes,
-          'redirectURL': redirectURL,
-          'refreshToken': refreshToken,
-          'useAccessToken': useAccessToken,
-        },
-      );
+      final String result = await platform
+          .invokeMethod('oidcGetAccessToken', <String, dynamic>{
+            'discoveryURL': discoveryURL,
+            'clientID': clientID,
+            'clientSecret': clientSecret,
+            'certificateAuthority': certificateAuthority,
+            'scopes': scopes,
+            'addDefaultScopes': addDefaultScopes,
+            'redirectURL': redirectURL,
+            'refreshToken': refreshToken,
+            'useAccessToken': useAccessToken,
+          });
 
-      Logger.log(
-        'OIDCService getAccessToken',
-        'Access Token Returned',
-        result,
-      );
+      Logger.log('OIDCService getAccessToken', 'Access Token Returned', result);
 
       Map<String, dynamic> jsonData = json.decode(result);
       return OIDCResponse.fromJson(jsonData);
@@ -275,23 +258,19 @@ class OIDCService {
     String clientID,
     String certificateAuthority,
     String scopes,
+    bool addDefaultScopes,
   ) async {
     try {
-      final String result = await platform.invokeMethod(
-        'oidcDeviceAuth',
-        <String, dynamic>{
-          'discoveryURL': discoveryURL,
-          'clientID': clientID,
-          'certificateAuthority': certificateAuthority,
-          'scopes': scopes,
-        },
-      );
+      final String result = await platform
+          .invokeMethod('oidcDeviceAuth', <String, dynamic>{
+            'discoveryURL': discoveryURL,
+            'clientID': clientID,
+            'certificateAuthority': certificateAuthority,
+            'scopes': scopes,
+            'addDefaultScopes': addDefaultScopes,
+          });
 
-      Logger.log(
-        'OIDCService deviceAuth',
-        'Device Auth Data Returned',
-        result,
-      );
+      Logger.log('OIDCService deviceAuth', 'Device Auth Data Returned', result);
 
       Map<String, dynamic> jsonData = json.decode(result);
       return OIDCDeviceAuth.fromJson(jsonData);
@@ -314,21 +293,21 @@ class OIDCService {
     String clientID,
     String certificateAuthority,
     String scopes,
+    bool addDefaultScopes,
     String deviceCode,
     bool useAccessToken,
   ) async {
     try {
-      final String result = await platform.invokeMethod(
-        'oidcDeviceAuthGetRefreshToken',
-        <String, dynamic>{
-          'discoveryURL': discoveryURL,
-          'clientID': clientID,
-          'certificateAuthority': certificateAuthority,
-          'scopes': scopes,
-          'deviceCode': deviceCode,
-          'useAccessToken': useAccessToken,
-        },
-      );
+      final String result = await platform
+          .invokeMethod('oidcDeviceAuthGetRefreshToken', <String, dynamic>{
+            'discoveryURL': discoveryURL,
+            'clientID': clientID,
+            'certificateAuthority': certificateAuthority,
+            'scopes': scopes,
+            'addDefaultScopes': addDefaultScopes,
+            'deviceCode': deviceCode,
+            'useAccessToken': useAccessToken,
+          });
 
       Logger.log(
         'OIDCService deviceAuthGetRefreshToken',

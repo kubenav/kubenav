@@ -33,6 +33,7 @@ class _SettingsReauthenticateOIDCState
         _provider?.oidc?.clientSecret ?? '',
         _provider?.oidc?.certificateAuthority ?? '',
         _provider?.oidc?.scopes ?? '',
+        _provider?.oidc?.addDefaultScopes ?? true,
         _provider?.oidc?.redirectURL ?? '',
         _provider?.oidc?.pkceMethod ?? '',
         _stateController.text,
@@ -54,11 +55,7 @@ class _SettingsReauthenticateOIDCState
         err,
       );
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Open Sign In Url',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Open Sign In Url', err.toString());
       }
     }
   }
@@ -76,6 +73,7 @@ class _SettingsReauthenticateOIDCState
         _provider?.oidc?.clientSecret ?? '',
         _provider?.oidc?.certificateAuthority ?? '',
         _provider?.oidc?.scopes ?? '',
+        _provider?.oidc?.addDefaultScopes ?? true,
         _provider?.oidc?.redirectURL ?? '',
         _provider?.oidc?.pkceMethod ?? '',
         _codeController.text,
@@ -102,11 +100,7 @@ class _SettingsReauthenticateOIDCState
         err,
       );
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Get Credentials',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Get Credentials', err.toString());
       }
     }
   }
@@ -173,9 +167,7 @@ class _SettingsReauthenticateOIDCState
               foregroundColor: Theme.of(context).colorScheme.onPrimary,
               minimumSize: const Size.fromHeight(40),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  Constants.sizeBorderRadius,
-                ),
+                borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
               ),
             ),
             onPressed: _signIn,
@@ -217,9 +209,7 @@ class _SettingsReauthenticateOIDCState
               foregroundColor: Theme.of(context).colorScheme.onPrimary,
               minimumSize: const Size.fromHeight(40),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  Constants.sizeBorderRadius,
-                ),
+                borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
               ),
             ),
             onPressed: _codeController.text == '' ? null : _getCredentials,

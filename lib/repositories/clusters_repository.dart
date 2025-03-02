@@ -32,10 +32,7 @@ class ClustersRepository with ChangeNotifier {
   /// Storage package.
   Future<void> _save() async {
     try {
-      Logger.log(
-        'ClustersRepository _save',
-        'Save',
-      );
+      Logger.log('ClustersRepository _save', 'Save');
       await Storage().write(
         'kubenavClustersRepository',
         json.encode(
@@ -47,11 +44,7 @@ class ClustersRepository with ChangeNotifier {
         ),
       );
     } catch (err) {
-      Logger.log(
-        'ClustersRepository _save',
-        'Failed to Save Clusters',
-        err,
-      );
+      Logger.log('ClustersRepository _save', 'Failed to Save Clusters', err);
     }
   }
 
@@ -63,19 +56,16 @@ class ClustersRepository with ChangeNotifier {
     try {
       final storedData = await Storage().read('kubenavClustersRepository');
       if (storedData != null) {
-        final parsedStoredData =
-            ClustersRepositoryStorage.fromJson(json.decode(storedData));
+        final parsedStoredData = ClustersRepositoryStorage.fromJson(
+          json.decode(storedData),
+        );
         _clusters = parsedStoredData.clusters;
         _providers = parsedStoredData.providers;
         _activeClusterId = parsedStoredData.activeClusterId;
       }
       notifyListeners();
     } catch (err) {
-      Logger.log(
-        'ClustersRepository init',
-        'Failed to Load Clusters',
-        err,
-      );
+      Logger.log('ClustersRepository init', 'Failed to Load Clusters', err);
     }
   }
 
@@ -196,11 +186,8 @@ class ClustersRepository with ChangeNotifier {
         throw 'No Clusters Found';
       }
 
-      final cluster = _clusters
-          .where(
-            (cluster) => cluster.id == clusterId,
-          )
-          .toList()[0];
+      final cluster =
+          _clusters.where((cluster) => cluster.id == clusterId).toList()[0];
 
       if (cluster.clusterProviderType == ClusterProviderType.aws) {
         /// When the cluster provider is AWS we get the expiration time saved in
@@ -230,9 +217,10 @@ class ClustersRepository with ChangeNotifier {
               cluster.clusterProviderInternal,
             );
             cluster.userToken = token;
-            cluster.userTokenExpireTimestamp = DateTime.now()
-                .add(const Duration(minutes: 10))
-                .microsecondsSinceEpoch;
+            cluster.userTokenExpireTimestamp =
+                DateTime.now()
+                    .add(const Duration(minutes: 10))
+                    .microsecondsSinceEpoch;
             await editClusterWithoutNotify(cluster);
             return cluster;
           } else {
@@ -287,9 +275,10 @@ class ClustersRepository with ChangeNotifier {
             );
 
             cluster.userToken = token;
-            cluster.userTokenExpireTimestamp = DateTime.now()
-                .add(const Duration(minutes: 10))
-                .microsecondsSinceEpoch;
+            cluster.userTokenExpireTimestamp =
+                DateTime.now()
+                    .add(const Duration(minutes: 10))
+                    .microsecondsSinceEpoch;
             await editClusterWithoutNotify(cluster);
             return cluster;
           } else {
@@ -318,7 +307,8 @@ class ClustersRepository with ChangeNotifier {
             provider?.google?.refreshToken ?? '',
           );
 
-          final expires = DateTime.now().millisecondsSinceEpoch +
+          final expires =
+              DateTime.now().millisecondsSinceEpoch +
               googleTokens.expiresIn! * 1000;
           provider?.google?.accessToken = googleTokens.accessToken!;
           provider?.google?.accessTokenExpires = expires;
@@ -362,6 +352,7 @@ class ClustersRepository with ChangeNotifier {
             provider?.oidc?.clientSecret ?? '',
             provider?.oidc?.certificateAuthority ?? '',
             provider?.oidc?.scopes ?? '',
+            provider?.oidc?.addDefaultScopes ?? true,
             Constants.oidcRedirectURI,
             provider?.oidc?.refreshToken ?? '',
             provider?.oidc?.useAccessToken ?? false,
@@ -522,14 +513,18 @@ class ClustersRepositoryStorage {
 
   factory ClustersRepositoryStorage.fromJson(Map<String, dynamic> data) {
     return ClustersRepositoryStorage(
-      clusters: data.containsKey('clusters') && data['clusters'] != null
-          ? List<Cluster>.from(data['clusters'].map((v) => Cluster.fromJson(v)))
-          : [],
-      providers: data.containsKey('providers') && data['providers'] != null
-          ? List<ClusterProvider>.from(
-              data['providers'].map((v) => ClusterProvider.fromJson(v)),
-            )
-          : [],
+      clusters:
+          data.containsKey('clusters') && data['clusters'] != null
+              ? List<Cluster>.from(
+                data['clusters'].map((v) => Cluster.fromJson(v)),
+              )
+              : [],
+      providers:
+          data.containsKey('providers') && data['providers'] != null
+              ? List<ClusterProvider>.from(
+                data['providers'].map((v) => ClusterProvider.fromJson(v)),
+              )
+              : [],
       activeClusterId:
           data.containsKey('activeClusterId') && data['activeClusterId'] != null
               ? data['activeClusterId']
