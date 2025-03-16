@@ -9,6 +9,8 @@ updates:
       - "ricoberger"
     assignees:
       - "ricoberger"
+    labels:
+      - "changelog: changed"
     groups:
       github-actions:
         patterns:
@@ -22,6 +24,8 @@ updates:
       - "ricoberger"
     assignees:
       - "ricoberger"
+    labels:
+      - "changelog: changed"
     groups:
       pub:
         patterns:
@@ -35,6 +39,8 @@ updates:
       - "ricoberger"
     assignees:
       - "ricoberger"
+    labels:
+      - "changelog: changed"
     groups:
       gomod:
         patterns:

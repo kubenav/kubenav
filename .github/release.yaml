@@ -15,15 +15,15 @@ version-resolver:
   minor:
     labels:
       - "changelog: added"
-      - "changelog: changed"
   patch:
     labels:
+      - "changelog: changed"
       - "changelog: fixed"
   default: patch
 category-template: "### $TITLE"
-change-template: '- #$NUMBER: $TITLE @$AUTHOR'
+change-template: "- #$NUMBER: $TITLE @$AUTHOR"
 template: |
   $CHANGES
 replacers:
-  - search: ':warning:'
-    replace: ':warning: _Breaking change:_ :warning:'
+  - search: ":warning:"
+    replace: ":warning: _Breaking change:_ :warning:"
