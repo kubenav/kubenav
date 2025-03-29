@@ -779,7 +779,7 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
       _redirectURLController.text = Constants.oidcRedirectURI;
     }
 
-    _stateController.text = generateRandomString(6);
+    _stateController.text = generateRandomString(12);
   }
 
   @override
