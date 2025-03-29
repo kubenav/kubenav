@@ -31,11 +31,12 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.0'
-          channel: 'stable'
+          flutter-version: "3.29.2"
+          channel: "stable"
           cache: true
-          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:'
-          cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:'
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"
+          cache-path:
+            "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:"
 
       - name: Install Dependencies
         run: |
@@ -73,11 +74,12 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.0'
-          channel: 'stable'
+          flutter-version: "3.29.2"
+          channel: "stable"
           cache: true
-          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:'
-          cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:'
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"
+          cache-path:
+            "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:"
 
       - name: Install Dependencies
         run: |
