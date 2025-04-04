@@ -1,11 +1,10 @@
 module github.com/kubenav/kubenav
 
 go 1.24.0
-
 replace golang.org/x/oauth2 => github.com/kubenav/oauth2 v0.0.0-20240830072915-86aad6e7f9f3
 
 require (
-	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.17.0
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.17.1
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.8.2
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/containerservice/armcontainerservice v1.0.0
 	github.com/aws/aws-sdk-go v1.55.6
@@ -17,10 +16,10 @@ require (
 	golang.org/x/mobile v0.0.0-20250218173827-cd096645fcd3
 	golang.org/x/oauth2 v0.28.0
 	helm.sh/helm/v3 v3.17.2
-	k8s.io/api v0.32.2
-	k8s.io/apimachinery v0.32.2
-	k8s.io/cli-runtime v0.32.2
-	k8s.io/client-go v0.32.2
+	k8s.io/api v0.32.3
+	k8s.io/apimachinery v0.32.3
+	k8s.io/cli-runtime v0.32.3
+	k8s.io/client-go v0.32.3
 	sigs.k8s.io/yaml v1.4.0
 )
 
