@@ -164,9 +164,7 @@ class _SettingsAWSSSOMultipleProvidersSelectState
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             separatorBuilder: (context, index) {
-              return const SizedBox(
-                height: Constants.spacingMiddle,
-              );
+              return const SizedBox(height: Constants.spacingMiddle);
             },
             itemCount: widget.accounts.length,
             itemBuilder: (context, accountIndex) {
@@ -190,9 +188,7 @@ class _SettingsAWSSSOMultipleProvidersSelectState
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     separatorBuilder: (context, index) {
-                      return const SizedBox(
-                        height: Constants.spacingMiddle,
-                      );
+                      return const SizedBox(height: Constants.spacingMiddle);
                     },
                     itemCount: widget.accounts[accountIndex].roles?.length ?? 0,
                     itemBuilder: (context, roleIndex) {
@@ -200,9 +196,10 @@ class _SettingsAWSSSOMultipleProvidersSelectState
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                              color: Theme.of(context)
-                                  .extension<CustomColors>()!
-                                  .shadow,
+                              color:
+                                  Theme.of(
+                                    context,
+                                  ).extension<CustomColors>()!.shadow,
                               blurRadius: Constants.sizeBorderBlurRadius,
                               spreadRadius: Constants.sizeBorderSpreadRadius,
                               offset: const Offset(0.0, 0.0),
@@ -215,14 +212,17 @@ class _SettingsAWSSSOMultipleProvidersSelectState
                         ),
                         child: CheckboxListTile(
                           controlAffinity: ListTileControlAffinity.leading,
-                          value: _selectedAccounts
+                          value:
+                              _selectedAccounts
                                   .where(
                                     (a) =>
                                         a.accountId ==
-                                            widget.accounts[accountIndex]
+                                            widget
+                                                .accounts[accountIndex]
                                                 .accountId &&
                                         a.role ==
-                                            widget.accounts[accountIndex]
+                                            widget
+                                                .accounts[accountIndex]
                                                 .roles![roleIndex],
                                   )
                                   .toList()
@@ -235,46 +235,57 @@ class _SettingsAWSSSOMultipleProvidersSelectState
                                   SelectedAWSSSOAccount(
                                     accountId:
                                         widget.accounts[accountIndex].accountId,
-                                    accountName: widget
-                                        .accounts[accountIndex].accountName,
-                                    role: widget.accounts[accountIndex]
-                                        .roles![roleIndex],
-                                    accessToken: widget
-                                        .accounts[accountIndex].accessToken,
-                                    accessTokenExpire: widget
-                                        .accounts[accountIndex]
-                                        .accessTokenExpire,
+                                    accountName:
+                                        widget
+                                            .accounts[accountIndex]
+                                            .accountName,
+                                    role:
+                                        widget
+                                            .accounts[accountIndex]
+                                            .roles![roleIndex],
+                                    accessToken:
+                                        widget
+                                            .accounts[accountIndex]
+                                            .accessToken,
+                                    accessTokenExpire:
+                                        widget
+                                            .accounts[accountIndex]
+                                            .accessTokenExpire,
                                   ),
                                 );
                               });
                             }
                             if (value == false) {
                               setState(() {
-                                _selectedAccounts = _selectedAccounts
-                                    .where(
-                                      (a) => !(a.accountId ==
-                                              widget.accounts[accountIndex]
-                                                  .accountId &&
-                                          a.role ==
-                                              widget.accounts[accountIndex]
-                                                  .roles![roleIndex]),
-                                    )
-                                    .toList();
+                                _selectedAccounts =
+                                    _selectedAccounts
+                                        .where(
+                                          (a) =>
+                                              !(a.accountId ==
+                                                      widget
+                                                          .accounts[accountIndex]
+                                                          .accountId &&
+                                                  a.role ==
+                                                      widget
+                                                          .accounts[accountIndex]
+                                                          .roles![roleIndex]),
+                                        )
+                                        .toList();
                               });
                             }
                           },
                           title: Text(
                             Characters(
-                              widget.accounts[accountIndex].roles![roleIndex],
-                            )
+                                  widget
+                                      .accounts[accountIndex]
+                                      .roles![roleIndex],
+                                )
                                 .replaceAll(
                                   Characters(''),
                                   Characters('\u{200B}'),
                                 )
                                 .toString(),
-                            style: noramlTextStyle(
-                              context,
-                            ),
+                            style: normalTextStyle(context),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),

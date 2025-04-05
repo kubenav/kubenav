@@ -23,10 +23,7 @@ import 'package:kubenav/widgets/shared/app_error_widget.dart';
 /// To get the list of clusters a valid [provider] configuration is required,
 /// with the users credentials to access the AWS API.
 class SettingsAddClusterAWSSSO extends StatefulWidget {
-  const SettingsAddClusterAWSSSO({
-    super.key,
-    required this.provider,
-  });
+  const SettingsAddClusterAWSSSO({super.key, required this.provider});
 
   final ClusterProvider provider;
 
@@ -122,7 +119,7 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
                   widget.provider.awssso!.ssoCredentials?.accessToken ?? '',
               userTokenExpireTimestamp:
                   widget.provider.awssso!.ssoCredentials?.accessTokenExpire ??
-                      0,
+                  0,
               namespace: 'default',
             ),
           );
@@ -139,11 +136,7 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
         _isLoadingAddCluster = false;
       });
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Add Clusters',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Add Clusters', err.toString());
       }
     }
   }
@@ -172,9 +165,7 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       separatorBuilder: (context, index) {
-        return const SizedBox(
-          height: Constants.spacingMiddle,
-        );
+        return const SizedBox(height: Constants.spacingMiddle);
       },
       itemCount: _clusters.length,
       itemBuilder: (context, index) {
@@ -195,7 +186,8 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
           ),
           child: CheckboxListTile(
             controlAffinity: ListTileControlAffinity.leading,
-            value: _selectedClusters
+            value:
+                _selectedClusters
                     .where((c) => c.name == _clusters[index].name)
                     .toList()
                     .length ==
@@ -208,9 +200,10 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
               }
               if (value == false) {
                 setState(() {
-                  _selectedClusters = _selectedClusters
-                      .where((c) => c.name != _clusters[index].name)
-                      .toList();
+                  _selectedClusters =
+                      _selectedClusters
+                          .where((c) => c.name != _clusters[index].name)
+                          .toList();
                 });
               }
             },
@@ -218,9 +211,7 @@ class _SettingsAddClusterAWSSSOState extends State<SettingsAddClusterAWSSSO> {
               Characters(
                 'aws_${widget.provider.awssso?.region}_${_clusters[index].name}',
               ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
-              style: noramlTextStyle(
-                context,
-              ),
+              style: normalTextStyle(context),
               overflow: TextOverflow.ellipsis,
             ),
           ),

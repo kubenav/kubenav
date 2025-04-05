@@ -109,11 +109,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
       }
     } catch (err) {
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Change Namespace',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Change Namespace', err.toString());
       }
     }
   }
@@ -167,9 +163,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
               flex: 1,
               child: Text(
                 'All Namespaces',
-                style: noramlTextStyle(
-                  context,
-                ),
+                style: normalTextStyle(context),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -177,17 +171,16 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
         ),
       ),
       SizedBox(
-        height: appRepository.settings.namespaces.isEmpty
-            ? 0
-            : Constants.spacingMiddle,
+        height:
+            appRepository.settings.namespaces.isEmpty
+                ? 0
+                : Constants.spacingMiddle,
       ),
       ListView.separated(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         separatorBuilder: (context, index) {
-          return const SizedBox(
-            height: Constants.spacingMiddle,
-          );
+          return const SizedBox(height: Constants.spacingMiddle);
         },
         itemCount: appRepository.settings.namespaces.length,
         itemBuilder: (context, index) {
@@ -214,9 +207,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                   flex: 1,
                   child: Text(
                     name,
-                    style: noramlTextStyle(
-                      context,
-                    ),
+                    style: normalTextStyle(context),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -318,8 +309,9 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                     );
                   }
 
-                  final filteredNamespaces =
-                      _getFilteredNamespaces(snapshot.data!);
+                  final filteredNamespaces = _getFilteredNamespaces(
+                    snapshot.data!,
+                  );
 
                   return Column(
                     children: [
@@ -377,9 +369,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
                                   flex: 1,
                                   child: Text(
                                     name ?? '',
-                                    style: noramlTextStyle(
-                                      context,
-                                    ),
+                                    style: normalTextStyle(context),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),

@@ -41,9 +41,7 @@ class Settings extends StatelessWidget {
   /// If the user hasn't any clusters configured yet. We display the
   /// [AppNoClustersWidget] widget, so the user can go to the clusters page to
   /// add his first cluster.
-  Widget _buildClusters(
-    BuildContext context,
-  ) {
+  Widget _buildClusters(BuildContext context) {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -100,9 +98,7 @@ class Settings extends StatelessWidget {
                       flex: 1,
                       child: Text(
                         clustersRepository.clusters[index].name,
-                        style: noramlTextStyle(
-                          context,
-                        ),
+                        style: normalTextStyle(context),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -121,9 +117,7 @@ class Settings extends StatelessWidget {
   /// page, where a user can add more clusters or reorder his existing clusters.
   Widget _buildViewAllClusters(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(
-        Constants.spacingMiddle,
-      ),
+      padding: const EdgeInsets.all(Constants.spacingMiddle),
       child: Row(
         children: [
           Expanded(
@@ -185,25 +179,14 @@ class Settings extends StatelessWidget {
       items: [
         AppVerticalListSimpleModel(
           onTap: () {
-            showModal(
-              context,
-              const Logger(),
-            );
+            showModal(context, const Logger());
           },
           children: [
-            Icon(
-              Icons.subject,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            Icon(Icons.subject, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text(
-                'Logs',
-                style: noramlTextStyle(
-                  context,
-                ),
-              ),
+              child: Text('Logs', style: normalTextStyle(context)),
             ),
             Icon(
               Icons.arrow_forward_ios,
@@ -217,25 +200,14 @@ class Settings extends StatelessWidget {
         ),
         AppVerticalListSimpleModel(
           onTap: () {
-            navigate(
-              context,
-              const SettingsHelp(),
-            );
+            navigate(context, const SettingsHelp());
           },
           children: [
-            Icon(
-              Icons.help,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            Icon(Icons.help, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text(
-                'Help',
-                style: noramlTextStyle(
-                  context,
-                ),
-              ),
+              child: Text('Help', style: normalTextStyle(context)),
             ),
             Icon(
               Icons.arrow_forward_ios,
@@ -261,16 +233,10 @@ class Settings extends StatelessWidget {
       context,
       listen: true,
     );
-    Provider.of<ClustersRepository>(
-      context,
-      listen: true,
-    );
+    Provider.of<ClustersRepository>(context, listen: true);
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Settings'),
-      ),
+      appBar: AppBar(centerTitle: true, title: const Text('Settings')),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SafeArea(
@@ -298,9 +264,7 @@ class Settings extends StatelessWidget {
                         flex: 1,
                         child: Text(
                           'Provider',
-                          style: noramlTextStyle(
-                            context,
-                          ),
+                          style: normalTextStyle(context),
                         ),
                       ),
                       Icon(
@@ -315,10 +279,7 @@ class Settings extends StatelessWidget {
                   ),
                   AppVerticalListSimpleModel(
                     onTap: () {
-                      navigate(
-                        context,
-                        const SettingsNamespaces(),
-                      );
+                      navigate(context, const SettingsNamespaces());
                     },
                     children: [
                       Icon(
@@ -330,9 +291,7 @@ class Settings extends StatelessWidget {
                         flex: 1,
                         child: Text(
                           'Namespaces',
-                          style: noramlTextStyle(
-                            context,
-                          ),
+                          style: normalTextStyle(context),
                         ),
                       ),
                       Icon(
@@ -356,9 +315,7 @@ class Settings extends StatelessWidget {
                         flex: 1,
                         child: Text(
                           'Authentication',
-                          style: noramlTextStyle(
-                            context,
-                          ),
+                          style: normalTextStyle(context),
                         ),
                       ),
                       Switch(
@@ -381,9 +338,7 @@ class Settings extends StatelessWidget {
                         flex: 1,
                         child: Text(
                           'Show Clusters on Start',
-                          style: noramlTextStyle(
-                            context,
-                          ),
+                          style: normalTextStyle(context),
                         ),
                       ),
                       Switch(
@@ -406,12 +361,7 @@ class Settings extends StatelessWidget {
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
                         flex: 1,
-                        child: Text(
-                          'Theme',
-                          style: noramlTextStyle(
-                            context,
-                          ),
-                        ),
+                        child: Text('Theme', style: normalTextStyle(context)),
                       ),
                       DropdownButton(
                         value: themeRepository.themeName,
@@ -420,22 +370,25 @@ class Settings extends StatelessWidget {
                           color: Theme.of(context).colorScheme.primary,
                         ),
                         onChanged: (ThemeName? value) {
-                          themeRepository
-                              .setThemeName(value ?? ThemeName.light);
-                        },
-                        items: ThemeName.values.map((value) {
-                          return DropdownMenuItem(
-                            value: value,
-                            child: Text(
-                              value.toShortString(),
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .extension<CustomColors>()!
-                                    .textPrimary,
-                              ),
-                            ),
+                          themeRepository.setThemeName(
+                            value ?? ThemeName.light,
                           );
-                        }).toList(),
+                        },
+                        items:
+                            ThemeName.values.map((value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Text(
+                                  value.toShortString(),
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context)
+                                            .extension<CustomColors>()!
+                                            .textPrimary,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
                       ),
                     ],
                   ),
@@ -450,9 +403,7 @@ class Settings extends StatelessWidget {
                         flex: 1,
                         child: Text(
                           'Editor Format',
-                          style: noramlTextStyle(
-                            context,
-                          ),
+                          style: normalTextStyle(context),
                         ),
                       ),
                       DropdownButton(
@@ -464,22 +415,21 @@ class Settings extends StatelessWidget {
                         onChanged: (String? newValue) {
                           appRepository.setEditorFormat(newValue ?? 'yaml');
                         },
-                        items: [
-                          'yaml',
-                          'json',
-                        ].map((value) {
-                          return DropdownMenuItem(
-                            value: value,
-                            child: Text(
-                              value,
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .extension<CustomColors>()!
-                                    .textPrimary,
-                              ),
-                            ),
-                          );
-                        }).toList(),
+                        items:
+                            ['yaml', 'json'].map((value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context)
+                                            .extension<CustomColors>()!
+                                            .textPrimary,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
                       ),
                     ],
                   ),
@@ -502,9 +452,7 @@ class Settings extends StatelessWidget {
                         flex: 1,
                         child: Text(
                           'Home Page',
-                          style: noramlTextStyle(
-                            context,
-                          ),
+                          style: normalTextStyle(context),
                         ),
                       ),
                       Icon(
@@ -534,12 +482,7 @@ class Settings extends StatelessWidget {
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
                         flex: 1,
-                        child: Text(
-                          'Proxy',
-                          style: noramlTextStyle(
-                            context,
-                          ),
-                        ),
+                        child: Text('Proxy', style: normalTextStyle(context)),
                       ),
                       Icon(
                         Icons.arrow_forward_ios,
@@ -568,12 +511,7 @@ class Settings extends StatelessWidget {
                       const SizedBox(width: Constants.spacingSmall),
                       Expanded(
                         flex: 1,
-                        child: Text(
-                          'Timeout',
-                          style: noramlTextStyle(
-                            context,
-                          ),
-                        ),
+                        child: Text('Timeout', style: normalTextStyle(context)),
                       ),
                       Icon(
                         Icons.arrow_forward_ios,
@@ -604,9 +542,7 @@ class Settings extends StatelessWidget {
                         flex: 1,
                         child: Text(
                           'Prometheus',
-                          style: noramlTextStyle(
-                            context,
-                          ),
+                          style: normalTextStyle(context),
                         ),
                       ),
                       Icon(

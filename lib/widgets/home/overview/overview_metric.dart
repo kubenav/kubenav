@@ -39,11 +39,7 @@ const texts = {
 /// [MetricType] is our enum value, which is used to specify which metrics we
 /// want to show in the bottom sheet. The possible values are [cpu], [memory]
 /// and [pods].
-enum MetricType {
-  cpu,
-  memory,
-  pods,
-}
+enum MetricType { cpu, memory, pods }
 
 /// The [Metric] model is used to represent all metrics for a [MetricType]. We
 /// collect the [allocatable], [usage], [requests] and [limits] for each
@@ -68,9 +64,7 @@ class Metric {
 class Metrics {
   Map<MetricType, Metric> metrics;
 
-  Metrics({
-    required this.metrics,
-  });
+  Metrics({required this.metrics});
 
   Metric getMetric(MetricType metric) {
     return metrics[metric]!;
@@ -78,13 +72,9 @@ class Metrics {
 }
 
 Metrics _getMetrics(List<String> results) {
-  final nodesList = IoK8sApiCoreV1NodeList.fromJson(
-    json.decode(results[0]),
-  );
+  final nodesList = IoK8sApiCoreV1NodeList.fromJson(json.decode(results[0]));
 
-  final podsList = IoK8sApiCoreV1PodList.fromJson(
-    json.decode(results[1]),
-  );
+  final podsList = IoK8sApiCoreV1PodList.fromJson(json.decode(results[1]));
 
   final nodeMetricsList = ApisMetricsV1beta1NodeMetricsList.fromJson(
     json.decode(results[2]),
@@ -106,13 +96,15 @@ Metrics _getMetrics(List<String> results) {
   if (nodesList != null && podsList != null && nodeMetricsList.items != null) {
     for (var node in nodesList.items) {
       if (node.status != null && node.status!.allocatable.containsKey('cpu')) {
-        cpuAllocatable = cpuAllocatable +
+        cpuAllocatable =
+            cpuAllocatable +
             cpuMetricsStringToDouble(node.status!.allocatable['cpu']!);
       }
 
       if (node.status != null &&
           node.status!.allocatable.containsKey('memory')) {
-        memoryAllocatable = memoryAllocatable +
+        memoryAllocatable =
+            memoryAllocatable +
             memoryMetricsStringToDouble(node.status!.allocatable['memory']!);
       }
 
@@ -140,15 +132,15 @@ Metrics _getMetrics(List<String> results) {
         for (var container in pod.spec!.containers) {
           if (container.resources != null &&
               container.resources!.requests.containsKey('cpu')) {
-            cpuRequests = cpuRequests +
-                cpuMetricsStringToDouble(
-                  container.resources!.requests['cpu']!,
-                );
+            cpuRequests =
+                cpuRequests +
+                cpuMetricsStringToDouble(container.resources!.requests['cpu']!);
           }
 
           if (container.resources != null &&
               container.resources!.requests.containsKey('memory')) {
-            memoryRequests = memoryRequests +
+            memoryRequests =
+                memoryRequests +
                 memoryMetricsStringToDouble(
                   container.resources!.requests['memory']!,
                 );
@@ -156,13 +148,15 @@ Metrics _getMetrics(List<String> results) {
 
           if (container.resources != null &&
               container.resources!.limits.containsKey('cpu')) {
-            cpuLimits = cpuLimits +
+            cpuLimits =
+                cpuLimits +
                 cpuMetricsStringToDouble(container.resources!.limits['cpu']!);
           }
 
           if (container.resources != null &&
               container.resources!.limits.containsKey('memory')) {
-            memoryLimits = memoryLimits +
+            memoryLimits =
+                memoryLimits +
                 memoryMetricsStringToDouble(
                   container.resources!.limits['memory']!,
                 );
@@ -305,9 +299,7 @@ class _OverviewMetricState extends State<OverviewMetric> {
             toY: data.metrics[widget.metricType]!.allocatable.toDouble(),
             color: Theme.of(context).colorScheme.primary,
             width: 25,
-            borderRadius: const BorderRadius.all(
-              Radius.zero,
-            ),
+            borderRadius: const BorderRadius.all(Radius.zero),
           ),
         ],
       ),
@@ -318,45 +310,37 @@ class _OverviewMetricState extends State<OverviewMetric> {
             toY: data.metrics[widget.metricType]!.usage.toDouble(),
             color: Theme.of(context).colorScheme.primary,
             width: 25,
-            borderRadius: const BorderRadius.all(
-              Radius.zero,
-            ),
+            borderRadius: const BorderRadius.all(Radius.zero),
           ),
         ],
       ),
     ];
 
     if (widget.metricType != MetricType.pods) {
-      barGroups.addAll(
-        [
-          BarChartGroupData(
-            x: 2,
-            barRods: [
-              BarChartRodData(
-                toY: data.metrics[widget.metricType]!.requests.toDouble(),
-                color: Theme.of(context).colorScheme.primary,
-                width: 25,
-                borderRadius: const BorderRadius.all(
-                  Radius.zero,
-                ),
-              ),
-            ],
-          ),
-          BarChartGroupData(
-            x: 3,
-            barRods: [
-              BarChartRodData(
-                toY: data.metrics[widget.metricType]!.limits.toDouble(),
-                color: Theme.of(context).colorScheme.primary,
-                width: 25,
-                borderRadius: const BorderRadius.all(
-                  Radius.zero,
-                ),
-              ),
-            ],
-          ),
-        ],
-      );
+      barGroups.addAll([
+        BarChartGroupData(
+          x: 2,
+          barRods: [
+            BarChartRodData(
+              toY: data.metrics[widget.metricType]!.requests.toDouble(),
+              color: Theme.of(context).colorScheme.primary,
+              width: 25,
+              borderRadius: const BorderRadius.all(Radius.zero),
+            ),
+          ],
+        ),
+        BarChartGroupData(
+          x: 3,
+          barRods: [
+            BarChartRodData(
+              toY: data.metrics[widget.metricType]!.limits.toDouble(),
+              color: Theme.of(context).colorScheme.primary,
+              width: 25,
+              borderRadius: const BorderRadius.all(Radius.zero),
+            ),
+          ],
+        ),
+      ]);
     }
 
     return barGroups;
@@ -373,18 +357,11 @@ class _OverviewMetricState extends State<OverviewMetric> {
         children: [
           Text(
             'Allocatable',
-            style: noramlTextStyle(
-              context,
-              size: Constants.sizeTextSecondary,
-            ),
+            style: normalTextStyle(context, size: Constants.sizeTextSecondary),
           ),
           Text(
-            formatValue(
-              data.metrics[widget.metricType]!.allocatable,
-            ),
-            style: secondaryTextStyle(
-              context,
-            ),
+            formatValue(data.metrics[widget.metricType]!.allocatable),
+            style: secondaryTextStyle(context),
           ),
         ],
       ),
@@ -393,68 +370,51 @@ class _OverviewMetricState extends State<OverviewMetric> {
         children: [
           Text(
             'Usage',
-            style: noramlTextStyle(
-              context,
-              size: Constants.sizeTextSecondary,
-            ),
+            style: normalTextStyle(context, size: Constants.sizeTextSecondary),
           ),
           Text(
-            formatValue(
-              data.metrics[widget.metricType]!.usage,
-            ),
-            style: secondaryTextStyle(
-              context,
-            ),
+            formatValue(data.metrics[widget.metricType]!.usage),
+            style: secondaryTextStyle(context),
           ),
         ],
       ),
     ];
 
     if (widget.metricType != MetricType.pods) {
-      legend.addAll(
-        [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Requests',
-                style: noramlTextStyle(
-                  context,
-                  size: Constants.sizeTextSecondary,
-                ),
+      legend.addAll([
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Requests',
+              style: normalTextStyle(
+                context,
+                size: Constants.sizeTextSecondary,
               ),
-              Text(
-                formatValue(
-                  data.metrics[widget.metricType]!.requests,
-                ),
-                style: secondaryTextStyle(
-                  context,
-                ),
+            ),
+            Text(
+              formatValue(data.metrics[widget.metricType]!.requests),
+              style: secondaryTextStyle(context),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Limits',
+              style: normalTextStyle(
+                context,
+                size: Constants.sizeTextSecondary,
               ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Limits',
-                style: noramlTextStyle(
-                  context,
-                  size: Constants.sizeTextSecondary,
-                ),
-              ),
-              Text(
-                formatValue(
-                  data.metrics[widget.metricType]!.limits,
-                ),
-                style: secondaryTextStyle(
-                  context,
-                ),
-              ),
-            ],
-          ),
-        ],
-      );
+            ),
+            Text(
+              formatValue(data.metrics[widget.metricType]!.limits),
+              style: secondaryTextStyle(context),
+            ),
+          ],
+        ),
+      ]);
     }
 
     return legend;
@@ -462,10 +422,7 @@ class _OverviewMetricState extends State<OverviewMetric> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ClustersRepository>(
-      context,
-      listen: true,
-    );
+    Provider.of<ClustersRepository>(context, listen: true);
 
     return AppBottomSheetWidget(
       title: texts[widget.metricType]!['title']!,
@@ -489,10 +446,7 @@ class _OverviewMetricState extends State<OverviewMetric> {
           ),
           child: FutureBuilder(
             future: _futureFetchMetrics,
-            builder: (
-              BuildContext context,
-              AsyncSnapshot<Metrics> snapshot,
-            ) {
+            builder: (BuildContext context, AsyncSnapshot<Metrics> snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
@@ -515,9 +469,10 @@ class _OverviewMetricState extends State<OverviewMetric> {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: Theme.of(context)
-                              .extension<CustomColors>()!
-                              .shadow,
+                          color:
+                              Theme.of(
+                                context,
+                              ).extension<CustomColors>()!.shadow,
                           blurRadius: Constants.sizeBorderBlurRadius,
                           spreadRadius: Constants.sizeBorderSpreadRadius,
                           offset: const Offset(0.0, 0.0),
@@ -541,12 +496,16 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                   fitInsideHorizontally: true,
                                   fitInsideVertically: true,
                                   getTooltipColor: (BarChartGroupData group) {
-                                    return Theme.of(context)
-                                        .extension<CustomColors>()!
-                                        .message;
+                                    return Theme.of(
+                                      context,
+                                    ).extension<CustomColors>()!.message;
                                   },
-                                  getTooltipItem:
-                                      (group, groupIndex, rod, rodIndex) {
+                                  getTooltipItem: (
+                                    group,
+                                    groupIndex,
+                                    rod,
+                                    rodIndex,
+                                  ) {
                                     String label;
                                     switch (group.x.toInt()) {
                                       case 0:
@@ -568,9 +527,10 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                     return BarTooltipItem(
                                       '$label\n',
                                       TextStyle(
-                                        color: Theme.of(context)
-                                            .extension<CustomColors>()!
-                                            .onMessage,
+                                        color:
+                                            Theme.of(context)
+                                                .extension<CustomColors>()!
+                                                .onMessage,
                                         fontWeight: FontWeight.normal,
                                         fontSize: 14,
                                       ),
@@ -578,9 +538,10 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                         TextSpan(
                                           text: formatValue(rod.toY),
                                           style: TextStyle(
-                                            color: Theme.of(context)
-                                                .extension<CustomColors>()!
-                                                .onMessage,
+                                            color:
+                                                Theme.of(context)
+                                                    .extension<CustomColors>()!
+                                                    .onMessage,
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal,
                                           ),
@@ -593,19 +554,13 @@ class _OverviewMetricState extends State<OverviewMetric> {
                               titlesData: FlTitlesData(
                                 show: true,
                                 rightTitles: const AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: false,
-                                  ),
+                                  sideTitles: SideTitles(showTitles: false),
                                 ),
                                 topTitles: const AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: false,
-                                  ),
+                                  sideTitles: SideTitles(showTitles: false),
                                 ),
                                 leftTitles: const AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: false,
-                                  ),
+                                  sideTitles: SideTitles(showTitles: false),
                                 ),
                                 bottomTitles: AxisTitles(
                                   sideTitles: SideTitles(
@@ -627,9 +582,7 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                         padding: const EdgeInsets.only(top: 16),
                                         child: Text(
                                           title,
-                                          style: secondaryTextStyle(
-                                            context,
-                                          ),
+                                          style: secondaryTextStyle(context),
                                           textDirection: TextDirection.rtl,
                                           textAlign: TextAlign.center,
                                         ),
@@ -643,18 +596,20 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                 show: true,
                                 getDrawingHorizontalLine: (value) {
                                   return FlLine(
-                                    color: Theme.of(context)
-                                        .extension<CustomColors>()!
-                                        .textSecondary,
+                                    color:
+                                        Theme.of(context)
+                                            .extension<CustomColors>()!
+                                            .textSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );
                                 },
                                 getDrawingVerticalLine: (value) {
                                   return FlLine(
-                                    color: Theme.of(context)
-                                        .extension<CustomColors>()!
-                                        .textSecondary,
+                                    color:
+                                        Theme.of(context)
+                                            .extension<CustomColors>()!
+                                            .textSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );

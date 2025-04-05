@@ -23,10 +23,7 @@ import 'package:kubenav/widgets/shared/app_error_widget.dart';
 /// To get the clusters from AWS a [provider] is required. The provider must
 /// contain a valid set of credentails for the user.
 class SettingsAddClusterAWS extends StatefulWidget {
-  const SettingsAddClusterAWS({
-    super.key,
-    required this.provider,
-  });
+  const SettingsAddClusterAWS({super.key, required this.provider});
 
   final ClusterProvider provider;
 
@@ -135,11 +132,7 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
         _isLoadingAddCluster = false;
       });
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Add Clusters',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Add Clusters', err.toString());
       }
     }
   }
@@ -167,9 +160,7 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       separatorBuilder: (context, index) {
-        return const SizedBox(
-          height: Constants.spacingMiddle,
-        );
+        return const SizedBox(height: Constants.spacingMiddle);
       },
       itemCount: _clusters.length,
       itemBuilder: (context, index) {
@@ -190,7 +181,8 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
           ),
           child: CheckboxListTile(
             controlAffinity: ListTileControlAffinity.leading,
-            value: _selectedClusters
+            value:
+                _selectedClusters
                     .where((c) => c.name == _clusters[index].name)
                     .toList()
                     .length ==
@@ -203,9 +195,10 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
               }
               if (value == false) {
                 setState(() {
-                  _selectedClusters = _selectedClusters
-                      .where((c) => c.name != _clusters[index].name)
-                      .toList();
+                  _selectedClusters =
+                      _selectedClusters
+                          .where((c) => c.name != _clusters[index].name)
+                          .toList();
                 });
               }
             },
@@ -213,9 +206,7 @@ class _SettingsAddClusterAWSState extends State<SettingsAddClusterAWS> {
               Characters(
                 'aws_${widget.provider.aws?.region}_${_clusters[index].name}',
               ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
-              style: noramlTextStyle(
-                context,
-              ),
+              style: normalTextStyle(context),
               overflow: TextOverflow.ellipsis,
             ),
           ),

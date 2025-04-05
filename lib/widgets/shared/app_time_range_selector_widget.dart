@@ -113,39 +113,38 @@ class _AppTimeRangeSelectorWidgetState
           child: ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            separatorBuilder: (context, index) => const SizedBox(
-              height: Constants.spacingMiddle,
-            ),
+            separatorBuilder:
+                (context, index) =>
+                    const SizedBox(height: Constants.spacingMiddle),
             itemCount: times.length,
-            itemBuilder: (context, index) => AppListItem(
-              onTap: () {
-                setState(() {
-                  _selectedTime = times[index];
-                });
-              },
-              child: Row(
-                children: [
-                  Icon(
-                    times[index] == _selectedTime
-                        ? Icons.radio_button_checked
-                        : Icons.radio_button_unchecked,
-                    size: 24,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const SizedBox(width: Constants.spacingSmall),
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      times[index],
-                      style: noramlTextStyle(
-                        context,
+            itemBuilder:
+                (context, index) => AppListItem(
+                  onTap: () {
+                    setState(() {
+                      _selectedTime = times[index];
+                    });
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        times[index] == _selectedTime
+                            ? Icons.radio_button_checked
+                            : Icons.radio_button_unchecked,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                      const SizedBox(width: Constants.spacingSmall),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          times[index],
+                          style: normalTextStyle(context),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
           ),
         ),
       ),

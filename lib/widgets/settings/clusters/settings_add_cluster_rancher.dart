@@ -18,10 +18,7 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 
 class SettingsAddClusterRancher extends StatefulWidget {
-  const SettingsAddClusterRancher({
-    super.key,
-    required this.provider,
-  });
+  const SettingsAddClusterRancher({super.key, required this.provider});
 
   final ClusterProvider provider;
 
@@ -62,13 +59,7 @@ class _SettingsAddClusterRancherState extends State<SettingsAddClusterRancher> {
             tmpClusters[i].id!,
           );
           tmpClusters[i].kubeconfig = Kubeconfig.fromJson(
-            json.decode(
-              json.encode(
-                loadYaml(
-                  kubeconfig.config ?? '',
-                ),
-              ),
-            ),
+            json.decode(json.encode(loadYaml(kubeconfig.config ?? ''))),
           );
         }
 
@@ -132,11 +123,7 @@ class _SettingsAddClusterRancherState extends State<SettingsAddClusterRancher> {
         _isLoadingAddCluster = false;
       });
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Add Clusters',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Add Clusters', err.toString());
       }
     }
   }
@@ -164,9 +151,7 @@ class _SettingsAddClusterRancherState extends State<SettingsAddClusterRancher> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       separatorBuilder: (context, index) {
-        return const SizedBox(
-          height: Constants.spacingMiddle,
-        );
+        return const SizedBox(height: Constants.spacingMiddle);
       },
       itemCount: _clusters.length,
       itemBuilder: (context, index) {
@@ -187,7 +172,8 @@ class _SettingsAddClusterRancherState extends State<SettingsAddClusterRancher> {
           ),
           child: CheckboxListTile(
             controlAffinity: ListTileControlAffinity.leading,
-            value: _selectedClusters
+            value:
+                _selectedClusters
                     .where((c) => c.name == _clusters[index].name)
                     .toList()
                     .length ==
@@ -200,19 +186,18 @@ class _SettingsAddClusterRancherState extends State<SettingsAddClusterRancher> {
               }
               if (value == false) {
                 setState(() {
-                  _selectedClusters = _selectedClusters
-                      .where((c) => c.name != _clusters[index].name)
-                      .toList();
+                  _selectedClusters =
+                      _selectedClusters
+                          .where((c) => c.name != _clusters[index].name)
+                          .toList();
                 });
               }
             },
             title: Text(
-              Characters(_clusters[index].name ?? '')
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
-              style: noramlTextStyle(
-                context,
-              ),
+              Characters(
+                _clusters[index].name ?? '',
+              ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
+              style: normalTextStyle(context),
               overflow: TextOverflow.ellipsis,
             ),
           ),

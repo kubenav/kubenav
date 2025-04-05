@@ -10,10 +10,7 @@ import 'package:kubenav/widgets/shared/app_list_item.dart';
 /// The [DetailsItemConditions] widget is used to show the conditions of a
 /// Kubernetes resource.
 class DetailsItemConditions extends StatelessWidget {
-  const DetailsItemConditions({
-    super.key,
-    required this.conditions,
-  });
+  const DetailsItemConditions({super.key, required this.conditions});
 
   final List<IoK8sApimachineryPkgApisMetaV1Condition>? conditions;
 
@@ -24,9 +21,7 @@ class DetailsItemConditions extends StatelessWidget {
         children: [
           const SizedBox(height: Constants.spacingMiddle),
           Padding(
-            padding: const EdgeInsets.all(
-              Constants.spacingMiddle,
-            ),
+            padding: const EdgeInsets.all(Constants.spacingMiddle),
             child: Row(
               children: [
                 Expanded(
@@ -44,50 +39,45 @@ class DetailsItemConditions extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               crossAxisCount: 2,
               childAspectRatio: 0.25,
-              children: List.generate(
-                conditions!.length,
-                (index) {
-                  return Container(
-                    margin: const EdgeInsets.only(
-                      top: Constants.spacingSmall,
-                      bottom: Constants.spacingSmall,
-                      left: Constants.spacingMiddle,
-                      right: Constants.spacingMiddle,
-                    ),
-                    child: AppListItem(
-                      onTap: () {
-                        showSnackbar(
-                          context,
-                          conditions![index].type,
-                          'Status: ${conditions![index].status}\nLast Transition Time: ${getAge(conditions![index].lastTransitionTime)}\nReason: ${conditions![index].reason}\nMessage: ${conditions![index].message}',
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          Icon(
-                            conditions![index].status == 'True'
-                                ? Icons.radio_button_checked
-                                : Icons.radio_button_unchecked,
-                            size: 24,
-                            color: Theme.of(context).colorScheme.primary,
+              children: List.generate(conditions!.length, (index) {
+                return Container(
+                  margin: const EdgeInsets.only(
+                    top: Constants.spacingSmall,
+                    bottom: Constants.spacingSmall,
+                    left: Constants.spacingMiddle,
+                    right: Constants.spacingMiddle,
+                  ),
+                  child: AppListItem(
+                    onTap: () {
+                      showSnackbar(
+                        context,
+                        conditions![index].type,
+                        'Status: ${conditions![index].status}\nLast Transition Time: ${getAge(conditions![index].lastTransitionTime)}\nReason: ${conditions![index].reason}\nMessage: ${conditions![index].message}',
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          conditions![index].status == 'True'
+                              ? Icons.radio_button_checked
+                              : Icons.radio_button_unchecked,
+                          size: 24,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        const SizedBox(width: Constants.spacingSmall),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            conditions![index].type,
+                            style: normalTextStyle(context),
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(width: Constants.spacingSmall),
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              conditions![index].type,
-                              style: noramlTextStyle(
-                                context,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              }),
             ),
           ),
         ],

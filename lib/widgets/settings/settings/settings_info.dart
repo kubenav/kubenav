@@ -61,11 +61,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
         _version = packageInfo.version;
       });
     } catch (err) {
-      Logger.log(
-        'SettingsInfo _getVersion',
-        'Could not get package info',
-        err,
-      );
+      Logger.log('SettingsInfo _getVersion', 'Could not get package info', err);
     }
   }
 
@@ -87,19 +83,11 @@ class _SettingsInfoState extends State<SettingsInfo> {
             );
           },
           children: [
-            Icon(
-              Icons.policy,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            Icon(Icons.policy, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text(
-                'Terms of Use',
-                style: noramlTextStyle(
-                  context,
-                ),
-              ),
+              child: Text('Terms of Use', style: normalTextStyle(context)),
             ),
             Icon(
               Icons.arrow_forward_ios,
@@ -121,19 +109,11 @@ class _SettingsInfoState extends State<SettingsInfo> {
             );
           },
           children: [
-            Icon(
-              Icons.favorite,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            Icon(Icons.favorite, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text(
-                'Restore Purchases',
-                style: noramlTextStyle(
-                  context,
-                ),
-              ),
+              child: Text('Restore Purchases', style: normalTextStyle(context)),
             ),
             Icon(
               Icons.arrow_forward_ios,
@@ -164,19 +144,11 @@ class _SettingsInfoState extends State<SettingsInfo> {
       items: [
         AppVerticalListSimpleModel(
           children: [
-            Icon(
-              Icons.code,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            Icon(Icons.code, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text(
-                'Version',
-                style: noramlTextStyle(
-                  context,
-                ),
-              ),
+              child: Text('Version', style: normalTextStyle(context)),
             ),
             Container(
               padding: const EdgeInsets.only(
@@ -191,10 +163,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
                   Radius.circular(Constants.sizeBorderRadius),
                 ),
               ),
-              constraints: const BoxConstraints(
-                minWidth: 16,
-                minHeight: 16,
-              ),
+              constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
               child: Text(
                 _version,
                 style: secondaryTextStyle(
@@ -212,19 +181,11 @@ class _SettingsInfoState extends State<SettingsInfo> {
             openUrl('https://kubenav.io');
           },
           children: [
-            Icon(
-              Icons.language,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            Icon(Icons.language, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text(
-                'Website',
-                style: noramlTextStyle(
-                  context,
-                ),
-              ),
+              child: Text('Website', style: normalTextStyle(context)),
             ),
             Icon(
               Icons.arrow_forward_ios,
@@ -248,12 +209,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text(
-                'GitHub',
-                style: noramlTextStyle(
-                  context,
-                ),
-              ),
+              child: Text('GitHub', style: normalTextStyle(context)),
             ),
             Icon(
               Icons.arrow_forward_ios,
@@ -277,12 +233,7 @@ class _SettingsInfoState extends State<SettingsInfo> {
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text(
-                'Twitter',
-                style: noramlTextStyle(
-                  context,
-                ),
-              ),
+              child: Text('Twitter', style: normalTextStyle(context)),
             ),
             Icon(
               Icons.arrow_forward_ios,
@@ -321,9 +272,10 @@ class _SettingsInfoState extends State<SettingsInfo> {
                     child: Text(
                       licenseText,
                       style: TextStyle(
-                        color: Theme.of(context)
-                            .extension<CustomColors>()!
-                            .textPrimary,
+                        color:
+                            Theme.of(
+                              context,
+                            ).extension<CustomColors>()!.textPrimary,
                       ),
                     ),
                   ),
@@ -332,19 +284,11 @@ class _SettingsInfoState extends State<SettingsInfo> {
             );
           },
           children: [
-            Icon(
-              Icons.copyright,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            Icon(Icons.copyright, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text(
-                'License',
-                style: noramlTextStyle(
-                  context,
-                ),
-              ),
+              child: Text('License', style: normalTextStyle(context)),
             ),
             Icon(
               Icons.arrow_forward_ios,
@@ -361,19 +305,11 @@ class _SettingsInfoState extends State<SettingsInfo> {
             openUrl('https://kubenav.io/privacy.html');
           },
           children: [
-            Icon(
-              Icons.policy,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            Icon(Icons.policy, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: Constants.spacingSmall),
             Expanded(
               flex: 1,
-              child: Text(
-                'Privacy Policy',
-                style: noramlTextStyle(
-                  context,
-                ),
-              ),
+              child: Text('Privacy Policy', style: normalTextStyle(context)),
             ),
             Icon(
               Icons.arrow_forward_ios,
