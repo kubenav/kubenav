@@ -46,31 +46,33 @@ class KubernetesService {
       '${cluster.name}, $method, $url, $body',
     );
 
-    final String result = await platform.invokeMethod(
-      'kubernetesRequest',
-      <String, dynamic>{
-        'clusterServer': cluster.clusterServer,
-        'clusterCertificateAuthorityData':
-            cluster.clusterCertificateAuthorityData,
-        'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
-        'userClientCertificateData': cluster.userClientCertificateData,
-        'userClientKeyData': cluster.userClientKeyData,
-        'userToken': cluster.userToken,
-        'userUsername': cluster.userUsername,
-        'userPassword': cluster.userPassword,
-        'proxy': proxy,
-        'timeout': timeout,
-        'requestMethod': method,
-        'requestURL': url,
-        'requestBody': body,
-      },
-    );
+    final String result = await platform
+        .invokeMethod('kubernetesRequest', <String, dynamic>{
+          'clusterServer': cluster.clusterServer,
+          'clusterCertificateAuthorityData':
+              cluster.clusterCertificateAuthorityData,
+          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
+          'userClientCertificateData': cluster.userClientCertificateData,
+          'userClientKeyData': cluster.userClientKeyData,
+          'userToken': cluster.userToken,
+          'userUsername': cluster.userUsername,
+          'userPassword': cluster.userPassword,
+          'proxy': proxy,
+          'timeout': timeout,
+          'requestMethod': method,
+          'requestURL': url,
+          'requestBody': body,
+        });
 
     Logger.log(
       'KubernetesService kubernetesRequest',
       'Result of the kubernetesRequest function',
       result,
     );
+
+    if (result.isEmpty) {
+      throw Exception('An unknown error occured');
+    }
 
     return result;
   }
@@ -94,11 +96,7 @@ class KubernetesService {
       }
       return false;
     } catch (err) {
-      Logger.log(
-        'KubernetesService checkHealth',
-        'Health check failed',
-        err,
-      );
+      Logger.log('KubernetesService checkHealth', 'Health check failed', err);
       rethrow;
     }
   }
@@ -119,11 +117,7 @@ class KubernetesService {
       );
       return result;
     } catch (err) {
-      Logger.log(
-        'KubernetesService getRequest',
-        'Get request failed',
-        err,
-      );
+      Logger.log('KubernetesService getRequest', 'Get request failed', err);
       rethrow;
     }
   }
@@ -160,21 +154,10 @@ class KubernetesService {
   /// json patch.
   Future<void> patchRequest(String url, String body) async {
     try {
-      await kubernetesRequest(
-        cluster,
-        proxy,
-        timeout,
-        'PATCH',
-        url,
-        body,
-      );
+      await kubernetesRequest(cluster, proxy, timeout, 'PATCH', url, body);
       return;
     } catch (err) {
-      Logger.log(
-        'KubernetesService patchRequest',
-        'Patch request failed',
-        err,
-      );
+      Logger.log('KubernetesService patchRequest', 'Patch request failed', err);
       rethrow;
     }
   }
@@ -185,21 +168,10 @@ class KubernetesService {
   /// Kubernetes manifest which should be created.
   Future<void> postRequest(String url, String body) async {
     try {
-      await kubernetesRequest(
-        cluster,
-        proxy,
-        timeout,
-        'POST',
-        url,
-        body,
-      );
+      await kubernetesRequest(cluster, proxy, timeout, 'POST', url, body);
       return;
     } catch (err) {
-      Logger.log(
-        'KubernetesService postRequest',
-        'Post request failed',
-        err,
-      );
+      Logger.log('KubernetesService postRequest', 'Post request failed', err);
       rethrow;
     }
   }
@@ -210,21 +182,10 @@ class KubernetesService {
   /// Kubernetes manifest which is used for the update.
   Future<void> putRequest(String url, String body) async {
     try {
-      await kubernetesRequest(
-        cluster,
-        proxy,
-        timeout,
-        'PUT',
-        url,
-        body,
-      );
+      await kubernetesRequest(cluster, proxy, timeout, 'PUT', url, body);
       return;
     } catch (err) {
-      Logger.log(
-        'KubernetesService putRequest',
-        'Put request failed',
-        err,
-      );
+      Logger.log('KubernetesService putRequest', 'Put request failed', err);
       rethrow;
     }
   }
@@ -276,14 +237,14 @@ class KubernetesService {
         result,
       );
 
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
+
       Map<String, dynamic> jsonData = json.decode(result);
       return jsonData['logs'] ?? [];
     } catch (err) {
-      Logger.log(
-        'KubernetesService getLogs',
-        'Get logs request failed',
-        err,
-      );
+      Logger.log('KubernetesService getLogs', 'Get logs request failed', err);
       rethrow;
     }
   }
@@ -370,9 +331,7 @@ class KubernetesService {
     try {
       final response = await http.post(
         Uri.parse('http://localhost:14122/portforwarding'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'contextName': cluster.name,
           'clusterServer': cluster.clusterServer,
@@ -430,12 +389,8 @@ class KubernetesService {
     try {
       final response = await http.delete(
         Uri.parse('http://localhost:14122/portforwarding'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({
-          'sessionID': sessionID,
-        }),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'sessionID': sessionID}),
       );
 
       if (response.statusCode == 200) {
@@ -517,11 +472,11 @@ class KubernetesService {
         },
       );
 
-      Logger.log(
-        'KubernetesService helmListReleases',
-        'Helm Releases',
-        result,
-      );
+      Logger.log('KubernetesService helmListReleases', 'Helm Releases', result);
+
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
 
       if (result == 'null') {
         return [];
@@ -571,11 +526,11 @@ class KubernetesService {
         },
       );
 
-      Logger.log(
-        'KubernetesService helmGetRelease',
-        'Helm Release',
-        result,
-      );
+      Logger.log('KubernetesService helmGetRelease', 'Helm Release', result);
+
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
 
       return compute(_decodeHelmGetRelease, result);
     } catch (err) {
@@ -626,6 +581,10 @@ class KubernetesService {
         result,
       );
 
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
+
       if (result == 'null') {
         return [];
       }
@@ -656,31 +615,25 @@ class KubernetesService {
         '${cluster.name}, $namespace, $name, $version',
       );
 
-      await platform.invokeMethod(
-        'helmRollbackRelease',
-        <String, dynamic>{
-          'clusterServer': cluster.clusterServer,
-          'clusterCertificateAuthorityData':
-              cluster.clusterCertificateAuthorityData,
-          'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
-          'userClientCertificateData': cluster.userClientCertificateData,
-          'userClientKeyData': cluster.userClientKeyData,
-          'userToken': cluster.userToken,
-          'userUsername': cluster.userUsername,
-          'userPassword': cluster.userPassword,
-          'proxy': proxy,
-          'timeout': timeout,
-          'namespace': namespace,
-          'name': name,
-          'version': version,
-          'options': options,
-        },
-      );
+      await platform.invokeMethod('helmRollbackRelease', <String, dynamic>{
+        'clusterServer': cluster.clusterServer,
+        'clusterCertificateAuthorityData':
+            cluster.clusterCertificateAuthorityData,
+        'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
+        'userClientCertificateData': cluster.userClientCertificateData,
+        'userClientKeyData': cluster.userClientKeyData,
+        'userToken': cluster.userToken,
+        'userUsername': cluster.userUsername,
+        'userPassword': cluster.userPassword,
+        'proxy': proxy,
+        'timeout': timeout,
+        'namespace': namespace,
+        'name': name,
+        'version': version,
+        'options': options,
+      });
 
-      Logger.log(
-        'KubernetesService helmRollbackRelease',
-        'Rollback Succeeded',
-      );
+      Logger.log('KubernetesService helmRollbackRelease', 'Rollback Succeeded');
 
       return;
     } catch (err) {
@@ -752,13 +705,14 @@ class KubernetesService {
     int timeEnd,
   ) async {
     try {
-      final request = Request(
-        prometheus: prometheus,
-        manifest: manifest,
-        queries: queries,
-        timeStart: timeStart,
-        timeEnd: timeEnd,
-      ).toString();
+      final request =
+          Request(
+            prometheus: prometheus,
+            manifest: manifest,
+            queries: queries,
+            timeStart: timeStart,
+            timeEnd: timeEnd,
+          ).toString();
 
       Logger.log(
         'KubernetesService prometheusGetData',
@@ -789,6 +743,10 @@ class KubernetesService {
         'List Helm charts was ok',
         result,
       );
+
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
 
       if (result == 'null') {
         return [];

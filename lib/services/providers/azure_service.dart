@@ -12,27 +12,20 @@ class AzureCluster {
   String? name;
   Kubeconfig? kubeconfig;
 
-  AzureCluster({
-    required this.name,
-    required this.kubeconfig,
-  });
+  AzureCluster({required this.name, required this.kubeconfig});
 
-  factory AzureCluster.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory AzureCluster.fromJson(Map<String, dynamic> data) {
     return AzureCluster(
       name: data.containsKey('name') ? data['name'] : null,
-      kubeconfig: data.containsKey('kubeconfig')
-          ? Kubeconfig.fromJson(data['kubeconfig'])
-          : null,
+      kubeconfig:
+          data.containsKey('kubeconfig')
+              ? Kubeconfig.fromJson(data['kubeconfig'])
+              : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'kubeconfig': kubeconfig?.toJson(),
-    };
+    return {'name': name, 'kubeconfig': kubeconfig?.toJson()};
   }
 }
 
@@ -52,22 +45,20 @@ class AzureService {
     bool isAdmin,
   ) async {
     try {
-      final String result = await platform.invokeMethod(
-        'azureGetClusters',
-        <String, dynamic>{
-          'subscriptionID': subscriptionID,
-          'tenantID': tenantID,
-          'clientID': clientID,
-          'clientSecret': clientSecret,
-          'isAdmin': isAdmin,
-        },
-      );
+      final String result = await platform
+          .invokeMethod('azureGetClusters', <String, dynamic>{
+            'subscriptionID': subscriptionID,
+            'tenantID': tenantID,
+            'clientID': clientID,
+            'clientSecret': clientSecret,
+            'isAdmin': isAdmin,
+          });
 
-      Logger.log(
-        'AzureService getClusters',
-        'Clusters Returned',
-        result,
-      );
+      Logger.log('AzureService getClusters', 'Clusters Returned', result);
+
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
 
       List<dynamic> tmpClusters = json.decode(result);
       List<AzureCluster> clusters = [];

@@ -9,6 +9,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -82,6 +83,12 @@ func oidcContext(ctx context.Context, certificateAuthority string) (context.Cont
 // OIDCGetLink returns the link for the configured OIDC provider. The Link can
 // then be used by the user to login.
 func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes string, addDefaultScopes bool, redirectURL, pkceMethod, state string) (string, error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("panic: %#v", r)
+		}
+	}()
+
 	ctx, err := oidcContext(context.Background(), certificateAuthority)
 	if err != nil {
 		return "", err
@@ -153,6 +160,12 @@ func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, sco
 // The refresh token can be used to get a new access token via the
 // OIDCGetAccessToken function.
 func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes string, addDefaultScopes bool, redirectURL, pkceMethod, code, verifier string, useAccessToken bool) (string, error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("panic: %#v", r)
+		}
+	}()
+
 	ctx, err := oidcContext(context.Background(), certificateAuthority)
 	if err != nil {
 		return "", err
@@ -213,6 +226,12 @@ func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthor
 
 // OIDCGetAccessToken is used to retrieve an access token from a refresh token.
 func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes string, addDefaultScopes bool, redirectURL, refreshToken string, useAccessToken bool) (string, error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("panic: %#v", r)
+		}
+	}()
+
 	ctx, err := oidcContext(context.Background(), certificateAuthority)
 	if err != nil {
 		return "", err
@@ -268,6 +287,12 @@ func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthori
 }
 
 func OIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes string, addDefaultScopes bool) (string, error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("panic: %#v", r)
+		}
+	}()
+
 	ctx, err := oidcContext(context.Background(), certificateAuthority)
 	if err != nil {
 		return "", err
@@ -318,6 +343,12 @@ func OIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes string,
 }
 
 func OIDCDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority, scopes string, addDefaultScopes bool, deviceCode string, useAccessToken bool) (string, error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("panic: %#v", r)
+		}
+	}()
+
 	ctx, err := oidcContext(context.Background(), certificateAuthority)
 	if err != nil {
 		return "", err

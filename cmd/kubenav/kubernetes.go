@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"regexp"
 	"strings"
@@ -25,6 +26,12 @@ import (
 // for the actually request. E.g. to get all Pods from the Kubernetes API the
 // method "GET" and the URL "/api/v1/pods" can be used.
 func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, requestMethod, requestURL, requestBody string) (string, error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("panic: %#v", r)
+		}
+	}()
+
 	_, clientset, err := kube.NewClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
 	if err != nil {
 		return "", err
@@ -74,6 +81,12 @@ func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, cl
 // of the Pod names. To use this function a user must also provide the
 // namespace, container, since and previous parameter.
 func KubernetesGetLogs(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, names, namespace, container string, since int64, filter string, previous bool) (string, error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("panic: %#v", r)
+		}
+	}()
+
 	_, clientset, err := kube.NewClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
 	if err != nil {
 		return "", err
@@ -166,5 +179,11 @@ func kubernetesGetLogs(clientset *kubernetes.Clientset, clusterServer, name, nam
 // server is responsible for providing the port forwarding and Pod exec feature
 // for kubenav.
 func KubernetesStartServer() {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("panic: %#v", r)
+		}
+	}()
+
 	server.Start()
 }

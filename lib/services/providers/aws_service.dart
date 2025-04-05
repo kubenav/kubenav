@@ -51,18 +51,17 @@ class AWSCluster {
     required this.certificateAuthority,
   });
 
-  factory AWSCluster.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory AWSCluster.fromJson(Map<String, dynamic> data) {
     return AWSCluster(
       name: data.containsKey('Name') ? data['Name'] : null,
       endpoint: data.containsKey('Endpoint') ? data['Endpoint'] : null,
-      certificateAuthority: data.containsKey('CertificateAuthority') &&
-              data['CertificateAuthority'] != null
-          ? AWSClusterCertificateAuthority.fromJson(
-              data['CertificateAuthority'],
-            )
-          : null,
+      certificateAuthority:
+          data.containsKey('CertificateAuthority') &&
+                  data['CertificateAuthority'] != null
+              ? AWSClusterCertificateAuthority.fromJson(
+                data['CertificateAuthority'],
+              )
+              : null,
     );
   }
 
@@ -80,22 +79,16 @@ class AWSCluster {
 class AWSClusterCertificateAuthority {
   String? data;
 
-  AWSClusterCertificateAuthority({
-    required this.data,
-  });
+  AWSClusterCertificateAuthority({required this.data});
 
-  factory AWSClusterCertificateAuthority.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory AWSClusterCertificateAuthority.fromJson(Map<String, dynamic> data) {
     return AWSClusterCertificateAuthority(
       data: data.containsKey('Data') ? data['Data'] : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'Data': data,
-    };
+    return {'Data': data};
   }
 }
 
@@ -105,29 +98,23 @@ class AWSSSOConfig {
   AWSSSOConfigClient? client;
   AWSSSOConfigDevice? device;
 
-  AWSSSOConfig({
-    required this.client,
-    required this.device,
-  });
+  AWSSSOConfig({required this.client, required this.device});
 
-  factory AWSSSOConfig.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory AWSSSOConfig.fromJson(Map<String, dynamic> data) {
     return AWSSSOConfig(
-      client: data.containsKey('client') && data['client'] != null
-          ? AWSSSOConfigClient.fromJson(data['client'])
-          : null,
-      device: data.containsKey('device') && data['device'] != null
-          ? AWSSSOConfigDevice.fromJson(data['device'])
-          : null,
+      client:
+          data.containsKey('client') && data['client'] != null
+              ? AWSSSOConfigClient.fromJson(data['client'])
+              : null,
+      device:
+          data.containsKey('device') && data['device'] != null
+              ? AWSSSOConfigDevice.fromJson(data['device'])
+              : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'client': client?.toJson(),
-      'device': device?.toJson(),
-    };
+    return {'client': client?.toJson(), 'device': device?.toJson()};
   }
 }
 
@@ -150,14 +137,16 @@ class AWSSSOConfigClient {
   factory AWSSSOConfigClient.fromJson(Map<String, dynamic> data) {
     return AWSSSOConfigClient(
       clientId: data.containsKey('ClientId') ? data['ClientId'] : null,
-      clientIdIssuedAt: data.containsKey('ClientIdIssuedAt')
-          ? data['ClientIdIssuedAt']
-          : null,
+      clientIdIssuedAt:
+          data.containsKey('ClientIdIssuedAt')
+              ? data['ClientIdIssuedAt']
+              : null,
       clientSecret:
           data.containsKey('ClientSecret') ? data['ClientSecret'] : null,
-      clientSecretExpiresAt: data.containsKey('ClientSecretExpiresAt')
-          ? data['ClientSecretExpiresAt']
-          : null,
+      clientSecretExpiresAt:
+          data.containsKey('ClientSecretExpiresAt')
+              ? data['ClientSecretExpiresAt']
+              : null,
     );
   }
 
@@ -199,9 +188,10 @@ class AWSSSOConfigDevice {
       userCode: data.containsKey('UserCode') ? data['UserCode'] : null,
       verificationUri:
           data.containsKey('VerificationUri') ? data['VerificationUri'] : null,
-      verificationUriComplete: data.containsKey('VerificationUriComplete')
-          ? data['VerificationUriComplete']
-          : null,
+      verificationUriComplete:
+          data.containsKey('VerificationUriComplete')
+              ? data['VerificationUriComplete']
+              : null,
     );
   }
 
@@ -245,9 +235,10 @@ class AWSSSOCredentials {
           data.containsKey('sessionToken') ? data['sessionToken'] : null,
       expire: data.containsKey('expire') ? data['expire'] : null,
       accessToken: data.containsKey('accessToken') ? data['accessToken'] : null,
-      accessTokenExpire: data.containsKey('accessTokenExpire')
-          ? data['accessTokenExpire']
-          : null,
+      accessTokenExpire:
+          data.containsKey('accessTokenExpire')
+              ? data['accessTokenExpire']
+              : null,
     );
   }
 
@@ -284,13 +275,15 @@ class AWSSSOAccount {
     return AWSSSOAccount(
       accountId: data.containsKey('accountId') ? data['accountId'] : null,
       accountName: data.containsKey('accountName') ? data['accountName'] : null,
-      roles: data.containsKey('roles')
-          ? List<String>.from(data['roles'].map((v) => v))
-          : null,
+      roles:
+          data.containsKey('roles')
+              ? List<String>.from(data['roles'].map((v) => v))
+              : null,
       accessToken: data.containsKey('accessToken') ? data['accessToken'] : null,
-      accessTokenExpire: data.containsKey('accessTokenExpire')
-          ? data['accessTokenExpire']
-          : null,
+      accessTokenExpire:
+          data.containsKey('accessTokenExpire')
+              ? data['accessTokenExpire']
+              : null,
     );
   }
 
@@ -321,22 +314,20 @@ class AWSService {
     String roleArn,
   ) async {
     try {
-      final String result = await platform.invokeMethod(
-        'awsGetClusters',
-        <String, dynamic>{
-          'accessKeyID': accessKeyID,
-          'secretKey': secretKey,
-          'region': region,
-          'sessionToken': sessionToken,
-          'roleArn': roleArn,
-        },
-      );
+      final String result = await platform
+          .invokeMethod('awsGetClusters', <String, dynamic>{
+            'accessKeyID': accessKeyID,
+            'secretKey': secretKey,
+            'region': region,
+            'sessionToken': sessionToken,
+            'roleArn': roleArn,
+          });
 
-      Logger.log(
-        'AWSService getClusters',
-        'Clusters Returned',
-        result,
-      );
+      Logger.log('AWSService getClusters', 'Clusters Returned', result);
+
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
 
       List<dynamic> tmpClusters = json.decode(result);
       List<AWSCluster> clusters = [];
@@ -345,11 +336,7 @@ class AWSService {
       }
       return clusters;
     } catch (err) {
-      Logger.log(
-        'AWSService getClusters',
-        'Failed to Get AWS Clusters',
-        err,
-      );
+      Logger.log('AWSService getClusters', 'Failed to Get AWS Clusters', err);
       rethrow;
     }
   }
@@ -365,64 +352,49 @@ class AWSService {
     String clusterID,
   ) async {
     try {
-      final String result = await platform.invokeMethod(
-        'awsGetToken',
-        <String, dynamic>{
-          'accessKeyID': accessKeyID,
-          'secretKey': secretKey,
-          'region': region,
-          'sessionToken': sessionToken,
-          'roleArn': roleArn,
-          'clusterID': clusterID,
-        },
-      );
+      final String result = await platform
+          .invokeMethod('awsGetToken', <String, dynamic>{
+            'accessKeyID': accessKeyID,
+            'secretKey': secretKey,
+            'region': region,
+            'sessionToken': sessionToken,
+            'roleArn': roleArn,
+            'clusterID': clusterID,
+          });
 
-      Logger.log(
-        'AWSService getToken',
-        'New Access Token Returned',
-        result,
-      );
+      Logger.log('AWSService getToken', 'New Access Token Returned', result);
+
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
+
       return result;
     } catch (err) {
-      Logger.log(
-        'AWSService getToken',
-        'Failed to Get Access Token',
-        err,
-      );
+      Logger.log('AWSService getToken', 'Failed to Get Access Token', err);
       rethrow;
     }
   }
 
   /// [getSSOConfig] can be used to get the sso config which can be used with
   /// the AWS SSO provider.
-  Future<AWSSSOConfig> getSSOConfig(
-    String ssoRegion,
-    String startURL,
-  ) async {
+  Future<AWSSSOConfig> getSSOConfig(String ssoRegion, String startURL) async {
     try {
       final String result = await platform.invokeMethod(
         'awsGetSSOConfig',
-        <String, dynamic>{
-          'ssoRegion': ssoRegion,
-          'startURL': startURL,
-        },
+        <String, dynamic>{'ssoRegion': ssoRegion, 'startURL': startURL},
       );
 
-      Logger.log(
-        'AWSService getSSOConfig',
-        'SSO Config Returned',
-        result,
-      );
+      Logger.log('AWSService getSSOConfig', 'SSO Config Returned', result);
+
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
 
       Map<String, dynamic> jsonData = json.decode(result);
       AWSSSOConfig tmpSSOConfig = AWSSSOConfig.fromJson(jsonData);
       return tmpSSOConfig;
     } catch (err) {
-      Logger.log(
-        'AWSService getSSOConfig',
-        'Failed to Get SSO Config',
-        err,
-      );
+      Logger.log('AWSService getSSOConfig', 'Failed to Get SSO Config', err);
       rethrow;
     }
   }
@@ -439,36 +411,31 @@ class AWSService {
     int accessTokenExpire,
   ) async {
     try {
-      final String result = await platform.invokeMethod(
-        'awsGetSSOToken',
-        <String, dynamic>{
-          'accountID': accountID,
-          'roleName': roleName,
-          'ssoRegion': ssoRegion,
-          'ssoClientID': ssoClientID,
-          'ssoClientSecret': ssoClientSecret,
-          'ssoDeviceCode': ssoDeviceCode,
-          'accessToken': accessToken,
-          'accessTokenExpire': accessTokenExpire,
-        },
-      );
+      final String result = await platform
+          .invokeMethod('awsGetSSOToken', <String, dynamic>{
+            'accountID': accountID,
+            'roleName': roleName,
+            'ssoRegion': ssoRegion,
+            'ssoClientID': ssoClientID,
+            'ssoClientSecret': ssoClientSecret,
+            'ssoDeviceCode': ssoDeviceCode,
+            'accessToken': accessToken,
+            'accessTokenExpire': accessTokenExpire,
+          });
 
-      Logger.log(
-        'AWSService getSSOToken',
-        'SSO Token Returned',
-        result,
-      );
+      Logger.log('AWSService getSSOToken', 'SSO Token Returned', result);
+
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
 
       Map<String, dynamic> jsonData = json.decode(result);
-      AWSSSOCredentials tmpSSOCredentials =
-          AWSSSOCredentials.fromJson(jsonData);
+      AWSSSOCredentials tmpSSOCredentials = AWSSSOCredentials.fromJson(
+        jsonData,
+      );
       return tmpSSOCredentials;
     } catch (err) {
-      Logger.log(
-        'AWSService getSSOToken',
-        'Failed to Get SSO Token',
-        err,
-      );
+      Logger.log('AWSService getSSOToken', 'Failed to Get SSO Token', err);
       rethrow;
     }
   }
@@ -482,21 +449,19 @@ class AWSService {
     String ssoDeviceCode,
   ) async {
     try {
-      final String result = await platform.invokeMethod(
-        'awsGetSSOAccounts',
-        <String, dynamic>{
-          'ssoRegion': ssoRegion,
-          'ssoClientID': ssoClientID,
-          'ssoClientSecret': ssoClientSecret,
-          'ssoDeviceCode': ssoDeviceCode,
-        },
-      );
+      final String result = await platform
+          .invokeMethod('awsGetSSOAccounts', <String, dynamic>{
+            'ssoRegion': ssoRegion,
+            'ssoClientID': ssoClientID,
+            'ssoClientSecret': ssoClientSecret,
+            'ssoDeviceCode': ssoDeviceCode,
+          });
 
-      Logger.log(
-        'AWSService getSSOAccounts',
-        'Accounts Returned',
-        result,
-      );
+      Logger.log('AWSService getSSOAccounts', 'Accounts Returned', result);
+
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
 
       List<dynamic> jsonData = json.decode(result);
       final accounts = <AWSSSOAccount>[];
