@@ -11,17 +11,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
-func NewClient(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64) (restClient *rest.Config, clientset *kubernetes.Clientset, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			err = fmt.Errorf("panic: %#v", r)
-		}
-	}()
-
-	return newClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
-}
-
-func newClient(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64) (*rest.Config, *kubernetes.Clientset, error) {
+func NewClient(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64) (*rest.Config, *kubernetes.Clientset, error) {
 	// If a token is provided, we must ensure that the username and password are
 	// empty. Otherwise the app would crash in such cases.
 	if userToken != "" {

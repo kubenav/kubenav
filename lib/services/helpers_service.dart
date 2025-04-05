@@ -16,17 +16,11 @@ class HelpersService {
   /// implemented in Go, because Dart lacks a good package to work with YAML.
   Future<String> prettifyYAML(String json) async {
     try {
-      Logger.log(
-        'HelperService prettifyYAML',
-        'Run prettifyYAML',
-        json,
-      );
+      Logger.log('HelperService prettifyYAML', 'Run prettifyYAML', json);
 
       final String result = await platform.invokeMethod(
         'prettifyYAML',
-        <String, dynamic>{
-          'jsonStr': json,
-        },
+        <String, dynamic>{'jsonStr': json},
       );
 
       Logger.log(
@@ -34,13 +28,14 @@ class HelpersService {
         'prettifyYAML Succeeded',
         result,
       );
+
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
+
       return result;
     } catch (err) {
-      Logger.log(
-        'HelpersService prettifyYAML',
-        'prettifyYAML Failed',
-        err,
-      );
+      Logger.log('HelpersService prettifyYAML', 'prettifyYAML Failed', err);
       rethrow;
     }
   }
@@ -59,10 +54,7 @@ class HelpersService {
 
       final String result = await platform.invokeMethod(
         'createJSONPatch',
-        <String, dynamic>{
-          'source': source,
-          'target': target,
-        },
+        <String, dynamic>{'source': source, 'target': target},
       );
 
       Logger.log(
@@ -70,6 +62,11 @@ class HelpersService {
         'createJSONPatch Succeeded',
         result,
       );
+
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
+
       return result;
     } catch (err) {
       Logger.log(

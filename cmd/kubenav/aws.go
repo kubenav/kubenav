@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -55,6 +56,12 @@ type AWSSSOAccount struct {
 // AWSGetClusters returns all clusters which can be accessed with the given
 // credentials.
 func AWSGetClusters(accessKeyID, secretKey, region, sessionToken, roleArn string) (string, error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("panic: %#v", r)
+		}
+	}()
+
 	var clusters []*eks.Cluster
 	var names []*string
 	var nextToken *string
@@ -110,6 +117,12 @@ func AWSGetClusters(accessKeyID, secretKey, region, sessionToken, roleArn string
 // of a cluster with the given clusterID.
 // See: https://github.com/kubernetes-sigs/aws-iam-authenticator/blob/7547c74e660f8d34d9980f2c69aa008eed1f48d0/pkg/token/token.go#L310
 func AWSGetToken(accessKeyID, secretKey, region, sessionToken, roleArn, clusterID string) (string, error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("panic: %#v", r)
+		}
+	}()
+
 	cred := credentials.NewStaticCredentials(accessKeyID, secretKey, sessionToken)
 
 	sess, err := session.NewSession(&aws.Config{Region: aws.String(region), Credentials: cred})
@@ -137,6 +150,12 @@ func AWSGetToken(accessKeyID, secretKey, region, sessionToken, roleArn, clusterI
 // authentication. The client and device authentication is returned, so that we
 // can use the information in the following steps of the SSO flow.
 func AWSGetSSOConfig(ssoRegion, startURL string) (string, error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("panic: %#v", r)
+		}
+	}()
+
 	clientName := "kubenav"
 	clientType := "public"
 
@@ -179,6 +198,12 @@ func AWSGetSSOConfig(ssoRegion, startURL string) (string, error) {
 // information from the former step in the sso flow. The retrieved access token
 // is then used to get the credentials for AWS.
 func AWSGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, accessToken string, accessTokenExpire int64) (string, error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("panic: %#v", r)
+		}
+	}()
+
 	grantType := "urn:ietf:params:oauth:grant-type:device_code"
 
 	sess, err := session.NewSession()
@@ -237,6 +262,12 @@ func AWSGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret
 // authenticated user, so that a user does not have to provide these information
 // by his own.
 func AWSGetSSOAccounts(ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode string) (string, error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("panic: %#v", r)
+		}
+	}()
+
 	grantType := "urn:ietf:params:oauth:grant-type:device_code"
 
 	sess, err := session.NewSession()

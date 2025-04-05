@@ -150,6 +150,10 @@ class OIDCService {
 
       Logger.log('OIDCService getLink', 'Link was generated', result);
 
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
+
       Map<String, dynamic> jsonData = json.decode(result);
       return OIDCResponse.fromJson(jsonData);
     } catch (err) {
@@ -195,6 +199,10 @@ class OIDCService {
         result,
       );
 
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
+
       Map<String, dynamic> jsonData = json.decode(result);
       return OIDCResponse.fromJson(jsonData);
     } catch (err) {
@@ -236,6 +244,10 @@ class OIDCService {
 
       Logger.log('OIDCService getAccessToken', 'Access Token Returned', result);
 
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
+
       Map<String, dynamic> jsonData = json.decode(result);
       return OIDCResponse.fromJson(jsonData);
     } catch (err) {
@@ -271,6 +283,10 @@ class OIDCService {
           });
 
       Logger.log('OIDCService deviceAuth', 'Device Auth Data Returned', result);
+
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
 
       Map<String, dynamic> jsonData = json.decode(result);
       return OIDCDeviceAuth.fromJson(jsonData);
@@ -314,6 +330,10 @@ class OIDCService {
         'Refresh Token Returned',
         result,
       );
+
+      if (result.isEmpty) {
+        throw Exception('An unknown error occured');
+      }
 
       Map<String, dynamic> jsonData = json.decode(result);
       return OIDCResponse.fromJson(jsonData);
