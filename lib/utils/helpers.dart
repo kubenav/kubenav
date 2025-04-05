@@ -9,8 +9,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/themes.dart';
 
-/// [noramlTextStyle] applies our default styles for normal text.
-TextStyle noramlTextStyle(
+/// [normalTextStyle] applies our default styles for normal text.
+TextStyle normalTextStyle(
   BuildContext context, {
   double? size,
   Color? color,
@@ -61,10 +61,7 @@ Future<void> openUrl(String url) async {
     launchMode = LaunchMode.externalApplication;
   }
 
-  await launchUrl(
-    Uri.parse(url),
-    mode: launchMode,
-  );
+  await launchUrl(Uri.parse(url), mode: launchMode);
 }
 
 String getMonospaceFontFamily() {

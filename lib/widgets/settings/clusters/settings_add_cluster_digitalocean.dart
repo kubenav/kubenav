@@ -24,10 +24,7 @@ import 'package:kubenav/widgets/shared/app_error_widget.dart';
 /// To get the clusters from the DigitalOcean API a valid [provider]
 /// configuration is required, with the users credentials to access the API.
 class SettingsAddClusterDigitalOcean extends StatefulWidget {
-  const SettingsAddClusterDigitalOcean({
-    super.key,
-    required this.provider,
-  });
+  const SettingsAddClusterDigitalOcean({super.key, required this.provider});
 
   final ClusterProvider provider;
 
@@ -71,13 +68,7 @@ class _SettingsAddClusterDigitalOceanState
             widget.provider.digitalocean!.token ?? '',
           );
           tmpClusters[i].kubeconfig = Kubeconfig.fromJson(
-            json.decode(
-              json.encode(
-                loadYaml(
-                  kubeconfig,
-                ),
-              ),
-            ),
+            json.decode(json.encode(loadYaml(kubeconfig))),
           );
         }
 
@@ -141,11 +132,7 @@ class _SettingsAddClusterDigitalOceanState
         _isLoadingAddCluster = false;
       });
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Add Clusters',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Add Clusters', err.toString());
       }
     }
   }
@@ -174,9 +161,7 @@ class _SettingsAddClusterDigitalOceanState
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       separatorBuilder: (context, index) {
-        return const SizedBox(
-          height: Constants.spacingMiddle,
-        );
+        return const SizedBox(height: Constants.spacingMiddle);
       },
       itemCount: _clusters.length,
       itemBuilder: (context, index) {
@@ -197,7 +182,8 @@ class _SettingsAddClusterDigitalOceanState
           ),
           child: CheckboxListTile(
             controlAffinity: ListTileControlAffinity.leading,
-            value: _selectedClusters
+            value:
+                _selectedClusters
                     .where((c) => c.name == _clusters[index].name)
                     .toList()
                     .length ==
@@ -210,9 +196,10 @@ class _SettingsAddClusterDigitalOceanState
               }
               if (value == false) {
                 setState(() {
-                  _selectedClusters = _selectedClusters
-                      .where((c) => c.name != _clusters[index].name)
-                      .toList();
+                  _selectedClusters =
+                      _selectedClusters
+                          .where((c) => c.name != _clusters[index].name)
+                          .toList();
                 });
               }
             },
@@ -220,9 +207,7 @@ class _SettingsAddClusterDigitalOceanState
               Characters(
                 _clusters[index].name ?? '',
               ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
-              style: noramlTextStyle(
-                context,
-              ),
+              style: normalTextStyle(context),
               overflow: TextOverflow.ellipsis,
             ),
           ),

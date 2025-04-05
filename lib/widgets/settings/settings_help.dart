@@ -31,11 +31,19 @@ class SettingsHelp extends StatelessWidget {
                 showModal(
                   context,
                   AppBottomSheetWidget(
-                    title: help_model
-                        .Help.list[sectionIndex].items[itemIndex].title,
+                    title:
+                        help_model
+                            .Help
+                            .list[sectionIndex]
+                            .items[itemIndex]
+                            .title,
                     subtitle: 'Help',
-                    icon: help_model
-                        .Help.list[sectionIndex].items[itemIndex].icon,
+                    icon:
+                        help_model
+                            .Help
+                            .list[sectionIndex]
+                            .items[itemIndex]
+                            .icon,
                     closePressed: () {
                       Navigator.pop(context);
                     },
@@ -45,9 +53,7 @@ class SettingsHelp extends StatelessWidget {
                     },
                     actionIsLoading: false,
                     child: Markdown(
-                      padding: const EdgeInsets.all(
-                        Constants.spacingMiddle,
-                      ),
+                      padding: const EdgeInsets.all(Constants.spacingMiddle),
                       styleSheet: MarkdownStyleSheet(
                         code: TextStyle(
                           fontFamily: getMonospaceFontFamily(),
@@ -59,8 +65,12 @@ class SettingsHelp extends StatelessWidget {
                         ),
                       ),
                       selectable: true,
-                      data: help_model
-                          .Help.list[sectionIndex].items[itemIndex].markdown,
+                      data:
+                          help_model
+                              .Help
+                              .list[sectionIndex]
+                              .items[itemIndex]
+                              .markdown,
                     ),
                   ),
                 );
@@ -75,9 +85,7 @@ class SettingsHelp extends StatelessWidget {
                   flex: 1,
                   child: Text(
                     help_model.Help.list[sectionIndex].items[itemIndex].title,
-                    style: noramlTextStyle(
-                      context,
-                    ),
+                    style: normalTextStyle(context),
                   ),
                 ),
                 Icon(
@@ -100,10 +108,7 @@ class SettingsHelp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Help'),
-      ),
+      appBar: AppBar(centerTitle: true, title: const Text('Help')),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SafeArea(

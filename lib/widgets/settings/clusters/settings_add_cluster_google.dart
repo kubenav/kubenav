@@ -23,10 +23,7 @@ import 'package:kubenav/widgets/shared/app_error_widget.dart';
 /// with the users access credentials so that we can call the Google API to get
 /// the clusters on behalf of the user.
 class SettingsAddClusterGoogle extends StatefulWidget {
-  const SettingsAddClusterGoogle({
-    super.key,
-    required this.provider,
-  });
+  const SettingsAddClusterGoogle({super.key, required this.provider});
 
   final ClusterProvider provider;
 
@@ -53,8 +50,9 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
 
     try {
       if (widget.provider.google != null) {
-        final projects = await GoogleService()
-            .getProjects(widget.provider.google!.accessToken ?? '');
+        final projects = await GoogleService().getProjects(
+          widget.provider.google!.accessToken ?? '',
+        );
 
         final List<GoogleCluster> tmpClusters = [];
         for (var project in projects) {
@@ -133,11 +131,7 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
         _isLoadingAddCluster = false;
       });
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Add Clusters',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Add Clusters', err.toString());
       }
     }
   }
@@ -165,9 +159,7 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       separatorBuilder: (context, index) {
-        return const SizedBox(
-          height: Constants.spacingMiddle,
-        );
+        return const SizedBox(height: Constants.spacingMiddle);
       },
       itemCount: _clusters.length,
       itemBuilder: (context, index) {
@@ -188,7 +180,8 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
           ),
           child: CheckboxListTile(
             controlAffinity: ListTileControlAffinity.leading,
-            value: _selectedClusters
+            value:
+                _selectedClusters
                     .where((c) => c.name == _clusters[index].name)
                     .toList()
                     .length ==
@@ -201,9 +194,10 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
               }
               if (value == false) {
                 setState(() {
-                  _selectedClusters = _selectedClusters
-                      .where((c) => c.name != _clusters[index].name)
-                      .toList();
+                  _selectedClusters =
+                      _selectedClusters
+                          .where((c) => c.name != _clusters[index].name)
+                          .toList();
                 });
               }
             },
@@ -211,9 +205,7 @@ class _SettingsAddClusterGoogleState extends State<SettingsAddClusterGoogle> {
               Characters(
                 'gke_${_clusters[index].location}_${_clusters[index].name}',
               ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
-              style: noramlTextStyle(
-                context,
-              ),
+              style: normalTextStyle(context),
               overflow: TextOverflow.ellipsis,
             ),
           ),

@@ -51,9 +51,7 @@ class SettingsSponsor extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(
-              Constants.spacingMiddle,
-            ),
+            padding: const EdgeInsets.all(Constants.spacingMiddle),
             child: Center(
               child: CircularProgressIndicator(
                 color: Theme.of(context).colorScheme.primary,
@@ -70,63 +68,57 @@ class SettingsSponsor extends StatelessWidget {
     /// were a user can buy it.
     return AppVerticalListSimpleWidget(
       title: 'Sponsor',
-      items: sponsorRepository.products
-          .map(
-            (e) => AppVerticalListSimpleModel(
-              onTap: () {
-                showModal(
-                  context,
-                  SettingsSponsorSubscribe(
-                    product: e,
-                  ),
-                );
-              },
-              children: [
-                Icon(
-                  Icons.favorite,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(width: Constants.spacingSmall),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    titles.containsKey(e.id) ? titles[e.id]! : e.title,
-                    style: noramlTextStyle(
-                      context,
+      items:
+          sponsorRepository.products
+              .map(
+                (e) => AppVerticalListSimpleModel(
+                  onTap: () {
+                    showModal(context, SettingsSponsorSubscribe(product: e));
+                  },
+                  children: [
+                    Icon(
+                      Icons.favorite,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(
-                    bottom: 2,
-                    top: 2,
-                    left: 6,
-                    right: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(Constants.sizeBorderRadius),
+                    const SizedBox(width: Constants.spacingSmall),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        titles.containsKey(e.id) ? titles[e.id]! : e.title,
+                        style: normalTextStyle(context),
+                      ),
                     ),
-                  ),
-                  constraints: const BoxConstraints(
-                    minWidth: 16,
-                    minHeight: 16,
-                  ),
-                  child: Text(
-                    e.price,
-                    style: secondaryTextStyle(
-                      context,
-                      size: 14,
-                      color: Theme.of(context).colorScheme.onPrimary,
+                    Container(
+                      padding: const EdgeInsets.only(
+                        bottom: 2,
+                        top: 2,
+                        left: 6,
+                        right: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(Constants.sizeBorderRadius),
+                        ),
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                      ),
+                      child: Text(
+                        e.price,
+                        style: secondaryTextStyle(
+                          context,
+                          size: 14,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          )
-          .toList(),
+              )
+              .toList(),
     );
   }
 }

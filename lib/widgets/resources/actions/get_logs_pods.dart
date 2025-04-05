@@ -86,11 +86,7 @@ class _GetLogsPodsState extends State<GetLogsPods> {
         }
       });
     } catch (err) {
-      Logger.log(
-        'GetLogsPods _getPods',
-        'Could not get pods',
-        err,
-      );
+      Logger.log('GetLogsPods _getPods', 'Could not get pods', err);
       setState(() {
         _isLoading = false;
         _error = err.toString();
@@ -143,7 +139,8 @@ class _GetLogsPodsState extends State<GetLogsPods> {
           ),
           child: CheckboxListTile(
             controlAffinity: ListTileControlAffinity.leading,
-            value: _selectedPods
+            value:
+                _selectedPods
                     .where(
                       (p) => p.metadata?.name == _pods[index].metadata?.name,
                     )
@@ -158,11 +155,13 @@ class _GetLogsPodsState extends State<GetLogsPods> {
               }
               if (value == false) {
                 setState(() {
-                  _selectedPods = _selectedPods
-                      .where(
-                        (p) => p.metadata?.name != _pods[index].metadata?.name,
-                      )
-                      .toList();
+                  _selectedPods =
+                      _selectedPods
+                          .where(
+                            (p) =>
+                                p.metadata?.name != _pods[index].metadata?.name,
+                          )
+                          .toList();
                 });
               }
             },
@@ -170,9 +169,7 @@ class _GetLogsPodsState extends State<GetLogsPods> {
               Characters(
                 _pods[index].metadata?.name ?? '',
               ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
-              style: noramlTextStyle(
-                context,
-              ),
+              style: normalTextStyle(context),
               overflow: TextOverflow.ellipsis,
             ),
           ),
