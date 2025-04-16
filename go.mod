@@ -16,7 +16,7 @@ require (
 	github.com/wI2L/jsondiff v0.6.1
 	golang.org/x/mobile v0.0.0-20250218173827-cd096645fcd3
 	golang.org/x/oauth2 v0.28.0
-	helm.sh/helm/v3 v3.17.2
+	helm.sh/helm/v3 v3.17.3
 	k8s.io/api v0.32.3
 	k8s.io/apimachinery v0.32.3
 	k8s.io/cli-runtime v0.32.3
