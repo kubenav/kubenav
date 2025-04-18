@@ -18,6 +18,8 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - quick_actions_ios (0.0.1):
+    - Flutter
   - TPInAppReceipt (3.4.1):
     - TPInAppReceipt/Core (= 3.4.1)
   - TPInAppReceipt/Core (3.4.1):
@@ -34,6 +36,7 @@ DEPENDENCIES:
   - local_auth_darwin (from `.symlinks/plugins/local_auth_darwin/darwin`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - quick_actions_ios (from `.symlinks/plugins/quick_actions_ios/ios`)
   - TPInAppReceipt
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
@@ -59,6 +62,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  quick_actions_ios:
+    :path: ".symlinks/plugins/quick_actions_ios/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
@@ -72,6 +77,7 @@ SPEC CHECKSUMS:
   local_auth_darwin: 553ce4f9b16d3fdfeafce9cf042e7c9f77c1c391
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  quick_actions_ios: 4b07fb49d8d8f3518d7565fbb7a91014067a7d82
   TPInAppReceipt: 22dbc616bcd6c61672ebe062e60b6329a2af6323
   url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
 
