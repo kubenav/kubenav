@@ -22,4 +22,8 @@ class Storage {
   Future<String?> read(String key) async {
     return await _storage?.read(key: key);
   }
+
+  Future<void> delete(String key) async {
+    return await _storage?.delete(key: key);
+  }
 }
