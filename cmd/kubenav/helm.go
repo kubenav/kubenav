@@ -36,7 +36,7 @@ type UninstallOptions struct {
 func HelmListReleases(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace string) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -73,7 +73,7 @@ func HelmListReleases(clusterServer, clusterCertificateAuthorityData string, clu
 func HelmGetRelease(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace, name string, version int64) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -106,7 +106,7 @@ func HelmGetRelease(clusterServer, clusterCertificateAuthorityData string, clust
 func HelmListReleaseHistory(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace, name string) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -143,7 +143,7 @@ func HelmListReleaseHistory(clusterServer, clusterCertificateAuthorityData strin
 func HelmRollbackRelease(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace, name string, version int64, options string) error {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -175,7 +175,7 @@ func HelmRollbackRelease(clusterServer, clusterCertificateAuthorityData string, 
 func HelmUninstallRelease(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace, name string, options string) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 

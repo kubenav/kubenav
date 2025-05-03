@@ -2,8 +2,10 @@
 name: Continuous Delivery
 
 on:
-  pull_request:
   push:
+    branches:
+      - main
+  pull_request:
     branches:
       - main
 
@@ -22,6 +24,9 @@ jobs:
           cache: true
           cache-dependency-path: go.sum
 
+      - name: Lint
+        uses: golangci/golangci-lint-action@v7
+
       - name: Generate Bindings
         run: |
           go install golang.org/x/mobile/cmd/gomobile@latest
@@ -31,7 +36,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.29.2"
+          flutter-version: "3.29.3"
           channel: "stable"
           cache: true
           cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"
@@ -64,6 +69,9 @@ jobs:
           cache: true
           cache-dependency-path: go.sum
 
+      - name: Lint
+        uses: golangci/golangci-lint-action@v7
+
       - name: Generate Bindings
         run: |
           echo "$ANDROID_NDK_HOME"
@@ -74,7 +82,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.29.2"
+          flutter-version: "3.29.3"
           channel: "stable"
           cache: true
           cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"

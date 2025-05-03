@@ -15,6 +15,7 @@ func Start() {
 	router.HandleFunc("/terminal", middleware.Cors(terminalHandler))
 	router.HandleFunc("/logs", middleware.Cors(logsHandler))
 
+	// #nosec G114
 	if err := http.ListenAndServe(":14122", router); err != nil {
 		return
 	}

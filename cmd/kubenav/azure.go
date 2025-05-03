@@ -26,7 +26,7 @@ type AzureCluster struct {
 func AzureGetClusters(subscriptionID, tenantID, clientID, clientSecret string, isAdmin bool) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -65,13 +65,13 @@ func AzureGetClusters(subscriptionID, tenantID, clientID, clientSecret string, i
 			if err != nil {
 				return "", err
 			}
-			result = resp.CredentialResults.Kubeconfigs
+			result = resp.Kubeconfigs
 		} else {
 			resp, err := managedClustersClient.ListClusterUserCredentials(ctx, resourceGroupName, name, &armcontainerservice.ManagedClustersClientListClusterUserCredentialsOptions{})
 			if err != nil {
 				return "", err
 			}
-			result = resp.CredentialResults.Kubeconfigs
+			result = resp.Kubeconfigs
 		}
 
 		for _, kubeconfig := range result {

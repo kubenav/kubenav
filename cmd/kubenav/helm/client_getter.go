@@ -42,7 +42,6 @@ func (c *RESTClientGetter) ToRESTConfig() (*rest.Config, error) {
 	}
 
 	return clientcmd.RESTConfigFromKubeConfig(c.kubeConfig)
-
 }
 
 // ToDiscoveryClient returns a CachedDiscoveryInterface that can be used as a
