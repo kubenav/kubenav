@@ -67,7 +67,7 @@ type datum struct {
 func PrometheusGetData(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, request string) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -285,6 +285,7 @@ func getRoundTripper(p prometheus) http.RoundTripper {
 	if p.Certificate != "" {
 		certPool := x509.NewCertPool()
 		certPool.AppendCertsFromPEM([]byte(p.Certificate))
+		// #nosec G402
 		tr.TLSClientConfig = &tls.Config{
 			RootCAs: certPool,
 		}

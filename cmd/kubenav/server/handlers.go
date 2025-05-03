@@ -103,7 +103,7 @@ func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			request.PodName = pods.Items[0].ObjectMeta.Name
+			request.PodName = pods.Items[0].Name
 			request.PodContainer, request.PodPort = getPodContainerAndPort(pods.Items[0], request.ServiceTargetPort)
 
 			if request.PodContainer == "" || request.PodPort == 0 {
@@ -174,7 +174,6 @@ func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	middleware.Write(w, r, nil)
-	return
 }
 
 // terminalHandler handles exec requests to a container via WebSockets.
@@ -230,12 +229,9 @@ func terminalHandler(w http.ResponseWriter, r *http.Request) {
 		ticker := time.NewTicker(30 * time.Second)
 		defer ticker.Stop()
 
-		for {
-			select {
-			case <-ticker.C:
-				if err := c.WriteMessage(websocket.PingMessage, nil); err != nil {
-					return
-				}
+		for range ticker.C {
+			if err := c.WriteMessage(websocket.PingMessage, nil); err != nil {
+				return
 			}
 		}
 	}()
@@ -268,7 +264,7 @@ func terminalHandler(w http.ResponseWriter, r *http.Request) {
 		SizeChan:  make(chan remotecommand.TerminalSize),
 	}
 
-	err = terminal.StartProcess(restConfig, reqURL, cmd, session)
+	err = terminal.StartProcess(r.Context(), restConfig, reqURL, cmd, session)
 	if err != nil {
 		msg, _ := json.Marshal(terminal.Message{
 			Op:   "stdout",
@@ -333,12 +329,9 @@ func logsHandler(w http.ResponseWriter, r *http.Request) {
 		ticker := time.NewTicker(30 * time.Second)
 		defer ticker.Stop()
 
-		for {
-			select {
-			case <-ticker.C:
-				if err := c.WriteMessage(websocket.PingMessage, nil); err != nil {
-					return
-				}
+		for range ticker.C {
+			if err := c.WriteMessage(websocket.PingMessage, nil); err != nil {
+				return
 			}
 		}
 	}()

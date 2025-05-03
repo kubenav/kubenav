@@ -28,7 +28,7 @@ import (
 func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, requestMethod, requestURL, requestBody string) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -43,15 +43,16 @@ func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, cl
 	var statusCode int
 	ctx := context.Background()
 
-	if requestMethod == http.MethodGet {
+	switch requestMethod {
+	case http.MethodGet:
 		responseResult = clientset.RESTClient().Get().RequestURI(requestURL).Do(ctx)
-	} else if requestMethod == http.MethodDelete {
+	case http.MethodDelete:
 		responseResult = clientset.RESTClient().Delete().RequestURI(requestURL).Body([]byte(requestBody)).Do(ctx)
-	} else if requestMethod == http.MethodPatch {
+	case http.MethodPatch:
 		responseResult = clientset.RESTClient().Patch(types.JSONPatchType).RequestURI(requestURL).Body([]byte(requestBody)).Do(ctx)
-	} else if requestMethod == http.MethodPost {
+	case http.MethodPost:
 		responseResult = clientset.RESTClient().Post().RequestURI(requestURL).Body([]byte(requestBody)).Do(ctx)
-	} else if requestMethod == http.MethodPut {
+	case http.MethodPut:
 		responseResult = clientset.RESTClient().Put().RequestURI(requestURL).Body([]byte(requestBody)).Do(ctx)
 	}
 
@@ -61,7 +62,7 @@ func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, cl
 
 	responseResult = responseResult.StatusCode(&statusCode)
 	if statusCode == http.StatusUnauthorized {
-		return "", fmt.Errorf(http.StatusText(http.StatusUnauthorized))
+		return "", fmt.Errorf("%s", http.StatusText(http.StatusUnauthorized))
 	}
 
 	responseBody, err := responseResult.Raw()
@@ -70,7 +71,7 @@ func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, cl
 	}
 
 	if statusCode < 200 || statusCode >= 300 {
-		return "", fmt.Errorf(string(responseBody))
+		return "", fmt.Errorf("%s", string(responseBody))
 	}
 
 	return string(responseBody), nil
@@ -83,7 +84,7 @@ func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, cl
 func KubernetesGetLogs(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, names, namespace, container string, since int64, filter string, previous bool) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -131,7 +132,7 @@ func kubernetesGetLogs(clientset *kubernetes.Clientset, clusterServer, name, nam
 
 	responseResult = responseResult.StatusCode(&statusCode)
 	if statusCode == http.StatusUnauthorized {
-		return nil, fmt.Errorf(http.StatusText(http.StatusUnauthorized))
+		return nil, fmt.Errorf("%s", http.StatusText(http.StatusUnauthorized))
 	}
 
 	responseBody, err := responseResult.Raw()
@@ -140,7 +141,7 @@ func kubernetesGetLogs(clientset *kubernetes.Clientset, clusterServer, name, nam
 	}
 
 	if statusCode < 200 || statusCode >= 300 {
-		return nil, fmt.Errorf(string(responseBody))
+		return nil, fmt.Errorf("%s", string(responseBody))
 	}
 
 	if filter == "" {
@@ -181,7 +182,7 @@ func kubernetesGetLogs(clientset *kubernetes.Clientset, clusterServer, name, nam
 func KubernetesStartServer() {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 

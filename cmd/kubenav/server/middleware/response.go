@@ -23,7 +23,6 @@ func Errorf(w http.ResponseWriter, r *http.Request, err error, code int, message
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(code)
 	json.NewEncoder(w).Encode(&errorMessage)
-	return
 }
 
 // Write return a new json response.
@@ -31,5 +30,4 @@ func Write(w http.ResponseWriter, r *http.Request, data interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&data)
-	return
 }

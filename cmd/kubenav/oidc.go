@@ -64,6 +64,7 @@ func oidcContext(ctx context.Context, certificateAuthority string) (context.Cont
 		return ctx, nil
 	}
 
+	// #nosec G402
 	tlsConfig := &tls.Config{RootCAs: x509.NewCertPool()}
 	rootCA := []byte(certificateAuthority)
 
@@ -85,7 +86,7 @@ func oidcContext(ctx context.Context, certificateAuthority string) (context.Cont
 func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes string, addDefaultScopes bool, redirectURL, pkceMethod, state string) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -162,7 +163,7 @@ func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, sco
 func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes string, addDefaultScopes bool, redirectURL, pkceMethod, code, verifier string, useAccessToken bool) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -228,7 +229,7 @@ func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthor
 func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes string, addDefaultScopes bool, redirectURL, refreshToken string, useAccessToken bool) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -289,7 +290,7 @@ func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthori
 func OIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes string, addDefaultScopes bool) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -345,7 +346,7 @@ func OIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes string,
 func OIDCDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority, scopes string, addDefaultScopes bool, deviceCode string, useAccessToken bool) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 

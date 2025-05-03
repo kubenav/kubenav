@@ -58,7 +58,7 @@ type AWSSSOAccount struct {
 func AWSGetClusters(accessKeyID, secretKey, region, sessionToken, roleArn string) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -119,7 +119,7 @@ func AWSGetClusters(accessKeyID, secretKey, region, sessionToken, roleArn string
 func AWSGetToken(accessKeyID, secretKey, region, sessionToken, roleArn, clusterID string) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -152,7 +152,7 @@ func AWSGetToken(accessKeyID, secretKey, region, sessionToken, roleArn, clusterI
 func AWSGetSSOConfig(ssoRegion, startURL string) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -200,7 +200,7 @@ func AWSGetSSOConfig(ssoRegion, startURL string) (string, error) {
 func AWSGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, accessToken string, accessTokenExpire int64) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -264,7 +264,7 @@ func AWSGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret
 func AWSGetSSOAccounts(ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode string) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -322,7 +322,6 @@ func AWSGetSSOAccounts(ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode st
 					ssoRoles = append(ssoRoles, *role.RoleName)
 				}
 			}
-
 		}
 
 		ssoAccounts = append(ssoAccounts, AWSSSOAccount{

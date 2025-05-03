@@ -27,6 +27,7 @@ func (sm *SessionMap) Get(sessionID string) (*Session, bool) {
 func (sm *SessionMap) Set(sessionID string, session *Session) {
 	sm.Lock.Lock()
 	defer sm.Lock.Unlock()
+
 	sm.Sessions[sessionID] = session
 }
 
@@ -35,7 +36,5 @@ func (sm *SessionMap) Delete(sessionID string) {
 	sm.Lock.Lock()
 	defer sm.Lock.Unlock()
 
-	if _, ok := sm.Sessions[sessionID]; ok {
-		delete(sm.Sessions, sessionID)
-	}
+	delete(sm.Sessions, sessionID)
 }

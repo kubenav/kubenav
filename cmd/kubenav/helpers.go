@@ -15,7 +15,7 @@ import (
 func PrettifyYAML(jsonStr string) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
@@ -41,7 +41,7 @@ func PrettifyYAML(jsonStr string) (string, error) {
 func CreateJSONPatch(source, target string) (string, error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("panic: %#v", r)
+			log.Printf("panic: %#v", r)
 		}
 	}()
 
