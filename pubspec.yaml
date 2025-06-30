@@ -39,13 +39,13 @@ dependencies:
   catppuccin_flutter: ^1.0.0
   code_text_field: ^1.0.2
   collection: ^1.19.0
-  file_picker: ^10.1.9
+  file_picker: ^10.2.0
   fl_chart: ^1.0.0
   flutter_markdown: ^0.7.7
   flutter_native_splash: ^2.4.6
   flutter_secure_storage: ^9.2.4
   flutter_slidable: ^4.0.0
-  flutter_svg: ^2.1.0
+  flutter_svg: ^2.2.0
   highlight: ^0.7.0
   http: ^1.4.0
   in_app_purchase: ^3.2.3
@@ -74,7 +74,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
 
-  flutter_launcher_icons: ^0.14.3
+  flutter_launcher_icons: ^0.14.4
   import_sorter: ^4.6.0
 
 # For information on the generic Dart part of this file, see the
