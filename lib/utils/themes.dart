@@ -205,8 +205,9 @@ class TerminalColors extends ThemeExtension<TerminalColors> {
       brightWhite: Color.lerp(brightWhite, other.brightWhite, t) ?? brightWhite,
       searchHitBackground:
           Color.lerp(searchHitBackground, other.searchHitBackground, t) ??
-              searchHitBackground,
-      searchHitBackgroundCurrent: Color.lerp(
+          searchHitBackground,
+      searchHitBackgroundCurrent:
+          Color.lerp(
             searchHitBackgroundCurrent,
             other.searchHitBackgroundCurrent,
             t,
@@ -214,7 +215,7 @@ class TerminalColors extends ThemeExtension<TerminalColors> {
           searchHitBackgroundCurrent,
       searchHitForeground:
           Color.lerp(searchHitForeground, other.searchHitForeground, t) ??
-              searchHitForeground,
+          searchHitForeground,
     );
   }
 
@@ -482,17 +483,14 @@ class EditorColors extends ThemeExtension<EditorColors> {
       variable: Color.lerp(variable, other.variable, t) ?? variable,
       templatevariable:
           Color.lerp(templatevariable, other.templatevariable, t) ??
-              templatevariable,
+          templatevariable,
       templatetag: Color.lerp(templatetag, other.templatetag, t) ?? templatetag,
     );
   }
 
   Map<String, TextStyle> getTheme() {
     return {
-      'root': TextStyle(
-        backgroundColor: rootBackground,
-        color: rootForeground,
-      ),
+      'root': TextStyle(backgroundColor: rootBackground, color: rootForeground),
       'subst': TextStyle(color: subst),
       'selector-tag': TextStyle(color: selectortag),
       'selector-id': TextStyle(color: selectorid),
@@ -611,18 +609,7 @@ class LogColors extends ThemeExtension<LogColors> {
   }
 
   List<Color> getTheme() {
-    return [
-      text,
-      blue,
-      red,
-      green,
-      yellow,
-      teal,
-      lavender,
-      maroon,
-      sky,
-      peach,
-    ];
+    return [text, blue, red, green, yellow, teal, lavender, maroon, sky, peach];
   }
 }
 
@@ -648,23 +635,17 @@ final lightTheme = ThemeData(
   ),
   snackBarTheme: SnackBarThemeData(
     backgroundColor: catppuccin.latte.base,
-    contentTextStyle: TextStyle(
-      color: catppuccin.latte.text,
-    ),
+    contentTextStyle: TextStyle(color: catppuccin.latte.text),
   ),
-  dialogTheme: DialogTheme(
+  dialogTheme: DialogThemeData(
     backgroundColor: catppuccin.latte.base,
     surfaceTintColor: catppuccin.latte.base,
-    contentTextStyle: TextStyle(
-      color: catppuccin.latte.text,
-    ),
+    contentTextStyle: TextStyle(color: catppuccin.latte.text),
   ),
   popupMenuTheme: PopupMenuThemeData(
     color: catppuccin.latte.base,
     surfaceTintColor: catppuccin.latte.base,
-    textStyle: TextStyle(
-      color: catppuccin.latte.text,
-    ),
+    textStyle: TextStyle(color: catppuccin.latte.text),
   ),
   drawerTheme: DrawerThemeData(
     backgroundColor: catppuccin.latte.base,
@@ -675,9 +656,7 @@ final lightTheme = ThemeData(
     surfaceTintColor: catppuccin.latte.base,
   ),
   dividerColor: catppuccin.latte.crust,
-  dividerTheme: DividerThemeData(
-    color: catppuccin.latte.crust,
-  ),
+  dividerTheme: DividerThemeData(color: catppuccin.latte.crust),
   pageTransitionsTheme: const PageTransitionsTheme(
     builders: {
       TargetPlatform.android: CupertinoPageTransitionsBuilder(),
@@ -803,23 +782,17 @@ final darkTheme = ThemeData(
   ),
   snackBarTheme: SnackBarThemeData(
     backgroundColor: catppuccin.macchiato.base,
-    contentTextStyle: TextStyle(
-      color: catppuccin.macchiato.text,
-    ),
+    contentTextStyle: TextStyle(color: catppuccin.macchiato.text),
   ),
-  dialogTheme: DialogTheme(
+  dialogTheme: DialogThemeData(
     backgroundColor: catppuccin.macchiato.base,
     surfaceTintColor: catppuccin.macchiato.base,
-    contentTextStyle: TextStyle(
-      color: catppuccin.macchiato.text,
-    ),
+    contentTextStyle: TextStyle(color: catppuccin.macchiato.text),
   ),
   popupMenuTheme: PopupMenuThemeData(
     color: catppuccin.macchiato.base,
     surfaceTintColor: catppuccin.macchiato.base,
-    textStyle: TextStyle(
-      color: catppuccin.macchiato.text,
-    ),
+    textStyle: TextStyle(color: catppuccin.macchiato.text),
   ),
   drawerTheme: DrawerThemeData(
     backgroundColor: catppuccin.macchiato.base,
@@ -830,9 +803,7 @@ final darkTheme = ThemeData(
     surfaceTintColor: catppuccin.macchiato.base,
   ),
   dividerColor: catppuccin.macchiato.mantle,
-  dividerTheme: DividerThemeData(
-    color: catppuccin.macchiato.mantle,
-  ),
+  dividerTheme: DividerThemeData(color: catppuccin.macchiato.mantle),
   pageTransitionsTheme: const PageTransitionsTheme(
     builders: {
       TargetPlatform.android: CupertinoPageTransitionsBuilder(),

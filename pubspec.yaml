@@ -20,7 +20,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 5.4.0+113
 
 environment:
-  sdk: ^3.7.0
+  sdk: ^3.8.1
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -39,18 +39,18 @@ dependencies:
   catppuccin_flutter: ^1.0.0
   code_text_field: ^1.0.2
   collection: ^1.19.0
-  file_picker: ^10.1.2
-  fl_chart: ^0.71.0
+  file_picker: ^10.1.9
+  fl_chart: ^1.0.0
   flutter_markdown: ^0.7.7
   flutter_native_splash: ^2.4.6
   flutter_secure_storage: ^9.2.4
   flutter_slidable: ^4.0.0
   flutter_svg: ^2.1.0
   highlight: ^0.7.0
-  http: ^1.3.0
-  in_app_purchase: ^3.2.1
+  http: ^1.4.0
+  in_app_purchase: ^3.2.3
   intl: ^0.20.2
-  json_path: ^0.7.5
+  json_path: ^0.7.6
   jwt_decode: ^0.3.1
   local_auth: ^2.3.0
   package_info_plus: ^8.3.0
@@ -72,7 +72,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
   flutter_launcher_icons: ^0.14.3
   import_sorter: ^4.6.0
