@@ -2,7 +2,7 @@ package kubenav
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 
 	"github.com/wI2L/jsondiff"
 	"sigs.k8s.io/yaml"
@@ -12,16 +12,16 @@ import (
 // string. For that we have to unmarshal the json string into a
 // map[string]interface{} which we can then marshal to the prettified yaml
 // string.
-func PrettifyYAML(jsonStr string) (string, error) {
+func PrettifyYAML(jsonStr string) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
 	var jsonObj map[string]interface{}
 
-	err := json.Unmarshal([]byte(jsonStr), &jsonObj)
+	err = json.Unmarshal([]byte(jsonStr), &jsonObj)
 	if err != nil {
 		return "", err
 	}
@@ -38,10 +38,10 @@ func PrettifyYAML(jsonStr string) (string, error) {
 // when a user edits a resource, where the source argument is the manifest of
 // the current resource and the target is the edited manifest. The returned
 // patch can then be send to the Kubernetes API to edit the resource.
-func CreateJSONPatch(source, target string) (string, error) {
+func CreateJSONPatch(source, target string) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 

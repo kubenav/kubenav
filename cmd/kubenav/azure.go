@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
@@ -23,10 +22,10 @@ type AzureCluster struct {
 // AzureGetClusters returns all clusters wich are available with the provided
 // Azure credentials, the returned JSON encoded string contains all the clusters
 // with there name and kubeconfig.
-func AzureGetClusters(subscriptionID, tenantID, clientID, clientSecret string, isAdmin bool) (string, error) {
+func AzureGetClusters(subscriptionID, tenantID, clientID, clientSecret string, isAdmin bool) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 

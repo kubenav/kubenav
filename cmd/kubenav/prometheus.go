@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"log"
 	"math"
 	"net"
 	"net/http"
@@ -64,10 +63,10 @@ type datum struct {
 
 // PrometheusGetData can be used to run a list multiple PromQL queries against a
 // Prometheus instance.
-func PrometheusGetData(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, request string) (string, error) {
+func PrometheusGetData(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, request string) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
