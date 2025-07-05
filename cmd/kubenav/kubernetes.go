@@ -25,10 +25,10 @@ import (
 // The "requestMethod", "requestURL" and "requestBody" arguments are then used
 // for the actually request. E.g. to get all Pods from the Kubernetes API the
 // method "GET" and the URL "/api/v1/pods" can be used.
-func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, requestMethod, requestURL, requestBody string) (string, error) {
+func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, requestMethod, requestURL, requestBody string) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
@@ -81,10 +81,10 @@ func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, cl
 // are provided via the "names" parameter, which must be a comma separated list
 // of the Pod names. To use this function a user must also provide the
 // namespace, container, since and previous parameter.
-func KubernetesGetLogs(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, names, namespace, container string, since int64, filter string, previous bool) (string, error) {
+func KubernetesGetLogs(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, names, namespace, container string, since int64, filter string, previous bool) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 

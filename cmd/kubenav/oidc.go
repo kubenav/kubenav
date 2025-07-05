@@ -9,7 +9,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 
@@ -83,10 +82,10 @@ func oidcContext(ctx context.Context, certificateAuthority string) (context.Cont
 
 // OIDCGetLink returns the link for the configured OIDC provider. The Link can
 // then be used by the user to login.
-func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes string, addDefaultScopes bool, redirectURL, pkceMethod, state string) (string, error) {
+func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, scopes string, addDefaultScopes bool, redirectURL, pkceMethod, state string) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
@@ -160,10 +159,10 @@ func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, sco
 // OIDCGetRefreshToken returns a refresh token for the configured OIDC provider.
 // The refresh token can be used to get a new access token via the
 // OIDCGetAccessToken function.
-func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes string, addDefaultScopes bool, redirectURL, pkceMethod, code, verifier string, useAccessToken bool) (string, error) {
+func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes string, addDefaultScopes bool, redirectURL, pkceMethod, code, verifier string, useAccessToken bool) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
@@ -226,10 +225,10 @@ func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthor
 }
 
 // OIDCGetAccessToken is used to retrieve an access token from a refresh token.
-func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes string, addDefaultScopes bool, redirectURL, refreshToken string, useAccessToken bool) (string, error) {
+func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthority, scopes string, addDefaultScopes bool, redirectURL, refreshToken string, useAccessToken bool) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
@@ -287,10 +286,10 @@ func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthori
 	return string(oidcResponseBytes), nil
 }
 
-func OIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes string, addDefaultScopes bool) (string, error) {
+func OIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes string, addDefaultScopes bool) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
@@ -343,10 +342,10 @@ func OIDCDeviceAuth(discoveryURL, clientID, certificateAuthority, scopes string,
 	return string(deviceAuthData), nil
 }
 
-func OIDCDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority, scopes string, addDefaultScopes bool, deviceCode string, useAccessToken bool) (string, error) {
+func OIDCDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority, scopes string, addDefaultScopes bool, deviceCode string, useAccessToken bool) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 

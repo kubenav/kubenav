@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -55,10 +54,10 @@ type AWSSSOAccount struct {
 
 // AWSGetClusters returns all clusters which can be accessed with the given
 // credentials.
-func AWSGetClusters(accessKeyID, secretKey, region, sessionToken, roleArn string) (string, error) {
+func AWSGetClusters(accessKeyID, secretKey, region, sessionToken, roleArn string) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
@@ -116,10 +115,10 @@ func AWSGetClusters(accessKeyID, secretKey, region, sessionToken, roleArn string
 // AWSGetToken returns a token, which can be used to access the Kubernetes API
 // of a cluster with the given clusterID.
 // See: https://github.com/kubernetes-sigs/aws-iam-authenticator/blob/7547c74e660f8d34d9980f2c69aa008eed1f48d0/pkg/token/token.go#L310
-func AWSGetToken(accessKeyID, secretKey, region, sessionToken, roleArn, clusterID string) (string, error) {
+func AWSGetToken(accessKeyID, secretKey, region, sessionToken, roleArn, clusterID string) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
@@ -149,10 +148,10 @@ func AWSGetToken(accessKeyID, secretKey, region, sessionToken, roleArn, clusterI
 // AWSGetSSOConfig registers a new AWS SSO client and starts the device
 // authentication. The client and device authentication is returned, so that we
 // can use the information in the following steps of the SSO flow.
-func AWSGetSSOConfig(ssoRegion, startURL string) (string, error) {
+func AWSGetSSOConfig(ssoRegion, startURL string) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
@@ -197,10 +196,10 @@ func AWSGetSSOConfig(ssoRegion, startURL string) (string, error) {
 // AWSGetSSOToken is used to request a new token with the client and device
 // information from the former step in the sso flow. The retrieved access token
 // is then used to get the credentials for AWS.
-func AWSGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, accessToken string, accessTokenExpire int64) (string, error) {
+func AWSGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode, accessToken string, accessTokenExpire int64) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
@@ -261,10 +260,10 @@ func AWSGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret
 // AWSGetSSOAccounts returns a list of accounts and roles for the currently
 // authenticated user, so that a user does not have to provide these information
 // by his own.
-func AWSGetSSOAccounts(ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode string) (string, error) {
+func AWSGetSSOAccounts(ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode string) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("panic: %#v", r)
+			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
