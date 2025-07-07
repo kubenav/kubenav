@@ -112,9 +112,7 @@ class _GetTerminalState extends State<GetTerminal> {
             Navigator.pop(context);
             showModal(
               context,
-              AppTerminalWidget(
-                terminalIndex: terminalIndex,
-              ),
+              AppTerminalWidget(terminalIndex: terminalIndex),
               fullScreen: true,
             );
           }
@@ -135,11 +133,7 @@ class _GetTerminalState extends State<GetTerminal> {
           err,
         );
         if (mounted) {
-          showSnackbar(
-            context,
-            'Failed to Create Terminal',
-            err.toString(),
-          );
+          showSnackbar(context, 'Failed to Create Terminal', err.toString());
         }
         setState(() {
           _isLoading = false;
@@ -158,15 +152,15 @@ class _GetTerminalState extends State<GetTerminal> {
     /// for the [_container] state.
     List<String> tmpContainers = [];
 
-    if (widget.pod.spec?.initContainers != null) {
-      for (var initContainer in widget.pod.spec!.initContainers) {
-        tmpContainers.add(initContainer.name);
-      }
-    }
-
     if (widget.pod.spec?.containers != null) {
       for (var container in widget.pod.spec!.containers) {
         tmpContainers.add(container.name);
+      }
+    }
+
+    if (widget.pod.spec?.initContainers != null) {
+      for (var initContainer in widget.pod.spec!.initContainers) {
+        tmpContainers.add(initContainer.name);
       }
     }
 
@@ -184,13 +178,18 @@ class _GetTerminalState extends State<GetTerminal> {
       /// state. If the annotation is not available we use the first container
       /// from the list.
       if (widget.pod.metadata?.annotations != null &&
-          widget.pod.metadata!.annotations
-              .containsKey('kubectl.kubernetes.io/default-container') &&
+          widget.pod.metadata!.annotations.containsKey(
+            'kubectl.kubernetes.io/default-container',
+          ) &&
           tmpContainers.contains(
-            widget.pod.metadata!
+            widget
+                .pod
+                .metadata!
                 .annotations['kubectl.kubernetes.io/default-container'],
           )) {
-        _container = widget.pod.metadata!
+        _container = widget
+            .pod
+            .metadata!
             .annotations['kubectl.kubernetes.io/default-container']!;
       } else {
         _container = tmpContainers[0];
@@ -246,9 +245,9 @@ class _GetTerminalState extends State<GetTerminal> {
                           child: Text(
                             value,
                             style: TextStyle(
-                              color: Theme.of(context)
-                                  .extension<CustomColors>()!
-                                  .textPrimary,
+                              color: Theme.of(
+                                context,
+                              ).extension<CustomColors>()!.textPrimary,
                             ),
                           ),
                         );
@@ -273,20 +272,15 @@ class _GetTerminalState extends State<GetTerminal> {
                           _shell = value ?? 'sh';
                         });
                       },
-                      items: [
-                        'sh',
-                        'bash',
-                        'pwsh',
-                        'cmd',
-                      ].map((value) {
+                      items: ['sh', 'bash', 'pwsh', 'cmd'].map((value) {
                         return DropdownMenuItem(
                           value: value,
                           child: Text(
                             value,
                             style: TextStyle(
-                              color: Theme.of(context)
-                                  .extension<CustomColors>()!
-                                  .textPrimary,
+                              color: Theme.of(
+                                context,
+                              ).extension<CustomColors>()!.textPrimary,
                             ),
                           ),
                         );
