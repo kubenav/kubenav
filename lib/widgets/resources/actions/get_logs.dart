@@ -132,9 +132,7 @@ class _GetLogsState extends State<GetLogs> {
               Navigator.pop(context);
               showModal(
                 context,
-                AppTerminalWidget(
-                  terminalIndex: terminalIndex,
-                ),
+                AppTerminalWidget(terminalIndex: terminalIndex),
                 fullScreen: true,
               );
             }
@@ -153,18 +151,19 @@ class _GetLogsState extends State<GetLogs> {
           /// via the [getLogs] method of the [KubernetesService] which uses
           /// platform channels to make the Kubernetes request. This has the
           /// advantage that we do not have to start a http server first.
-          final logs = await KubernetesService(
-            cluster: cluster!,
-            proxy: appRepository.settings.proxy,
-            timeout: appRepository.settings.timeout,
-          ).getLogs(
-            widget.names,
-            widget.namespace,
-            _container,
-            _sinceOptions[_since]!,
-            _filterController.text,
-            _previous,
-          );
+          final logs =
+              await KubernetesService(
+                cluster: cluster!,
+                proxy: appRepository.settings.proxy,
+                timeout: appRepository.settings.timeout,
+              ).getLogs(
+                widget.names,
+                widget.namespace,
+                _container,
+                _sinceOptions[_since]!,
+                _filterController.text,
+                _previous,
+              );
 
           final terminalIndex = terminalRepository.addTerminal(
             TerminalType.log,
@@ -181,25 +180,15 @@ class _GetLogsState extends State<GetLogs> {
             Navigator.pop(context);
             showModal(
               context,
-              AppTerminalWidget(
-                terminalIndex: terminalIndex,
-              ),
+              AppTerminalWidget(terminalIndex: terminalIndex),
               fullScreen: true,
             );
           }
         }
       } catch (err) {
-        Logger.log(
-          'GetLogs _getLogs',
-          'Failed to Get Logs',
-          err,
-        );
+        Logger.log('GetLogs _getLogs', 'Failed to Get Logs', err);
         if (mounted) {
-          showSnackbar(
-            context,
-            'Failed to Get Logs',
-            err.toString(),
-          );
+          showSnackbar(context, 'Failed to Get Logs', err.toString());
         }
         setState(() {
           _isLoading = false;
@@ -230,6 +219,12 @@ class _GetLogsState extends State<GetLogs> {
       }
     }
 
+    if (widget.pod.spec?.ephemeralContainers != null) {
+      for (var ephemeralContainer in widget.pod.spec!.ephemeralContainers!) {
+        tmpContainers.add(ephemeralContainer.name);
+      }
+    }
+
     if (tmpContainers.isNotEmpty) {
       _containers = tmpContainers;
 
@@ -238,13 +233,18 @@ class _GetLogsState extends State<GetLogs> {
       /// state. If the annotation is not available we use the first container
       /// from the list.
       if (widget.pod.metadata?.annotations != null &&
-          widget.pod.metadata!.annotations
-              .containsKey('kubectl.kubernetes.io/default-container') &&
+          widget.pod.metadata!.annotations.containsKey(
+            'kubectl.kubernetes.io/default-container',
+          ) &&
           tmpContainers.contains(
-            widget.pod.metadata!
+            widget
+                .pod
+                .metadata!
                 .annotations['kubectl.kubernetes.io/default-container'],
           )) {
-        _container = widget.pod.metadata!
+        _container = widget
+            .pod
+            .metadata!
             .annotations['kubectl.kubernetes.io/default-container']!;
       } else {
         _container = tmpContainers[0];
@@ -306,9 +306,9 @@ class _GetLogsState extends State<GetLogs> {
                           child: Text(
                             value,
                             style: TextStyle(
-                              color: Theme.of(context)
-                                  .extension<CustomColors>()!
-                                  .textPrimary,
+                              color: Theme.of(
+                                context,
+                              ).extension<CustomColors>()!.textPrimary,
                             ),
                           ),
                         );
@@ -339,9 +339,9 @@ class _GetLogsState extends State<GetLogs> {
                           child: Text(
                             value,
                             style: TextStyle(
-                              color: Theme.of(context)
-                                  .extension<CustomColors>()!
-                                  .textPrimary,
+                              color: Theme.of(
+                                context,
+                              ).extension<CustomColors>()!.textPrimary,
                             ),
                           ),
                         );
