@@ -218,15 +218,15 @@ class _GetLogsState extends State<GetLogs> {
     /// for the [_container] state.
     List<String> tmpContainers = [];
 
-    if (widget.pod.spec?.initContainers != null) {
-      for (var initContainer in widget.pod.spec!.initContainers) {
-        tmpContainers.add(initContainer.name);
-      }
-    }
-
     if (widget.pod.spec?.containers != null) {
       for (var container in widget.pod.spec!.containers) {
         tmpContainers.add(container.name);
+      }
+    }
+
+    if (widget.pod.spec?.initContainers != null) {
+      for (var initContainer in widget.pod.spec!.initContainers) {
+        tmpContainers.add(initContainer.name);
       }
     }
 
