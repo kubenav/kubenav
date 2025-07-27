@@ -1,6 +1,7 @@
 package portforwarding
 
 import (
+	"context"
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
@@ -85,7 +86,8 @@ func CreateSession(sessionPrefix, name, namespace, container string, remotePort 
 
 	// In the next step we have to create a listener, so that we can bound the
 	// remote port to a random local port.
-	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	listenConfig := net.ListenConfig{}
+	listener, err := listenConfig.Listen(context.Background(), "tcp", "127.0.0.1:0")
 	if err != nil {
 		return nil, err
 	}
