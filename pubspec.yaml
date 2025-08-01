@@ -57,7 +57,7 @@ dependencies:
   path_provider: ^2.1.5
   provider: ^6.1.5
   quick_actions: ^1.1.0
-  url_launcher: ^6.3.1
+  url_launcher: ^6.3.2
   uuid: ^4.5.1
   web_socket_channel: ^3.0.3
   xterm: ^4.0.0
