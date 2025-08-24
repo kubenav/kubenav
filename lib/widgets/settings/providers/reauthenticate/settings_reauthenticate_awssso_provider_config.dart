@@ -76,11 +76,7 @@ class _SettingsReauthenticateAWSSSOState
         err,
       );
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Verify Device',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Verify Device', err.toString());
       }
     }
   }
@@ -131,11 +127,7 @@ class _SettingsReauthenticateAWSSSOState
         err,
       );
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Get SSO Credentials',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Get SSO Credentials', err.toString());
       }
     }
   }
@@ -175,9 +167,7 @@ class _SettingsReauthenticateAWSSSOState
               foregroundColor: Theme.of(context).colorScheme.onPrimary,
               minimumSize: const Size.fromHeight(40),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  Constants.sizeBorderRadius,
-                ),
+                borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
               ),
             ),
             onPressed: _startSSOFlow,
@@ -202,9 +192,7 @@ class _SettingsReauthenticateAWSSSOState
               foregroundColor: Theme.of(context).colorScheme.onPrimary,
               minimumSize: const Size.fromHeight(40),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  Constants.sizeBorderRadius,
-                ),
+                borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
               ),
             ),
             onPressed: _awsSSOConfig == null ? null : _verifyDevice,
@@ -229,13 +217,12 @@ class _SettingsReauthenticateAWSSSOState
               foregroundColor: Theme.of(context).colorScheme.onPrimary,
               minimumSize: const Size.fromHeight(40),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  Constants.sizeBorderRadius,
-                ),
+                borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
               ),
             ),
-            onPressed:
-                _awsSSOConfig == null || !_verified ? null : _getSSOCredentials,
+            onPressed: _awsSSOConfig == null || !_verified
+                ? null
+                : _getSSOCredentials,
             child: Text(
               'Get Credentials',
               style: primaryTextStyle(

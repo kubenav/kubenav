@@ -22,9 +22,7 @@ class DigitalOceanCluster {
     required this.kubeconfig,
   });
 
-  factory DigitalOceanCluster.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory DigitalOceanCluster.fromJson(Map<String, dynamic> data) {
     return DigitalOceanCluster(
       id: data.containsKey('id') ? data['id'] : null,
       name: data.containsKey('name') ? data['name'] : null,
@@ -50,15 +48,11 @@ class DigitalOceanCluster {
 class DigitalOceanService {
   /// [getClusters] can be used to get all DigitalOcean clusters which can be
   /// accessed using the provided API [token].
-  Future<List<DigitalOceanCluster>> getClusters(
-    String token,
-  ) async {
+  Future<List<DigitalOceanCluster>> getClusters(String token) async {
     try {
       final response = await http.get(
         Uri.parse('https://api.digitalocean.com/v2/kubernetes/clusters'),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
 
       Logger.log(
@@ -102,18 +96,13 @@ class DigitalOceanService {
 
   /// [getKubeconfig] can be used to get the kubeconfig for a DigitalOcean
   /// cluster.
-  Future<String> getKubeconfig(
-    String id,
-    String token,
-  ) async {
+  Future<String> getKubeconfig(String id, String token) async {
     try {
       final response = await http.get(
         Uri.parse(
           'https://api.digitalocean.com/v2/kubernetes/clusters/$id/kubeconfig',
         ),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
 
       Logger.log(

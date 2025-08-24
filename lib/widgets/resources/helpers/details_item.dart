@@ -151,10 +151,7 @@ class DetailsItem extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: Text(
-                  title,
-                  style: primaryTextStyle(context, size: 18),
-                ),
+                child: Text(title, style: primaryTextStyle(context, size: 18)),
               ),
               _buildGoTo(context),
             ],
@@ -182,35 +179,32 @@ class DetailsItem extends StatelessWidget {
             ),
           ),
           child: Column(
-            children: List.generate(
-              filteredDetails.length,
-              (index) {
-                return Container(
-                  margin: const EdgeInsets.only(
-                    top: Constants.spacingSmall,
-                    bottom: Constants.spacingSmall,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${filteredDetails[index].name}:',
-                        style: primaryTextStyle(context, size: 14),
-                        maxLines: 2,
-                      ),
-                      const SizedBox(width: Constants.spacingSmall),
-                      _buildValue(
-                        context,
-                        filteredDetails[index].name,
-                        filteredDetails[index].values,
-                        filteredDetails[index].onTap,
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+            children: List.generate(filteredDetails.length, (index) {
+              return Container(
+                margin: const EdgeInsets.only(
+                  top: Constants.spacingSmall,
+                  bottom: Constants.spacingSmall,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${filteredDetails[index].name}:',
+                      style: primaryTextStyle(context, size: 14),
+                      maxLines: 2,
+                    ),
+                    const SizedBox(width: Constants.spacingSmall),
+                    _buildValue(
+                      context,
+                      filteredDetails[index].name,
+                      filteredDetails[index].values,
+                      filteredDetails[index].onTap,
+                    ),
+                  ],
+                ),
+              );
+            }),
           ),
         ),
       ],

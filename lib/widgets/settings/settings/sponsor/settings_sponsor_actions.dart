@@ -14,10 +14,7 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 /// the [SettingsSponsorSubscribe] will be opened like it is done in the
 /// settings screen.
 class SettingsSponsorActions extends StatelessWidget {
-  const SettingsSponsorActions({
-    super.key,
-    required this.showDismiss,
-  });
+  const SettingsSponsorActions({super.key, required this.showDismiss});
 
   final bool showDismiss;
 
@@ -41,10 +38,7 @@ class SettingsSponsorActions extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                   onTap: () {
                     Navigator.pop(context);
-                    showModal(
-                      context,
-                      SettingsSponsorSubscribe(product: e),
-                    );
+                    showModal(context, SettingsSponsorSubscribe(product: e));
                   },
                 ),
               ),
@@ -64,20 +58,17 @@ class SettingsSponsorActions extends StatelessWidget {
               ),
             ]
           : sponsorRepository.products
-              .map(
-                (e) => AppActionsWidgetAction(
-                  title: titles.containsKey(e.id) ? titles[e.id]! : e.title,
-                  color: Theme.of(context).colorScheme.primary,
-                  onTap: () {
-                    Navigator.pop(context);
-                    showModal(
-                      context,
-                      SettingsSponsorSubscribe(product: e),
-                    );
-                  },
-                ),
-              )
-              .toList(),
+                .map(
+                  (e) => AppActionsWidgetAction(
+                    title: titles.containsKey(e.id) ? titles[e.id]! : e.title,
+                    color: Theme.of(context).colorScheme.primary,
+                    onTap: () {
+                      Navigator.pop(context);
+                      showModal(context, SettingsSponsorSubscribe(product: e));
+                    },
+                  ),
+                )
+                .toList(),
     );
   }
 }

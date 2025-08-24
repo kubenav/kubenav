@@ -334,7 +334,10 @@ class _LiveMetricsState extends State<LiveMetrics> {
                     ),
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                  tabs: const [Tab(text: 'CPU'), Tab(text: 'Memory')],
+                  tabs: const [
+                    Tab(text: 'CPU'),
+                    Tab(text: 'Memory'),
+                  ],
                 ),
               ),
             ),
@@ -354,10 +357,9 @@ class _LiveMetricsState extends State<LiveMetrics> {
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color:
-                                Theme.of(
-                                  context,
-                                ).extension<CustomColors>()!.shadow,
+                            color: Theme.of(
+                              context,
+                            ).extension<CustomColors>()!.shadow,
                             blurRadius: Constants.sizeBorderBlurRadius,
                             spreadRadius: Constants.sizeBorderSpreadRadius,
                             offset: const Offset(0.0, 0.0),
@@ -382,8 +384,9 @@ class _LiveMetricsState extends State<LiveMetrics> {
                                   touchTooltipData: LineTouchTooltipData(
                                     fitInsideHorizontally: true,
                                     fitInsideVertically: true,
-                                    maxContentWidth:
-                                        MediaQuery.of(context).size.width,
+                                    maxContentWidth: MediaQuery.of(
+                                      context,
+                                    ).size.width,
                                     getTooltipColor: (LineBarSpot touchedSpot) {
                                       return Theme.of(
                                         context,
@@ -396,10 +399,9 @@ class _LiveMetricsState extends State<LiveMetrics> {
                                         return LineTooltipItem(
                                           '${_containerMetrics.keys.elementAt(touchedSpot.barIndex)}: ${touchedSpot.y > 1000000000 ? formatCpuMetric(touchedSpot.y) : formatCpuMetric(touchedSpot.y, 0)}',
                                           TextStyle(
-                                            color:
-                                                Theme.of(context)
-                                                    .extension<CustomColors>()!
-                                                    .onMessage,
+                                            color: Theme.of(context)
+                                                .extension<CustomColors>()!
+                                                .onMessage,
                                             fontWeight: FontWeight.normal,
                                             fontSize: 14,
                                           ),
@@ -409,35 +411,27 @@ class _LiveMetricsState extends State<LiveMetrics> {
                                   ),
                                 ),
                                 clipData: const FlClipData.all(),
-                                lineBarsData:
-                                    _containerMetrics.entries
-                                        .map(
-                                          (e) => LineChartBarData(
-                                            spots: e.value.cpu,
-                                            dotData: const FlDotData(
-                                              show: false,
-                                            ),
-                                            color:
-                                                e.key == 'Requests'
-                                                    ? Theme.of(context)
-                                                        .extension<
-                                                          CustomColors
-                                                        >()!
-                                                        .warning
-                                                    : e.key == 'Limits'
-                                                    ? Theme.of(context)
-                                                        .extension<
-                                                          CustomColors
-                                                        >()!
-                                                        .error
-                                                    : Theme.of(
-                                                      context,
-                                                    ).colorScheme.primary,
-                                            barWidth: 4,
-                                            isCurved: false,
-                                          ),
-                                        )
-                                        .toList(),
+                                lineBarsData: _containerMetrics.entries
+                                    .map(
+                                      (e) => LineChartBarData(
+                                        spots: e.value.cpu,
+                                        dotData: const FlDotData(show: false),
+                                        color: e.key == 'Requests'
+                                            ? Theme.of(context)
+                                                  .extension<CustomColors>()!
+                                                  .warning
+                                            : e.key == 'Limits'
+                                            ? Theme.of(
+                                                context,
+                                              ).extension<CustomColors>()!.error
+                                            : Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
+                                        barWidth: 4,
+                                        isCurved: false,
+                                      ),
+                                    )
+                                    .toList(),
                                 titlesData: FlTitlesData(
                                   show: true,
                                   rightTitles: const AxisTitles(
@@ -450,17 +444,17 @@ class _LiveMetricsState extends State<LiveMetrics> {
                                     sideTitles: SideTitles(
                                       showTitles: true,
                                       reservedSize: 64,
-                                      getTitlesWidget: (
-                                        double value,
-                                        TitleMeta meta,
-                                      ) {
-                                        return Text(
-                                          value > 1000000000
-                                              ? formatCpuMetric(value)
-                                              : formatCpuMetric(value, 0),
-                                          style: secondaryTextStyle(context),
-                                        );
-                                      },
+                                      getTitlesWidget:
+                                          (double value, TitleMeta meta) {
+                                            return Text(
+                                              value > 1000000000
+                                                  ? formatCpuMetric(value)
+                                                  : formatCpuMetric(value, 0),
+                                              style: secondaryTextStyle(
+                                                context,
+                                              ),
+                                            );
+                                          },
                                     ),
                                   ),
                                   bottomTitles: AxisTitles(
@@ -493,20 +487,18 @@ class _LiveMetricsState extends State<LiveMetrics> {
                                   show: true,
                                   getDrawingHorizontalLine: (value) {
                                     return FlLine(
-                                      color:
-                                          Theme.of(context)
-                                              .extension<CustomColors>()!
-                                              .textSecondary,
+                                      color: Theme.of(context)
+                                          .extension<CustomColors>()!
+                                          .textSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );
                                   },
                                   getDrawingVerticalLine: (value) {
                                     return FlLine(
-                                      color:
-                                          Theme.of(context)
-                                              .extension<CustomColors>()!
-                                              .textSecondary,
+                                      color: Theme.of(context)
+                                          .extension<CustomColors>()!
+                                          .textSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );
@@ -562,10 +554,9 @@ class _LiveMetricsState extends State<LiveMetrics> {
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color:
-                                Theme.of(
-                                  context,
-                                ).extension<CustomColors>()!.shadow,
+                            color: Theme.of(
+                              context,
+                            ).extension<CustomColors>()!.shadow,
                             blurRadius: Constants.sizeBorderBlurRadius,
                             spreadRadius: Constants.sizeBorderSpreadRadius,
                             offset: const Offset(0.0, 0.0),
@@ -590,8 +581,9 @@ class _LiveMetricsState extends State<LiveMetrics> {
                                   touchTooltipData: LineTouchTooltipData(
                                     fitInsideHorizontally: true,
                                     fitInsideVertically: true,
-                                    maxContentWidth:
-                                        MediaQuery.of(context).size.width,
+                                    maxContentWidth: MediaQuery.of(
+                                      context,
+                                    ).size.width,
                                     getTooltipColor: (LineBarSpot touchedSpot) {
                                       return Theme.of(
                                         context,
@@ -604,10 +596,9 @@ class _LiveMetricsState extends State<LiveMetrics> {
                                         return LineTooltipItem(
                                           '${_containerMetrics.keys.elementAt(touchedSpot.barIndex)}: ${touchedSpot.y > 1048576 ? formatMemoryMetric(touchedSpot.y, 2) : formatMemoryMetric(touchedSpot.y, 0)}',
                                           TextStyle(
-                                            color:
-                                                Theme.of(context)
-                                                    .extension<CustomColors>()!
-                                                    .onMessage,
+                                            color: Theme.of(context)
+                                                .extension<CustomColors>()!
+                                                .onMessage,
                                             fontWeight: FontWeight.normal,
                                             fontSize: 14,
                                           ),
@@ -617,35 +608,27 @@ class _LiveMetricsState extends State<LiveMetrics> {
                                   ),
                                 ),
                                 clipData: const FlClipData.all(),
-                                lineBarsData:
-                                    _containerMetrics.entries
-                                        .map(
-                                          (e) => LineChartBarData(
-                                            spots: e.value.memory,
-                                            dotData: const FlDotData(
-                                              show: false,
-                                            ),
-                                            color:
-                                                e.key == 'Requests'
-                                                    ? Theme.of(context)
-                                                        .extension<
-                                                          CustomColors
-                                                        >()!
-                                                        .warning
-                                                    : e.key == 'Limits'
-                                                    ? Theme.of(context)
-                                                        .extension<
-                                                          CustomColors
-                                                        >()!
-                                                        .error
-                                                    : Theme.of(
-                                                      context,
-                                                    ).colorScheme.primary,
-                                            barWidth: 4,
-                                            isCurved: false,
-                                          ),
-                                        )
-                                        .toList(),
+                                lineBarsData: _containerMetrics.entries
+                                    .map(
+                                      (e) => LineChartBarData(
+                                        spots: e.value.memory,
+                                        dotData: const FlDotData(show: false),
+                                        color: e.key == 'Requests'
+                                            ? Theme.of(context)
+                                                  .extension<CustomColors>()!
+                                                  .warning
+                                            : e.key == 'Limits'
+                                            ? Theme.of(
+                                                context,
+                                              ).extension<CustomColors>()!.error
+                                            : Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
+                                        barWidth: 4,
+                                        isCurved: false,
+                                      ),
+                                    )
+                                    .toList(),
                                 titlesData: FlTitlesData(
                                   show: true,
                                   rightTitles: const AxisTitles(
@@ -658,17 +641,20 @@ class _LiveMetricsState extends State<LiveMetrics> {
                                     sideTitles: SideTitles(
                                       showTitles: true,
                                       reservedSize: 64,
-                                      getTitlesWidget: (
-                                        double value,
-                                        TitleMeta meta,
-                                      ) {
-                                        return Text(
-                                          value > 1048576
-                                              ? formatMemoryMetric(value, 2)
-                                              : formatMemoryMetric(value, 0),
-                                          style: secondaryTextStyle(context),
-                                        );
-                                      },
+                                      getTitlesWidget:
+                                          (double value, TitleMeta meta) {
+                                            return Text(
+                                              value > 1048576
+                                                  ? formatMemoryMetric(value, 2)
+                                                  : formatMemoryMetric(
+                                                      value,
+                                                      0,
+                                                    ),
+                                              style: secondaryTextStyle(
+                                                context,
+                                              ),
+                                            );
+                                          },
                                     ),
                                   ),
                                   bottomTitles: AxisTitles(
@@ -701,20 +687,18 @@ class _LiveMetricsState extends State<LiveMetrics> {
                                   show: true,
                                   getDrawingHorizontalLine: (value) {
                                     return FlLine(
-                                      color:
-                                          Theme.of(context)
-                                              .extension<CustomColors>()!
-                                              .textSecondary,
+                                      color: Theme.of(context)
+                                          .extension<CustomColors>()!
+                                          .textSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );
                                   },
                                   getDrawingVerticalLine: (value) {
                                     return FlLine(
-                                      color:
-                                          Theme.of(context)
-                                              .extension<CustomColors>()!
-                                              .textSecondary,
+                                      color: Theme.of(context)
+                                          .extension<CustomColors>()!
+                                          .textSecondary,
                                       strokeWidth: 0.4,
                                       dashArray: [8, 4],
                                     );
@@ -789,10 +773,9 @@ class LiveMetricsContainers extends StatelessWidget {
       actions: List.generate(
         pod.spec != null ? pod.spec!.containers.length + 1 : 1,
         (index) => AppActionsWidgetAction(
-          title:
-              index == pod.spec!.containers.length
-                  ? 'All Containers'
-                  : pod.spec?.containers[index].name ?? '',
+          title: index == pod.spec!.containers.length
+              ? 'All Containers'
+              : pod.spec?.containers[index].name ?? '',
           color: Theme.of(context).colorScheme.primary,
           onTap: () {
             Navigator.pop(context);
@@ -802,10 +785,9 @@ class LiveMetricsContainers extends StatelessWidget {
                 name: name,
                 namespace: namespace,
                 pod: pod,
-                selectedContainer:
-                    index == pod.spec!.containers.length
-                        ? ''
-                        : pod.spec?.containers[index].name ?? '',
+                selectedContainer: index == pod.spec!.containers.length
+                    ? ''
+                    : pod.spec?.containers[index].name ?? '',
               ),
             );
           },

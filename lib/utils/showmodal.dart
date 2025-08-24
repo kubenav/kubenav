@@ -18,9 +18,7 @@ void showModal(BuildContext context, Widget widget, {bool fullScreen = false}) {
     clipBehavior: Clip.antiAliasWithSaveLayer,
     constraints: fullScreen == false
         ? null
-        : BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-          ),
+        : BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
     builder: (BuildContext context) {
       return widget;
     },
@@ -48,9 +46,7 @@ void showSnackbar(BuildContext context, String title, String message) {
       duration: const Duration(seconds: 3),
       backgroundColor: Theme.of(context).extension<CustomColors>()!.message,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-          Constants.sizeBorderRadius,
-        ),
+        borderRadius: BorderRadius.circular(Constants.sizeBorderRadius),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,

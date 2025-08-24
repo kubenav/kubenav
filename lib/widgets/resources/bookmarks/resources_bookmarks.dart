@@ -31,11 +31,7 @@ class ResourcesBookmarks extends StatefulWidget {
 class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
   /// [_proxyDecorator] is used to highlight the bookmark which is currently
   /// draged by the user.
-  Widget _proxyDecorator(
-    Widget child,
-    int index,
-    Animation<double> animation,
-  ) {
+  Widget _proxyDecorator(Widget child, int index, Animation<double> animation) {
     return Material(
       elevation: 0,
       color: Colors.transparent,
@@ -75,8 +71,9 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
 
     try {
       if (bookmarksRepository.bookmarks[index].type == BookmarkType.list) {
-        await clustersRepository
-            .setActiveCluster(bookmarksRepository.bookmarks[index].clusterId);
+        await clustersRepository.setActiveCluster(
+          bookmarksRepository.bookmarks[index].clusterId,
+        );
         await clustersRepository.setNamespace(
           bookmarksRepository.bookmarks[index].clusterId,
           bookmarksRepository.bookmarks[index].namespace,
@@ -98,8 +95,9 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
           throw Exception('Invalid Bookmark');
         }
 
-        await clustersRepository
-            .setActiveCluster(bookmarksRepository.bookmarks[index].clusterId);
+        await clustersRepository.setActiveCluster(
+          bookmarksRepository.bookmarks[index].clusterId,
+        );
         await clustersRepository.setNamespace(
           bookmarksRepository.bookmarks[index].clusterId,
           bookmarksRepository.bookmarks[index].namespace,
@@ -131,10 +129,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Bookmarks'),
-      ),
+      appBar: AppBar(centerTitle: true, title: const Text('Bookmarks')),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SafeArea(
@@ -149,18 +144,12 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                 onReorder: (int start, int current) {
                   bookmarksRepository.reorder(start, current);
                 },
-                proxyDecorator: (
-                  Widget child,
-                  int index,
-                  Animation<double> animation,
-                ) {
-                  return _proxyDecorator(child, index, animation);
-                },
+                proxyDecorator:
+                    (Widget child, int index, Animation<double> animation) {
+                      return _proxyDecorator(child, index, animation);
+                    },
                 itemCount: bookmarksRepository.bookmarks.length,
-                itemBuilder: (
-                  context,
-                  index,
-                ) {
+                itemBuilder: (context, index) {
                   final cluster = clustersRepository.getCluster(
                     bookmarksRepository.bookmarks[index].clusterId,
                   );
@@ -184,27 +173,31 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
 
                           showActions(
                             context,
-                            ResourcesBookmarkActions(
-                              index: index,
-                            ),
+                            ResourcesBookmarkActions(index: index),
                           );
                         },
                         slidableActions: [
                           AppListItemSlidableAction(
                             icon: Icons.delete,
                             label: 'Delete',
-                            backgroundColor:
-                                Theme.of(context).colorScheme.error,
-                            foregroundColor:
-                                Theme.of(context).colorScheme.onError,
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.error,
+                            foregroundColor: Theme.of(
+                              context,
+                            ).colorScheme.onError,
                             onTap: (BuildContext context) async {
                               final title =
                                   bookmarksRepository.bookmarks[index].type ==
-                                          BookmarkType.list
-                                      ? bookmarksRepository
-                                          .bookmarks[index].resource.plural
-                                      : bookmarksRepository
-                                          .bookmarks[index].resource.singular;
+                                      BookmarkType.list
+                                  ? bookmarksRepository
+                                        .bookmarks[index]
+                                        .resource
+                                        .plural
+                                  : bookmarksRepository
+                                        .bookmarks[index]
+                                        .resource
+                                        .singular;
                               await bookmarksRepository.removeBookmark(index);
 
                               if (context.mounted) {
@@ -230,19 +223,18 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                                     children: [
                                       Text(
                                         bookmarksRepository
-                                                    .bookmarks[index].type ==
+                                                    .bookmarks[index]
+                                                    .type ==
                                                 BookmarkType.list
                                             ? bookmarksRepository
-                                                .bookmarks[index]
-                                                .resource
-                                                .plural
+                                                  .bookmarks[index]
+                                                  .resource
+                                                  .plural
                                             : bookmarksRepository
-                                                .bookmarks[index]
-                                                .resource
-                                                .singular,
-                                        style: primaryTextStyle(
-                                          context,
-                                        ),
+                                                  .bookmarks[index]
+                                                  .resource
+                                                  .singular,
+                                        style: primaryTextStyle(context),
                                       ),
                                       Column(
                                         mainAxisAlignment:
@@ -252,48 +244,40 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                                         children: [
                                           Text(
                                             Characters(
-                                              'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
-                                            )
+                                                  'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
+                                                )
                                                 .replaceAll(
                                                   Characters(''),
                                                   Characters('\u{200B}'),
                                                 )
                                                 .toString(),
-                                            style: secondaryTextStyle(
-                                              context,
-                                            ),
+                                            style: secondaryTextStyle(context),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           Text(
                                             Characters(
-                                              'Namespace: ${bookmarksRepository.bookmarks[index].namespace ?? '-'}',
-                                            )
+                                                  'Namespace: ${bookmarksRepository.bookmarks[index].namespace ?? '-'}',
+                                                )
                                                 .replaceAll(
                                                   Characters(''),
                                                   Characters('\u{200B}'),
                                                 )
                                                 .toString(),
-                                            style: secondaryTextStyle(
-                                              context,
-                                            ),
+                                            style: secondaryTextStyle(context),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           Text(
                                             Characters(
-                                              'Name: ${bookmarksRepository.bookmarks[index].name ?? '-'}',
-                                            )
+                                                  'Name: ${bookmarksRepository.bookmarks[index].name ?? '-'}',
+                                                )
                                                 .replaceAll(
                                                   Characters(''),
-                                                  Characters(
-                                                    '\u{200B}',
-                                                  ),
+                                                  Characters('\u{200B}'),
                                                 )
                                                 .toString(),
-                                            style: secondaryTextStyle(
-                                              context,
-                                            ),
+                                            style: secondaryTextStyle(context),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                           ),

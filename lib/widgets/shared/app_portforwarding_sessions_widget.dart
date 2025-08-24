@@ -21,10 +21,7 @@ class AppPortForwardingSessionsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PortForwardingRepository portForwardingRepository =
-        Provider.of<PortForwardingRepository>(
-      context,
-      listen: true,
-    );
+        Provider.of<PortForwardingRepository>(context, listen: true);
 
     return AppActionsWidget(
       actions: List.generate(
@@ -37,9 +34,7 @@ class AppPortForwardingSessionsWidget extends StatelessWidget {
             Navigator.pop(context);
             showActions(
               context,
-              AppPortForwardingSessionWidget(
-                sessionIndex: index,
-              ),
+              AppPortForwardingSessionWidget(sessionIndex: index),
             );
           },
         ),
@@ -56,10 +51,7 @@ class AppPortForwardingSessionsWidget extends StatelessWidget {
 /// - Copy the local port number of the port forwarding session.
 /// - Delete the port forwarding session.
 class AppPortForwardingSessionWidget extends StatefulWidget {
-  const AppPortForwardingSessionWidget({
-    super.key,
-    required this.sessionIndex,
-  });
+  const AppPortForwardingSessionWidget({super.key, required this.sessionIndex});
 
   final int sessionIndex;
 
@@ -84,10 +76,7 @@ class _AppPortForwardingSessionWidgetState
       listen: false,
     );
     PortForwardingRepository portForwardingRepository =
-        Provider.of<PortForwardingRepository>(
-      context,
-      listen: false,
-    );
+        Provider.of<PortForwardingRepository>(context, listen: false);
 
     try {
       final cluster = await clustersRepository.getClusterWithCredentials(
@@ -117,10 +106,7 @@ class _AppPortForwardingSessionWidgetState
   @override
   Widget build(BuildContext context) {
     PortForwardingRepository portForwardingRepository =
-        Provider.of<PortForwardingRepository>(
-      context,
-      listen: true,
-    );
+        Provider.of<PortForwardingRepository>(context, listen: true);
 
     return AppActionsWidget(
       actions: [

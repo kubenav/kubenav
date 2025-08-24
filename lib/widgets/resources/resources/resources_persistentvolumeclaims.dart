@@ -72,34 +72,29 @@ final Resource resourcePersistentVolumeClaim = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiCoreV1PersistentVolumeClaim;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiCoreV1PersistentVolumeClaim;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Status: ${item.status?.phase ?? '-'}',
-        'Volume: ${item.spec?.volumeName ?? '-'}',
-        'Capacity: ${item.status?.capacity['storage'] ?? '-'}',
-        'Access Mode: ${item.spec?.accessModes.join(', ') ?? '-'}',
-        'Storage Class: ${item.spec?.storageClassName ?? '-'}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Namespace: ${item.metadata?.namespace ?? '-'}',
+            'Status: ${item.status?.phase ?? '-'}',
+            'Volume: ${item.spec?.volumeName ?? '-'}',
+            'Capacity: ${item.status?.capacity['storage'] ?? '-'}',
+            'Access Mode: ${item.spec?.accessModes.join(', ') ?? '-'}',
+            'Storage Class: ${item.spec?.storageClassName ?? '-'}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiCoreV1PersistentVolumeClaim;
 
     return [
@@ -112,19 +107,12 @@ final Resource resourcePersistentVolumeClaim = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiCoreV1PersistentVolumeClaim;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(
           conditions: item.status?.conditions
               .map(
@@ -165,7 +153,8 @@ final Resource resourcePersistentVolumeClaim = Resource(
             ),
             DetailsItemModel(
               name: 'Requested Storage',
-              values: item.spec?.resources != null &&
+              values:
+                  item.spec?.resources != null &&
                       item.spec!.resources!.requests.containsKey('storage')
                   ? item.spec?.resources!.requests['storage']
                   : null,
@@ -196,17 +185,15 @@ final Resource resourcePersistentVolumeClaim = Resource(
         DetailsItem(
           title: 'Status',
           details: [
-            DetailsItemModel(
-              name: 'Status',
-              values: item.status?.phase,
-            ),
+            DetailsItemModel(name: 'Status', values: item.status?.phase),
             DetailsItemModel(
               name: 'Access Modes',
               values: item.status?.accessModes,
             ),
             DetailsItemModel(
               name: 'Storage',
-              values: item.status?.capacity != null &&
+              values:
+                  item.status?.capacity != null &&
                       item.status!.capacity.containsKey('storage')
                   ? item.status?.capacity['storage']
                   : null,

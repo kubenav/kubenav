@@ -93,32 +93,29 @@ final resourcePod = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiCoreV1Pod;
-    final podDetails = _getPodDetails(item);
-    final resourceDetails = _getResourceDetails(item, listItem.metrics);
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiCoreV1Pod;
+        final podDetails = _getPodDetails(item);
+        final resourceDetails = _getResourceDetails(item, listItem.metrics);
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: podDetails.status,
-      details: [
-        'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Ready: ${podDetails.ready}',
-        'Status: ${podDetails.statusText}',
-        'Restarts: ${podDetails.restarts}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-        'CPU: ${resourceDetails?.cpu ?? '-'}',
-        'Memory: ${resourceDetails?.memory ?? '-'}',
-      ],
-    );
-  },
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: podDetails.status,
+          details: [
+            'Namespace: ${item.metadata?.namespace ?? '-'}',
+            'Ready: ${podDetails.ready}',
+            'Status: ${podDetails.statusText}',
+            'Restarts: ${podDetails.restarts}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+            'CPU: ${resourceDetails?.cpu ?? '-'}',
+            'Memory: ${resourceDetails?.memory ?? '-'}',
+          ],
+        );
+      },
   previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiCoreV1Pod;
     final podDetails = _getPodDetails(item);
@@ -131,15 +128,12 @@ final resourcePod = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
-    final item = detailsItem as IoK8sApiCoreV1Pod;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item = detailsItem as IoK8sApiCoreV1Pod;
 
-    return PodItem(resource: resource, pod: item);
-  },
+        return PodItem(resource: resource, pod: item);
+      },
 );
 
 class PodItem extends StatelessWidget {
@@ -245,20 +239,18 @@ class PodItem extends StatelessWidget {
       children: [
         DetailsItemMetadata(kind: pod.kind, metadata: pod.metadata),
         DetailsItemConditions(
-          conditions:
-              pod.status?.conditions
-                  .map(
-                    (e) => IoK8sApimachineryPkgApisMetaV1Condition(
-                      lastTransitionTime:
-                          e.lastTransitionTime ?? DateTime.now(),
-                      message: e.message ?? '',
-                      observedGeneration: null,
-                      reason: e.reason ?? '',
-                      status: e.status,
-                      type: e.type,
-                    ),
-                  )
-                  .toList(),
+          conditions: pod.status?.conditions
+              .map(
+                (e) => IoK8sApimachineryPkgApisMetaV1Condition(
+                  lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
+                  message: e.message ?? '',
+                  observedGeneration: null,
+                  reason: e.reason ?? '',
+                  status: e.status,
+                  type: e.type,
+                ),
+              )
+              .toList(),
         ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
@@ -293,15 +285,14 @@ class PodItem extends StatelessWidget {
             ),
             DetailsItemModel(
               name: 'Ports',
-              values:
-                  ports != null
-                      ? ports
-                          .map(
-                            (port) =>
-                                '${port.containerName}: ${port.port.containerPort}${port.port.protocol != null ? '/${port.port.protocol}' : ''}${port.port.name != null ? ' (${port.port.name})' : ''}',
-                          )
-                          .toList()
-                      : '-',
+              values: ports != null
+                  ? ports
+                        .map(
+                          (port) =>
+                              '${port.containerName}: ${port.port.containerPort}${port.port.protocol != null ? '/${port.port.protocol}' : ''}${port.port.name != null ? ' (${port.port.name})' : ''}',
+                        )
+                        .toList()
+                  : '-',
               onTap: (index) {
                 if (ports != null) {
                   _portForward(
@@ -329,27 +320,28 @@ class PodItem extends StatelessWidget {
         const SizedBox(height: Constants.spacingMiddle),
         FutureBuilder(
           future: _fetchMetrics(context),
-          builder: (
-            BuildContext context,
-            AsyncSnapshot<List<ApisMetricsV1beta1PodMetricsItemContainer>>
-            snapshot,
-          ) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
-                );
-              default:
-                return DetailsContainers(
-                  initContainers: pod.spec!.initContainers,
-                  containers: pod.spec!.containers,
-                  initContainerStatuses: pod.status!.initContainerStatuses,
-                  containerStatuses: pod.status!.containerStatuses,
-                  containerMetrics: snapshot.data ?? [],
-                );
-            }
-          },
+          builder:
+              (
+                BuildContext context,
+                AsyncSnapshot<List<ApisMetricsV1beta1PodMetricsItemContainer>>
+                snapshot,
+              ) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                  case ConnectionState.waiting:
+                    return CircularProgressIndicator(
+                      color: Theme.of(context).colorScheme.primary,
+                    );
+                  default:
+                    return DetailsContainers(
+                      initContainers: pod.spec!.initContainers,
+                      containers: pod.spec!.containers,
+                      initContainerStatuses: pod.status!.initContainerStatuses,
+                      containerStatuses: pod.status!.containerStatuses,
+                      containerMetrics: snapshot.data ?? [],
+                    );
+                }
+              },
         ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsResourcesPreview(
@@ -467,11 +459,13 @@ class DetailsContainers extends StatelessWidget {
   ) {
     List<IoK8sApiCoreV1ContainerStatus> status = [];
     if (containerType == 'Init Container') {
-      status =
-          initContainerStatuses.where((e) => e.name == container.name).toList();
+      status = initContainerStatuses
+          .where((e) => e.name == container.name)
+          .toList();
     } else if (containerType == 'Container') {
-      status =
-          containerStatuses.where((e) => e.name == container.name).toList();
+      status = containerStatuses
+          .where((e) => e.name == container.name)
+          .toList();
     }
 
     if (status.length != 1) {
@@ -481,12 +475,9 @@ class DetailsContainers extends StatelessWidget {
     List<ApisMetricsV1beta1PodMetricsItemContainer> filteredContainerMetrics =
         [];
     if (containerMetrics.isNotEmpty) {
-      filteredContainerMetrics =
-          containerMetrics
-              .where(
-                (containerMetric) => containerMetric.name == container.name,
-              )
-              .toList();
+      filteredContainerMetrics = containerMetrics
+          .where((containerMetric) => containerMetric.name == container.name)
+          .toList();
     }
 
     return [
@@ -573,11 +564,13 @@ class DetailsContainer extends StatelessWidget {
   List<Widget> buildStatus() {
     List<IoK8sApiCoreV1ContainerStatus> status = [];
     if (containerType == 'Init Container') {
-      status =
-          initContainerStatuses.where((e) => e.name == container.name).toList();
+      status = initContainerStatuses
+          .where((e) => e.name == container.name)
+          .toList();
     } else if (containerType == 'Container') {
-      status =
-          containerStatuses.where((e) => e.name == container.name).toList();
+      status = containerStatuses
+          .where((e) => e.name == container.name)
+          .toList();
     }
 
     if (status.length != 1) {
@@ -644,8 +637,9 @@ class DetailsContainer extends StatelessWidget {
                   ),
                   DetailsItemModel(
                     name: 'Command',
-                    values:
-                        container.command.isNotEmpty ? container.command : '-',
+                    values: container.command.isNotEmpty
+                        ? container.command
+                        : '-',
                   ),
                   DetailsItemModel(
                     name: 'Arguments',
@@ -653,36 +647,32 @@ class DetailsContainer extends StatelessWidget {
                   ),
                   DetailsItemModel(
                     name: 'Ports',
-                    values:
-                        container.ports.isNotEmpty
-                            ? container.ports
-                                .map(
-                                  (port) =>
-                                      '${port.containerPort}${port.hostPort != null ? '/${port.hostPort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''}',
-                                )
-                                .toList()
-                            : '-',
+                    values: container.ports.isNotEmpty
+                        ? container.ports
+                              .map(
+                                (port) =>
+                                    '${port.containerPort}${port.hostPort != null ? '/${port.hostPort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''}',
+                              )
+                              .toList()
+                        : '-',
                   ),
                   DetailsItemModel(
                     name: 'Readiness Probe',
-                    values:
-                        container.readinessProbe != null
-                            ? _getProbe(container.readinessProbe!)
-                            : '-',
+                    values: container.readinessProbe != null
+                        ? _getProbe(container.readinessProbe!)
+                        : '-',
                   ),
                   DetailsItemModel(
                     name: 'Liveness Probe',
-                    values:
-                        container.livenessProbe != null
-                            ? _getProbe(container.livenessProbe!)
-                            : '-',
+                    values: container.livenessProbe != null
+                        ? _getProbe(container.livenessProbe!)
+                        : '-',
                   ),
                   DetailsItemModel(
                     name: 'Startup Probe',
-                    values:
-                        container.startupProbe != null
-                            ? _getProbe(container.startupProbe!)
-                            : '-',
+                    values: container.startupProbe != null
+                        ? _getProbe(container.startupProbe!)
+                        : '-',
                   ),
                 ],
               ),
@@ -695,203 +685,197 @@ class DetailsContainer extends StatelessWidget {
                     name: 'CPU Usage',
                     values:
                         containerMetric.isNotEmpty &&
-                                containerMetric[0].usage?.cpu != null
-                            ? formatCpuMetric(
-                              cpuMetricsStringToDouble(
-                                containerMetric[0].usage!.cpu!,
-                              ),
-                            )
-                            : '-',
+                            containerMetric[0].usage?.cpu != null
+                        ? formatCpuMetric(
+                            cpuMetricsStringToDouble(
+                              containerMetric[0].usage!.cpu!,
+                            ),
+                          )
+                        : '-',
                   ),
                   DetailsItemModel(
                     name: 'CPU Requests',
                     values:
                         container.resources != null &&
-                                container.resources!.requests.containsKey('cpu')
-                            ? container.resources!.requests['cpu']
-                            : '-',
+                            container.resources!.requests.containsKey('cpu')
+                        ? container.resources!.requests['cpu']
+                        : '-',
                   ),
                   DetailsItemModel(
                     name: 'CPU Limits',
                     values:
                         container.resources != null &&
-                                container.resources!.limits.containsKey('cpu')
-                            ? container.resources!.limits['cpu']
-                            : '-',
+                            container.resources!.limits.containsKey('cpu')
+                        ? container.resources!.limits['cpu']
+                        : '-',
                   ),
                   DetailsItemModel(
                     name: 'Memory Usage',
                     values:
                         containerMetric.isNotEmpty &&
-                                containerMetric[0].usage?.memory != null
-                            ? formatMemoryMetric(
-                              memoryMetricsStringToDouble(
-                                containerMetric[0].usage!.memory!,
-                              ),
-                            )
-                            : '-',
+                            containerMetric[0].usage?.memory != null
+                        ? formatMemoryMetric(
+                            memoryMetricsStringToDouble(
+                              containerMetric[0].usage!.memory!,
+                            ),
+                          )
+                        : '-',
                   ),
                   DetailsItemModel(
                     name: 'Memory Requests',
                     values:
                         container.resources != null &&
-                                container.resources!.requests.containsKey(
-                                  'memory',
-                                )
-                            ? container.resources!.requests['memory']
-                            : '-',
+                            container.resources!.requests.containsKey('memory')
+                        ? container.resources!.requests['memory']
+                        : '-',
                   ),
                   DetailsItemModel(
                     name: 'Memory Limits',
                     values:
                         container.resources != null &&
-                                container.resources!.limits.containsKey(
-                                  'memory',
-                                )
-                            ? container.resources!.limits['memory']
-                            : '-',
+                            container.resources!.limits.containsKey('memory')
+                        ? container.resources!.limits['memory']
+                        : '-',
                   ),
                 ],
               ),
               const SizedBox(height: Constants.spacingMiddle),
               AppVerticalListSimpleWidget(
                 title: 'Environment Variables',
-                items:
-                    container.env
-                        .map(
-                          (env) => AppVerticalListSimpleModel(
-                            onTap: () {
-                              showSnackbar(
-                                context,
-                                env.name,
-                                env.value != null
-                                    ? env.value!
-                                    : env.valueFrom != null
-                                    ? _getValueFrom(env.valueFrom!)
-                                    : '-',
-                              );
-                            },
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(Constants.sizeBorderRadius),
-                                  ),
-                                ),
-                                height: 54,
-                                width: 54,
-                                padding: const EdgeInsets.all(
-                                  Constants.spacingIcon54x54,
-                                ),
-                                child: SvgPicture.asset(
-                                  'assets/resources/secrets.svg',
-                                ),
+                items: container.env
+                    .map(
+                      (env) => AppVerticalListSimpleModel(
+                        onTap: () {
+                          showSnackbar(
+                            context,
+                            env.name,
+                            env.value != null
+                                ? env.value!
+                                : env.valueFrom != null
+                                ? _getValueFrom(env.valueFrom!)
+                                : '-',
+                          );
+                        },
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(Constants.sizeBorderRadius),
                               ),
-                              const SizedBox(width: Constants.spacingSmall),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      env.name,
-                                      style: primaryTextStyle(context),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      env.value != null
-                                          ? env.value!
-                                          : env.valueFrom != null
-                                          ? _getValueFrom(env.valueFrom!)
-                                          : '-',
-                                      style: secondaryTextStyle(context),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: Constants.spacingSmall),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: Theme.of(context)
-                                    .extension<CustomColors>()!
-                                    .textSecondary
-                                    .withValues(alpha: Constants.opacityIcon),
-                                size: 24,
-                              ),
-                            ],
+                            ),
+                            height: 54,
+                            width: 54,
+                            padding: const EdgeInsets.all(
+                              Constants.spacingIcon54x54,
+                            ),
+                            child: SvgPicture.asset(
+                              'assets/resources/secrets.svg',
+                            ),
                           ),
-                        )
-                        .toList(),
+                          const SizedBox(width: Constants.spacingSmall),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  env.name,
+                                  style: primaryTextStyle(context),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  env.value != null
+                                      ? env.value!
+                                      : env.valueFrom != null
+                                      ? _getValueFrom(env.valueFrom!)
+                                      : '-',
+                                  style: secondaryTextStyle(context),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: Constants.spacingSmall),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .textSecondary
+                                .withValues(alpha: Constants.opacityIcon),
+                            size: 24,
+                          ),
+                        ],
+                      ),
+                    )
+                    .toList(),
               ),
               const SizedBox(height: Constants.spacingMiddle),
               AppVerticalListSimpleWidget(
                 title: 'Volume Mounts',
-                items:
-                    container.volumeMounts
-                        .map(
-                          (volumeMount) => AppVerticalListSimpleModel(
-                            onTap: () {
-                              showSnackbar(
-                                context,
-                                volumeMount.name,
-                                'Path: ${volumeMount.mountPath}\nSub-Path: ${volumeMount.subPath ?? '-'}\nReadonly: ${volumeMount.readOnly == true ? 'True' : 'False'}',
-                              );
-                            },
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(Constants.sizeBorderRadius),
-                                  ),
-                                ),
-                                height: 54,
-                                width: 54,
-                                padding: const EdgeInsets.all(
-                                  Constants.spacingIcon54x54,
-                                ),
-                                child: SvgPicture.asset(
-                                  'assets/resources/persistentvolumes.svg',
-                                ),
+                items: container.volumeMounts
+                    .map(
+                      (volumeMount) => AppVerticalListSimpleModel(
+                        onTap: () {
+                          showSnackbar(
+                            context,
+                            volumeMount.name,
+                            'Path: ${volumeMount.mountPath}\nSub-Path: ${volumeMount.subPath ?? '-'}\nReadonly: ${volumeMount.readOnly == true ? 'True' : 'False'}',
+                          );
+                        },
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(Constants.sizeBorderRadius),
                               ),
-                              const SizedBox(width: Constants.spacingSmall),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      volumeMount.name,
-                                      style: primaryTextStyle(context),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      volumeMount.mountPath,
-                                      style: secondaryTextStyle(context),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: Constants.spacingSmall),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: Theme.of(context)
-                                    .extension<CustomColors>()!
-                                    .textSecondary
-                                    .withValues(alpha: Constants.opacityIcon),
-                                size: 24,
-                              ),
-                            ],
+                            ),
+                            height: 54,
+                            width: 54,
+                            padding: const EdgeInsets.all(
+                              Constants.spacingIcon54x54,
+                            ),
+                            child: SvgPicture.asset(
+                              'assets/resources/persistentvolumes.svg',
+                            ),
                           ),
-                        )
-                        .toList(),
+                          const SizedBox(width: Constants.spacingSmall),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  volumeMount.name,
+                                  style: primaryTextStyle(context),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  volumeMount.mountPath,
+                                  style: secondaryTextStyle(context),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: Constants.spacingSmall),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: Theme.of(context)
+                                .extension<CustomColors>()!
+                                .textSecondary
+                                .withValues(alpha: Constants.opacityIcon),
+                            size: 24,
+                          ),
+                        ],
+                      ),
+                    )
+                    .toList(),
               ),
             ],
           ),
@@ -1009,14 +993,13 @@ PodDetails _getPodDetails(IoK8sApiCoreV1Pod pod) {
     ready: '$isReady/$shouldReady',
     statusText: status,
     restarts: '$restarts',
-    status:
-        isHealhty == false
-            ? ResourceStatus.danger
-            : (shouldReady != isReady &&
-                    (status != 'Completed' && status != 'Succeeded')) ||
-                (restarts > 0 && restartsWithinLast24Hours)
-            ? ResourceStatus.warning
-            : ResourceStatus.success,
+    status: isHealhty == false
+        ? ResourceStatus.danger
+        : (shouldReady != isReady &&
+                  (status != 'Completed' && status != 'Succeeded')) ||
+              (restarts > 0 && restartsWithinLast24Hours)
+        ? ResourceStatus.warning
+        : ResourceStatus.success,
   );
 }
 
@@ -1177,14 +1160,13 @@ ResourceMetrics? _getMetricsForPod(
       return null;
     }
 
-    final podMetricsItem =
-        metrics
-            .where(
-              (item) =>
-                  item.metadata?.name == pod.metadata!.name &&
-                  item.metadata?.namespace == pod.metadata!.namespace,
-            )
-            .toList();
+    final podMetricsItem = metrics
+        .where(
+          (item) =>
+              item.metadata?.name == pod.metadata!.name &&
+              item.metadata?.namespace == pod.metadata!.namespace,
+        )
+        .toList();
 
     if (podMetricsItem.length != 1 ||
         podMetricsItem[0].containers == null ||

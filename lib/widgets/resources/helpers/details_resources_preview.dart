@@ -61,10 +61,7 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
       timeout: appRepository.settings.timeout,
     ).getRequest(url);
 
-    final items = await compute(
-      widget.resource.decodeList,
-      result,
-    );
+    final items = await compute(widget.resource.decodeList, result);
 
     if (widget.filter != null) {
       return widget.filter!(items);
@@ -119,17 +116,11 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ClustersRepository>(
-      context,
-      listen: true,
-    );
+    Provider.of<ClustersRepository>(context, listen: true);
 
     return FutureBuilder(
       future: _futureFetchItems,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<List<dynamic>> snapshot,
-      ) {
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
@@ -176,8 +167,9 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
                       context,
                       ResourcesDetails(
                         name: widget.resource.getName(snapshot.data![index]),
-                        namespace:
-                            widget.resource.getNamespace(snapshot.data![index]),
+                        namespace: widget.resource.getNamespace(
+                          snapshot.data![index],
+                        ),
                         resource: widget.resource,
                       ),
                     );
@@ -195,8 +187,10 @@ class _DetailsResourcesPreviewState extends State<DetailsResourcesPreview> {
                   context,
                   ResourcesList(
                     resource: widget.resource,
-                    namespace: widget.selector
-                            .startsWith('fieldSelector=spec.nodeName=')
+                    namespace:
+                        widget.selector.startsWith(
+                          'fieldSelector=spec.nodeName=',
+                        )
                         ? null
                         : widget.namespace,
                     selector: widget.selector,

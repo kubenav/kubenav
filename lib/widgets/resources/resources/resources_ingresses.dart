@@ -45,8 +45,8 @@ final resourceIngress = Resource(
         metrics: null,
         status:
             hosts == null || hosts.isEmpty || address == null || address.isEmpty
-                ? ResourceStatus.warning
-                : ResourceStatus.success,
+            ? ResourceStatus.warning
+            : ResourceStatus.success,
       );
     }).toList();
   },
@@ -71,11 +71,7 @@ final resourceIngress = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
+  listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
     final item = listItem.item as IoK8sApiNetworkingV1Ingress;
     final status = listItem.status;
 
@@ -99,9 +95,7 @@ final resourceIngress = Resource(
       ],
     );
   },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiNetworkingV1Ingress;
 
     final hosts = item.spec?.rules.map((rule) => rule.host).toList();
@@ -117,70 +111,64 @@ final resourceIngress = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
-    final item = detailsItem as IoK8sApiNetworkingV1Ingress;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item = detailsItem as IoK8sApiNetworkingV1Ingress;
 
-    return Column(
-      children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Configuration',
-          details: [
-            DetailsItemModel(
-              name: 'Default Backend',
-              values: item.spec?.defaultBackend?.service?.name,
+        return Column(
+          children: [
+            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Configuration',
+              details: [
+                DetailsItemModel(
+                  name: 'Default Backend',
+                  values: item.spec?.defaultBackend?.service?.name,
+                ),
+                DetailsItemModel(
+                  name: 'Ingress Class',
+                  values: item.spec?.ingressClassName,
+                  onTap: item.spec?.ingressClassName == null
+                      ? null
+                      : (int index) {
+                          navigate(
+                            context,
+                            ResourcesDetails(
+                              name: item.spec!.ingressClassName!,
+                              namespace: null,
+                              resource: resourceIngressClass,
+                            ),
+                          );
+                        },
+                ),
+                DetailsItemModel(
+                  name: 'Address',
+                  values: item.status?.loadBalancer?.ingress
+                      .where((e) => e.ip != null)
+                      .map((e) => e.ip ?? '-')
+                      .toList(),
+                ),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Ingress Class',
-              values: item.spec?.ingressClassName,
-              onTap: item.spec?.ingressClassName == null
-                  ? null
-                  : (int index) {
-                      navigate(
-                        context,
-                        ResourcesDetails(
-                          name: item.spec!.ingressClassName!,
-                          namespace: null,
-                          resource: resourceIngressClass,
-                        ),
-                      );
-                    },
+            ..._buildRules(item),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsResourcesPreview(
+              resource: resourceEvent,
+              namespace: item.metadata?.namespace,
+              selector:
+                  'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
+              filter: null,
             ),
-            DetailsItemModel(
-              name: 'Address',
-              values: item.status?.loadBalancer?.ingress
-                  .where((e) => e.ip != null)
-                  .map((e) => e.ip ?? '-')
-                  .toList(),
+            const SizedBox(height: Constants.spacingMiddle),
+            AppPrometheusChartsWidget(
+              item: item,
+              toJson: resource.toJson,
+              defaultCharts: const [],
             ),
           ],
-        ),
-        ..._buildRules(item),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsResourcesPreview(
-          resource: resourceEvent,
-          namespace: item.metadata?.namespace,
-          selector:
-              'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
-          filter: null,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        AppPrometheusChartsWidget(
-          item: item,
-          toJson: resource.toJson,
-          defaultCharts: const [],
-        ),
-      ],
-    );
-  },
+        );
+      },
 );
 
 List<Widget> _buildRules(IoK8sApiNetworkingV1Ingress ingress) {
@@ -191,17 +179,12 @@ List<Widget> _buildRules(IoK8sApiNetworkingV1Ingress ingress) {
   final List<Widget> ruleWidgets = [];
 
   for (var i = 0; i < ingress.spec!.rules.length; i++) {
-    ruleWidgets.add(
-      const SizedBox(height: Constants.spacingMiddle),
-    );
+    ruleWidgets.add(const SizedBox(height: Constants.spacingMiddle));
     ruleWidgets.add(
       DetailsItem(
         title: 'Rule ${i + 1}',
         details: [
-          DetailsItemModel(
-            name: 'Host',
-            values: ingress.spec?.rules[i].host,
-          ),
+          DetailsItemModel(name: 'Host', values: ingress.spec?.rules[i].host),
           DetailsItemModel(
             name: 'Paths',
             values: ingress.spec?.rules[i].http?.paths

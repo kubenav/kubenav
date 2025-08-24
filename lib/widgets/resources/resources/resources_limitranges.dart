@@ -63,30 +63,25 @@ final resourceLimitRange = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiCoreV1LimitRange;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiCoreV1LimitRange;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Limits: ${item.spec?.limits.length ?? '-'}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Namespace: ${item.metadata?.namespace ?? '-'}',
+            'Limits: ${item.spec?.limits.length ?? '-'}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiCoreV1LimitRange;
 
     return [
@@ -95,19 +90,12 @@ final resourceLimitRange = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiCoreV1LimitRange;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         const SizedBox(height: Constants.spacingMiddle),
         ..._buildLimits(item.spec?.limits),
         DetailsResourcesPreview(
@@ -121,8 +109,7 @@ final resourceLimitRange = Resource(
         AppPrometheusChartsWidget(
           item: item,
           toJson: resource.toJson,
-          defaultCharts: _buildMetrics(item.spec?.limits)
-              .entries
+          defaultCharts: _buildMetrics(item.spec?.limits).entries
               .map(
                 (e) => Chart(
                   title: e.key,
@@ -155,10 +142,7 @@ List<Widget> _buildLimits(List<IoK8sApiCoreV1LimitRangeItem>? limits) {
       DetailsItem(
         title: 'Limit ${i + 1}',
         details: [
-          DetailsItemModel(
-            name: 'Type',
-            values: limits[i].type,
-          ),
+          DetailsItemModel(name: 'Type', values: limits[i].type),
           DetailsItemModel(
             name: 'Defaults',
             values: limits[i].default_.entries.map((e) {

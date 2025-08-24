@@ -33,9 +33,10 @@ final resourceHorizontalPodAutoscaler = Resource(
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
     final items =
-        IoK8sApiAutoscalingV2HorizontalPodAutoscalerList.fromJson(parsed)
-                ?.items ??
-            [];
+        IoK8sApiAutoscalingV2HorizontalPodAutoscalerList.fromJson(
+          parsed,
+        )?.items ??
+        [];
 
     return items.map((e) {
       final currentReplicas = e.status!.currentReplicas ?? 0;
@@ -48,17 +49,18 @@ final resourceHorizontalPodAutoscaler = Resource(
         metrics: null,
         status:
             currentReplicas == maxReplicas || currentReplicas != desiredReplicas
-                ? ResourceStatus.warning
-                : currentReplicas < minReplicas || currentReplicas > maxReplicas
-                    ? ResourceStatus.danger
-                    : ResourceStatus.success,
+            ? ResourceStatus.warning
+            : currentReplicas < minReplicas || currentReplicas > maxReplicas
+            ? ResourceStatus.danger
+            : ResourceStatus.success,
       );
     }).toList();
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiAutoscalingV2HorizontalPodAutoscalerList.fromJson(parsed)
-            ?.items ??
+    return IoK8sApiAutoscalingV2HorizontalPodAutoscalerList.fromJson(
+          parsed,
+        )?.items ??
         [];
   },
   getName: (dynamic item) {
@@ -83,11 +85,7 @@ final resourceHorizontalPodAutoscaler = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
+  listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
     final item = listItem.item as IoK8sApiAutoscalingV2HorizontalPodAutoscaler;
     final status = listItem.status;
 
@@ -107,9 +105,7 @@ final resourceHorizontalPodAutoscaler = Resource(
       ],
     );
   },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiAutoscalingV2HorizontalPodAutoscaler;
 
     return [
@@ -121,19 +117,12 @@ final resourceHorizontalPodAutoscaler = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiAutoscalingV2HorizontalPodAutoscaler;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(
           conditions: item.status?.conditions
               .map(
@@ -244,9 +233,7 @@ final resourceHorizontalPodAutoscaler = Resource(
   },
 );
 
-List<Widget> _buildReference(
-  IoK8sApiAutoscalingV2HorizontalPodAutoscaler hpa,
-) {
+List<Widget> _buildReference(IoK8sApiAutoscalingV2HorizontalPodAutoscaler hpa) {
   if (hpa.spec!.scaleTargetRef.kind != 'Deployment' &&
       hpa.spec!.scaleTargetRef.kind != 'StatefulSet') {
     return [Container()];

@@ -10,10 +10,7 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// The [SettingsHomePage] widget can be used to configure the home page of the
 /// application.
 class SettingsHomePage extends StatefulWidget {
-  const SettingsHomePage({
-    super.key,
-    required this.currentHome,
-  });
+  const SettingsHomePage({super.key, required this.currentHome});
 
   final AppRepositorySettingsHome currentHome;
 
@@ -101,7 +98,7 @@ class _SettingsHomePageState extends State<SettingsHomePage> {
                   children: [
                     const Text('Use Selected Namespace'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _useSelectedNamespace = !_useSelectedNamespace;
@@ -114,24 +111,9 @@ class _SettingsHomePageState extends State<SettingsHomePage> {
                 const SizedBox(height: Constants.spacingExtraLarge),
                 Row(
                   children: [
-                    const Expanded(
-                      child: Divider(
-                        height: 0,
-                        thickness: 1.0,
-                      ),
-                    ),
-                    Text(
-                      'Components',
-                      style: secondaryTextStyle(
-                        context,
-                      ),
-                    ),
-                    const Expanded(
-                      child: Divider(
-                        height: 0,
-                        thickness: 1.0,
-                      ),
-                    ),
+                    const Expanded(child: Divider(height: 0, thickness: 1.0)),
+                    Text('Components', style: secondaryTextStyle(context)),
+                    const Expanded(child: Divider(height: 0, thickness: 1.0)),
                   ],
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
@@ -141,7 +123,7 @@ class _SettingsHomePageState extends State<SettingsHomePage> {
                   children: [
                     const Text('Show Metrics'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _showMetrics = !_showMetrics;
@@ -158,7 +140,7 @@ class _SettingsHomePageState extends State<SettingsHomePage> {
                   children: [
                     const Text('Show Warnings'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _showWarnings = !_showWarnings;
@@ -171,24 +153,9 @@ class _SettingsHomePageState extends State<SettingsHomePage> {
                 const SizedBox(height: Constants.spacingExtraLarge),
                 Row(
                   children: [
-                    const Expanded(
-                      child: Divider(
-                        height: 0,
-                        thickness: 1.0,
-                      ),
-                    ),
-                    Text(
-                      'Workloads',
-                      style: secondaryTextStyle(
-                        context,
-                      ),
-                    ),
-                    const Expanded(
-                      child: Divider(
-                        height: 0,
-                        thickness: 1.0,
-                      ),
-                    ),
+                    const Expanded(child: Divider(height: 0, thickness: 1.0)),
+                    Text('Workloads', style: secondaryTextStyle(context)),
+                    const Expanded(child: Divider(height: 0, thickness: 1.0)),
                   ],
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
@@ -198,7 +165,7 @@ class _SettingsHomePageState extends State<SettingsHomePage> {
                   children: [
                     const Text('Show Pods'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _showWorkloadPods = !_showWorkloadPods;
@@ -215,7 +182,7 @@ class _SettingsHomePageState extends State<SettingsHomePage> {
                   children: [
                     const Text('Show Deployments'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _showWorkloadDeployments = !_showWorkloadDeployments;
@@ -232,7 +199,7 @@ class _SettingsHomePageState extends State<SettingsHomePage> {
                   children: [
                     const Text('Show StatefulSets'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _showWorkloadStatefulSets =
@@ -250,7 +217,7 @@ class _SettingsHomePageState extends State<SettingsHomePage> {
                   children: [
                     const Text('Show DaemonSets'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _showWorkloadDaemonSets = !_showWorkloadDaemonSets;
@@ -267,7 +234,7 @@ class _SettingsHomePageState extends State<SettingsHomePage> {
                   children: [
                     const Text('Show Jobs'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _showWorkloadJobs = !_showWorkloadJobs;

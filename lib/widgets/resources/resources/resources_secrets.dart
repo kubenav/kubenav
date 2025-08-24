@@ -69,31 +69,26 @@ final resourceSecret = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiCoreV1Secret;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiCoreV1Secret;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Type: ${item.type ?? '-'}',
-        'Data: ${item.data.entries.length}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Namespace: ${item.metadata?.namespace ?? '-'}',
+            'Type: ${item.type ?? '-'}',
+            'Data: ${item.data.entries.length}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiCoreV1Secret;
 
     return [
@@ -103,58 +98,39 @@ final resourceSecret = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
-    final item = detailsItem as IoK8sApiCoreV1Secret;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item = detailsItem as IoK8sApiCoreV1Secret;
 
-    return Column(
-      children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Configuration',
-          details: [
-            DetailsItemModel(
-              name: 'Type',
-              values: item.type ?? '-',
+        return Column(
+          children: [
+            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Configuration',
+              details: [
+                DetailsItemModel(name: 'Type', values: item.type ?? '-'),
+              ],
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+            ..._buildData(context, 'Data', item.data, true),
+            ..._buildData(context, 'String Data', item.stringData, false),
+            DetailsResourcesPreview(
+              resource: resourceEvent,
+              namespace: item.metadata?.namespace,
+              selector:
+                  'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
+              filter: null,
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+            AppPrometheusChartsWidget(
+              item: item,
+              toJson: resource.toJson,
+              defaultCharts: const [],
             ),
           ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        ..._buildData(
-          context,
-          'Data',
-          item.data,
-          true,
-        ),
-        ..._buildData(
-          context,
-          'String Data',
-          item.stringData,
-          false,
-        ),
-        DetailsResourcesPreview(
-          resource: resourceEvent,
-          namespace: item.metadata?.namespace,
-          selector:
-              'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
-          filter: null,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        AppPrometheusChartsWidget(
-          item: item,
-          toJson: resource.toJson,
-          defaultCharts: const [],
-        ),
-      ],
-    );
-  },
+        );
+      },
 );
 
 List<Widget> _buildData(
@@ -176,12 +152,7 @@ List<Widget> _buildData(
               onTap: () {
                 showModal(
                   context,
-                  _buildBottomSheet(
-                    context,
-                    data.key,
-                    data.value,
-                    true,
-                  ),
+                  _buildBottomSheet(context, data.key, data.value, true),
                 );
               },
               children: [
@@ -194,9 +165,7 @@ List<Widget> _buildData(
                   ),
                   height: 54,
                   width: 54,
-                  padding: const EdgeInsets.all(
-                    Constants.spacingIcon54x54,
-                  ),
+                  padding: const EdgeInsets.all(Constants.spacingIcon54x54),
                   child: SvgPicture.asset('assets/resources/secrets.svg'),
                 ),
                 const SizedBox(width: Constants.spacingSmall),
@@ -207,17 +176,13 @@ List<Widget> _buildData(
                     children: [
                       Text(
                         data.key,
-                        style: primaryTextStyle(
-                          context,
-                        ),
+                        style: primaryTextStyle(context),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
                         data.value,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
+                        style: secondaryTextStyle(context),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -257,11 +222,7 @@ Widget _buildBottomSheet(
     },
     actionText: 'Copy',
     actionPressed: () {
-      Clipboard.setData(
-        ClipboardData(
-          text: utf8.fuse(base64).decode(value),
-        ),
-      );
+      Clipboard.setData(ClipboardData(text: utf8.fuse(base64).decode(value)));
       Navigator.pop(context);
     },
     actionIsLoading: false,
@@ -278,9 +239,7 @@ Widget _buildBottomSheet(
           child: SelectableText(
             isBase64 ? utf8.fuse(base64).decode(value) : value,
             textAlign: TextAlign.left,
-            style: TextStyle(
-              fontFamily: getMonospaceFontFamily(),
-            ),
+            style: TextStyle(fontFamily: getMonospaceFontFamily()),
           ),
         ),
       ),

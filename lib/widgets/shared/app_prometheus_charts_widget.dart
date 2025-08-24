@@ -21,11 +21,7 @@ List<Chart> _getChartsFromAnnotation(String annotation) {
   final parsedCharts = loadYaml(annotation);
 
   for (var parsedChart in parsedCharts as List<dynamic>) {
-    additionalCharts.add(
-      Chart.fromYaml(
-        parsedChart,
-      ),
-    );
+    additionalCharts.add(Chart.fromYaml(parsedChart));
   }
 
   return additionalCharts;
@@ -80,8 +76,9 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
 
           if (manifest.containsKey('metadata') &&
               manifest['metadata'].containsKey('annotations') &&
-              manifest['metadata']['annotations']
-                  .containsKey('kubenav.io/prometheus') &&
+              manifest['metadata']['annotations'].containsKey(
+                'kubenav.io/prometheus',
+              ) &&
               manifest['metadata']['annotations']['kubenav.io/prometheus'] !=
                   'dashboard') {
             Logger.log(
@@ -203,9 +200,8 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
             left: Constants.spacingMiddle,
             right: Constants.spacingMiddle,
           ),
-          separatorBuilder: (context, index) => const SizedBox(
-            height: Constants.spacingMiddle,
-          ),
+          separatorBuilder: (context, index) =>
+              const SizedBox(height: Constants.spacingMiddle),
           itemCount: _charts.length,
           itemBuilder: (context, index) => AppListItem(
             onTap: () {
@@ -229,9 +225,7 @@ class _AppPrometheusChartsWidgetState extends State<AppPrometheusChartsWidget> {
                     children: [
                       Text(
                         _charts[index].title,
-                        style: primaryTextStyle(
-                          context,
-                        ),
+                        style: primaryTextStyle(context),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

@@ -132,20 +132,12 @@ class _CreateJobState extends State<CreateJob> {
           Navigator.pop(context);
         }
       } catch (err) {
-        Logger.log(
-          'CreateJob _createJob',
-          'Failed to Create Job',
-          err,
-        );
+        Logger.log('CreateJob _createJob', 'Failed to Create Job', err);
         setState(() {
           _isLoading = false;
         });
         if (mounted) {
-          showSnackbar(
-            context,
-            'Failed to Create Job',
-            err.toString(),
-          );
+          showSnackbar(context, 'Failed to Create Job', err.toString());
         }
       }
     }

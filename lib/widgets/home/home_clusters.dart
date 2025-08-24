@@ -52,34 +52,32 @@ class _HomeClustersState extends State<HomeClusters> {
         child: Padding(
           padding: const EdgeInsets.all(Constants.spacingMiddle),
           child: ListView.separated(
-            separatorBuilder:
-                (context, index) =>
-                    const SizedBox(height: Constants.spacingMiddle),
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: Constants.spacingMiddle),
             itemCount: clustersRepository.clusters.length,
-            itemBuilder:
-                (context, index) => AppListItem(
-                  onTap: () {
-                    _setActiveCluster(clustersRepository.clusters[index].id);
-                  },
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.radio_button_unchecked,
-                        size: 24,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      const SizedBox(width: Constants.spacingSmall),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          clustersRepository.clusters[index].name,
-                          style: normalTextStyle(context),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+            itemBuilder: (context, index) => AppListItem(
+              onTap: () {
+                _setActiveCluster(clustersRepository.clusters[index].id);
+              },
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.radio_button_unchecked,
+                    size: 24,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                ),
+                  const SizedBox(width: Constants.spacingSmall),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      clustersRepository.clusters[index].name,
+                      style: normalTextStyle(context),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),

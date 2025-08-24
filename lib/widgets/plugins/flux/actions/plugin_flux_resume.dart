@@ -73,8 +73,8 @@ class _PluginFluxResumeState extends State<PluginFluxResume> {
 
       final String body =
           widget.item.spec != null && widget.item.spec.suspend != null
-              ? '[{ "op": "replace", "path": "/spec/suspend", "value": false }]'
-              : '[{ "op": "add", "path": "/spec/suspend", "value": false }]';
+          ? '[{ "op": "replace", "path": "/spec/suspend", "value": false }]'
+          : '[{ "op": "add", "path": "/spec/suspend", "value": false }]';
 
       final cluster = await clustersRepository.getClusterWithCredentials(
         clustersRepository.activeClusterId,
@@ -101,20 +101,12 @@ class _PluginFluxResumeState extends State<PluginFluxResume> {
         Navigator.pop(context);
       }
     } catch (err) {
-      Logger.log(
-        'PluginFluxResume _resume',
-        'Resumption Failed',
-        err,
-      );
+      Logger.log('PluginFluxResume _resume', 'Resumption Failed', err);
       setState(() {
         _isLoading = false;
       });
       if (mounted) {
-        showSnackbar(
-          context,
-          'Resumption Failed',
-          err.toString(),
-        );
+        showSnackbar(context, 'Resumption Failed', err.toString());
       }
     }
   }

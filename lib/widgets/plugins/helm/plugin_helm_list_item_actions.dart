@@ -8,10 +8,7 @@ import 'package:kubenav/widgets/shared/app_resource_actions.dart';
 /// actions for a Helm release. The actions are the same as defined in the
 /// `plugin_helm_details.dart` file for the details view of a Helm release.
 class PluginHelmListItemActions extends StatefulWidget {
-  const PluginHelmListItemActions({
-    super.key,
-    required this.release,
-  });
+  const PluginHelmListItemActions({super.key, required this.release});
 
   final Release release;
 
@@ -25,11 +22,7 @@ class _PluginHelmListItemActionsState extends State<PluginHelmListItemActions> {
   Widget build(BuildContext context) {
     return AppResourceActions(
       mode: AppResourceActionsMode.actions,
-      actions: helmDetailsActions(
-        context,
-        widget.release,
-        null,
-      ),
+      actions: helmDetailsActions(context, widget.release, null),
     );
   }
 }

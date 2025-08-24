@@ -145,7 +145,7 @@ class _DeleteResourceState extends State<DeleteResource> {
                 children: [
                   const Text('Force'),
                   Switch(
-                    activeColor: Theme.of(context).colorScheme.primary,
+                    activeThumbColor: Theme.of(context).colorScheme.primary,
                     onChanged: (value) {
                       setState(() {
                         _force = !_force;
@@ -178,9 +178,9 @@ class _DeleteResourceState extends State<DeleteResource> {
                         child: Text(
                           '',
                           style: TextStyle(
-                            color: Theme.of(context)
-                                .extension<CustomColors>()!
-                                .textPrimary,
+                            color: Theme.of(
+                              context,
+                            ).extension<CustomColors>()!.textPrimary,
                           ),
                         ),
                       ),
@@ -189,9 +189,9 @@ class _DeleteResourceState extends State<DeleteResource> {
                         child: Text(
                           'Background',
                           style: TextStyle(
-                            color: Theme.of(context)
-                                .extension<CustomColors>()!
-                                .textPrimary,
+                            color: Theme.of(
+                              context,
+                            ).extension<CustomColors>()!.textPrimary,
                           ),
                         ),
                       ),
@@ -200,9 +200,9 @@ class _DeleteResourceState extends State<DeleteResource> {
                         child: Text(
                           'Foreground',
                           style: TextStyle(
-                            color: Theme.of(context)
-                                .extension<CustomColors>()!
-                                .textPrimary,
+                            color: Theme.of(
+                              context,
+                            ).extension<CustomColors>()!.textPrimary,
                           ),
                         ),
                       ),
@@ -211,9 +211,9 @@ class _DeleteResourceState extends State<DeleteResource> {
                         child: Text(
                           'Orphan',
                           style: TextStyle(
-                            color: Theme.of(context)
-                                .extension<CustomColors>()!
-                                .textPrimary,
+                            color: Theme.of(
+                              context,
+                            ).extension<CustomColors>()!.textPrimary,
                           ),
                         ),
                       ),

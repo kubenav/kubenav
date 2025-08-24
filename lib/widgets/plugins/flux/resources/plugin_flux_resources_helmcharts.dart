@@ -35,27 +35,25 @@ final Resource fluxResourceHelmChart = Resource(
     final items =
         IoFluxcdToolkitSourceV1HelmChartList.fromJson(parsed)?.items ?? [];
 
-    return items.map(
-      (e) {
-        final status =
-            e.status?.conditions != null && e.status!.conditions!.isNotEmpty
-                ? e.status!.conditions!
-                    .where((e) => e.type == 'Ready')
-                    .firstOrNull
-                    ?.status
-                : 'Unknown';
+    return items.map((e) {
+      final status =
+          e.status?.conditions != null && e.status!.conditions!.isNotEmpty
+          ? e.status!.conditions!
+                .where((e) => e.type == 'Ready')
+                .firstOrNull
+                ?.status
+          : 'Unknown';
 
-        return ResourceItem(
-          item: e,
-          metrics: null,
-          status: status == 'True'
-              ? ResourceStatus.success
-              : status == 'False'
-                  ? ResourceStatus.danger
-                  : ResourceStatus.warning,
-        );
-      },
-    ).toList();
+      return ResourceItem(
+        item: e,
+        metrics: null,
+        status: status == 'True'
+            ? ResourceStatus.success
+            : status == 'False'
+            ? ResourceStatus.danger
+            : ResourceStatus.warning,
+      );
+    }).toList();
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
@@ -78,11 +76,7 @@ final Resource fluxResourceHelmChart = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
+  listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
     final item = listItem.item as IoFluxcdToolkitSourceV1HelmChart;
     final status = listItem.status;
 
@@ -100,9 +94,7 @@ final Resource fluxResourceHelmChart = Resource(
       ],
     );
   },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoFluxcdToolkitSourceV1HelmChart;
 
     return [
@@ -112,19 +104,12 @@ final Resource fluxResourceHelmChart = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoFluxcdToolkitSourceV1HelmChart;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(conditions: item.status?.conditions),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
@@ -135,9 +120,11 @@ final Resource fluxResourceHelmChart = Resource(
               values: item.spec?.sourceRef != null
                   ? '${item.spec?.sourceRef.kind} (${item.metadata?.namespace}/${item.spec?.sourceRef.name})'
                   : null,
-              onTap: item.spec?.sourceRef.kind != null &&
-                      kindToFluxResource
-                          .containsKey(item.spec!.sourceRef.kind.value)
+              onTap:
+                  item.spec?.sourceRef.kind != null &&
+                      kindToFluxResource.containsKey(
+                        item.spec!.sourceRef.kind.value,
+                      )
                   ? (int index) {
                       final resource =
                           kindToFluxResource[item.spec!.sourceRef.kind.value];
@@ -161,18 +148,9 @@ final Resource fluxResourceHelmChart = Resource(
                     }
                   : null,
             ),
-            DetailsItemModel(
-              name: 'Chart',
-              values: item.spec?.chart,
-            ),
-            DetailsItemModel(
-              name: 'Version',
-              values: item.spec?.version,
-            ),
-            DetailsItemModel(
-              name: 'Interval',
-              values: item.spec?.interval,
-            ),
+            DetailsItemModel(name: 'Chart', values: item.spec?.chart),
+            DetailsItemModel(name: 'Version', values: item.spec?.version),
+            DetailsItemModel(name: 'Interval', values: item.spec?.interval),
             DetailsItemModel(
               name: 'Suspended',
               values: item.spec?.suspend == true ? 'True' : 'False',
@@ -183,14 +161,8 @@ final Resource fluxResourceHelmChart = Resource(
         DetailsItem(
           title: 'Artifact',
           details: [
-            DetailsItemModel(
-              name: 'Path',
-              values: item.status?.artifact?.path,
-            ),
-            DetailsItemModel(
-              name: 'Url',
-              values: item.status?.artifact?.url,
-            ),
+            DetailsItemModel(name: 'Path', values: item.status?.artifact?.path),
+            DetailsItemModel(name: 'Url', values: item.status?.artifact?.url),
             DetailsItemModel(
               name: 'Revision',
               values: item.status?.artifact?.revision,

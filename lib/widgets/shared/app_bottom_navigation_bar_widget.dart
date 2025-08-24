@@ -32,8 +32,9 @@ class AppBottomNavigationBarWidget extends StatelessWidget {
       type: BottomNavigationBarType.fixed,
       backgroundColor: Theme.of(context).colorScheme.primary,
       selectedItemColor: Theme.of(context).colorScheme.onPrimary,
-      unselectedItemColor:
-          Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.60),
+      unselectedItemColor: Theme.of(
+        context,
+      ).colorScheme.onPrimary.withValues(alpha: 0.60),
       selectedFontSize: 14,
       unselectedFontSize: 14,
       currentIndex: appRepository.currentPageIndex,
@@ -42,11 +43,7 @@ class AppBottomNavigationBarWidget extends StatelessWidget {
           case 0:
             if (Navigator.of(context).canPop() == true ||
                 appRepository.currentPageIndex != Constants.pageIndexHome) {
-              navigate(
-                context,
-                const Home(),
-                Constants.pageIndexHome,
-              );
+              navigate(context, const Home(), Constants.pageIndexHome);
             }
             break;
           case 1:
@@ -63,52 +60,31 @@ class AppBottomNavigationBarWidget extends StatelessWidget {
           case 2:
             if (Navigator.of(context).canPop() == true ||
                 appRepository.currentPageIndex != Constants.pageIndexPlugins) {
-              navigate(
-                context,
-                const Plugins(),
-                Constants.pageIndexPlugins,
-              );
+              navigate(context, const Plugins(), Constants.pageIndexPlugins);
             }
             break;
           case 3:
             if (Navigator.of(context).canPop() == true ||
                 appRepository.currentPageIndex != Constants.pageIndexSettings) {
-              navigate(
-                context,
-                const Settings(),
-                Constants.pageIndexSettings,
-              );
+              navigate(context, const Settings(), Constants.pageIndexSettings);
             }
             break;
           default:
             if (Navigator.of(context).canPop() == true ||
                 appRepository.currentPageIndex != Constants.pageIndexHome) {
-              navigate(
-                context,
-                const Home(),
-                Constants.pageIndexHome,
-              );
+              navigate(context, const Home(), Constants.pageIndexHome);
             }
             break;
         }
       },
       items: const [
-        BottomNavigationBarItem(
-          label: 'Home',
-          icon: Icon(Icons.home),
-        ),
+        BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home)),
         BottomNavigationBarItem(
           label: 'Resources',
           icon: Icon(CustomIcons.kubernetes),
         ),
-        BottomNavigationBarItem(
-          label: 'Plugins',
-          icon: Icon(Icons.extension),
-        ),
-        BottomNavigationBarItem(
-          label: 'Settings',
-          icon: Icon(Icons.settings),
-        ),
+        BottomNavigationBarItem(label: 'Plugins', icon: Icon(Icons.extension)),
+        BottomNavigationBarItem(label: 'Settings', icon: Icon(Icons.settings)),
       ],
     );
   }

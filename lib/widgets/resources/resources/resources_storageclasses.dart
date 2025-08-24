@@ -62,32 +62,27 @@ final resourceStorageClass = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiStorageV1StorageClass;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiStorageV1StorageClass;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Provisioner: ${item.provisioner}',
-        'Reclaim Policy: ${item.reclaimPolicy ?? '-'}',
-        'Volume Binding Mode: ${item.volumeBindingMode ?? '-'}',
-        'Allow Volume Expansion: ${item.allowVolumeExpansion != null && item.allowVolumeExpansion == true ? 'True' : 'False'}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Provisioner: ${item.provisioner}',
+            'Reclaim Policy: ${item.reclaimPolicy ?? '-'}',
+            'Volume Binding Mode: ${item.volumeBindingMode ?? '-'}',
+            'Allow Volume Expansion: ${item.allowVolumeExpansion != null && item.allowVolumeExpansion == true ? 'True' : 'False'}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiStorageV1StorageClass;
 
     return [
@@ -98,42 +93,32 @@ final resourceStorageClass = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiStorageV1StorageClass;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Configuration',
           details: [
             DetailsItemModel(
               name: 'Default',
-              values: item.metadata != null &&
+              values:
+                  item.metadata != null &&
                       item.metadata!.annotations.containsKey(
                         'storageclass.kubernetes.io/is-default-class',
                       ) &&
                       item
                               .metadata!
-                              .annotations[
-                                  'storageclass.kubernetes.io/is-default-class']!
+                              .annotations['storageclass.kubernetes.io/is-default-class']!
                               .toLowerCase() ==
                           'true'
                   ? 'Yes'
                   : 'No',
             ),
-            DetailsItemModel(
-              name: 'Provisioner',
-              values: item.provisioner,
-            ),
+            DetailsItemModel(name: 'Provisioner', values: item.provisioner),
             DetailsItemModel(
               name: 'Parameters',
               values: item.parameters.entries
@@ -142,15 +127,13 @@ final resourceStorageClass = Resource(
             ),
             DetailsItemModel(
               name: 'Allow Volume Expansion',
-              values: item.allowVolumeExpansion != null &&
+              values:
+                  item.allowVolumeExpansion != null &&
                       item.allowVolumeExpansion == true
                   ? 'True'
                   : 'False',
             ),
-            DetailsItemModel(
-              name: 'Mount Options',
-              values: item.mountOptions,
-            ),
+            DetailsItemModel(name: 'Mount Options', values: item.mountOptions),
             DetailsItemModel(
               name: 'Reclaim Policy',
               values: item.reclaimPolicy,

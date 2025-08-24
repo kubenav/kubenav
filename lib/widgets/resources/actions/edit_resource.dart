@@ -101,11 +101,7 @@ class _EditResourceState extends State<EditResource> {
         _codeController.text = data;
       }
     } catch (err) {
-      Logger.log(
-        'EditResource _init',
-        'Encoding Failed',
-        err,
-      );
+      Logger.log('EditResource _init', 'Encoding Failed', err);
     }
   }
 

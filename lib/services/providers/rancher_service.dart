@@ -11,14 +11,9 @@ class RancherToken {
   String? id;
   String? token;
 
-  RancherToken({
-    required this.id,
-    required this.token,
-  });
+  RancherToken({required this.id, required this.token});
 
-  factory RancherToken.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory RancherToken.fromJson(Map<String, dynamic> data) {
     return RancherToken(
       id: data.containsKey('id') ? data['id'] : null,
       token: data.containsKey('token') ? data['token'] : null,
@@ -26,10 +21,7 @@ class RancherToken {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'token': token,
-    };
+    return {'id': id, 'token': token};
   }
 }
 
@@ -46,9 +38,7 @@ class RancherCluster {
     required this.kubeconfig,
   });
 
-  factory RancherCluster.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory RancherCluster.fromJson(Map<String, dynamic> data) {
     return RancherCluster(
       id: data.containsKey('id') ? data['id'] : null,
       name: data.containsKey('name') ? data['name'] : null,
@@ -59,11 +49,7 @@ class RancherCluster {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'kubeconfig': kubeconfig?.toJson(),
-    };
+    return {'id': id, 'name': name, 'kubeconfig': kubeconfig?.toJson()};
   }
 }
 
@@ -80,9 +66,7 @@ class RancherKubeconfig {
     required this.type,
   });
 
-  factory RancherKubeconfig.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory RancherKubeconfig.fromJson(Map<String, dynamic> data) {
     return RancherKubeconfig(
       baseType: data.containsKey('baseType') ? data['baseType'] : null,
       config: data.containsKey('config') ? data['config'] : null,
@@ -91,11 +75,7 @@ class RancherKubeconfig {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'baseType': baseType,
-      'config': config,
-      'type': type,
-    };
+    return {'baseType': baseType, 'config': config, 'type': type};
   }
 }
 
@@ -113,21 +93,17 @@ class RancherService {
             ((X509Certificate cert, String host, int port) => true);
       }
       HttpClientRequest request = await client.postUrl(
-        Uri.parse(
-          '$serverAddress/v3-public/localProviders/local?action=login',
-        ),
+        Uri.parse('$serverAddress/v3-public/localProviders/local?action=login'),
       );
       request.headers.set('content-type', 'application/json');
       request.add(
         utf8.encode(
-          json.encode(
-            {
-              'description': 'kubenav session',
-              'username': username,
-              'password': password,
-              'ttl': 57600000,
-            },
-          ),
+          json.encode({
+            'description': 'kubenav session',
+            'username': username,
+            'password': password,
+            'ttl': 57600000,
+          }),
         ),
       );
 
@@ -154,11 +130,7 @@ class RancherService {
         throw Exception(jsonData);
       }
     } catch (err) {
-      Logger.log(
-        'RancherService signin',
-        'Failed to Get Token',
-        err,
-      );
+      Logger.log('RancherService signin', 'Failed to Get Token', err);
       rethrow;
     }
   }
@@ -174,8 +146,9 @@ class RancherService {
         client.badCertificateCallback =
             ((X509Certificate cert, String host, int port) => true);
       }
-      HttpClientRequest request =
-          await client.getUrl(Uri.parse('$serverAddress/v3/clusters'));
+      HttpClientRequest request = await client.getUrl(
+        Uri.parse('$serverAddress/v3/clusters'),
+      );
       request.headers.set('Authorization', 'Bearer $token');
 
       HttpClientResponse response = await request.close();
@@ -204,11 +177,7 @@ class RancherService {
         throw Exception(jsonData);
       }
     } catch (err) {
-      Logger.log(
-        'RancherService getClusters',
-        'Failed to Get Clusters',
-        err,
-      );
+      Logger.log('RancherService getClusters', 'Failed to Get Clusters', err);
       rethrow;
     }
   }

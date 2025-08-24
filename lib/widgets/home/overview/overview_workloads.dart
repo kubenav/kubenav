@@ -94,20 +94,17 @@ class OverviewWorkloads extends StatelessWidget {
             cacheExtent: 1024,
             crossAxisCount: 2,
             childAspectRatio: 0.30,
-            children: List.generate(
-              resources.length,
-              (index) {
-                return Container(
-                  margin: const EdgeInsets.only(
-                    top: Constants.spacingSmall,
-                    bottom: Constants.spacingSmall,
-                    left: Constants.spacingMiddle,
-                    right: Constants.spacingMiddle,
-                  ),
-                  child: OverviewWorkload(resource: resources[index]),
-                );
-              },
-            ),
+            children: List.generate(resources.length, (index) {
+              return Container(
+                margin: const EdgeInsets.only(
+                  top: Constants.spacingSmall,
+                  bottom: Constants.spacingSmall,
+                  left: Constants.spacingMiddle,
+                  right: Constants.spacingMiddle,
+                ),
+                child: OverviewWorkload(resource: resources[index]),
+              );
+            }),
           ),
         ),
         const SizedBox(height: Constants.spacingMiddle),
@@ -121,10 +118,7 @@ class OverviewWorkloads extends StatelessWidget {
 /// the workload and the counts for all, healthy, warning and unhealthy
 /// resources.
 class OverviewWorkload extends StatefulWidget {
-  const OverviewWorkload({
-    super.key,
-    required this.resource,
-  });
+  const OverviewWorkload({super.key, required this.resource});
 
   final Resource resource;
 
@@ -149,7 +143,8 @@ class _OverviewWorkloadState extends State<OverviewWorkload> {
       clustersRepository.activeClusterId,
     );
 
-    final url = appRepository.settings.home.useSelectedNamespace &&
+    final url =
+        appRepository.settings.home.useSelectedNamespace &&
             cluster!.namespace != ''
         ? '${widget.resource.path}/namespaces/${cluster.namespace}/${widget.resource.resource}'
         : '${widget.resource.path}/${widget.resource.resource}';
@@ -162,10 +157,7 @@ class _OverviewWorkloadState extends State<OverviewWorkload> {
 
     final data = await compute(
       widget.resource.decodeListData,
-      ResourcesListData(
-        list: result,
-        metrics: null,
-      ),
+      ResourcesListData(list: result, metrics: null),
     );
 
     return ResourceStatusCounts(
@@ -186,18 +178,13 @@ class _OverviewWorkloadState extends State<OverviewWorkload> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ClustersRepository>(
-      context,
-      listen: true,
-    );
+    Provider.of<ClustersRepository>(context, listen: true);
 
     return InkWell(
       onTap: () {
         showActions(
           context,
-          OverviewWorkloadActions(
-            resource: widget.resource,
-          ),
+          OverviewWorkloadActions(resource: widget.resource),
         );
       },
       child: Container(
@@ -219,75 +206,68 @@ class _OverviewWorkloadState extends State<OverviewWorkload> {
         ),
         child: FutureBuilder(
           future: _futureFetchItems,
-          builder: (
-            BuildContext context,
-            AsyncSnapshot<ResourceStatusCounts> snapshot,
-          ) {
-            final isLoading =
-                snapshot.connectionState == ConnectionState.none ||
+          builder:
+              (
+                BuildContext context,
+                AsyncSnapshot<ResourceStatusCounts> snapshot,
+              ) {
+                final isLoading =
+                    snapshot.connectionState == ConnectionState.none ||
                         snapshot.connectionState == ConnectionState.waiting
                     ? true
                     : false;
 
-            return Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(Constants.sizeBorderRadius),
-                    ),
-                  ),
-                  height: 54,
-                  width: 54,
-                  padding: const EdgeInsets.all(
-                    Constants.spacingIcon54x54,
-                  ),
-                  child: SvgPicture.asset(
-                    'assets/resources/${widget.resource.icon}.svg',
-                  ),
-                ),
-                const SizedBox(width: Constants.spacingSmall),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.resource.plural,
-                        style: primaryTextStyle(
-                          context,
+                return Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(Constants.sizeBorderRadius),
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                      Row(
+                      height: 54,
+                      width: 54,
+                      padding: const EdgeInsets.all(Constants.spacingIcon54x54),
+                      child: SvgPicture.asset(
+                        'assets/resources/${widget.resource.icon}.svg',
+                      ),
+                    ),
+                    const SizedBox(width: Constants.spacingSmall),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'All: ${isLoading ? '-' : snapshot.data?.all ?? '-'}\nHealthy: ${isLoading ? '-' : snapshot.data?.success ?? '-'}',
-                            style: secondaryTextStyle(
-                              context,
-                            ),
-                            maxLines: 2,
+                            widget.resource.plural,
+                            style: primaryTextStyle(context),
+                            maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(width: Constants.spacingMiddle),
-                          Text(
-                            'Warning: ${isLoading ? '-' : snapshot.data?.warning ?? '-'}\nUnhealthy: ${isLoading ? '-' : snapshot.data?.danger ?? '-'}',
-                            style: secondaryTextStyle(
-                              context,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                          Row(
+                            children: [
+                              Text(
+                                'All: ${isLoading ? '-' : snapshot.data?.all ?? '-'}\nHealthy: ${isLoading ? '-' : snapshot.data?.success ?? '-'}',
+                                style: secondaryTextStyle(context),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(width: Constants.spacingMiddle),
+                              Text(
+                                'Warning: ${isLoading ? '-' : snapshot.data?.warning ?? '-'}\nUnhealthy: ${isLoading ? '-' : snapshot.data?.danger ?? '-'}',
+                                style: secondaryTextStyle(context),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
+                    ),
+                  ],
+                );
+              },
         ),
       ),
     );
@@ -299,10 +279,7 @@ class _OverviewWorkloadState extends State<OverviewWorkload> {
 /// for all, healthy, warning and unhealthy resources. When an action is tapped,
 /// the [ResourcesList] widget will be opened with the selected status.
 class OverviewWorkloadActions extends StatelessWidget {
-  const OverviewWorkloadActions({
-    super.key,
-    required this.resource,
-  });
+  const OverviewWorkloadActions({super.key, required this.resource});
 
   final Resource resource;
 
@@ -310,46 +287,40 @@ class OverviewWorkloadActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppResourceActions(
       mode: AppResourceActionsMode.actions,
-      actions: List.generate(
-        ResourceStatus.values.length,
-        (index) {
-          return AppResourceActionsModel(
-            title: ResourceStatus.values[index].toLocalizedString(),
-            icon: Icons.list,
-            onTap: () async {
-              ClustersRepository clustersRepository =
-                  Provider.of<ClustersRepository>(
-                context,
-                listen: false,
-              );
-              AppRepository appRepository = Provider.of<AppRepository>(
-                context,
-                listen: false,
-              );
+      actions: List.generate(ResourceStatus.values.length, (index) {
+        return AppResourceActionsModel(
+          title: ResourceStatus.values[index].toLocalizedString(),
+          icon: Icons.list,
+          onTap: () async {
+            ClustersRepository clustersRepository =
+                Provider.of<ClustersRepository>(context, listen: false);
+            AppRepository appRepository = Provider.of<AppRepository>(
+              context,
+              listen: false,
+            );
 
-              try {
-                if (!appRepository.settings.home.useSelectedNamespace) {
-                  await clustersRepository.setNamespace(
-                    clustersRepository.activeClusterId,
-                    '',
-                  );
-                }
-                if (context.mounted) {
-                  navigate(
-                    context,
-                    ResourcesList(
-                      resource: resource,
-                      namespace: null,
-                      selector: null,
-                      status: ResourceStatus.values[index],
-                    ),
-                  );
-                }
-              } catch (_) {}
-            },
-          );
-        },
-      ),
+            try {
+              if (!appRepository.settings.home.useSelectedNamespace) {
+                await clustersRepository.setNamespace(
+                  clustersRepository.activeClusterId,
+                  '',
+                );
+              }
+              if (context.mounted) {
+                navigate(
+                  context,
+                  ResourcesList(
+                    resource: resource,
+                    namespace: null,
+                    selector: null,
+                    status: ResourceStatus.values[index],
+                  ),
+                );
+              }
+            } catch (_) {}
+          },
+        );
+      }),
     );
   }
 }

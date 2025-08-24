@@ -61,30 +61,25 @@ final resourceIngressClass = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiNetworkingV1IngressClass;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiNetworkingV1IngressClass;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Controller: ${item.spec?.controller ?? '-'}',
-        'Parameters: ${item.spec?.parameters != null ? '${item.spec?.parameters?.namespace != null ? '${item.spec?.parameters?.namespace}/' : ''}${item.spec?.parameters?.name}' : '-'}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Controller: ${item.spec?.controller ?? '-'}',
+            'Parameters: ${item.spec?.parameters != null ? '${item.spec?.parameters?.namespace != null ? '${item.spec?.parameters?.namespace}/' : ''}${item.spec?.parameters?.name}' : '-'}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiNetworkingV1IngressClass;
 
     return [
@@ -93,27 +88,17 @@ final resourceIngressClass = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiNetworkingV1IngressClass;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Configuration',
           details: [
-            DetailsItemModel(
-              name: 'Controller',
-              values: item.spec?.controller,
-            ),
+            DetailsItemModel(name: 'Controller', values: item.spec?.controller),
             DetailsItemModel(
               name: 'Parameters',
               values: item.spec?.parameters == null

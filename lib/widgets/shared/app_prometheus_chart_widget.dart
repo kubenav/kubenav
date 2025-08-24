@@ -103,10 +103,7 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
           ),
           child: FutureBuilder(
             future: _futureFetchMetrics,
-            builder: (
-              BuildContext context,
-              AsyncSnapshot<List<Metric>> snapshot,
-            ) {
+            builder: (BuildContext context, AsyncSnapshot<List<Metric>> snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
@@ -129,10 +126,9 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color:
-                              Theme.of(
-                                context,
-                              ).extension<CustomColors>()!.shadow,
+                          color: Theme.of(
+                            context,
+                          ).extension<CustomColors>()!.shadow,
                           blurRadius: Constants.sizeBorderBlurRadius,
                           spreadRadius: Constants.sizeBorderSpreadRadius,
                           offset: const Offset(0.0, 0.0),
@@ -156,8 +152,9 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                 touchTooltipData: LineTouchTooltipData(
                                   fitInsideHorizontally: true,
                                   fitInsideVertically: true,
-                                  maxContentWidth:
-                                      MediaQuery.of(context).size.width,
+                                  maxContentWidth: MediaQuery.of(
+                                    context,
+                                  ).size.width,
                                   getTooltipColor: (LineBarSpot touchedSpot) {
                                     return Theme.of(
                                       context,
@@ -170,10 +167,9 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                       return LineTooltipItem(
                                         '${_selectedLabel == '' ? snapshot.data![touchedSpot.barIndex].label : _selectedLabel}: ${NumberFormat.compact(locale: "en_US").format(touchedSpot.y)} ${widget.unit}',
                                         TextStyle(
-                                          color:
-                                              Theme.of(context)
-                                                  .extension<CustomColors>()!
-                                                  .onMessage,
+                                          color: Theme.of(context)
+                                              .extension<CustomColors>()!
+                                              .onMessage,
                                           fontWeight: FontWeight.normal,
                                           fontSize: 14,
                                         ),
@@ -183,26 +179,24 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                 ),
                               ),
                               clipData: const FlClipData.all(),
-                              lineBarsData:
-                                  snapshot.data!
-                                      .where(
-                                        (e) =>
-                                            _selectedLabel == '' ||
-                                            e.label == _selectedLabel,
-                                      )
-                                      .map(
-                                        (e) => LineChartBarData(
-                                          spots: e.toSpots(),
-                                          dotData: const FlDotData(show: false),
-                                          color:
-                                              Theme.of(
-                                                context,
-                                              ).colorScheme.primary,
-                                          barWidth: 4,
-                                          isCurved: false,
-                                        ),
-                                      )
-                                      .toList(),
+                              lineBarsData: snapshot.data!
+                                  .where(
+                                    (e) =>
+                                        _selectedLabel == '' ||
+                                        e.label == _selectedLabel,
+                                  )
+                                  .map(
+                                    (e) => LineChartBarData(
+                                      spots: e.toSpots(),
+                                      dotData: const FlDotData(show: false),
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
+                                      barWidth: 4,
+                                      isCurved: false,
+                                    ),
+                                  )
+                                  .toList(),
                               titlesData: FlTitlesData(
                                 show: true,
                                 rightTitles: const AxisTitles(
@@ -215,15 +209,13 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                   sideTitles: SideTitles(
                                     showTitles: true,
                                     reservedSize: 96,
-                                    getTitlesWidget: (
-                                      double value,
-                                      TitleMeta meta,
-                                    ) {
-                                      return Text(
-                                        '${NumberFormat.compact(locale: "en_US").format(value)} ${widget.unit}',
-                                        style: secondaryTextStyle(context),
-                                      );
-                                    },
+                                    getTitlesWidget:
+                                        (double value, TitleMeta meta) {
+                                          return Text(
+                                            '${NumberFormat.compact(locale: "en_US").format(value)} ${widget.unit}',
+                                            style: secondaryTextStyle(context),
+                                          );
+                                        },
                                   ),
                                 ),
                                 bottomTitles: AxisTitles(
@@ -259,20 +251,18 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                 show: true,
                                 getDrawingHorizontalLine: (value) {
                                   return FlLine(
-                                    color:
-                                        Theme.of(context)
-                                            .extension<CustomColors>()!
-                                            .textSecondary,
+                                    color: Theme.of(
+                                      context,
+                                    ).extension<CustomColors>()!.textSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );
                                 },
                                 getDrawingVerticalLine: (value) {
                                   return FlLine(
-                                    color:
-                                        Theme.of(context)
-                                            .extension<CustomColors>()!
-                                            .textSecondary,
+                                    color: Theme.of(
+                                      context,
+                                    ).extension<CustomColors>()!.textSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );
@@ -309,10 +299,9 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                     style: normalTextStyle(
                                       context,
                                       size: Constants.sizeTextSecondary,
-                                      decoration:
-                                          _selectedLabel == e.label
-                                              ? TextDecoration.underline
-                                              : null,
+                                      decoration: _selectedLabel == e.label
+                                          ? TextDecoration.underline
+                                          : null,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -325,10 +314,9 @@ class _AppPrometheusChartWidgetState extends State<AppPrometheusChartWidget> {
                                       : '',
                                   style: secondaryTextStyle(
                                     context,
-                                    decoration:
-                                        _selectedLabel == e.label
-                                            ? TextDecoration.underline
-                                            : null,
+                                    decoration: _selectedLabel == e.label
+                                        ? TextDecoration.underline
+                                        : null,
                                   ),
                                 ),
                               ],

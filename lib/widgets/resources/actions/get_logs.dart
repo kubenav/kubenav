@@ -371,7 +371,7 @@ class _GetLogsState extends State<GetLogs> {
                   children: [
                     const Text('Previous'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _previous = !_previous;
@@ -388,7 +388,7 @@ class _GetLogsState extends State<GetLogs> {
                   children: [
                     const Text('Follow'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: widget.names.split(',').length > 1
                           ? null
                           : (value) {

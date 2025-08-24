@@ -135,21 +135,13 @@ class _PluginHelmDetailsRollbackState extends State<PluginHelmDetailsRollback> {
         Navigator.pop(context);
       }
     } catch (err) {
-      Logger.log(
-        'PluginHelmDetailsRollback _rollback',
-        'Rollback Failed',
-        err,
-      );
+      Logger.log('PluginHelmDetailsRollback _rollback', 'Rollback Failed', err);
       setState(() {
         _isLoading = false;
       });
       if (mounted) {
         Navigator.pop(context);
-        showSnackbar(
-          context,
-          'Rollback Failed',
-          err.toString(),
-        );
+        showSnackbar(context, 'Rollback Failed', err.toString());
       }
     }
   }
@@ -218,7 +210,7 @@ class _PluginHelmDetailsRollbackState extends State<PluginHelmDetailsRollback> {
                   children: [
                     const Text('Cleanup On Fail'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _cleanupOnFail = !_cleanupOnFail;
@@ -235,7 +227,7 @@ class _PluginHelmDetailsRollbackState extends State<PluginHelmDetailsRollback> {
                   children: [
                     const Text('Dry Run'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _dryRun = !_dryRun;
@@ -252,7 +244,7 @@ class _PluginHelmDetailsRollbackState extends State<PluginHelmDetailsRollback> {
                   children: [
                     const Text('Force'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _force = !_force;
@@ -284,7 +276,7 @@ class _PluginHelmDetailsRollbackState extends State<PluginHelmDetailsRollback> {
                   children: [
                     const Text('Disable Hooks'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _disableHooks = !_disableHooks;
@@ -301,7 +293,7 @@ class _PluginHelmDetailsRollbackState extends State<PluginHelmDetailsRollback> {
                   children: [
                     const Text('Recreate'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _recreate = !_recreate;
@@ -333,7 +325,7 @@ class _PluginHelmDetailsRollbackState extends State<PluginHelmDetailsRollback> {
                   children: [
                     const Text('Wait'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _wait = !_wait;
@@ -350,7 +342,7 @@ class _PluginHelmDetailsRollbackState extends State<PluginHelmDetailsRollback> {
                   children: [
                     const Text('Wait For Jobs'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _waitForJobs = !_waitForJobs;

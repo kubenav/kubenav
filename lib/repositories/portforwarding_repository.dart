@@ -52,11 +52,7 @@ class PortForwardingRepository with ChangeNotifier {
   /// the server to ensure that the session we are manging in the UI are the
   /// same as in the server, because it could happen that a session is closed on
   /// the server side which we wouldn't notice in the ui.
-  Future<void> showSessions(
-    Cluster cluster,
-    String proxy,
-    int timeout,
-  ) async {
+  Future<void> showSessions(Cluster cluster, String proxy, int timeout) async {
     try {
       final result = await KubernetesService(
         cluster: cluster,
@@ -146,17 +142,18 @@ class PortForwardingRepository with ChangeNotifier {
           'Internal http server is started and healthy, try to establish port forwarding',
         );
 
-        final result = await KubernetesService(
-          cluster: cluster,
-          proxy: proxy,
-          timeout: timeout,
-        ).portForwarding(
-          name,
-          namespace,
-          port,
-          serviceSelector,
-          serviceTargetPort,
-        );
+        final result =
+            await KubernetesService(
+              cluster: cluster,
+              proxy: proxy,
+              timeout: timeout,
+            ).portForwarding(
+              name,
+              namespace,
+              port,
+              serviceSelector,
+              serviceTargetPort,
+            );
 
         _sessions.add(PortForwardingSession.fromJson(result));
         notifyListeners();

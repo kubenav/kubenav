@@ -25,8 +25,10 @@ class CRDsCacheRepository {
 
   CRDsCacheRepository._internal();
 
-  List<IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition>?
-      _crds;
+  List<
+    IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition
+  >?
+  _crds;
 
   /// [init] reads the CRDs from the storage. If there are already CRDs saved,
   /// we will decode the storage entry into the [_crds] list.
@@ -34,21 +36,22 @@ class CRDsCacheRepository {
     try {
       final data = await Storage().read('kubenav-crds');
       if (data != null) {
-        _crds = List<
-            IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition>.from(
-          json.decode(data).map(
-                (e) =>
-                    IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition
-                        .fromJson(e),
-              ),
-        );
+        _crds =
+            List<
+              IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition
+            >.from(
+              json
+                  .decode(data)
+                  .map(
+                    (e) =>
+                        IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition.fromJson(
+                          e,
+                        ),
+                  ),
+            );
       }
     } catch (err) {
-      Logger.log(
-        'CRDsCacheRepository _init',
-        'Failed to Load CRDs',
-        err,
-      );
+      Logger.log('CRDsCacheRepository _init', 'Failed to Load CRDs', err);
     }
   }
 
@@ -62,11 +65,7 @@ class CRDsCacheRepository {
         );
       }
     } catch (err) {
-      Logger.log(
-        'CRDsCacheRepository _save',
-        'Failed to Save CRDs',
-        err,
-      );
+      Logger.log('CRDsCacheRepository _save', 'Failed to Save CRDs', err);
     }
   }
 
@@ -90,28 +89,26 @@ class CRDsCacheRepository {
       clustersRepository.activeClusterId,
     );
 
-    final result = await KubernetesService(
-      cluster: cluster!,
-      proxy: appRepository.settings.proxy,
-      timeout: appRepository.settings.timeout,
-    ).getRequest(
-      '${resourceCustomResourceDefinition.path}/${resourceCustomResourceDefinition.resource}',
-    );
+    final result =
+        await KubernetesService(
+          cluster: cluster!,
+          proxy: appRepository.settings.proxy,
+          timeout: appRepository.settings.timeout,
+        ).getRequest(
+          '${resourceCustomResourceDefinition.path}/${resourceCustomResourceDefinition.resource}',
+        );
 
-    _crds = (await compute(
-      resourceCustomResourceDefinition.decodeList,
-      result,
-    )) as List<
-        IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition>;
+    _crds =
+        (await compute(resourceCustomResourceDefinition.decodeList, result))
+            as List<
+              IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition
+            >;
     await _save();
   }
 
   /// [_getCRD] returns a CRD from the [_crds] list by the kind and apiVersion.
   IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition?
-      _getCRD(
-    String kind,
-    String apiVersion,
-  ) {
+  _getCRD(String kind, String apiVersion) {
     if (_crds != null) {
       for (var crd in _crds!) {
         if (kind == crd.spec.names.kind) {
@@ -132,12 +129,10 @@ class CRDsCacheRepository {
   /// the list is not empty we directly try to return the CRD. If we are not
   /// able to find the CRD in the list, we fetch the CRDs from the Kubernetes
   /// API again and try to return the CRD.
-  Future<IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition?>
-      getCRD(
-    BuildContext context,
-    String kind,
-    String apiVersion,
-  ) async {
+  Future<
+    IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition?
+  >
+  getCRD(BuildContext context, String kind, String apiVersion) async {
     if (_crds == null) {
       await _getCRDs(context, kind, apiVersion);
       return _getCRD(kind, apiVersion);

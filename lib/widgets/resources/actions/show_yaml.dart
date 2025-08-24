@@ -71,11 +71,7 @@ class _ShowYamlState extends State<ShowYaml> {
         _codeController.text = data;
       }
     } catch (err) {
-      Logger.log(
-        'ShowYaml _init',
-        'Encoding Failed',
-        err,
-      );
+      Logger.log('ShowYaml _init', 'Encoding Failed', err);
     }
   }
 
@@ -111,20 +107,12 @@ class _ShowYamlState extends State<ShowYaml> {
         Navigator.pop(context);
       }
     } catch (err) {
-      Logger.log(
-        'ShowYaml _export',
-        'Export Failed',
-        err,
-      );
+      Logger.log('ShowYaml _export', 'Export Failed', err);
       setState(() {
         _isLoading = false;
       });
       if (mounted) {
-        showSnackbar(
-          context,
-          'Export Failed',
-          err.toString(),
-        );
+        showSnackbar(context, 'Export Failed', err.toString());
       }
     }
   }

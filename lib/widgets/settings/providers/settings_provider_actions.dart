@@ -21,33 +21,19 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 Widget buildProviderModal(ClusterProvider provider) {
   switch (provider.type) {
     case ClusterProviderType.aws:
-      return SettingsAWSProvider(
-        provider: provider,
-      );
+      return SettingsAWSProvider(provider: provider);
     case ClusterProviderType.awssso:
-      return SettingsAWSSSOProvider(
-        provider: provider,
-      );
+      return SettingsAWSSSOProvider(provider: provider);
     case ClusterProviderType.azure:
-      return SettingsAzureProvider(
-        provider: provider,
-      );
+      return SettingsAzureProvider(provider: provider);
     case ClusterProviderType.digitalocean:
-      return SettingsDigitalOceanProvider(
-        provider: provider,
-      );
+      return SettingsDigitalOceanProvider(provider: provider);
     case ClusterProviderType.google:
-      return SettingsGoogleProvider(
-        provider: provider,
-      );
+      return SettingsGoogleProvider(provider: provider);
     case ClusterProviderType.oidc:
-      return SettingsOIDCProvider(
-        provider: provider,
-      );
+      return SettingsOIDCProvider(provider: provider);
     case ClusterProviderType.rancher:
-      return SettingsRancherProvider(
-        provider: provider,
-      );
+      return SettingsRancherProvider(provider: provider);
     default:
       return Container();
   }
@@ -59,10 +45,7 @@ Widget buildProviderModal(ClusterProvider provider) {
 /// user selects the delete item, we remove the provider, when it is not used by
 /// a cluster.
 class SettingsProviderActions extends StatelessWidget {
-  const SettingsProviderActions({
-    super.key,
-    required this.provider,
-  });
+  const SettingsProviderActions({super.key, required this.provider});
 
   final ClusterProvider provider;
 
@@ -88,11 +71,7 @@ class SettingsProviderActions extends StatelessWidget {
     } catch (err) {
       if (context.mounted) {
         Navigator.pop(context);
-        showSnackbar(
-          context,
-          'Failed to Delete Provider',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Delete Provider', err.toString());
       }
     }
   }

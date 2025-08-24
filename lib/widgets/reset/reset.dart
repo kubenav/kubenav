@@ -102,23 +102,17 @@ class _ResetState extends State<Reset> {
                     ),
                   ),
                   onPressed: _isLoading ? null : _reset,
-                  child:
-                      _isLoading
-                          ? SizedBox(
-                            height: 24,
-                            width: 24,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                          )
-                          : Text(
-                            'Reset',
-                            style: primaryTextStyle(
-                              context,
-                              color: Colors.white,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
+                  child: _isLoading
+                      ? SizedBox(
+                          height: 24,
+                          width: 24,
+                          child: CircularProgressIndicator(color: Colors.white),
+                        )
+                      : Text(
+                          'Reset',
+                          style: primaryTextStyle(context, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
                 ),
               ),
             ],

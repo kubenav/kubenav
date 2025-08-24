@@ -30,30 +30,30 @@ final resourceCertificateSigningRequest = Resource(
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
     final items =
-        IoK8sApiCertificatesV1CertificateSigningRequestList.fromJson(parsed)
-                ?.items ??
-            [];
+        IoK8sApiCertificatesV1CertificateSigningRequestList.fromJson(
+          parsed,
+        )?.items ??
+        [];
 
-    return items.map(
-      (e) {
-        final condition = _getCondition(e.status?.conditions);
+    return items.map((e) {
+      final condition = _getCondition(e.status?.conditions);
 
-        return ResourceItem(
-          item: e,
-          metrics: null,
-          status: condition == 'Approved'
-              ? ResourceStatus.success
-              : condition == 'Pending'
-                  ? ResourceStatus.warning
-                  : ResourceStatus.danger,
-        );
-      },
-    ).toList();
+      return ResourceItem(
+        item: e,
+        metrics: null,
+        status: condition == 'Approved'
+            ? ResourceStatus.success
+            : condition == 'Pending'
+            ? ResourceStatus.warning
+            : ResourceStatus.danger,
+      );
+    }).toList();
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCertificatesV1CertificateSigningRequestList.fromJson(parsed)
-            ?.items ??
+    return IoK8sApiCertificatesV1CertificateSigningRequestList.fromJson(
+          parsed,
+        )?.items ??
         [];
   },
   getName: (dynamic item) {
@@ -78,33 +78,28 @@ final resourceCertificateSigningRequest = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item =
-        listItem.item as IoK8sApiCertificatesV1CertificateSigningRequest;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item =
+            listItem.item as IoK8sApiCertificatesV1CertificateSigningRequest;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Signer Name: ${item.spec.signerName}',
-        'Requestor: ${item.spec.username ?? '-'}',
-        'Requested Duration: ${formatSeconds(item.spec.expirationSeconds)}',
-        'Condition: ${_getCondition(item.status?.conditions)}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Signer Name: ${item.spec.signerName}',
+            'Requestor: ${item.spec.username ?? '-'}',
+            'Requested Duration: ${formatSeconds(item.spec.expirationSeconds)}',
+            'Condition: ${_getCondition(item.status?.conditions)}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiCertificatesV1CertificateSigningRequest;
 
     return [
@@ -115,86 +110,70 @@ final resourceCertificateSigningRequest = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
-    final item = detailsItem as IoK8sApiCertificatesV1CertificateSigningRequest;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item =
+            detailsItem as IoK8sApiCertificatesV1CertificateSigningRequest;
 
-    return Column(
-      children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
-        DetailsItemConditions(
-          conditions: item.status?.conditions
-              .map(
-                (e) => IoK8sApimachineryPkgApisMetaV1Condition(
-                  lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
-                  message: e.message ?? '',
-                  observedGeneration: null,
-                  reason: e.reason ?? '',
-                  status: e.status,
-                  type: e.type,
+        return Column(
+          children: [
+            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            DetailsItemConditions(
+              conditions: item.status?.conditions
+                  .map(
+                    (e) => IoK8sApimachineryPkgApisMetaV1Condition(
+                      lastTransitionTime:
+                          e.lastTransitionTime ?? DateTime.now(),
+                      message: e.message ?? '',
+                      observedGeneration: null,
+                      reason: e.reason ?? '',
+                      status: e.status,
+                      type: e.type,
+                    ),
+                  )
+                  .toList(),
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Configuration',
+              details: [
+                DetailsItemModel(
+                  name: 'Signer Name',
+                  values: item.spec.signerName,
                 ),
-              )
-              .toList(),
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Configuration',
-          details: [
-            DetailsItemModel(
-              name: 'Signer Name',
-              values: item.spec.signerName,
+                DetailsItemModel(name: 'Requestor', values: item.spec.username),
+                DetailsItemModel(
+                  name: 'Requested Duration',
+                  values: formatSeconds(item.spec.expirationSeconds),
+                ),
+                DetailsItemModel(name: 'Request', values: item.spec.request),
+                DetailsItemModel(name: 'Groups', values: item.spec.groups),
+                DetailsItemModel(name: 'Usages', values: item.spec.usages),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Requestor',
-              values: item.spec.username,
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Status',
+              details: [
+                DetailsItemModel(
+                  name: 'Condition',
+                  values: _getCondition(item.status?.conditions),
+                ),
+                DetailsItemModel(
+                  name: 'Certificate',
+                  values: item.status?.certificate,
+                ),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Requested Duration',
-              values: formatSeconds(item.spec.expirationSeconds),
-            ),
-            DetailsItemModel(
-              name: 'Request',
-              values: item.spec.request,
-            ),
-            DetailsItemModel(
-              name: 'Groups',
-              values: item.spec.groups,
-            ),
-            DetailsItemModel(
-              name: 'Usages',
-              values: item.spec.usages,
-            ),
-          ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Status',
-          details: [
-            DetailsItemModel(
-              name: 'Condition',
-              values: _getCondition(item.status?.conditions),
-            ),
-            DetailsItemModel(
-              name: 'Certificate',
-              values: item.status?.certificate,
+            const SizedBox(height: Constants.spacingMiddle),
+            AppPrometheusChartsWidget(
+              item: item,
+              toJson: resource.toJson,
+              defaultCharts: const [],
             ),
           ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        AppPrometheusChartsWidget(
-          item: item,
-          toJson: resource.toJson,
-          defaultCharts: const [],
-        ),
-      ],
-    );
-  },
+        );
+      },
 );
 
 String _getCondition(

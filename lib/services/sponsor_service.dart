@@ -8,14 +8,9 @@ class SponsorService {
   static const platform = MethodChannel('kubenav.io');
 
   Future<String> verifyIAP() async {
-    Logger.log(
-      'KubenavMobile verifyIAP',
-      'Run verifyIAP function',
-    );
+    Logger.log('KubenavMobile verifyIAP', 'Run verifyIAP function');
 
-    final String result = await platform.invokeMethod(
-      'verifyIAP',
-    );
+    final String result = await platform.invokeMethod('verifyIAP');
 
     Logger.log(
       'KubenavMobile verifyIAP',

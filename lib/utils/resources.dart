@@ -229,10 +229,9 @@ String getAdditionalPrinterColumnValue(
   AdditionalPrinterColumns additionalPrinterColumns,
   dynamic item,
 ) {
-  final values = JsonPath(r'$' + additionalPrinterColumns.jsonPath)
-      .read(item)
-      .map((e) => e.value)
-      .toList();
+  final values = JsonPath(
+    r'$' + additionalPrinterColumns.jsonPath,
+  ).read(item).map((e) => e.value).toList();
 
   String formattedValue = '';
   if (additionalPrinterColumns.type == 'integer' && values.isEmpty) {
@@ -344,11 +343,7 @@ Future<void> goToReference(
       }
     }
   } catch (err) {
-    Logger.log(
-      'goToReference',
-      'Failed to Go To Reference',
-      err,
-    );
+    Logger.log('goToReference', 'Failed to Go To Reference', err);
   }
 }
 

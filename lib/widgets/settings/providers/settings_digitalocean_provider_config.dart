@@ -12,10 +12,7 @@ import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_digitaloc
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class SettingsDigitalOceanProvider extends StatefulWidget {
-  const SettingsDigitalOceanProvider({
-    super.key,
-    required this.provider,
-  });
+  const SettingsDigitalOceanProvider({super.key, required this.provider});
 
   final ClusterProvider? provider;
 
@@ -71,9 +68,7 @@ class _SettingsDigitalOceanProviderState
             Navigator.pop(context);
             showModal(
               context,
-              SettingsAddClusterDigitalOcean(
-                provider: provider,
-              ),
+              SettingsAddClusterDigitalOcean(provider: provider),
             );
           }
         } else {

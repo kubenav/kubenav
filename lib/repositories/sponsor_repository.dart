@@ -29,10 +29,7 @@ const Map<String, String> titles = {
 /// [SponsorRepository]. The status can be [done] or [pending]. Normally the
 /// status is always [done] and only [pending] for the time between the user
 /// clicks on the subscribe button and finishes the payment.
-enum SponsorRepositoryStatus {
-  pending,
-  done,
-}
+enum SponsorRepositoryStatus { pending, done }
 
 /// The [SponsorRepository] handles the sponsoring of the project via In-App
 /// Purchases for iOS and Android. It is responsible for fetching all available
@@ -230,8 +227,9 @@ class SponsorRepository with ChangeNotifier {
   Future<void> subscribe(ProductDetails product) async {
     try {
       if (_isAvailable) {
-        final PurchaseParam purchaseParam =
-            PurchaseParam(productDetails: product);
+        final PurchaseParam purchaseParam = PurchaseParam(
+          productDetails: product,
+        );
         await _iap.buyNonConsumable(purchaseParam: purchaseParam);
       }
     } catch (err) {

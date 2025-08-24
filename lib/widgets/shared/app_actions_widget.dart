@@ -23,10 +23,7 @@ class AppActionsWidgetAction {
 /// component. The actions are defined as a list of our [AppActionsWidgetAction]
 /// model.
 class AppActionsWidget extends StatelessWidget {
-  const AppActionsWidget({
-    super.key,
-    required this.actions,
-  });
+  const AppActionsWidget({super.key, required this.actions});
 
   final List<AppActionsWidgetAction> actions;
 
@@ -34,9 +31,7 @@ class AppActionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        margin: const EdgeInsets.all(
-          Constants.spacingMiddle,
-        ),
+        margin: const EdgeInsets.all(Constants.spacingMiddle),
         padding: const EdgeInsets.only(
           left: Constants.spacingMiddle,
           right: Constants.spacingMiddle,
@@ -53,10 +48,7 @@ class AppActionsWidget extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.all(0),
             separatorBuilder: (context, index) {
-              return const Divider(
-                height: 0,
-                thickness: 1.0,
-              );
+              return const Divider(height: 0, thickness: 1.0);
             },
             itemCount: actions.length,
             itemBuilder: (context, index) {

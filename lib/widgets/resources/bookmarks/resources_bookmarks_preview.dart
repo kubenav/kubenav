@@ -42,8 +42,9 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
 
     try {
       if (bookmarksRepository.bookmarks[index].type == BookmarkType.list) {
-        await clustersRepository
-            .setActiveCluster(bookmarksRepository.bookmarks[index].clusterId);
+        await clustersRepository.setActiveCluster(
+          bookmarksRepository.bookmarks[index].clusterId,
+        );
         await clustersRepository.setNamespace(
           bookmarksRepository.bookmarks[index].clusterId,
           bookmarksRepository.bookmarks[index].namespace,
@@ -65,8 +66,9 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
           throw Exception('Invalid Bookmark');
         }
 
-        await clustersRepository
-            .setActiveCluster(bookmarksRepository.bookmarks[index].clusterId);
+        await clustersRepository.setActiveCluster(
+          bookmarksRepository.bookmarks[index].clusterId,
+        );
         await clustersRepository.setNamespace(
           bookmarksRepository.bookmarks[index].clusterId,
           bookmarksRepository.bookmarks[index].namespace,
@@ -115,8 +117,8 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
           return AppHorizontalListCardsModel(
             title:
                 bookmarksRepository.bookmarks[index].type == BookmarkType.list
-                    ? bookmarksRepository.bookmarks[index].resource.plural
-                    : bookmarksRepository.bookmarks[index].resource.singular,
+                ? bookmarksRepository.bookmarks[index].resource.plural
+                : bookmarksRepository.bookmarks[index].resource.singular,
             subtitle: [
               'Cluster: ${cluster?.name ?? bookmarksRepository.bookmarks[index].clusterId}',
               'Namespace: ${bookmarksRepository.bookmarks[index].namespace ?? '-'}',
@@ -134,10 +136,7 @@ class _ResourcesBookmarksPreviewState extends State<ResourcesBookmarksPreview> {
       moreIcon: Icons.keyboard_arrow_right,
       moreText: 'View all',
       moreOnTap: () {
-        navigate(
-          context,
-          const ResourcesBookmarks(),
-        );
+        navigate(context, const ResourcesBookmarks());
       },
     );
   }

@@ -31,34 +31,33 @@ final Resource fluxResourceOCIRepository = Resource(
     final parsed = json.decode(data.list);
     final items =
         IoFluxcdToolkitSourceV1beta2OCIRepositoryList.fromJson(parsed)?.items ??
-            [];
+        [];
 
-    return items.map(
-      (e) {
-        final status =
-            e.status?.conditions != null && e.status!.conditions!.isNotEmpty
-                ? e.status!.conditions!
-                    .where((e) => e.type == 'Ready')
-                    .firstOrNull
-                    ?.status
-                : 'Unknown';
+    return items.map((e) {
+      final status =
+          e.status?.conditions != null && e.status!.conditions!.isNotEmpty
+          ? e.status!.conditions!
+                .where((e) => e.type == 'Ready')
+                .firstOrNull
+                ?.status
+          : 'Unknown';
 
-        return ResourceItem(
-          item: e,
-          metrics: null,
-          status: status == 'True'
-              ? ResourceStatus.success
-              : status == 'False'
-                  ? ResourceStatus.danger
-                  : ResourceStatus.warning,
-        );
-      },
-    ).toList();
+      return ResourceItem(
+        item: e,
+        metrics: null,
+        status: status == 'True'
+            ? ResourceStatus.success
+            : status == 'False'
+            ? ResourceStatus.danger
+            : ResourceStatus.warning,
+      );
+    }).toList();
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitSourceV1beta2OCIRepositoryList.fromJson(parsed)
-            ?.items ??
+    return IoFluxcdToolkitSourceV1beta2OCIRepositoryList.fromJson(
+          parsed,
+        )?.items ??
         [];
   },
   getName: (dynamic item) {
@@ -81,11 +80,7 @@ final Resource fluxResourceOCIRepository = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
+  listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
     final item = listItem.item as IoFluxcdToolkitSourceV1beta2OCIRepository;
     final status = listItem.status;
 
@@ -103,9 +98,7 @@ final Resource fluxResourceOCIRepository = Resource(
       ],
     );
   },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoFluxcdToolkitSourceV1beta2OCIRepository;
 
     return [
@@ -115,106 +108,85 @@ final Resource fluxResourceOCIRepository = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
-    final item = detailsItem as IoFluxcdToolkitSourceV1beta2OCIRepository;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item = detailsItem as IoFluxcdToolkitSourceV1beta2OCIRepository;
 
-    return Column(
-      children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
-        DetailsItemConditions(conditions: item.status?.conditions),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Configuration',
-          details: [
-            DetailsItemModel(
-              name: 'Url',
-              values: item.spec?.url,
+        return Column(
+          children: [
+            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            DetailsItemConditions(conditions: item.status?.conditions),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Configuration',
+              details: [
+                DetailsItemModel(name: 'Url', values: item.spec?.url),
+                DetailsItemModel(name: 'Provider', values: item.spec?.interval),
+                DetailsItemModel(name: 'Interval', values: item.spec?.interval),
+                DetailsItemModel(
+                  name: 'Suspended',
+                  values: item.spec?.suspend == true ? 'True' : 'False',
+                ),
+                DetailsItemModel(name: 'Timeout', values: item.spec?.timeout),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Provider',
-              values: item.spec?.interval,
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'OCI Repository Reference',
+              details: [
+                DetailsItemModel(name: 'Tag', values: item.spec?.ref?.tag),
+                DetailsItemModel(
+                  name: 'SemVer',
+                  values: item.spec?.ref?.semver,
+                ),
+                DetailsItemModel(
+                  name: 'Digest',
+                  values: item.spec?.ref?.digest,
+                ),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Interval',
-              values: item.spec?.interval,
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Artifact',
+              details: [
+                DetailsItemModel(
+                  name: 'Path',
+                  values: item.status?.artifact?.path,
+                ),
+                DetailsItemModel(
+                  name: 'Url',
+                  values: item.status?.artifact?.url,
+                ),
+                DetailsItemModel(
+                  name: 'Revision',
+                  values: item.status?.artifact?.revision,
+                ),
+                DetailsItemModel(
+                  name: 'Digest',
+                  values: item.status?.artifact?.digest,
+                ),
+                DetailsItemModel(
+                  name: 'Last Update',
+                  values: getAge(item.status?.artifact?.lastUpdateTime),
+                ),
+                DetailsItemModel(
+                  name: 'Size',
+                  values: item.status?.artifact?.size != null
+                      ? formatBytes(item.status!.artifact!.size!)
+                      : null,
+                ),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Suspended',
-              values: item.spec?.suspend == true ? 'True' : 'False',
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsResourcesPreview(
+              resource: resourceEvent,
+              namespace: item.metadata?.namespace,
+              selector:
+                  'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
+              filter: null,
             ),
-            DetailsItemModel(
-              name: 'Timeout',
-              values: item.spec?.timeout,
-            ),
+            const SizedBox(height: Constants.spacingMiddle),
           ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'OCI Repository Reference',
-          details: [
-            DetailsItemModel(
-              name: 'Tag',
-              values: item.spec?.ref?.tag,
-            ),
-            DetailsItemModel(
-              name: 'SemVer',
-              values: item.spec?.ref?.semver,
-            ),
-            DetailsItemModel(
-              name: 'Digest',
-              values: item.spec?.ref?.digest,
-            ),
-          ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Artifact',
-          details: [
-            DetailsItemModel(
-              name: 'Path',
-              values: item.status?.artifact?.path,
-            ),
-            DetailsItemModel(
-              name: 'Url',
-              values: item.status?.artifact?.url,
-            ),
-            DetailsItemModel(
-              name: 'Revision',
-              values: item.status?.artifact?.revision,
-            ),
-            DetailsItemModel(
-              name: 'Digest',
-              values: item.status?.artifact?.digest,
-            ),
-            DetailsItemModel(
-              name: 'Last Update',
-              values: getAge(item.status?.artifact?.lastUpdateTime),
-            ),
-            DetailsItemModel(
-              name: 'Size',
-              values: item.status?.artifact?.size != null
-                  ? formatBytes(item.status!.artifact!.size!)
-                  : null,
-            ),
-          ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsResourcesPreview(
-          resource: resourceEvent,
-          namespace: item.metadata?.namespace,
-          selector:
-              'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
-          filter: null,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-      ],
-    );
-  },
+        );
+      },
 );

@@ -65,33 +65,28 @@ final resourceCronJob = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiBatchV1CronJob;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiBatchV1CronJob;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Schedule: ${item.spec?.schedule ?? '-'}',
-        'Suspend: ${item.spec?.suspend == false ? 'False' : 'True'}',
-        'Active: ${item.status?.active.length ?? 0}',
-        'Last Schedule: ${getAge(item.status?.lastScheduleTime)}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Namespace: ${item.metadata?.namespace ?? '-'}',
+            'Schedule: ${item.spec?.schedule ?? '-'}',
+            'Suspend: ${item.spec?.suspend == false ? 'False' : 'True'}',
+            'Active: ${item.status?.active.length ?? 0}',
+            'Last Schedule: ${getAge(item.status?.lastScheduleTime)}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiBatchV1CronJob;
 
     return [
@@ -103,119 +98,117 @@ final resourceCronJob = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
-    final item = detailsItem as IoK8sApiBatchV1CronJob;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item = detailsItem as IoK8sApiBatchV1CronJob;
 
-    return Column(
-      children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Configuration',
-          details: [
-            DetailsItemModel(
-              name: 'Schedule',
-              values: item.spec?.schedule,
+        return Column(
+          children: [
+            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Configuration',
+              details: [
+                DetailsItemModel(name: 'Schedule', values: item.spec?.schedule),
+                DetailsItemModel(
+                  name: 'Concurrency Policy',
+                  values: item.spec?.concurrencyPolicy,
+                ),
+                DetailsItemModel(
+                  name: 'Suspend',
+                  values:
+                      item.spec?.suspend == null || item.spec?.suspend == false
+                      ? 'False'
+                      : 'True',
+                ),
+                DetailsItemModel(
+                  name: 'Successful Job History Limit',
+                  values: item.spec?.successfulJobsHistoryLimit,
+                ),
+                DetailsItemModel(
+                  name: 'Failed Job History Limit',
+                  values: item.spec?.failedJobsHistoryLimit,
+                ),
+                DetailsItemModel(
+                  name: 'Starting Deadline Seconds',
+                  values: item.spec?.startingDeadlineSeconds,
+                ),
+                DetailsItemModel(
+                  name: 'Selector',
+                  values: item
+                      .spec
+                      ?.jobTemplate
+                      .spec
+                      ?.selector
+                      ?.matchLabels
+                      .entries
+                      .map(
+                        (matchLabel) => '${matchLabel.key}=${matchLabel.value}',
+                      )
+                      .toList(),
+                ),
+                DetailsItemModel(
+                  name: 'Parallelism',
+                  values: item.spec?.jobTemplate.spec?.parallelism,
+                ),
+                DetailsItemModel(
+                  name: 'Completions',
+                  values: item.spec?.jobTemplate.spec?.completions,
+                ),
+                DetailsItemModel(
+                  name: 'Active Deadline Seconds',
+                  values: item.spec?.jobTemplate.spec?.activeDeadlineSeconds,
+                ),
+                DetailsItemModel(
+                  name: 'Backoff Limit',
+                  values: item.spec?.jobTemplate.spec?.backoffLimit,
+                ),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Concurrency Policy',
-              values: item.spec?.concurrencyPolicy,
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Status',
+              details: [
+                DetailsItemModel(
+                  name: 'Last Schedule',
+                  values: getAge(item.status?.lastScheduleTime),
+                ),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Suspend',
-              values: item.spec?.suspend == null || item.spec?.suspend == false
-                  ? 'False'
-                  : 'True',
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsResourcesPreview(
+              resource: resourceJob,
+              namespace: item.metadata?.namespace,
+              selector: '',
+              filter: (List<dynamic> previewItems) {
+                final jobs = previewItems as List<IoK8sApiBatchV1Job>;
+
+                return jobs
+                    .where(
+                      (job) =>
+                          job.metadata?.ownerReferences != null &&
+                          job.metadata?.ownerReferences.length == 1 &&
+                          job.metadata?.ownerReferences[0].name ==
+                              item.metadata?.name,
+                    )
+                    .toList();
+              },
             ),
-            DetailsItemModel(
-              name: 'Successful Job History Limit',
-              values: item.spec?.successfulJobsHistoryLimit,
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsResourcesPreview(
+              resource: resourceEvent,
+              namespace: item.metadata?.namespace,
+              selector:
+                  'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
+              filter: null,
             ),
-            DetailsItemModel(
-              name: 'Failed Job History Limit',
-              values: item.spec?.failedJobsHistoryLimit,
-            ),
-            DetailsItemModel(
-              name: 'Starting Deadline Seconds',
-              values: item.spec?.startingDeadlineSeconds,
-            ),
-            DetailsItemModel(
-              name: 'Selector',
-              values: item.spec?.jobTemplate.spec?.selector?.matchLabels.entries
-                  .map(
-                    (matchLabel) => '${matchLabel.key}=${matchLabel.value}',
-                  )
-                  .toList(),
-            ),
-            DetailsItemModel(
-              name: 'Parallelism',
-              values: item.spec?.jobTemplate.spec?.parallelism,
-            ),
-            DetailsItemModel(
-              name: 'Completions',
-              values: item.spec?.jobTemplate.spec?.completions,
-            ),
-            DetailsItemModel(
-              name: 'Active Deadline Seconds',
-              values: item.spec?.jobTemplate.spec?.activeDeadlineSeconds,
-            ),
-            DetailsItemModel(
-              name: 'Backoff Limit',
-              values: item.spec?.jobTemplate.spec?.backoffLimit,
+            const SizedBox(height: Constants.spacingMiddle),
+            AppPrometheusChartsWidget(
+              item: item,
+              toJson: resource.toJson,
+              defaultCharts: const [],
             ),
           ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Status',
-          details: [
-            DetailsItemModel(
-              name: 'Last Schedule',
-              values: getAge(item.status?.lastScheduleTime),
-            ),
-          ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsResourcesPreview(
-          resource: resourceJob,
-          namespace: item.metadata?.namespace,
-          selector: '',
-          filter: (List<dynamic> previewItems) {
-            final jobs = previewItems as List<IoK8sApiBatchV1Job>;
-
-            return jobs
-                .where(
-                  (job) =>
-                      job.metadata?.ownerReferences != null &&
-                      job.metadata?.ownerReferences.length == 1 &&
-                      job.metadata?.ownerReferences[0].name ==
-                          item.metadata?.name,
-                )
-                .toList();
-          },
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsResourcesPreview(
-          resource: resourceEvent,
-          namespace: item.metadata?.namespace,
-          selector:
-              'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
-          filter: null,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        AppPrometheusChartsWidget(
-          item: item,
-          toJson: resource.toJson,
-          defaultCharts: const [],
-        ),
-      ],
-    );
-  },
+        );
+      },
 );

@@ -78,13 +78,15 @@ class _PluginFluxReconcileState extends State<PluginFluxReconcile> {
       final item = await compute(widget.resource.toJson, widget.item);
       final now = DateTime.now().toRFC3339Nano();
 
-      final String body = item['metadata'] != null &&
+      final String body =
+          item['metadata'] != null &&
               item['metadata']['annotations'] != null &&
               !item['metadata']['annotations'].isEmpty
-          ? item['metadata']['annotations']
-                  .containsKey('reconcile.fluxcd.io/requestedAt')
-              ? '[{"op": "replace", "path": "/metadata/annotations/reconcile.fluxcd.io~1requestedAt", "value": "$now"}]'
-              : '[{"op": "add", "path": "/metadata/annotations/reconcile.fluxcd.io~1requestedAt", "value": "$now"}]'
+          ? item['metadata']['annotations'].containsKey(
+                  'reconcile.fluxcd.io/requestedAt',
+                )
+                ? '[{"op": "replace", "path": "/metadata/annotations/reconcile.fluxcd.io~1requestedAt", "value": "$now"}]'
+                : '[{"op": "add", "path": "/metadata/annotations/reconcile.fluxcd.io~1requestedAt", "value": "$now"}]'
           : '[{"op": "add", "path": "/metadata/annotations", "value": {"reconcile.fluxcd.io/requestedAt": "$now"}}]';
 
       final cluster = await clustersRepository.getClusterWithCredentials(
@@ -121,11 +123,7 @@ class _PluginFluxReconcileState extends State<PluginFluxReconcile> {
         _isLoading = false;
       });
       if (mounted) {
-        showSnackbar(
-          context,
-          'Reconciliation Failed',
-          err.toString(),
-        );
+        showSnackbar(context, 'Reconciliation Failed', err.toString());
       }
     }
   }

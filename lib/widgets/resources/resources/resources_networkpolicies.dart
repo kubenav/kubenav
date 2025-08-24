@@ -68,34 +68,29 @@ final resourceNetworkPolicy = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiNetworkingV1NetworkPolicy;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiNetworkingV1NetworkPolicy;
+        final status = listItem.status;
 
-    final podSelector = item.spec?.podSelector.matchLabels.entries
-        .map((e) => '${e.key}=${e.value}')
-        .toList();
+        final podSelector = item.spec?.podSelector.matchLabels.entries
+            .map((e) => '${e.key}=${e.value}')
+            .toList();
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Pod Selector: ${podSelector != null && podSelector.isNotEmpty ? podSelector.join(', ') : '-'}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Namespace: ${item.metadata?.namespace ?? '-'}',
+            'Pod Selector: ${podSelector != null && podSelector.isNotEmpty ? podSelector.join(', ') : '-'}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiNetworkingV1NetworkPolicy;
 
     final podSelector = item.spec?.podSelector.matchLabels.entries
@@ -108,66 +103,60 @@ final resourceNetworkPolicy = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
-    final item = detailsItem as IoK8sApiNetworkingV1NetworkPolicy;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item = detailsItem as IoK8sApiNetworkingV1NetworkPolicy;
 
-    return Column(
-      children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
-        DetailsItemConditions(conditions: item.status?.conditions),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Configuration',
-          details: [
-            DetailsItemModel(
-              name: 'Pod Selector',
-              values: item.spec?.podSelector.matchLabels.entries
-                  .map((e) => '${e.key}=${e.value}')
-                  .toList(),
+        return Column(
+          children: [
+            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            DetailsItemConditions(conditions: item.status?.conditions),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Configuration',
+              details: [
+                DetailsItemModel(
+                  name: 'Pod Selector',
+                  values: item.spec?.podSelector.matchLabels.entries
+                      .map((e) => '${e.key}=${e.value}')
+                      .toList(),
+                ),
+                DetailsItemModel(
+                  name: 'Policy Types',
+                  values: item.spec?.policyTypes,
+                ),
+                DetailsItemModel(
+                  name: 'Egress Rules',
+                  values: item.spec?.egress.length,
+                ),
+                DetailsItemModel(
+                  name: 'Ingress Rules',
+                  values: item.spec?.ingress.length,
+                ),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Policy Types',
-              values: item.spec?.policyTypes,
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsResourcesPreview(
+              resource: resourcePod,
+              namespace: item.metadata?.namespace,
+              selector: getSelector(item.spec?.podSelector),
+              filter: null,
             ),
-            DetailsItemModel(
-              name: 'Egress Rules',
-              values: item.spec?.egress.length,
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsResourcesPreview(
+              resource: resourceEvent,
+              namespace: item.metadata?.namespace,
+              selector:
+                  'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
+              filter: null,
             ),
-            DetailsItemModel(
-              name: 'Ingress Rules',
-              values: item.spec?.ingress.length,
+            const SizedBox(height: Constants.spacingMiddle),
+            AppPrometheusChartsWidget(
+              item: item,
+              toJson: resource.toJson,
+              defaultCharts: const [],
             ),
           ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsResourcesPreview(
-          resource: resourcePod,
-          namespace: item.metadata?.namespace,
-          selector: getSelector(item.spec?.podSelector),
-          filter: null,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsResourcesPreview(
-          resource: resourceEvent,
-          namespace: item.metadata?.namespace,
-          selector:
-              'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
-          filter: null,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        AppPrometheusChartsWidget(
-          item: item,
-          toJson: resource.toJson,
-          defaultCharts: const [],
-        ),
-      ],
-    );
-  },
+        );
+      },
 );

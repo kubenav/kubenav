@@ -24,7 +24,7 @@ jobs:
           cache: true
           cache-dependency-path: go.sum
 
-      - name: Lint
+      - name: Lint Go
         uses: golangci/golangci-lint-action@v8
 
       - name: Generate Bindings
@@ -36,7 +36,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.32.7"
+          flutter-version: "3.35.1"
           channel: "stable"
           cache: true
           cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"
@@ -46,6 +46,10 @@ jobs:
       - name: Install Dependencies
         run: |
           flutter pub get
+
+      - name: Lint Flutter
+        run: |
+          dart analyze --fatal-infos
 
       - name: Build
         run: |
@@ -70,7 +74,7 @@ jobs:
           cache: true
           cache-dependency-path: go.sum
 
-      - name: Lint
+      - name: Lint Go
         uses: golangci/golangci-lint-action@v8
 
       - name: Generate Bindings
@@ -83,7 +87,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.32.7"
+          flutter-version: "3.35.1"
           channel: "stable"
           cache: true
           cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"
@@ -93,6 +97,10 @@ jobs:
       - name: Install Dependencies
         run: |
           flutter pub get
+
+      - name: Lint Flutter
+        run: |
+          dart analyze --fatal-infos
 
       - name: Build
         run: |

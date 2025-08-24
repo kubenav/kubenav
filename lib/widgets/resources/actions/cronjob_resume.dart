@@ -84,20 +84,12 @@ class _CronJobResumeState extends State<CronJobResume> {
         Navigator.pop(context);
       }
     } catch (err) {
-      Logger.log(
-        'CronJobResume _resume',
-        'Resumption Failed',
-        err,
-      );
+      Logger.log('CronJobResume _resume', 'Resumption Failed', err);
       setState(() {
         _isLoading = false;
       });
       if (mounted) {
-        showSnackbar(
-          context,
-          'Resumption Failed',
-          err.toString(),
-        );
+        showSnackbar(context, 'Resumption Failed', err.toString());
       }
     }
   }

@@ -51,15 +51,17 @@ class _PluginCertManagerApproveState extends State<PluginCertManagerApprove> {
       });
 
       final now = DateTime.now().toRFC3339();
-      final conditionIndex =
-          widget.cr.status?.conditions.indexWhere((e) => e.type == 'Approved');
+      final conditionIndex = widget.cr.status?.conditions.indexWhere(
+        (e) => e.type == 'Approved',
+      );
 
-      final String body = widget.cr.status?.conditions == null ||
+      final String body =
+          widget.cr.status?.conditions == null ||
               widget.cr.status!.conditions.isEmpty
           ? '[{"op":"add","path":"/status/conditions","value":[{"type":"Approved","status":"True","lastTransitionTime":"$now","reason":"KubenavCertManager","message":"manually approved by kubenav"}]}]'
           : conditionIndex == null
-              ? '[{"op":"add","path":"/status/conditions/${widget.cr.status?.conditions != null ? widget.cr.status!.conditions.length + 1 : 0}","value":{"type":"Approved","status":"True","lastTransitionTime":"$now","reason":"KubenavCertManager","message":"manually approved by kubenav"}}]'
-              : '[{"op":"replace","path":"/status/conditions/$conditionIndex","value":{"type":"Approved","status":"True","lastTransitionTime":"$now","reason":"KubenavCertManager","message":"manually approved by kubenav"}}]';
+          ? '[{"op":"add","path":"/status/conditions/${widget.cr.status?.conditions != null ? widget.cr.status!.conditions.length + 1 : 0}","value":{"type":"Approved","status":"True","lastTransitionTime":"$now","reason":"KubenavCertManager","message":"manually approved by kubenav"}}]'
+          : '[{"op":"replace","path":"/status/conditions/$conditionIndex","value":{"type":"Approved","status":"True","lastTransitionTime":"$now","reason":"KubenavCertManager","message":"manually approved by kubenav"}}]';
 
       final cluster = await clustersRepository.getClusterWithCredentials(
         clustersRepository.activeClusterId,

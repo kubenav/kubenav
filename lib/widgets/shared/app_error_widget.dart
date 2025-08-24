@@ -94,27 +94,13 @@ class AppErrorWidget extends StatelessWidget {
           ),
           const SizedBox(height: Constants.spacingSmall),
           Padding(
-            padding: const EdgeInsets.only(
-              left: Constants.spacingSmall,
-            ),
-            child: Text(
-              message,
-              style: primaryTextStyle(
-                context,
-              ),
-            ),
+            padding: const EdgeInsets.only(left: Constants.spacingSmall),
+            child: Text(message, style: primaryTextStyle(context)),
           ),
           const SizedBox(height: Constants.spacingExtraSmall),
           Padding(
-            padding: const EdgeInsets.only(
-              left: Constants.spacingSmall,
-            ),
-            child: Text(
-              details,
-              style: secondaryTextStyle(
-                context,
-              ),
-            ),
+            padding: const EdgeInsets.only(left: Constants.spacingSmall),
+            child: Text(details, style: secondaryTextStyle(context)),
           ),
           const SizedBox(height: Constants.spacingSmall),
           _buildReauthWidget(details),

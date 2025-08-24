@@ -42,9 +42,7 @@ class AppBottomSheetWidget extends StatelessWidget {
   Widget _buildIcon(BuildContext context, dynamic icon) {
     if (icon is String) {
       return Container(
-        margin: const EdgeInsets.only(
-          right: Constants.spacingMiddle,
-        ),
+        margin: const EdgeInsets.only(right: Constants.spacingMiddle),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary,
           borderRadius: const BorderRadius.all(
@@ -53,19 +51,13 @@ class AppBottomSheetWidget extends StatelessWidget {
         ),
         height: 54,
         width: 54,
-        padding: const EdgeInsets.all(
-          Constants.spacingIcon54x54,
-        ),
+        padding: const EdgeInsets.all(Constants.spacingIcon54x54),
         child: SvgPicture.asset(icon),
       );
     } else if (icon is IconData) {
       return Container(
-        margin: const EdgeInsets.only(
-          right: Constants.spacingMiddle,
-        ),
-        padding: const EdgeInsets.all(
-          Constants.spacingExtraSmall,
-        ),
+        margin: const EdgeInsets.only(right: Constants.spacingMiddle),
+        padding: const EdgeInsets.all(Constants.spacingExtraSmall),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary,
           borderRadius: const BorderRadius.all(
@@ -114,10 +106,7 @@ class AppBottomSheetWidget extends StatelessWidget {
                               Text(
                                 title,
                                 overflow: TextOverflow.ellipsis,
-                                style: primaryTextStyle(
-                                  context,
-                                  size: 18,
-                                ),
+                                style: primaryTextStyle(context, size: 18),
                               ),
                               Text(
                                 Characters(subtitle)
@@ -127,9 +116,7 @@ class AppBottomSheetWidget extends StatelessWidget {
                                     )
                                     .toString(),
                                 overflow: TextOverflow.ellipsis,
-                                style: secondaryTextStyle(
-                                  context,
-                                ),
+                                style: secondaryTextStyle(context),
                               ),
                             ],
                           ),
@@ -140,9 +127,9 @@ class AppBottomSheetWidget extends StatelessWidget {
                   IconButton(
                     icon: Icon(
                       Icons.close_outlined,
-                      color: Theme.of(context)
-                          .extension<CustomColors>()!
-                          .textPrimary,
+                      color: Theme.of(
+                        context,
+                      ).extension<CustomColors>()!.textPrimary,
                     ),
                     onPressed: closePressed,
                   ),
@@ -154,25 +141,17 @@ class AppBottomSheetWidget extends StatelessWidget {
                 left: Constants.spacingMiddle,
                 right: Constants.spacingMiddle,
               ),
-              child: Divider(
-                height: 0,
-                thickness: 1.0,
-              ),
+              child: Divider(height: 0, thickness: 1.0),
             ),
             const SizedBox(height: Constants.spacingMiddle),
-            Expanded(
-              child: child,
-            ),
+            Expanded(child: child),
             const SizedBox(height: Constants.spacingMiddle),
             const Padding(
               padding: EdgeInsets.only(
                 left: Constants.spacingMiddle,
                 right: Constants.spacingMiddle,
               ),
-              child: Divider(
-                height: 0,
-                thickness: 1.0,
-              ),
+              child: Divider(height: 0, thickness: 1.0),
             ),
             Padding(
               padding: const EdgeInsets.only(

@@ -238,29 +238,32 @@ class _OverviewMetricState extends State<OverviewMetric> {
       clustersRepository.activeClusterId,
     );
 
-    final nodesData = await KubernetesService(
-      cluster: cluster!,
-      proxy: appRepository.settings.proxy,
-      timeout: appRepository.settings.timeout,
-    ).getRequest(
-      '/api/v1/nodes${widget.nodeName != null ? '?fieldSelector=metadata.name=${widget.nodeName}' : ''}',
-    );
+    final nodesData =
+        await KubernetesService(
+          cluster: cluster!,
+          proxy: appRepository.settings.proxy,
+          timeout: appRepository.settings.timeout,
+        ).getRequest(
+          '/api/v1/nodes${widget.nodeName != null ? '?fieldSelector=metadata.name=${widget.nodeName}' : ''}',
+        );
 
-    final podsData = await KubernetesService(
-      cluster: cluster,
-      proxy: appRepository.settings.proxy,
-      timeout: appRepository.settings.timeout,
-    ).getRequest(
-      '/api/v1/pods${widget.nodeName != null ? '?fieldSelector=spec.nodeName=${widget.nodeName}' : ''}',
-    );
+    final podsData =
+        await KubernetesService(
+          cluster: cluster,
+          proxy: appRepository.settings.proxy,
+          timeout: appRepository.settings.timeout,
+        ).getRequest(
+          '/api/v1/pods${widget.nodeName != null ? '?fieldSelector=spec.nodeName=${widget.nodeName}' : ''}',
+        );
 
-    final nodeMetricsData = await KubernetesService(
-      cluster: cluster,
-      proxy: appRepository.settings.proxy,
-      timeout: appRepository.settings.timeout,
-    ).getRequest(
-      '/apis/metrics.k8s.io/v1beta1/nodes${widget.nodeName != null ? '?fieldSelector=metadata.name=${widget.nodeName}' : ''}',
-    );
+    final nodeMetricsData =
+        await KubernetesService(
+          cluster: cluster,
+          proxy: appRepository.settings.proxy,
+          timeout: appRepository.settings.timeout,
+        ).getRequest(
+          '/apis/metrics.k8s.io/v1beta1/nodes${widget.nodeName != null ? '?fieldSelector=metadata.name=${widget.nodeName}' : ''}',
+        );
 
     return compute(_getMetrics, [nodesData, podsData, nodeMetricsData]);
   }
@@ -469,10 +472,9 @@ class _OverviewMetricState extends State<OverviewMetric> {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color:
-                              Theme.of(
-                                context,
-                              ).extension<CustomColors>()!.shadow,
+                          color: Theme.of(
+                            context,
+                          ).extension<CustomColors>()!.shadow,
                           blurRadius: Constants.sizeBorderBlurRadius,
                           spreadRadius: Constants.sizeBorderSpreadRadius,
                           offset: const Offset(0.0, 0.0),
@@ -500,55 +502,49 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                       context,
                                     ).extension<CustomColors>()!.message;
                                   },
-                                  getTooltipItem: (
-                                    group,
-                                    groupIndex,
-                                    rod,
-                                    rodIndex,
-                                  ) {
-                                    String label;
-                                    switch (group.x.toInt()) {
-                                      case 0:
-                                        label = 'Allocatable';
-                                        break;
-                                      case 1:
-                                        label = 'Usage';
-                                        break;
-                                      case 2:
-                                        label = 'Requests';
-                                        break;
-                                      case 3:
-                                        label = 'Limits';
-                                        break;
-                                      default:
-                                        label = '';
-                                        break;
-                                    }
-                                    return BarTooltipItem(
-                                      '$label\n',
-                                      TextStyle(
-                                        color:
-                                            Theme.of(context)
+                                  getTooltipItem:
+                                      (group, groupIndex, rod, rodIndex) {
+                                        String label;
+                                        switch (group.x.toInt()) {
+                                          case 0:
+                                            label = 'Allocatable';
+                                            break;
+                                          case 1:
+                                            label = 'Usage';
+                                            break;
+                                          case 2:
+                                            label = 'Requests';
+                                            break;
+                                          case 3:
+                                            label = 'Limits';
+                                            break;
+                                          default:
+                                            label = '';
+                                            break;
+                                        }
+                                        return BarTooltipItem(
+                                          '$label\n',
+                                          TextStyle(
+                                            color: Theme.of(context)
                                                 .extension<CustomColors>()!
                                                 .onMessage,
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 14,
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          text: formatValue(rod.toY),
-                                          style: TextStyle(
-                                            color:
-                                                Theme.of(context)
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 14,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: formatValue(rod.toY),
+                                              style: TextStyle(
+                                                color: Theme.of(context)
                                                     .extension<CustomColors>()!
                                                     .onMessage,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  },
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
                                 ),
                               ),
                               titlesData: FlTitlesData(
@@ -596,20 +592,18 @@ class _OverviewMetricState extends State<OverviewMetric> {
                                 show: true,
                                 getDrawingHorizontalLine: (value) {
                                   return FlLine(
-                                    color:
-                                        Theme.of(context)
-                                            .extension<CustomColors>()!
-                                            .textSecondary,
+                                    color: Theme.of(
+                                      context,
+                                    ).extension<CustomColors>()!.textSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );
                                 },
                                 getDrawingVerticalLine: (value) {
                                   return FlLine(
-                                    color:
-                                        Theme.of(context)
-                                            .extension<CustomColors>()!
-                                            .textSecondary,
+                                    color: Theme.of(
+                                      context,
+                                    ).extension<CustomColors>()!.textSecondary,
                                     strokeWidth: 0.4,
                                     dashArray: [8, 4],
                                   );

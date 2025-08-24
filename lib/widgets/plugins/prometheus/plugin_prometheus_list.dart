@@ -114,9 +114,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
                       .toString(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: primaryTextStyle(
-                    context,
-                  ),
+                  style: primaryTextStyle(context),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -124,27 +122,23 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
                   children: [
                     Text(
                       Characters(
-                        'Namespace: ${configMap.metadata?.namespace ?? ''}',
-                      )
+                            'Namespace: ${configMap.metadata?.namespace ?? ''}',
+                          )
                           .replaceAll(Characters(''), Characters('\u{200B}'))
                           .toString(),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: secondaryTextStyle(
-                        context,
-                      ),
+                      style: secondaryTextStyle(context),
                     ),
                     Text(
                       Characters(
-                        'Description: ${configMap.data.containsKey('description') ? configMap.data['description'] : ''}',
-                      )
+                            'Description: ${configMap.data.containsKey('description') ? configMap.data['description'] : ''}',
+                          )
                           .replaceAll(Characters(''), Characters('\u{200B}'))
                           .toString(),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: secondaryTextStyle(
-                        context,
-                      ),
+                      style: secondaryTextStyle(context),
                     ),
                   ],
                 ),
@@ -166,10 +160,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<AppRepository>(
-      context,
-      listen: true,
-    );
+    Provider.of<AppRepository>(context, listen: true);
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,
@@ -189,9 +180,9 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
         title: Column(
           children: [
             Text(
-              Characters('Prometheus Dashboards')
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
+              Characters(
+                'Prometheus Dashboards',
+              ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 20,
@@ -202,17 +193,13 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
             Text(
               Characters(
                 clustersRepository
-                            .getCluster(
-                              clustersRepository.activeClusterId,
-                            )!
+                            .getCluster(clustersRepository.activeClusterId)!
                             .namespace ==
                         ''
                     ? 'All Namespaces'
                     : clustersRepository
-                        .getCluster(
-                          clustersRepository.activeClusterId,
-                        )!
-                        .namespace,
+                          .getCluster(clustersRepository.activeClusterId)!
+                          .namespace,
               ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
@@ -232,91 +219,93 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
             children: [
               FutureBuilder(
                 future: _futureFetchDashboards,
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<List<IoK8sApiCoreV1ConfigMap>> snapshot,
-                ) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.none:
-                    case ConnectionState.waiting:
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(
-                              Constants.spacingMiddle,
-                            ),
-                            child: CircularProgressIndicator(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ],
-                      );
-                    default:
-                      if (snapshot.hasError) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: Padding(
+                builder:
+                    (
+                      BuildContext context,
+                      AsyncSnapshot<List<IoK8sApiCoreV1ConfigMap>> snapshot,
+                    ) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                        case ConnectionState.waiting:
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
                                 padding: const EdgeInsets.all(
                                   Constants.spacingMiddle,
                                 ),
-                                child: AppErrorWidget(
-                                  message: 'Failed to Load Dashboards',
-                                  details: snapshot.error.toString(),
-                                  icon: 'assets/plugins/prometheus.svg',
+                                child: CircularProgressIndicator(
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
-                            ),
-                          ],
-                        );
-                      }
+                            ],
+                          );
+                        default:
+                          if (snapshot.hasError) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(
+                                      Constants.spacingMiddle,
+                                    ),
+                                    child: AppErrorWidget(
+                                      message: 'Failed to Load Dashboards',
+                                      details: snapshot.error.toString(),
+                                      icon: 'assets/plugins/prometheus.svg',
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
 
-                      return Wrap(
-                        children: [
-                          AppResourceActions(
-                            mode: AppResourceActionsMode.header,
-                            actions: [
-                              AppResourceActionsModel(
-                                title: 'Refresh',
-                                icon: Icons.refresh,
-                                onTap: () {
-                                  setState(() {
-                                    _futureFetchDashboards = _fetchDashboards();
-                                  });
-                                },
+                          return Wrap(
+                            children: [
+                              AppResourceActions(
+                                mode: AppResourceActionsMode.header,
+                                actions: [
+                                  AppResourceActionsModel(
+                                    title: 'Refresh',
+                                    icon: Icons.refresh,
+                                    onTap: () {
+                                      setState(() {
+                                        _futureFetchDashboards =
+                                            _fetchDashboards();
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                  top: Constants.spacingMiddle,
+                                  bottom: Constants.spacingMiddle,
+                                ),
+                                child: ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  padding: const EdgeInsets.only(
+                                    right: Constants.spacingMiddle,
+                                    left: Constants.spacingMiddle,
+                                  ),
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                        height: Constants.spacingMiddle,
+                                      ),
+                                  itemCount: snapshot.data!.length,
+                                  itemBuilder: (context, index) {
+                                    return _buildItem(snapshot.data![index]);
+                                  },
+                                ),
                               ),
                             ],
-                          ),
-                          Container(
-                            padding: const EdgeInsets.only(
-                              top: Constants.spacingMiddle,
-                              bottom: Constants.spacingMiddle,
-                            ),
-                            child: ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: const EdgeInsets.only(
-                                right: Constants.spacingMiddle,
-                                left: Constants.spacingMiddle,
-                              ),
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                height: Constants.spacingMiddle,
-                              ),
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) {
-                                return _buildItem(snapshot.data![index]);
-                              },
-                            ),
-                          ),
-                        ],
-                      );
-                  }
-                },
+                          );
+                      }
+                    },
               ),
             ],
           ),

@@ -59,8 +59,8 @@ final resourceNode = Resource(
         status: !_isNodeReady(e.status!.conditions)
             ? ResourceStatus.danger
             : e.spec!.unschedulable == true
-                ? ResourceStatus.warning
-                : ResourceStatus.success,
+            ? ResourceStatus.warning
+            : ResourceStatus.success,
       );
     }).toList();
   },
@@ -85,11 +85,7 @@ final resourceNode = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
+  listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
     final item = listItem.item as IoK8sApiCoreV1Node;
     final status = listItem.status;
 
@@ -114,9 +110,7 @@ final resourceNode = Resource(
       ],
     );
   },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiCoreV1Node;
 
     final nodeStatus = _getNodeStatus(item);
@@ -130,19 +124,12 @@ final resourceNode = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiCoreV1Node;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(
           conditions: item.status?.conditions
               .map(
@@ -197,14 +184,8 @@ final resourceNode = Resource(
               name: 'OS Image',
               values: item.status?.nodeInfo?.osImage,
             ),
-            DetailsItemModel(
-              name: 'Pod CIDR',
-              values: item.spec?.podCIDR,
-            ),
-            DetailsItemModel(
-              name: 'Pod CIDRs',
-              values: item.spec?.podCIDRs,
-            ),
+            DetailsItemModel(name: 'Pod CIDR', values: item.spec?.podCIDR),
+            DetailsItemModel(name: 'Pod CIDRs', values: item.spec?.podCIDRs),
             DetailsItemModel(
               name: 'System UUID',
               values: item.status?.nodeInfo?.systemUUID,
@@ -231,13 +212,12 @@ final resourceNode = Resource(
           ],
         ),
         const SizedBox(height: Constants.spacingMiddle),
-        OverviewMetrics(
-          nodeName: item.metadata?.name,
-        ),
+        OverviewMetrics(nodeName: item.metadata?.name),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Resources',
-          details: item.status?.allocatable.entries
+          details:
+              item.status?.allocatable.entries
                   .map(
                     (allocatable) => DetailsItemModel(
                       name: allocatable.key,
@@ -257,15 +237,12 @@ final resourceNode = Resource(
         const SizedBox(height: Constants.spacingMiddle),
         AppVerticalListSimpleWidget(
           title: 'Images',
-          items: item.status?.images
+          items:
+              item.status?.images
                   .map(
                     (image) => AppVerticalListSimpleModel(
                       onTap: () {
-                        showSnackbar(
-                          context,
-                          'Names',
-                          image.names.join('\n'),
-                        );
+                        showSnackbar(context, 'Names', image.names.join('\n'));
                       },
                       children: [
                         Container(
@@ -292,9 +269,7 @@ final resourceNode = Resource(
                             children: [
                               Text(
                                 image.names.firstOrNull ?? '-',
-                                style: primaryTextStyle(
-                                  context,
-                                ),
+                                style: primaryTextStyle(context),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -302,9 +277,7 @@ final resourceNode = Resource(
                                 image.sizeBytes != null
                                     ? formatBytes(image.sizeBytes!)
                                     : '-',
-                                style: secondaryTextStyle(
-                                  context,
-                                ),
+                                style: secondaryTextStyle(context),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -480,7 +453,8 @@ ResourceMetrics? _getMetricsForNode(
     }
 
     if (nodeMetricsItem[0].usage!.memory != null) {
-      memory = memory +
+      memory =
+          memory +
           memoryMetricsStringToDouble(nodeMetricsItem[0].usage!.memory!);
     }
 
@@ -506,7 +480,8 @@ ResourceMetrics? getAllocatableResources(IoK8sApiCoreV1Node node) {
   }
 
   if (node.status!.allocatable.containsKey('memory')) {
-    memory = memory +
+    memory =
+        memory +
         memoryMetricsStringToDouble(node.status!.allocatable['memory']!);
   }
 

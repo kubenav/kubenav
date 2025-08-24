@@ -69,14 +69,16 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
           clusterProviderType: ClusterProviderType.manual,
           clusterProviderId: '',
           clusterServer: _clusterServerController.text.endsWith('/')
-              ? _clusterServerController.text
-                  .substring(0, _clusterServerController.text.length - 1)
+              ? _clusterServerController.text.substring(
+                  0,
+                  _clusterServerController.text.length - 1,
+                )
               : _clusterServerController.text,
           clusterCertificateAuthorityData:
               _clusterCertificateAuthorityDataController.text.trim(),
           clusterInsecureSkipTLSVerify: _clusterInsecureSkipTLSVerify,
-          userClientCertificateData:
-              _userClientCertificateDataController.text.trim(),
+          userClientCertificateData: _userClientCertificateDataController.text
+              .trim(),
           userClientKeyData: _userClientKeyDataController.text.trim(),
           userToken: _userTokenController.text.trim(),
           userUsername: _userUsernameController.text.trim(),
@@ -105,11 +107,7 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
         _isLoadingAddCluster = false;
       });
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Add Cluster',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Add Cluster', err.toString());
       }
     }
   }
@@ -207,7 +205,7 @@ class _SettingsAddClusterManualState extends State<SettingsAddClusterManual> {
                   children: [
                     const Text('Insecure Skip TLS Verify'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (val) => {
                         setState(() {
                           _clusterInsecureSkipTLSVerify =

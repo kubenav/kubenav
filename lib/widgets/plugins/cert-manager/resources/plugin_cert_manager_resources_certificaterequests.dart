@@ -39,46 +39,44 @@ final Resource certManagerResourceCertificateRequest = Resource(
     final items =
         IoCertManagerV1CertificateRequestList.fromJson(parsed)?.items ?? [];
 
-    return items.map(
-      (e) {
-        final ready =
-            e.status?.conditions != null && e.status!.conditions.isNotEmpty
-                ? e.status!.conditions
-                    .where((e) => e.type == 'Ready')
-                    .firstOrNull
-                    ?.status
-                    .value
-                : 'Unknown';
-        final approved =
-            e.status?.conditions != null && e.status!.conditions.isNotEmpty
-                ? e.status!.conditions
-                    .where((e) => e.type == 'Approved')
-                    .firstOrNull
-                    ?.status
-                    .value
-                : 'Unknown';
-        final denied =
-            e.status?.conditions != null && e.status!.conditions.isNotEmpty
-                ? e.status!.conditions
-                    .where((e) => e.type == 'Denied')
-                    .firstOrNull
-                    ?.status
-                    .value
-                : 'Unknown';
+    return items.map((e) {
+      final ready =
+          e.status?.conditions != null && e.status!.conditions.isNotEmpty
+          ? e.status!.conditions
+                .where((e) => e.type == 'Ready')
+                .firstOrNull
+                ?.status
+                .value
+          : 'Unknown';
+      final approved =
+          e.status?.conditions != null && e.status!.conditions.isNotEmpty
+          ? e.status!.conditions
+                .where((e) => e.type == 'Approved')
+                .firstOrNull
+                ?.status
+                .value
+          : 'Unknown';
+      final denied =
+          e.status?.conditions != null && e.status!.conditions.isNotEmpty
+          ? e.status!.conditions
+                .where((e) => e.type == 'Denied')
+                .firstOrNull
+                ?.status
+                .value
+          : 'Unknown';
 
-        return ResourceItem(
-          item: e,
-          metrics: null,
-          status: ready == 'True'
-              ? ResourceStatus.success
-              : approved == 'True'
-                  ? ResourceStatus.warning
-                  : ready == 'False' || denied == 'True'
-                      ? ResourceStatus.danger
-                      : ResourceStatus.warning,
-        );
-      },
-    ).toList();
+      return ResourceItem(
+        item: e,
+        metrics: null,
+        status: ready == 'True'
+            ? ResourceStatus.success
+            : approved == 'True'
+            ? ResourceStatus.warning
+            : ready == 'False' || denied == 'True'
+            ? ResourceStatus.danger
+            : ResourceStatus.warning,
+      );
+    }).toList();
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
@@ -101,11 +99,7 @@ final Resource certManagerResourceCertificateRequest = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
+  listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
     final item = listItem.item as IoCertManagerV1CertificateRequest;
     final status = listItem.status;
 
@@ -126,9 +120,7 @@ final Resource certManagerResourceCertificateRequest = Resource(
       ],
     );
   },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoCertManagerV1CertificateRequest;
 
     return [
@@ -141,19 +133,12 @@ final Resource certManagerResourceCertificateRequest = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoCertManagerV1CertificateRequest;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(
           conditions: item.status?.conditions
               .map(
@@ -172,10 +157,7 @@ final Resource certManagerResourceCertificateRequest = Resource(
         DetailsItem(
           title: 'Configuration',
           details: [
-            DetailsItemModel(
-              name: 'Requestor',
-              values: item.spec?.username,
-            ),
+            DetailsItemModel(name: 'Requestor', values: item.spec?.username),
             DetailsItemModel(
               name: 'Issuer',
               values: item.spec?.issuerRef == null
@@ -190,8 +172,8 @@ final Resource certManagerResourceCertificateRequest = Resource(
                           name: item.spec!.issuerRef.name,
                           namespace:
                               item.spec!.issuerRef.kind == 'ClusterIssuer'
-                                  ? null
-                                  : item.metadata?.namespace,
+                              ? null
+                              : item.metadata?.namespace,
                           resource: item.spec!.issuerRef.kind == 'ClusterIssuer'
                               ? certManagerResourceClusterIssuer
                               : certManagerResourceIssuer,
@@ -199,14 +181,8 @@ final Resource certManagerResourceCertificateRequest = Resource(
                       );
                     },
             ),
-            DetailsItemModel(
-              name: 'Groups',
-              values: item.spec?.groups,
-            ),
-            DetailsItemModel(
-              name: 'Request',
-              values: item.spec?.request,
-            ),
+            DetailsItemModel(name: 'Groups', values: item.spec?.groups),
+            DetailsItemModel(name: 'Request', values: item.spec?.request),
           ],
         ),
         const SizedBox(height: Constants.spacingMiddle),
@@ -215,42 +191,46 @@ final Resource certManagerResourceCertificateRequest = Resource(
           details: [
             DetailsItemModel(
               name: 'Approved',
-              values: item.status?.conditions != null &&
+              values:
+                  item.status?.conditions != null &&
                       item.status!.conditions.isNotEmpty
                   ? item.status!.conditions
-                      .where((e) => e.type == 'Approved')
-                      .first
-                      .status
+                        .where((e) => e.type == 'Approved')
+                        .first
+                        .status
                   : null,
             ),
             DetailsItemModel(
               name: 'Denied',
-              values: item.status?.conditions != null &&
+              values:
+                  item.status?.conditions != null &&
                       item.status!.conditions.isNotEmpty
                   ? item.status!.conditions
-                      .where((e) => e.type == 'Denied')
-                      .firstOrNull
-                      ?.status
+                        .where((e) => e.type == 'Denied')
+                        .firstOrNull
+                        ?.status
                   : null,
             ),
             DetailsItemModel(
               name: 'Ready',
-              values: item.status?.conditions != null &&
+              values:
+                  item.status?.conditions != null &&
                       item.status!.conditions.isNotEmpty
                   ? item.status!.conditions
-                      .where((e) => e.type == 'Ready')
-                      .firstOrNull
-                      ?.status
+                        .where((e) => e.type == 'Ready')
+                        .firstOrNull
+                        ?.status
                   : null,
             ),
             DetailsItemModel(
               name: 'Status',
-              values: item.status?.conditions != null &&
+              values:
+                  item.status?.conditions != null &&
                       item.status!.conditions.isNotEmpty
                   ? item.status!.conditions
-                      .where((e) => e.type == 'Ready')
-                      .firstOrNull
-                      ?.message
+                        .where((e) => e.type == 'Ready')
+                        .firstOrNull
+                        ?.message
                   : null,
             ),
             DetailsItemModel(

@@ -13,10 +13,7 @@ import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_aws.dart'
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class SettingsAWSProvider extends StatefulWidget {
-  const SettingsAWSProvider({
-    super.key,
-    required this.provider,
-  });
+  const SettingsAWSProvider({super.key, required this.provider});
 
   final ClusterProvider? provider;
 
@@ -76,12 +73,7 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
           });
           if (mounted) {
             Navigator.pop(context);
-            showModal(
-              context,
-              SettingsAddClusterAWS(
-                provider: provider,
-              ),
-            );
+            showModal(context, SettingsAddClusterAWS(provider: provider));
           }
         } else {
           final provider = widget.provider;
@@ -225,9 +217,9 @@ class _SettingsAWSProviderState extends State<SettingsAWSProvider> {
                           child: Text(
                             value,
                             style: TextStyle(
-                              color: Theme.of(context)
-                                  .extension<CustomColors>()!
-                                  .textPrimary,
+                              color: Theme.of(
+                                context,
+                              ).extension<CustomColors>()!.textPrimary,
                             ),
                           ),
                         );

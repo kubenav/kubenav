@@ -705,14 +705,13 @@ class KubernetesService {
     int timeEnd,
   ) async {
     try {
-      final request =
-          Request(
-            prometheus: prometheus,
-            manifest: manifest,
-            queries: queries,
-            timeStart: timeStart,
-            timeEnd: timeEnd,
-          ).toString();
+      final request = Request(
+        prometheus: prometheus,
+        manifest: manifest,
+        queries: queries,
+        timeStart: timeStart,
+        timeEnd: timeEnd,
+      ).toString();
 
       Logger.log(
         'KubernetesService prometheusGetData',

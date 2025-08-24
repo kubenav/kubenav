@@ -41,28 +41,26 @@ final Resource certManagerResourceCertificate = Resource(
     final parsed = json.decode(data.list);
     final items = IoCertManagerV1CertificateList.fromJson(parsed)?.items ?? [];
 
-    return items.map(
-      (e) {
-        final status =
-            e.status?.conditions != null && e.status!.conditions.isNotEmpty
-                ? e.status!.conditions
-                    .where((e) => e.type == 'Ready')
-                    .firstOrNull
-                    ?.status
-                    .value
-                : 'Unknown';
+    return items.map((e) {
+      final status =
+          e.status?.conditions != null && e.status!.conditions.isNotEmpty
+          ? e.status!.conditions
+                .where((e) => e.type == 'Ready')
+                .firstOrNull
+                ?.status
+                .value
+          : 'Unknown';
 
-        return ResourceItem(
-          item: e,
-          metrics: null,
-          status: status == 'True'
-              ? ResourceStatus.success
-              : status == 'False'
-                  ? ResourceStatus.danger
-                  : ResourceStatus.warning,
-        );
-      },
-    ).toList();
+      return ResourceItem(
+        item: e,
+        metrics: null,
+        status: status == 'True'
+            ? ResourceStatus.success
+            : status == 'False'
+            ? ResourceStatus.danger
+            : ResourceStatus.warning,
+      );
+    }).toList();
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
@@ -85,31 +83,26 @@ final Resource certManagerResourceCertificate = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoCertManagerV1Certificate;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoCertManagerV1Certificate;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace ?? '',
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Ready: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
-        'Secret Name: ${item.spec?.secretName ?? '-'}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace ?? '',
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Namespace: ${item.metadata?.namespace ?? '-'}',
+            'Ready: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
+            'Secret Name: ${item.spec?.secretName ?? '-'}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoCertManagerV1Certificate;
 
     return [
@@ -119,19 +112,12 @@ final Resource certManagerResourceCertificate = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoCertManagerV1Certificate;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(
           conditions: item.status?.conditions
               .map(
@@ -174,26 +160,17 @@ final Resource certManagerResourceCertificate = Resource(
               name: 'Common Name',
               values: item.spec?.commonName,
             ),
-            DetailsItemModel(
-              name: 'Duration',
-              values: item.spec?.duration,
-            ),
+            DetailsItemModel(name: 'Duration', values: item.spec?.duration),
             DetailsItemModel(
               name: 'Renew Before',
               values: item.spec?.renewBefore,
             ),
-            DetailsItemModel(
-              name: 'DNS Names',
-              values: item.spec?.dnsNames,
-            ),
+            DetailsItemModel(name: 'DNS Names', values: item.spec?.dnsNames),
             DetailsItemModel(
               name: 'IP Addresses',
               values: item.spec?.ipAddresses,
             ),
-            DetailsItemModel(
-              name: 'Uris',
-              values: item.spec?.uris,
-            ),
+            DetailsItemModel(name: 'Uris', values: item.spec?.uris),
             DetailsItemModel(
               name: 'Email Addresses',
               values: item.spec?.emailAddresses,
@@ -203,8 +180,8 @@ final Resource certManagerResourceCertificate = Resource(
               values: item.spec?.isCA == null
                   ? null
                   : item.spec!.isCA!
-                      ? 'True'
-                      : 'False',
+                  ? 'True'
+                  : 'False',
             ),
             DetailsItemModel(
               name: 'Usages',
@@ -224,8 +201,8 @@ final Resource certManagerResourceCertificate = Resource(
                           name: item.spec!.issuerRef.name,
                           namespace:
                               item.spec!.issuerRef.kind == 'ClusterIssuer'
-                                  ? null
-                                  : item.metadata?.namespace,
+                              ? null
+                              : item.metadata?.namespace,
                           resource: item.spec!.issuerRef.kind == 'ClusterIssuer'
                               ? certManagerResourceClusterIssuer
                               : certManagerResourceIssuer,
@@ -243,32 +220,31 @@ final Resource certManagerResourceCertificate = Resource(
           details: [
             DetailsItemModel(
               name: 'Ready',
-              values: item.status?.conditions != null &&
+              values:
+                  item.status?.conditions != null &&
                       item.status!.conditions.isNotEmpty
                   ? item.status!.conditions
-                      .where((e) => e.type == 'Ready')
-                      .firstOrNull
-                      ?.status
+                        .where((e) => e.type == 'Ready')
+                        .firstOrNull
+                        ?.status
                   : null,
             ),
             DetailsItemModel(
               name: 'Status',
-              values: item.status?.conditions != null &&
+              values:
+                  item.status?.conditions != null &&
                       item.status!.conditions.isNotEmpty
                   ? item.status!.conditions
-                      .where((e) => e.type == 'Ready')
-                      .firstOrNull
-                      ?.message
+                        .where((e) => e.type == 'Ready')
+                        .firstOrNull
+                        ?.message
                   : null,
             ),
             DetailsItemModel(
               name: 'Not Before',
               values: item.status?.notBefore,
             ),
-            DetailsItemModel(
-              name: 'Not After',
-              values: item.status?.notAfter,
-            ),
+            DetailsItemModel(name: 'Not After', values: item.status?.notAfter),
             DetailsItemModel(
               name: 'Renewal Time',
               values: item.status?.renewalTime,
@@ -330,34 +306,19 @@ Widget _buildX509Subject(IoCertManagerV1CertificateSpecSubject? subject) {
             name: 'Organizations',
             values: subject.organizations,
           ),
-          DetailsItemModel(
-            name: 'Countries',
-            values: subject.countries,
-          ),
+          DetailsItemModel(name: 'Countries', values: subject.countries),
           DetailsItemModel(
             name: 'Organizational Units',
             values: subject.organizationalUnits,
           ),
-          DetailsItemModel(
-            name: 'Localities',
-            values: subject.localities,
-          ),
-          DetailsItemModel(
-            name: 'Provinces',
-            values: subject.provinces,
-          ),
+          DetailsItemModel(name: 'Localities', values: subject.localities),
+          DetailsItemModel(name: 'Provinces', values: subject.provinces),
           DetailsItemModel(
             name: 'Street Addresses',
             values: subject.streetAddresses,
           ),
-          DetailsItemModel(
-            name: 'Postal Codes',
-            values: subject.postalCodes,
-          ),
-          DetailsItemModel(
-            name: 'Serial Number',
-            values: subject.serialNumber,
-          ),
+          DetailsItemModel(name: 'Postal Codes', values: subject.postalCodes),
+          DetailsItemModel(name: 'Serial Number', values: subject.serialNumber),
         ],
       ),
       const SizedBox(height: Constants.spacingMiddle),
@@ -387,10 +348,7 @@ Widget _buildPrivateKey(IoCertManagerV1CertificateSpecPrivateKey? privateKey) {
             name: 'Algorithm',
             values: privateKey.algorithm?.value,
           ),
-          DetailsItemModel(
-            name: 'Size',
-            values: privateKey.size,
-          ),
+          DetailsItemModel(name: 'Size', values: privateKey.size),
         ],
       ),
       const SizedBox(height: Constants.spacingMiddle),

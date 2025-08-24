@@ -272,10 +272,9 @@ class _SettingsInfoState extends State<SettingsInfo> {
                     child: Text(
                       licenseText,
                       style: TextStyle(
-                        color:
-                            Theme.of(
-                              context,
-                            ).extension<CustomColors>()!.textPrimary,
+                        color: Theme.of(
+                          context,
+                        ).extension<CustomColors>()!.textPrimary,
                       ),
                     ),
                   ),

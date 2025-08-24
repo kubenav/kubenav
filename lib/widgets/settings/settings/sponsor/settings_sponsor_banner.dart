@@ -30,9 +30,7 @@ class SettingsSponsorBanner extends StatelessWidget {
         DateTime.now().millisecondsSinceEpoch >
             appRepository.settings.sponsorReminder) {
       return Container(
-        margin: const EdgeInsets.all(
-          Constants.spacingMiddle,
-        ),
+        margin: const EdgeInsets.all(Constants.spacingMiddle),
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -51,9 +49,7 @@ class SettingsSponsorBanner extends StatelessWidget {
           onTap: () {
             showActions(
               context,
-              const SettingsSponsorActions(
-                showDismiss: true,
-              ),
+              const SettingsSponsorActions(showDismiss: true),
             );
           },
           child: Column(
@@ -77,26 +73,15 @@ class SettingsSponsorBanner extends StatelessWidget {
               ),
               const SizedBox(height: Constants.spacingSmall),
               Padding(
-                padding: const EdgeInsets.only(
-                  left: Constants.spacingSmall,
-                ),
-                child: Text(
-                  'Sponsor',
-                  style: primaryTextStyle(
-                    context,
-                  ),
-                ),
+                padding: const EdgeInsets.only(left: Constants.spacingSmall),
+                child: Text('Sponsor', style: primaryTextStyle(context)),
               ),
               const SizedBox(height: Constants.spacingExtraSmall),
               Padding(
-                padding: const EdgeInsets.only(
-                  left: Constants.spacingSmall,
-                ),
+                padding: const EdgeInsets.only(left: Constants.spacingSmall),
                 child: Text(
                   'Support the development of kubenav by becoming a sponsor.',
-                  style: secondaryTextStyle(
-                    context,
-                  ),
+                  style: secondaryTextStyle(context),
                 ),
               ),
               const SizedBox(height: Constants.spacingSmall),

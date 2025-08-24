@@ -33,21 +33,19 @@ final Resource certManagerResourceOrder = Resource(
     final parsed = json.decode(data.list);
     final items = IoCertManagerAcmeV1OrderList.fromJson(parsed)?.items ?? [];
 
-    return items.map(
-      (e) {
-        final state = e.status?.state?.value;
+    return items.map((e) {
+      final state = e.status?.state?.value;
 
-        return ResourceItem(
-          item: e,
-          metrics: null,
-          status: state == 'valid'
-              ? ResourceStatus.success
-              : state == 'ready'
-                  ? ResourceStatus.warning
-                  : ResourceStatus.danger,
-        );
-      },
-    ).toList();
+      return ResourceItem(
+        item: e,
+        metrics: null,
+        status: state == 'valid'
+            ? ResourceStatus.success
+            : state == 'ready'
+            ? ResourceStatus.warning
+            : ResourceStatus.danger,
+      );
+    }).toList();
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
@@ -70,32 +68,27 @@ final Resource certManagerResourceOrder = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoCertManagerAcmeV1Order;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoCertManagerAcmeV1Order;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata.name ?? '',
-      namespace: item.metadata.namespace ?? '',
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Namespace: ${item.metadata.namespace ?? '-'}',
-        'State: ${item.status?.state?.value ?? '-'}',
-        'Reason: ${item.status?.reason ?? '-'}',
-        'Issuer: ${item.spec.issuerRef.name}',
-        'Age: ${getAge(item.metadata.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata.name ?? '',
+          namespace: item.metadata.namespace ?? '',
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Namespace: ${item.metadata.namespace ?? '-'}',
+            'State: ${item.status?.state?.value ?? '-'}',
+            'Reason: ${item.status?.reason ?? '-'}',
+            'Issuer: ${item.spec.issuerRef.name}',
+            'Age: ${getAge(item.metadata.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoCertManagerAcmeV1Order;
 
     return [
@@ -106,84 +99,69 @@ final Resource certManagerResourceOrder = Resource(
       'Age: ${getAge(item.metadata.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
-    final item = detailsItem as IoCertManagerAcmeV1Order;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item = detailsItem as IoCertManagerAcmeV1Order;
 
-    return Column(
-      children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Configuration',
-          details: [
-            DetailsItemModel(
-              name: 'Issuer',
-              values:
-                  '${item.spec.issuerRef.kind} (${item.spec.issuerRef.name})',
-              onTap: (index) {
-                navigate(
-                  context,
-                  ResourcesDetails(
-                    name: item.spec.issuerRef.name,
-                    namespace: item.spec.issuerRef.kind == 'ClusterIssuer'
-                        ? null
-                        : item.metadata.namespace,
-                    resource: item.spec.issuerRef.kind == 'ClusterIssuer'
-                        ? certManagerResourceClusterIssuer
-                        : certManagerResourceIssuer,
-                  ),
-                );
-              },
+        return Column(
+          children: [
+            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Configuration',
+              details: [
+                DetailsItemModel(
+                  name: 'Issuer',
+                  values:
+                      '${item.spec.issuerRef.kind} (${item.spec.issuerRef.name})',
+                  onTap: (index) {
+                    navigate(
+                      context,
+                      ResourcesDetails(
+                        name: item.spec.issuerRef.name,
+                        namespace: item.spec.issuerRef.kind == 'ClusterIssuer'
+                            ? null
+                            : item.metadata.namespace,
+                        resource: item.spec.issuerRef.kind == 'ClusterIssuer'
+                            ? certManagerResourceClusterIssuer
+                            : certManagerResourceIssuer,
+                      ),
+                    );
+                  },
+                ),
+                DetailsItemModel(name: 'DNS Names', values: item.spec.dnsNames),
+                DetailsItemModel(
+                  name: 'IP Addresses',
+                  values: item.spec.ipAddresses,
+                ),
+                DetailsItemModel(
+                  name: 'Common Name',
+                  values: item.spec.commonName,
+                ),
+                DetailsItemModel(name: 'Request', values: item.spec.request),
+              ],
             ),
-            DetailsItemModel(
-              name: 'DNS Names',
-              values: item.spec.dnsNames,
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Status',
+              details: [
+                DetailsItemModel(
+                  name: 'State',
+                  values: item.status?.state?.value,
+                ),
+                DetailsItemModel(name: 'Reason', values: item.status?.reason),
+              ],
             ),
-            DetailsItemModel(
-              name: 'IP Addresses',
-              values: item.spec.ipAddresses,
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsResourcesPreview(
+              resource: resourceEvent,
+              namespace: item.metadata.namespace,
+              selector:
+                  'fieldSelector=involvedObject.name=${item.metadata.name ?? ''}',
+              filter: null,
             ),
-            DetailsItemModel(
-              name: 'Common Name',
-              values: item.spec.commonName,
-            ),
-            DetailsItemModel(
-              name: 'Request',
-              values: item.spec.request,
-            ),
+            const SizedBox(height: Constants.spacingMiddle),
           ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Status',
-          details: [
-            DetailsItemModel(
-              name: 'State',
-              values: item.status?.state?.value,
-            ),
-            DetailsItemModel(
-              name: 'Reason',
-              values: item.status?.reason,
-            ),
-          ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsResourcesPreview(
-          resource: resourceEvent,
-          namespace: item.metadata.namespace,
-          selector:
-              'fieldSelector=involvedObject.name=${item.metadata.name ?? ''}',
-          filter: null,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-      ],
-    );
-  },
+        );
+      },
 );

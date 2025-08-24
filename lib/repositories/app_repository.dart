@@ -45,11 +45,7 @@ class AppRepository with ChangeNotifier {
         json.encode(_settings.toJson()),
       );
     } catch (err) {
-      Logger.log(
-        'AppRepository _save',
-        'Failed to Save Settings',
-        err,
-      );
+      Logger.log('AppRepository _save', 'Failed to Save Settings', err);
     }
   }
 
@@ -84,11 +80,7 @@ class AppRepository with ChangeNotifier {
 
       notifyListeners();
     } catch (err) {
-      Logger.log(
-        'AppRepository _init',
-        'Failed to Load Settings',
-        err,
-      );
+      Logger.log('AppRepository _init', 'Failed to Load Settings', err);
     }
   }
 
@@ -112,8 +104,8 @@ class AppRepository with ChangeNotifier {
             canAuthenticateWithBiometrics || await auth.isDeviceSupported();
 
         if (canAuthenticate) {
-          final List<BiometricType> availableBiometrics =
-              await auth.getAvailableBiometrics();
+          final List<BiometricType> availableBiometrics = await auth
+              .getAvailableBiometrics();
 
           if (availableBiometrics.isNotEmpty) {
             _settings.isAuthenticationEnabled = true;
@@ -139,10 +131,7 @@ class AppRepository with ChangeNotifier {
         }
       }
     } catch (err) {
-      Logger.log(
-        'Enable / Disable Authentication Failed',
-        err.toString(),
-      );
+      Logger.log('Enable / Disable Authentication Failed', err.toString());
       rethrow;
     }
   }
@@ -160,8 +149,8 @@ class AppRepository with ChangeNotifier {
             canAuthenticateWithBiometrics || await auth.isDeviceSupported();
 
         if (canAuthenticate) {
-          final List<BiometricType> availableBiometrics =
-              await auth.getAvailableBiometrics();
+          final List<BiometricType> availableBiometrics = await auth
+              .getAvailableBiometrics();
 
           if (availableBiometrics.isNotEmpty) {
             final bool didAuthenticate = await auth.authenticate(
@@ -184,10 +173,7 @@ class AppRepository with ChangeNotifier {
           break;
         }
       } catch (err) {
-        Logger.log(
-          'Authentication Failed',
-          err.toString(),
-        );
+        Logger.log('Authentication Failed', err.toString());
       }
     }
   }
@@ -206,9 +192,7 @@ class AppRepository with ChangeNotifier {
   /// list of the users favorite namespaces.
   Future<void> deleteNamespace(String value) async {
     _settings.namespaces = _settings.namespaces
-        .where(
-          (e) => e != value,
-        )
+        .where((e) => e != value)
         .toList();
     await _save();
     notifyListeners();
@@ -381,18 +365,20 @@ class AppRepositorySettings {
       namespaces: data.containsKey('namespaces') && data['namespaces'] != null
           ? (json.decode(data['namespaces']) as List<dynamic>).cast<String>()
           : [],
-      isAuthenticationEnabled: data.containsKey('isAuthenticationEnabled') &&
+      isAuthenticationEnabled:
+          data.containsKey('isAuthenticationEnabled') &&
               data['isAuthenticationEnabled'] != null
           ? data['isAuthenticationEnabled']
           : false,
-      isShowClustersOnStart: data.containsKey('isShowClustersOnStart') &&
+      isShowClustersOnStart:
+          data.containsKey('isShowClustersOnStart') &&
               data['isShowClustersOnStart'] != null
           ? data['isShowClustersOnStart']
           : false,
       editorFormat:
           data.containsKey('editorFormat') && data['editorFormat'] != null
-              ? data['editorFormat']
-              : 'yaml',
+          ? data['editorFormat']
+          : 'yaml',
       proxy: data.containsKey('proxy') && data['proxy'] != null
           ? data['proxy']
           : '',
@@ -401,8 +387,8 @@ class AppRepositorySettings {
           : 0,
       sponsorReminder:
           data.containsKey('sponsorReminder') && data['sponsorReminder'] != null
-              ? data['sponsorReminder']
-              : 0,
+          ? data['sponsorReminder']
+          : 0,
       home: data.containsKey('home') && data['home'] != null
           ? AppRepositorySettingsHome.fromJson(data['home'])
           : AppRepositorySettingsHome.fromDefault(),
@@ -465,35 +451,41 @@ class AppRepositorySettingsHome {
 
   factory AppRepositorySettingsHome.fromJson(Map<String, dynamic> data) {
     return AppRepositorySettingsHome(
-      useSelectedNamespace: data.containsKey('useSelectedNamespace') &&
+      useSelectedNamespace:
+          data.containsKey('useSelectedNamespace') &&
               data['useSelectedNamespace'] != null
           ? data['useSelectedNamespace']
           : false,
       showMetrics:
           data.containsKey('showMetrics') && data['showMetrics'] != null
-              ? data['showMetrics']
-              : true,
+          ? data['showMetrics']
+          : true,
       showWarnings:
           data.containsKey('showWarnings') && data['showWarnings'] != null
-              ? data['showWarnings']
-              : true,
-      showWorkloadPods: data.containsKey('showWorkloadPods') &&
+          ? data['showWarnings']
+          : true,
+      showWorkloadPods:
+          data.containsKey('showWorkloadPods') &&
               data['showWorkloadPods'] != null
           ? data['showWorkloadPods']
           : true,
-      showWorkloadDeployments: data.containsKey('showWorkloadDeployments') &&
+      showWorkloadDeployments:
+          data.containsKey('showWorkloadDeployments') &&
               data['showWorkloadDeployments'] != null
           ? data['showWorkloadDeployments']
           : true,
-      showWorkloadStatefulSets: data.containsKey('showWorkloadStatefulSets') &&
+      showWorkloadStatefulSets:
+          data.containsKey('showWorkloadStatefulSets') &&
               data['showWorkloadStatefulSets'] != null
           ? data['showWorkloadStatefulSets']
           : true,
-      showWorkloadDaemonSets: data.containsKey('showWorkloadDaemonSets') &&
+      showWorkloadDaemonSets:
+          data.containsKey('showWorkloadDaemonSets') &&
               data['showWorkloadDaemonSets'] != null
           ? data['showWorkloadDaemonSets']
           : true,
-      showWorkloadJobs: data.containsKey('showWorkloadJobs') &&
+      showWorkloadJobs:
+          data.containsKey('showWorkloadJobs') &&
               data['showWorkloadJobs'] != null
           ? data['showWorkloadJobs']
           : true,
@@ -572,16 +564,17 @@ class AppRepositorySettingsPrometheus {
           : 'monitoring',
       labelSelector:
           data.containsKey('labelSelector') && data['labelSelector'] != null
-              ? data['labelSelector']
-              : 'app=prometheus',
+          ? data['labelSelector']
+          : 'app=prometheus',
       container: data.containsKey('container') && data['container'] != null
           ? data['container']
           : 'prometheus',
       port: data.containsKey('port') && data['port'] != null
           ? data['port']
           : 9090,
-      path:
-          data.containsKey('path') && data['path'] != null ? data['path'] : '',
+      path: data.containsKey('path') && data['path'] != null
+          ? data['path']
+          : '',
       username: data.containsKey('username') && data['username'] != null
           ? data['username']
           : '',
@@ -593,8 +586,8 @@ class AppRepositorySettingsPrometheus {
           : '',
       certificate:
           data.containsKey('certificate') && data['certificate'] != null
-              ? data['certificate']
-              : '',
+          ? data['certificate']
+          : '',
     );
   }
 

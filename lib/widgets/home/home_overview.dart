@@ -38,9 +38,7 @@ class HomeOverview extends StatelessWidget {
       ];
     }
 
-    final List<Widget> content = [
-      const OverviewActions(),
-    ];
+    final List<Widget> content = [const OverviewActions()];
 
     content.add(const OverviewWorkloads());
 
@@ -80,10 +78,7 @@ class HomeOverview extends StatelessWidget {
         ],
         leading: const Padding(
           padding: EdgeInsets.only(left: Constants.spacingMiddle),
-          child: Icon(
-            CustomIcons.kubenav,
-            size: 42,
-          ),
+          child: Icon(CustomIcons.kubenav, size: 42),
         ),
         title: Column(
           children: [
@@ -97,9 +92,9 @@ class HomeOverview extends StatelessWidget {
               ),
             ),
             Text(
-              Characters(activeCluster?.name ?? 'No Active Cluster')
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
+              Characters(
+                activeCluster?.name ?? 'No Active Cluster',
+              ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 14,
@@ -114,9 +109,7 @@ class HomeOverview extends StatelessWidget {
       floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: _buildContent(context),
-          ),
+          child: Column(children: _buildContent(context)),
         ),
       ),
     );

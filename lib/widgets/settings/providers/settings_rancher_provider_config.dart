@@ -14,10 +14,7 @@ import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_rancher.d
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class SettingsRancherProvider extends StatefulWidget {
-  const SettingsRancherProvider({
-    super.key,
-    required this.provider,
-  });
+  const SettingsRancherProvider({super.key, required this.provider});
 
   final ClusterProvider? provider;
 
@@ -64,20 +61,12 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
         _isLoading = false;
       });
     } catch (err) {
-      Logger.log(
-        'SettingsRancherProvider _signin',
-        'Sign In Failed',
-        err,
-      );
+      Logger.log('SettingsRancherProvider _signin', 'Sign In Failed', err);
       setState(() {
         _isLoading = false;
       });
       if (mounted) {
-        showSnackbar(
-          context,
-          'Sign In Failed',
-          err.toString(),
-        );
+        showSnackbar(context, 'Sign In Failed', err.toString());
       }
     }
   }
@@ -112,12 +101,7 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
         });
         if (mounted) {
           Navigator.pop(context);
-          showModal(
-            context,
-            SettingsAddClusterRancher(
-              provider: provider,
-            ),
-          );
+          showModal(context, SettingsAddClusterRancher(provider: provider));
         }
       } else {
         final provider = widget.provider;
@@ -238,7 +222,7 @@ class _SettingsRancherProviderState extends State<SettingsRancherProvider> {
                   children: [
                     const Text('Allow Insecure Connections'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _allowInsecureConnections =

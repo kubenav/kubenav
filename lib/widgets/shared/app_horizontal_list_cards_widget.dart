@@ -85,24 +85,19 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
 
   /// [_buildSubtitle] creates the subtitle widget. Each item in the list of
   /// [subtitle] represents one line of text in the returned column widget.
-  Widget _buildSubtitle(
-    BuildContext context,
-    List<String> subtitle,
-  ) {
+  Widget _buildSubtitle(BuildContext context, List<String> subtitle) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: subtitle
           .map(
             (e) => Text(
-              Characters(e)
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
+              Characters(
+                e,
+              ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
-              style: secondaryTextStyle(
-                context,
-              ),
+              style: secondaryTextStyle(context),
             ),
           )
           .toList(),
@@ -155,8 +150,9 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color:
-                          Theme.of(context).extension<CustomColors>()!.shadow,
+                      color: Theme.of(
+                        context,
+                      ).extension<CustomColors>()!.shadow,
                       blurRadius: Constants.sizeBorderBlurRadius,
                       spreadRadius: Constants.sizeBorderSpreadRadius,
                       offset: const Offset(0.0, 0.0),
@@ -176,18 +172,22 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.primary,
                           borderRadius: const BorderRadius.only(
-                            topLeft:
-                                Radius.circular(Constants.sizeBorderRadius),
-                            topRight:
-                                Radius.circular(Constants.sizeBorderRadius),
+                            topLeft: Radius.circular(
+                              Constants.sizeBorderRadius,
+                            ),
+                            topRight: Radius.circular(
+                              Constants.sizeBorderRadius,
+                            ),
                           ),
                         ),
                         child: ClipRRect(
                           borderRadius: const BorderRadius.only(
-                            topLeft:
-                                Radius.circular(Constants.sizeBorderRadius),
-                            topRight:
-                                Radius.circular(Constants.sizeBorderRadius),
+                            topLeft: Radius.circular(
+                              Constants.sizeBorderRadius,
+                            ),
+                            topRight: Radius.circular(
+                              Constants.sizeBorderRadius,
+                            ),
                           ),
                           clipBehavior: Clip.antiAliasWithSaveLayer,
                           child: Container(
@@ -215,9 +215,7 @@ class AppHorizontalListCardsWidget extends StatelessWidget {
                               )
                               .toString(),
                           overflow: TextOverflow.ellipsis,
-                          style: primaryTextStyle(
-                            context,
-                          ),
+                          style: primaryTextStyle(context),
                         ),
                       ),
                       const SizedBox(height: Constants.spacingExtraSmall),

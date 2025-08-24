@@ -38,10 +38,7 @@ class _AppFloatingActionButtonsWidgetState
       listen: false,
     );
     PortForwardingRepository portForwardingRepository =
-        Provider.of<PortForwardingRepository>(
-      context,
-      listen: false,
-    );
+        Provider.of<PortForwardingRepository>(context, listen: false);
 
     try {
       final cluster = await clustersRepository.getClusterWithCredentials(
@@ -54,10 +51,7 @@ class _AppFloatingActionButtonsWidgetState
       );
 
       if (mounted) {
-        showActions(
-          context,
-          const AppPortForwardingSessionsWidget(),
-        );
+        showActions(context, const AppPortForwardingSessionsWidget());
       }
     } catch (err) {
       if (mounted) {
@@ -80,10 +74,7 @@ class _AppFloatingActionButtonsWidgetState
       listen: false,
     );
     PortForwardingRepository portForwardingRepository =
-        Provider.of<PortForwardingRepository>(
-      context,
-      listen: false,
-    );
+        Provider.of<PortForwardingRepository>(context, listen: false);
 
     List<Widget> floatingActionButtons = [];
 
@@ -93,10 +84,7 @@ class _AppFloatingActionButtonsWidgetState
           heroTag: 'terminal',
           backgroundColor: Theme.of(context).colorScheme.primary,
           onPressed: () {
-            showActions(
-              context,
-              const AppTerminalsActionsWidget(),
-            );
+            showActions(context, const AppTerminalsActionsWidget());
           },
           child: Icon(
             Icons.terminal,
@@ -127,14 +115,8 @@ class _AppFloatingActionButtonsWidgetState
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<TerminalRepository>(
-      context,
-      listen: true,
-    );
-    Provider.of<PortForwardingRepository>(
-      context,
-      listen: true,
-    );
+    Provider.of<TerminalRepository>(context, listen: true);
+    Provider.of<PortForwardingRepository>(context, listen: true);
 
     return Wrap(
       direction: Axis.vertical,

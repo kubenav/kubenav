@@ -43,10 +43,10 @@ final resourceStatefulSet = Resource(
             status: e.status!.replicas == 0
                 ? ResourceStatus.warning
                 : e.status!.replicas != e.status!.readyReplicas ||
-                        e.status!.replicas != e.status!.updatedReplicas ||
-                        e.status!.replicas != e.status!.availableReplicas
-                    ? ResourceStatus.danger
-                    : ResourceStatus.success,
+                      e.status!.replicas != e.status!.updatedReplicas ||
+                      e.status!.replicas != e.status!.availableReplicas
+                ? ResourceStatus.danger
+                : ResourceStatus.success,
           ),
         )
         .toList();
@@ -72,32 +72,27 @@ final resourceStatefulSet = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiAppsV1StatefulSet;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiAppsV1StatefulSet;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Replicas: ${item.status?.replicas ?? 0}',
-        'Ready: ${item.status?.readyReplicas ?? 0}',
-        'Updated: ${item.status?.updatedReplicas ?? 0}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Namespace: ${item.metadata?.namespace ?? '-'}',
+            'Replicas: ${item.status?.replicas ?? 0}',
+            'Ready: ${item.status?.readyReplicas ?? 0}',
+            'Updated: ${item.status?.updatedReplicas ?? 0}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiAppsV1StatefulSet;
 
     return [
@@ -108,19 +103,12 @@ final resourceStatefulSet = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiAppsV1StatefulSet;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(
           conditions: item.status?.conditions
               .map(
@@ -139,10 +127,7 @@ final resourceStatefulSet = Resource(
         DetailsItem(
           title: 'Configuration',
           details: [
-            DetailsItemModel(
-              name: 'Replicas',
-              values: item.spec?.replicas,
-            ),
+            DetailsItemModel(name: 'Replicas', values: item.spec?.replicas),
             DetailsItemModel(
               name: 'Revision History Limit',
               values: item.spec?.revisionHistoryLimit,

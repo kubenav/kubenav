@@ -8,21 +8,14 @@ class HelpItem {
   IconData icon;
   String markdown;
 
-  HelpItem({
-    required this.title,
-    required this.icon,
-    required this.markdown,
-  });
+  HelpItem({required this.title, required this.icon, required this.markdown});
 }
 
 class HelpSection {
   String title;
   List<HelpItem> items;
 
-  HelpSection({
-    required this.title,
-    required this.items,
-  });
+  HelpSection({required this.title, required this.items});
 }
 
 abstract class Help {
@@ -115,7 +108,8 @@ Make sure that the Kubeconfig file only contains clusters and users, which are n
         HelpItem(
           title: 'Google',
           icon: CustomIcons.kubernetes,
-          markdown: '''
+          markdown:
+              '''
 You can directly import your GKA clusters from Google Cloud. To import your GKE clusters you have to provide a valide **Client ID** and **Client Secret** from a Google OAuth 2.0 application. The instructions on how to configure such an application can be found in the following.
 
 ### Google OAuth 2.0 Configuration
@@ -202,7 +196,8 @@ There add a new **Role assignment** between the role **Contributor** and the **A
         HelpItem(
           title: 'OIDC',
           icon: CustomIcons.kubernetes,
-          markdown: '''
+          markdown:
+              '''
 Provide a **Name**, **Discovery URL** and **Client ID** for your OIDC provider. If you do not select a PKCE method you must also provide a **Client Secret**.
 
 Optionally you can also specify a **Scope**, **Certificate Authority** and **Refresh Token**.

@@ -22,9 +22,7 @@ class Logger extends StatelessWidget {
       actionText: 'Copy',
       actionPressed: () {
         Clipboard.setData(
-          ClipboardData(
-            text: _Log.list.map((e) => e.toString()).join('\n\n'),
-          ),
+          ClipboardData(text: _Log.list.map((e) => e.toString()).join('\n\n')),
         );
         Navigator.pop(context);
       },

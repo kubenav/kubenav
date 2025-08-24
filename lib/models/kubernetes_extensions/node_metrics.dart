@@ -22,8 +22,9 @@ class ApisMetricsV1beta1NodeMetricsList {
           : null,
       items: data.containsKey('items') && data['items'] != null
           ? List<ApisMetricsV1beta1NodeMetricsItem>.from(
-              data['items']
-                  .map((v) => ApisMetricsV1beta1NodeMetricsItem.fromJson(v)),
+              data['items'].map(
+                (v) => ApisMetricsV1beta1NodeMetricsItem.fromJson(v),
+              ),
             )
           : null,
     );
@@ -42,9 +43,7 @@ class ApisMetricsV1beta1NodeMetricsList {
 class ApisMetricsV1beta1NodeMetricsListMetadata {
   String? selfLink;
 
-  ApisMetricsV1beta1NodeMetricsListMetadata({
-    required this.selfLink,
-  });
+  ApisMetricsV1beta1NodeMetricsListMetadata({required this.selfLink});
 
   factory ApisMetricsV1beta1NodeMetricsListMetadata.fromJson(
     Map<String, dynamic> data,
@@ -55,9 +54,7 @@ class ApisMetricsV1beta1NodeMetricsListMetadata {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'selfLink': selfLink,
-    };
+    return {'selfLink': selfLink};
   }
 }
 
@@ -150,9 +147,6 @@ class ApisMetricsV1beta1NodeMetricsItemUsage {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'cpu': cpu,
-      'memory': memory,
-    };
+    return {'cpu': cpu, 'memory': memory};
   }
 }

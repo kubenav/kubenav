@@ -31,19 +31,17 @@ class SettingsHelp extends StatelessWidget {
                 showModal(
                   context,
                   AppBottomSheetWidget(
-                    title:
-                        help_model
-                            .Help
-                            .list[sectionIndex]
-                            .items[itemIndex]
-                            .title,
+                    title: help_model
+                        .Help
+                        .list[sectionIndex]
+                        .items[itemIndex]
+                        .title,
                     subtitle: 'Help',
-                    icon:
-                        help_model
-                            .Help
-                            .list[sectionIndex]
-                            .items[itemIndex]
-                            .icon,
+                    icon: help_model
+                        .Help
+                        .list[sectionIndex]
+                        .items[itemIndex]
+                        .icon,
                     closePressed: () {
                       Navigator.pop(context);
                     },
@@ -65,12 +63,11 @@ class SettingsHelp extends StatelessWidget {
                         ),
                       ),
                       selectable: true,
-                      data:
-                          help_model
-                              .Help
-                              .list[sectionIndex]
-                              .items[itemIndex]
-                              .markdown,
+                      data: help_model
+                          .Help
+                          .list[sectionIndex]
+                          .items[itemIndex]
+                          .markdown,
                     ),
                   ),
                 );

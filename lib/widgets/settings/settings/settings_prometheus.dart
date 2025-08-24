@@ -11,10 +11,7 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// which allows a user to view Prometheus metrics within serveral resources and
 /// to create custom dashboards, which can be accessed via the app.
 class SettingsPrometheus extends StatefulWidget {
-  const SettingsPrometheus({
-    super.key,
-    required this.currentPrometheus,
-  });
+  const SettingsPrometheus({super.key, required this.currentPrometheus});
 
   final AppRepositorySettingsPrometheus currentPrometheus;
 
@@ -149,7 +146,7 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                   children: [
                     const Text('Enabled'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _enabled = !_enabled;
@@ -177,24 +174,12 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                 const SizedBox(height: Constants.spacingExtraLarge),
                 Row(
                   children: [
-                    const Expanded(
-                      child: Divider(
-                        height: 0,
-                        thickness: 1.0,
-                      ),
-                    ),
+                    const Expanded(child: Divider(height: 0, thickness: 1.0)),
                     Text(
                       'In-Cluster Configuration',
-                      style: secondaryTextStyle(
-                        context,
-                      ),
+                      style: secondaryTextStyle(context),
                     ),
-                    const Expanded(
-                      child: Divider(
-                        height: 0,
-                        thickness: 1.0,
-                      ),
-                    ),
+                    const Expanded(child: Divider(height: 0, thickness: 1.0)),
                   ],
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
@@ -276,24 +261,9 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                 const SizedBox(height: Constants.spacingExtraLarge),
                 Row(
                   children: [
-                    const Expanded(
-                      child: Divider(
-                        height: 0,
-                        thickness: 1.0,
-                      ),
-                    ),
-                    Text(
-                      'Credentials',
-                      style: secondaryTextStyle(
-                        context,
-                      ),
-                    ),
-                    const Expanded(
-                      child: Divider(
-                        height: 0,
-                        thickness: 1.0,
-                      ),
-                    ),
+                    const Expanded(child: Divider(height: 0, thickness: 1.0)),
+                    Text('Credentials', style: secondaryTextStyle(context)),
+                    const Expanded(child: Divider(height: 0, thickness: 1.0)),
                   ],
                 ),
                 const SizedBox(height: Constants.spacingMiddle),

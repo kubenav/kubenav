@@ -186,8 +186,9 @@ class ClustersRepository with ChangeNotifier {
         throw 'No Clusters Found';
       }
 
-      final cluster =
-          _clusters.where((cluster) => cluster.id == clusterId).toList()[0];
+      final cluster = _clusters
+          .where((cluster) => cluster.id == clusterId)
+          .toList()[0];
 
       if (cluster.clusterProviderType == ClusterProviderType.aws) {
         /// When the cluster provider is AWS we get the expiration time saved in
@@ -217,10 +218,9 @@ class ClustersRepository with ChangeNotifier {
               cluster.clusterProviderInternal,
             );
             cluster.userToken = token;
-            cluster.userTokenExpireTimestamp =
-                DateTime.now()
-                    .add(const Duration(minutes: 10))
-                    .microsecondsSinceEpoch;
+            cluster.userTokenExpireTimestamp = DateTime.now()
+                .add(const Duration(minutes: 10))
+                .microsecondsSinceEpoch;
             await editClusterWithoutNotify(cluster);
             return cluster;
           } else {
@@ -275,10 +275,9 @@ class ClustersRepository with ChangeNotifier {
             );
 
             cluster.userToken = token;
-            cluster.userTokenExpireTimestamp =
-                DateTime.now()
-                    .add(const Duration(minutes: 10))
-                    .microsecondsSinceEpoch;
+            cluster.userTokenExpireTimestamp = DateTime.now()
+                .add(const Duration(minutes: 10))
+                .microsecondsSinceEpoch;
             await editClusterWithoutNotify(cluster);
             return cluster;
           } else {
@@ -513,22 +512,18 @@ class ClustersRepositoryStorage {
 
   factory ClustersRepositoryStorage.fromJson(Map<String, dynamic> data) {
     return ClustersRepositoryStorage(
-      clusters:
-          data.containsKey('clusters') && data['clusters'] != null
-              ? List<Cluster>.from(
-                data['clusters'].map((v) => Cluster.fromJson(v)),
-              )
-              : [],
-      providers:
-          data.containsKey('providers') && data['providers'] != null
-              ? List<ClusterProvider>.from(
-                data['providers'].map((v) => ClusterProvider.fromJson(v)),
-              )
-              : [],
+      clusters: data.containsKey('clusters') && data['clusters'] != null
+          ? List<Cluster>.from(data['clusters'].map((v) => Cluster.fromJson(v)))
+          : [],
+      providers: data.containsKey('providers') && data['providers'] != null
+          ? List<ClusterProvider>.from(
+              data['providers'].map((v) => ClusterProvider.fromJson(v)),
+            )
+          : [],
       activeClusterId:
           data.containsKey('activeClusterId') && data['activeClusterId'] != null
-              ? data['activeClusterId']
-              : '',
+          ? data['activeClusterId']
+          : '',
     );
   }
 

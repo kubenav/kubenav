@@ -100,14 +100,8 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<AppRepository>(
-      context,
-      listen: true,
-    );
-    Provider.of<ClustersRepository>(
-      context,
-      listen: true,
-    );
+    Provider.of<AppRepository>(context, listen: true);
+    Provider.of<ClustersRepository>(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(
@@ -115,9 +109,9 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
         title: Column(
           children: [
             Text(
-              Characters(widget.name)
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
+              Characters(
+                widget.name,
+              ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 20,
@@ -126,9 +120,9 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
               ),
             ),
             Text(
-              Characters(widget.namespace)
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
+              Characters(
+                widget.namespace,
+              ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 14,
@@ -147,56 +141,57 @@ class _PluginPrometheusDetailsState extends State<PluginPrometheusDetails> {
             children: [
               FutureBuilder(
                 future: _futureFetchDashboard,
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<List<Chart>> snapshot,
-                ) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.none:
-                    case ConnectionState.waiting:
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(
-                              Constants.spacingMiddle,
-                            ),
-                            child: CircularProgressIndicator(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ],
-                      );
-                    default:
-                      if (snapshot.hasError) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: Padding(
+                builder:
+                    (
+                      BuildContext context,
+                      AsyncSnapshot<List<Chart>> snapshot,
+                    ) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                        case ConnectionState.waiting:
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
                                 padding: const EdgeInsets.all(
                                   Constants.spacingMiddle,
                                 ),
-                                child: AppErrorWidget(
-                                  message: 'Could not load dashboard',
-                                  details: snapshot.error.toString(),
-                                  icon: 'assets/plugins/prometheus.svg',
+                                child: CircularProgressIndicator(
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
-                            ),
-                          ],
-                        );
-                      }
+                            ],
+                          );
+                        default:
+                          if (snapshot.hasError) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(
+                                      Constants.spacingMiddle,
+                                    ),
+                                    child: AppErrorWidget(
+                                      message: 'Could not load dashboard',
+                                      details: snapshot.error.toString(),
+                                      icon: 'assets/plugins/prometheus.svg',
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
 
-                      return AppPrometheusChartsWidget(
-                        item: null,
-                        toJson: null,
-                        defaultCharts: snapshot.data!,
-                      );
-                  }
-                },
+                          return AppPrometheusChartsWidget(
+                            item: null,
+                            toJson: null,
+                            defaultCharts: snapshot.data!,
+                          );
+                      }
+                    },
               ),
             ],
           ),

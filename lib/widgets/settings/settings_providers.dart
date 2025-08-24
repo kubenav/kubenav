@@ -37,18 +37,12 @@ class SettingsProviders extends StatelessWidget {
 
     return AppListItem(
       onTap: () {
-        showActions(
-          context,
-          SettingsProviderActions(provider: provider),
-        );
+        showActions(context, SettingsProviderActions(provider: provider));
       },
       onLongPress: () {
         hapticFeedback();
 
-        showActions(
-          context,
-          SettingsProviderActions(provider: provider),
-        );
+        showActions(context, SettingsProviderActions(provider: provider));
       },
       slidableActions: [
         AppListItemSlidableAction(
@@ -98,9 +92,7 @@ class SettingsProviders extends StatelessWidget {
             ),
             height: 54,
             width: 54,
-            padding: const EdgeInsets.all(
-              Constants.spacingIcon54x54,
-            ),
+            padding: const EdgeInsets.all(Constants.spacingIcon54x54),
             child: SvgPicture.asset(provider.type!.icon()),
           ),
           const SizedBox(width: Constants.spacingSmall),
@@ -111,25 +103,19 @@ class SettingsProviders extends StatelessWidget {
               children: [
                 Text(
                   provider.name!,
-                  style: primaryTextStyle(
-                    context,
-                  ),
+                  style: primaryTextStyle(context),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   provider.type!.title(),
-                  style: secondaryTextStyle(
-                    context,
-                  ),
+                  style: secondaryTextStyle(context),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   provider.type!.subtitle(),
-                  style: secondaryTextStyle(
-                    context,
-                  ),
+                  style: secondaryTextStyle(context),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -158,10 +144,7 @@ class SettingsProviders extends StatelessWidget {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Providers'),
-      ),
+      appBar: AppBar(centerTitle: true, title: const Text('Providers')),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SafeArea(
@@ -176,14 +159,11 @@ class SettingsProviders extends StatelessWidget {
                   left: Constants.spacingMiddle,
                   right: Constants.spacingMiddle,
                 ),
-                separatorBuilder: (context, index) => const SizedBox(
-                  height: Constants.spacingMiddle,
-                ),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: Constants.spacingMiddle),
                 itemCount: clustersRepository.providers.length,
-                itemBuilder: (context, index) => buildProvider(
-                  context,
-                  clustersRepository.providers[index],
-                ),
+                itemBuilder: (context, index) =>
+                    buildProvider(context, clustersRepository.providers[index]),
               ),
               const SizedBox(height: Constants.spacingMiddle),
             ],

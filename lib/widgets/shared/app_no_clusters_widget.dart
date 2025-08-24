@@ -59,26 +59,15 @@ class AppNoClustersWidget extends StatelessWidget {
             ),
             const SizedBox(height: Constants.spacingSmall),
             Padding(
-              padding: const EdgeInsets.only(
-                left: Constants.spacingSmall,
-              ),
-              child: Text(
-                'Add a Cluster',
-                style: primaryTextStyle(
-                  context,
-                ),
-              ),
+              padding: const EdgeInsets.only(left: Constants.spacingSmall),
+              child: Text('Add a Cluster', style: primaryTextStyle(context)),
             ),
             const SizedBox(height: Constants.spacingExtraSmall),
             Padding(
-              padding: const EdgeInsets.only(
-                left: Constants.spacingSmall,
-              ),
+              padding: const EdgeInsets.only(left: Constants.spacingSmall),
               child: Text(
                 'Add your first cluster and start using kubenav',
-                style: secondaryTextStyle(
-                  context,
-                ),
+                style: secondaryTextStyle(context),
               ),
             ),
             const SizedBox(height: Constants.spacingSmall),

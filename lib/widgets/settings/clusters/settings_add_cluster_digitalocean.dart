@@ -196,10 +196,9 @@ class _SettingsAddClusterDigitalOceanState
               }
               if (value == false) {
                 setState(() {
-                  _selectedClusters =
-                      _selectedClusters
-                          .where((c) => c.name != _clusters[index].name)
-                          .toList();
+                  _selectedClusters = _selectedClusters
+                      .where((c) => c.name != _clusters[index].name)
+                      .toList();
                 });
               }
             },

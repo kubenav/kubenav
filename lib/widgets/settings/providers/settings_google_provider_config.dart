@@ -14,10 +14,7 @@ import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_google.da
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class SettingsGoogleProvider extends StatefulWidget {
-  const SettingsGoogleProvider({
-    super.key,
-    required this.provider,
-  });
+  const SettingsGoogleProvider({super.key, required this.provider});
 
   final ClusterProvider? provider;
 
@@ -56,11 +53,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
         err,
       );
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Open Sign In Url',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Open Sign In Url', err.toString());
       }
     }
   }
@@ -84,7 +77,8 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
       if (googleTokens.accessToken != null &&
           googleTokens.expiresIn != null &&
           googleTokens.refreshToken != null) {
-        final expires = DateTime.now().millisecondsSinceEpoch +
+        final expires =
+            DateTime.now().millisecondsSinceEpoch +
             googleTokens.expiresIn! * 1000;
 
         if (widget.provider == null) {
@@ -109,12 +103,7 @@ class _SettingsGoogleProviderState extends State<SettingsGoogleProvider> {
           });
           if (mounted) {
             Navigator.pop(context);
-            showModal(
-              context,
-              SettingsAddClusterGoogle(
-                provider: provider,
-              ),
-            );
+            showModal(context, SettingsAddClusterGoogle(provider: provider));
           }
         } else {
           final provider = widget.provider;

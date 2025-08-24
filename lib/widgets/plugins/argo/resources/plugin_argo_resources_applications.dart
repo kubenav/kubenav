@@ -32,21 +32,19 @@ final Resource argoResourceApplication = Resource(
     final items =
         IoArgoprojV1alpha1ApplicationList.fromJson(parsed)?.items ?? [];
 
-    return items.map(
-      (e) {
-        final status = e.status?.health?.status ?? 'Unknown';
+    return items.map((e) {
+      final status = e.status?.health?.status ?? 'Unknown';
 
-        return ResourceItem(
-          item: e,
-          metrics: null,
-          status: status == 'Healthy'
-              ? ResourceStatus.success
-              : status == 'Degraded'
-                  ? ResourceStatus.danger
-                  : ResourceStatus.warning,
-        );
-      },
-    ).toList();
+      return ResourceItem(
+        item: e,
+        metrics: null,
+        status: status == 'Healthy'
+            ? ResourceStatus.success
+            : status == 'Degraded'
+            ? ResourceStatus.danger
+            : ResourceStatus.warning,
+      );
+    }).toList();
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
@@ -69,32 +67,27 @@ final Resource argoResourceApplication = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoArgoprojV1alpha1Application;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoArgoprojV1alpha1Application;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata.name ?? '',
-      namespace: item.metadata.namespace ?? '',
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Namespace: ${item.metadata.namespace ?? '-'}',
-        'AppHealth: ${item.status?.health?.status ?? '-'}',
-        'SyncStatus: ${item.status?.sync_?.status ?? '-'}',
-        'CreatedAt: ${getAge(item.metadata.creationTimestamp)}',
-        'LastSync: ${getAge(item.status?.operationState?.finishedAt)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata.name ?? '',
+          namespace: item.metadata.namespace ?? '',
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Namespace: ${item.metadata.namespace ?? '-'}',
+            'AppHealth: ${item.status?.health?.status ?? '-'}',
+            'SyncStatus: ${item.status?.sync_?.status ?? '-'}',
+            'CreatedAt: ${getAge(item.metadata.creationTimestamp)}',
+            'LastSync: ${getAge(item.status?.operationState?.finishedAt)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoArgoprojV1alpha1Application;
 
     return [
@@ -105,133 +98,123 @@ final Resource argoResourceApplication = Resource(
       'LastSync: ${getAge(item.status?.operationState?.finishedAt)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
-    final item = detailsItem as IoArgoprojV1alpha1Application;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item = detailsItem as IoArgoprojV1alpha1Application;
 
-    return Column(
-      children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Configuration',
-          details: [
-            DetailsItemModel(
-              name: 'Project',
-              values: item.spec.project,
+        return Column(
+          children: [
+            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Configuration',
+              details: [
+                DetailsItemModel(name: 'Project', values: item.spec.project),
+                DetailsItemModel(
+                  name: 'Info',
+                  values: item.spec.info.isNotEmpty ? item.spec.info : null,
+                ),
+                DetailsItemModel(
+                  name: 'Cluster',
+                  values:
+                      item.spec.destination.server ??
+                      item.spec.destination.name,
+                ),
+                DetailsItemModel(
+                  name: 'SourceType',
+                  values: item.status?.sourceType ?? '-',
+                ),
+                DetailsItemModel(
+                  name: 'RepoURL',
+                  values: item.spec.source_?.repoURL ?? '-',
+                ),
+                DetailsItemModel(
+                  name: 'TargetRevision',
+                  values: item.spec.source_?.targetRevision ?? '-',
+                ),
+                DetailsItemModel(
+                  name: 'Path',
+                  values: item.spec.source_?.path ?? '-',
+                ),
+                DetailsItemModel(
+                  name: 'SyncPolicy',
+                  values: item.spec.syncPolicy != null
+                      ? 'Auto sync enabled'
+                      : 'Auto sync disabled',
+                ),
+                DetailsItemModel(
+                  name: 'Prune',
+                  values: item.spec.syncPolicy?.automated?.prune,
+                ),
+                DetailsItemModel(
+                  name: 'SelfHeal',
+                  values: item.spec.syncPolicy?.automated?.selfHeal,
+                ),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Info',
-              values: item.spec.info.isNotEmpty ? item.spec.info : null,
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Status',
+              details: [
+                DetailsItemModel(
+                  name: 'AppHealth',
+                  values: item.status?.health?.status,
+                ),
+                DetailsItemModel(
+                  name: 'SyncStatus',
+                  values: item.status?.sync_?.status,
+                ),
+                DetailsItemModel(
+                  name: 'LastSync',
+                  values: getAge(item.status?.operationState?.finishedAt),
+                ),
+                DetailsItemModel(
+                  name: 'LastReconcile',
+                  values: getAge(item.status?.reconciledAt),
+                ),
+                DetailsItemModel(
+                  name: 'Images',
+                  values: item.status?.summary?.images,
+                ),
+                DetailsItemModel(
+                  name: 'URLs',
+                  values: item.status?.summary?.externalURLs,
+                ),
+                // TODO: this list should link to the customResource widgets for
+                // non-supported resource kinds, it would also be useful to see
+                // health and sync status per resource.
+                DetailsItemModel(
+                  name: 'Resources',
+                  values: item.status?.resources.map((e) {
+                    return '${e.kind}/${e.name}';
+                  }).toList(),
+                  onTap: (index) {
+                    final res = item.status!.resources[index];
+                    if (kindToResource.containsKey(res.kind)) {
+                      navigate(
+                        context,
+                        ResourcesDetails(
+                          name: res.name as String,
+                          namespace: res.namespace,
+                          resource: kindToResource[res.kind]!,
+                        ),
+                      );
+                      return;
+                    }
+                  },
+                ),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Cluster',
-              values:
-                  item.spec.destination.server ?? item.spec.destination.name,
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsResourcesPreview(
+              resource: resourceEvent,
+              namespace: item.metadata.namespace,
+              selector:
+                  'fieldSelector=involvedObject.name=${item.metadata.name ?? ''}',
+              filter: null,
             ),
-            DetailsItemModel(
-              name: 'SourceType',
-              values: item.status?.sourceType ?? '-',
-            ),
-            DetailsItemModel(
-              name: 'RepoURL',
-              values: item.spec.source_?.repoURL ?? '-',
-            ),
-            DetailsItemModel(
-              name: 'TargetRevision',
-              values: item.spec.source_?.targetRevision ?? '-',
-            ),
-            DetailsItemModel(
-              name: 'Path',
-              values: item.spec.source_?.path ?? '-',
-            ),
-            DetailsItemModel(
-              name: 'SyncPolicy',
-              values: item.spec.syncPolicy != null
-                  ? 'Auto sync enabled'
-                  : 'Auto sync disabled',
-            ),
-            DetailsItemModel(
-              name: 'Prune',
-              values: item.spec.syncPolicy?.automated?.prune,
-            ),
-            DetailsItemModel(
-              name: 'SelfHeal',
-              values: item.spec.syncPolicy?.automated?.selfHeal,
-            ),
+            const SizedBox(height: Constants.spacingMiddle),
           ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Status',
-          details: [
-            DetailsItemModel(
-              name: 'AppHealth',
-              values: item.status?.health?.status,
-            ),
-            DetailsItemModel(
-              name: 'SyncStatus',
-              values: item.status?.sync_?.status,
-            ),
-            DetailsItemModel(
-              name: 'LastSync',
-              values: getAge(item.status?.operationState?.finishedAt),
-            ),
-            DetailsItemModel(
-              name: 'LastReconcile',
-              values: getAge(item.status?.reconciledAt),
-            ),
-            DetailsItemModel(
-              name: 'Images',
-              values: item.status?.summary?.images,
-            ),
-            DetailsItemModel(
-              name: 'URLs',
-              values: item.status?.summary?.externalURLs,
-            ),
-            // TODO: this list should link to the customResource widgets for
-            // non-supported resource kinds, it would also be useful to see
-            // health and sync status per resource.
-            DetailsItemModel(
-              name: 'Resources',
-              values: item.status?.resources.map(
-                (e) {
-                  return '${e.kind}/${e.name}';
-                },
-              ).toList(),
-              onTap: (index) {
-                final res = item.status!.resources[index];
-                if (kindToResource.containsKey(res.kind)) {
-                  navigate(
-                    context,
-                    ResourcesDetails(
-                      name: res.name as String,
-                      namespace: res.namespace,
-                      resource: kindToResource[res.kind]!,
-                    ),
-                  );
-                  return;
-                }
-              },
-            ),
-          ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsResourcesPreview(
-          resource: resourceEvent,
-          namespace: item.metadata.namespace,
-          selector:
-              'fieldSelector=involvedObject.name=${item.metadata.name ?? ''}',
-          filter: null,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-      ],
-    );
-  },
+        );
+      },
 );

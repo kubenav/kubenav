@@ -84,20 +84,12 @@ class _CronJobSuspendState extends State<CronJobSuspend> {
         Navigator.pop(context);
       }
     } catch (err) {
-      Logger.log(
-        'CronJobSuspend _suspend',
-        'Suspension Failed',
-        err,
-      );
+      Logger.log('CronJobSuspend _suspend', 'Suspension Failed', err);
       setState(() {
         _isLoading = false;
       });
       if (mounted) {
-        showSnackbar(
-          context,
-          'Suspension Failed',
-          err.toString(),
-        );
+        showSnackbar(context, 'Suspension Failed', err.toString());
       }
     }
   }

@@ -38,10 +38,10 @@ final resourceCustomResourceDefinition = Resource(
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
     final items =
-        IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinitionList
-                    .fromJson(parsed)
-                ?.items ??
-            [];
+        IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinitionList.fromJson(
+          parsed,
+        )?.items ??
+        [];
     return items
         .map(
           (e) => ResourceItem(
@@ -54,9 +54,9 @@ final resourceCustomResourceDefinition = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinitionList
-                .fromJson(parsed)
-            ?.items ??
+    return IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinitionList.fromJson(
+          parsed,
+        )?.items ??
         [];
   },
   getName: (dynamic item) {
@@ -74,8 +74,9 @@ final resourceCustomResourceDefinition = Resource(
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition
-        .fromJson(parsed);
+    return IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition.fromJson(
+      parsed,
+    );
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -84,33 +85,30 @@ final resourceCustomResourceDefinition = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item
-        as IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item =
+            listItem.item
+                as IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Kind: ${item.spec.names.kind}',
-        'Scope: ${item.spec.scope}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
-    final item = listItem
-        as IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition;
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Kind: ${item.spec.names.kind}',
+            'Scope: ${item.spec.scope}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
+    final item =
+        listItem
+            as IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition;
 
     return [
       'Kind: ${item.spec.names.kind}',
@@ -118,48 +116,30 @@ final resourceCustomResourceDefinition = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
-    final item = detailsItem
-        as IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition;
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
+    final item =
+        detailsItem
+            as IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Configuration',
           details: [
-            DetailsItemModel(
-              name: 'Group',
-              values: item.spec.group,
-            ),
-            DetailsItemModel(
-              name: 'Kind',
-              values: item.spec.names.kind,
-            ),
+            DetailsItemModel(name: 'Group', values: item.spec.group),
+            DetailsItemModel(name: 'Kind', values: item.spec.names.kind),
             DetailsItemModel(
               name: 'List Kind',
               values: item.spec.names.listKind,
             ),
-            DetailsItemModel(
-              name: 'Plural',
-              values: item.spec.names.plural,
-            ),
+            DetailsItemModel(name: 'Plural', values: item.spec.names.plural),
             DetailsItemModel(
               name: 'Singular',
               values: item.spec.names.singular,
             ),
-            DetailsItemModel(
-              name: 'Scope',
-              values: item.spec.scope,
-            ),
+            DetailsItemModel(name: 'Scope', values: item.spec.scope),
             DetailsItemModel(
               name: 'Conversion Strategy',
               values: item.spec.conversion?.strategy,
@@ -212,9 +192,7 @@ final resourceCustomResourceDefinition = Resource(
                       ),
                       height: 54,
                       width: 54,
-                      padding: const EdgeInsets.all(
-                        Constants.spacingIcon54x54,
-                      ),
+                      padding: const EdgeInsets.all(Constants.spacingIcon54x54),
                       child: SvgPicture.asset(
                         'assets/resources/customresourcedefinitions.svg',
                       ),
@@ -227,17 +205,13 @@ final resourceCustomResourceDefinition = Resource(
                         children: [
                           Text(
                             version.name,
-                            style: primaryTextStyle(
-                              context,
-                            ),
+                            style: primaryTextStyle(context),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             '${version.deprecated == true ? 'Deprecated' : 'Stable'}: ${version.deprecationWarning ?? '-'}',
-                            style: secondaryTextStyle(
-                              context,
-                            ),
+                            style: secondaryTextStyle(context),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -289,14 +263,14 @@ Resource buildCustomResource(
 
       return parsed.containsKey('items')
           ? (parsed['items'] as List<dynamic>)
-              .map(
-                (e) => ResourceItem(
-                  item: e,
-                  metrics: null,
-                  status: ResourceStatus.undefined,
-                ),
-              )
-              .toList()
+                .map(
+                  (e) => ResourceItem(
+                    item: e,
+                    metrics: null,
+                    status: ResourceStatus.undefined,
+                  ),
+                )
+                .toList()
           : [] as List<ResourceItem>;
     },
     decodeList: (String data) {
@@ -331,15 +305,12 @@ Resource buildCustomResource(
     toJson: (dynamic item) {
       return json.decode(json.encode(item));
     },
-    listItemBuilder: (
-      BuildContext context,
-      Resource resource,
-      ResourceItem listItem,
-    ) {
+    listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
       final name = resource.getName(listItem.item);
       final namespace = resource.getNamespace(listItem.item);
-      final List<String> details =
-          namespace != null ? ['Namespace: $namespace'] : [];
+      final List<String> details = namespace != null
+          ? ['Namespace: $namespace']
+          : [];
 
       if (resource.additionalPrinterColumns.isNotEmpty) {
         details.addAll(
@@ -366,21 +337,13 @@ Resource buildCustomResource(
         details: details,
       );
     },
-    previewItemBuilder: (
-      dynamic listItem,
-    ) {
+    previewItemBuilder: (dynamic listItem) {
       return [];
     },
-    detailsItemBuilder: (
-      BuildContext context,
-      Resource resource,
-      dynamic detailsItem,
-    ) {
-      return CustomResourceItem(
-        resource: resource,
-        item: detailsItem,
-      );
-    },
+    detailsItemBuilder:
+        (BuildContext context, Resource resource, dynamic detailsItem) {
+          return CustomResourceItem(resource: resource, item: detailsItem);
+        },
   );
 }
 
@@ -405,7 +368,7 @@ class CustomResourceItem extends StatelessWidget {
   }
 
   Future<List<IoK8sApimachineryPkgApisMetaV1Condition>?>
-      _getConditions() async {
+  _getConditions() async {
     try {
       if (item.containsKey('status') &&
           item['status'] != null &&
@@ -415,8 +378,9 @@ class CustomResourceItem extends StatelessWidget {
         final List<IoK8sApimachineryPkgApisMetaV1Condition> conditions = [];
 
         for (final condition in item['status']['conditions']) {
-          final value =
-              IoK8sApimachineryPkgApisMetaV1Condition.fromJson(condition);
+          final value = IoK8sApimachineryPkgApisMetaV1Condition.fromJson(
+            condition,
+          );
           if (value != null) {
             conditions.add(value);
           }
@@ -462,10 +426,7 @@ class CustomResourceItem extends StatelessWidget {
 
     return [
       const SizedBox(height: Constants.spacingMiddle),
-      DetailsItem(
-        title: 'Additional Information',
-        details: detailsItems,
-      ),
+      DetailsItem(title: 'Additional Information', details: detailsItems),
     ];
   }
 
@@ -475,43 +436,46 @@ class CustomResourceItem extends StatelessWidget {
       children: [
         FutureBuilder(
           future: _getMetadata(),
-          builder: (
-            BuildContext context,
-            AsyncSnapshot<IoK8sApimachineryPkgApisMetaV1ObjectMeta?> snapshot,
-          ) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
-                );
-              default:
-                return DetailsItemMetadata(
-                  kind: item != null && item.containsKey('kind')
-                      ? item['kind']
-                      : null,
-                  metadata: snapshot.data,
-                );
-            }
-          },
+          builder:
+              (
+                BuildContext context,
+                AsyncSnapshot<IoK8sApimachineryPkgApisMetaV1ObjectMeta?>
+                snapshot,
+              ) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                  case ConnectionState.waiting:
+                    return CircularProgressIndicator(
+                      color: Theme.of(context).colorScheme.primary,
+                    );
+                  default:
+                    return DetailsItemMetadata(
+                      kind: item != null && item.containsKey('kind')
+                          ? item['kind']
+                          : null,
+                      metadata: snapshot.data,
+                    );
+                }
+              },
         ),
         FutureBuilder(
           future: _getConditions(),
-          builder: (
-            BuildContext context,
-            AsyncSnapshot<List<IoK8sApimachineryPkgApisMetaV1Condition>?>
+          builder:
+              (
+                BuildContext context,
+                AsyncSnapshot<List<IoK8sApimachineryPkgApisMetaV1Condition>?>
                 snapshot,
-          ) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
-                );
-              default:
-                return DetailsItemConditions(conditions: snapshot.data);
-            }
-          },
+              ) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                  case ConnectionState.waiting:
+                    return CircularProgressIndicator(
+                      color: Theme.of(context).colorScheme.primary,
+                    );
+                  default:
+                    return DetailsItemConditions(conditions: snapshot.data);
+                }
+              },
         ),
         ..._buildAdditionalPrinterColumns(context),
         const SizedBox(height: Constants.spacingMiddle),

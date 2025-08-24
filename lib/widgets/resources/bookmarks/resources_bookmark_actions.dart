@@ -11,10 +11,7 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 /// for a bookmark within the bookmarks screen. Currently it is only possible to
 /// delete an existing bookmark via the actions.
 class ResourcesBookmarkActions extends StatelessWidget {
-  const ResourcesBookmarkActions({
-    super.key,
-    required this.index,
-  });
+  const ResourcesBookmarkActions({super.key, required this.index});
 
   final int index;
 
@@ -33,8 +30,8 @@ class ResourcesBookmarkActions extends StatelessWidget {
           onTap: () async {
             final title =
                 bookmarksRepository.bookmarks[index].type == BookmarkType.list
-                    ? bookmarksRepository.bookmarks[index].resource.plural
-                    : bookmarksRepository.bookmarks[index].resource.singular;
+                ? bookmarksRepository.bookmarks[index].resource.plural
+                : bookmarksRepository.bookmarks[index].resource.singular;
             await bookmarksRepository.removeBookmark(index);
 
             if (context.mounted) {

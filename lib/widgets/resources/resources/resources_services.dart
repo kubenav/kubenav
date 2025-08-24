@@ -69,11 +69,7 @@ final resourceService = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
+  listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
     final item = listItem.item as IoK8sApiCoreV1Service;
     final status = listItem.status;
 
@@ -103,9 +99,7 @@ final resourceService = Resource(
       ],
     );
   },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiCoreV1Service;
 
     final externalIP = item.status?.loadBalancer?.ingress
@@ -127,26 +121,16 @@ final resourceService = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
-    final item = detailsItem as IoK8sApiCoreV1Service;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item = detailsItem as IoK8sApiCoreV1Service;
 
-    return ServiceItem(
-      resource: resource,
-      service: item,
-    );
-  },
+        return ServiceItem(resource: resource, service: item);
+      },
 );
 
 class ServiceItem extends StatelessWidget {
-  const ServiceItem({
-    super.key,
-    required this.resource,
-    required this.service,
-  });
+  const ServiceItem({super.key, required this.resource, required this.service});
 
   final Resource resource;
   final IoK8sApiCoreV1Service service;
@@ -166,16 +150,9 @@ class ServiceItem extends StatelessWidget {
       listen: false,
     );
     PortForwardingRepository portForwardingRepository =
-        Provider.of<PortForwardingRepository>(
-      context,
-      listen: false,
-    );
+        Provider.of<PortForwardingRepository>(context, listen: false);
 
-    showSnackbar(
-      context,
-      'Port Forwarding',
-      'Create Session ...',
-    );
+    showSnackbar(context, 'Port Forwarding', 'Create Session ...');
 
     try {
       final cluster = await clustersRepository.getClusterWithCredentials(
@@ -195,11 +172,7 @@ class ServiceItem extends StatelessWidget {
       );
 
       if (context.mounted) {
-        showSnackbar(
-          context,
-          'Port Forwarding',
-          'Session Created',
-        );
+        showSnackbar(context, 'Port Forwarding', 'Session Created');
       }
     } catch (err) {
       if (context.mounted) {
@@ -216,10 +189,7 @@ class ServiceItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: service.kind,
-          metadata: service.metadata,
-        ),
+        DetailsItemMetadata(kind: service.kind, metadata: service.metadata),
         DetailsItemConditions(conditions: service.status?.conditions),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
@@ -231,10 +201,7 @@ class ServiceItem extends StatelessWidget {
                   .map((selector) => '${selector.key}=${selector.value}')
                   .toList(),
             ),
-            DetailsItemModel(
-              name: 'Type',
-              values: service.spec?.type,
-            ),
+            DetailsItemModel(name: 'Type', values: service.spec?.type),
             DetailsItemModel(
               name: 'Ports',
               values: service.spec?.ports

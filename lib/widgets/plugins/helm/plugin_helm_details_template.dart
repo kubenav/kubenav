@@ -31,9 +31,7 @@ class _PluginHelmDetailsTemplateState extends State<PluginHelmDetailsTemplate> {
   @override
   void initState() {
     super.initState();
-    _codeController = CodeController(
-      text: widget.template,
-    );
+    _codeController = CodeController(text: widget.template);
   }
 
   @override

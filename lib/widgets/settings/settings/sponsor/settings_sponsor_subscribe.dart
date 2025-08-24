@@ -16,10 +16,7 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// button of the modal bottom sheet the sponsoring process is initialized and
 /// then completed via the platforms native screens.
 class SettingsSponsorSubscribe extends StatefulWidget {
-  const SettingsSponsorSubscribe({
-    super.key,
-    required this.product,
-  });
+  const SettingsSponsorSubscribe({super.key, required this.product});
 
   final ProductDetails product;
 
@@ -60,11 +57,7 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
         _isLoading = false;
       });
       if (mounted) {
-        showSnackbar(
-          context,
-          'An error occured',
-          err.toString(),
-        );
+        showSnackbar(context, 'An error occured', err.toString());
       }
     }
   }
@@ -72,17 +65,12 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
   Widget _buildIOSNotes() {
     if (Platform.isIOS) {
       return Padding(
-        padding: const EdgeInsets.only(
-          top: Constants.spacingMiddle,
-        ),
+        padding: const EdgeInsets.only(top: Constants.spacingMiddle),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Notes:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            const Text('Notes:', style: TextStyle(fontWeight: FontWeight.bold)),
             const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -188,17 +176,13 @@ class _SettingsSponsorSubscribeState extends State<SettingsSponsorSubscribe> {
                 'We believe in open source. This means that we will never put any features behind a paywall. You will always be able to use all features of kubenav for free.',
               ),
               const Padding(
-                padding: EdgeInsets.only(
-                  top: Constants.spacingMiddle,
-                ),
+                padding: EdgeInsets.only(top: Constants.spacingMiddle),
                 child: Text(
                   'With the monthly and yearly sponsoring you can remove the "Sponsor" banner in the settings screen and support the development of kubenav.',
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.only(
-                  top: Constants.spacingMiddle,
-                ),
+                padding: EdgeInsets.only(top: Constants.spacingMiddle),
                 child: Text(
                   'You can also support us by reporting bugs, submitting fixes, proposing new features or by becoming a maintainer. For more information you can have a look at the contributing guide in our GitHub repository. The repository is available at https://github.com/kubenav/kubenav.',
                 ),

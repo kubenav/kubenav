@@ -69,11 +69,7 @@ final Resource resourcePersistentVolume = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
+  listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
     final item = listItem.item as IoK8sApiCoreV1PersistentVolume;
     final status = listItem.status;
 
@@ -95,9 +91,7 @@ final Resource resourcePersistentVolume = Resource(
       ],
     );
   },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiCoreV1PersistentVolume;
 
     return [
@@ -111,19 +105,12 @@ final Resource resourcePersistentVolume = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiCoreV1PersistentVolume;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Configuration',
@@ -154,7 +141,8 @@ final Resource resourcePersistentVolume = Resource(
             ),
             DetailsItemModel(
               name: 'Storage',
-              values: item.spec?.capacity != null &&
+              values:
+                  item.spec?.capacity != null &&
                       item.spec!.capacity.containsKey('storage')
                   ? item.spec?.capacity['storage']
                   : null,
@@ -169,15 +157,13 @@ final Resource resourcePersistentVolume = Resource(
         DetailsItem(
           title: 'Status',
           details: [
-            DetailsItemModel(
-              name: 'Status',
-              values: item.status?.phase,
-            ),
+            DetailsItemModel(name: 'Status', values: item.status?.phase),
             DetailsItemModel(
               name: 'Claim',
               values:
                   '${item.spec?.claimRef?.namespace ?? '-'}/${item.spec?.claimRef?.name ?? '-'}',
-              onTap: item.spec?.claimRef?.namespace == null ||
+              onTap:
+                  item.spec?.claimRef?.namespace == null ||
                       item.spec?.claimRef?.name == null
                   ? null
                   : (index) {

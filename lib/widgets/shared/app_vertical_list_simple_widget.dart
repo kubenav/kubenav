@@ -12,10 +12,7 @@ class AppVerticalListSimpleModel {
   List<Widget> children;
   void Function()? onTap;
 
-  AppVerticalListSimpleModel({
-    required this.children,
-    this.onTap,
-  });
+  AppVerticalListSimpleModel({required this.children, this.onTap});
 }
 
 /// [AppVerticalListSimpleWidget] is a widget to render a simple vertical list.
@@ -38,16 +35,11 @@ class AppVerticalListSimpleWidget extends StatelessWidget {
     return Wrap(
       children: [
         Padding(
-          padding: const EdgeInsets.all(
-            Constants.spacingMiddle,
-          ),
+          padding: const EdgeInsets.all(Constants.spacingMiddle),
           child: Row(
             children: [
               Expanded(
-                child: Text(
-                  title,
-                  style: primaryTextStyle(context, size: 18),
-                ),
+                child: Text(title, style: primaryTextStyle(context, size: 18)),
               ),
             ],
           ),
@@ -60,15 +52,12 @@ class AppVerticalListSimpleWidget extends StatelessWidget {
           child: ListView.separated(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            separatorBuilder: (context, index) => const SizedBox(
-              height: Constants.spacingMiddle,
-            ),
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: Constants.spacingMiddle),
             itemCount: items.length,
             itemBuilder: (context, index) => AppListItem(
               onTap: items[index].onTap,
-              child: Row(
-                children: items[index].children,
-              ),
+              child: Row(children: items[index].children),
             ),
           ),
         ),

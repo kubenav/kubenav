@@ -15,9 +15,7 @@ class ArgoResourceCategories {
   static const resources = 'Resources';
 }
 
-final List<String> argoResourceCategories = [
-  ArgoResourceCategories.resources,
-];
+final List<String> argoResourceCategories = [ArgoResourceCategories.resources];
 
 /// [argoResources] is a list of all supported Argo resources, which are
 /// implementing the [Resource] model.

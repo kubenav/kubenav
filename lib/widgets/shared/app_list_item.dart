@@ -73,9 +73,7 @@ class AppListItem extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                   horizontal: Constants.sizeBorderRadius,
                 ),
-                child: Container(
-                  color: slidableActions![0].backgroundColor,
-                ),
+                child: Container(color: slidableActions![0].backgroundColor),
               ),
             ),
           ),
@@ -84,26 +82,23 @@ class AppListItem extends StatelessWidget {
             endActionPane: ActionPane(
               motion: const DrawerMotion(),
               extentRatio: 0.3 * slidableActions!.length,
-              children: List.generate(
-                slidableActions!.length,
-                (int index) {
-                  return SlidableAction(
-                    onPressed: slidableActions![index].onTap,
-                    backgroundColor: slidableActions![index].backgroundColor,
-                    foregroundColor: slidableActions![index].foregroundColor,
-                    icon: slidableActions![index].icon,
-                    label: slidableActions![index].label,
-                    borderRadius: slidableActions!.length - 1 == index
-                        ? const BorderRadius.only(
-                            topRight:
-                                Radius.circular(Constants.sizeBorderRadius),
-                            bottomRight:
-                                Radius.circular(Constants.sizeBorderRadius),
-                          )
-                        : BorderRadius.zero,
-                  );
-                },
-              ),
+              children: List.generate(slidableActions!.length, (int index) {
+                return SlidableAction(
+                  onPressed: slidableActions![index].onTap,
+                  backgroundColor: slidableActions![index].backgroundColor,
+                  foregroundColor: slidableActions![index].foregroundColor,
+                  icon: slidableActions![index].icon,
+                  label: slidableActions![index].label,
+                  borderRadius: slidableActions!.length - 1 == index
+                      ? const BorderRadius.only(
+                          topRight: Radius.circular(Constants.sizeBorderRadius),
+                          bottomRight: Radius.circular(
+                            Constants.sizeBorderRadius,
+                          ),
+                        )
+                      : BorderRadius.zero,
+                );
+              }),
             ),
             child: _buildItem(context),
           ),
