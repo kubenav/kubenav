@@ -5,28 +5,28 @@ go 1.24.0
 replace golang.org/x/oauth2 => github.com/kubenav/oauth2 v0.0.0-20240830072915-86aad6e7f9f3
 
 require (
-	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.18.0
-	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.10.1
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.19.0
+	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.11.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/containerservice/armcontainerservice v1.0.0
-	github.com/aws/aws-sdk-go v1.55.7
-	github.com/coreos/go-oidc/v3 v3.14.1
+	github.com/aws/aws-sdk-go v1.55.8
+	github.com/coreos/go-oidc/v3 v3.15.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
-	github.com/prometheus/client_golang v1.22.0
+	github.com/prometheus/client_golang v1.23.0
 	github.com/prometheus/common v0.65.0
 	github.com/wI2L/jsondiff v0.7.0
 	golang.org/x/mobile v0.0.0-20250218173827-cd096645fcd3
 	golang.org/x/oauth2 v0.30.0
-	helm.sh/helm/v3 v3.18.5
-	k8s.io/api v0.33.3
-	k8s.io/apimachinery v0.33.3
-	k8s.io/cli-runtime v0.33.3
-	k8s.io/client-go v0.33.3
-	sigs.k8s.io/yaml v1.5.0
+	helm.sh/helm/v3 v3.18.6
+	k8s.io/api v0.33.4
+	k8s.io/apimachinery v0.33.4
+	k8s.io/cli-runtime v0.33.4
+	k8s.io/client-go v0.33.4
+	sigs.k8s.io/yaml v1.6.0
 )
 
 require (
 	dario.cat/mergo v1.0.1 // indirect
-	github.com/Azure/azure-sdk-for-go/sdk/internal v1.11.1 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/internal v1.11.2 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c // indirect
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.4.2 // indirect
 	github.com/BurntSushi/toml v1.5.0 // indirect
@@ -58,7 +58,7 @@ require (
 	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang-jwt/jwt/v5 v5.2.2 // indirect
+	github.com/golang-jwt/jwt/v5 v5.3.0 // indirect
 	github.com/google/btree v1.1.3 // indirect
 	github.com/google/gnostic-models v0.6.9 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
@@ -119,7 +119,7 @@ require (
 	go.yaml.in/yaml/v3 v3.0.3 // indirect
 	golang.org/x/crypto v0.40.0 // indirect
 	golang.org/x/mod v0.25.0 // indirect
-	golang.org/x/net v0.41.0 // indirect
+	golang.org/x/net v0.42.0 // indirect
 	golang.org/x/sync v0.16.0 // indirect
 	golang.org/x/sys v0.34.0 // indirect
 	golang.org/x/term v0.33.0 // indirect
