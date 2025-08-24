@@ -81,12 +81,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
       onLongPress: () {
         hapticFeedback();
 
-        showActions(
-          context,
-          PluginHelmListItemActions(
-            release: release,
-          ),
-        );
+        showActions(context, PluginHelmListItemActions(release: release));
       },
       slidableActions: [
         AppListItemSlidableAction(
@@ -95,12 +90,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
           backgroundColor: Theme.of(context).colorScheme.primary,
           foregroundColor: Theme.of(context).colorScheme.onPrimary,
           onTap: (BuildContext context) {
-            showActions(
-              context,
-              PluginHelmListItemActions(
-                release: release,
-              ),
-            );
+            showActions(context, PluginHelmListItemActions(release: release));
           },
         ),
       ],
@@ -117,9 +107,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
                       .toString(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: primaryTextStyle(
-                    context,
-                  ),
+                  style: primaryTextStyle(context),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -131,9 +119,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
                           .toString(),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: secondaryTextStyle(
-                        context,
-                      ),
+                      style: secondaryTextStyle(context),
                     ),
                     Text(
                       Characters('Revision: ${release.version}')
@@ -141,21 +127,17 @@ class _PluginHelmListState extends State<PluginHelmList> {
                           .toString(),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: secondaryTextStyle(
-                        context,
-                      ),
+                      style: secondaryTextStyle(context),
                     ),
                     Text(
                       Characters(
-                        'Updated: ${formatTime(DateTime.parse(release.info?.lastDeployed ?? '-'))}',
-                      )
+                            'Updated: ${formatTime(DateTime.parse(release.info?.lastDeployed ?? '-'))}',
+                          )
                           .replaceAll(Characters(''), Characters('\u{200B}'))
                           .toString(),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: secondaryTextStyle(
-                        context,
-                      ),
+                      style: secondaryTextStyle(context),
                     ),
                     Text(
                       Characters('Status: ${release.info?.status ?? '-'}')
@@ -163,33 +145,27 @@ class _PluginHelmListState extends State<PluginHelmList> {
                           .toString(),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: secondaryTextStyle(
-                        context,
-                      ),
+                      style: secondaryTextStyle(context),
                     ),
                     Text(
                       Characters(
-                        'Chart Version: ${release.chart?.metadata?.version ?? '-'}',
-                      )
+                            'Chart Version: ${release.chart?.metadata?.version ?? '-'}',
+                          )
                           .replaceAll(Characters(''), Characters('\u{200B}'))
                           .toString(),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: secondaryTextStyle(
-                        context,
-                      ),
+                      style: secondaryTextStyle(context),
                     ),
                     Text(
                       Characters(
-                        'App Version: ${release.chart?.metadata?.appVersion ?? '-'}',
-                      )
+                            'App Version: ${release.chart?.metadata?.appVersion ?? '-'}',
+                          )
                           .replaceAll(Characters(''), Characters('\u{200B}'))
                           .toString(),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: secondaryTextStyle(
-                        context,
-                      ),
+                      style: secondaryTextStyle(context),
                     ),
                   ],
                 ),
@@ -202,13 +178,14 @@ class _PluginHelmListState extends State<PluginHelmList> {
               Icon(
                 Icons.radio_button_checked,
                 size: 24,
-                color: release.info?.status == 'deployed' ||
+                color:
+                    release.info?.status == 'deployed' ||
                         release.info?.status == 'superseded' ||
                         release.info?.status == 'uninstalled'
                     ? Theme.of(context).extension<CustomColors>()!.success
                     : release.info?.status == 'failed'
-                        ? Theme.of(context).extension<CustomColors>()!.error
-                        : Theme.of(context).extension<CustomColors>()!.warning,
+                    ? Theme.of(context).extension<CustomColors>()!.error
+                    : Theme.of(context).extension<CustomColors>()!.warning,
               ),
             ],
           ),
@@ -227,10 +204,7 @@ class _PluginHelmListState extends State<PluginHelmList> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<AppRepository>(
-      context,
-      listen: true,
-    );
+    Provider.of<AppRepository>(context, listen: true);
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,
@@ -250,9 +224,9 @@ class _PluginHelmListState extends State<PluginHelmList> {
         title: Column(
           children: [
             Text(
-              Characters('Helm Charts')
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
+              Characters(
+                'Helm Charts',
+              ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 20,
@@ -263,17 +237,13 @@ class _PluginHelmListState extends State<PluginHelmList> {
             Text(
               Characters(
                 clustersRepository
-                            .getCluster(
-                              clustersRepository.activeClusterId,
-                            )!
+                            .getCluster(clustersRepository.activeClusterId)!
                             .namespace ==
                         ''
                     ? 'All Namespaces'
                     : clustersRepository
-                        .getCluster(
-                          clustersRepository.activeClusterId,
-                        )!
-                        .namespace,
+                          .getCluster(clustersRepository.activeClusterId)!
+                          .namespace,
               ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
@@ -293,92 +263,93 @@ class _PluginHelmListState extends State<PluginHelmList> {
             children: [
               FutureBuilder(
                 future: _futureFetchHelmReleases,
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<List<Release>> snapshot,
-                ) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.none:
-                    case ConnectionState.waiting:
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(
-                              Constants.spacingMiddle,
-                            ),
-                            child: CircularProgressIndicator(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ],
-                      );
-                    default:
-                      if (snapshot.hasError) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: Padding(
+                builder:
+                    (
+                      BuildContext context,
+                      AsyncSnapshot<List<Release>> snapshot,
+                    ) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                        case ConnectionState.waiting:
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
                                 padding: const EdgeInsets.all(
                                   Constants.spacingMiddle,
                                 ),
-                                child: AppErrorWidget(
-                                  message: 'Failed to Load Helm Releases',
-                                  details: snapshot.error.toString(),
-                                  icon: 'assets/plugins/helm.svg',
+                                child: CircularProgressIndicator(
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
-                            ),
-                          ],
-                        );
-                      }
+                            ],
+                          );
+                        default:
+                          if (snapshot.hasError) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(
+                                      Constants.spacingMiddle,
+                                    ),
+                                    child: AppErrorWidget(
+                                      message: 'Failed to Load Helm Releases',
+                                      details: snapshot.error.toString(),
+                                      icon: 'assets/plugins/helm.svg',
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
 
-                      return Wrap(
-                        children: [
-                          AppResourceActions(
-                            mode: AppResourceActionsMode.header,
-                            actions: [
-                              AppResourceActionsModel(
-                                title: 'Refresh',
-                                icon: Icons.refresh,
-                                onTap: () {
-                                  setState(() {
-                                    _futureFetchHelmReleases =
-                                        _fetchHelmReleases();
-                                  });
-                                },
+                          return Wrap(
+                            children: [
+                              AppResourceActions(
+                                mode: AppResourceActionsMode.header,
+                                actions: [
+                                  AppResourceActionsModel(
+                                    title: 'Refresh',
+                                    icon: Icons.refresh,
+                                    onTap: () {
+                                      setState(() {
+                                        _futureFetchHelmReleases =
+                                            _fetchHelmReleases();
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                  top: Constants.spacingMiddle,
+                                  bottom: Constants.spacingMiddle,
+                                ),
+                                child: ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  padding: const EdgeInsets.only(
+                                    right: Constants.spacingMiddle,
+                                    left: Constants.spacingMiddle,
+                                  ),
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                        height: Constants.spacingMiddle,
+                                      ),
+                                  itemCount: snapshot.data!.length,
+                                  itemBuilder: (context, index) {
+                                    return _buildItem(snapshot.data![index]);
+                                  },
+                                ),
                               ),
                             ],
-                          ),
-                          Container(
-                            padding: const EdgeInsets.only(
-                              top: Constants.spacingMiddle,
-                              bottom: Constants.spacingMiddle,
-                            ),
-                            child: ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: const EdgeInsets.only(
-                                right: Constants.spacingMiddle,
-                                left: Constants.spacingMiddle,
-                              ),
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                height: Constants.spacingMiddle,
-                              ),
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) {
-                                return _buildItem(snapshot.data![index]);
-                              },
-                            ),
-                          ),
-                        ],
-                      );
-                  }
-                },
+                          );
+                      }
+                    },
               ),
             ],
           ),

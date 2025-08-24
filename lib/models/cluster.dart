@@ -53,16 +53,17 @@ class Cluster {
       clusterProviderInternal: data.containsKey('clusterProviderInternal')
           ? data['clusterProviderInternal']
           : '',
-      clusterServer:
-          data.containsKey('clusterServer') ? data['clusterServer'] : '',
+      clusterServer: data.containsKey('clusterServer')
+          ? data['clusterServer']
+          : '',
       clusterCertificateAuthorityData:
           data.containsKey('clusterCertificateAuthorityData')
-              ? data['clusterCertificateAuthorityData']
-              : '',
+          ? data['clusterCertificateAuthorityData']
+          : '',
       clusterInsecureSkipTLSVerify:
           data.containsKey('clusterInsecureSkipTLSVerify')
-              ? data['clusterInsecureSkipTLSVerify']
-              : false,
+          ? data['clusterInsecureSkipTLSVerify']
+          : false,
       userClientCertificateData: data.containsKey('userClientCertificateData')
           ? data['userClientCertificateData']
           : '',
@@ -73,10 +74,12 @@ class Cluster {
       userTokenExpireTimestamp: data.containsKey('userTokenExpireTimestamp')
           ? data['userTokenExpireTimestamp']
           : 0,
-      userUsername:
-          data.containsKey('userUsername') ? data['userUsername'] : '',
-      userPassword:
-          data.containsKey('userPassword') ? data['userPassword'] : '',
+      userUsername: data.containsKey('userUsername')
+          ? data['userUsername']
+          : '',
+      userPassword: data.containsKey('userPassword')
+          ? data['userPassword']
+          : '',
       namespace: data.containsKey('namespace') ? data['namespace'] : 'default',
     );
   }

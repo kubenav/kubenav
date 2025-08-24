@@ -37,7 +37,8 @@ final resourceJob = Resource(
     return items.map((e) {
       final completions = e.spec?.completions ?? 0;
       final succeeded = e.status?.succeeded ?? 0;
-      final unhealthy = e.status?.conditions
+      final unhealthy =
+          e.status?.conditions
               .where(
                 (c) =>
                     c.reason == 'BackoffLimitExceeded' ||
@@ -52,8 +53,8 @@ final resourceJob = Resource(
         status: unhealthy > 0
             ? ResourceStatus.danger
             : succeeded < completions
-                ? ResourceStatus.warning
-                : ResourceStatus.success,
+            ? ResourceStatus.warning
+            : ResourceStatus.success,
       );
     }).toList();
   },
@@ -78,11 +79,7 @@ final resourceJob = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
+  listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
     final item = listItem.item as IoK8sApiBatchV1Job;
     final status = listItem.status;
 
@@ -100,9 +97,7 @@ final resourceJob = Resource(
       ],
     );
   },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiBatchV1Job;
 
     return [
@@ -112,102 +107,94 @@ final resourceJob = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
-    final item = detailsItem as IoK8sApiBatchV1Job;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item = detailsItem as IoK8sApiBatchV1Job;
 
-    return Column(
-      children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
-        DetailsItemConditions(
-          conditions: item.status?.conditions
-              .map(
-                (e) => IoK8sApimachineryPkgApisMetaV1Condition(
-                  lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
-                  message: e.message ?? '',
-                  observedGeneration: null,
-                  reason: e.reason ?? '',
-                  status: e.status,
-                  type: e.type,
+        return Column(
+          children: [
+            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            DetailsItemConditions(
+              conditions: item.status?.conditions
+                  .map(
+                    (e) => IoK8sApimachineryPkgApisMetaV1Condition(
+                      lastTransitionTime:
+                          e.lastTransitionTime ?? DateTime.now(),
+                      message: e.message ?? '',
+                      observedGeneration: null,
+                      reason: e.reason ?? '',
+                      status: e.status,
+                      type: e.type,
+                    ),
+                  )
+                  .toList(),
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Configuration',
+              details: [
+                DetailsItemModel(
+                  name: 'Backoff Limit',
+                  values: item.spec?.backoffLimit,
                 ),
-              )
-              .toList(),
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Configuration',
-          details: [
-            DetailsItemModel(
-              name: 'Backoff Limit',
-              values: item.spec?.backoffLimit,
+                DetailsItemModel(
+                  name: 'Completions',
+                  values: item.spec?.completions,
+                ),
+                DetailsItemModel(
+                  name: 'Parallelism',
+                  values: item.spec?.parallelism,
+                ),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Completions',
-              values: item.spec?.completions,
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Status',
+              details: [
+                DetailsItemModel(
+                  name: 'Start Time',
+                  values: formatTime(item.status?.startTime),
+                ),
+                DetailsItemModel(
+                  name: 'Completion Time',
+                  values: formatTime(item.status?.completionTime),
+                ),
+                DetailsItemModel(
+                  name: 'Duration',
+                  values: timeDiff(
+                    item.status?.startTime,
+                    item.status?.completionTime,
+                  ),
+                ),
+                DetailsItemModel(
+                  name: 'Succeeded',
+                  values: item.status?.succeeded,
+                ),
+                DetailsItemModel(name: 'Failed', values: item.status?.failed),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Parallelism',
-              values: item.spec?.parallelism,
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsResourcesPreview(
+              resource: resourcePod,
+              namespace: item.metadata?.namespace,
+              selector: getSelector(item.spec?.selector),
+              filter: null,
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsResourcesPreview(
+              resource: resourceEvent,
+              namespace: item.metadata?.namespace,
+              selector:
+                  'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
+              filter: null,
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+            AppPrometheusChartsWidget(
+              item: item,
+              toJson: resource.toJson,
+              defaultCharts: const [],
             ),
           ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Status',
-          details: [
-            DetailsItemModel(
-              name: 'Start Time',
-              values: formatTime(item.status?.startTime),
-            ),
-            DetailsItemModel(
-              name: 'Completion Time',
-              values: formatTime(item.status?.completionTime),
-            ),
-            DetailsItemModel(
-              name: 'Duration',
-              values: timeDiff(
-                item.status?.startTime,
-                item.status?.completionTime,
-              ),
-            ),
-            DetailsItemModel(
-              name: 'Succeeded',
-              values: item.status?.succeeded,
-            ),
-            DetailsItemModel(
-              name: 'Failed',
-              values: item.status?.failed,
-            ),
-          ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsResourcesPreview(
-          resource: resourcePod,
-          namespace: item.metadata?.namespace,
-          selector: getSelector(item.spec?.selector),
-          filter: null,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsResourcesPreview(
-          resource: resourceEvent,
-          namespace: item.metadata?.namespace,
-          selector:
-              'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
-          filter: null,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        AppPrometheusChartsWidget(
-          item: item,
-          toJson: resource.toJson,
-          defaultCharts: const [],
-        ),
-      ],
-    );
-  },
+        );
+      },
 );

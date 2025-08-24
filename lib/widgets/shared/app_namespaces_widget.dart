@@ -79,14 +79,14 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
     return _filter == ''
         ? namespaces
         : namespaces
-            .where(
-              (namespace) =>
-                  namespace.metadata != null &&
-                  namespace.metadata!.name != null &&
-                  namespace.metadata!.name is String &&
-                  namespace.metadata!.name!.contains(_filter.toLowerCase()),
-            )
-            .toList();
+              .where(
+                (namespace) =>
+                    namespace.metadata != null &&
+                    namespace.metadata!.name != null &&
+                    namespace.metadata!.name is String &&
+                    namespace.metadata!.name!.contains(_filter.toLowerCase()),
+              )
+              .toList();
   }
 
   /// [_changeNamespace] sets the namespace of the currently active cluster to
@@ -171,10 +171,9 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
         ),
       ),
       SizedBox(
-        height:
-            appRepository.settings.namespaces.isEmpty
-                ? 0
-                : Constants.spacingMiddle,
+        height: appRepository.settings.namespaces.isEmpty
+            ? 0
+            : Constants.spacingMiddle,
       ),
       ListView.separated(
         shrinkWrap: true,
@@ -270,118 +269,124 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
           ),
           child: FutureBuilder(
             future: _futureFetchNamespaces,
-            builder: (
-              BuildContext context,
-              AsyncSnapshot<List<IoK8sApiCoreV1Namespace>> snapshot,
-            ) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                case ConnectionState.waiting:
-                  return ListView(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      ..._buildFavoriteNamespace(),
-                      Center(
-                        child: CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ],
-                  );
-                default:
-                  if (snapshot.hasError) {
-                    return ListView(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        ..._buildFavoriteNamespace(),
-                        Wrap(
-                          children: [
-                            AppErrorWidget(
-                              message: 'Failed to Load Namespaces',
-                              details: snapshot.error.toString(),
-                              icon: CustomIcons.namespaces,
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  }
-
-                  final filteredNamespaces = _getFilteredNamespaces(
-                    snapshot.data!,
-                  );
-
-                  return Column(
-                    children: [
-                      ..._buildFavoriteNamespace(),
-                      TextField(
-                        onChanged: (value) {
-                          setState(() {
-                            _filter = value;
-                          });
-                        },
-                        keyboardType: TextInputType.text,
-                        autocorrect: false,
-                        enableSuggestions: false,
-                        maxLines: 1,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Filter',
-                        ),
-                      ),
-                      const SizedBox(height: Constants.spacingMiddle),
-                      ListView.separated(
+            builder:
+                (
+                  BuildContext context,
+                  AsyncSnapshot<List<IoK8sApiCoreV1Namespace>> snapshot,
+                ) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                      return ListView(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(
-                            height: Constants.spacingMiddle,
-                          );
-                        },
-                        itemCount: filteredNamespaces.length,
-                        itemBuilder: (context, index) {
-                          final name = filteredNamespaces[index].metadata?.name;
-
-                          return AppListItem(
-                            onTap: () {
-                              _changeNamespace(name ?? 'default');
-                            },
-                            child: Row(
+                        children: [
+                          ..._buildFavoriteNamespace(),
+                          Center(
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ],
+                      );
+                    default:
+                      if (snapshot.hasError) {
+                        return ListView(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            ..._buildFavoriteNamespace(),
+                            Wrap(
                               children: [
-                                Icon(
-                                  name != null &&
-                                          name ==
-                                              clustersRepository
-                                                  .getCluster(
-                                                    clustersRepository
-                                                        .activeClusterId,
-                                                  )!
-                                                  .namespace
-                                      ? Icons.radio_button_checked
-                                      : Icons.radio_button_unchecked,
-                                  size: 24,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                const SizedBox(width: Constants.spacingSmall),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    name ?? '',
-                                    style: normalTextStyle(context),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                                AppErrorWidget(
+                                  message: 'Failed to Load Namespaces',
+                                  details: snapshot.error.toString(),
+                                  icon: CustomIcons.namespaces,
                                 ),
                               ],
                             ),
-                          );
-                        },
-                      ),
-                    ],
-                  );
-              }
-            },
+                          ],
+                        );
+                      }
+
+                      final filteredNamespaces = _getFilteredNamespaces(
+                        snapshot.data!,
+                      );
+
+                      return Column(
+                        children: [
+                          ..._buildFavoriteNamespace(),
+                          TextField(
+                            onChanged: (value) {
+                              setState(() {
+                                _filter = value;
+                              });
+                            },
+                            keyboardType: TextInputType.text,
+                            autocorrect: false,
+                            enableSuggestions: false,
+                            maxLines: 1,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Filter',
+                            ),
+                          ),
+                          const SizedBox(height: Constants.spacingMiddle),
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            separatorBuilder: (context, index) {
+                              return const SizedBox(
+                                height: Constants.spacingMiddle,
+                              );
+                            },
+                            itemCount: filteredNamespaces.length,
+                            itemBuilder: (context, index) {
+                              final name =
+                                  filteredNamespaces[index].metadata?.name;
+
+                              return AppListItem(
+                                onTap: () {
+                                  _changeNamespace(name ?? 'default');
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      name != null &&
+                                              name ==
+                                                  clustersRepository
+                                                      .getCluster(
+                                                        clustersRepository
+                                                            .activeClusterId,
+                                                      )!
+                                                      .namespace
+                                          ? Icons.radio_button_checked
+                                          : Icons.radio_button_unchecked,
+                                      size: 24,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
+                                    ),
+                                    const SizedBox(
+                                      width: Constants.spacingSmall,
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        name ?? '',
+                                        style: normalTextStyle(context),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                  }
+                },
           ),
         ),
       ),

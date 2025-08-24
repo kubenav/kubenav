@@ -17,10 +17,9 @@ class AzureCluster {
   factory AzureCluster.fromJson(Map<String, dynamic> data) {
     return AzureCluster(
       name: data.containsKey('name') ? data['name'] : null,
-      kubeconfig:
-          data.containsKey('kubeconfig')
-              ? Kubeconfig.fromJson(data['kubeconfig'])
-              : null,
+      kubeconfig: data.containsKey('kubeconfig')
+          ? Kubeconfig.fromJson(data['kubeconfig'])
+          : null,
     );
   }
 

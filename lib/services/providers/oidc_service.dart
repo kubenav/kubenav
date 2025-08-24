@@ -58,8 +58,9 @@ class OIDCResponse {
     return OIDCResponse(
       url: data.containsKey('url') ? data['url'] : null,
       idToken: data.containsKey('idToken') ? data['idToken'] : null,
-      refreshToken:
-          data.containsKey('refreshToken') ? data['refreshToken'] : null,
+      refreshToken: data.containsKey('refreshToken')
+          ? data['refreshToken']
+          : null,
       verifier: data.containsKey('verifier') ? data['verifier'] : null,
     );
   }
@@ -94,14 +95,12 @@ class OIDCDeviceAuth {
     return OIDCDeviceAuth(
       deviceCode: data.containsKey('device_code') ? data['device_code'] : null,
       userCode: data.containsKey('user_code') ? data['user_code'] : null,
-      verificationURI:
-          data.containsKey('verification_uri')
-              ? data['verification_uri']
-              : null,
-      verificationURIComplete:
-          data.containsKey('verification_uri_complete')
-              ? data['verification_uri_complete']
-              : null,
+      verificationURI: data.containsKey('verification_uri')
+          ? data['verification_uri']
+          : null,
+      verificationURIComplete: data.containsKey('verification_uri_complete')
+          ? data['verification_uri_complete']
+          : null,
     );
   }
 

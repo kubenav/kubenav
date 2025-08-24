@@ -10,10 +10,7 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 /// The [SettingsDeleteNamespace] widget is used to delete a namespace which was
 /// added by the user to his favorite namespaces list.
 class SettingsDeleteNamespace extends StatelessWidget {
-  const SettingsDeleteNamespace({
-    super.key,
-    required this.namespace,
-  });
+  const SettingsDeleteNamespace({super.key, required this.namespace});
 
   final String namespace;
 

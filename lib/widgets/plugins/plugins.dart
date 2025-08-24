@@ -92,76 +92,64 @@ class Plugins extends StatelessWidget {
     return [
       AppVerticalListSimpleWidget(
         title: 'Plugins',
-        items: List.generate(
-          _plugins.length,
-          (index) {
-            return AppVerticalListSimpleModel(
-              onTap: () {
-                navigate(context, _plugins[index].widget);
-              },
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(Constants.sizeBorderRadius),
+        items: List.generate(_plugins.length, (index) {
+          return AppVerticalListSimpleModel(
+            onTap: () {
+              navigate(context, _plugins[index].widget);
+            },
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(Constants.sizeBorderRadius),
+                  ),
+                ),
+                height: 54,
+                width: 54,
+                padding: const EdgeInsets.all(Constants.spacingIcon54x54),
+                child: SvgPicture.asset(_plugins[index].icon),
+              ),
+              const SizedBox(width: Constants.spacingSmall),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _plugins[index].title,
+                      style: primaryTextStyle(context),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  height: 54,
-                  width: 54,
-                  padding: const EdgeInsets.all(
-                    Constants.spacingIcon54x54,
-                  ),
-                  child: SvgPicture.asset(_plugins[index].icon),
+                    Text(
+                      _plugins[index].description,
+                      style: secondaryTextStyle(context),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
-                const SizedBox(width: Constants.spacingSmall),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _plugins[index].title,
-                        style: primaryTextStyle(
-                          context,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        _plugins[index].description,
-                        style: secondaryTextStyle(
-                          context,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: Constants.spacingSmall),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  color: Theme.of(context)
-                      .extension<CustomColors>()!
-                      .textSecondary
-                      .withValues(alpha: Constants.opacityIcon),
-                  size: 24,
-                ),
-              ],
-            );
-          },
-        ),
+              ),
+              const SizedBox(width: Constants.spacingSmall),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context)
+                    .extension<CustomColors>()!
+                    .textSecondary
+                    .withValues(alpha: Constants.opacityIcon),
+                size: 24,
+              ),
+            ],
+          );
+        }),
       ),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<AppRepository>(
-      context,
-      listen: true,
-    );
+    Provider.of<AppRepository>(context, listen: true);
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: true,
@@ -194,9 +182,9 @@ class Plugins extends StatelessWidget {
               ),
             ),
             Text(
-              Characters(activeCluster?.name ?? 'No Active Cluster')
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
+              Characters(
+                activeCluster?.name ?? 'No Active Cluster',
+              ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 14,
@@ -211,9 +199,7 @@ class Plugins extends StatelessWidget {
       floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: buildContent(context),
-          ),
+          child: Column(children: buildContent(context)),
         ),
       ),
     );

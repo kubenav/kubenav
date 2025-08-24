@@ -71,11 +71,7 @@ class _PluginHelmDetailsValuesState extends State<PluginHelmDetailsValues> {
         _codeController.text = data;
       }
     } catch (err) {
-      Logger.log(
-        'PluginHelmDetailsValues _init',
-        'Encoding Failed',
-        err,
-      );
+      Logger.log('PluginHelmDetailsValues _init', 'Encoding Failed', err);
     }
   }
 

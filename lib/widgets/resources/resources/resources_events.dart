@@ -61,11 +61,7 @@ final resourceEvent = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
+  listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
     final item = listItem.item as IoK8sApiCoreV1Event;
     final status = listItem.status;
 
@@ -85,9 +81,7 @@ final resourceEvent = Resource(
       ],
     );
   },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiCoreV1Event;
 
     return [
@@ -99,98 +93,76 @@ final resourceEvent = Resource(
       'Message: ${item.message ?? '-'}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
-    final item = detailsItem as IoK8sApiCoreV1Event;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item = detailsItem as IoK8sApiCoreV1Event;
 
-    return Column(
-      children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Details',
-          details: [
-            DetailsItemModel(
-              name: 'Type',
-              values: item.type,
+        return Column(
+          children: [
+            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Details',
+              details: [
+                DetailsItemModel(name: 'Type', values: item.type),
+                DetailsItemModel(name: 'Reason', values: item.reason),
+                DetailsItemModel(name: 'Message', values: item.message),
+                DetailsItemModel(
+                  name: 'Event Time',
+                  values: getAge(item.eventTime),
+                ),
+                DetailsItemModel(
+                  name: 'Last Seen',
+                  values: getAge(item.lastTimestamp),
+                ),
+                DetailsItemModel(
+                  name: 'First Seen',
+                  values: getAge(item.firstTimestamp),
+                ),
+                DetailsItemModel(name: 'Count', values: item.count),
+                DetailsItemModel(
+                  name: 'Source',
+                  values: item.source_?.component,
+                ),
+                DetailsItemModel(
+                  name: 'Reporting Component',
+                  values: item.reportingComponent,
+                ),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Reason',
-              values: item.reason,
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Involved Object',
+              goTo: 'View',
+              goToOnTap: () {
+                goToReference(context, item.involvedObject, null);
+              },
+              details: [
+                DetailsItemModel(
+                  name: 'API Version',
+                  values: item.involvedObject.apiVersion,
+                ),
+                DetailsItemModel(
+                  name: 'Kind',
+                  values: item.involvedObject.kind,
+                ),
+                DetailsItemModel(
+                  name: 'Name',
+                  values: item.involvedObject.name,
+                ),
+                DetailsItemModel(
+                  name: 'Namespace',
+                  values: item.involvedObject.namespace,
+                ),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Message',
-              values: item.message,
-            ),
-            DetailsItemModel(
-              name: 'Event Time',
-              values: getAge(item.eventTime),
-            ),
-            DetailsItemModel(
-              name: 'Last Seen',
-              values: getAge(item.lastTimestamp),
-            ),
-            DetailsItemModel(
-              name: 'First Seen',
-              values: getAge(item.firstTimestamp),
-            ),
-            DetailsItemModel(
-              name: 'Count',
-              values: item.count,
-            ),
-            DetailsItemModel(
-              name: 'Source',
-              values: item.source_?.component,
-            ),
-            DetailsItemModel(
-              name: 'Reporting Component',
-              values: item.reportingComponent,
-            ),
-          ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Involved Object',
-          goTo: 'View',
-          goToOnTap: () {
-            goToReference(
-              context,
-              item.involvedObject,
-              null,
-            );
-          },
-          details: [
-            DetailsItemModel(
-              name: 'API Version',
-              values: item.involvedObject.apiVersion,
-            ),
-            DetailsItemModel(
-              name: 'Kind',
-              values: item.involvedObject.kind,
-            ),
-            DetailsItemModel(
-              name: 'Name',
-              values: item.involvedObject.name,
-            ),
-            DetailsItemModel(
-              name: 'Namespace',
-              values: item.involvedObject.namespace,
+            const SizedBox(height: Constants.spacingMiddle),
+            AppPrometheusChartsWidget(
+              item: item,
+              toJson: resource.toJson,
+              defaultCharts: const [],
             ),
           ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        AppPrometheusChartsWidget(
-          item: item,
-          toJson: resource.toJson,
-          defaultCharts: const [],
-        ),
-      ],
-    );
-  },
+        );
+      },
 );

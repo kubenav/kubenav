@@ -7,10 +7,7 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 
 /// The [AppResourceActionsMode] enum defines all the modes which are supported
 /// by the [AppResourceActions] widget.
-enum AppResourceActionsMode {
-  header,
-  actions,
-}
+enum AppResourceActionsMode { header, actions }
 
 /// [AppResourceActionsModel] is the class to define an action for the
 /// [AppResourceActions] widget. Each action must have a [title], a [icon]
@@ -54,14 +51,12 @@ class AppResourceActions extends StatelessWidget {
         height: actions.length <= 3
             ? 90
             : actions.length <= 6
-                ? 180
-                : actions.length <= 9
-                    ? 270
-                    : 360,
+            ? 180
+            : actions.length <= 9
+            ? 270
+            : 360,
         width: MediaQuery.of(context).size.width,
-        margin: const EdgeInsets.only(
-          bottom: Constants.spacingExtraLarge,
-        ),
+        margin: const EdgeInsets.only(bottom: Constants.spacingExtraLarge),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.vertical(
@@ -93,43 +88,39 @@ class AppResourceActions extends StatelessWidget {
             alignment: WrapAlignment.center,
             direction: Axis.horizontal,
             spacing: Constants.spacingSmall,
-            children: actions.map(
-              (action) {
-                return Container(
-                  constraints: BoxConstraints(
-                    minWidth: MediaQuery.of(context).size.width * 0.25,
-                  ),
-                  padding: const EdgeInsets.only(
-                    top: Constants.spacingMiddle,
-                    bottom: Constants.spacingMiddle,
-                  ),
-                  child: Column(
-                    children: [
-                      InkWell(
-                        onTap: action.onTap,
-                        child: Column(
-                          children: [
-                            Icon(
-                              action.icon,
-                              color: Theme.of(context).colorScheme.primary,
-                              size: 28,
-                            ),
-                            const SizedBox(
-                              height: Constants.spacingSmall,
-                            ),
-                            Text(
-                              action.title,
-                              style: primaryTextStyle(context, size: 12),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
+            children: actions.map((action) {
+              return Container(
+                constraints: BoxConstraints(
+                  minWidth: MediaQuery.of(context).size.width * 0.25,
+                ),
+                padding: const EdgeInsets.only(
+                  top: Constants.spacingMiddle,
+                  bottom: Constants.spacingMiddle,
+                ),
+                child: Column(
+                  children: [
+                    InkWell(
+                      onTap: action.onTap,
+                      child: Column(
+                        children: [
+                          Icon(
+                            action.icon,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 28,
+                          ),
+                          const SizedBox(height: Constants.spacingSmall),
+                          Text(
+                            action.title,
+                            style: primaryTextStyle(context, size: 12),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                );
-              },
-            ).toList(),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
           ),
         ),
       );
@@ -137,18 +128,16 @@ class AppResourceActions extends StatelessWidget {
 
     if (mode == AppResourceActionsMode.actions) {
       return AppActionsWidget(
-        actions: actions.map(
-          (e) {
-            return AppActionsWidgetAction(
-              title: e.title,
-              color: Theme.of(context).colorScheme.primary,
-              onTap: () {
-                Navigator.pop(context);
-                e.onTap();
-              },
-            );
-          },
-        ).toList(),
+        actions: actions.map((e) {
+          return AppActionsWidgetAction(
+            title: e.title,
+            color: Theme.of(context).colorScheme.primary,
+            onTap: () {
+              Navigator.pop(context);
+              e.onTap();
+            },
+          );
+        }).toList(),
       );
     }
 

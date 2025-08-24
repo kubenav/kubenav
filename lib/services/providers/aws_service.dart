@@ -57,11 +57,11 @@ class AWSCluster {
       endpoint: data.containsKey('Endpoint') ? data['Endpoint'] : null,
       certificateAuthority:
           data.containsKey('CertificateAuthority') &&
-                  data['CertificateAuthority'] != null
-              ? AWSClusterCertificateAuthority.fromJson(
-                data['CertificateAuthority'],
-              )
-              : null,
+              data['CertificateAuthority'] != null
+          ? AWSClusterCertificateAuthority.fromJson(
+              data['CertificateAuthority'],
+            )
+          : null,
     );
   }
 
@@ -102,14 +102,12 @@ class AWSSSOConfig {
 
   factory AWSSSOConfig.fromJson(Map<String, dynamic> data) {
     return AWSSSOConfig(
-      client:
-          data.containsKey('client') && data['client'] != null
-              ? AWSSSOConfigClient.fromJson(data['client'])
-              : null,
-      device:
-          data.containsKey('device') && data['device'] != null
-              ? AWSSSOConfigDevice.fromJson(data['device'])
-              : null,
+      client: data.containsKey('client') && data['client'] != null
+          ? AWSSSOConfigClient.fromJson(data['client'])
+          : null,
+      device: data.containsKey('device') && data['device'] != null
+          ? AWSSSOConfigDevice.fromJson(data['device'])
+          : null,
     );
   }
 
@@ -137,16 +135,15 @@ class AWSSSOConfigClient {
   factory AWSSSOConfigClient.fromJson(Map<String, dynamic> data) {
     return AWSSSOConfigClient(
       clientId: data.containsKey('ClientId') ? data['ClientId'] : null,
-      clientIdIssuedAt:
-          data.containsKey('ClientIdIssuedAt')
-              ? data['ClientIdIssuedAt']
-              : null,
-      clientSecret:
-          data.containsKey('ClientSecret') ? data['ClientSecret'] : null,
-      clientSecretExpiresAt:
-          data.containsKey('ClientSecretExpiresAt')
-              ? data['ClientSecretExpiresAt']
-              : null,
+      clientIdIssuedAt: data.containsKey('ClientIdIssuedAt')
+          ? data['ClientIdIssuedAt']
+          : null,
+      clientSecret: data.containsKey('ClientSecret')
+          ? data['ClientSecret']
+          : null,
+      clientSecretExpiresAt: data.containsKey('ClientSecretExpiresAt')
+          ? data['ClientSecretExpiresAt']
+          : null,
     );
   }
 
@@ -186,12 +183,12 @@ class AWSSSOConfigDevice {
       expiresIn: data.containsKey('ExpiresIn') ? data['ExpiresIn'] : null,
       interval: data.containsKey('Interval') ? data['Interval'] : null,
       userCode: data.containsKey('UserCode') ? data['UserCode'] : null,
-      verificationUri:
-          data.containsKey('VerificationUri') ? data['VerificationUri'] : null,
-      verificationUriComplete:
-          data.containsKey('VerificationUriComplete')
-              ? data['VerificationUriComplete']
-              : null,
+      verificationUri: data.containsKey('VerificationUri')
+          ? data['VerificationUri']
+          : null,
+      verificationUriComplete: data.containsKey('VerificationUriComplete')
+          ? data['VerificationUriComplete']
+          : null,
     );
   }
 
@@ -229,16 +226,17 @@ class AWSSSOCredentials {
   factory AWSSSOCredentials.fromJson(Map<String, dynamic> data) {
     return AWSSSOCredentials(
       accessKeyId: data.containsKey('accessKeyId') ? data['accessKeyId'] : null,
-      secretAccessKey:
-          data.containsKey('secretAccessKey') ? data['secretAccessKey'] : null,
-      sessionToken:
-          data.containsKey('sessionToken') ? data['sessionToken'] : null,
+      secretAccessKey: data.containsKey('secretAccessKey')
+          ? data['secretAccessKey']
+          : null,
+      sessionToken: data.containsKey('sessionToken')
+          ? data['sessionToken']
+          : null,
       expire: data.containsKey('expire') ? data['expire'] : null,
       accessToken: data.containsKey('accessToken') ? data['accessToken'] : null,
-      accessTokenExpire:
-          data.containsKey('accessTokenExpire')
-              ? data['accessTokenExpire']
-              : null,
+      accessTokenExpire: data.containsKey('accessTokenExpire')
+          ? data['accessTokenExpire']
+          : null,
     );
   }
 
@@ -275,15 +273,13 @@ class AWSSSOAccount {
     return AWSSSOAccount(
       accountId: data.containsKey('accountId') ? data['accountId'] : null,
       accountName: data.containsKey('accountName') ? data['accountName'] : null,
-      roles:
-          data.containsKey('roles')
-              ? List<String>.from(data['roles'].map((v) => v))
-              : null,
+      roles: data.containsKey('roles')
+          ? List<String>.from(data['roles'].map((v) => v))
+          : null,
       accessToken: data.containsKey('accessToken') ? data['accessToken'] : null,
-      accessTokenExpire:
-          data.containsKey('accessTokenExpire')
-              ? data['accessTokenExpire']
-              : null,
+      accessTokenExpire: data.containsKey('accessTokenExpire')
+          ? data['accessTokenExpire']
+          : null,
     );
   }
 

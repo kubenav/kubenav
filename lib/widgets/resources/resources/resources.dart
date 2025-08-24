@@ -54,10 +54,7 @@ final List<String> resourceCategories = [
 /// [ResourceScope] is a `enum` for the scope of the Kubernetes resource. A
 /// Kubernetes resource can be `namespaced` (e.g. Pods, Deployments, etc.) or
 /// `cluster` (e.g. Custom Resource Definitions, Nodes, etc.).
-enum ResourceScope {
-  namespaced,
-  cluster,
-}
+enum ResourceScope { namespaced, cluster }
 
 extension ResourceScopeExtension on ResourceScope {
   /// [toShortString] returns a short string of the resource scope, so that we
@@ -99,19 +96,11 @@ class Resource {
   dynamic Function(String data) decodeItem;
   String Function(dynamic item) encodeItem;
   Map<String, dynamic> Function(dynamic item) toJson;
-  Widget Function(
-    BuildContext context,
-    Resource resource,
-    ResourceItem item,
-  ) listItemBuilder;
-  List<String> Function(
-    dynamic item,
-  ) previewItemBuilder;
-  Widget Function(
-    BuildContext context,
-    Resource resource,
-    dynamic item,
-  ) detailsItemBuilder;
+  Widget Function(BuildContext context, Resource resource, ResourceItem item)
+  listItemBuilder;
+  List<String> Function(dynamic item) previewItemBuilder;
+  Widget Function(BuildContext context, Resource resource, dynamic item)
+  detailsItemBuilder;
 
   Resource({
     required this.category,
@@ -144,8 +133,9 @@ class Resource {
       'path': path,
       'resource': resource,
       'scope': scope.toShortString(),
-      'additionalPrinterColumns':
-          additionalPrinterColumns.map((e) => e.toJson()).toList(),
+      'additionalPrinterColumns': additionalPrinterColumns
+          .map((e) => e.toJson())
+          .toList(),
     };
   }
 }
@@ -207,20 +197,12 @@ class ResourceMetrics {
   String cpu;
   String memory;
 
-  ResourceMetrics({
-    required this.cpu,
-    required this.memory,
-  });
+  ResourceMetrics({required this.cpu, required this.memory});
 }
 
 /// [ResourceStatus] is a `enum` for the status of a Kubernetes resource. The
 /// status can be `undefined`, `success`, `warning` or `danger`.
-enum ResourceStatus {
-  undefined,
-  success,
-  warning,
-  danger,
-}
+enum ResourceStatus { undefined, success, warning, danger }
 
 extension ResourceStatusExtension on ResourceStatus {
   /// [toLocalizedString] returns a string for the status of a resource, which

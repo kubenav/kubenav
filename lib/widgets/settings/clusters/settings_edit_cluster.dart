@@ -12,10 +12,7 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// configuration of an existing cluster. Within the form it is possible to
 /// change all configuration which matters for the user.
 class SettingsEditCluster extends StatefulWidget {
-  const SettingsEditCluster({
-    super.key,
-    required this.cluster,
-  });
+  const SettingsEditCluster({super.key, required this.cluster});
 
   final Cluster cluster;
 
@@ -67,14 +64,17 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
         final cluster = widget.cluster;
         cluster.name = _nameController.text;
         cluster.clusterServer = _clusterServerController.text.endsWith('/')
-            ? _clusterServerController.text
-                .substring(0, _clusterServerController.text.length - 1)
+            ? _clusterServerController.text.substring(
+                0,
+                _clusterServerController.text.length - 1,
+              )
             : _clusterServerController.text;
         cluster.clusterCertificateAuthorityData =
             _clusterCertificateAuthorityDataController.text.trim();
         cluster.clusterInsecureSkipTLSVerify = _clusterInsecureSkipTLSVerify;
-        cluster.userClientCertificateData =
-            _userClientCertificateDataController.text.trim();
+        cluster.userClientCertificateData = _userClientCertificateDataController
+            .text
+            .trim();
         cluster.userClientKeyData = _userClientKeyDataController.text.trim();
         cluster.userToken = _userTokenController.text.trim();
         cluster.userUsername = _userUsernameController.text.trim();
@@ -102,11 +102,7 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
         _isLoadingAddCluster = false;
       });
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Save Cluster',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Save Cluster', err.toString());
       }
     }
   }
@@ -221,7 +217,7 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
                   children: [
                     const Text('Insecure Skip TLS Verify'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _clusterInsecureSkipTLSVerify =

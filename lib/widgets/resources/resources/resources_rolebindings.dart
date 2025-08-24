@@ -71,29 +71,24 @@ final resourceRoleBinding = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiRbacV1ClusterRoleBinding;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiRbacV1ClusterRoleBinding;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Role: ${item.roleRef.kind}/${item.roleRef.name}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Role: ${item.roleRef.kind}/${item.roleRef.name}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiRbacV1ClusterRoleBinding;
 
     return [
@@ -101,19 +96,12 @@ final resourceRoleBinding = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiRbacV1ClusterRoleBinding;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Configuration',
@@ -133,17 +121,17 @@ final resourceRoleBinding = Resource(
                       );
                     }
                   : item.roleRef.kind == 'Role'
-                      ? (index) {
-                          navigate(
-                            context,
-                            ResourcesDetails(
-                              name: item.roleRef.name,
-                              namespace: item.metadata?.namespace,
-                              resource: resourceRole,
-                            ),
-                          );
-                        }
-                      : null,
+                  ? (index) {
+                      navigate(
+                        context,
+                        ResourcesDetails(
+                          name: item.roleRef.name,
+                          namespace: item.metadata?.namespace,
+                          resource: resourceRole,
+                        ),
+                      );
+                    }
+                  : null,
             ),
           ],
         ),
@@ -175,9 +163,7 @@ final resourceRoleBinding = Resource(
                       ),
                       height: 54,
                       width: 54,
-                      padding: const EdgeInsets.all(
-                        Constants.spacingIcon54x54,
-                      ),
+                      padding: const EdgeInsets.all(Constants.spacingIcon54x54),
                       child: SvgPicture.asset(
                         'assets/resources/clusterrolebindings.svg',
                       ),
@@ -190,17 +176,13 @@ final resourceRoleBinding = Resource(
                         children: [
                           Text(
                             subject.kind,
-                            style: primaryTextStyle(
-                              context,
-                            ),
+                            style: primaryTextStyle(context),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             '${subject.namespace != null ? '${subject.namespace}/' : ''}${subject.name}',
-                            style: secondaryTextStyle(
-                              context,
-                            ),
+                            style: secondaryTextStyle(context),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),

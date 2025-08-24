@@ -15,10 +15,7 @@ import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_awssso.da
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class SettingsAWSSSOProvider extends StatefulWidget {
-  const SettingsAWSSSOProvider({
-    super.key,
-    required this.provider,
-  });
+  const SettingsAWSSSOProvider({super.key, required this.provider});
 
   final ClusterProvider? provider;
 
@@ -101,11 +98,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
         err,
       );
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Verify Device',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Verify Device', err.toString());
       }
     }
   }
@@ -145,11 +138,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
         err,
       );
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Get SSO Credentials',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Get SSO Credentials', err.toString());
       }
     }
   }
@@ -189,12 +178,7 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
           });
           if (mounted) {
             Navigator.pop(context);
-            showModal(
-              context,
-              SettingsAddClusterAWSSSO(
-                provider: provider,
-              ),
-            );
+            showModal(context, SettingsAddClusterAWSSSO(provider: provider));
           }
         } else {
           final provider = widget.provider;
@@ -366,9 +350,9 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                           child: Text(
                             value,
                             style: TextStyle(
-                              color: Theme.of(context)
-                                  .extension<CustomColors>()!
-                                  .textPrimary,
+                              color: Theme.of(
+                                context,
+                              ).extension<CustomColors>()!.textPrimary,
                             ),
                           ),
                         );
@@ -399,9 +383,9 @@ class _SettingsAWSSSOProviderState extends State<SettingsAWSSSOProvider> {
                           child: Text(
                             value,
                             style: TextStyle(
-                              color: Theme.of(context)
-                                  .extension<CustomColors>()!
-                                  .textPrimary,
+                              color: Theme.of(
+                                context,
+                              ).extension<CustomColors>()!.textPrimary,
                             ),
                           ),
                         );

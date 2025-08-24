@@ -7,11 +7,7 @@ import 'package:kubenav/utils/storage.dart';
 /// [ThemeName] is a enum value which contains all available themes for the app.
 /// All defined themes must also have a [ThemeSettings] object which is returned
 /// for the specified theme name in the [ThemeRepository.theme] getter.
-enum ThemeName {
-  auto,
-  light,
-  dark,
-}
+enum ThemeName { auto, light, dark }
 
 /// [ResourceScopeExtension] defines all extensions for the [ThemeName] enum
 /// value.
@@ -66,11 +62,7 @@ class ThemeRepository with ChangeNotifier {
     try {
       await Storage().write('kubenav-theme', _themeName.toShortString());
     } catch (err) {
-      Logger.log(
-        'ThemeRepository _save',
-        'Failed to Save Theme',
-        err,
-      );
+      Logger.log('ThemeRepository _save', 'Failed to Save Theme', err);
     }
   }
 
@@ -86,11 +78,7 @@ class ThemeRepository with ChangeNotifier {
 
       notifyListeners();
     } catch (err) {
-      Logger.log(
-        'ThemeRepository _init',
-        'Failed to Load Theme',
-        err,
-      );
+      Logger.log('ThemeRepository _init', 'Failed to Load Theme', err);
     }
   }
 

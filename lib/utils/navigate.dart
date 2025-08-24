@@ -16,17 +16,13 @@ void navigate(BuildContext context, Widget widget, [int? index]) {
 
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) => widget,
-      ),
+      MaterialPageRoute<void>(builder: (BuildContext context) => widget),
       (route) => false,
     );
   } else {
     Navigator.push(
       context,
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) => widget,
-      ),
+      MaterialPageRoute<void>(builder: (BuildContext context) => widget),
     );
   }
 }

@@ -55,15 +55,17 @@ class _PluginCertManagerRenewState extends State<PluginCertManagerRenew> {
       });
 
       final now = DateTime.now().toRFC3339();
-      final conditionIndex = widget.certificate.status?.conditions
-          .indexWhere((e) => e.type == 'Issuing');
+      final conditionIndex = widget.certificate.status?.conditions.indexWhere(
+        (e) => e.type == 'Issuing',
+      );
 
-      final String body = widget.certificate.status?.conditions == null ||
+      final String body =
+          widget.certificate.status?.conditions == null ||
               widget.certificate.status!.conditions.isEmpty
           ? '[{"op":"add","path":"/status/conditions","value":[{"type":"Issuing","status":"True","lastTransitionTime":"$now","reason":"ManuallyTriggered","message":"Certificate re-issuance manually triggered","observedGeneration":${widget.certificate.metadata?.generation ?? 1}}]}]'
           : conditionIndex == null
-              ? '[{"op":"add","path":"/status/conditions/${widget.certificate.status?.conditions != null ? widget.certificate.status!.conditions.length + 1 : 0}","value":{"type":"Issuing","status":"True","lastTransitionTime":"$now","reason":"ManuallyTriggered","message":"Certificate re-issuance manually triggered","observedGeneration":${widget.certificate.metadata?.generation ?? 1}}}]'
-              : '[{"op":"replace","path":"/status/conditions/$conditionIndex","value":{"type":"Issuing","status":"True","lastTransitionTime":"$now","reason":"ManuallyTriggered","message":"Certificate re-issuance manually triggered","observedGeneration":${widget.certificate.metadata?.generation ?? 1}}}]';
+          ? '[{"op":"add","path":"/status/conditions/${widget.certificate.status?.conditions != null ? widget.certificate.status!.conditions.length + 1 : 0}","value":{"type":"Issuing","status":"True","lastTransitionTime":"$now","reason":"ManuallyTriggered","message":"Certificate re-issuance manually triggered","observedGeneration":${widget.certificate.metadata?.generation ?? 1}}}]'
+          : '[{"op":"replace","path":"/status/conditions/$conditionIndex","value":{"type":"Issuing","status":"True","lastTransitionTime":"$now","reason":"ManuallyTriggered","message":"Certificate re-issuance manually triggered","observedGeneration":${widget.certificate.metadata?.generation ?? 1}}}]';
 
       final cluster = await clustersRepository.getClusterWithCredentials(
         clustersRepository.activeClusterId,

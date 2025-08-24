@@ -27,18 +27,9 @@ class DetailsItemMetadata extends StatelessWidget {
     return DetailsItem(
       title: 'Metadata',
       details: [
-        DetailsItemModel(
-          name: 'Kind',
-          values: kind,
-        ),
-        DetailsItemModel(
-          name: 'Name',
-          values: metadata?.name,
-        ),
-        DetailsItemModel(
-          name: 'Namespace',
-          values: metadata?.namespace,
-        ),
+        DetailsItemModel(name: 'Kind', values: kind),
+        DetailsItemModel(name: 'Name', values: metadata?.name),
+        DetailsItemModel(name: 'Namespace', values: metadata?.namespace),
         DetailsItemModel(
           name: 'Age',
           values: getAge(metadata?.creationTimestamp),

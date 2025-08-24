@@ -41,10 +41,7 @@ class Query {
   String query;
   String label;
 
-  Query({
-    required this.query,
-    required this.label,
-  });
+  Query({required this.query, required this.label});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -53,13 +50,8 @@ class Query {
     return data;
   }
 
-  factory Query.fromYaml(
-    dynamic yaml,
-  ) {
-    return Query(
-      query: yaml['query'] ?? '',
-      label: yaml['label'] ?? '',
-    );
+  factory Query.fromYaml(dynamic yaml) {
+    return Query(query: yaml['query'] ?? '', label: yaml['label'] ?? '');
   }
 
   @override
@@ -72,14 +64,9 @@ class Metric {
   String? label;
   List<Datum>? data;
 
-  Metric({
-    required this.label,
-    required this.data,
-  });
+  Metric({required this.label, required this.data});
 
-  Metric.fromJson(
-    Map<String, dynamic> json,
-  ) {
+  Metric.fromJson(Map<String, dynamic> json) {
     label = json['label'];
     if (json['data'] != null) {
       final tmpData = <Datum>[];
@@ -105,14 +92,9 @@ class Datum {
   int? x;
   num? y;
 
-  Datum({
-    required this.x,
-    required this.y,
-  });
+  Datum({required this.x, required this.y});
 
-  Datum.fromJson(
-    Map<String, dynamic> json,
-  ) {
+  Datum.fromJson(Map<String, dynamic> json) {
     x = json['x'];
     if (json['y'] != null) {
       y = json['y'];
@@ -125,15 +107,9 @@ class Chart {
   String unit;
   List<Query> queries;
 
-  Chart({
-    required this.title,
-    required this.unit,
-    required this.queries,
-  });
+  Chart({required this.title, required this.unit, required this.queries});
 
-  factory Chart.fromYaml(
-    dynamic yaml,
-  ) {
+  factory Chart.fromYaml(dynamic yaml) {
     List<Query> queries = [];
     if (yaml['queries'] != null) {
       final tmpQueries = <Query>[];

@@ -14,10 +14,7 @@ import 'package:kubenav/widgets/home/overview/overview_metric.dart';
 /// If the metrics should only be displayed for a single node instead of for the
 /// whole cluster the optional [nodeName] argument can be set.
 class OverviewMetrics extends StatelessWidget {
-  const OverviewMetrics({
-    super.key,
-    required this.nodeName,
-  });
+  const OverviewMetrics({super.key, required this.nodeName});
 
   final String? nodeName;
 
@@ -33,9 +30,7 @@ class OverviewMetrics extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(
-          Constants.spacingMiddle,
-        ),
+        padding: const EdgeInsets.all(Constants.spacingMiddle),
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -52,18 +47,9 @@ class OverviewMetrics extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Icon(
-              icon,
-              color: Theme.of(context).colorScheme.primary,
-              size: 64,
-            ),
+            Icon(icon, color: Theme.of(context).colorScheme.primary, size: 64),
             const SizedBox(height: Constants.spacingSmall),
-            Text(
-              title,
-              style: primaryTextStyle(
-                context,
-              ),
-            ),
+            Text(title, style: primaryTextStyle(context)),
           ],
         ),
       ),
@@ -72,18 +58,10 @@ class OverviewMetrics extends StatelessWidget {
 
   /// [showMetrics] opens the [OverviewMetric] widget in a modal to display the
   /// metrics for the requested [metricType] (CPU, Memory or Pods).
-  void showMetrics(
-    BuildContext context,
-    MetricType metricType,
-    IconData icon,
-  ) {
+  void showMetrics(BuildContext context, MetricType metricType, IconData icon) {
     showModal(
       context,
-      OverviewMetric(
-        metricType: metricType,
-        icon: icon,
-        nodeName: nodeName,
-      ),
+      OverviewMetric(metricType: metricType, icon: icon, nodeName: nodeName),
     );
   }
 
@@ -92,9 +70,7 @@ class OverviewMetrics extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(
-            Constants.spacingMiddle,
-          ),
+          padding: const EdgeInsets.all(Constants.spacingMiddle),
           child: Row(
             children: [
               Expanded(
@@ -116,42 +92,15 @@ class OverviewMetrics extends StatelessWidget {
                 ? MainAxisAlignment.spaceEvenly
                 : MainAxisAlignment.spaceBetween,
             children: [
-              buildCard(
-                context,
-                'CPU',
-                Icons.bar_chart,
-                () {
-                  showMetrics(
-                    context,
-                    MetricType.cpu,
-                    Icons.bar_chart,
-                  );
-                },
-              ),
-              buildCard(
-                context,
-                'Memory',
-                Icons.area_chart,
-                () {
-                  showMetrics(
-                    context,
-                    MetricType.memory,
-                    Icons.area_chart,
-                  );
-                },
-              ),
-              buildCard(
-                context,
-                'Pods',
-                Icons.pie_chart,
-                () {
-                  showMetrics(
-                    context,
-                    MetricType.pods,
-                    Icons.pie_chart,
-                  );
-                },
-              ),
+              buildCard(context, 'CPU', Icons.bar_chart, () {
+                showMetrics(context, MetricType.cpu, Icons.bar_chart);
+              }),
+              buildCard(context, 'Memory', Icons.area_chart, () {
+                showMetrics(context, MetricType.memory, Icons.area_chart);
+              }),
+              buildCard(context, 'Pods', Icons.pie_chart, () {
+                showMetrics(context, MetricType.pods, Icons.pie_chart);
+              }),
             ],
           ),
         ),

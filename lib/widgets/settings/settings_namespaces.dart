@@ -23,11 +23,7 @@ class SettingsNamespaces extends StatelessWidget {
 
   /// [_proxyDecorator] is used to highlight the bookmark which is currently
   /// draged by the user.
-  Widget _proxyDecorator(
-    Widget child,
-    int index,
-    Animation<double> animation,
-  ) {
+  Widget _proxyDecorator(Widget child, int index, Animation<double> animation) {
     return Material(
       elevation: 0,
       color: Colors.transparent,
@@ -71,22 +67,12 @@ class SettingsNamespaces extends StatelessWidget {
       ),
       child: AppListItem(
         onTap: () {
-          showActions(
-            context,
-            SettingsDeleteNamespace(
-              namespace: namespace,
-            ),
-          );
+          showActions(context, SettingsDeleteNamespace(namespace: namespace));
         },
         onLongPress: () {
           hapticFeedback();
 
-          showActions(
-            context,
-            SettingsDeleteNamespace(
-              namespace: namespace,
-            ),
-          );
+          showActions(context, SettingsDeleteNamespace(namespace: namespace));
         },
         slidableActions: [
           AppListItemSlidableAction(
@@ -113,9 +99,7 @@ class SettingsNamespaces extends StatelessWidget {
                 children: [
                   Text(
                     namespace,
-                    style: primaryTextStyle(
-                      context,
-                    ),
+                    style: primaryTextStyle(context),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -152,10 +136,7 @@ class SettingsNamespaces extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              showModal(
-                context,
-                const SettingsAddNamespace(),
-              );
+              showModal(context, const SettingsAddNamespace());
             },
           ),
         ],
@@ -175,18 +156,12 @@ class SettingsNamespaces extends StatelessWidget {
                 onReorder: (int start, int current) {
                   appRepository.reorderNamespaces(start, current);
                 },
-                proxyDecorator: (
-                  Widget child,
-                  int index,
-                  Animation<double> animation,
-                ) {
-                  return _proxyDecorator(child, index, animation);
-                },
+                proxyDecorator:
+                    (Widget child, int index, Animation<double> animation) {
+                      return _proxyDecorator(child, index, animation);
+                    },
                 itemCount: appRepository.settings.namespaces.length,
-                itemBuilder: (
-                  context,
-                  index,
-                ) {
+                itemBuilder: (context, index) {
                   return buildNamespace(context, index);
                 },
               ),

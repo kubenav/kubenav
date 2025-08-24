@@ -65,29 +65,24 @@ final resourceRole = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiRbacV1Role;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiRbacV1Role;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Rules: ${item.rules.length}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Rules: ${item.rules.length}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiRbacV1Role;
 
     return [
@@ -95,21 +90,14 @@ final resourceRole = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiRbacV1Role;
 
     final rules = formatRules(item.rules);
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         const SizedBox(height: Constants.spacingMiddle),
         AppVerticalListSimpleWidget(
           title: 'Rules',
@@ -133,12 +121,8 @@ final resourceRole = Resource(
                       ),
                       height: 54,
                       width: 54,
-                      padding: const EdgeInsets.all(
-                        Constants.spacingIcon54x54,
-                      ),
-                      child: SvgPicture.asset(
-                        'assets/resources/roles.svg',
-                      ),
+                      padding: const EdgeInsets.all(Constants.spacingIcon54x54),
+                      child: SvgPicture.asset('assets/resources/roles.svg'),
                     ),
                     const SizedBox(width: Constants.spacingSmall),
                     Expanded(
@@ -153,17 +137,13 @@ final resourceRole = Resource(
                                   Characters('\u{200B}'),
                                 )
                                 .toString(),
-                            style: primaryTextStyle(
-                              context,
-                            ),
+                            style: primaryTextStyle(context),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             'Non-Resource URLs: ${rule.nonResourceURLs.isNotEmpty ? rule.nonResourceURLs.join(', ') : '-'}\nResource Names: ${rule.resourceNames.isNotEmpty ? rule.resourceNames.join(', ') : '-'}\nVerbs: ${rule.verbs.isNotEmpty ? rule.verbs.join(', ') : '-'}',
-                            style: secondaryTextStyle(
-                              context,
-                            ),
+                            style: secondaryTextStyle(context),
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),

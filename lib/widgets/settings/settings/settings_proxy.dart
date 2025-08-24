@@ -9,10 +9,7 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// The [SettingsProxy] widget allows a user to specify a proxy for all
 /// Kubernetes API requests.
 class SettingsProxy extends StatefulWidget {
-  const SettingsProxy({
-    super.key,
-    required this.currentProxy,
-  });
+  const SettingsProxy({super.key, required this.currentProxy});
 
   final String currentProxy;
 

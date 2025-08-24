@@ -50,15 +50,17 @@ class _PluginCertManagerDenyState extends State<PluginCertManagerDeny> {
       });
 
       final now = DateTime.now().toRFC3339();
-      final conditionIndex =
-          widget.cr.status?.conditions.indexWhere((e) => e.type == 'Denied');
+      final conditionIndex = widget.cr.status?.conditions.indexWhere(
+        (e) => e.type == 'Denied',
+      );
 
-      final String body = widget.cr.status?.conditions == null ||
+      final String body =
+          widget.cr.status?.conditions == null ||
               widget.cr.status!.conditions.isEmpty
           ? '[{"op":"add","path":"/status/conditions","value":[{"type":"Denied","status":"True","lastTransitionTime":"$now","reason":"KubenavCertManager","message":"manually denied by kubenav"}]}]'
           : conditionIndex == null
-              ? '[{"op":"add","path":"/status/conditions/${widget.cr.status?.conditions != null ? widget.cr.status!.conditions.length + 1 : 0}","value":{"type":"Denied","status":"True","lastTransitionTime":"$now","reason":"KubenavCertManager","message":"manually denied by kubenav"}}]'
-              : '[{"op":"replace","path":"/status/conditions/$conditionIndex","value":{"type":"Denied","status":"True","lastTransitionTime":"$now","reason":"KubenavCertManager","message":"manually denied by kubenav"}}]';
+          ? '[{"op":"add","path":"/status/conditions/${widget.cr.status?.conditions != null ? widget.cr.status!.conditions.length + 1 : 0}","value":{"type":"Denied","status":"True","lastTransitionTime":"$now","reason":"KubenavCertManager","message":"manually denied by kubenav"}}]'
+          : '[{"op":"replace","path":"/status/conditions/$conditionIndex","value":{"type":"Denied","status":"True","lastTransitionTime":"$now","reason":"KubenavCertManager","message":"manually denied by kubenav"}}]';
 
       final cluster = await clustersRepository.getClusterWithCredentials(
         clustersRepository.activeClusterId,

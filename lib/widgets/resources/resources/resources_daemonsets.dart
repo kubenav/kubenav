@@ -43,16 +43,16 @@ final resourceDaemonSet = Resource(
             status: e.status!.desiredNumberScheduled == 0
                 ? ResourceStatus.warning
                 : e.status!.desiredNumberScheduled !=
-                            e.status!.currentNumberScheduled ||
-                        e.status!.desiredNumberScheduled !=
-                            e.status!.numberReady ||
-                        e.status!.desiredNumberScheduled !=
-                            e.status!.updatedNumberScheduled ||
-                        e.status!.desiredNumberScheduled !=
-                            e.status!.numberAvailable ||
-                        e.status!.numberMisscheduled > 0
-                    ? ResourceStatus.danger
-                    : ResourceStatus.success,
+                          e.status!.currentNumberScheduled ||
+                      e.status!.desiredNumberScheduled !=
+                          e.status!.numberReady ||
+                      e.status!.desiredNumberScheduled !=
+                          e.status!.updatedNumberScheduled ||
+                      e.status!.desiredNumberScheduled !=
+                          e.status!.numberAvailable ||
+                      e.status!.numberMisscheduled > 0
+                ? ResourceStatus.danger
+                : ResourceStatus.success,
           ),
         )
         .toList();
@@ -78,44 +78,41 @@ final resourceDaemonSet = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiAppsV1DaemonSet;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiAppsV1DaemonSet;
+        final status = listItem.status;
 
-    final nodeSelector = item.spec?.template.spec?.nodeSelector.entries
-            .map((e) => '${e.key}=${e.value}')
-            .toList() ??
-        [];
+        final nodeSelector =
+            item.spec?.template.spec?.nodeSelector.entries
+                .map((e) => '${e.key}=${e.value}')
+                .toList() ??
+            [];
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Desired: ${item.status?.desiredNumberScheduled ?? 0}',
-        'Current: ${item.status?.currentNumberScheduled ?? 0}',
-        'Ready: ${item.status?.numberReady ?? 0}',
-        'Up to Date: ${item.status?.updatedNumberScheduled ?? 0}',
-        'Available: ${item.status?.numberAvailable ?? 0}',
-        'Misscheduled: ${item.status?.numberMisscheduled ?? 0}',
-        'Node Selector: ${nodeSelector.isEmpty ? '-' : nodeSelector.join(', ')}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Namespace: ${item.metadata?.namespace ?? '-'}',
+            'Desired: ${item.status?.desiredNumberScheduled ?? 0}',
+            'Current: ${item.status?.currentNumberScheduled ?? 0}',
+            'Ready: ${item.status?.numberReady ?? 0}',
+            'Up to Date: ${item.status?.updatedNumberScheduled ?? 0}',
+            'Available: ${item.status?.numberAvailable ?? 0}',
+            'Misscheduled: ${item.status?.numberMisscheduled ?? 0}',
+            'Node Selector: ${nodeSelector.isEmpty ? '-' : nodeSelector.join(', ')}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiAppsV1DaemonSet;
 
-    final nodeSelector = item.spec?.template.spec?.nodeSelector.entries
+    final nodeSelector =
+        item.spec?.template.spec?.nodeSelector.entries
             .map((e) => '${e.key}=${e.value}')
             .toList() ??
         [];
@@ -132,19 +129,12 @@ final resourceDaemonSet = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiAppsV1DaemonSet;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(
           conditions: item.status?.conditions
               .map(
@@ -191,10 +181,7 @@ final resourceDaemonSet = Resource(
               name: 'Current',
               values: item.status?.currentNumberScheduled,
             ),
-            DetailsItemModel(
-              name: 'Ready',
-              values: item.status?.numberReady,
-            ),
+            DetailsItemModel(name: 'Ready', values: item.status?.numberReady),
             DetailsItemModel(
               name: 'Available',
               values: item.status?.numberAvailable,

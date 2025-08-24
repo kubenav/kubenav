@@ -107,11 +107,7 @@ List<AppResourceActionsModel> resourceDetailsActions(
       onTap: () {
         showModal(
           context,
-          DeleteResource(
-            name: name,
-            namespace: namespace,
-            resource: resource,
-          ),
+          DeleteResource(name: name, namespace: namespace, resource: resource),
         );
       },
     ),
@@ -149,7 +145,8 @@ List<AppResourceActionsModel> resourceDetailsActions(
 
   actions.add(
     AppResourceActionsModel(
-      title: bookmarksRepository.isBookmarked(
+      title:
+          bookmarksRepository.isBookmarked(
                 BookmarkType.details,
                 clustersRepository.activeClusterId,
                 name,
@@ -159,7 +156,8 @@ List<AppResourceActionsModel> resourceDetailsActions(
               -1
           ? 'Remove Bookmark'
           : 'Add Bookmark',
-      icon: bookmarksRepository.isBookmarked(
+      icon:
+          bookmarksRepository.isBookmarked(
                 BookmarkType.details,
                 clustersRepository.activeClusterId,
                 name,
@@ -242,54 +240,52 @@ List<AppResourceActionsModel> resourceDetailsActions(
 
   if (resource.resource == resourceCronJob.resource &&
       resource.path == resourceCronJob.path) {
-    actions.addAll(
-      [
-        AppResourceActionsModel(
-          title: 'Create Job',
-          icon: Icons.start,
-          onTap: () {
-            showModal(
-              context,
-              CreateJob(
-                name: name,
-                namespace: namespace ?? 'default',
-                cronJob: item,
-              ),
-            );
-          },
-        ),
-        AppResourceActionsModel(
-          title: 'Suspend',
-          icon: Icons.pause,
-          onTap: () {
-            showModal(
-              context,
-              CronJobSuspend(
-                name: name,
-                namespace: namespace ?? 'default',
-                resource: resource,
-                cronJob: item,
-              ),
-            );
-          },
-        ),
-        AppResourceActionsModel(
-          title: 'Resume',
-          icon: Icons.play_arrow,
-          onTap: () {
-            showModal(
-              context,
-              CronJobResume(
-                name: name,
-                namespace: namespace ?? 'default',
-                resource: resource,
-                cronJob: item,
-              ),
-            );
-          },
-        ),
-      ],
-    );
+    actions.addAll([
+      AppResourceActionsModel(
+        title: 'Create Job',
+        icon: Icons.start,
+        onTap: () {
+          showModal(
+            context,
+            CreateJob(
+              name: name,
+              namespace: namespace ?? 'default',
+              cronJob: item,
+            ),
+          );
+        },
+      ),
+      AppResourceActionsModel(
+        title: 'Suspend',
+        icon: Icons.pause,
+        onTap: () {
+          showModal(
+            context,
+            CronJobSuspend(
+              name: name,
+              namespace: namespace ?? 'default',
+              resource: resource,
+              cronJob: item,
+            ),
+          );
+        },
+      ),
+      AppResourceActionsModel(
+        title: 'Resume',
+        icon: Icons.play_arrow,
+        onTap: () {
+          showModal(
+            context,
+            CronJobResume(
+              name: name,
+              namespace: namespace ?? 'default',
+              resource: resource,
+              cronJob: item,
+            ),
+          );
+        },
+      ),
+    ]);
   }
 
   if (resource.resource == resourcePod.resource &&
@@ -301,11 +297,7 @@ List<AppResourceActionsModel> resourceDetailsActions(
         onTap: () {
           showModal(
             context,
-            GetLogs(
-              names: name,
-              namespace: namespace ?? 'default',
-              pod: item,
-            ),
+            GetLogs(names: name, namespace: namespace ?? 'default', pod: item),
           );
         },
       ),
@@ -401,7 +393,8 @@ List<AppResourceActionsModel> resourceDetailsActions(
     actions.add(
       AppResourceActionsModel(
         title: 'Favorite',
-        icon: appRepository.settings.namespaces
+        icon:
+            appRepository.settings.namespaces
                 .where((e) => e == name)
                 .toList()
                 .isEmpty
@@ -430,11 +423,7 @@ List<AppResourceActionsModel> resourceDetailsActions(
         onTap: () {
           showModal(
             context,
-            CSRApprove(
-              name: name,
-              csr: item,
-              resource: resource,
-            ),
+            CSRApprove(name: name, csr: item, resource: resource),
           );
         },
       ),
@@ -446,11 +435,7 @@ List<AppResourceActionsModel> resourceDetailsActions(
         onTap: () {
           showModal(
             context,
-            CSRDeny(
-              name: name,
-              csr: item,
-              resource: resource,
-            ),
+            CSRDeny(name: name, csr: item, resource: resource),
           );
         },
       ),
@@ -466,11 +451,7 @@ List<AppResourceActionsModel> resourceDetailsActions(
         onTap: () {
           showModal(
             context,
-            NodeCordon(
-              name: name,
-              node: item,
-              resource: resource,
-            ),
+            NodeCordon(name: name, node: item, resource: resource),
           );
         },
       ),
@@ -482,11 +463,7 @@ List<AppResourceActionsModel> resourceDetailsActions(
         onTap: () {
           showModal(
             context,
-            NodeUncordon(
-              name: name,
-              node: item,
-              resource: resource,
-            ),
+            NodeUncordon(name: name, node: item, resource: resource),
           );
         },
       ),
@@ -498,46 +475,20 @@ List<AppResourceActionsModel> resourceDetailsActions(
         onTap: () {
           showModal(
             context,
-            CreateSSHPod(
-              name: name,
-              node: item,
-              resource: resource,
-            ),
+            CreateSSHPod(name: name, node: item, resource: resource),
           );
         },
       ),
     );
   }
 
-  actions.addAll(
-    fluxResourceActions(
-      context,
-      name,
-      namespace,
-      resource,
-      item,
-    ),
-  );
+  actions.addAll(fluxResourceActions(context, name, namespace, resource, item));
 
   actions.addAll(
-    certManagerResourceActions(
-      context,
-      name,
-      namespace,
-      resource,
-      item,
-    ),
+    certManagerResourceActions(context, name, namespace, resource, item),
   );
 
-  actions.addAll(
-    argoResourceActions(
-      context,
-      name,
-      namespace,
-      resource,
-      item,
-    ),
-  );
+  actions.addAll(argoResourceActions(context, name, namespace, resource, item));
 
   return actions;
 }
@@ -598,10 +549,7 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ClustersRepository>(
-      context,
-      listen: true,
-    );
+    Provider.of<ClustersRepository>(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(
@@ -609,9 +557,9 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
         title: Column(
           children: [
             Text(
-              Characters(widget.name)
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
+              Characters(
+                widget.name,
+              ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 20,
@@ -620,9 +568,9 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
               ),
             ),
             Text(
-              Characters(widget.namespace ?? 'No Namespace')
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
+              Characters(
+                widget.namespace ?? 'No Namespace',
+              ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 14,
@@ -641,10 +589,7 @@ class _ResourcesDetailsState extends State<ResourcesDetails> {
             children: [
               FutureBuilder(
                 future: _futureFetchItem,
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<dynamic> snapshot,
-                ) {
+                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.none:
                     case ConnectionState.waiting:
@@ -738,14 +683,8 @@ class ResourcesDetailsActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<AppRepository>(
-      context,
-      listen: true,
-    );
-    Provider.of<BookmarksRepository>(
-      context,
-      listen: true,
-    );
+    Provider.of<AppRepository>(context, listen: true);
+    Provider.of<BookmarksRepository>(context, listen: true);
 
     return AppResourceActions(
       mode: AppResourceActionsMode.header,

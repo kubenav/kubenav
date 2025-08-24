@@ -30,15 +30,13 @@ final Resource argoResourceProject = Resource(
     final items =
         IoArgoprojV1alpha1AppProjectList.fromJson(parsed)?.items ?? [];
 
-    return items.map(
-      (e) {
-        return ResourceItem(
-          item: e,
-          metrics: null,
-          status: ResourceStatus.undefined,
-        );
-      },
-    ).toList();
+    return items.map((e) {
+      return ResourceItem(
+        item: e,
+        metrics: null,
+        status: ResourceStatus.undefined,
+      );
+    }).toList();
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
@@ -61,29 +59,24 @@ final Resource argoResourceProject = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoArgoprojV1alpha1AppProject;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoArgoprojV1alpha1AppProject;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata.name ?? '',
-      namespace: item.metadata.namespace ?? '',
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Namespace: ${item.metadata.namespace ?? '-'}',
-        'CreatedAt: ${getAge(item.metadata.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata.name ?? '',
+          namespace: item.metadata.namespace ?? '',
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Namespace: ${item.metadata.namespace ?? '-'}',
+            'CreatedAt: ${getAge(item.metadata.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoArgoprojV1alpha1AppProject;
 
     return [
@@ -91,46 +84,40 @@ final Resource argoResourceProject = Resource(
       'CreatedAt: ${getAge(item.metadata.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
-    final item = detailsItem as IoArgoprojV1alpha1AppProject;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item = detailsItem as IoArgoprojV1alpha1AppProject;
 
-    return Column(
-      children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Details',
-          details: [
-            DetailsItemModel(
-              name: 'Description',
-              values: item.spec.description,
+        return Column(
+          children: [
+            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Details',
+              details: [
+                DetailsItemModel(
+                  name: 'Description',
+                  values: item.spec.description,
+                ),
+                // TODO: There are more details to show than just enabled or not
+                DetailsItemModel(
+                  name: 'SyncWindows',
+                  values: item.spec.syncWindows.isEmpty
+                      ? 'No sync windows'
+                      : 'Sync windows defined',
+                ),
+              ],
             ),
-            // TODO: There are more details to show than just enabled or not
-            DetailsItemModel(
-              name: 'SyncWindows',
-              values: item.spec.syncWindows.isEmpty
-                  ? 'No sync windows'
-                  : 'Sync windows defined',
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsResourcesPreview(
+              resource: resourceEvent,
+              namespace: item.metadata.namespace,
+              selector:
+                  'fieldSelector=involvedObject.name=${item.metadata.name ?? ''}',
+              filter: null,
             ),
+            const SizedBox(height: Constants.spacingMiddle),
           ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsResourcesPreview(
-          resource: resourceEvent,
-          namespace: item.metadata.namespace,
-          selector:
-              'fieldSelector=involvedObject.name=${item.metadata.name ?? ''}',
-          filter: null,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-      ],
-    );
-  },
+        );
+      },
 );

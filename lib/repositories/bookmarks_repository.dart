@@ -21,11 +21,7 @@ class BookmarksRepository with ChangeNotifier {
         json.encode(_bookmarks.map((e) => e.toJson()).toList()),
       );
     } catch (err) {
-      Logger.log(
-        'BookmarksRepository _save',
-        'Failed to Save Bookmarks',
-        err,
-      );
+      Logger.log('BookmarksRepository _save', 'Failed to Save Bookmarks', err);
     }
   }
 
@@ -39,11 +35,7 @@ class BookmarksRepository with ChangeNotifier {
       }
       notifyListeners();
     } catch (err) {
-      Logger.log(
-        'BookmarksRepository _init',
-        'Failed to Load Bookmarks',
-        err,
-      );
+      Logger.log('BookmarksRepository _init', 'Failed to Load Bookmarks', err);
     }
   }
 
@@ -136,10 +128,7 @@ class BookmarksRepository with ChangeNotifier {
 
 /// [BookmarkType] is a `enum`, which defines if a bookmark is related to the
 /// [details] or [list] view for the resources.
-enum BookmarkType {
-  details,
-  list,
-}
+enum BookmarkType { details, list }
 
 extension BookmarkTypeExtension on BookmarkType {
   /// [toShortString] returns a short string of the bookmark type, so that we
@@ -204,8 +193,9 @@ class Bookmark {
           data['resource']['resource'],
           data['resource']['scope'],
           List<AdditionalPrinterColumns>.from(
-            data['resource']['additionalPrinterColumns']
-                .map((e) => AdditionalPrinterColumns.fromJson(e)),
+            data['resource']['additionalPrinterColumns'].map(
+              (e) => AdditionalPrinterColumns.fromJson(e),
+            ),
           ),
         ),
       );
@@ -235,7 +225,7 @@ class Bookmark {
   }
 }
 
-_resourcesEqual(Map<String, dynamic> a, Map<String, dynamic> b) {
+bool _resourcesEqual(Map<String, dynamic> a, Map<String, dynamic> b) {
   return a['plural'] == b['plural'] &&
       a['singular'] == b['singular'] &&
       a['description'] == b['description'] &&

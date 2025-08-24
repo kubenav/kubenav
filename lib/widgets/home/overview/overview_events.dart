@@ -27,8 +27,8 @@ List<IoK8sApiCoreV1Event> _decodeResult(String result) {
   events.sort(
     (a, b) => (b.lastTimestamp ?? b.eventTime ?? b.metadata.creationTimestamp)!
         .compareTo(
-      (a.lastTimestamp ?? a.eventTime ?? a.metadata.creationTimestamp)!,
-    ),
+          (a.lastTimestamp ?? a.eventTime ?? a.metadata.creationTimestamp)!,
+        ),
   );
 
   if (events.length > 25) {
@@ -72,7 +72,8 @@ class _OverviewEventsState extends State<OverviewEvents> {
       clustersRepository.activeClusterId,
     );
 
-    final resourcesListUrl = appRepository.settings.home.useSelectedNamespace &&
+    final resourcesListUrl =
+        appRepository.settings.home.useSelectedNamespace &&
             cluster!.namespace != ''
         ? '${resourceEvent.path}/namespaces/${cluster.namespace}/${resourceEvent.resource}?fieldSelector=type=Warning'
         : '${resourceEvent.path}/${resourceEvent.resource}?fieldSelector=type=Warning';
@@ -132,87 +133,83 @@ class _OverviewEventsState extends State<OverviewEvents> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ClustersRepository>(
-      context,
-      listen: true,
-    );
+    Provider.of<ClustersRepository>(context, listen: true);
 
     return FutureBuilder(
       future: _futureFetchEvents,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<List<IoK8sApiCoreV1Event>> snapshot,
-      ) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.waiting:
-            return buildContainer(
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: Constants.spacingMiddle,
-                      right: Constants.spacingMiddle,
-                    ),
-                    child: CircularProgressIndicator(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          default:
-            if (snapshot.hasError) {
-              return buildContainer(
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: Padding(
+      builder:
+          (
+            BuildContext context,
+            AsyncSnapshot<List<IoK8sApiCoreV1Event>> snapshot,
+          ) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+                return buildContainer(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
                         padding: const EdgeInsets.only(
                           left: Constants.spacingMiddle,
                           right: Constants.spacingMiddle,
                         ),
-                        child: AppErrorWidget(
-                          message: 'Failed to Load ${resourceEvent.plural}',
-                          details: snapshot.error.toString(),
-                          icon: 'assets/resources/${resourceEvent.icon}.svg',
+                        child: CircularProgressIndicator(
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
+                    ],
+                  ),
+                );
+              default:
+                if (snapshot.hasError) {
+                  return buildContainer(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              left: Constants.spacingMiddle,
+                              right: Constants.spacingMiddle,
+                            ),
+                            child: AppErrorWidget(
+                              message: 'Failed to Load ${resourceEvent.plural}',
+                              details: snapshot.error.toString(),
+                              icon:
+                                  'assets/resources/${resourceEvent.icon}.svg',
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            }
-
-            if (snapshot.data == null || snapshot.data!.isEmpty) {
-              return Container();
-            }
-
-            return buildContainer(
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.only(
-                  right: Constants.spacingMiddle,
-                  left: Constants.spacingMiddle,
-                ),
-                separatorBuilder: (context, index) => const SizedBox(
-                  height: Constants.spacingMiddle,
-                ),
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  return buildEventItem(
-                    snapshot.data![index],
                   );
-                },
-              ),
-            );
-        }
-      },
+                }
+
+                if (snapshot.data == null || snapshot.data!.isEmpty) {
+                  return Container();
+                }
+
+                return buildContainer(
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.only(
+                      right: Constants.spacingMiddle,
+                      left: Constants.spacingMiddle,
+                    ),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: Constants.spacingMiddle),
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      return buildEventItem(snapshot.data![index]);
+                    },
+                  ),
+                );
+            }
+          },
     );
   }
 }

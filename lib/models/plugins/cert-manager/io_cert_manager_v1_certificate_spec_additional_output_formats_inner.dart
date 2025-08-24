@@ -11,7 +11,6 @@
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
-
 class IoCertManagerV1CertificateSpecAdditionalOutputFormatsInner {
   /// Returns a new [IoCertManagerV1CertificateSpecAdditionalOutputFormatsInner] instance.
   IoCertManagerV1CertificateSpecAdditionalOutputFormatsInner({

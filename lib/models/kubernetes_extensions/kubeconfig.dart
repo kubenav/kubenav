@@ -15,9 +15,7 @@ class Kubeconfig {
     required this.users,
   });
 
-  factory Kubeconfig.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory Kubeconfig.fromJson(Map<String, dynamic> data) {
     return Kubeconfig(
       clusters: data.containsKey('clusters')
           ? List<KubeconfigCluster>.from(
@@ -52,29 +50,14 @@ class Kubeconfig {
     final List<Cluster> parsedClusters = [];
 
     if (contexts == null || contexts!.isEmpty) {
-      Logger.log(
-        'Kubeconfig getClusters',
-        'Contexts are missing',
-      );
-      throw Exception(
-        'Could not parse kubeconfig: Contexts are missing',
-      );
+      Logger.log('Kubeconfig getClusters', 'Contexts are missing');
+      throw Exception('Could not parse kubeconfig: Contexts are missing');
     } else if (clusters == null || clusters!.isEmpty) {
-      Logger.log(
-        'Kubeconfig getClusters',
-        'Clusters are missing',
-      );
-      throw Exception(
-        'Could not parse kubeconfig: Clusters are missing',
-      );
+      Logger.log('Kubeconfig getClusters', 'Clusters are missing');
+      throw Exception('Could not parse kubeconfig: Clusters are missing');
     } else if (users == null || users!.isEmpty) {
-      Logger.log(
-        'Kubeconfig getClusters',
-        'Users are missing',
-      );
-      throw Exception(
-        'Could not parse kubeconfig: Users are missing',
-      );
+      Logger.log('Kubeconfig getClusters', 'Users are missing');
+      throw Exception('Could not parse kubeconfig: Users are missing');
     } else {
       for (var context in contexts!) {
         if (context.name == null) {
@@ -178,14 +161,9 @@ class KubeconfigCluster {
   String? name;
   KubeconfigClusterCluster? cluster;
 
-  KubeconfigCluster({
-    required this.name,
-    required this.cluster,
-  });
+  KubeconfigCluster({required this.name, required this.cluster});
 
-  factory KubeconfigCluster.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory KubeconfigCluster.fromJson(Map<String, dynamic> data) {
     return KubeconfigCluster(
       name: data.containsKey('name') ? data['name'] : null,
       cluster: data.containsKey('cluster')
@@ -195,10 +173,7 @@ class KubeconfigCluster {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'cluster': cluster?.toJson(),
-    };
+    return {'name': name, 'cluster': cluster?.toJson()};
   }
 }
 
@@ -213,9 +188,7 @@ class KubeconfigClusterCluster {
     required this.server,
   });
 
-  factory KubeconfigClusterCluster.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory KubeconfigClusterCluster.fromJson(Map<String, dynamic> data) {
     return KubeconfigClusterCluster(
       certificateAuthorityData: data.containsKey('certificate-authority-data')
           ? data['certificate-authority-data']
@@ -240,14 +213,9 @@ class KubeconfigContext {
   String? name;
   KubeconfigContextContext? context;
 
-  KubeconfigContext({
-    required this.name,
-    required this.context,
-  });
+  KubeconfigContext({required this.name, required this.context});
 
-  factory KubeconfigContext.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory KubeconfigContext.fromJson(Map<String, dynamic> data) {
     return KubeconfigContext(
       name: data.containsKey('name') ? data['name'] : null,
       context: data.containsKey('context')
@@ -257,10 +225,7 @@ class KubeconfigContext {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'context': context?.toJson(),
-    };
+    return {'name': name, 'context': context?.toJson()};
   }
 }
 
@@ -275,9 +240,7 @@ class KubeconfigContextContext {
     required this.user,
   });
 
-  factory KubeconfigContextContext.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory KubeconfigContextContext.fromJson(Map<String, dynamic> data) {
     return KubeconfigContextContext(
       cluster: data.containsKey('cluster') ? data['cluster'] : null,
       namespace: data.containsKey('namespace') ? data['namespace'] : null,
@@ -286,11 +249,7 @@ class KubeconfigContextContext {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'cluster': cluster,
-      'namespace': namespace,
-      'user': user,
-    };
+    return {'cluster': cluster, 'namespace': namespace, 'user': user};
   }
 }
 
@@ -298,14 +257,9 @@ class KubeconfigUser {
   String? name;
   KubeconfigUserUser? user;
 
-  KubeconfigUser({
-    required this.name,
-    required this.user,
-  });
+  KubeconfigUser({required this.name, required this.user});
 
-  factory KubeconfigUser.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory KubeconfigUser.fromJson(Map<String, dynamic> data) {
     return KubeconfigUser(
       name: data.containsKey('name') ? data['name'] : null,
       user: data.containsKey('user')
@@ -315,10 +269,7 @@ class KubeconfigUser {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'user': user?.toJson(),
-    };
+    return {'name': name, 'user': user?.toJson()};
   }
 }
 
@@ -339,9 +290,7 @@ class KubeconfigUserUser {
     required this.username,
   });
 
-  factory KubeconfigUserUser.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory KubeconfigUserUser.fromJson(Map<String, dynamic> data) {
     return KubeconfigUserUser(
       authProvider: data.containsKey('auth-provider')
           ? KubeconfigUserUserAuthProvider.fromJson(data['auth-provider'])
@@ -349,8 +298,9 @@ class KubeconfigUserUser {
       clientCertificateData: data.containsKey('client-certificate-data')
           ? data['client-certificate-data']
           : null,
-      clientKeyData:
-          data.containsKey('client-key-data') ? data['client-key-data'] : null,
+      clientKeyData: data.containsKey('client-key-data')
+          ? data['client-key-data']
+          : null,
       password: data.containsKey('password') ? data['password'] : null,
       token: data.containsKey('token') ? data['token'] : null,
       username: data.containsKey('username') ? data['username'] : null,
@@ -373,14 +323,9 @@ class KubeconfigUserUserAuthProvider {
   String? name;
   KubeconfigUserUserAuthProviderConfig? config;
 
-  KubeconfigUserUserAuthProvider({
-    required this.name,
-    required this.config,
-  });
+  KubeconfigUserUserAuthProvider({required this.name, required this.config});
 
-  factory KubeconfigUserUserAuthProvider.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory KubeconfigUserUserAuthProvider.fromJson(Map<String, dynamic> data) {
     return KubeconfigUserUserAuthProvider(
       name: data.containsKey('name') ? data['name'] : null,
       config: data.containsKey('config')
@@ -390,10 +335,7 @@ class KubeconfigUserUserAuthProvider {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'config': config?.toJson(),
-    };
+    return {'name': name, 'config': config?.toJson()};
   }
 }
 
@@ -419,17 +361,20 @@ class KubeconfigUserUserAuthProviderConfig {
   ) {
     return KubeconfigUserUserAuthProviderConfig(
       clientID: data.containsKey('client-id') ? data['client-id'] : null,
-      clientSecret:
-          data.containsKey('client-secret') ? data['client-secret'] : null,
+      clientSecret: data.containsKey('client-secret')
+          ? data['client-secret']
+          : null,
       idpCertificateAuthorityData:
           data.containsKey('idp-certificate-authority-data')
-              ? data['idp-certificate-authority-data']
-              : null,
-      idpIssuerUrl:
-          data.containsKey('idp-issuer-url') ? data['idp-issuer-url'] : null,
+          ? data['idp-certificate-authority-data']
+          : null,
+      idpIssuerUrl: data.containsKey('idp-issuer-url')
+          ? data['idp-issuer-url']
+          : null,
       idToken: data.containsKey('id-token') ? data['id-token'] : null,
-      refreshToken:
-          data.containsKey('refresh-token') ? data['refresh-token'] : null,
+      refreshToken: data.containsKey('refresh-token')
+          ? data['refresh-token']
+          : null,
     );
   }
 

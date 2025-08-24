@@ -14,10 +14,7 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// formerly configured OIDC provider. For this a valid [provider] configuration
 /// is required.
 class SettingsAddClusterOIDC extends StatefulWidget {
-  const SettingsAddClusterOIDC({
-    super.key,
-    required this.provider,
-  });
+  const SettingsAddClusterOIDC({super.key, required this.provider});
 
   final ClusterProvider provider;
 
@@ -66,8 +63,10 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
           clusterProviderType: ClusterProviderType.oidc,
           clusterProviderId: widget.provider.id ?? '',
           clusterServer: _clusterServerController.text.endsWith('/')
-              ? _clusterServerController.text
-                  .substring(0, _clusterServerController.text.length - 1)
+              ? _clusterServerController.text.substring(
+                  0,
+                  _clusterServerController.text.length - 1,
+                )
               : _clusterServerController.text,
           clusterCertificateAuthorityData:
               _clusterCertificateAuthorityDataController.text.trim(),
@@ -101,11 +100,7 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
         _isLoadingAddCluster = false;
       });
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Add Cluster',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Add Cluster', err.toString());
       }
     }
   }
@@ -189,7 +184,7 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
                   children: [
                     const Text('Insecure Skip TLS Verify'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _clusterInsecureSkipTLSVerify =

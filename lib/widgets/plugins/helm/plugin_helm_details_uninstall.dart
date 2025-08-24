@@ -101,15 +101,16 @@ class _PluginHelmDetailsUninstallState
         wait: _wait,
       );
 
-      final message = await KubernetesService(
-        cluster: cluster!,
-        proxy: appRepository.settings.proxy,
-        timeout: appRepository.settings.timeout,
-      ).helmUninstallRelease(
-        widget.namespace,
-        widget.name,
-        uninstallOptions.toString(),
-      );
+      final message =
+          await KubernetesService(
+            cluster: cluster!,
+            proxy: appRepository.settings.proxy,
+            timeout: appRepository.settings.timeout,
+          ).helmUninstallRelease(
+            widget.namespace,
+            widget.name,
+            uninstallOptions.toString(),
+          );
 
       setState(() {
         _isLoading = false;
@@ -135,11 +136,7 @@ class _PluginHelmDetailsUninstallState
       });
       if (mounted) {
         Navigator.pop(context);
-        showSnackbar(
-          context,
-          'Uninstall Failed',
-          err.toString(),
-        );
+        showSnackbar(context, 'Uninstall Failed', err.toString());
       }
     }
   }
@@ -205,9 +202,9 @@ class _PluginHelmDetailsUninstallState
                           child: Text(
                             'background',
                             style: TextStyle(
-                              color: Theme.of(context)
-                                  .extension<CustomColors>()!
-                                  .textPrimary,
+                              color: Theme.of(
+                                context,
+                              ).extension<CustomColors>()!.textPrimary,
                             ),
                           ),
                         ),
@@ -216,9 +213,9 @@ class _PluginHelmDetailsUninstallState
                           child: Text(
                             'orphan',
                             style: TextStyle(
-                              color: Theme.of(context)
-                                  .extension<CustomColors>()!
-                                  .textPrimary,
+                              color: Theme.of(
+                                context,
+                              ).extension<CustomColors>()!.textPrimary,
                             ),
                           ),
                         ),
@@ -227,9 +224,9 @@ class _PluginHelmDetailsUninstallState
                           child: Text(
                             'foreground',
                             style: TextStyle(
-                              color: Theme.of(context)
-                                  .extension<CustomColors>()!
-                                  .textPrimary,
+                              color: Theme.of(
+                                context,
+                              ).extension<CustomColors>()!.textPrimary,
                             ),
                           ),
                         ),
@@ -244,7 +241,7 @@ class _PluginHelmDetailsUninstallState
                   children: [
                     const Text('Dry Run'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _dryRun = !_dryRun;
@@ -261,7 +258,7 @@ class _PluginHelmDetailsUninstallState
                   children: [
                     const Text('Keep History'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _keepHistory = !_keepHistory;
@@ -278,7 +275,7 @@ class _PluginHelmDetailsUninstallState
                   children: [
                     const Text('Disable Hooks'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _disableHooks = !_disableHooks;
@@ -310,7 +307,7 @@ class _PluginHelmDetailsUninstallState
                   children: [
                     const Text('Wait'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (value) {
                         setState(() {
                           _wait = !_wait;

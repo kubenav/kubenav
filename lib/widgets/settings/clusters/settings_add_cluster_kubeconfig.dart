@@ -89,17 +89,8 @@ class _SettingsAddClusterKubeconfigState
 
         var count = 0;
         final clusters = await Kubeconfig.fromJson(
-          json.decode(
-            json.encode(
-              loadYaml(
-                _kubeconfigController.text,
-              ),
-            ),
-          ),
-        ).getClusters(
-          ClusterProviderType.kubeconfig,
-          '',
-        );
+          json.decode(json.encode(loadYaml(_kubeconfigController.text))),
+        ).getClusters(ClusterProviderType.kubeconfig, '');
 
         for (var cluster in clusters) {
           await clustersRepository.addCluster(cluster);
@@ -110,11 +101,7 @@ class _SettingsAddClusterKubeconfigState
           _isLoadingAddCluster = false;
         });
         if (mounted) {
-          showSnackbar(
-            context,
-            'Clusters Added',
-            '$count clusters were added',
-          );
+          showSnackbar(context, 'Clusters Added', '$count clusters were added');
           Navigator.pop(context);
         }
       } catch (err) {
@@ -122,11 +109,7 @@ class _SettingsAddClusterKubeconfigState
           _isLoadingAddCluster = false;
         });
         if (mounted) {
-          showSnackbar(
-            context,
-            'Failed to Add Clusters',
-            err.toString(),
-          );
+          showSnackbar(context, 'Failed to Add Clusters', err.toString());
         }
       }
     }
@@ -190,24 +173,12 @@ class _SettingsAddClusterKubeconfigState
                 const SizedBox(height: Constants.spacingMiddle),
                 Row(
                   children: [
-                    const Expanded(
-                      child: Divider(
-                        height: 0,
-                        thickness: 1.0,
-                      ),
-                    ),
+                    const Expanded(child: Divider(height: 0, thickness: 1.0)),
                     Text(
                       'or paste content',
-                      style: secondaryTextStyle(
-                        context,
-                      ),
+                      style: secondaryTextStyle(context),
                     ),
-                    const Expanded(
-                      child: Divider(
-                        height: 0,
-                        thickness: 1.0,
-                      ),
-                    ),
+                    const Expanded(child: Divider(height: 0, thickness: 1.0)),
                   ],
                 ),
                 const SizedBox(height: Constants.spacingMiddle),

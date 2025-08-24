@@ -41,28 +41,26 @@ final Resource certManagerResourceClusterIssuer = Resource(
     final items =
         IoCertManagerV1ClusterIssuerList.fromJson(parsed)?.items ?? [];
 
-    return items.map(
-      (e) {
-        final status =
-            e.status?.conditions != null && e.status!.conditions.isNotEmpty
-                ? e.status!.conditions
-                    .where((e) => e.type == 'Ready')
-                    .firstOrNull
-                    ?.status
-                    .value
-                : 'Unknown';
+    return items.map((e) {
+      final status =
+          e.status?.conditions != null && e.status!.conditions.isNotEmpty
+          ? e.status!.conditions
+                .where((e) => e.type == 'Ready')
+                .firstOrNull
+                ?.status
+                .value
+          : 'Unknown';
 
-        return ResourceItem(
-          item: e,
-          metrics: null,
-          status: status == 'True'
-              ? ResourceStatus.success
-              : status == 'False'
-                  ? ResourceStatus.danger
-                  : ResourceStatus.warning,
-        );
-      },
-    ).toList();
+      return ResourceItem(
+        item: e,
+        metrics: null,
+        status: status == 'True'
+            ? ResourceStatus.success
+            : status == 'False'
+            ? ResourceStatus.danger
+            : ResourceStatus.warning,
+      );
+    }).toList();
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
@@ -85,29 +83,24 @@ final Resource certManagerResourceClusterIssuer = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoCertManagerV1ClusterIssuer;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoCertManagerV1ClusterIssuer;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace ?? '',
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Ready: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace ?? '',
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Ready: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoCertManagerV1ClusterIssuer;
 
     return [
@@ -115,88 +108,85 @@ final Resource certManagerResourceClusterIssuer = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
-    final item = detailsItem as IoCertManagerV1ClusterIssuer;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item = detailsItem as IoCertManagerV1ClusterIssuer;
 
-    return Column(
-      children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
-        DetailsItemConditions(
-          conditions: item.status?.conditions
-              .map(
-                (e) => IoK8sApimachineryPkgApisMetaV1Condition(
-                  lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
-                  message: e.message ?? '',
-                  observedGeneration: e.observedGeneration,
-                  reason: e.reason ?? '',
-                  status: e.status.value,
-                  type: e.type,
+        return Column(
+          children: [
+            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            DetailsItemConditions(
+              conditions: item.status?.conditions
+                  .map(
+                    (e) => IoK8sApimachineryPkgApisMetaV1Condition(
+                      lastTransitionTime:
+                          e.lastTransitionTime ?? DateTime.now(),
+                      message: e.message ?? '',
+                      observedGeneration: e.observedGeneration,
+                      reason: e.reason ?? '',
+                      status: e.status.value,
+                      type: e.type,
+                    ),
+                  )
+                  .toList(),
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+            buildACME(context, 'cert-manager', item.spec.acme),
+            buildCA(context, 'cert-manager', item.spec.ca),
+            buildSelfSigned(context, 'cert-manager', item.spec.selfSigned),
+            buildVault(context, 'cert-manager', item.spec.vault),
+            buildVenafi(context, 'cert-manager', item.spec.venafi),
+            DetailsItem(
+              title: 'Status',
+              details: [
+                DetailsItemModel(
+                  name: 'Ready',
+                  values:
+                      item.status?.conditions != null &&
+                          item.status!.conditions.isNotEmpty
+                      ? item.status!.conditions
+                            .where((e) => e.type == 'Ready')
+                            .firstOrNull
+                            ?.status
+                      : null,
                 ),
-              )
-              .toList(),
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        buildACME(context, 'cert-manager', item.spec.acme),
-        buildCA(context, 'cert-manager', item.spec.ca),
-        buildSelfSigned(context, 'cert-manager', item.spec.selfSigned),
-        buildVault(context, 'cert-manager', item.spec.vault),
-        buildVenafi(context, 'cert-manager', item.spec.venafi),
-        DetailsItem(
-          title: 'Status',
-          details: [
-            DetailsItemModel(
-              name: 'Ready',
-              values: item.status?.conditions != null &&
-                      item.status!.conditions.isNotEmpty
-                  ? item.status!.conditions
-                      .where((e) => e.type == 'Ready')
-                      .firstOrNull
-                      ?.status
-                  : null,
+                DetailsItemModel(
+                  name: 'Status',
+                  values:
+                      item.status?.conditions != null &&
+                          item.status!.conditions.isNotEmpty
+                      ? item.status!.conditions
+                            .where((e) => e.type == 'Ready')
+                            .firstOrNull
+                            ?.status
+                      : null,
+                ),
+                DetailsItemModel(
+                  name: 'ACME Uri',
+                  values: item.status?.acme?.uri,
+                ),
+                DetailsItemModel(
+                  name: 'ACME Last Registered Email',
+                  values: item.status?.acme?.lastRegisteredEmail,
+                ),
+                DetailsItemModel(
+                  name: 'ACME Last Private Key Hash',
+                  values: item.status?.acme?.lastPrivateKeyHash,
+                ),
+              ],
             ),
-            DetailsItemModel(
-              name: 'Status',
-              values: item.status?.conditions != null &&
-                      item.status!.conditions.isNotEmpty
-                  ? item.status!.conditions
-                      .where((e) => e.type == 'Ready')
-                      .firstOrNull
-                      ?.status
-                  : null,
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsResourcesPreview(
+              resource: resourceEvent,
+              namespace: item.metadata?.namespace,
+              selector:
+                  'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
+              filter: null,
             ),
-            DetailsItemModel(
-              name: 'ACME Uri',
-              values: item.status?.acme?.uri,
-            ),
-            DetailsItemModel(
-              name: 'ACME Last Registered Email',
-              values: item.status?.acme?.lastRegisteredEmail,
-            ),
-            DetailsItemModel(
-              name: 'ACME Last Private Key Hash',
-              values: item.status?.acme?.lastPrivateKeyHash,
-            ),
+            const SizedBox(height: Constants.spacingMiddle),
           ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsResourcesPreview(
-          resource: resourceEvent,
-          namespace: item.metadata?.namespace,
-          selector:
-              'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
-          filter: null,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-      ],
-    );
-  },
+        );
+      },
 );
 
 Widget buildACME(
@@ -213,26 +203,14 @@ Widget buildACME(
       DetailsItem(
         title: 'Configuration',
         details: [
-          DetailsItemModel(
-            name: 'Email',
-            values: acme.email,
-          ),
-          DetailsItemModel(
-            name: 'Server',
-            values: acme.server,
-          ),
+          DetailsItemModel(name: 'Email', values: acme.email),
+          DetailsItemModel(name: 'Server', values: acme.server),
           DetailsItemModel(
             name: 'Preferred Chain',
             values: acme.preferredChain,
           ),
-          DetailsItemModel(
-            name: 'CA Bundle',
-            values: acme.caBundle,
-          ),
-          DetailsItemModel(
-            name: 'Skip TLS Verify',
-            values: acme.skipTLSVerify,
-          ),
+          DetailsItemModel(name: 'CA Bundle', values: acme.caBundle),
+          DetailsItemModel(name: 'Skip TLS Verify', values: acme.skipTLSVerify),
           DetailsItemModel(
             name: 'Solvers',
             values: acme.solvers
@@ -292,10 +270,7 @@ Widget buildCA(
             name: 'CRL Distribution Points',
             values: ca.crlDistributionPoints,
           ),
-          DetailsItemModel(
-            name: 'OCSP Servers',
-            values: ca.ocspServers,
-          ),
+          DetailsItemModel(name: 'OCSP Servers', values: ca.ocspServers),
           DetailsItemModel(
             name: 'Issuing Certificate Urls',
             values: ca.issuingCertificateURLs,
@@ -348,22 +323,10 @@ Widget buildVault(
       DetailsItem(
         title: 'Configuration',
         details: [
-          DetailsItemModel(
-            name: 'Server',
-            values: vault.server,
-          ),
-          DetailsItemModel(
-            name: 'Path',
-            values: vault.path,
-          ),
-          DetailsItemModel(
-            name: 'Namespace',
-            values: vault.namespace,
-          ),
-          DetailsItemModel(
-            name: 'CA Bundle',
-            values: vault.caBundle,
-          ),
+          DetailsItemModel(name: 'Server', values: vault.server),
+          DetailsItemModel(name: 'Path', values: vault.path),
+          DetailsItemModel(name: 'Namespace', values: vault.namespace),
+          DetailsItemModel(name: 'CA Bundle', values: vault.caBundle),
           DetailsItemModel(
             name: 'CA Bundle Secret',
             values: vault.caBundleSecretRef?.name,
@@ -400,12 +363,7 @@ Widget buildVenafi(
     children: [
       DetailsItem(
         title: 'Configuration',
-        details: [
-          DetailsItemModel(
-            name: 'Zone',
-            values: venafi.zone,
-          ),
-        ],
+        details: [DetailsItemModel(name: 'Zone', values: venafi.zone)],
       ),
       const SizedBox(height: Constants.spacingMiddle),
     ],

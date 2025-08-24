@@ -75,10 +75,7 @@ class _CreateSSHPodState extends State<CreateSSHPod> {
           cluster: cluster!,
           proxy: appRepository.settings.proxy,
           timeout: appRepository.settings.timeout,
-        ).postRequest(
-          url,
-          body,
-        );
+        ).postRequest(url, body);
 
         setState(() {
           _isLoading = false;

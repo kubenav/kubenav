@@ -63,30 +63,25 @@ final resourceResourceQuota = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiCoreV1ResourceQuota;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiCoreV1ResourceQuota;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Request: ${_getRequest(item.status)}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Namespace: ${item.metadata?.namespace ?? '-'}',
+            'Request: ${_getRequest(item.status)}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiCoreV1ResourceQuota;
 
     return [
@@ -95,23 +90,17 @@ final resourceResourceQuota = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiCoreV1ResourceQuota;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Request',
-          details: item.status?.hard.keys.map((key) {
+          details:
+              item.status?.hard.keys.map((key) {
                 return DetailsItemModel(
                   name: key,
                   values:
@@ -132,7 +121,8 @@ final resourceResourceQuota = Resource(
         AppPrometheusChartsWidget(
           item: item,
           toJson: resource.toJson,
-          defaultCharts: item.status?.hard.keys
+          defaultCharts:
+              item.status?.hard.keys
                   .map(
                     (e) => Chart(
                       title: e,

@@ -11,9 +11,7 @@ class ApisMetricsV1beta1PodMetricsList {
     required this.items,
   });
 
-  factory ApisMetricsV1beta1PodMetricsList.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory ApisMetricsV1beta1PodMetricsList.fromJson(Map<String, dynamic> data) {
     return ApisMetricsV1beta1PodMetricsList(
       kind: data.containsKey('kind') ? data['kind'] : null,
       apiVersion: data.containsKey('apiVersion') ? data['apiVersion'] : null,
@@ -21,8 +19,11 @@ class ApisMetricsV1beta1PodMetricsList {
           ? ApisMetricsV1beta1PodMetricsListMetadata.fromJson(data['metadata'])
           : null,
       items: data.containsKey('items') && data['items'] != null
-          ? List<ApisMetricsV1beta1PodMetricsItem>.from(data['items']
-              .map((v) => ApisMetricsV1beta1PodMetricsItem.fromJson(v)),)
+          ? List<ApisMetricsV1beta1PodMetricsItem>.from(
+              data['items'].map(
+                (v) => ApisMetricsV1beta1PodMetricsItem.fromJson(v),
+              ),
+            )
           : null,
     );
   }
@@ -40,9 +41,7 @@ class ApisMetricsV1beta1PodMetricsList {
 class ApisMetricsV1beta1PodMetricsListMetadata {
   String? selfLink;
 
-  ApisMetricsV1beta1PodMetricsListMetadata({
-    required this.selfLink,
-  });
+  ApisMetricsV1beta1PodMetricsListMetadata({required this.selfLink});
 
   factory ApisMetricsV1beta1PodMetricsListMetadata.fromJson(
     Map<String, dynamic> data,
@@ -53,9 +52,7 @@ class ApisMetricsV1beta1PodMetricsListMetadata {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'selfLink': selfLink,
-    };
+    return {'selfLink': selfLink};
   }
 }
 
@@ -72,9 +69,7 @@ class ApisMetricsV1beta1PodMetricsItem {
     required this.containers,
   });
 
-  factory ApisMetricsV1beta1PodMetricsItem.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory ApisMetricsV1beta1PodMetricsItem.fromJson(Map<String, dynamic> data) {
     return ApisMetricsV1beta1PodMetricsItem(
       metadata: data.containsKey('metadata') && data['metadata'] != null
           ? ApisMetricsV1beta1PodMetricsItemMetadata.fromJson(data['metadata'])
@@ -84,7 +79,9 @@ class ApisMetricsV1beta1PodMetricsItem {
       containers: data.containsKey('containers') && data['containers'] != null
           ? List<ApisMetricsV1beta1PodMetricsItemContainer>.from(
               data['containers'].map(
-                  (v) => ApisMetricsV1beta1PodMetricsItemContainer.fromJson(v),),)
+                (v) => ApisMetricsV1beta1PodMetricsItemContainer.fromJson(v),
+              ),
+            )
           : null,
     );
   }
@@ -151,16 +148,14 @@ class ApisMetricsV1beta1PodMetricsItemContainer {
       name: data.containsKey('name') ? data['name'] : null,
       usage: data.containsKey('usage') && data['usage'] != null
           ? ApisMetricsV1beta1PodMetricsItemContainerUsage.fromJson(
-              data['usage'],)
+              data['usage'],
+            )
           : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'usage': usage?.toJson(),
-    };
+    return {'name': name, 'usage': usage?.toJson()};
   }
 }
 
@@ -183,9 +178,6 @@ class ApisMetricsV1beta1PodMetricsItemContainerUsage {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'cpu': cpu,
-      'memory': memory,
-    };
+    return {'cpu': cpu, 'memory': memory};
   }
 }

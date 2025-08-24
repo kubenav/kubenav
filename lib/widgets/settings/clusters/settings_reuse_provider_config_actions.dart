@@ -29,10 +29,7 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 /// providers the action menu also contains an item to add a new provider with
 /// the provided type.
 class SettingsReuseProviderActions extends StatelessWidget {
-  const SettingsReuseProviderActions({
-    super.key,
-    required this.providerType,
-  });
+  const SettingsReuseProviderActions({super.key, required this.providerType});
 
   final ClusterProviderType providerType;
 
@@ -45,33 +42,19 @@ class SettingsReuseProviderActions extends StatelessWidget {
       case ClusterProviderType.kubeconfig:
         return const SettingsAddClusterKubeconfig();
       case ClusterProviderType.aws:
-        return SettingsAddClusterAWS(
-          provider: provider,
-        );
+        return SettingsAddClusterAWS(provider: provider);
       case ClusterProviderType.awssso:
-        return SettingsAddClusterAWSSSO(
-          provider: provider,
-        );
+        return SettingsAddClusterAWSSSO(provider: provider);
       case ClusterProviderType.azure:
-        return SettingsAddClusterAzure(
-          provider: provider,
-        );
+        return SettingsAddClusterAzure(provider: provider);
       case ClusterProviderType.digitalocean:
-        return SettingsAddClusterDigitalOcean(
-          provider: provider,
-        );
+        return SettingsAddClusterDigitalOcean(provider: provider);
       case ClusterProviderType.google:
-        return SettingsAddClusterGoogle(
-          provider: provider,
-        );
+        return SettingsAddClusterGoogle(provider: provider);
       case ClusterProviderType.oidc:
-        return SettingsAddClusterOIDC(
-          provider: provider,
-        );
+        return SettingsAddClusterOIDC(provider: provider);
       case ClusterProviderType.rancher:
-        return SettingsAddClusterRancher(
-          provider: provider,
-        );
+        return SettingsAddClusterRancher(provider: provider);
       default:
         return const SettingsAddClusterManual();
     }
@@ -86,33 +69,19 @@ class SettingsReuseProviderActions extends StatelessWidget {
       case ClusterProviderType.kubeconfig:
         return const SettingsAddClusterKubeconfig();
       case ClusterProviderType.aws:
-        return const SettingsAWSProvider(
-          provider: null,
-        );
+        return const SettingsAWSProvider(provider: null);
       case ClusterProviderType.awssso:
-        return const SettingsAWSSSOProvider(
-          provider: null,
-        );
+        return const SettingsAWSSSOProvider(provider: null);
       case ClusterProviderType.azure:
-        return const SettingsAzureProvider(
-          provider: null,
-        );
+        return const SettingsAzureProvider(provider: null);
       case ClusterProviderType.digitalocean:
-        return const SettingsDigitalOceanProvider(
-          provider: null,
-        );
+        return const SettingsDigitalOceanProvider(provider: null);
       case ClusterProviderType.google:
-        return const SettingsGoogleProvider(
-          provider: null,
-        );
+        return const SettingsGoogleProvider(provider: null);
       case ClusterProviderType.oidc:
-        return const SettingsOIDCProvider(
-          provider: null,
-        );
+        return const SettingsOIDCProvider(provider: null);
       case ClusterProviderType.rancher:
-        return const SettingsRancherProvider(
-          provider: null,
-        );
+        return const SettingsRancherProvider(provider: null);
     }
   }
 
@@ -165,8 +134,6 @@ class SettingsReuseProviderActions extends StatelessWidget {
       );
     }
 
-    return AppActionsWidget(
-      actions: actions,
-    );
+    return AppActionsWidget(actions: actions);
   }
 }

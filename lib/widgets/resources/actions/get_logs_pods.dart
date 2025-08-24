@@ -68,13 +68,14 @@ class _GetLogsPodsState extends State<GetLogsPods> {
         clustersRepository.activeClusterId,
       );
 
-      final result = await KubernetesService(
-        cluster: cluster!,
-        proxy: appRepository.settings.proxy,
-        timeout: appRepository.settings.timeout,
-      ).getRequest(
-        '${resourcePod.path}/namespaces/${widget.namespace}/${resourcePod.resource}?${getSelector(widget.item.spec.selector)}',
-      );
+      final result =
+          await KubernetesService(
+            cluster: cluster!,
+            proxy: appRepository.settings.proxy,
+            timeout: appRepository.settings.timeout,
+          ).getRequest(
+            '${resourcePod.path}/namespaces/${widget.namespace}/${resourcePod.resource}?${getSelector(widget.item.spec.selector)}',
+          );
 
       final pods = await compute(resourcePod.decodeList, result);
 
@@ -155,13 +156,11 @@ class _GetLogsPodsState extends State<GetLogsPods> {
               }
               if (value == false) {
                 setState(() {
-                  _selectedPods =
-                      _selectedPods
-                          .where(
-                            (p) =>
-                                p.metadata?.name != _pods[index].metadata?.name,
-                          )
-                          .toList();
+                  _selectedPods = _selectedPods
+                      .where(
+                        (p) => p.metadata?.name != _pods[index].metadata?.name,
+                      )
+                      .toList();
                 });
               }
             },

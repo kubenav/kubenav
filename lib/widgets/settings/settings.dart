@@ -319,7 +319,7 @@ class Settings extends StatelessWidget {
                         ),
                       ),
                       Switch(
-                        activeColor: Theme.of(context).colorScheme.primary,
+                        activeThumbColor: Theme.of(context).colorScheme.primary,
                         onChanged: (value) {
                           _toogleAuthentication(context);
                         },
@@ -342,7 +342,7 @@ class Settings extends StatelessWidget {
                         ),
                       ),
                       Switch(
-                        activeColor: Theme.of(context).colorScheme.primary,
+                        activeThumbColor: Theme.of(context).colorScheme.primary,
                         onChanged: (value) {
                           appRepository.setIsShowClustersOnStart(
                             !appRepository.settings.isShowClustersOnStart,
@@ -374,21 +374,19 @@ class Settings extends StatelessWidget {
                             value ?? ThemeName.light,
                           );
                         },
-                        items:
-                            ThemeName.values.map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(
-                                  value.toShortString(),
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context)
-                                            .extension<CustomColors>()!
-                                            .textPrimary,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
+                        items: ThemeName.values.map((value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Text(
+                              value.toShortString(),
+                              style: TextStyle(
+                                color: Theme.of(
+                                  context,
+                                ).extension<CustomColors>()!.textPrimary,
+                              ),
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ],
                   ),
@@ -415,21 +413,19 @@ class Settings extends StatelessWidget {
                         onChanged: (String? newValue) {
                           appRepository.setEditorFormat(newValue ?? 'yaml');
                         },
-                        items:
-                            ['yaml', 'json'].map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context)
-                                            .extension<CustomColors>()!
-                                            .textPrimary,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
+                        items: ['yaml', 'json'].map((value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                color: Theme.of(
+                                  context,
+                                ).extension<CustomColors>()!.textPrimary,
+                              ),
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ],
                   ),

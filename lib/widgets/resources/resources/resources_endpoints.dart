@@ -42,8 +42,9 @@ final resourceEndpoint = Resource(
       return ResourceItem(
         item: e,
         metrics: null,
-        status:
-            ips.isNotEmpty ? ResourceStatus.success : ResourceStatus.warning,
+        status: ips.isNotEmpty
+            ? ResourceStatus.success
+            : ResourceStatus.warning,
       );
     }).toList();
   },
@@ -68,35 +69,33 @@ final resourceEndpoint = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiCoreV1Endpoints;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiCoreV1Endpoints;
+        final status = listItem.status;
 
-    final ips = item.subsets
-        .map((subset) => subset.addresses.map((address) => address.ip).toList())
-        .expand((e) => e)
-        .toList();
+        final ips = item.subsets
+            .map(
+              (subset) =>
+                  subset.addresses.map((address) => address.ip).toList(),
+            )
+            .expand((e) => e)
+            .toList();
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Endpoints: ${ips.isNotEmpty ? ips.join(', ') : '-'}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Namespace: ${item.metadata?.namespace ?? '-'}',
+            'Endpoints: ${ips.isNotEmpty ? ips.join(', ') : '-'}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiCoreV1Endpoints;
 
     final ips = item.subsets
@@ -110,19 +109,12 @@ final resourceEndpoint = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiCoreV1Endpoints;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         ..._buildSubsets(context, item),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsResourcesPreview(
@@ -167,9 +159,7 @@ List<Widget> _buildSubsets(
   final List<Widget> ruleWidgets = [];
 
   for (var i = 0; i < endpoint.subsets.length; i++) {
-    ruleWidgets.add(
-      const SizedBox(height: Constants.spacingMiddle),
-    );
+    ruleWidgets.add(const SizedBox(height: Constants.spacingMiddle));
     ruleWidgets.add(
       DetailsItem(
         title: 'Subset ${i + 1}',
@@ -179,7 +169,13 @@ List<Widget> _buildSubsets(
             values: endpoint.subsets[i].addresses
                 .map(
                   (address) =>
-                      '${address.ip}${address.hostname != null ? ' (${address.hostname})' : address.targetRef?.name != null ? ' (${address.targetRef!.name})' : address.nodeName != null ? ' (${address.nodeName})' : ''}',
+                      '${address.ip}${address.hostname != null
+                          ? ' (${address.hostname})'
+                          : address.targetRef?.name != null
+                          ? ' (${address.targetRef!.name})'
+                          : address.nodeName != null
+                          ? ' (${address.nodeName})'
+                          : ''}',
                 )
                 .toList(),
             onTap: (int index) {

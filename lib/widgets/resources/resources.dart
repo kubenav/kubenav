@@ -26,77 +26,65 @@ class Resources extends StatelessWidget {
     BuildContext context,
     String resourceCategory,
   ) {
-    final resourcesForCategory =
-        resources.where((e) => e.category == resourceCategory).toList();
+    final resourcesForCategory = resources
+        .where((e) => e.category == resourceCategory)
+        .toList();
 
-    return List.generate(
-      resourcesForCategory.length,
-      (index) {
-        final resource = resourcesForCategory[index];
-        return AppVerticalListSimpleModel(
-          onTap: () {
-            navigate(
-              context,
-              ResourcesList(
-                resource: resource,
-                namespace: null,
-                selector: null,
+    return List.generate(resourcesForCategory.length, (index) {
+      final resource = resourcesForCategory[index];
+      return AppVerticalListSimpleModel(
+        onTap: () {
+          navigate(
+            context,
+            ResourcesList(resource: resource, namespace: null, selector: null),
+          );
+        },
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(Constants.sizeBorderRadius),
               ),
-            );
-          },
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(Constants.sizeBorderRadius),
+            ),
+            height: 54,
+            width: 54,
+            padding: const EdgeInsets.all(Constants.spacingIcon54x54),
+            child: SvgPicture.asset('assets/resources/${resource.icon}.svg'),
+          ),
+          const SizedBox(width: Constants.spacingSmall),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  resource.plural,
+                  style: primaryTextStyle(context),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              height: 54,
-              width: 54,
-              padding: const EdgeInsets.all(
-                Constants.spacingIcon54x54,
-              ),
-              child: SvgPicture.asset('assets/resources/${resource.icon}.svg'),
+                Text(
+                  resource.description,
+                  style: secondaryTextStyle(context),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
-            const SizedBox(width: Constants.spacingSmall),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    resource.plural,
-                    style: primaryTextStyle(
-                      context,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    resource.description,
-                    style: secondaryTextStyle(
-                      context,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: Constants.spacingSmall),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: Theme.of(context)
-                  .extension<CustomColors>()!
-                  .textSecondary
-                  .withValues(alpha: Constants.opacityIcon),
-              size: 24,
-            ),
-          ],
-        );
-      },
-    );
+          ),
+          const SizedBox(width: Constants.spacingSmall),
+          Icon(
+            Icons.arrow_forward_ios,
+            color: Theme.of(context)
+                .extension<CustomColors>()!
+                .textSecondary
+                .withValues(alpha: Constants.opacityIcon),
+            size: 24,
+          ),
+        ],
+      );
+    });
   }
 
   List<Widget> _buildContent(BuildContext context) {
@@ -116,21 +104,18 @@ class Resources extends StatelessWidget {
 
     return [
       const ResourcesBookmarksPreview(),
-      ...List.generate(
-        resourceCategories.length,
-        (index) {
-          final resourceCategory = resourceCategories[index];
-          return Column(
-            children: [
-              AppVerticalListSimpleWidget(
-                title: resourceCategory,
-                items: _buildItems(context, resourceCategory),
-              ),
-              const SizedBox(height: Constants.spacingMiddle),
-            ],
-          );
-        },
-      ),
+      ...List.generate(resourceCategories.length, (index) {
+        final resourceCategory = resourceCategories[index];
+        return Column(
+          children: [
+            AppVerticalListSimpleWidget(
+              title: resourceCategory,
+              items: _buildItems(context, resourceCategory),
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+          ],
+        );
+      }),
     ];
   }
 
@@ -168,9 +153,9 @@ class Resources extends StatelessWidget {
               ),
             ),
             Text(
-              Characters(activeCluster?.name ?? 'No Active Cluster')
-                  .replaceAll(Characters(''), Characters('\u{200B}'))
-                  .toString(),
+              Characters(
+                activeCluster?.name ?? 'No Active Cluster',
+              ).replaceAll(Characters(''), Characters('\u{200B}')).toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 14,
@@ -185,9 +170,7 @@ class Resources extends StatelessWidget {
       floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: _buildContent(context),
-          ),
+          child: Column(children: _buildContent(context)),
         ),
       ),
     );

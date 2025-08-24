@@ -11,9 +11,7 @@ import 'package:kubenav/widgets/settings/providers/settings_awssso_multiple_prov
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class SettingsAWSSSOMultipleProviders extends StatefulWidget {
-  const SettingsAWSSSOMultipleProviders({
-    super.key,
-  });
+  const SettingsAWSSSOMultipleProviders({super.key});
 
   @override
   State<SettingsAWSSSOMultipleProviders> createState() =>
@@ -87,11 +85,7 @@ class _SettingsAWSSSOMultipleProvidersState
         err,
       );
       if (mounted) {
-        showSnackbar(
-          context,
-          'Failed to Verify Device',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Verify Device', err.toString());
       }
     }
   }
@@ -225,9 +219,9 @@ class _SettingsAWSSSOMultipleProvidersState
                           child: Text(
                             value,
                             style: TextStyle(
-                              color: Theme.of(context)
-                                  .extension<CustomColors>()!
-                                  .textPrimary,
+                              color: Theme.of(
+                                context,
+                              ).extension<CustomColors>()!.textPrimary,
                             ),
                           ),
                         );

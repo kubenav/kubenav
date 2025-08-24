@@ -70,29 +70,24 @@ final resourceNamespace = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiCoreV1Namespace;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiCoreV1Namespace;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Status: ${item.status?.phase ?? '-'}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Status: ${item.status?.phase ?? '-'}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiCoreV1Namespace;
 
     return [
@@ -100,19 +95,12 @@ final resourceNamespace = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiCoreV1Namespace;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(
           conditions: item.status?.conditions
               .map(
@@ -131,10 +119,7 @@ final resourceNamespace = Resource(
         DetailsItem(
           title: 'Status',
           details: [
-            DetailsItemModel(
-              name: 'Phase',
-              values: item.status!.phase,
-            ),
+            DetailsItemModel(name: 'Phase', values: item.status!.phase),
           ],
         ),
         const SizedBox(height: Constants.spacingMiddle),

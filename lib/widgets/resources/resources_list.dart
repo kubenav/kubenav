@@ -90,16 +90,15 @@ class _ResourcesListState extends State<ResourcesList> {
       clustersRepository.activeClusterId,
     );
 
-    final listUrl =
-        widget.resource.scope == ResourceScope.cluster
-            ? '${widget.resource.path}/${widget.resource.resource}?${widget.selector} ?? '
-                '}'
-            : widget.namespace != null
-            ? '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}?${widget.selector ?? ''}'
-            : widget.selector != null &&
-                widget.selector!.startsWith('fieldSelector=spec.nodeName=')
-            ? '${widget.resource.path}/${widget.resource.resource}?${widget.selector ?? ''}'
-            : '${widget.resource.path}${cluster!.namespace != '' ? '/namespaces/${cluster.namespace}' : ''}/${widget.resource.resource}?${widget.selector ?? ''}';
+    final listUrl = widget.resource.scope == ResourceScope.cluster
+        ? '${widget.resource.path}/${widget.resource.resource}?${widget.selector} ?? '
+              '}'
+        : widget.namespace != null
+        ? '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}?${widget.selector ?? ''}'
+        : widget.selector != null &&
+              widget.selector!.startsWith('fieldSelector=spec.nodeName=')
+        ? '${widget.resource.path}/${widget.resource.resource}?${widget.selector ?? ''}'
+        : '${widget.resource.path}${cluster!.namespace != '' ? '/namespaces/${cluster.namespace}' : ''}/${widget.resource.resource}?${widget.selector ?? ''}';
 
     final listResult = await KubernetesService(
       cluster: cluster!,
@@ -112,12 +111,11 @@ class _ResourcesListState extends State<ResourcesList> {
               widget.resource.path == resourceNode.path) ||
           (widget.resource.resource == resourcePod.resource &&
               widget.resource.path == resourcePod.path)) {
-        final metricsUrl =
-            widget.resource.scope == ResourceScope.cluster
-                ? '/apis/metrics.k8s.io/v1beta1/${widget.resource.resource}?${widget.selector ?? ''}'
-                : widget.namespace != null
-                ? '/apis/metrics.k8s.io/v1beta1/namespaces/${widget.namespace}/${widget.resource.resource}?${widget.selector ?? ''}'
-                : '/apis/metrics.k8s.io/v1beta1${cluster.namespace != '' ? '/namespaces/${cluster.namespace}' : ''}/${widget.resource.resource}?${widget.selector ?? ''}';
+        final metricsUrl = widget.resource.scope == ResourceScope.cluster
+            ? '/apis/metrics.k8s.io/v1beta1/${widget.resource.resource}?${widget.selector ?? ''}'
+            : widget.namespace != null
+            ? '/apis/metrics.k8s.io/v1beta1/namespaces/${widget.namespace}/${widget.resource.resource}?${widget.selector ?? ''}'
+            : '/apis/metrics.k8s.io/v1beta1${cluster.namespace != '' ? '/namespaces/${cluster.namespace}' : ''}/${widget.resource.resource}?${widget.selector ?? ''}';
 
         final metricsResult = await KubernetesService(
           cluster: cluster,
@@ -218,16 +216,16 @@ class _ResourcesListState extends State<ResourcesList> {
         /// view all Pods of a Deployment) we do not show the button.
         actions:
             widget.resource.scope == ResourceScope.namespaced &&
-                    widget.selector == null
-                ? [
-                  IconButton(
-                    icon: const Icon(CustomIcons.namespaces),
-                    onPressed: () {
-                      showModal(context, const AppNamespacesWidget());
-                    },
-                  ),
-                ]
-                : null,
+                widget.selector == null
+            ? [
+                IconButton(
+                  icon: const Icon(CustomIcons.namespaces),
+                  onPressed: () {
+                    showModal(context, const AppNamespacesWidget());
+                  },
+                ),
+              ]
+            : null,
 
         /// We always display the title of the resource as main title for the
         /// widget.
@@ -253,42 +251,43 @@ class _ResourcesListState extends State<ResourcesList> {
             ),
             widget.selector == null
                 ? Text(
-                  Characters(
-                        clustersRepository
+                    Characters(
+                          clustersRepository
+                                          .getCluster(
+                                            clustersRepository.activeClusterId,
+                                          )
+                                          ?.namespace ==
+                                      '' ||
+                                  (widget.resource.scope ==
+                                      ResourceScope.cluster)
+                              ? 'All Namespaces'
+                              : clustersRepository
                                         .getCluster(
                                           clustersRepository.activeClusterId,
                                         )
-                                        ?.namespace ==
-                                    '' ||
-                                (widget.resource.scope == ResourceScope.cluster)
-                            ? 'All Namespaces'
-                            : clustersRepository
-                                    .getCluster(
-                                      clustersRepository.activeClusterId,
-                                    )
-                                    ?.namespace ??
-                                'All Namespaces',
-                      )
-                      .replaceAll(Characters(''), Characters('\u{200B}'))
-                      .toString(),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )
+                                        ?.namespace ??
+                                    'All Namespaces',
+                        )
+                        .replaceAll(Characters(''), Characters('\u{200B}'))
+                        .toString(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
                 : Text(
-                  Characters(widget.namespace ?? 'All Namespaces')
-                      .replaceAll(Characters(''), Characters('\u{200B}'))
-                      .toString(),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                    overflow: TextOverflow.ellipsis,
+                    Characters(widget.namespace ?? 'All Namespaces')
+                        .replaceAll(Characters(''), Characters('\u{200B}'))
+                        .toString(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
           ],
         ),
       ),
@@ -300,175 +299,176 @@ class _ResourcesListState extends State<ResourcesList> {
             children: [
               FutureBuilder(
                 future: _futureFetchItems,
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<List<ResourceItem>> snapshot,
-                ) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.none:
-                    case ConnectionState.waiting:
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(
-                              Constants.spacingMiddle,
-                            ),
-                            child: CircularProgressIndicator(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ],
-                      );
-                    default:
-                      if (snapshot.hasError || snapshot.data == null) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: Padding(
+                builder:
+                    (
+                      BuildContext context,
+                      AsyncSnapshot<List<ResourceItem>> snapshot,
+                    ) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                        case ConnectionState.waiting:
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
                                 padding: const EdgeInsets.all(
                                   Constants.spacingMiddle,
                                 ),
-                                child: AppErrorWidget(
-                                  message:
-                                      'Failed to Load ${widget.resource.plural}',
-                                  details: snapshot.error.toString(),
-                                  icon:
-                                      'assets/resources/${widget.resource.icon}.svg',
+                                child: CircularProgressIndicator(
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
-                            ),
-                          ],
-                        );
-                      }
-
-                      final filteredItems = _getFilteredItems(snapshot.data!);
-
-                      return Wrap(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.only(
-                              top: Constants.spacingMiddle,
-                              bottom: Constants.spacingSmall,
-                              left: Constants.spacingMiddle,
-                              right: Constants.spacingMiddle,
-                            ),
-                            color: Theme.of(context).colorScheme.primary,
-                            child: Row(
+                            ],
+                          );
+                        default:
+                          if (snapshot.hasError || snapshot.data == null) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Expanded(
-                                  child: TextField(
-                                    controller: _filterController,
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(
-                                            context,
-                                          ).colorScheme.onPrimary,
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(
+                                      Constants.spacingMiddle,
                                     ),
-                                    cursorColor:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                    keyboardType: TextInputType.text,
-                                    autocorrect: false,
-                                    enableSuggestions: false,
-                                    maxLines: 1,
-                                    decoration: InputDecoration(
-                                      border: const OutlineInputBorder(),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color:
-                                              Theme.of(
-                                                context,
-                                              ).colorScheme.onPrimary,
-                                          width: 0.0,
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color:
-                                              Theme.of(
-                                                context,
-                                              ).colorScheme.onPrimary,
-                                          width: 0.0,
-                                        ),
-                                      ),
-                                      isDense: true,
-                                      contentPadding: const EdgeInsets.all(8),
-                                      hintStyle: TextStyle(
-                                        color:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.onPrimary,
-                                      ),
-                                      hintText: 'Filter...',
-                                      suffixIcon: IconButton(
-                                        onPressed: () {
-                                          _filterController.clear();
-                                        },
-                                        icon: Icon(
-                                          Icons.clear,
-                                          color:
-                                              Theme.of(
-                                                context,
-                                              ).colorScheme.onPrimary,
-                                        ),
-                                      ),
+                                    child: AppErrorWidget(
+                                      message:
+                                          'Failed to Load ${widget.resource.plural}',
+                                      details: snapshot.error.toString(),
+                                      icon:
+                                          'assets/resources/${widget.resource.icon}.svg',
                                     ),
                                   ),
-                                ),
-                                ResourcesListStatus(
-                                  items: snapshot.data!,
-                                  status: _status,
-                                  selectStatus: (ResourceStatus status) {
-                                    setState(() {
-                                      _status = status;
-                                    });
-                                  },
                                 ),
                               ],
-                            ),
-                          ),
-                          ResourcesListActions(
-                            items: filteredItems,
-                            resource: widget.resource,
-                            refresh: () {
-                              setState(() {
-                                _futureFetchItems = _fetchItems();
-                              });
-                            },
-                          ),
-                          Container(
-                            padding: const EdgeInsets.only(
-                              top: Constants.spacingMiddle,
-                              bottom: Constants.spacingMiddle,
-                            ),
-                            child: ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: const EdgeInsets.only(
-                                right: Constants.spacingMiddle,
-                                left: Constants.spacingMiddle,
+                            );
+                          }
+
+                          final filteredItems = _getFilteredItems(
+                            snapshot.data!,
+                          );
+
+                          return Wrap(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(
+                                  top: Constants.spacingMiddle,
+                                  bottom: Constants.spacingSmall,
+                                  left: Constants.spacingMiddle,
+                                  right: Constants.spacingMiddle,
+                                ),
+                                color: Theme.of(context).colorScheme.primary,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextField(
+                                        controller: _filterController,
+                                        style: TextStyle(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onPrimary,
+                                        ),
+                                        cursorColor: Theme.of(
+                                          context,
+                                        ).colorScheme.onPrimary,
+                                        keyboardType: TextInputType.text,
+                                        autocorrect: false,
+                                        enableSuggestions: false,
+                                        maxLines: 1,
+                                        decoration: InputDecoration(
+                                          border: const OutlineInputBorder(),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.onPrimary,
+                                              width: 0.0,
+                                            ),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.onPrimary,
+                                              width: 0.0,
+                                            ),
+                                          ),
+                                          isDense: true,
+                                          contentPadding: const EdgeInsets.all(
+                                            8,
+                                          ),
+                                          hintStyle: TextStyle(
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onPrimary,
+                                          ),
+                                          hintText: 'Filter...',
+                                          suffixIcon: IconButton(
+                                            onPressed: () {
+                                              _filterController.clear();
+                                            },
+                                            icon: Icon(
+                                              Icons.clear,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.onPrimary,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    ResourcesListStatus(
+                                      items: snapshot.data!,
+                                      status: _status,
+                                      selectStatus: (ResourceStatus status) {
+                                        setState(() {
+                                          _status = status;
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
-                              separatorBuilder:
-                                  (context, index) => const SizedBox(
-                                    height: Constants.spacingMiddle,
+                              ResourcesListActions(
+                                items: filteredItems,
+                                resource: widget.resource,
+                                refresh: () {
+                                  setState(() {
+                                    _futureFetchItems = _fetchItems();
+                                  });
+                                },
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                  top: Constants.spacingMiddle,
+                                  bottom: Constants.spacingMiddle,
+                                ),
+                                child: ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  padding: const EdgeInsets.only(
+                                    right: Constants.spacingMiddle,
+                                    left: Constants.spacingMiddle,
                                   ),
-                              itemCount: filteredItems.length,
-                              itemBuilder: (context, index) {
-                                return widget.resource.listItemBuilder(
-                                  context,
-                                  widget.resource,
-                                  filteredItems[index],
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      );
-                  }
-                },
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                        height: Constants.spacingMiddle,
+                                      ),
+                                  itemCount: filteredItems.length,
+                                  itemBuilder: (context, index) {
+                                    return widget.resource.listItemBuilder(
+                                      context,
+                                      widget.resource,
+                                      filteredItems[index],
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                      }
+                    },
               ),
             ],
           ),
@@ -538,30 +538,30 @@ class ResourcesListActions extends StatelessWidget {
         AppResourceActionsModel(
           title:
               bookmarksRepository.isBookmarked(
-                        BookmarkType.list,
-                        clustersRepository.activeClusterId,
-                        null,
-                        clustersRepository
-                            .getCluster(clustersRepository.activeClusterId)
-                            ?.namespace,
-                        resource,
-                      ) >
-                      -1
-                  ? 'Remove Bookmark'
-                  : 'Add Bookmark',
+                    BookmarkType.list,
+                    clustersRepository.activeClusterId,
+                    null,
+                    clustersRepository
+                        .getCluster(clustersRepository.activeClusterId)
+                        ?.namespace,
+                    resource,
+                  ) >
+                  -1
+              ? 'Remove Bookmark'
+              : 'Add Bookmark',
           icon:
               bookmarksRepository.isBookmarked(
-                        BookmarkType.list,
-                        clustersRepository.activeClusterId,
-                        null,
-                        clustersRepository
-                            .getCluster(clustersRepository.activeClusterId)
-                            ?.namespace,
-                        resource,
-                      ) >
-                      -1
-                  ? Icons.bookmark
-                  : Icons.bookmark_border,
+                    BookmarkType.list,
+                    clustersRepository.activeClusterId,
+                    null,
+                    clustersRepository
+                        .getCluster(clustersRepository.activeClusterId)
+                        ?.namespace,
+                    resource,
+                  ) >
+                  -1
+              ? Icons.bookmark
+              : Icons.bookmark_border,
           onTap: () {
             final bookmarkIndex = bookmarksRepository.isBookmarked(
               BookmarkType.list,
@@ -610,12 +610,15 @@ class ResourcesListStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final undefinedCount = items.length;
-    final successCount =
-        items.where((e) => e.status == ResourceStatus.success).length;
-    final warningCount =
-        items.where((e) => e.status == ResourceStatus.warning).length;
-    final dangerCount =
-        items.where((e) => e.status == ResourceStatus.danger).length;
+    final successCount = items
+        .where((e) => e.status == ResourceStatus.success)
+        .length;
+    final warningCount = items
+        .where((e) => e.status == ResourceStatus.warning)
+        .length;
+    final dangerCount = items
+        .where((e) => e.status == ResourceStatus.danger)
+        .length;
 
     return PopupMenuButton<ResourceStatus>(
       initialValue: status,
@@ -624,33 +627,32 @@ class ResourcesListStatus extends StatelessWidget {
         Icons.filter_list,
         color: Theme.of(context).colorScheme.onPrimary,
       ),
-      itemBuilder:
-          (BuildContext context) => <PopupMenuEntry<ResourceStatus>>[
-            PopupMenuItem<ResourceStatus>(
-              value: ResourceStatus.undefined,
-              child: Text(
-                '${ResourceStatus.undefined.toLocalizedString()} ($undefinedCount)',
-              ),
-            ),
-            PopupMenuItem<ResourceStatus>(
-              value: ResourceStatus.success,
-              child: Text(
-                '${ResourceStatus.success.toLocalizedString()} ($successCount)',
-              ),
-            ),
-            PopupMenuItem<ResourceStatus>(
-              value: ResourceStatus.warning,
-              child: Text(
-                '${ResourceStatus.warning.toLocalizedString()} ($warningCount)',
-              ),
-            ),
-            PopupMenuItem<ResourceStatus>(
-              value: ResourceStatus.danger,
-              child: Text(
-                '${ResourceStatus.danger.toLocalizedString()} ($dangerCount)',
-              ),
-            ),
-          ],
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<ResourceStatus>>[
+        PopupMenuItem<ResourceStatus>(
+          value: ResourceStatus.undefined,
+          child: Text(
+            '${ResourceStatus.undefined.toLocalizedString()} ($undefinedCount)',
+          ),
+        ),
+        PopupMenuItem<ResourceStatus>(
+          value: ResourceStatus.success,
+          child: Text(
+            '${ResourceStatus.success.toLocalizedString()} ($successCount)',
+          ),
+        ),
+        PopupMenuItem<ResourceStatus>(
+          value: ResourceStatus.warning,
+          child: Text(
+            '${ResourceStatus.warning.toLocalizedString()} ($warningCount)',
+          ),
+        ),
+        PopupMenuItem<ResourceStatus>(
+          value: ResourceStatus.danger,
+          child: Text(
+            '${ResourceStatus.danger.toLocalizedString()} ($dangerCount)',
+          ),
+        ),
+      ],
     );
   }
 }
@@ -688,12 +690,11 @@ class ResourcesListItem extends StatelessWidget {
           Icon(
             Icons.radio_button_checked,
             size: 24,
-            color:
-                status == ResourceStatus.success
-                    ? Theme.of(context).extension<CustomColors>()!.success
-                    : status == ResourceStatus.danger
-                    ? Theme.of(context).extension<CustomColors>()!.error
-                    : Theme.of(context).extension<CustomColors>()!.warning,
+            color: status == ResourceStatus.success
+                ? Theme.of(context).extension<CustomColors>()!.success
+                : status == ResourceStatus.danger
+                ? Theme.of(context).extension<CustomColors>()!.error
+                : Theme.of(context).extension<CustomColors>()!.warning,
           ),
         ],
       );
@@ -877,10 +878,9 @@ class _ResourcesListItemCreateResourceState
 
     _codeController = CodeController(
       text: '',
-      language:
-          appRepository.settings.editorFormat == 'json'
-              ? highlight_json.json
-              : highlight_yaml.yaml,
+      language: appRepository.settings.editorFormat == 'json'
+          ? highlight_json.json
+          : highlight_yaml.yaml,
     );
 
     try {
@@ -926,19 +926,18 @@ class _ResourcesListItemCreateResourceState
       final cluster = await clustersRepository.getClusterWithCredentials(
         clustersRepository.activeClusterId,
       );
-      final manifest =
-          appRepository.settings.editorFormat == 'json'
-              ? await compute(_createResourceDecodeJson, _codeController.text)
-              : await compute(_createResourceDecodeYaml, _codeController.text);
+      final manifest = appRepository.settings.editorFormat == 'json'
+          ? await compute(_createResourceDecodeJson, _codeController.text)
+          : await compute(_createResourceDecodeYaml, _codeController.text);
       final name =
           manifest['metadata'] != null && manifest['metadata']['name'] != null
-              ? manifest['metadata']['name']
-              : '';
+          ? manifest['metadata']['name']
+          : '';
       final namespace =
           manifest['metadata'] != null &&
-                  manifest['metadata']['namespace'] != null
-              ? manifest['metadata']['namespace']
-              : '';
+              manifest['metadata']['namespace'] != null
+          ? manifest['metadata']['namespace']
+          : '';
       final url =
           '${widget.resource.path}${namespace != null && namespace != '' ? '/namespaces/$namespace' : ''}/${widget.resource.resource}';
 
@@ -1092,10 +1091,9 @@ class _ResourcesListItemDeleteResourcesState
         final name = widget.resource.getName(selectedItem.item);
         final namespace = widget.resource.getNamespace(selectedItem.item);
 
-        final url =
-            namespace == null
-                ? '${widget.resource.path}/${widget.resource.resource}/$name'
-                : '${widget.resource.path}/namespaces/$namespace/${widget.resource.resource}/$name';
+        final url = namespace == null
+            ? '${widget.resource.path}/${widget.resource.resource}/$name'
+            : '${widget.resource.path}/namespaces/$namespace/${widget.resource.resource}/$name';
 
         await KubernetesService(
           cluster: cluster!,
@@ -1146,12 +1144,11 @@ class _ResourcesListItemDeleteResourcesState
           Icon(
             Icons.radio_button_checked,
             size: 24,
-            color:
-                status == ResourceStatus.success
-                    ? Theme.of(context).extension<CustomColors>()!.success
-                    : status == ResourceStatus.danger
-                    ? Theme.of(context).extension<CustomColors>()!.error
-                    : Theme.of(context).extension<CustomColors>()!.warning,
+            color: status == ResourceStatus.success
+                ? Theme.of(context).extension<CustomColors>()!.success
+                : status == ResourceStatus.danger
+                ? Theme.of(context).extension<CustomColors>()!.error
+                : Theme.of(context).extension<CustomColors>()!.warning,
           ),
         ],
       );
@@ -1190,7 +1187,7 @@ class _ResourcesListItemDeleteResourcesState
                 children: [
                   const Text('Force'),
                   Switch(
-                    activeColor: Theme.of(context).colorScheme.primary,
+                    activeThumbColor: Theme.of(context).colorScheme.primary,
                     onChanged: (value) {
                       setState(() {
                         _force = !_force;
@@ -1213,10 +1210,9 @@ class _ResourcesListItemDeleteResourcesState
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color:
-                              Theme.of(
-                                context,
-                              ).extension<CustomColors>()!.shadow,
+                          color: Theme.of(
+                            context,
+                          ).extension<CustomColors>()!.shadow,
                           blurRadius: Constants.sizeBorderBlurRadius,
                           spreadRadius: Constants.sizeBorderSpreadRadius,
                           offset: const Offset(0.0, 0.0),
@@ -1253,22 +1249,21 @@ class _ResourcesListItemDeleteResourcesState
                         }
                         if (value == false) {
                           setState(() {
-                            _selectedItems =
-                                _selectedItems
-                                    .where(
-                                      (e) =>
-                                          !(widget.resource.getName(e.item) ==
-                                                  widget.resource.getName(
-                                                    widget.items[index].item,
-                                                  ) &&
+                            _selectedItems = _selectedItems
+                                .where(
+                                  (e) =>
+                                      !(widget.resource.getName(e.item) ==
+                                              widget.resource.getName(
+                                                widget.items[index].item,
+                                              ) &&
+                                          widget.resource.getNamespace(
+                                                e.item,
+                                              ) ==
                                               widget.resource.getNamespace(
-                                                    e.item,
-                                                  ) ==
-                                                  widget.resource.getNamespace(
-                                                    widget.items[index].item,
-                                                  )),
-                                    )
-                                    .toList();
+                                                widget.items[index].item,
+                                              )),
+                                )
+                                .toList();
                           });
                         }
                       },
@@ -1283,25 +1278,25 @@ class _ResourcesListItemDeleteResourcesState
                       ),
                       subtitle:
                           widget.resource.getNamespace(
-                                    widget.items[index].item,
-                                  ) ==
-                                  null
-                              ? null
-                              : Text(
-                                Characters(
-                                      widget.resource.getNamespace(
-                                            widget.items[index].item,
-                                          ) ??
-                                          '',
-                                    )
-                                    .replaceAll(
-                                      Characters(''),
-                                      Characters('\u{200B}'),
-                                    )
-                                    .toString(),
-                                style: secondaryTextStyle(context),
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                                widget.items[index].item,
+                              ) ==
+                              null
+                          ? null
+                          : Text(
+                              Characters(
+                                    widget.resource.getNamespace(
+                                          widget.items[index].item,
+                                        ) ??
+                                        '',
+                                  )
+                                  .replaceAll(
+                                    Characters(''),
+                                    Characters('\u{200B}'),
+                                  )
+                                  .toString(),
+                              style: secondaryTextStyle(context),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                       secondary: _buildStatus(
                         context,
                         widget.items[index].status,

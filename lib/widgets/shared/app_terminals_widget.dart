@@ -38,9 +38,7 @@ class AppTerminalsActionsWidget extends StatelessWidget {
             Navigator.pop(context);
             showActions(
               context,
-              AppTerminalActionsWidget(
-                terminalIndex: index,
-              ),
+              AppTerminalActionsWidget(terminalIndex: index),
             );
           },
         ),
@@ -50,10 +48,7 @@ class AppTerminalsActionsWidget extends StatelessWidget {
 }
 
 class AppTerminalActionsWidget extends StatelessWidget {
-  const AppTerminalActionsWidget({
-    super.key,
-    required this.terminalIndex,
-  });
+  const AppTerminalActionsWidget({super.key, required this.terminalIndex});
 
   final int terminalIndex;
 
@@ -73,9 +68,7 @@ class AppTerminalActionsWidget extends StatelessWidget {
             Navigator.pop(context);
             showModal(
               context,
-              AppTerminalWidget(
-                terminalIndex: terminalIndex,
-              ),
+              AppTerminalWidget(terminalIndex: terminalIndex),
               fullScreen: true,
             );
           },
@@ -94,10 +87,7 @@ class AppTerminalActionsWidget extends StatelessWidget {
 }
 
 class AppTerminalWidget extends StatelessWidget {
-  const AppTerminalWidget({
-    super.key,
-    required this.terminalIndex,
-  });
+  const AppTerminalWidget({super.key, required this.terminalIndex});
 
   final int terminalIndex;
 
@@ -180,24 +170,24 @@ class AppTerminalWidget extends StatelessWidget {
               children: terminalRepository.terminals[terminalIndex].logs == null
                   ? []
                   : terminalRepository.terminals[terminalIndex].logs!
-                      .asMap()
-                      .entries
-                      .map(
-                        (e) => SelectableText(
-                          e.value.join('\n\n'),
-                          style: TextStyle(
-                            color: getColor(
-                              e.key,
-                              Theme.of(context)
-                                  .extension<LogColors>()!
-                                  .getTheme(),
+                        .asMap()
+                        .entries
+                        .map(
+                          (e) => SelectableText(
+                            e.value.join('\n\n'),
+                            style: TextStyle(
+                              color: getColor(
+                                e.key,
+                                Theme.of(
+                                  context,
+                                ).extension<LogColors>()!.getTheme(),
+                              ),
+                              fontSize: 14,
+                              fontFamily: getMonospaceFontFamily(),
                             ),
-                            fontSize: 14,
-                            fontFamily: getMonospaceFontFamily(),
                           ),
-                        ),
-                      )
-                      .toList(),
+                        )
+                        .toList(),
             ),
           ),
         ),
@@ -288,25 +278,21 @@ class AppTerminalWidget extends StatelessWidget {
                                 terminalRepository.terminals[terminalIndex].type
                                     .toLocalizedString(),
                                 overflow: TextOverflow.ellipsis,
-                                style: primaryTextStyle(
-                                  context,
-                                  size: 18,
-                                ),
+                                style: primaryTextStyle(context, size: 18),
                               ),
                               Text(
                                 Characters(
-                                  terminalRepository
-                                      .terminals[terminalIndex].name,
-                                )
+                                      terminalRepository
+                                          .terminals[terminalIndex]
+                                          .name,
+                                    )
                                     .replaceAll(
                                       Characters(''),
                                       Characters('\u{200B}'),
                                     )
                                     .toString(),
                                 overflow: TextOverflow.ellipsis,
-                                style: secondaryTextStyle(
-                                  context,
-                                ),
+                                style: secondaryTextStyle(context),
                               ),
                             ],
                           ),
@@ -317,9 +303,9 @@ class AppTerminalWidget extends StatelessWidget {
                   IconButton(
                     icon: Icon(
                       Icons.close_outlined,
-                      color: Theme.of(context)
-                          .extension<CustomColors>()!
-                          .textPrimary,
+                      color: Theme.of(
+                        context,
+                      ).extension<CustomColors>()!.textPrimary,
                     ),
                     onPressed: () {
                       Navigator.pop(context);
@@ -333,15 +319,10 @@ class AppTerminalWidget extends StatelessWidget {
                 left: Constants.spacingMiddle,
                 right: Constants.spacingMiddle,
               ),
-              child: Divider(
-                height: 0,
-                thickness: 1.0,
-              ),
+              child: Divider(height: 0, thickness: 1.0),
             ),
             const SizedBox(height: Constants.spacingMiddle),
-            Expanded(
-              child: _buildContent(context),
-            ),
+            Expanded(child: _buildContent(context)),
             const SizedBox(height: Constants.spacingMiddle),
           ],
         ),

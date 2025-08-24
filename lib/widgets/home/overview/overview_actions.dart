@@ -26,7 +26,8 @@ class OverviewActions extends StatelessWidget {
       listen: true,
     );
 
-    final sponsorAction = (sponsorRepository.isAvailable &&
+    final sponsorAction =
+        (sponsorRepository.isAvailable &&
             sponsorRepository.products.isNotEmpty &&
             !sponsorRepository.isSponsor)
         ? AppResourceActionsModel(
@@ -35,9 +36,7 @@ class OverviewActions extends StatelessWidget {
             onTap: () {
               showActions(
                 context,
-                const SettingsSponsorActions(
-                  showDismiss: false,
-                ),
+                const SettingsSponsorActions(showDismiss: false),
               );
             },
           )
@@ -56,33 +55,21 @@ class OverviewActions extends StatelessWidget {
           title: 'Resources',
           icon: CustomIcons.kubernetes,
           onTap: () {
-            navigate(
-              context,
-              const Resources(),
-              Constants.pageIndexResources,
-            );
+            navigate(context, const Resources(), Constants.pageIndexResources);
           },
         ),
         AppResourceActionsModel(
           title: 'Plugins',
           icon: Icons.extension,
           onTap: () {
-            navigate(
-              context,
-              const Plugins(),
-              Constants.pageIndexPlugins,
-            );
+            navigate(context, const Plugins(), Constants.pageIndexPlugins);
           },
         ),
         AppResourceActionsModel(
           title: 'Settings',
           icon: Icons.settings,
           onTap: () {
-            navigate(
-              context,
-              const Settings(),
-              Constants.pageIndexSettings,
-            );
+            navigate(context, const Settings(), Constants.pageIndexSettings);
           },
         ),
         AppResourceActionsModel(

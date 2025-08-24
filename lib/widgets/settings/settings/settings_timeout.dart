@@ -9,10 +9,7 @@ import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 /// The [SettingsTimeout] widget allows a user to change the timeout for all
 /// Kubernetes API requests.
 class SettingsTimeout extends StatefulWidget {
-  const SettingsTimeout({
-    super.key,
-    required this.currentTimeout,
-  });
+  const SettingsTimeout({super.key, required this.currentTimeout});
 
   final int currentTimeout;
 
@@ -73,9 +70,7 @@ class _SettingsTimeoutState extends State<SettingsTimeout> {
       actionPressed: () {
         if (_timeoutFormKey.currentState != null &&
             _timeoutFormKey.currentState!.validate()) {
-          appRepository.setTimeout(
-            int.tryParse(_timeoutController.text) ?? 0,
-          );
+          appRepository.setTimeout(int.tryParse(_timeoutController.text) ?? 0);
           Navigator.pop(context);
         }
       },

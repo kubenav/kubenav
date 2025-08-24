@@ -48,9 +48,7 @@ class _SettingsAddNamespaceState extends State<SettingsAddNamespace> {
       actionPressed: () async {
         if (_namespaceFormKey.currentState != null &&
             _namespaceFormKey.currentState!.validate()) {
-          await appRepository.addNamespace(
-            _namespaceController.text,
-          );
+          await appRepository.addNamespace(_namespaceController.text);
 
           if (context.mounted) {
             Navigator.pop(context);
@@ -74,9 +72,7 @@ class _SettingsAddNamespaceState extends State<SettingsAddNamespace> {
                   'Enter the name of one of your favorite namespaces for faster access:',
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                    top: Constants.spacingMiddle,
-                  ),
+                  padding: const EdgeInsets.only(top: Constants.spacingMiddle),
                   child: TextFormField(
                     controller: _namespaceController,
                     keyboardType: TextInputType.text,

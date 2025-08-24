@@ -8,11 +8,7 @@ import 'package:xterm/core.dart' as xtermcore;
 import 'package:xterm/xterm.dart' as xterm;
 
 /// [TerminalType] is a `enum`, which defines if a terminal is used to show logs or for connection to a container.
-enum TerminalType {
-  log,
-  logstream,
-  exec,
-}
+enum TerminalType { log, logstream, exec }
 
 extension TerminalTypeExtension on TerminalType {
   /// [toLocalizedString] returns a localized string for a source type.
@@ -62,11 +58,11 @@ class TerminalData {
   });
 
   factory TerminalData.fromJson(Map<String, dynamic> json) => TerminalData(
-        op: json['Op'],
-        data: json['Data'],
-        rows: json['Rows'],
-        cols: json['Cols'],
-      );
+    op: json['Op'],
+    data: json['Data'],
+    rows: json['Rows'],
+    cols: json['Cols'],
+  );
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> jsonData = <String, dynamic>{};
@@ -101,8 +97,8 @@ class TerminalBackend {
       platform: Platform.isAndroid
           ? xtermcore.TerminalTargetPlatform.android
           : Platform.isIOS
-              ? xtermcore.TerminalTargetPlatform.ios
-              : xtermcore.TerminalTargetPlatform.unknown,
+          ? xtermcore.TerminalTargetPlatform.ios
+          : xtermcore.TerminalTargetPlatform.unknown,
     );
 
     channel.stream.listen(
@@ -133,12 +129,7 @@ class TerminalBackend {
 
     terminal.onOutput = (data) {
       channel.sink.add(
-        TerminalData(
-          op: 'stdin',
-          data: data,
-          rows: 0,
-          cols: 0,
-        ).toString(),
+        TerminalData(op: 'stdin', data: data, rows: 0, cols: 0).toString(),
       );
 
       // if (data == '\r') {
@@ -175,8 +166,8 @@ class LogStreamBackend {
       platform: Platform.isAndroid
           ? xtermcore.TerminalTargetPlatform.android
           : Platform.isIOS
-              ? xtermcore.TerminalTargetPlatform.ios
-              : xtermcore.TerminalTargetPlatform.unknown,
+          ? xtermcore.TerminalTargetPlatform.ios
+          : xtermcore.TerminalTargetPlatform.unknown,
     );
 
     channel.stream.listen(

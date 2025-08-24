@@ -35,11 +35,7 @@ class _SettingsClustersState extends State<SettingsClusters> {
 
   /// [_proxyDecorator] is used to highlight the bookmark which is currently
   /// draged by the user.
-  Widget _proxyDecorator(
-    Widget child,
-    int index,
-    Animation<double> animation,
-  ) {
+  Widget _proxyDecorator(Widget child, int index, Animation<double> animation) {
     return Material(
       elevation: 0,
       color: Colors.transparent,
@@ -73,23 +69,15 @@ class _SettingsClustersState extends State<SettingsClusters> {
   ) {
     switch (clusterProviderType) {
       case ClusterProviderType.manual:
-        showModal(
-          context,
-          const SettingsAddClusterManual(),
-        );
+        showModal(context, const SettingsAddClusterManual());
         break;
       case ClusterProviderType.kubeconfig:
-        showModal(
-          context,
-          const SettingsAddClusterKubeconfig(),
-        );
+        showModal(context, const SettingsAddClusterKubeconfig());
         break;
       default:
         showActions(
           context,
-          SettingsReuseProviderActions(
-            providerType: clusterProviderType,
-          ),
+          SettingsReuseProviderActions(providerType: clusterProviderType),
         );
         break;
     }
@@ -126,10 +114,7 @@ class _SettingsClustersState extends State<SettingsClusters> {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Clusters'),
-      ),
+      appBar: AppBar(centerTitle: true, title: const Text('Clusters')),
       bottomNavigationBar: const AppBottomNavigationBarWidget(),
       floatingActionButton: const AppFloatingActionButtonsWidget(),
       body: SafeArea(
@@ -192,27 +177,20 @@ class _SettingsClustersState extends State<SettingsClusters> {
                 onReorder: (int start, int current) {
                   clustersRepository.reorderClusters(start, current);
                 },
-                proxyDecorator: (
-                  Widget child,
-                  int index,
-                  Animation<double> animation,
-                ) {
-                  return _proxyDecorator(child, index, animation);
-                },
+                proxyDecorator:
+                    (Widget child, int index, Animation<double> animation) {
+                      return _proxyDecorator(child, index, animation);
+                    },
                 itemCount: clustersRepository.clusters.length,
-                itemBuilder: (
-                  context,
-                  index,
-                ) {
+                itemBuilder: (context, index) {
                   return Container(
-                    key: Key(
-                      clustersRepository.clusters[index].id,
-                    ),
+                    key: Key(clustersRepository.clusters[index].id),
                     child: SettingsClusterItem(
                       key: Key(clustersRepository.clusters[index].id),
                       index: index,
                       cluster: clustersRepository.clusters[index],
-                      isActiveCluster: clustersRepository.clusters[index].id ==
+                      isActiveCluster:
+                          clustersRepository.clusters[index].id ==
                           clustersRepository.activeClusterId,
                       isSortable: isSortable,
                       onTap: isSortable

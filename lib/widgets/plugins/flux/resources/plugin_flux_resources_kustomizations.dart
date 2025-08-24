@@ -34,34 +34,33 @@ final Resource fluxResourceKustomization = Resource(
     final parsed = json.decode(data.list);
     final items =
         IoFluxcdToolkitKustomizeV1KustomizationList.fromJson(parsed)?.items ??
-            [];
+        [];
 
-    return items.map(
-      (e) {
-        final status =
-            e.status?.conditions != null && e.status!.conditions!.isNotEmpty
-                ? e.status!.conditions!
-                    .where((e) => e.type == 'Ready')
-                    .firstOrNull
-                    ?.status
-                : 'Unknown';
+    return items.map((e) {
+      final status =
+          e.status?.conditions != null && e.status!.conditions!.isNotEmpty
+          ? e.status!.conditions!
+                .where((e) => e.type == 'Ready')
+                .firstOrNull
+                ?.status
+          : 'Unknown';
 
-        return ResourceItem(
-          item: e,
-          metrics: null,
-          status: status == 'True'
-              ? ResourceStatus.success
-              : status == 'False'
-                  ? ResourceStatus.danger
-                  : ResourceStatus.warning,
-        );
-      },
-    ).toList();
+      return ResourceItem(
+        item: e,
+        metrics: null,
+        status: status == 'True'
+            ? ResourceStatus.success
+            : status == 'False'
+            ? ResourceStatus.danger
+            : ResourceStatus.warning,
+      );
+    }).toList();
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitKustomizeV1KustomizationList.fromJson(parsed)
-            ?.items ??
+    return IoFluxcdToolkitKustomizeV1KustomizationList.fromJson(
+          parsed,
+        )?.items ??
         [];
   },
   getName: (dynamic item) {
@@ -84,11 +83,7 @@ final Resource fluxResourceKustomization = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
+  listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
     final item = listItem.item as IoFluxcdToolkitKustomizeV1Kustomization;
     final status = listItem.status;
 
@@ -106,9 +101,7 @@ final Resource fluxResourceKustomization = Resource(
       ],
     );
   },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoFluxcdToolkitKustomizeV1Kustomization;
 
     return [
@@ -118,19 +111,12 @@ final Resource fluxResourceKustomization = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoFluxcdToolkitKustomizeV1Kustomization;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(conditions: item.status?.conditions),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
@@ -141,7 +127,8 @@ final Resource fluxResourceKustomization = Resource(
               values: item.spec?.sourceRef != null
                   ? '${item.spec?.sourceRef.kind} (${item.spec?.sourceRef.namespace ?? item.metadata?.namespace}/${item.spec?.sourceRef.name})'
                   : null,
-              onTap: item.spec?.sourceRef.kind != null &&
+              onTap:
+                  item.spec?.sourceRef.kind != null &&
                       kindToFluxResource.containsKey(
                         item.spec?.sourceRef.kind.value,
                       )
@@ -154,7 +141,8 @@ final Resource fluxResourceKustomization = Resource(
                           context,
                           ResourcesDetails(
                             name: item.spec?.sourceRef.name ?? '',
-                            namespace: item.spec?.sourceRef.namespace ??
+                            namespace:
+                                item.spec?.sourceRef.namespace ??
                                 item.metadata?.namespace ??
                                 '',
                             resource: resource,
@@ -170,14 +158,8 @@ final Resource fluxResourceKustomization = Resource(
                     }
                   : null,
             ),
-            DetailsItemModel(
-              name: 'Path',
-              values: item.spec?.path,
-            ),
-            DetailsItemModel(
-              name: 'Interval',
-              values: item.spec?.interval,
-            ),
+            DetailsItemModel(name: 'Path', values: item.spec?.path),
+            DetailsItemModel(name: 'Interval', values: item.spec?.interval),
             DetailsItemModel(
               name: 'Suspended',
               values: item.spec?.suspend == true ? 'True' : 'False',
@@ -186,10 +168,7 @@ final Resource fluxResourceKustomization = Resource(
               name: 'Prune',
               values: item.spec?.prune == true ? 'True' : 'False',
             ),
-            DetailsItemModel(
-              name: 'Timeout',
-              values: item.spec?.timeout,
-            ),
+            DetailsItemModel(name: 'Timeout', values: item.spec?.timeout),
           ],
         ),
         const SizedBox(height: Constants.spacingMiddle),

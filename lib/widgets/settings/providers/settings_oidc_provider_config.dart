@@ -25,7 +25,6 @@ class SettingsOIDCProvider extends StatefulWidget {
 
 class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
   final _providerConfigFormKey = GlobalKey<FormState>();
-  final _addDefaultScopesTooltipKey = GlobalKey<TooltipState>();
   final _nameController = TextEditingController();
   OIDCFlow _flow = OIDCFlow.standard;
   final _discoveryURLController = TextEditingController();
@@ -450,13 +449,12 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           children: [
             const Text('Use Access Token instead of ID Token'),
             Switch(
-              activeColor: Theme.of(context).colorScheme.primary,
-              onChanged:
-                  (val) => {
-                    setState(() {
-                      _useAccessToken = !_useAccessToken;
-                    }),
-                  },
+              activeThumbColor: Theme.of(context).colorScheme.primary,
+              onChanged: (val) => {
+                setState(() {
+                  _useAccessToken = !_useAccessToken;
+                }),
+              },
               value: _useAccessToken,
             ),
           ],
@@ -497,13 +495,12 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                   onPressed: () {
                     showDialog(
                       context: context,
-                      builder:
-                          (context) => AlertDialog(
-                            title: Text('Add Default Scopes'),
-                            content: Text(
-                              'Add the "openid" and "offline_access" scopes.',
-                            ),
-                          ),
+                      builder: (context) => AlertDialog(
+                        title: Text('Add Default Scopes'),
+                        content: Text(
+                          'Add the "openid" and "offline_access" scopes.',
+                        ),
+                      ),
                     );
                   },
                   icon: Icon(Icons.info),
@@ -511,13 +508,12 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
               ],
             ),
             Switch(
-              activeColor: Theme.of(context).colorScheme.primary,
-              onChanged:
-                  (val) => {
-                    setState(() {
-                      _addDefaultScopes = !_addDefaultScopes;
-                    }),
-                  },
+              activeThumbColor: Theme.of(context).colorScheme.primary,
+              onChanged: (val) => {
+                setState(() {
+                  _addDefaultScopes = !_addDefaultScopes;
+                }),
+              },
               value: _addDefaultScopes,
             ),
           ],
@@ -565,21 +561,19 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                   _pkceMethod = newValue ?? '';
                 });
               },
-              items:
-                  ['', 'S256'].map((value) {
-                    return DropdownMenuItem(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: TextStyle(
-                          color:
-                              Theme.of(
-                                context,
-                              ).extension<CustomColors>()!.textPrimary,
-                        ),
-                      ),
-                    );
-                  }).toList(),
+              items: ['', 'S256'].map((value) {
+                return DropdownMenuItem(
+                  value: value,
+                  child: Text(
+                    value,
+                    style: TextStyle(
+                      color: Theme.of(
+                        context,
+                      ).extension<CustomColors>()!.textPrimary,
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
           ],
         ),
@@ -612,13 +606,12 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                   onPressed: () {
                     showDialog(
                       context: context,
-                      builder:
-                          (context) => AlertDialog(
-                            title: Text('Add Default Scopes'),
-                            content: Text(
-                              'Add the "openid" and "offline_access" scopes.',
-                            ),
-                          ),
+                      builder: (context) => AlertDialog(
+                        title: Text('Add Default Scopes'),
+                        content: Text(
+                          'Add the "openid" and "offline_access" scopes.',
+                        ),
+                      ),
                     );
                   },
                   icon: Icon(Icons.info),
@@ -627,13 +620,12 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
             ),
 
             Switch(
-              activeColor: Theme.of(context).colorScheme.primary,
-              onChanged:
-                  (val) => {
-                    setState(() {
-                      _addDefaultScopes = !_addDefaultScopes;
-                    }),
-                  },
+              activeThumbColor: Theme.of(context).colorScheme.primary,
+              onChanged: (val) => {
+                setState(() {
+                  _addDefaultScopes = !_addDefaultScopes;
+                }),
+              },
               value: _addDefaultScopes,
             ),
           ],
@@ -705,13 +697,12 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
           children: [
             const Text('Use Access Token instead of ID Token'),
             Switch(
-              activeColor: Theme.of(context).colorScheme.primary,
-              onChanged:
-                  (val) => {
-                    setState(() {
-                      _useAccessToken = !_useAccessToken;
-                    }),
-                  },
+              activeThumbColor: Theme.of(context).colorScheme.primary,
+              onChanged: (val) => {
+                setState(() {
+                  _useAccessToken = !_useAccessToken;
+                }),
+              },
               value: _useAccessToken,
             ),
           ],
@@ -852,21 +843,19 @@ class _SettingsOIDCProviderState extends State<SettingsOIDCProvider> {
                           _flow = newValue ?? OIDCFlow.standard;
                         });
                       },
-                      items:
-                          OIDCFlow.values.map((value) {
-                            return DropdownMenuItem(
-                              value: value,
-                              child: Text(
-                                value.pretty(),
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(
-                                        context,
-                                      ).extension<CustomColors>()!.textPrimary,
-                                ),
-                              ),
-                            );
-                          }).toList(),
+                      items: OIDCFlow.values.map((value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(
+                            value.pretty(),
+                            style: TextStyle(
+                              color: Theme.of(
+                                context,
+                              ).extension<CustomColors>()!.textPrimary,
+                            ),
+                          ),
+                        );
+                      }).toList(),
                     ),
                   ],
                 ),

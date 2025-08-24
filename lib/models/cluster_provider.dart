@@ -36,38 +36,31 @@ class ClusterProvider {
     return ClusterProvider(
       id: data.containsKey('id') ? data['id'] : null,
       name: data.containsKey('name') ? data['name'] : null,
-      type:
-          data.containsKey('type')
-              ? getClusterProviderType(data['type'])
-              : null,
-      aws:
-          data.containsKey('aws') && data['aws'] != null
-              ? ClusterProviderAWS.fromJson(data['aws'])
-              : null,
-      awssso:
-          data.containsKey('awssso') && data['awssso'] != null
-              ? ClusterProviderAWSSSO.fromJson(data['awssso'])
-              : null,
-      azure:
-          data.containsKey('azure') && data['azure'] != null
-              ? ClusterProviderAzure.fromJson(data['azure'])
-              : null,
+      type: data.containsKey('type')
+          ? getClusterProviderType(data['type'])
+          : null,
+      aws: data.containsKey('aws') && data['aws'] != null
+          ? ClusterProviderAWS.fromJson(data['aws'])
+          : null,
+      awssso: data.containsKey('awssso') && data['awssso'] != null
+          ? ClusterProviderAWSSSO.fromJson(data['awssso'])
+          : null,
+      azure: data.containsKey('azure') && data['azure'] != null
+          ? ClusterProviderAzure.fromJson(data['azure'])
+          : null,
       digitalocean:
           data.containsKey('digitalocean') && data['digitalocean'] != null
-              ? ClusterProviderDigitalOcean.fromJson(data['digitalocean'])
-              : null,
-      google:
-          data.containsKey('google') && data['google'] != null
-              ? ClusterProviderGoogle.fromJson(data['google'])
-              : null,
-      oidc:
-          data.containsKey('oidc') && data['oidc'] != null
-              ? ClusterProviderOIDC.fromJson(data['oidc'])
-              : null,
-      rancher:
-          data.containsKey('rancher') && data['rancher'] != null
-              ? ClusterProviderRancher.fromJson(data['rancher'])
-              : null,
+          ? ClusterProviderDigitalOcean.fromJson(data['digitalocean'])
+          : null,
+      google: data.containsKey('google') && data['google'] != null
+          ? ClusterProviderGoogle.fromJson(data['google'])
+          : null,
+      oidc: data.containsKey('oidc') && data['oidc'] != null
+          ? ClusterProviderOIDC.fromJson(data['oidc'])
+          : null,
+      rancher: data.containsKey('rancher') && data['rancher'] != null
+          ? ClusterProviderRancher.fromJson(data['rancher'])
+          : null,
     );
   }
 
@@ -110,8 +103,9 @@ class ClusterProviderAWS {
       accessKeyID: data.containsKey('accessKeyID') ? data['accessKeyID'] : null,
       secretKey: data.containsKey('secretKey') ? data['secretKey'] : null,
       region: data.containsKey('region') ? data['region'] : null,
-      sessionToken:
-          data.containsKey('sessionToken') ? data['sessionToken'] : null,
+      sessionToken: data.containsKey('sessionToken')
+          ? data['sessionToken']
+          : null,
       roleArn: data.containsKey('roleArn') ? data['roleArn'] : null,
     );
   }
@@ -160,14 +154,13 @@ class ClusterProviderAWSSSO {
       roleArn: data.containsKey('roleArn') ? data['roleArn'] : null,
       ssoRegion: data.containsKey('ssoRegion') ? data['ssoRegion'] : null,
       region: data.containsKey('region') ? data['region'] : null,
-      ssoConfig:
-          data.containsKey('ssoConfig') && data['ssoConfig'] != null
-              ? AWSSSOConfig.fromJson(data['ssoConfig'])
-              : null,
+      ssoConfig: data.containsKey('ssoConfig') && data['ssoConfig'] != null
+          ? AWSSSOConfig.fromJson(data['ssoConfig'])
+          : null,
       ssoCredentials:
           data.containsKey('ssoCredentials') && data['ssoCredentials'] != null
-              ? AWSSSOCredentials.fromJson(data['ssoCredentials'])
-              : null,
+          ? AWSSSOCredentials.fromJson(data['ssoCredentials'])
+          : null,
     );
   }
 
@@ -207,12 +200,14 @@ class ClusterProviderAzure {
 
   factory ClusterProviderAzure.fromJson(Map<String, dynamic> data) {
     return ClusterProviderAzure(
-      subscriptionID:
-          data.containsKey('subscriptionID') ? data['subscriptionID'] : null,
+      subscriptionID: data.containsKey('subscriptionID')
+          ? data['subscriptionID']
+          : null,
       tenantID: data.containsKey('tenantID') ? data['tenantID'] : null,
       clientID: data.containsKey('clientID') ? data['clientID'] : null,
-      clientSecret:
-          data.containsKey('clientSecret') ? data['clientSecret'] : null,
+      clientSecret: data.containsKey('clientSecret')
+          ? data['clientSecret']
+          : null,
       isAdmin: data.containsKey('isAdmin') ? data['isAdmin'] : false,
     );
   }
@@ -273,20 +268,20 @@ class ClusterProviderGoogle {
   factory ClusterProviderGoogle.fromJson(Map<String, dynamic> data) {
     return ClusterProviderGoogle(
       clientID: data.containsKey('clientID') ? data['clientID'] : null,
-      clientSecret:
-          data.containsKey('clientSecret') ? data['clientSecret'] : null,
+      clientSecret: data.containsKey('clientSecret')
+          ? data['clientSecret']
+          : null,
       code: data.containsKey('code') ? data['code'] : null,
       accessToken: data.containsKey('accessToken') ? data['accessToken'] : null,
-      accessTokenExpires:
-          data.containsKey('accessTokenExpires')
-              ? data['accessTokenExpires']
-              : null,
-      refreshToken:
-          data.containsKey('refreshToken') ? data['refreshToken'] : null,
-      redirectURL:
-          data.containsKey('redirectURL')
-              ? data['redirectURL']
-              : Constants.googleRedirectURI,
+      accessTokenExpires: data.containsKey('accessTokenExpires')
+          ? data['accessTokenExpires']
+          : null,
+      refreshToken: data.containsKey('refreshToken')
+          ? data['refreshToken']
+          : null,
+      redirectURL: data.containsKey('redirectURL')
+          ? data['redirectURL']
+          : Constants.googleRedirectURI,
     );
   }
 
@@ -340,36 +335,36 @@ class ClusterProviderOIDC {
 
   factory ClusterProviderOIDC.fromJson(Map<String, dynamic> data) {
     return ClusterProviderOIDC(
-      flow:
-          data.containsKey('flow')
-              ? getOIDCFlowFromString(data['flow'])
-              : OIDCFlow.standard,
-      discoveryURL:
-          data.containsKey('discoveryURL') ? data['discoveryURL'] : null,
+      flow: data.containsKey('flow')
+          ? getOIDCFlowFromString(data['flow'])
+          : OIDCFlow.standard,
+      discoveryURL: data.containsKey('discoveryURL')
+          ? data['discoveryURL']
+          : null,
       clientID: data.containsKey('clientID') ? data['clientID'] : null,
-      clientSecret:
-          data.containsKey('clientSecret') ? data['clientSecret'] : null,
-      certificateAuthority:
-          data.containsKey('certificateAuthority')
-              ? data['certificateAuthority']
-              : null,
+      clientSecret: data.containsKey('clientSecret')
+          ? data['clientSecret']
+          : null,
+      certificateAuthority: data.containsKey('certificateAuthority')
+          ? data['certificateAuthority']
+          : null,
       scopes: data.containsKey('scopes') ? data['scopes'] : null,
-      addDefaultScopes:
-          data.containsKey('addDefaultScopes')
-              ? data['addDefaultScopes']
-              : true,
+      addDefaultScopes: data.containsKey('addDefaultScopes')
+          ? data['addDefaultScopes']
+          : true,
       pkceMethod: data.containsKey('pkceMethod') ? data['pkceMethod'] : null,
       verifier: data.containsKey('verifier') ? data['verifier'] : null,
       code: data.containsKey('code') ? data['code'] : null,
       idToken: data.containsKey('idToken') ? data['idToken'] : null,
-      refreshToken:
-          data.containsKey('refreshToken') ? data['refreshToken'] : null,
-      redirectURL:
-          data.containsKey('redirectURL')
-              ? data['redirectURL']
-              : Constants.oidcRedirectURI,
-      useAccessToken:
-          data.containsKey('useAccessToken') ? data['useAccessToken'] : false,
+      refreshToken: data.containsKey('refreshToken')
+          ? data['refreshToken']
+          : null,
+      redirectURL: data.containsKey('redirectURL')
+          ? data['redirectURL']
+          : Constants.oidcRedirectURI,
+      useAccessToken: data.containsKey('useAccessToken')
+          ? data['useAccessToken']
+          : false,
     );
   }
 
@@ -412,12 +407,12 @@ class ClusterProviderRancher {
 
   factory ClusterProviderRancher.fromJson(Map<String, dynamic> data) {
     return ClusterProviderRancher(
-      serverAddress:
-          data.containsKey('serverAddress') ? data['serverAddress'] : null,
-      allowInsecureConnections:
-          data.containsKey('allowInsecureConnections')
-              ? data['allowInsecureConnections']
-              : false,
+      serverAddress: data.containsKey('serverAddress')
+          ? data['serverAddress']
+          : null,
+      allowInsecureConnections: data.containsKey('allowInsecureConnections')
+          ? data['allowInsecureConnections']
+          : false,
       username: data.containsKey('username') ? data['username'] : null,
       password: data.containsKey('password') ? data['password'] : null,
       token: data.containsKey('token') ? data['token'] : null,

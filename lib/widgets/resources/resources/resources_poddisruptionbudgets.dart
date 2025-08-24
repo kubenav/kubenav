@@ -39,12 +39,13 @@ final resourcePodDisruptionBudget = Resource(
           (e) => ResourceItem(
             item: e,
             metrics: null,
-            status: e.status!.desiredHealthy == 0 ||
+            status:
+                e.status!.desiredHealthy == 0 ||
                     e.status!.disruptionsAllowed == 0
                 ? ResourceStatus.warning
                 : e.status!.currentHealthy < e.status!.desiredHealthy
-                    ? ResourceStatus.danger
-                    : ResourceStatus.success,
+                ? ResourceStatus.danger
+                : ResourceStatus.success,
           ),
         )
         .toList();
@@ -71,32 +72,27 @@ final resourcePodDisruptionBudget = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiPolicyV1PodDisruptionBudget;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiPolicyV1PodDisruptionBudget;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Min. Available: ${item.spec?.minAvailable ?? '-'}',
-        'Max. Unavailable: ${item.spec?.maxUnavailable ?? '-'}',
-        'Allowed Disruptions: ${item.status?.disruptionsAllowed ?? 0}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Namespace: ${item.metadata?.namespace ?? '-'}',
+            'Min. Available: ${item.spec?.minAvailable ?? '-'}',
+            'Max. Unavailable: ${item.spec?.maxUnavailable ?? '-'}',
+            'Allowed Disruptions: ${item.status?.disruptionsAllowed ?? 0}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiPolicyV1PodDisruptionBudget;
 
     return [
@@ -107,19 +103,12 @@ final resourcePodDisruptionBudget = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiPolicyV1PodDisruptionBudget;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(conditions: item.status?.conditions),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(

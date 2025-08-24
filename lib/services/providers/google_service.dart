@@ -27,20 +27,20 @@ class GoogleTokens {
     required this.tokenType,
   });
 
-  factory GoogleTokens.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory GoogleTokens.fromJson(Map<String, dynamic> data) {
     return GoogleTokens(
-      accessToken:
-          data.containsKey('access_token') ? data['access_token'] : null,
+      accessToken: data.containsKey('access_token')
+          ? data['access_token']
+          : null,
       error: data.containsKey('error') ? data['error'] : null,
       errorDescription: data.containsKey('error_description')
           ? data['error_description']
           : null,
       expiresIn: data.containsKey('expires_in') ? data['expires_in'] : null,
       idToken: data.containsKey('id_token') ? data['id_token'] : null,
-      refreshToken:
-          data.containsKey('refresh_token') ? data['refresh_token'] : null,
+      refreshToken: data.containsKey('refresh_token')
+          ? data['refresh_token']
+          : null,
       tokenType: data.containsKey('token_type') ? data['token_type'] : null,
     );
   }
@@ -62,22 +62,16 @@ class GoogleTokens {
 class GoogleProject {
   String? projectId;
 
-  GoogleProject({
-    required this.projectId,
-  });
+  GoogleProject({required this.projectId});
 
-  factory GoogleProject.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory GoogleProject.fromJson(Map<String, dynamic> data) {
     return GoogleProject(
       projectId: data.containsKey('projectId') ? data['projectId'] : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'projectId': projectId,
-    };
+    return {'projectId': projectId};
   }
 }
 
@@ -95,9 +89,7 @@ class GoogleCluster {
     required this.masterAuth,
   });
 
-  factory GoogleCluster.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory GoogleCluster.fromJson(Map<String, dynamic> data) {
     return GoogleCluster(
       name: data.containsKey('name') ? data['name'] : null,
       endpoint: data.containsKey('endpoint') ? data['endpoint'] : null,
@@ -135,9 +127,7 @@ class GoogleClusterMasterAuth {
     required this.clientKey,
   });
 
-  factory GoogleClusterMasterAuth.fromJson(
-    Map<String, dynamic> data,
-  ) {
+  factory GoogleClusterMasterAuth.fromJson(Map<String, dynamic> data) {
     return GoogleClusterMasterAuth(
       username: data.containsKey('username') ? data['username'] : null,
       password: data.containsKey('password') ? data['password'] : null,
@@ -282,9 +272,7 @@ class GoogleService {
         Uri.parse(
           'https://serviceusage.googleapis.com/v1/projects/$project/services/$api',
         ),
-        headers: {
-          'Authorization': 'Bearer $accessToken',
-        },
+        headers: {'Authorization': 'Bearer $accessToken'},
       );
 
       Logger.log(
@@ -320,17 +308,13 @@ class GoogleService {
   }
 
   /// [getProjects] returns all the projects a user has access to.
-  Future<List<GoogleProject>> getProjects(
-    String accessToken,
-  ) async {
+  Future<List<GoogleProject>> getProjects(String accessToken) async {
     try {
       final response = await http.get(
         Uri.parse(
           'https://cloudresourcemanager.googleapis.com/v1/projects?filter=lifecycleState%3AACTIVE',
         ),
-        headers: {
-          'Authorization': 'Bearer $accessToken',
-        },
+        headers: {'Authorization': 'Bearer $accessToken'},
       );
 
       Logger.log(
@@ -372,11 +356,7 @@ class GoogleService {
         throw Exception(jsonData ?? 'An unknown error occured');
       }
     } catch (err) {
-      Logger.log(
-        'GoogleService getProjects',
-        'Failed to Get Projects',
-        err,
-      );
+      Logger.log('GoogleService getProjects', 'Failed to Get Projects', err);
       rethrow;
     }
   }
@@ -391,9 +371,7 @@ class GoogleService {
         Uri.parse(
           'https://container.googleapis.com/v1/projects/$project/locations/-/clusters',
         ),
-        headers: {
-          'Authorization': 'Bearer $accessToken',
-        },
+        headers: {'Authorization': 'Bearer $accessToken'},
       );
 
       Logger.log(
@@ -426,11 +404,7 @@ class GoogleService {
         throw Exception(jsonData ?? 'An unknown error occured');
       }
     } catch (err) {
-      Logger.log(
-        'GoogleService getClusters',
-        'Failed to Get Clusters',
-        err,
-      );
+      Logger.log('GoogleService getClusters', 'Failed to Get Clusters', err);
       rethrow;
     }
   }

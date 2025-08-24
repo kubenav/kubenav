@@ -15,10 +15,7 @@ import 'package:kubenav/widgets/shared/app_actions_widget.dart';
 /// [SettingsEditCluster] in a new modal so that the user can modify the cluster
 /// properties. If the user selects the delete item, we remove the cluster.
 class SettingsClusterActions extends StatefulWidget {
-  const SettingsClusterActions({
-    super.key,
-    required this.cluster,
-  });
+  const SettingsClusterActions({super.key, required this.cluster});
 
   final Cluster cluster;
 
@@ -54,11 +51,7 @@ class _SettingsClusterActionsState extends State<SettingsClusterActions> {
     } catch (err) {
       if (mounted) {
         Navigator.pop(context);
-        showSnackbar(
-          context,
-          'Failed to Delete Cluster',
-          err.toString(),
-        );
+        showSnackbar(context, 'Failed to Delete Cluster', err.toString());
       }
     }
   }

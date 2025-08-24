@@ -11,10 +11,7 @@ import 'package:kubenav/widgets/settings/clusters/settings_add_cluster_azure.dar
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
 class SettingsAzureProvider extends StatefulWidget {
-  const SettingsAzureProvider({
-    super.key,
-    required this.provider,
-  });
+  const SettingsAzureProvider({super.key, required this.provider});
 
   final ClusterProvider? provider;
 
@@ -74,12 +71,7 @@ class _SettingsAzureProviderState extends State<SettingsAzureProvider> {
           });
           if (mounted) {
             Navigator.pop(context);
-            showModal(
-              context,
-              SettingsAddClusterAzure(
-                provider: provider,
-              ),
-            );
+            showModal(context, SettingsAddClusterAzure(provider: provider));
           }
         } else {
           final provider = widget.provider;
@@ -234,7 +226,7 @@ class _SettingsAzureProviderState extends State<SettingsAzureProvider> {
                   children: [
                     const Text('Admin'),
                     Switch(
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
                       onChanged: (val) {
                         setState(() {
                           _isAdmin = !_isAdmin;

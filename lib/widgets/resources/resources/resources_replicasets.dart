@@ -42,9 +42,9 @@ final resourceReplicaSet = Resource(
             status: e.status!.replicas == 0
                 ? ResourceStatus.undefined
                 : e.status!.replicas != e.status!.availableReplicas ||
-                        e.status!.replicas != e.status!.readyReplicas
-                    ? ResourceStatus.danger
-                    : ResourceStatus.success,
+                      e.status!.replicas != e.status!.readyReplicas
+                ? ResourceStatus.danger
+                : ResourceStatus.success,
           ),
         )
         .toList();
@@ -70,32 +70,27 @@ final resourceReplicaSet = Resource(
   toJson: (dynamic item) {
     return json.decode(json.encode(item));
   },
-  listItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    ResourceItem listItem,
-  ) {
-    final item = listItem.item as IoK8sApiAppsV1ReplicaSet;
-    final status = listItem.status;
+  listItemBuilder:
+      (BuildContext context, Resource resource, ResourceItem listItem) {
+        final item = listItem.item as IoK8sApiAppsV1ReplicaSet;
+        final status = listItem.status;
 
-    return ResourcesListItem(
-      name: item.metadata?.name ?? '',
-      namespace: item.metadata?.namespace,
-      resource: resource,
-      item: item,
-      status: status,
-      details: [
-        'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Desired: ${item.status?.replicas ?? 0}',
-        'Current: ${item.status?.availableReplicas ?? 0}',
-        'Ready: ${item.status?.readyReplicas ?? 0}',
-        'Age: ${getAge(item.metadata?.creationTimestamp)}',
-      ],
-    );
-  },
-  previewItemBuilder: (
-    dynamic listItem,
-  ) {
+        return ResourcesListItem(
+          name: item.metadata?.name ?? '',
+          namespace: item.metadata?.namespace,
+          resource: resource,
+          item: item,
+          status: status,
+          details: [
+            'Namespace: ${item.metadata?.namespace ?? '-'}',
+            'Desired: ${item.status?.replicas ?? 0}',
+            'Current: ${item.status?.availableReplicas ?? 0}',
+            'Ready: ${item.status?.readyReplicas ?? 0}',
+            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+          ],
+        );
+      },
+  previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiAppsV1ReplicaSet;
 
     return [
@@ -106,19 +101,12 @@ final resourceReplicaSet = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (
-    BuildContext context,
-    Resource resource,
-    dynamic detailsItem,
-  ) {
+  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiAppsV1ReplicaSet;
 
     return Column(
       children: [
-        DetailsItemMetadata(
-          kind: item.kind,
-          metadata: item.metadata,
-        ),
+        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(
           conditions: item.status?.conditions
               .map(
@@ -137,10 +125,7 @@ final resourceReplicaSet = Resource(
         DetailsItem(
           title: 'Configuration',
           details: [
-            DetailsItemModel(
-              name: 'Replicas',
-              values: item.spec?.replicas,
-            ),
+            DetailsItemModel(name: 'Replicas', values: item.spec?.replicas),
             DetailsItemModel(
               name: 'Selector',
               values: item.spec?.selector.matchLabels.entries

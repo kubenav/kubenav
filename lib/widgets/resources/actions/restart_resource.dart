@@ -58,15 +58,15 @@ class _RestartResourceState extends State<RestartResource> {
       final item = await compute(widget.resource.toJson, widget.item);
       final now = DateTime.now().toIso8601String();
 
-      final String body = item['spec'] != null &&
+      final String body =
+          item['spec'] != null &&
               item['spec']['template'] != null &&
               item['spec']['template']['metadata'] != null &&
               item['spec']['template']['metadata']['annotations'] != null
-          ? item['spec']['template']['metadata']['annotations']
-                      ['kubenav.io/restartedAt'] !=
-                  null
-              ? '[{"op": "replace", "path": "/spec/template/metadata/annotations/kubenav.io~1restartedAt", "value": "$now"}]'
-              : '[{"op": "add", "path": "/spec/template/metadata/annotations/kubenav.io~1restartedAt", "value": "$now"}]'
+          ? item['spec']['template']['metadata']['annotations']['kubenav.io/restartedAt'] !=
+                    null
+                ? '[{"op": "replace", "path": "/spec/template/metadata/annotations/kubenav.io~1restartedAt", "value": "$now"}]'
+                : '[{"op": "add", "path": "/spec/template/metadata/annotations/kubenav.io~1restartedAt", "value": "$now"}]'
           : '[{"op": "add", "path": "/spec/template/metadata/annotations", "value": {"kubenav.io/restartedAt": "$now"}}]';
 
       final cluster = await clustersRepository.getClusterWithCredentials(

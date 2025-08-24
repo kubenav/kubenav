@@ -140,10 +140,7 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
             backgroundColor: Theme.of(context).colorScheme.primary,
             foregroundColor: Theme.of(context).colorScheme.onPrimary,
             onTap: (BuildContext context) {
-              showModal(
-                context,
-                SettingsEditCluster(cluster: widget.cluster),
-              );
+              showModal(context, SettingsEditCluster(cluster: widget.cluster));
             },
           ),
           AppListItemSlidableAction(
@@ -153,20 +150,15 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
             foregroundColor: Theme.of(context).colorScheme.onError,
             onTap: (BuildContext context) async {
               ClustersRepository clustersRepository =
-                  Provider.of<ClustersRepository>(
-                context,
-                listen: false,
-              );
+                  Provider.of<ClustersRepository>(context, listen: false);
               BookmarksRepository bookmarksRepository =
-                  Provider.of<BookmarksRepository>(
-                context,
-                listen: false,
-              );
+                  Provider.of<BookmarksRepository>(context, listen: false);
 
               try {
                 await clustersRepository.deleteCluster(widget.cluster.id);
-                await bookmarksRepository
-                    .removeBookmarksForCluster(widget.cluster.id);
+                await bookmarksRepository.removeBookmarksForCluster(
+                  widget.cluster.id,
+                );
                 if (context.mounted) {
                   showSnackbar(
                     context,
@@ -198,27 +190,17 @@ class _SettingsClusterItemState extends State<SettingsClusterItem> {
                     children: [
                       Text(
                         Characters(widget.cluster.name)
-                            .replaceAll(
-                              Characters(''),
-                              Characters('\u{200B}'),
-                            )
+                            .replaceAll(Characters(''), Characters('\u{200B}'))
                             .toString(),
-                        style: primaryTextStyle(
-                          context,
-                        ),
+                        style: primaryTextStyle(context),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
                         Characters(widget.cluster.clusterProviderType.title())
-                            .replaceAll(
-                              Characters(''),
-                              Characters('\u{200B}'),
-                            )
+                            .replaceAll(Characters(''), Characters('\u{200B}'))
                             .toString(),
-                        style: secondaryTextStyle(
-                          context,
-                        ),
+                        style: secondaryTextStyle(context),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

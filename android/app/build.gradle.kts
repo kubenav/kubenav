@@ -34,8 +34,8 @@ android {
         // Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "io.kubenav.kubenav"
         // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 21
+        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
+        minSdk = 24
         targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
