@@ -42,7 +42,7 @@ dependencies:
   file_picker: ^10.3.3
   fl_chart: ^1.1.1
   flutter_markdown: ^0.7.7
-  flutter_native_splash: ^2.4.6
+  flutter_native_splash: ^2.4.7
   flutter_secure_storage: ^9.2.4
   flutter_slidable: ^4.0.3
   flutter_svg: ^2.2.1
@@ -52,7 +52,7 @@ dependencies:
   intl: ^0.20.2
   json_path: ^0.8.0
   jwt_decode: ^0.3.1
-  local_auth: ^2.3.0
+  local_auth: ^3.0.0
   package_info_plus: ^9.0.0
   path_provider: ^2.1.5
   provider: ^6.1.5
