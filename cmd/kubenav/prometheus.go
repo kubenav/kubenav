@@ -34,16 +34,19 @@ type requestData struct {
 }
 
 type prometheus struct {
-	Address       string `json:"address"`
-	Namespace     string `json:"namespace"`
-	LabelSelector string `json:"labelSelector"`
-	Container     string `json:"container"`
-	Port          int64  `json:"port"`
-	Path          string `json:"path"`
-	Username      string `json:"username"`
-	Password      string `json:"password"`
-	Token         string `json:"token"`
-	Certificate   string `json:"certificate"`
+	Address               string `json:"address"`
+	Namespace             string `json:"namespace"`
+	LabelSelector         string `json:"labelSelector"`
+	Container             string `json:"container"`
+	Port                  int64  `json:"port"`
+	Path                  string `json:"path"`
+	Username              string `json:"username"`
+	Password              string `json:"password"`
+	Token                 string `json:"token"`
+	CertificateAuthority  string `json:"certificateAuthority"`
+	InsecureSkipTLSVerify bool   `json:"insecureSkipTLSVerify"`
+	ClientCertificate     string `json:"clientCertificate"`
+	ClientKey             string `json:"clientKey"`
 }
 
 type query struct {
@@ -86,7 +89,7 @@ func PrometheusGetData(clusterServer, clusterCertificateAuthorityData string, cl
 	// to the Prometheus API. The session is closed as soon as we retrieved the
 	// data from the Prometheus API.
 	if requestData.Prometheus.Address == "" {
-		pf, err := getPortForwardingSesstion(restConfig, clientset, requestData)
+		pf, err := getPortForwardingSession(restConfig, clientset, requestData)
 		if err != nil {
 			return "", err
 		}
@@ -213,7 +216,7 @@ func PrometheusGetData(clusterServer, clusterCertificateAuthorityData string, cl
 	return string(metricsData), nil
 }
 
-func getPortForwardingSesstion(restConfig *rest.Config, clientset *kubernetes.Clientset, requestData requestData) (*portforwarding.Session, error) {
+func getPortForwardingSession(restConfig *rest.Config, clientset *kubernetes.Clientset, requestData requestData) (*portforwarding.Session, error) {
 	// Get a list of all Pods, which are matching the users specified namespace
 	// and label selector. If the list of Pods is empty we return an error. If
 	// not we continue with establishing the port forwarding session.
@@ -279,14 +282,25 @@ func getRoundTripper(p prometheus) http.RoundTripper {
 			KeepAlive: 30 * time.Second,
 		}).DialContext,
 		TLSHandshakeTimeout: 10 * time.Second,
+		TLSClientConfig: &tls.Config{
+			MinVersion: tls.VersionTLS12,
+		},
 	}
 
-	if p.Certificate != "" {
-		certPool := x509.NewCertPool()
-		certPool.AppendCertsFromPEM([]byte(p.Certificate))
-		// #nosec G402
-		tr.TLSClientConfig = &tls.Config{
-			RootCAs: certPool,
+	if p.CertificateAuthority != "" {
+		caCertPool := x509.NewCertPool()
+		caCertPool.AppendCertsFromPEM([]byte(p.CertificateAuthority))
+		tr.TLSClientConfig.RootCAs = caCertPool
+	}
+
+	if p.InsecureSkipTLSVerify {
+		tr.TLSClientConfig.InsecureSkipVerify = true
+	}
+
+	if p.ClientCertificate != "" && p.ClientKey != "" {
+		cert, err := tls.X509KeyPair([]byte(p.ClientCertificate), []byte(p.ClientKey))
+		if err == nil {
+			tr.TLSClientConfig.Certificates = []tls.Certificate{cert}
 		}
 	}
 
