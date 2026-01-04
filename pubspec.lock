@@ -999,4 +999,4 @@ packages:
     version: "0.0.6"
 sdks:
   dart: ">=3.10.4 <4.0.0"
-  flutter: ">=3.35.0"
+  flutter: "3.38.5"

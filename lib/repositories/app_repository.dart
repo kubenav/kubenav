@@ -518,7 +518,10 @@ class AppRepositorySettingsPrometheus {
   String username;
   String password;
   String token;
-  String certificate;
+  String certificateAuthority;
+  bool insecureSkipTLSVerify;
+  String clientCertificate;
+  String clientKey;
 
   AppRepositorySettingsPrometheus({
     required this.enabled,
@@ -531,7 +534,10 @@ class AppRepositorySettingsPrometheus {
     required this.username,
     required this.password,
     required this.token,
-    required this.certificate,
+    required this.certificateAuthority,
+    required this.insecureSkipTLSVerify,
+    required this.clientCertificate,
+    required this.clientKey,
   });
 
   factory AppRepositorySettingsPrometheus.fromDefault() {
@@ -546,7 +552,10 @@ class AppRepositorySettingsPrometheus {
       username: '',
       password: '',
       token: '',
-      certificate: '',
+      certificateAuthority: '',
+      insecureSkipTLSVerify: false,
+      clientCertificate: '',
+      clientKey: '',
     );
   }
 
@@ -583,9 +592,23 @@ class AppRepositorySettingsPrometheus {
       token: data.containsKey('token') && data['token'] != null
           ? data['token']
           : '',
-      certificate:
-          data.containsKey('certificate') && data['certificate'] != null
-          ? data['certificate']
+      certificateAuthority:
+          data.containsKey('certificateAuthority') &&
+              data['certificateAuthority'] != null
+          ? data['certificateAuthority']
+          : '',
+      insecureSkipTLSVerify:
+          data.containsKey('insecureSkipTLSVerify') &&
+              data['insecureSkipTLSVerify'] != null
+          ? data['insecureSkipTLSVerify']
+          : '',
+      clientCertificate:
+          data.containsKey('clientCertificate') &&
+              data['clientCertificate'] != null
+          ? data['clientCertificate']
+          : '',
+      clientKey: data.containsKey('clientKey') && data['clientKey'] != null
+          ? data['clientKey']
           : '',
     );
   }
@@ -602,7 +625,10 @@ class AppRepositorySettingsPrometheus {
       'username': username,
       'password': password,
       'token': token,
-      'certificate': certificate,
+      'certificateAuthority': certificateAuthority,
+      'insecureSkipTLSVerify': insecureSkipTLSVerify,
+      'clientCertificate': clientCertificate,
+      'clientKey': clientKey,
     };
   }
 }

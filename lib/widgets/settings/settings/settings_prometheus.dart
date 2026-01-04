@@ -31,7 +31,10 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _tokenController = TextEditingController();
-  final _certificateController = TextEditingController();
+  final _certificateAuthorityController = TextEditingController();
+  bool _insecureSkipTLSVerify = false;
+  final _clientCertificateController = TextEditingController();
+  final _clientKeyController = TextEditingController();
 
   /// [_portValidator] is used to validate the required field [_portController].
   /// If the value is empty or not a number the validation fails.
@@ -72,7 +75,10 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
           username: _usernameController.text,
           password: _passwordController.text,
           token: _tokenController.text,
-          certificate: _certificateController.text,
+          certificateAuthority: _certificateAuthorityController.text,
+          insecureSkipTLSVerify: _insecureSkipTLSVerify,
+          clientCertificate: _clientCertificateController.text,
+          clientKey: _clientKeyController.text,
         ),
       );
       Navigator.pop(context);
@@ -92,7 +98,12 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
     _usernameController.text = widget.currentPrometheus.username;
     _passwordController.text = widget.currentPrometheus.password;
     _tokenController.text = widget.currentPrometheus.token;
-    _certificateController.text = widget.currentPrometheus.certificate;
+    _certificateAuthorityController.text =
+        widget.currentPrometheus.certificateAuthority;
+    _insecureSkipTLSVerify = widget.currentPrometheus.insecureSkipTLSVerify;
+    _clientCertificateController.text =
+        widget.currentPrometheus.clientCertificate;
+    _clientKeyController.text = widget.currentPrometheus.clientKey;
   }
 
   @override
@@ -106,7 +117,9 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
     _usernameController.dispose();
     _passwordController.dispose();
     _tokenController.dispose();
-    _certificateController.dispose();
+    _certificateAuthorityController.dispose();
+    _clientCertificateController.dispose();
+    _clientKeyController.dispose();
     super.dispose();
   }
 
@@ -313,14 +326,60 @@ class _SettingsPrometheusState extends State<SettingsPrometheus> {
                 ),
                 const SizedBox(height: Constants.spacingMiddle),
                 TextFormField(
-                  controller: _certificateController,
+                  controller: _certificateAuthorityController,
                   keyboardType: TextInputType.text,
                   autocorrect: false,
                   enableSuggestions: false,
                   maxLines: null,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Certificate',
+                    labelText: 'Certificate Authority',
+                  ),
+                  onFieldSubmitted: (String value) {
+                    _save();
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Insecure Skip TLS Verify'),
+                    Switch(
+                      activeThumbColor: Theme.of(context).colorScheme.primary,
+                      onChanged: (value) {
+                        setState(() {
+                          _insecureSkipTLSVerify = value;
+                        });
+                      },
+                      value: _insecureSkipTLSVerify,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                TextFormField(
+                  controller: _clientCertificateController,
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Client Certificate',
+                  ),
+                  onFieldSubmitted: (String value) {
+                    _save();
+                  },
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                TextFormField(
+                  controller: _clientKeyController,
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Client Key',
                   ),
                   onFieldSubmitted: (String value) {
                     _save();
