@@ -155,7 +155,6 @@ class AppRepository with ChangeNotifier {
           if (availableBiometrics.isNotEmpty) {
             final bool didAuthenticate = await auth.authenticate(
               localizedReason: 'Authenticate to access your clusters',
-              options: const AuthenticationOptions(useErrorDialogs: false),
             );
 
             if (didAuthenticate) {
