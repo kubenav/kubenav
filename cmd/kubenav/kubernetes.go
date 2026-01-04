@@ -11,6 +11,7 @@ import (
 
 	"github.com/kubenav/kubenav/cmd/kubenav/kube"
 	"github.com/kubenav/kubenav/cmd/kubenav/server"
+
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
