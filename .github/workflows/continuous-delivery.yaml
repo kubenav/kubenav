@@ -38,13 +38,15 @@ jobs:
         with:
           flutter-version-file: pubspec.yaml
           channel: "stable"
-          cache: true
+          cache: false
           cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"
           cache-path:
             "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:"
 
       - name: Install Dependencies
         run: |
+          flutter config --enable-ios
+          flutter config --enable-swift-package-manager
           flutter pub get
 
       - name: Lint Flutter
@@ -53,8 +55,6 @@ jobs:
 
       - name: Build
         run: |
-          flutter config --enable-ios
-          flutter config --enable-swift-package-manager
           flutter build ipa --no-codesign
 
   android:
@@ -140,6 +140,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          flutter config --enable-android
           flutter pub get
 
       - name: Lint Flutter
@@ -148,5 +149,4 @@ jobs:
 
       - name: Build
         run: |
-          flutter config --enable-android
           flutter build appbundle
