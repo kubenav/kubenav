@@ -1,6 +1,14 @@
 {
-  "originHash" : "69329afeedd51b7644d8415e5fcaed6e1e6f0ff4acaac46021a0b56623fcaaf8",
   "pins" : [
+    {
+      "identity" : "asn1swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tikhop/ASN1Swift",
+      "state" : {
+        "revision" : "403cd95194e6a962e16db7c0d373d89fce83e0f7",
+        "version" : "1.2.7"
+      }
+    },
     {
       "identity" : "dkcamera",
       "kind" : "remoteSourceControl",
@@ -54,7 +62,16 @@
         "revision" : "a634cb7cdfd580006e79a6e74e64417fe9e9783b",
         "version" : "2.7.4"
       }
+    },
+    {
+      "identity" : "tpinappreceipt",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tikhop/TPInAppReceipt.git",
+      "state" : {
+        "revision" : "e135055eaeba5a52874b7f9b290f42890cbe981f",
+        "version" : "3.4.1"
+      }
     }
   ],
-  "version" : 3
+  "version" : 2
 }
