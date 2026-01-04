@@ -1,8 +1,6 @@
 PODS:
   - ASN1Swift (1.2.7)
   - Flutter (1.0.0)
-  - flutter_secure_storage (6.0.0):
-    - Flutter
   - TPInAppReceipt (3.4.1):
     - TPInAppReceipt/Core (= 3.4.1)
   - TPInAppReceipt/Core (3.4.1):
@@ -10,7 +8,6 @@ PODS:
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - TPInAppReceipt
 
 SPEC REPOS:
@@ -21,13 +18,10 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  flutter_secure_storage:
-    :path: ".symlinks/plugins/flutter_secure_storage/ios"
 
 SPEC CHECKSUMS:
   ASN1Swift: bbd56c299b2084ba71bd7d7769c6202451598948
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
   TPInAppReceipt: 22dbc616bcd6c61672ebe062e60b6329a2af6323
 
 PODFILE CHECKSUM: 3a0aa19bb9f59a4c072f9992754980dc9103e682
