@@ -1,5 +1,7 @@
 ---
 version: "2"
+run:
+  modules-download-mode: readonly
 linters:
   default: none
   enable:
@@ -29,7 +31,7 @@ formatters:
   settings:
     goimports:
       local-prefixes:
-        - github.com/ricoberger/script_exporter
+        - github.com/kubenav/kubenav
   exclusions:
     generated: lax
     paths:
