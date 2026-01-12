@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_deployment.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_stateful_set.dart';
+import 'package:kubenav/models/kubernetes/deploymentlist_apps_v1.dart'
+    as deploymentlistv1;
+import 'package:kubenav/models/kubernetes/statefulsetlist_apps_v1.dart'
+    as statefulsetlistv1;
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -130,12 +132,12 @@ class _ScaleResourceState extends State<ScaleResource> {
 
     /// Set the initial value for the [_replicasController] based on the
     /// provided item, which should be a Deployment or StatefulSet.
-    if (widget.item is IoK8sApiAppsV1Deployment) {
+    if (widget.item is deploymentlistv1.DeploymentlistAppsV1Item) {
       _replicasController.text =
-          '${(widget.item as IoK8sApiAppsV1Deployment).spec?.replicas ?? 0}';
-    } else if (widget.item is IoK8sApiAppsV1StatefulSet) {
+          '${(widget.item as deploymentlistv1.DeploymentlistAppsV1Item).spec?.replicas ?? 0}';
+    } else if (widget.item is statefulsetlistv1.StatefulsetlistAppsV1Item) {
       _replicasController.text =
-          '${(widget.item as IoK8sApiAppsV1StatefulSet).spec?.replicas ?? 0}';
+          '${(widget.item as statefulsetlistv1.StatefulsetlistAppsV1Item).spec?.replicas ?? 0}';
     } else {
       _replicasController.text = '0';
     }

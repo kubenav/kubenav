@@ -5,15 +5,15 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_secret.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_secret_list.dart';
+import 'package:kubenav/models/kubernetes/secretlist_v1.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -36,7 +36,7 @@ final resourceSecret = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1SecretList.fromJson(parsed)?.items ?? [];
+    final items = SecretlistV1.fromJson(parsed).items;
 
     return items
         .map(
@@ -50,17 +50,17 @@ final resourceSecret = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1SecretList.fromJson(parsed)?.items ?? [];
+    return SecretlistV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiCoreV1Secret).metadata?.name ?? '';
+    return (item as Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiCoreV1Secret).metadata?.namespace;
+    return (item as Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1Secret.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -71,7 +71,7 @@ final resourceSecret = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoK8sApiCoreV1Secret;
+        final item = listItem.item as Item;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -83,28 +83,49 @@ final resourceSecret = Resource(
           details: [
             'Namespace: ${item.metadata?.namespace ?? '-'}',
             'Type: ${item.type ?? '-'}',
-            'Data: ${item.data.entries.length}',
+            'Data: ${item.data?.entries.length}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiCoreV1Secret;
+    final item = listItem as Item;
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
       'Type: ${item.type ?? '-'}',
-      'Data: ${item.data.entries.length}',
+      'Data: ${item.data?.entries.length}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
   detailsItemBuilder:
       (BuildContext context, Resource resource, dynamic detailsItem) {
-        final item = detailsItem as IoK8sApiCoreV1Secret;
+        final item = detailsItem as Item;
 
         return Column(
           children: [
-            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            details_item_metadata.DetailsItemMetadata(
+              kind: item.kind?.name,
+              metadata: details_item_metadata.Metadata(
+                name: item.metadata?.name,
+                namespace: item.metadata?.namespace,
+                labels: item.metadata?.labels,
+                annotations: item.metadata?.annotations,
+                creationTimestamp: item.metadata?.creationTimestamp,
+                ownerReferences: item.metadata?.ownerReferences
+                    ?.map(
+                      (ownerReference) => details_item_metadata.OwnerReference(
+                        apiVersion: ownerReference?.apiVersion ?? '',
+                        blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                        controller: ownerReference?.controller,
+                        kind: ownerReference?.kind ?? '',
+                        name: ownerReference?.name ?? '',
+                        uid: ownerReference?.uid ?? '',
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
             const SizedBox(height: Constants.spacingMiddle),
             DetailsItem(
               title: 'Configuration',
@@ -136,10 +157,10 @@ final resourceSecret = Resource(
 List<Widget> _buildData(
   BuildContext context,
   String title,
-  Map<String, String> data,
+  Map<String, String?>? data,
   bool isBase64,
 ) {
-  if (data.keys.isEmpty) {
+  if (data?.keys == null || data!.keys.isEmpty) {
     return [];
   }
 
@@ -152,7 +173,7 @@ List<Widget> _buildData(
               onTap: () {
                 showModal(
                   context,
-                  _buildBottomSheet(context, data.key, data.value, true),
+                  _buildBottomSheet(context, data.key, data.value ?? '', true),
                 );
               },
               children: [
@@ -181,7 +202,7 @@ List<Widget> _buildData(
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        data.value,
+                        data.value ?? '',
                         style: secondaryTextStyle(context),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,

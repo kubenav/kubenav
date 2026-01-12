@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_job.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_job_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
+import 'package:kubenav/models/kubernetes/joblist_batch_v1.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart'
+    as details_item_conditions;
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -32,17 +32,17 @@ final resourceJob = Resource(
       '{"apiVersion":"batch/v1","kind":"Job","metadata":{"name":"","namespace":""},"spec":{"backoffLimit":0,"completions":1,"parallelism":1,"template":{"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}',
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiBatchV1JobList.fromJson(parsed)?.items ?? [];
+    final items = JoblistBatchV1.fromJson(parsed).items;
 
     return items.map((e) {
-      final completions = e.spec?.completions ?? 0;
-      final succeeded = e.status?.succeeded ?? 0;
+      final completions = e?.spec?.completions ?? 0;
+      final succeeded = e?.status?.succeeded ?? 0;
       final unhealthy =
-          e.status?.conditions
-              .where(
+          e?.status?.conditions
+              ?.where(
                 (c) =>
-                    c.reason == 'BackoffLimitExceeded' ||
-                    c.reason == 'DeadlineExceeded',
+                    c?.reason == 'BackoffLimitExceeded' ||
+                    c?.reason == 'DeadlineExceeded',
               )
               .length ??
           0;
@@ -60,17 +60,17 @@ final resourceJob = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiBatchV1JobList.fromJson(parsed)?.items ?? [];
+    return JoblistBatchV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiBatchV1Job).metadata?.name ?? '';
+    return (item as JoblistBatchV1Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiBatchV1Job).metadata?.namespace;
+    return (item as JoblistBatchV1Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiBatchV1Job.fromJson(parsed);
+    return JoblistBatchV1Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -80,7 +80,7 @@ final resourceJob = Resource(
     return json.decode(json.encode(item));
   },
   listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
-    final item = listItem.item as IoK8sApiBatchV1Job;
+    final item = listItem.item as JoblistBatchV1Item;
     final status = listItem.status;
 
     return ResourcesListItem(
@@ -98,7 +98,7 @@ final resourceJob = Resource(
     );
   },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiBatchV1Job;
+    final item = listItem as JoblistBatchV1Item;
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
@@ -109,22 +109,42 @@ final resourceJob = Resource(
   },
   detailsItemBuilder:
       (BuildContext context, Resource resource, dynamic detailsItem) {
-        final item = detailsItem as IoK8sApiBatchV1Job;
+        final item = detailsItem as JoblistBatchV1Item;
 
         return Column(
           children: [
-            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-            DetailsItemConditions(
+            details_item_metadata.DetailsItemMetadata(
+              kind: item.kind?.name,
+              metadata: details_item_metadata.Metadata(
+                name: item.metadata?.name,
+                namespace: item.metadata?.namespace,
+                labels: item.metadata?.labels,
+                annotations: item.metadata?.annotations,
+                creationTimestamp: item.metadata?.creationTimestamp,
+                ownerReferences: item.metadata?.ownerReferences
+                    ?.map(
+                      (ownerReference) => details_item_metadata.OwnerReference(
+                        apiVersion: ownerReference?.apiVersion ?? '',
+                        blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                        controller: ownerReference?.controller,
+                        kind: ownerReference?.kind ?? '',
+                        name: ownerReference?.name ?? '',
+                        uid: ownerReference?.uid ?? '',
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            details_item_conditions.DetailsItemConditions(
               conditions: item.status?.conditions
-                  .map(
-                    (e) => IoK8sApimachineryPkgApisMetaV1Condition(
+                  ?.map(
+                    (condition) => details_item_conditions.Condition(
+                      type: condition?.type ?? '',
+                      status: condition?.status ?? '',
                       lastTransitionTime:
-                          e.lastTransitionTime ?? DateTime.now(),
-                      message: e.message ?? '',
-                      observedGeneration: null,
-                      reason: e.reason ?? '',
-                      status: e.status,
-                      type: e.type,
+                          condition?.lastTransitionTime ?? DateTime.now(),
+                      reason: condition?.reason ?? '',
+                      message: condition?.message ?? '',
                     ),
                   )
                   .toList(),
@@ -177,7 +197,20 @@ final resourceJob = Resource(
             DetailsResourcesPreview(
               resource: resourcePod,
               namespace: item.metadata?.namespace,
-              selector: getSelector(item.spec?.selector),
+              selector: getSelector(
+                Selector(
+                  matchLabels: item.spec?.selector?.matchLabels,
+                  matchExpressions: item.spec?.selector?.matchExpressions
+                      ?.map(
+                        (e) => MatchExpression(
+                          key: e!.key,
+                          matchExpressionOperator: e.matchExpressionOperator,
+                          values: e.values,
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
               filter: null,
             ),
             const SizedBox(height: Constants.spacingMiddle),

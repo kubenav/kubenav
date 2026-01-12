@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yaml/yaml.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_config_map.dart';
+import 'package:kubenav/models/kubernetes/configmaplist_v1.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
@@ -19,13 +19,11 @@ import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
 
 List<Chart> _decodeResult(String result) {
   final parsed = json.decode(result);
-  final configMap = IoK8sApiCoreV1ConfigMap.fromJson(parsed);
+  final configMap = Item.fromJson(parsed);
 
-  if (configMap != null &&
-      configMap.metadata != null &&
-      configMap.metadata!.name != null) {
-    if (configMap.data.containsKey('charts')) {
-      final parsedCharts = loadYaml(configMap.data['charts']!);
+  if (configMap.metadata != null && configMap.metadata!.name != null) {
+    if (configMap.data != null && configMap.data!.containsKey('charts')) {
+      final parsedCharts = loadYaml(configMap.data!['charts']!);
 
       final List<Chart> charts = [];
       for (var parsedChart in parsedCharts as List<dynamic>) {

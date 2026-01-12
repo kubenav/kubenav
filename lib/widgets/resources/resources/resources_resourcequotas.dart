@@ -2,14 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_resource_quota.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_resource_quota_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_resource_quota_status.dart';
+import 'package:kubenav/models/kubernetes/resourcequotalist_v1.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -30,7 +29,7 @@ final resourceResourceQuota = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1ResourceQuotaList.fromJson(parsed)?.items ?? [];
+    final items = ResourcequotalistV1.fromJson(parsed).items;
 
     return items
         .map(
@@ -44,17 +43,17 @@ final resourceResourceQuota = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1ResourceQuotaList.fromJson(parsed)?.items ?? [];
+    return ResourcequotalistV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiCoreV1ResourceQuota).metadata?.name ?? '';
+    return (item as Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiCoreV1ResourceQuota).metadata?.namespace;
+    return (item as Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1ResourceQuota.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -65,7 +64,7 @@ final resourceResourceQuota = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoK8sApiCoreV1ResourceQuota;
+        final item = listItem.item as Item;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -82,7 +81,7 @@ final resourceResourceQuota = Resource(
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiCoreV1ResourceQuota;
+    final item = listItem as Item;
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
@@ -91,20 +90,41 @@ final resourceResourceQuota = Resource(
     ];
   },
   detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
-    final item = detailsItem as IoK8sApiCoreV1ResourceQuota;
+    final item = detailsItem as Item;
 
     return Column(
       children: [
-        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+        details_item_metadata.DetailsItemMetadata(
+          kind: item.kind?.name,
+          metadata: details_item_metadata.Metadata(
+            name: item.metadata?.name,
+            namespace: item.metadata?.namespace,
+            labels: item.metadata?.labels,
+            annotations: item.metadata?.annotations,
+            creationTimestamp: item.metadata?.creationTimestamp,
+            ownerReferences: item.metadata?.ownerReferences
+                ?.map(
+                  (ownerReference) => details_item_metadata.OwnerReference(
+                    apiVersion: ownerReference?.apiVersion ?? '',
+                    blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                    controller: ownerReference?.controller,
+                    kind: ownerReference?.kind ?? '',
+                    name: ownerReference?.name ?? '',
+                    uid: ownerReference?.uid ?? '',
+                  ),
+                )
+                .toList(),
+          ),
+        ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Request',
           details:
-              item.status?.hard.keys.map((key) {
+              item.status?.hard?.keys.map((key) {
                 return DetailsItemModel(
                   name: key,
                   values:
-                      '${item.status!.used.containsKey(key) ? item.status?.used[key] : '-'}/${item.status?.hard[key]}',
+                      '${item.status?.used != null && item.status!.used!.containsKey(key) ? item.status?.used![key] : '-'}/${item.status?.hard![key]}',
                 );
               }).toList() ??
               [],
@@ -122,7 +142,7 @@ final resourceResourceQuota = Resource(
           item: item,
           toJson: resource.toJson,
           defaultCharts:
-              item.status?.hard.keys
+              item.status?.hard?.keys
                   .map(
                     (e) => Chart(
                       title: e,
@@ -146,7 +166,7 @@ final resourceResourceQuota = Resource(
 
 /// [_getRequest] returns a formated string with the set quota and the used
 /// quota, which can be used in the list and preview items.
-String _getRequest(IoK8sApiCoreV1ResourceQuotaStatus? status) {
+String _getRequest(Status? status) {
   final hard = status?.hard ?? {};
   final used = status?.used ?? {};
 

@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_cron_job.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_job.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_owner_reference.dart';
+import 'package:kubenav/models/kubernetes/cronjoblist_batch_v1.dart'
+    as cronjoblistv1;
+import 'package:kubenav/models/kubernetes/joblist_batch_v1.dart' as joblistv1;
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -19,7 +18,7 @@ import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/resources/resources/resources_jobs.dart';
 import 'package:kubenav/widgets/shared/app_bottom_sheet_widget.dart';
 
-String _createBody(IoK8sApiBatchV1Job job) {
+String _createBody(joblistv1.JoblistBatchV1Item job) {
   return json.encode(removeNull(resourceJob.toJson(job)));
 }
 
@@ -36,7 +35,7 @@ class CreateJob extends StatefulWidget {
 
   final String name;
   final String namespace;
-  final IoK8sApiBatchV1CronJob cronJob;
+  final cronjoblistv1.CronjoblistBatchV1Item cronJob;
 
   @override
   State<CreateJob> createState() => _CreateJobState();
@@ -80,21 +79,23 @@ class _CreateJobState extends State<CreateJob> {
           'cronjob.kubernetes.io/instantiate': 'manual',
         };
         if (widget.cronJob.spec?.jobTemplate.metadata?.annotations != null) {
-          annotations.addAll(
-            widget.cronJob.spec!.jobTemplate.metadata!.annotations,
-          );
+          for (final key
+              in widget.cronJob.spec!.jobTemplate.metadata!.annotations!.keys) {
+            annotations[key] =
+                widget.cronJob.spec!.jobTemplate.metadata!.annotations![key]!;
+          }
         }
 
-        final job = IoK8sApiBatchV1Job(
-          kind: 'Job',
-          apiVersion: 'batch/v1',
-          metadata: IoK8sApimachineryPkgApisMetaV1ObjectMeta(
+        final job = joblistv1.JoblistBatchV1Item(
+          kind: joblistv1.ItemKind.JOB,
+          apiVersion: joblistv1.ApiVersion.BATCH_V1,
+          metadata: joblistv1.ItemMetadata(
             name: _nameController.text,
             namespace: widget.namespace,
             labels: widget.cronJob.spec?.jobTemplate.metadata?.labels ?? {},
             annotations: annotations,
             ownerReferences: [
-              IoK8sApimachineryPkgApisMetaV1OwnerReference(
+              joblistv1.PurpleOwnerReference(
                 apiVersion: 'batch/v1',
                 blockOwnerDeletion: true,
                 controller: true,
@@ -104,7 +105,9 @@ class _CreateJobState extends State<CreateJob> {
               ),
             ],
           ),
-          spec: widget.cronJob.spec?.jobTemplate.spec,
+          spec: joblistv1.ItemSpec.fromJson(
+            widget.cronJob.spec!.jobTemplate.spec!.toJson(),
+          ),
         );
         final String body = await compute(_createBody, job);
 

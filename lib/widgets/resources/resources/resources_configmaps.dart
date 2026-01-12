@@ -5,14 +5,14 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_config_map.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_config_map_list.dart';
+import 'package:kubenav/models/kubernetes/configmaplist_v1.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/utils/themes.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -35,7 +35,7 @@ final resourceConfigMap = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1ConfigMapList.fromJson(parsed)?.items ?? [];
+    final items = ConfigmaplistV1.fromJson(parsed).items;
 
     return items
         .map(
@@ -49,17 +49,17 @@ final resourceConfigMap = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1ConfigMapList.fromJson(parsed)?.items ?? [];
+    return ConfigmaplistV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiCoreV1ConfigMap).metadata?.name ?? '';
+    return (item as Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiCoreV1ConfigMap).metadata?.namespace;
+    return (item as Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1ConfigMap.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -70,7 +70,7 @@ final resourceConfigMap = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoK8sApiCoreV1ConfigMap;
+        final item = listItem.item as Item;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -81,90 +81,117 @@ final resourceConfigMap = Resource(
           status: status,
           details: [
             'Namespace: ${item.metadata?.namespace ?? '-'}',
-            'Data: ${item.data.entries.length}',
+            'Data: ${item.data?.entries.length}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiCoreV1ConfigMap;
+    final item = listItem as Item;
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
-      'Data: ${item.data.entries.length}',
+      'Data: ${item.data?.entries.length}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
   detailsItemBuilder:
       (BuildContext context, Resource resource, dynamic detailsItem) {
-        final item = detailsItem as IoK8sApiCoreV1ConfigMap;
+        final item = detailsItem as Item;
 
         return Column(
           children: [
-            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            details_item_metadata.DetailsItemMetadata(
+              kind: item.kind?.name,
+              metadata: details_item_metadata.Metadata(
+                name: item.metadata?.name,
+                namespace: item.metadata?.namespace,
+                labels: item.metadata?.labels,
+                annotations: item.metadata?.annotations,
+                creationTimestamp: item.metadata?.creationTimestamp,
+                ownerReferences: item.metadata?.ownerReferences
+                    ?.map(
+                      (ownerReference) => details_item_metadata.OwnerReference(
+                        apiVersion: ownerReference?.apiVersion ?? '',
+                        blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                        controller: ownerReference?.controller,
+                        kind: ownerReference?.kind ?? '',
+                        name: ownerReference?.name ?? '',
+                        uid: ownerReference?.uid ?? '',
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
             const SizedBox(height: Constants.spacingMiddle),
             AppVerticalListSimpleWidget(
               title: 'Data',
-              items: item.data.entries
-                  .map(
-                    (data) => AppVerticalListSimpleModel(
-                      onTap: () {
-                        showModal(
-                          context,
-                          _buildBottomSheet(context, data.key, data.value),
-                        );
-                      },
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(Constants.sizeBorderRadius),
-                            ),
-                          ),
-                          height: 54,
-                          width: 54,
-                          padding: const EdgeInsets.all(
-                            Constants.spacingIcon54x54,
-                          ),
-                          child: SvgPicture.asset(
-                            'assets/resources/configmaps.svg',
-                          ),
-                        ),
-                        const SizedBox(width: Constants.spacingSmall),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
+              items:
+                  item.data?.entries
+                      .map(
+                        (data) => AppVerticalListSimpleModel(
+                          onTap: () {
+                            showModal(
+                              context,
+                              _buildBottomSheet(
+                                context,
                                 data.key,
-                                style: primaryTextStyle(context),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                                data.value ?? '',
                               ),
-                              Text(
-                                data.value,
-                                style: secondaryTextStyle(context),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
+                            );
+                          },
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primary,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(Constants.sizeBorderRadius),
+                                ),
                               ),
-                            ],
-                          ),
+                              height: 54,
+                              width: 54,
+                              padding: const EdgeInsets.all(
+                                Constants.spacingIcon54x54,
+                              ),
+                              child: SvgPicture.asset(
+                                'assets/resources/configmaps.svg',
+                              ),
+                            ),
+                            const SizedBox(width: Constants.spacingSmall),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data.key,
+                                    style: primaryTextStyle(context),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    data.value ?? '',
+                                    style: secondaryTextStyle(context),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: Constants.spacingSmall),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              color: Theme.of(context)
+                                  .extension<CustomColors>()!
+                                  .textSecondary
+                                  .withValues(alpha: Constants.opacityIcon),
+                              size: 24,
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: Constants.spacingSmall),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: Theme.of(context)
-                              .extension<CustomColors>()!
-                              .textSecondary
-                              .withValues(alpha: Constants.opacityIcon),
-                          size: 24,
-                        ),
-                      ],
-                    ),
-                  )
-                  .toList(),
+                      )
+                      .toList() ??
+                  [],
             ),
             const SizedBox(height: Constants.spacingMiddle),
             DetailsResourcesPreview(

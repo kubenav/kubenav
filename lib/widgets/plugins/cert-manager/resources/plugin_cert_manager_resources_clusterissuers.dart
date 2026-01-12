@@ -2,21 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_cluster_issuer.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_cluster_issuer_list.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_cluster_issuer_spec_acme.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_cluster_issuer_spec_ca.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_cluster_issuer_spec_self_signed.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_cluster_issuer_spec_vault.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_cluster_issuer_spec_venafi.dart';
+import 'package:kubenav/models/kubernetes/clusterissuerlist_cert_manager_v1.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/plugins/cert-manager/resources/plugin_cert_manager_resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart'
+    as details_item_conditions;
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -38,17 +33,16 @@ final Resource certManagerResourceClusterIssuer = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoCertManagerV1ClusterIssuerList.fromJson(parsed)?.items ?? [];
+    final items = ClusterissuerlistCertManagerV1.fromJson(parsed).items;
 
     return items.map((e) {
       final status =
-          e.status?.conditions != null && e.status!.conditions.isNotEmpty
-          ? e.status!.conditions
-                .where((e) => e.type == 'Ready')
+          e!.status?.conditions != null && e.status!.conditions!.isNotEmpty
+          ? e.status!.conditions!
+                .where((e) => e!.type == 'Ready')
                 .firstOrNull
                 ?.status
-                .value
+                .name
           : 'Unknown';
 
       return ResourceItem(
@@ -64,17 +58,17 @@ final Resource certManagerResourceClusterIssuer = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoCertManagerV1ClusterIssuerList.fromJson(parsed)?.items ?? [];
+    return ClusterissuerlistCertManagerV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoCertManagerV1ClusterIssuer).metadata?.name ?? '';
+    return (item as Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoCertManagerV1ClusterIssuer).metadata?.namespace;
+    return (item as Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoCertManagerV1ClusterIssuer.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -85,7 +79,7 @@ final Resource certManagerResourceClusterIssuer = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoCertManagerV1ClusterIssuer;
+        final item = listItem.item as Item;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -95,47 +89,67 @@ final Resource certManagerResourceClusterIssuer = Resource(
           item: item,
           status: status,
           details: [
-            'Ready: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
+            'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions!.where((e) => e!.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoCertManagerV1ClusterIssuer;
+    final item = listItem as Item;
 
     return [
-      'Ready: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
+      'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions!.where((e) => e!.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
   detailsItemBuilder:
       (BuildContext context, Resource resource, dynamic detailsItem) {
-        final item = detailsItem as IoCertManagerV1ClusterIssuer;
+        final item = detailsItem as Item;
 
         return Column(
           children: [
-            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-            DetailsItemConditions(
+            details_item_metadata.DetailsItemMetadata(
+              kind: item.kind?.name,
+              metadata: details_item_metadata.Metadata(
+                name: item.metadata?.name,
+                namespace: item.metadata?.namespace,
+                labels: item.metadata?.labels,
+                annotations: item.metadata?.annotations,
+                creationTimestamp: item.metadata?.creationTimestamp,
+                ownerReferences: item.metadata?.ownerReferences
+                    ?.map(
+                      (ownerReference) => details_item_metadata.OwnerReference(
+                        apiVersion: ownerReference?.apiVersion ?? '',
+                        blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                        controller: ownerReference?.controller,
+                        kind: ownerReference?.kind ?? '',
+                        name: ownerReference?.name ?? '',
+                        uid: ownerReference?.uid ?? '',
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            details_item_conditions.DetailsItemConditions(
               conditions: item.status?.conditions
-                  .map(
-                    (e) => IoK8sApimachineryPkgApisMetaV1Condition(
+                  ?.map(
+                    (condition) => details_item_conditions.Condition(
+                      type: condition?.type ?? '',
+                      status: condition?.status.name ?? '',
                       lastTransitionTime:
-                          e.lastTransitionTime ?? DateTime.now(),
-                      message: e.message ?? '',
-                      observedGeneration: e.observedGeneration,
-                      reason: e.reason ?? '',
-                      status: e.status.value,
-                      type: e.type,
+                          condition?.lastTransitionTime ?? DateTime.now(),
+                      reason: condition?.reason ?? '',
+                      message: condition?.message ?? '',
                     ),
                   )
                   .toList(),
             ),
             const SizedBox(height: Constants.spacingMiddle),
-            buildACME(context, 'cert-manager', item.spec.acme),
-            buildCA(context, 'cert-manager', item.spec.ca),
-            buildSelfSigned(context, 'cert-manager', item.spec.selfSigned),
-            buildVault(context, 'cert-manager', item.spec.vault),
-            buildVenafi(context, 'cert-manager', item.spec.venafi),
+            _buildACME(context, 'cert-manager', item.spec.acme),
+            _buildCA(context, 'cert-manager', item.spec.ca),
+            _buildSelfSigned(context, 'cert-manager', item.spec.selfSigned),
+            _buildVault(context, 'cert-manager', item.spec.vault),
+            _buildVenafi(context, 'cert-manager', item.spec.venafi),
             DetailsItem(
               title: 'Status',
               details: [
@@ -143,9 +157,9 @@ final Resource certManagerResourceClusterIssuer = Resource(
                   name: 'Ready',
                   values:
                       item.status?.conditions != null &&
-                          item.status!.conditions.isNotEmpty
-                      ? item.status!.conditions
-                            .where((e) => e.type == 'Ready')
+                          item.status!.conditions!.isNotEmpty
+                      ? item.status!.conditions!
+                            .where((e) => e!.type == 'Ready')
                             .firstOrNull
                             ?.status
                       : null,
@@ -154,9 +168,9 @@ final Resource certManagerResourceClusterIssuer = Resource(
                   name: 'Status',
                   values:
                       item.status?.conditions != null &&
-                          item.status!.conditions.isNotEmpty
-                      ? item.status!.conditions
-                            .where((e) => e.type == 'Ready')
+                          item.status!.conditions!.isNotEmpty
+                      ? item.status!.conditions!
+                            .where((e) => e!.type == 'Ready')
                             .firstOrNull
                             ?.status
                       : null,
@@ -189,11 +203,7 @@ final Resource certManagerResourceClusterIssuer = Resource(
       },
 );
 
-Widget buildACME(
-  BuildContext context,
-  String namespace,
-  IoCertManagerV1ClusterIssuerSpecAcme? acme,
-) {
+Widget _buildACME(BuildContext context, String namespace, SpecAcme? acme) {
   if (acme == null) {
     return Container();
   }
@@ -210,11 +220,11 @@ Widget buildACME(
             values: acme.preferredChain,
           ),
           DetailsItemModel(name: 'CA Bundle', values: acme.caBundle),
-          DetailsItemModel(name: 'Skip TLS Verify', values: acme.skipTLSVerify),
+          DetailsItemModel(name: 'Skip TLS Verify', values: acme.skipTlsVerify),
           DetailsItemModel(
             name: 'Solvers',
             values: acme.solvers
-                .map((e) => e.dns01 != null ? 'DNS01' : 'HTTP01')
+                ?.map((e) => e?.dns01 != null ? 'DNS01' : 'HTTP01')
                 .toList(),
           ),
           DetailsItemModel(
@@ -238,11 +248,7 @@ Widget buildACME(
   );
 }
 
-Widget buildCA(
-  BuildContext context,
-  String namespace,
-  IoCertManagerV1ClusterIssuerSpecCa? ca,
-) {
+Widget _buildCA(BuildContext context, String namespace, Ca? ca) {
   if (ca == null) {
     return Container();
   }
@@ -273,7 +279,7 @@ Widget buildCA(
           DetailsItemModel(name: 'OCSP Servers', values: ca.ocspServers),
           DetailsItemModel(
             name: 'Issuing Certificate Urls',
-            values: ca.issuingCertificateURLs,
+            values: ca.issuingCertificateUrLs,
           ),
         ],
       ),
@@ -282,10 +288,10 @@ Widget buildCA(
   );
 }
 
-Widget buildSelfSigned(
+Widget _buildSelfSigned(
   BuildContext context,
   String namespace,
-  IoCertManagerV1ClusterIssuerSpecSelfSigned? selfSigned,
+  SelfSigned? selfSigned,
 ) {
   if (selfSigned == null) {
     return Container();
@@ -298,7 +304,9 @@ Widget buildSelfSigned(
         details: [
           DetailsItemModel(
             name: 'CRL Distribution Points',
-            values: selfSigned.crlDistributionPoints.isNotEmpty
+            values:
+                selfSigned.crlDistributionPoints != null &&
+                    selfSigned.crlDistributionPoints!.isNotEmpty
                 ? selfSigned.crlDistributionPoints
                 : '-',
           ),
@@ -309,11 +317,7 @@ Widget buildSelfSigned(
   );
 }
 
-Widget buildVault(
-  BuildContext context,
-  String namespace,
-  IoCertManagerV1ClusterIssuerSpecVault? vault,
-) {
+Widget _buildVault(BuildContext context, String namespace, Vault? vault) {
   if (vault == null) {
     return Container();
   }
@@ -350,11 +354,7 @@ Widget buildVault(
   );
 }
 
-Widget buildVenafi(
-  BuildContext context,
-  String namespace,
-  IoCertManagerV1ClusterIssuerSpecVenafi? venafi,
-) {
+Widget _buildVenafi(BuildContext context, String namespace, Venafi? venafi) {
   if (venafi == null) {
     return Container();
   }

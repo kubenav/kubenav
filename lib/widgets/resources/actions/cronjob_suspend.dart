@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_cron_job.dart';
+import 'package:kubenav/models/kubernetes/cronjoblist_batch_v1.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -27,7 +27,7 @@ class CronJobSuspend extends StatefulWidget {
   final String name;
   final String namespace;
   final Resource resource;
-  final IoK8sApiBatchV1CronJob cronJob;
+  final CronjoblistBatchV1Item cronJob;
 
   @override
   State<CronJobSuspend> createState() => _CronJobSuspendState();

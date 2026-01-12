@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_apiextensions_apiserver_pkg_apis_apiextensions_v1_custom_resource_definition.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apiextensions_apiserver_pkg_apis_apiextensions_v1_custom_resource_definition_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
+import 'package:kubenav/models/kubernetes_extensions/customresourcedefinitions.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
@@ -15,8 +12,10 @@ import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart'
+    as details_item_conditions;
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -37,11 +36,7 @@ final resourceCustomResourceDefinition = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinitionList.fromJson(
-          parsed,
-        )?.items ??
-        [];
+    final items = CustomResourceDefinitionList.fromJson(parsed).items;
     return items
         .map(
           (e) => ResourceItem(
@@ -54,29 +49,17 @@ final resourceCustomResourceDefinition = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinitionList.fromJson(
-          parsed,
-        )?.items ??
-        [];
+    return CustomResourceDefinitionList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item
-                as IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition)
-            .metadata
-            ?.name ??
-        '';
+    return (item as CustomResourceDefinition).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item
-            as IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition)
-        .metadata
-        ?.namespace;
+    return (item as CustomResourceDefinition).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition.fromJson(
-      parsed,
-    );
+    return CustomResourceDefinition.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -87,9 +70,7 @@ final resourceCustomResourceDefinition = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item =
-            listItem.item
-                as IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition;
+        final item = listItem.item as CustomResourceDefinition;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -99,143 +80,173 @@ final resourceCustomResourceDefinition = Resource(
           item: item,
           status: status,
           details: [
-            'Kind: ${item.spec.names.kind}',
-            'Scope: ${item.spec.scope}',
+            'Kind: ${item.spec?.names.kind}',
+            'Scope: ${item.spec?.scope}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item =
-        listItem
-            as IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition;
+    final item = listItem as CustomResourceDefinition;
 
     return [
-      'Kind: ${item.spec.names.kind}',
-      'Scope: ${item.spec.scope}',
+      'Kind: ${item.spec?.names.kind}',
+      'Scope: ${item.spec?.scope}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
-    final item =
-        detailsItem
-            as IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinition;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item = detailsItem as CustomResourceDefinition;
 
-    return Column(
-      children: [
-        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Configuration',
-          details: [
-            DetailsItemModel(name: 'Group', values: item.spec.group),
-            DetailsItemModel(name: 'Kind', values: item.spec.names.kind),
-            DetailsItemModel(
-              name: 'List Kind',
-              values: item.spec.names.listKind,
+        return Column(
+          children: [
+            details_item_metadata.DetailsItemMetadata(
+              kind: 'CustomResourceDefinition',
+              metadata: details_item_metadata.Metadata(
+                name: item.metadata?.name,
+                namespace: item.metadata?.namespace,
+                labels: item.metadata?.labels,
+                annotations: item.metadata?.annotations,
+                creationTimestamp: item.metadata?.creationTimestamp,
+                ownerReferences: item.metadata?.ownerReferences
+                    ?.map(
+                      (ownerReference) => details_item_metadata.OwnerReference(
+                        apiVersion: ownerReference?.apiVersion ?? '',
+                        blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                        controller: ownerReference?.controller,
+                        kind: ownerReference?.kind ?? '',
+                        name: ownerReference?.name ?? '',
+                        uid: ownerReference?.uid ?? '',
+                      ),
+                    )
+                    .toList(),
+              ),
             ),
-            DetailsItemModel(name: 'Plural', values: item.spec.names.plural),
-            DetailsItemModel(
-              name: 'Singular',
-              values: item.spec.names.singular,
-            ),
-            DetailsItemModel(name: 'Scope', values: item.spec.scope),
-            DetailsItemModel(
-              name: 'Conversion Strategy',
-              values: item.spec.conversion?.strategy,
-            ),
-          ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        AppVerticalListSimpleWidget(
-          title: 'Versions',
-          items: item.spec.versions
-              .map(
-                (version) => AppVerticalListSimpleModel(
-                  onTap: () {
-                    final customResource = buildCustomResource(
-                      item.spec.names.plural,
-                      item.spec.names.singular ?? item.spec.names.plural,
-                      '${item.spec.group}/${version.name}',
-                      '/apis/${item.spec.group}/${version.name}',
-                      item.spec.names.plural,
-                      item.spec.scope,
-                      version.additionalPrinterColumns
-                          .where((e) => e.priority == null || e.priority == 0)
-                          .map(
-                            (e) => AdditionalPrinterColumns(
-                              description: e.description ?? '',
-                              jsonPath: e.jsonPath,
-                              name: e.name,
-                              type: e.type,
-                            ),
-                          )
-                          .toList(),
-                    );
-
-                    navigate(
-                      context,
-                      ResourcesList(
-                        resource: customResource,
-                        namespace: null,
-                        selector: null,
-                      ),
-                    );
-                  },
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(Constants.sizeBorderRadius),
-                        ),
-                      ),
-                      height: 54,
-                      width: 54,
-                      padding: const EdgeInsets.all(Constants.spacingIcon54x54),
-                      child: SvgPicture.asset(
-                        'assets/resources/customresourcedefinitions.svg',
-                      ),
-                    ),
-                    const SizedBox(width: Constants.spacingSmall),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            version.name,
-                            style: primaryTextStyle(context),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            '${version.deprecated == true ? 'Deprecated' : 'Stable'}: ${version.deprecationWarning ?? '-'}',
-                            style: secondaryTextStyle(context),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: Constants.spacingSmall),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      color: Theme.of(context)
-                          .extension<CustomColors>()!
-                          .textSecondary
-                          .withValues(alpha: Constants.opacityIcon),
-                      size: 24,
-                    ),
-                  ],
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Configuration',
+              details: [
+                DetailsItemModel(name: 'Group', values: item.spec?.group),
+                DetailsItemModel(name: 'Kind', values: item.spec?.names.kind),
+                DetailsItemModel(
+                  name: 'List Kind',
+                  values: item.spec?.names.listKind,
                 ),
-              )
-              .toList(),
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-      ],
-    );
-  },
+                DetailsItemModel(
+                  name: 'Plural',
+                  values: item.spec?.names.plural,
+                ),
+                DetailsItemModel(
+                  name: 'Singular',
+                  values: item.spec?.names.singular,
+                ),
+                DetailsItemModel(name: 'Scope', values: item.spec?.scope),
+                DetailsItemModel(
+                  name: 'Conversion Strategy',
+                  values: item.spec?.conversion?.strategy,
+                ),
+              ],
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+            AppVerticalListSimpleWidget(
+              title: 'Versions',
+              items:
+                  item.spec?.versions
+                      .map(
+                        (version) => AppVerticalListSimpleModel(
+                          onTap: () {
+                            final customResource = buildCustomResource(
+                              item.spec?.names.plural ?? '',
+                              item.spec?.names.singular ??
+                                  item.spec?.names.plural ??
+                                  '',
+                              '${item.spec?.group}/${version.name}',
+                              '/apis/${item.spec?.group}/${version.name}',
+                              item.spec?.names.plural ?? '',
+                              item.spec?.scope ?? '',
+                              version.additionalPrinterColumns
+                                  .where(
+                                    (e) =>
+                                        e.priority == null || e.priority == 0,
+                                  )
+                                  .map(
+                                    (e) => AdditionalPrinterColumns(
+                                      description: e.description ?? '',
+                                      jsonPath: e.jsonPath,
+                                      name: e.name,
+                                      type: e.type,
+                                    ),
+                                  )
+                                  .toList(),
+                            );
+
+                            navigate(
+                              context,
+                              ResourcesList(
+                                resource: customResource,
+                                namespace: null,
+                                selector: null,
+                              ),
+                            );
+                          },
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primary,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(Constants.sizeBorderRadius),
+                                ),
+                              ),
+                              height: 54,
+                              width: 54,
+                              padding: const EdgeInsets.all(
+                                Constants.spacingIcon54x54,
+                              ),
+                              child: SvgPicture.asset(
+                                'assets/resources/customresourcedefinitions.svg',
+                              ),
+                            ),
+                            const SizedBox(width: Constants.spacingSmall),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    version.name,
+                                    style: primaryTextStyle(context),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    '${version.deprecated == true ? 'Deprecated' : 'Stable'}: ${version.deprecationWarning ?? '-'}',
+                                    style: secondaryTextStyle(context),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: Constants.spacingSmall),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              color: Theme.of(context)
+                                  .extension<CustomColors>()!
+                                  .textSecondary
+                                  .withValues(alpha: Constants.opacityIcon),
+                              size: 24,
+                            ),
+                          ],
+                        ),
+                      )
+                      .toList() ??
+                  [],
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+          ],
+        );
+      },
 );
 
 Resource buildCustomResource(
@@ -357,33 +368,26 @@ class CustomResourceItem extends StatelessWidget {
   final Resource resource;
   final dynamic item;
 
-  Future<IoK8sApimachineryPkgApisMetaV1ObjectMeta?> _getMetadata() async {
+  Future<CustomResourceDefinitionMetadata?> _getMetadata() async {
     try {
-      return IoK8sApimachineryPkgApisMetaV1ObjectMeta.fromJson(
-        item['metadata'],
-      );
+      return CustomResourceDefinitionMetadata.fromJson(item['metadata']);
     } catch (err) {
       return null;
     }
   }
 
-  Future<List<IoK8sApimachineryPkgApisMetaV1Condition>?>
-  _getConditions() async {
+  Future<List<Condition>?> _getConditions() async {
     try {
       if (item.containsKey('status') &&
           item['status'] != null &&
           item['status'].containsKey('conditions') &&
           item['status']['conditions'] != null &&
           item['status']['conditions'] is List<dynamic>) {
-        final List<IoK8sApimachineryPkgApisMetaV1Condition> conditions = [];
+        final List<Condition> conditions = [];
 
         for (final condition in item['status']['conditions']) {
-          final value = IoK8sApimachineryPkgApisMetaV1Condition.fromJson(
-            condition,
-          );
-          if (value != null) {
-            conditions.add(value);
-          }
+          final value = Condition.fromJson(condition);
+          conditions.add(value);
         }
 
         return conditions;
@@ -439,8 +443,7 @@ class CustomResourceItem extends StatelessWidget {
           builder:
               (
                 BuildContext context,
-                AsyncSnapshot<IoK8sApimachineryPkgApisMetaV1ObjectMeta?>
-                snapshot,
+                AsyncSnapshot<CustomResourceDefinitionMetadata?> snapshot,
               ) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
@@ -449,11 +452,32 @@ class CustomResourceItem extends StatelessWidget {
                       color: Theme.of(context).colorScheme.primary,
                     );
                   default:
-                    return DetailsItemMetadata(
+                    return details_item_metadata.DetailsItemMetadata(
                       kind: item != null && item.containsKey('kind')
                           ? item['kind']
                           : null,
-                      metadata: snapshot.data,
+                      metadata: details_item_metadata.Metadata(
+                        name: snapshot.data?.name,
+                        namespace: snapshot.data?.namespace,
+                        labels: snapshot.data?.labels,
+                        annotations: snapshot.data?.annotations,
+                        creationTimestamp: snapshot.data?.creationTimestamp,
+                        ownerReferences: snapshot.data?.ownerReferences
+                            ?.map(
+                              (ownerReference) =>
+                                  details_item_metadata.OwnerReference(
+                                    apiVersion:
+                                        ownerReference?.apiVersion ?? '',
+                                    blockOwnerDeletion:
+                                        ownerReference?.blockOwnerDeletion,
+                                    controller: ownerReference?.controller,
+                                    kind: ownerReference?.kind ?? '',
+                                    name: ownerReference?.name ?? '',
+                                    uid: ownerReference?.uid ?? '',
+                                  ),
+                            )
+                            .toList(),
+                      ),
                     );
                 }
               },
@@ -461,11 +485,7 @@ class CustomResourceItem extends StatelessWidget {
         FutureBuilder(
           future: _getConditions(),
           builder:
-              (
-                BuildContext context,
-                AsyncSnapshot<List<IoK8sApimachineryPkgApisMetaV1Condition>?>
-                snapshot,
-              ) {
+              (BuildContext context, AsyncSnapshot<List<Condition>?> snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
                   case ConnectionState.waiting:
@@ -473,7 +493,21 @@ class CustomResourceItem extends StatelessWidget {
                       color: Theme.of(context).colorScheme.primary,
                     );
                   default:
-                    return DetailsItemConditions(conditions: snapshot.data);
+                    return details_item_conditions.DetailsItemConditions(
+                      conditions: snapshot.data
+                          ?.map(
+                            (condition) => details_item_conditions.Condition(
+                              type: condition.type,
+                              status: condition.status,
+                              lastTransitionTime:
+                                  condition.lastTransitionTime ??
+                                  DateTime.now(),
+                              reason: condition.reason ?? '',
+                              message: condition.message ?? '',
+                            ),
+                          )
+                          .toList(),
+                    );
                 }
               },
         ),

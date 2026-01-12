@@ -2,15 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_deployment.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_deployment_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
+import 'package:kubenav/models/kubernetes/deploymentlist_apps_v1.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart'
+    as details_item_conditions;
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -33,14 +33,14 @@ final resourceDeployment = Resource(
       '{"apiVersion":"apps/v1","kind":"Deployment","metadata":{"name":"","namespace":""},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"nginx"}},"template":{"metadata":{"labels":{"app":"nginx"}},"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}',
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiAppsV1DeploymentList.fromJson(parsed)?.items ?? [];
+    final items = DeploymentlistAppsV1.fromJson(parsed).items;
 
     return items
         .map(
           (e) => ResourceItem(
             item: e,
             metrics: null,
-            status: e.status!.replicas == 0
+            status: e!.status!.replicas == 0
                 ? ResourceStatus.warning
                 : e.status!.replicas != e.status!.readyReplicas ||
                       e.status!.replicas != e.status!.updatedReplicas ||
@@ -53,17 +53,17 @@ final resourceDeployment = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiAppsV1DeploymentList.fromJson(parsed)?.items ?? [];
+    return DeploymentlistAppsV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiAppsV1Deployment).metadata?.name ?? '';
+    return (item as DeploymentlistAppsV1Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiAppsV1Deployment).metadata?.namespace;
+    return (item as DeploymentlistAppsV1Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiAppsV1Deployment.fromJson(parsed);
+    return DeploymentlistAppsV1Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -74,7 +74,7 @@ final resourceDeployment = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoK8sApiAppsV1Deployment;
+        final item = listItem.item as DeploymentlistAppsV1Item;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -94,7 +94,7 @@ final resourceDeployment = Resource(
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiAppsV1Deployment;
+    final item = listItem as DeploymentlistAppsV1Item;
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
@@ -106,21 +106,42 @@ final resourceDeployment = Resource(
     ];
   },
   detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
-    final item = detailsItem as IoK8sApiAppsV1Deployment;
+    final item = detailsItem as DeploymentlistAppsV1Item;
 
     return Column(
       children: [
-        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-        DetailsItemConditions(
+        details_item_metadata.DetailsItemMetadata(
+          kind: item.kind?.name,
+          metadata: details_item_metadata.Metadata(
+            name: item.metadata?.name,
+            namespace: item.metadata?.namespace,
+            labels: item.metadata?.labels,
+            annotations: item.metadata?.annotations,
+            creationTimestamp: item.metadata?.creationTimestamp,
+            ownerReferences: item.metadata?.ownerReferences
+                ?.map(
+                  (ownerReference) => details_item_metadata.OwnerReference(
+                    apiVersion: ownerReference?.apiVersion ?? '',
+                    blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                    controller: ownerReference?.controller,
+                    kind: ownerReference?.kind ?? '',
+                    name: ownerReference?.name ?? '',
+                    uid: ownerReference?.uid ?? '',
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+        details_item_conditions.DetailsItemConditions(
           conditions: item.status?.conditions
-              .map(
-                (e) => IoK8sApimachineryPkgApisMetaV1Condition(
-                  lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
-                  message: e.message ?? '',
-                  observedGeneration: null,
-                  reason: e.reason ?? '',
-                  status: e.status,
-                  type: e.type,
+              ?.map(
+                (condition) => details_item_conditions.Condition(
+                  type: condition?.type ?? '',
+                  status: condition?.status ?? '',
+                  lastTransitionTime:
+                      condition?.lastTransitionTime ?? DateTime.now(),
+                  reason: condition?.reason ?? '',
+                  message: condition?.message ?? '',
                 ),
               )
               .toList(),
@@ -148,7 +169,7 @@ final resourceDeployment = Resource(
             ),
             DetailsItemModel(
               name: 'Selector',
-              values: item.spec?.selector.matchLabels.entries
+              values: item.spec?.selector.matchLabels?.entries
                   .map((matchLabel) => '${matchLabel.key}=${matchLabel.value}')
                   .toList(),
             ),
@@ -184,7 +205,20 @@ final resourceDeployment = Resource(
         DetailsResourcesPreview(
           resource: resourcePod,
           namespace: item.metadata?.namespace,
-          selector: getSelector(item.spec?.selector),
+          selector: getSelector(
+            Selector(
+              matchLabels: item.spec?.selector.matchLabels,
+              matchExpressions: item.spec?.selector.matchExpressions
+                  ?.map(
+                    (e) => MatchExpression(
+                      key: e!.key,
+                      matchExpressionOperator: e.matchExpressionOperator,
+                      values: e.values,
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
           filter: null,
         ),
         const SizedBox(height: Constants.spacingMiddle),

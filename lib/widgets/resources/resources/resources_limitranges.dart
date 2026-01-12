@@ -2,14 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_limit_range.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_limit_range_item.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_limit_range_list.dart';
+import 'package:kubenav/models/kubernetes/limitrangelist_v1.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -30,7 +29,7 @@ final resourceLimitRange = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1LimitRangeList.fromJson(parsed)?.items ?? [];
+    final items = LimitrangelistV1.fromJson(parsed).items;
 
     return items
         .map(
@@ -44,17 +43,17 @@ final resourceLimitRange = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1LimitRangeList.fromJson(parsed)?.items ?? [];
+    return LimitrangelistV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiCoreV1LimitRange).metadata?.name ?? '';
+    return (item as Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiCoreV1LimitRange).metadata?.namespace;
+    return (item as Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1LimitRange.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -65,7 +64,7 @@ final resourceLimitRange = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoK8sApiCoreV1LimitRange;
+        final item = listItem.item as Item;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -82,7 +81,7 @@ final resourceLimitRange = Resource(
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiCoreV1LimitRange;
+    final item = listItem as Item;
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
@@ -91,11 +90,32 @@ final resourceLimitRange = Resource(
     ];
   },
   detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
-    final item = detailsItem as IoK8sApiCoreV1LimitRange;
+    final item = detailsItem as Item;
 
     return Column(
       children: [
-        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+        details_item_metadata.DetailsItemMetadata(
+          kind: item.kind?.name,
+          metadata: details_item_metadata.Metadata(
+            name: item.metadata?.name,
+            namespace: item.metadata?.namespace,
+            labels: item.metadata?.labels,
+            annotations: item.metadata?.annotations,
+            creationTimestamp: item.metadata?.creationTimestamp,
+            ownerReferences: item.metadata?.ownerReferences
+                ?.map(
+                  (ownerReference) => details_item_metadata.OwnerReference(
+                    apiVersion: ownerReference?.apiVersion ?? '',
+                    blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                    controller: ownerReference?.controller,
+                    kind: ownerReference?.kind ?? '',
+                    name: ownerReference?.name ?? '',
+                    uid: ownerReference?.uid ?? '',
+                  ),
+                )
+                .toList(),
+          ),
+        ),
         const SizedBox(height: Constants.spacingMiddle),
         ..._buildLimits(item.spec?.limits),
         DetailsResourcesPreview(
@@ -130,7 +150,7 @@ final resourceLimitRange = Resource(
   },
 );
 
-List<Widget> _buildLimits(List<IoK8sApiCoreV1LimitRangeItem>? limits) {
+List<Widget> _buildLimits(List<Limit?>? limits) {
   final List<Widget> widgets = [];
 
   if (limits == null) {
@@ -138,39 +158,41 @@ List<Widget> _buildLimits(List<IoK8sApiCoreV1LimitRangeItem>? limits) {
   }
 
   for (var i = 0; i < limits.length; i++) {
-    widgets.add(
-      DetailsItem(
-        title: 'Limit ${i + 1}',
-        details: [
-          DetailsItemModel(name: 'Type', values: limits[i].type),
-          DetailsItemModel(
-            name: 'Defaults',
-            values: limits[i].default_.entries.map((e) {
-              return '${e.key}: ${e.value}';
-            }).toList(),
-          ),
-          DetailsItemModel(
-            name: 'Default Requests',
-            values: limits[i].defaultRequest.entries.map((e) {
-              return '${e.key}: ${e.value}';
-            }).toList(),
-          ),
-          DetailsItemModel(
-            name: 'Max',
-            values: limits[i].max.entries.map((e) {
-              return '${e.key}: ${e.value}';
-            }).toList(),
-          ),
-          DetailsItemModel(
-            name: 'Min',
-            values: limits[i].min.entries.map((e) {
-              return '${e.key}: ${e.value}';
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-    widgets.add(const SizedBox(height: Constants.spacingMiddle));
+    if (limits[i] != null) {
+      widgets.add(
+        DetailsItem(
+          title: 'Limit ${i + 1}',
+          details: [
+            DetailsItemModel(name: 'Type', values: limits[i]!.type),
+            DetailsItemModel(
+              name: 'Defaults',
+              values: limits[i]!.limitDefault?.entries.map((e) {
+                return '${e.key}: ${e.value}';
+              }).toList(),
+            ),
+            DetailsItemModel(
+              name: 'Default Requests',
+              values: limits[i]!.defaultRequest?.entries.map((e) {
+                return '${e.key}: ${e.value}';
+              }).toList(),
+            ),
+            DetailsItemModel(
+              name: 'Max',
+              values: limits[i]!.max?.entries.map((e) {
+                return '${e.key}: ${e.value}';
+              }).toList(),
+            ),
+            DetailsItemModel(
+              name: 'Min',
+              values: limits[i]!.min?.entries.map((e) {
+                return '${e.key}: ${e.value}';
+              }).toList(),
+            ),
+          ],
+        ),
+      );
+      widgets.add(const SizedBox(height: Constants.spacingMiddle));
+    }
   }
 
   return widgets;
@@ -180,9 +202,7 @@ List<Widget> _buildLimits(List<IoK8sApiCoreV1LimitRangeItem>? limits) {
 /// contains all unique combinations of the used types and resources in the
 /// limits definition as key. The value is a list of two elements, with the type
 /// as the first element and the resource as the second element.
-Map<String, List<String>> _buildMetrics(
-  List<IoK8sApiCoreV1LimitRangeItem>? limits,
-) {
+Map<String, List<String>> _buildMetrics(List<Limit?>? limits) {
   if (limits == null) {
     return {};
   }
@@ -190,11 +210,15 @@ Map<String, List<String>> _buildMetrics(
   final metrics = <String, List<String>>{};
 
   for (var i = 0; i < limits.length; i++) {
-    final type = limits[i].type;
+    if (limits[i] != null) {
+      final type = limits[i]!.type;
 
-    for (var j = 0; j < limits[i].default_.keys.length; j++) {
-      final resource = limits[i].default_.keys.elementAt(j);
-      metrics['$type: $resource'] = [type, resource];
+      if (limits[i]!.limitDefault?.keys != null) {
+        for (var j = 0; j < limits[i]!.limitDefault!.keys.length; j++) {
+          final resource = limits[i]!.limitDefault?.keys.elementAt(j);
+          metrics['$type: $resource'] = [type, resource!];
+        }
+      }
     }
   }
 

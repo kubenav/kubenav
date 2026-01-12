@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_node.dart';
+import 'package:kubenav/models/kubernetes/nodelist_v1.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -21,7 +21,7 @@ class NodeUncordon extends StatefulWidget {
   });
 
   final String name;
-  final IoK8sApiCoreV1Node node;
+  final Item node;
   final Resource resource;
 
   @override

@@ -1,8 +1,43 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
+
+class Metadata {
+  Map<String, String?>? annotations;
+  DateTime? creationTimestamp;
+  Map<String, String?>? labels;
+  String? name;
+  String? namespace;
+  List<OwnerReference?>? ownerReferences;
+
+  Metadata({
+    this.annotations,
+    this.creationTimestamp,
+    this.labels,
+    this.name,
+    this.namespace,
+    this.ownerReferences,
+  });
+}
+
+class OwnerReference {
+  String apiVersion;
+  bool? blockOwnerDeletion;
+  bool? controller;
+  String kind;
+  String name;
+  String uid;
+
+  OwnerReference({
+    required this.apiVersion,
+    this.blockOwnerDeletion,
+    this.controller,
+    required this.kind,
+    required this.name,
+    required this.uid,
+  });
+}
 
 /// The [DetailsItemMetadata] widget is used to show the metadata of a
 /// Kubernetes resource.
@@ -14,13 +49,14 @@ class DetailsItemMetadata extends StatelessWidget {
   });
 
   final String? kind;
-  final IoK8sApimachineryPkgApisMetaV1ObjectMeta? metadata;
+  final Metadata? metadata;
 
   @override
   Widget build(BuildContext context) {
     final ownerReferences = metadata?.ownerReferences
-        .map(
-          (ownerReference) => '${ownerReference.kind} (${ownerReference.name})',
+        ?.map(
+          (ownerReference) =>
+              '${ownerReference?.kind} (${ownerReference?.name})',
         )
         .toList();
 
@@ -36,13 +72,13 @@ class DetailsItemMetadata extends StatelessWidget {
         ),
         DetailsItemModel(
           name: 'Labels',
-          values: metadata?.labels.entries
+          values: metadata?.labels?.entries
               .map((e) => '${e.key}: ${e.value}')
               .toList(),
         ),
         DetailsItemModel(
           name: 'Annotations',
-          values: metadata?.annotations.entries
+          values: metadata?.annotations?.entries
               .map((e) => '${e.key}: ${e.value}')
               .toList(),
         ),
@@ -52,7 +88,12 @@ class DetailsItemMetadata extends StatelessWidget {
           onTap: (int index) {
             goToReference(
               context,
-              metadata?.ownerReferences[index],
+              Reference(
+                apiVersion: metadata?.ownerReferences?[index]?.apiVersion,
+                kind: metadata?.ownerReferences?[index]?.kind,
+                name: metadata?.ownerReferences?[index]?.name,
+                uid: metadata?.ownerReferences?[index]?.uid,
+              ),
               metadata?.namespace,
             );
           },

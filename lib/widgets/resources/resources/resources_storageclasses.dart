@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_storage_v1_storage_class.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_storage_v1_storage_class_list.dart';
+import 'package:kubenav/models/kubernetes/storageclasslist_storage_v1.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -28,8 +28,7 @@ final resourceStorageClass = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiStorageV1StorageClassList.fromJson(parsed)?.items ?? [];
+    final items = StorageclasslistStorageV1.fromJson(parsed).items;
 
     return items
         .map(
@@ -43,17 +42,17 @@ final resourceStorageClass = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiStorageV1StorageClassList.fromJson(parsed)?.items ?? [];
+    return StorageclasslistStorageV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiStorageV1StorageClass).metadata?.name ?? '';
+    return (item as Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiStorageV1StorageClass).metadata?.namespace;
+    return (item as Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiStorageV1StorageClass.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -64,7 +63,7 @@ final resourceStorageClass = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoK8sApiStorageV1StorageClass;
+        final item = listItem.item as Item;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -83,7 +82,7 @@ final resourceStorageClass = Resource(
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiStorageV1StorageClass;
+    final item = listItem as Item;
 
     return [
       'Provisioner: ${item.provisioner}',
@@ -94,11 +93,32 @@ final resourceStorageClass = Resource(
     ];
   },
   detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
-    final item = detailsItem as IoK8sApiStorageV1StorageClass;
+    final item = detailsItem as Item;
 
     return Column(
       children: [
-        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+        details_item_metadata.DetailsItemMetadata(
+          kind: item.kind?.name,
+          metadata: details_item_metadata.Metadata(
+            name: item.metadata?.name,
+            namespace: item.metadata?.namespace,
+            labels: item.metadata?.labels,
+            annotations: item.metadata?.annotations,
+            creationTimestamp: item.metadata?.creationTimestamp,
+            ownerReferences: item.metadata?.ownerReferences
+                ?.map(
+                  (ownerReference) => details_item_metadata.OwnerReference(
+                    apiVersion: ownerReference?.apiVersion ?? '',
+                    blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                    controller: ownerReference?.controller,
+                    kind: ownerReference?.kind ?? '',
+                    name: ownerReference?.name ?? '',
+                    uid: ownerReference?.uid ?? '',
+                  ),
+                )
+                .toList(),
+          ),
+        ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Configuration',
@@ -106,13 +126,13 @@ final resourceStorageClass = Resource(
             DetailsItemModel(
               name: 'Default',
               values:
-                  item.metadata != null &&
-                      item.metadata!.annotations.containsKey(
+                  item.metadata?.annotations != null &&
+                      item.metadata!.annotations!.containsKey(
                         'storageclass.kubernetes.io/is-default-class',
                       ) &&
                       item
                               .metadata!
-                              .annotations['storageclass.kubernetes.io/is-default-class']!
+                              .annotations!['storageclass.kubernetes.io/is-default-class']!
                               .toLowerCase() ==
                           'true'
                   ? 'Yes'
@@ -121,7 +141,7 @@ final resourceStorageClass = Resource(
             DetailsItemModel(name: 'Provisioner', values: item.provisioner),
             DetailsItemModel(
               name: 'Parameters',
-              values: item.parameters.entries
+              values: item.parameters?.entries
                   .map((e) => '${e.key}=${e.value}')
                   .toList(),
             ),

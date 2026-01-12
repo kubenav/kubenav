@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_certificate.dart';
+import 'package:kubenav/models/kubernetes/certificatelist_cert_manager_v1.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -30,7 +30,7 @@ class PluginCertManagerRenew extends StatefulWidget {
   final String name;
   final String namespace;
   final Resource resource;
-  final IoCertManagerV1Certificate certificate;
+  final Item certificate;
 
   @override
   State<PluginCertManagerRenew> createState() => _PluginCertManagerRenewState();
@@ -55,16 +55,16 @@ class _PluginCertManagerRenewState extends State<PluginCertManagerRenew> {
       });
 
       final now = DateTime.now().toRFC3339();
-      final conditionIndex = widget.certificate.status?.conditions.indexWhere(
-        (e) => e.type == 'Issuing',
+      final conditionIndex = widget.certificate.status?.conditions?.indexWhere(
+        (e) => e!.type == 'Issuing',
       );
 
       final String body =
           widget.certificate.status?.conditions == null ||
-              widget.certificate.status!.conditions.isEmpty
+              widget.certificate.status!.conditions!.isEmpty
           ? '[{"op":"add","path":"/status/conditions","value":[{"type":"Issuing","status":"True","lastTransitionTime":"$now","reason":"ManuallyTriggered","message":"Certificate re-issuance manually triggered","observedGeneration":${widget.certificate.metadata?.generation ?? 1}}]}]'
           : conditionIndex == null
-          ? '[{"op":"add","path":"/status/conditions/${widget.certificate.status?.conditions != null ? widget.certificate.status!.conditions.length + 1 : 0}","value":{"type":"Issuing","status":"True","lastTransitionTime":"$now","reason":"ManuallyTriggered","message":"Certificate re-issuance manually triggered","observedGeneration":${widget.certificate.metadata?.generation ?? 1}}}]'
+          ? '[{"op":"add","path":"/status/conditions/${widget.certificate.status?.conditions != null ? widget.certificate.status!.conditions!.length + 1 : 0}","value":{"type":"Issuing","status":"True","lastTransitionTime":"$now","reason":"ManuallyTriggered","message":"Certificate re-issuance manually triggered","observedGeneration":${widget.certificate.metadata?.generation ?? 1}}}]'
           : '[{"op":"replace","path":"/status/conditions/$conditionIndex","value":{"type":"Issuing","status":"True","lastTransitionTime":"$now","reason":"ManuallyTriggered","message":"Certificate re-issuance manually triggered","observedGeneration":${widget.certificate.metadata?.generation ?? 1}}}]';
 
       final cluster = await clustersRepository.getClusterWithCredentials(

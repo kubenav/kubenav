@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application.dart';
-import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_list.dart';
+import 'package:kubenav/models/kubernetes/applicationlist_argoproj_v1alpha1.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/plugins/argo/resources/plugin_argo_resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -29,11 +29,10 @@ final Resource argoResourceApplication = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoArgoprojV1alpha1ApplicationList.fromJson(parsed)?.items ?? [];
+    final items = ApplicationlistArgoprojV1Alpha1.fromJson(parsed).items;
 
     return items.map((e) {
-      final status = e.status?.health?.status ?? 'Unknown';
+      final status = e!.status?.health?.status ?? 'Unknown';
 
       return ResourceItem(
         item: e,
@@ -48,17 +47,17 @@ final Resource argoResourceApplication = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoArgoprojV1alpha1ApplicationList.fromJson(parsed)?.items ?? [];
+    return ApplicationlistArgoprojV1Alpha1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoArgoprojV1alpha1Application).metadata.name ?? '';
+    return (item as Item).metadata.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoArgoprojV1alpha1Application).metadata.namespace;
+    return (item as Item).metadata.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoArgoprojV1alpha1Application.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -69,7 +68,7 @@ final Resource argoResourceApplication = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoArgoprojV1alpha1Application;
+        final item = listItem.item as Item;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -81,30 +80,51 @@ final Resource argoResourceApplication = Resource(
           details: [
             'Namespace: ${item.metadata.namespace ?? '-'}',
             'AppHealth: ${item.status?.health?.status ?? '-'}',
-            'SyncStatus: ${item.status?.sync_?.status ?? '-'}',
+            'SyncStatus: ${item.status?.sync?.status ?? '-'}',
             'CreatedAt: ${getAge(item.metadata.creationTimestamp)}',
             'LastSync: ${getAge(item.status?.operationState?.finishedAt)}',
           ],
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoArgoprojV1alpha1Application;
+    final item = listItem as Item;
 
     return [
       'Namespace: ${item.metadata.namespace ?? '-'}',
       'AppHealth: ${item.status?.health?.status ?? '-'}',
-      'SyncStatus: ${item.status?.sync_?.status ?? '-'}',
+      'SyncStatus: ${item.status?.sync?.status ?? '-'}',
       'CreatedAt: ${getAge(item.metadata.creationTimestamp)}',
       'LastSync: ${getAge(item.status?.operationState?.finishedAt)}',
     ];
   },
   detailsItemBuilder:
       (BuildContext context, Resource resource, dynamic detailsItem) {
-        final item = detailsItem as IoArgoprojV1alpha1Application;
+        final item = detailsItem as Item;
 
         return Column(
           children: [
-            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            details_item_metadata.DetailsItemMetadata(
+              kind: item.kind?.name,
+              metadata: details_item_metadata.Metadata(
+                name: item.metadata.name,
+                namespace: item.metadata.namespace,
+                labels: item.metadata.labels,
+                annotations: item.metadata.annotations,
+                creationTimestamp: item.metadata.creationTimestamp,
+                ownerReferences: item.metadata.ownerReferences
+                    ?.map(
+                      (ownerReference) => details_item_metadata.OwnerReference(
+                        apiVersion: ownerReference?.apiVersion ?? '',
+                        blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                        controller: ownerReference?.controller,
+                        kind: ownerReference?.kind ?? '',
+                        name: ownerReference?.name ?? '',
+                        uid: ownerReference?.uid ?? '',
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
             const SizedBox(height: Constants.spacingMiddle),
             DetailsItem(
               title: 'Configuration',
@@ -112,7 +132,9 @@ final Resource argoResourceApplication = Resource(
                 DetailsItemModel(name: 'Project', values: item.spec.project),
                 DetailsItemModel(
                   name: 'Info',
-                  values: item.spec.info.isNotEmpty ? item.spec.info : null,
+                  values: item.spec.info != null && item.spec.info!.isNotEmpty
+                      ? item.spec.info
+                      : null,
                 ),
                 DetailsItemModel(
                   name: 'Cluster',
@@ -126,15 +148,15 @@ final Resource argoResourceApplication = Resource(
                 ),
                 DetailsItemModel(
                   name: 'RepoURL',
-                  values: item.spec.source_?.repoURL ?? '-',
+                  values: item.spec.source?.repoUrl ?? '-',
                 ),
                 DetailsItemModel(
                   name: 'TargetRevision',
-                  values: item.spec.source_?.targetRevision ?? '-',
+                  values: item.spec.source?.targetRevision ?? '-',
                 ),
                 DetailsItemModel(
                   name: 'Path',
-                  values: item.spec.source_?.path ?? '-',
+                  values: item.spec.source?.path ?? '-',
                 ),
                 DetailsItemModel(
                   name: 'SyncPolicy',
@@ -162,7 +184,7 @@ final Resource argoResourceApplication = Resource(
                 ),
                 DetailsItemModel(
                   name: 'SyncStatus',
-                  values: item.status?.sync_?.status,
+                  values: item.status?.sync?.status,
                 ),
                 DetailsItemModel(
                   name: 'LastSync',
@@ -178,25 +200,25 @@ final Resource argoResourceApplication = Resource(
                 ),
                 DetailsItemModel(
                   name: 'URLs',
-                  values: item.status?.summary?.externalURLs,
+                  values: item.status?.summary?.externalUrLs,
                 ),
                 // TODO: this list should link to the customResource widgets for
                 // non-supported resource kinds, it would also be useful to see
                 // health and sync status per resource.
                 DetailsItemModel(
                   name: 'Resources',
-                  values: item.status?.resources.map((e) {
-                    return '${e.kind}/${e.name}';
+                  values: item.status?.resources?.map((e) {
+                    return '${e!.kind}/${e.name}';
                   }).toList(),
                   onTap: (index) {
-                    final res = item.status!.resources[index];
-                    if (kindToResource.containsKey(res.kind)) {
+                    final res = item.status!.resources?[index];
+                    if (kindToResource.containsKey(res?.kind)) {
                       navigate(
                         context,
                         ResourcesDetails(
-                          name: res.name as String,
-                          namespace: res.namespace,
-                          resource: kindToResource[res.kind]!,
+                          name: res?.name ?? '',
+                          namespace: res?.namespace,
+                          resource: kindToResource[res?.kind]!,
                         ),
                       );
                       return;

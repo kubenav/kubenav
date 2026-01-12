@@ -2,13 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_object_reference.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_ingress_class.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_ingress_class_list.dart';
+import 'package:kubenav/models/kubernetes/ingressclasslist_networking_v1.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -29,8 +28,7 @@ final resourceIngressClass = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiNetworkingV1IngressClassList.fromJson(parsed)?.items ?? [];
+    final items = IngressclasslistNetworkingV1.fromJson(parsed).items;
 
     return items.map((e) {
       return ResourceItem(
@@ -42,17 +40,17 @@ final resourceIngressClass = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiNetworkingV1IngressClassList.fromJson(parsed)?.items ?? [];
+    return IngressclasslistNetworkingV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiNetworkingV1IngressClass).metadata?.name ?? '';
+    return (item as Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiNetworkingV1IngressClass).metadata?.namespace;
+    return (item as Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiNetworkingV1IngressClass.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -63,7 +61,7 @@ final resourceIngressClass = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoK8sApiNetworkingV1IngressClass;
+        final item = listItem.item as Item;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -80,7 +78,7 @@ final resourceIngressClass = Resource(
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiNetworkingV1IngressClass;
+    final item = listItem as Item;
 
     return [
       'Controller: ${item.spec?.controller ?? '-'}',
@@ -89,11 +87,32 @@ final resourceIngressClass = Resource(
     ];
   },
   detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
-    final item = detailsItem as IoK8sApiNetworkingV1IngressClass;
+    final item = detailsItem as Item;
 
     return Column(
       children: [
-        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+        details_item_metadata.DetailsItemMetadata(
+          kind: item.kind?.name,
+          metadata: details_item_metadata.Metadata(
+            name: item.metadata?.name,
+            namespace: item.metadata?.namespace,
+            labels: item.metadata?.labels,
+            annotations: item.metadata?.annotations,
+            creationTimestamp: item.metadata?.creationTimestamp,
+            ownerReferences: item.metadata?.ownerReferences
+                ?.map(
+                  (ownerReference) => details_item_metadata.OwnerReference(
+                    apiVersion: ownerReference?.apiVersion ?? '',
+                    blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                    controller: ownerReference?.controller,
+                    kind: ownerReference?.kind ?? '',
+                    name: ownerReference?.name ?? '',
+                    uid: ownerReference?.uid ?? '',
+                  ),
+                )
+                .toList(),
+          ),
+        ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Configuration',
@@ -109,7 +128,7 @@ final resourceIngressClass = Resource(
                   : (int index) {
                       goToReference(
                         context,
-                        IoK8sApiCoreV1ObjectReference(
+                        Reference(
                           apiVersion: item.spec?.parameters?.apiGroup,
                           kind: item.spec?.parameters?.kind,
                           name: item.spec?.parameters?.name,

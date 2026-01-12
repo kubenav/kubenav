@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_node_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod_list.dart';
+import 'package:kubenav/models/kubernetes/nodelist_v1.dart' as nodelistv1;
+import 'package:kubenav/models/kubernetes/podlist_v1.dart' as podlistv1;
 import 'package:kubenav/models/kubernetes_extensions/node_metrics.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
@@ -72,10 +72,8 @@ class Metrics {
 }
 
 Metrics _getMetrics(List<String> results) {
-  final nodesList = IoK8sApiCoreV1NodeList.fromJson(json.decode(results[0]));
-
-  final podsList = IoK8sApiCoreV1PodList.fromJson(json.decode(results[1]));
-
+  final nodesList = nodelistv1.NodelistV1.fromJson(json.decode(results[0]));
+  final podsList = podlistv1.PodlistV1.fromJson(json.decode(results[1]));
   final nodeMetricsList = ApisMetricsV1beta1NodeMetricsList.fromJson(
     json.decode(results[2]),
   );
@@ -93,24 +91,26 @@ Metrics _getMetrics(List<String> results) {
   var podsAllocatable = 0.0;
   var podsUsage = 0.0;
 
-  if (nodesList != null && podsList != null && nodeMetricsList.items != null) {
+  if (nodeMetricsList.items != null) {
     for (var node in nodesList.items) {
-      if (node.status != null && node.status!.allocatable.containsKey('cpu')) {
+      if (node?.status?.allocatable != null &&
+          node!.status!.allocatable!.containsKey('cpu')) {
         cpuAllocatable =
             cpuAllocatable +
-            cpuMetricsStringToDouble(node.status!.allocatable['cpu']!);
+            cpuMetricsStringToDouble(node.status!.allocatable!['cpu']!);
       }
 
-      if (node.status != null &&
-          node.status!.allocatable.containsKey('memory')) {
+      if (node?.status?.allocatable != null &&
+          node!.status!.allocatable!.containsKey('memory')) {
         memoryAllocatable =
             memoryAllocatable +
-            memoryMetricsStringToDouble(node.status!.allocatable['memory']!);
+            memoryMetricsStringToDouble(node.status!.allocatable!['memory']!);
       }
 
-      if (node.status != null && node.status!.allocatable.containsKey('pods')) {
+      if (node?.status?.allocatable != null &&
+          node!.status!.allocatable!.containsKey('pods')) {
         podsAllocatable =
-            podsAllocatable + int.parse(node.status!.allocatable['pods']!);
+            podsAllocatable + int.parse(node.status!.allocatable!['pods']!);
       }
     }
 
@@ -128,37 +128,39 @@ Metrics _getMetrics(List<String> results) {
     }
 
     for (var pod in podsList.items) {
-      if (pod.spec != null) {
-        for (var container in pod.spec!.containers) {
-          if (container.resources != null &&
-              container.resources!.requests.containsKey('cpu')) {
+      if (pod?.spec?.containers != null) {
+        for (var container in pod!.spec!.containers) {
+          if (container?.resources?.requests != null &&
+              container!.resources!.requests!.containsKey('cpu')) {
             cpuRequests =
                 cpuRequests +
-                cpuMetricsStringToDouble(container.resources!.requests['cpu']!);
-          }
-
-          if (container.resources != null &&
-              container.resources!.requests.containsKey('memory')) {
-            memoryRequests =
-                memoryRequests +
-                memoryMetricsStringToDouble(
-                  container.resources!.requests['memory']!,
+                cpuMetricsStringToDouble(
+                  container.resources!.requests!['cpu']!,
                 );
           }
 
-          if (container.resources != null &&
-              container.resources!.limits.containsKey('cpu')) {
-            cpuLimits =
-                cpuLimits +
-                cpuMetricsStringToDouble(container.resources!.limits['cpu']!);
+          if (container?.resources?.requests != null &&
+              container!.resources!.requests!.containsKey('memory')) {
+            memoryRequests =
+                memoryRequests +
+                memoryMetricsStringToDouble(
+                  container.resources!.requests!['memory']!,
+                );
           }
 
-          if (container.resources != null &&
-              container.resources!.limits.containsKey('memory')) {
+          if (container?.resources?.limits != null &&
+              container!.resources!.limits!.containsKey('cpu')) {
+            cpuLimits =
+                cpuLimits +
+                cpuMetricsStringToDouble(container.resources!.limits!['cpu']!);
+          }
+
+          if (container?.resources?.limits != null &&
+              container!.resources!.limits!.containsKey('memory')) {
             memoryLimits =
                 memoryLimits +
                 memoryMetricsStringToDouble(
-                  container.resources!.limits['memory']!,
+                  container.resources!.limits!['memory']!,
                 );
           }
         }

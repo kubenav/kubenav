@@ -6,15 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_port.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_state.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_status.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_env_var_source.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_probe.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
+import 'package:kubenav/models/kubernetes/podlist_v1.dart' as podlistv1;
 import 'package:kubenav/models/kubernetes_extensions/pod_metrics.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/repositories/app_repository.dart';
@@ -28,8 +20,10 @@ import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart'
+    as details_item_conditions;
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -56,7 +50,7 @@ final resourcePod = Resource(
       '{"apiVersion":"v1","kind":"Pod","metadata":{"name":"","namespace":""},"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}',
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1PodList.fromJson(parsed)?.items ?? [];
+    final items = podlistv1.PodlistV1.fromJson(parsed).items;
 
     List<ApisMetricsV1beta1PodMetricsItem>? metricsItems;
     if (data.metrics != null && data.metrics != '') {
@@ -66,7 +60,7 @@ final resourcePod = Resource(
     }
 
     return items.map((e) {
-      final podDetails = _getPodDetails(e);
+      final podDetails = _getPodDetails(e!);
       final metrics = _getMetricsForPod(e, metricsItems);
 
       return ResourceItem(item: e, metrics: metrics, status: podDetails.status);
@@ -74,17 +68,17 @@ final resourcePod = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1PodList.fromJson(parsed)?.items ?? [];
+    return podlistv1.PodlistV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiCoreV1Pod).metadata?.name ?? '';
+    return (item as podlistv1.PodlistV1Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiCoreV1Pod).metadata?.namespace;
+    return (item as podlistv1.PodlistV1Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1Pod.fromJson(parsed);
+    return podlistv1.PodlistV1Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -95,7 +89,7 @@ final resourcePod = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoK8sApiCoreV1Pod;
+        final item = listItem.item as podlistv1.PodlistV1Item;
         final podDetails = _getPodDetails(item);
         final resourceDetails = _getResourceDetails(item, listItem.metrics);
 
@@ -117,7 +111,7 @@ final resourcePod = Resource(
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiCoreV1Pod;
+    final item = listItem as podlistv1.PodlistV1Item;
     final podDetails = _getPodDetails(item);
 
     return [
@@ -130,7 +124,7 @@ final resourcePod = Resource(
   },
   detailsItemBuilder:
       (BuildContext context, Resource resource, dynamic detailsItem) {
-        final item = detailsItem as IoK8sApiCoreV1Pod;
+        final item = detailsItem as podlistv1.PodlistV1Item;
 
         return PodItem(resource: resource, pod: item);
       },
@@ -140,7 +134,7 @@ class PodItem extends StatelessWidget {
   const PodItem({super.key, required this.resource, required this.pod});
 
   final Resource resource;
-  final IoK8sApiCoreV1Pod pod;
+  final podlistv1.PodlistV1Item pod;
 
   Future<List<ApisMetricsV1beta1PodMetricsItemContainer>> _fetchMetrics(
     BuildContext context,
@@ -237,17 +231,38 @@ class PodItem extends StatelessWidget {
 
     return Column(
       children: [
-        DetailsItemMetadata(kind: pod.kind, metadata: pod.metadata),
-        DetailsItemConditions(
+        details_item_metadata.DetailsItemMetadata(
+          kind: pod.kind?.name,
+          metadata: details_item_metadata.Metadata(
+            name: pod.metadata?.name,
+            namespace: pod.metadata?.namespace,
+            labels: pod.metadata?.labels,
+            annotations: pod.metadata?.annotations,
+            creationTimestamp: pod.metadata?.creationTimestamp,
+            ownerReferences: pod.metadata?.ownerReferences
+                ?.map(
+                  (ownerReference) => details_item_metadata.OwnerReference(
+                    apiVersion: ownerReference?.apiVersion ?? '',
+                    blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                    controller: ownerReference?.controller,
+                    kind: ownerReference?.kind ?? '',
+                    name: ownerReference?.name ?? '',
+                    uid: ownerReference?.uid ?? '',
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+        details_item_conditions.DetailsItemConditions(
           conditions: pod.status?.conditions
-              .map(
-                (e) => IoK8sApimachineryPkgApisMetaV1Condition(
-                  lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
-                  message: e.message ?? '',
-                  observedGeneration: null,
-                  reason: e.reason ?? '',
-                  status: e.status,
-                  type: e.type,
+              ?.map(
+                (condition) => details_item_conditions.Condition(
+                  type: condition?.type ?? '',
+                  status: condition?.status ?? '',
+                  lastTransitionTime:
+                      condition?.lastTransitionTime ?? DateTime.now(),
+                  reason: condition?.reason ?? '',
+                  message: condition?.message ?? '',
                 ),
               )
               .toList(),
@@ -313,8 +328,8 @@ class PodItem extends StatelessWidget {
             DetailsItemModel(name: 'Restarts', values: podDetails.restarts),
             DetailsItemModel(name: 'Status', values: podDetails.statusText),
             DetailsItemModel(name: 'QoS', values: pod.status?.qosClass),
-            DetailsItemModel(name: 'Pod IP', values: pod.status?.podIP),
-            DetailsItemModel(name: 'Host IP', values: pod.status?.hostIP),
+            DetailsItemModel(name: 'Pod IP', values: pod.status?.podIp),
+            DetailsItemModel(name: 'Host IP', values: pod.status?.hostIp),
           ],
         ),
         const SizedBox(height: Constants.spacingMiddle),
@@ -447,28 +462,28 @@ class DetailsContainers extends StatelessWidget {
     required this.containerMetrics,
   });
 
-  final List<IoK8sApiCoreV1Container> initContainers;
-  final List<IoK8sApiCoreV1Container> containers;
-  final List<IoK8sApiCoreV1ContainerStatus> initContainerStatuses;
-  final List<IoK8sApiCoreV1ContainerStatus> containerStatuses;
+  final List<podlistv1.Container?>? initContainers;
+  final List<podlistv1.Container?> containers;
+  final List<podlistv1.ContainerStatus?>? initContainerStatuses;
+  final List<podlistv1.ContainerStatus?>? containerStatuses;
   final List<ApisMetricsV1beta1PodMetricsItemContainer> containerMetrics;
 
-  List<String> getSubtitle(
+  List<String> _getSubtitle(
     String containerType,
-    IoK8sApiCoreV1Container container,
+    podlistv1.Container container,
   ) {
-    List<IoK8sApiCoreV1ContainerStatus> status = [];
+    List<podlistv1.ContainerStatus?>? status = [];
     if (containerType == 'Init Container') {
       status = initContainerStatuses
-          .where((e) => e.name == container.name)
+          ?.where((e) => e?.name == container.name)
           .toList();
     } else if (containerType == 'Container') {
       status = containerStatuses
-          .where((e) => e.name == container.name)
+          ?.where((e) => e?.name == container.name)
           .toList();
     }
 
-    if (status.length != 1) {
+    if (status == null || status.length != 1) {
       return ['Type: $containerType'];
     }
 
@@ -482,11 +497,11 @@ class DetailsContainers extends StatelessWidget {
 
     return [
       'Type: $containerType ',
-      'Ready: ${status[0].ready ? 'True' : 'False'}',
-      'Restarts: ${status[0].restartCount}',
-      'State: ${_getContainerState(status[0].state)}',
-      'CPU: ${filteredContainerMetrics.isNotEmpty && filteredContainerMetrics[0].usage?.cpu != null ? formatCpuMetric(cpuMetricsStringToDouble(filteredContainerMetrics[0].usage!.cpu!)) : '-'} / ${container.resources != null && container.resources!.requests.containsKey('cpu') ? container.resources!.requests['cpu'] : '-'} / ${container.resources != null && container.resources!.limits.containsKey('cpu') ? container.resources!.limits['cpu'] : '-'}',
-      'Memory: ${filteredContainerMetrics.isNotEmpty && filteredContainerMetrics[0].usage?.memory != null ? formatMemoryMetric(memoryMetricsStringToDouble(filteredContainerMetrics[0].usage!.memory!)) : '-'} / ${container.resources != null && container.resources!.requests.containsKey('memory') ? container.resources!.requests['memory'] : '-'} / ${container.resources != null && container.resources!.limits.containsKey('memory') ? container.resources!.limits['memory'] : '-'}',
+      'Ready: ${status[0]!.ready ? 'True' : 'False'}',
+      'Restarts: ${status[0]!.restartCount}',
+      'State: ${_getContainerState(status[0]!.state)}',
+      'CPU: ${filteredContainerMetrics.isNotEmpty && filteredContainerMetrics[0].usage?.cpu != null ? formatCpuMetric(cpuMetricsStringToDouble(filteredContainerMetrics[0].usage!.cpu!)) : '-'} / ${container.resources?.requests != null && container.resources!.requests!.containsKey('cpu') ? container.resources!.requests!['cpu'] : '-'} / ${container.resources?.limits != null && container.resources!.limits!.containsKey('cpu') ? container.resources!.limits!['cpu'] : '-'}',
+      'Memory: ${filteredContainerMetrics.isNotEmpty && filteredContainerMetrics[0].usage?.memory != null ? formatMemoryMetric(memoryMetricsStringToDouble(filteredContainerMetrics[0].usage!.memory!)) : '-'} / ${container.resources?.requests != null && container.resources!.requests!.containsKey('memory') ? container.resources!.requests!['memory'] : '-'} / ${container.resources?.limits != null && container.resources!.limits!.containsKey('memory') ? container.resources!.limits!['memory'] : '-'}',
     ];
   }
 
@@ -496,10 +511,10 @@ class DetailsContainers extends StatelessWidget {
       title: 'Containers',
       cards: [
         ...List.generate(
-          initContainers.length,
+          initContainers?.length ?? 0,
           (index) => AppHorizontalListCardsModel(
-            title: initContainers[index].name,
-            subtitle: getSubtitle('Init Container', initContainers[index]),
+            title: initContainers![index]!.name,
+            subtitle: _getSubtitle('Init Container', initContainers![index]!),
             image: 'assets/resources/containers.svg',
             imageFit: BoxFit.none,
             onTap: () {
@@ -507,7 +522,7 @@ class DetailsContainers extends StatelessWidget {
                 context,
                 DetailsContainer(
                   containerType: 'Init Container',
-                  container: initContainers[index],
+                  container: initContainers![index],
                   initContainerStatuses: initContainerStatuses,
                   containerStatuses: containerStatuses,
                   containerMetrics: containerMetrics,
@@ -519,8 +534,8 @@ class DetailsContainers extends StatelessWidget {
         ...List.generate(
           containers.length,
           (index) => AppHorizontalListCardsModel(
-            title: containers[index].name,
-            subtitle: getSubtitle('Container', containers[index]),
+            title: containers[index]!.name,
+            subtitle: _getSubtitle('Container', containers[index]!),
             image: 'assets/resources/containers.svg',
             imageFit: BoxFit.none,
             onTap: () {
@@ -555,22 +570,26 @@ class DetailsContainer extends StatelessWidget {
     required this.containerMetrics,
   });
 
+  final podlistv1.Container? container;
   final String containerType;
-  final IoK8sApiCoreV1Container container;
-  final List<IoK8sApiCoreV1ContainerStatus> initContainerStatuses;
-  final List<IoK8sApiCoreV1ContainerStatus> containerStatuses;
+  final List<podlistv1.ContainerStatus?>? initContainerStatuses;
+  final List<podlistv1.ContainerStatus?>? containerStatuses;
   final List<ApisMetricsV1beta1PodMetricsItemContainer> containerMetrics;
 
-  List<Widget> buildStatus() {
-    List<IoK8sApiCoreV1ContainerStatus> status = [];
+  List<Widget> _buildStatus() {
+    List<podlistv1.ContainerStatus?>? status = [];
     if (containerType == 'Init Container') {
-      status = initContainerStatuses
-          .where((e) => e.name == container.name)
-          .toList();
+      status =
+          initContainerStatuses
+              ?.where((e) => e?.name == container?.name)
+              .toList() ??
+          [];
     } else if (containerType == 'Container') {
-      status = containerStatuses
-          .where((e) => e.name == container.name)
-          .toList();
+      status =
+          containerStatuses
+              ?.where((e) => e?.name == container?.name)
+              .toList() ??
+          [];
     }
 
     if (status.length != 1) {
@@ -583,17 +602,17 @@ class DetailsContainer extends StatelessWidget {
         details: [
           DetailsItemModel(
             name: 'State',
-            values: _getContainerState(status[0].state, true),
+            values: _getContainerState(status[0]?.state, true),
           ),
           DetailsItemModel(
             name: 'Last State',
-            values: _getContainerState(status[0].lastState, true),
+            values: _getContainerLastState(status[0]?.lastState, true),
           ),
           DetailsItemModel(
             name: 'Ready',
-            values: status[0].ready ? 'True' : 'False',
+            values: status[0]!.ready ? 'True' : 'False',
           ),
-          DetailsItemModel(name: 'Restarts', values: status[0].restartCount),
+          DetailsItemModel(name: 'Restarts', values: status[0]!.restartCount),
         ],
       ),
       const SizedBox(height: Constants.spacingMiddle),
@@ -604,11 +623,11 @@ class DetailsContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<ApisMetricsV1beta1PodMetricsItemContainer> containerMetric =
         containerMetrics
-            .where((containerMetric) => containerMetric.name == container.name)
+            .where((containerMetric) => containerMetric.name == container?.name)
             .toList();
 
     return AppBottomSheetWidget(
-      title: container.name,
+      title: container?.name ?? '',
       subtitle: containerType,
       icon: 'assets/resources/containers.svg',
       closePressed: () {
@@ -629,55 +648,64 @@ class DetailsContainer extends StatelessWidget {
                 details: [
                   DetailsItemModel(
                     name: 'Image',
-                    values: container.image ?? '-',
+                    values: container?.image ?? '-',
                   ),
                   DetailsItemModel(
                     name: 'Image Pull Policy',
-                    values: container.imagePullPolicy ?? '-',
+                    values: container?.imagePullPolicy != null
+                        ? podlistv1.pullPolicyValues.reverse[container!
+                              .imagePullPolicy]
+                        : '-',
                   ),
                   DetailsItemModel(
                     name: 'Command',
-                    values: container.command.isNotEmpty
-                        ? container.command
+                    values:
+                        container?.command != null &&
+                            container!.command!.isNotEmpty
+                        ? container!.command
                         : '-',
                   ),
                   DetailsItemModel(
                     name: 'Arguments',
-                    values: container.args.isNotEmpty ? container.args : '-',
+                    values:
+                        container?.args != null && container!.args!.isNotEmpty
+                        ? container!.args
+                        : '-',
                   ),
                   DetailsItemModel(
                     name: 'Ports',
-                    values: container.ports.isNotEmpty
-                        ? container.ports
-                              .map(
+                    values:
+                        container?.ports != null && container!.ports!.isNotEmpty
+                        ? container!.ports
+                              ?.map(
                                 (port) =>
-                                    '${port.containerPort}${port.hostPort != null ? '/${port.hostPort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''}',
+                                    '${port?.containerPort}${port?.hostPort != null ? '/${port?.hostPort}' : ''}${port?.protocol != null ? '/${port?.protocol}' : ''}${port?.name != null ? ' (${port?.name})' : ''}',
                               )
                               .toList()
                         : '-',
                   ),
                   DetailsItemModel(
                     name: 'Readiness Probe',
-                    values: container.readinessProbe != null
-                        ? _getProbe(container.readinessProbe!)
+                    values: container?.readinessProbe != null
+                        ? _getProbe(container!.readinessProbe!)
                         : '-',
                   ),
                   DetailsItemModel(
                     name: 'Liveness Probe',
-                    values: container.livenessProbe != null
-                        ? _getProbe(container.livenessProbe!)
+                    values: container?.livenessProbe != null
+                        ? _getProbe(container!.livenessProbe!)
                         : '-',
                   ),
                   DetailsItemModel(
                     name: 'Startup Probe',
-                    values: container.startupProbe != null
-                        ? _getProbe(container.startupProbe!)
+                    values: container?.startupProbe != null
+                        ? _getProbe(container!.startupProbe!)
                         : '-',
                   ),
                 ],
               ),
               const SizedBox(height: Constants.spacingMiddle),
-              ...buildStatus(),
+              ..._buildStatus(),
               DetailsItem(
                 title: 'Resources',
                 details: [
@@ -696,17 +724,17 @@ class DetailsContainer extends StatelessWidget {
                   DetailsItemModel(
                     name: 'CPU Requests',
                     values:
-                        container.resources != null &&
-                            container.resources!.requests.containsKey('cpu')
-                        ? container.resources!.requests['cpu']
+                        container?.resources?.requests != null &&
+                            container!.resources!.requests!.containsKey('cpu')
+                        ? container!.resources!.requests!['cpu']
                         : '-',
                   ),
                   DetailsItemModel(
                     name: 'CPU Limits',
                     values:
-                        container.resources != null &&
-                            container.resources!.limits.containsKey('cpu')
-                        ? container.resources!.limits['cpu']
+                        container?.resources?.limits != null &&
+                            container!.resources!.limits!.containsKey('cpu')
+                        ? container!.resources!.limits!['cpu']
                         : '-',
                   ),
                   DetailsItemModel(
@@ -724,17 +752,19 @@ class DetailsContainer extends StatelessWidget {
                   DetailsItemModel(
                     name: 'Memory Requests',
                     values:
-                        container.resources != null &&
-                            container.resources!.requests.containsKey('memory')
-                        ? container.resources!.requests['memory']
+                        container?.resources?.requests != null &&
+                            container!.resources!.requests!.containsKey(
+                              'memory',
+                            )
+                        ? container!.resources!.requests!['memory']
                         : '-',
                   ),
                   DetailsItemModel(
                     name: 'Memory Limits',
                     values:
-                        container.resources != null &&
-                            container.resources!.limits.containsKey('memory')
-                        ? container.resources!.limits['memory']
+                        container?.resources?.limits != null &&
+                            container!.resources!.limits!.containsKey('memory')
+                        ? container!.resources!.limits!['memory']
                         : '-',
                   ),
                 ],
@@ -742,140 +772,144 @@ class DetailsContainer extends StatelessWidget {
               const SizedBox(height: Constants.spacingMiddle),
               AppVerticalListSimpleWidget(
                 title: 'Environment Variables',
-                items: container.env
-                    .map(
-                      (env) => AppVerticalListSimpleModel(
-                        onTap: () {
-                          showSnackbar(
-                            context,
-                            env.name,
-                            env.value != null
-                                ? env.value!
-                                : env.valueFrom != null
-                                ? _getValueFrom(env.valueFrom!)
-                                : '-',
-                          );
-                        },
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(Constants.sizeBorderRadius),
+                items:
+                    container?.env
+                        ?.map(
+                          (env) => AppVerticalListSimpleModel(
+                            onTap: () {
+                              showSnackbar(
+                                context,
+                                env?.name ?? '',
+                                env?.value != null
+                                    ? env!.value!
+                                    : env?.valueFrom != null
+                                    ? _getValueFrom(env!.valueFrom!)
+                                    : '-',
+                              );
+                            },
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(Constants.sizeBorderRadius),
+                                  ),
+                                ),
+                                height: 54,
+                                width: 54,
+                                padding: const EdgeInsets.all(
+                                  Constants.spacingIcon54x54,
+                                ),
+                                child: SvgPicture.asset(
+                                  'assets/resources/secrets.svg',
+                                ),
                               ),
-                            ),
-                            height: 54,
-                            width: 54,
-                            padding: const EdgeInsets.all(
-                              Constants.spacingIcon54x54,
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/resources/secrets.svg',
-                            ),
-                          ),
-                          const SizedBox(width: Constants.spacingSmall),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  env.name,
-                                  style: primaryTextStyle(context),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                              const SizedBox(width: Constants.spacingSmall),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      env?.name ?? '',
+                                      style: primaryTextStyle(context),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      env?.value != null
+                                          ? env!.value!
+                                          : env?.valueFrom != null
+                                          ? _getValueFrom(env!.valueFrom!)
+                                          : '-',
+                                      style: secondaryTextStyle(context),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  env.value != null
-                                      ? env.value!
-                                      : env.valueFrom != null
-                                      ? _getValueFrom(env.valueFrom!)
-                                      : '-',
-                                  style: secondaryTextStyle(context),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(width: Constants.spacingSmall),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: Theme.of(context)
+                                    .extension<CustomColors>()!
+                                    .textSecondary
+                                    .withValues(alpha: Constants.opacityIcon),
+                                size: 24,
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: Constants.spacingSmall),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            color: Theme.of(context)
-                                .extension<CustomColors>()!
-                                .textSecondary
-                                .withValues(alpha: Constants.opacityIcon),
-                            size: 24,
-                          ),
-                        ],
-                      ),
-                    )
-                    .toList(),
+                        )
+                        .toList() ??
+                    [],
               ),
               const SizedBox(height: Constants.spacingMiddle),
               AppVerticalListSimpleWidget(
                 title: 'Volume Mounts',
-                items: container.volumeMounts
-                    .map(
-                      (volumeMount) => AppVerticalListSimpleModel(
-                        onTap: () {
-                          showSnackbar(
-                            context,
-                            volumeMount.name,
-                            'Path: ${volumeMount.mountPath}\nSub-Path: ${volumeMount.subPath ?? '-'}\nReadonly: ${volumeMount.readOnly == true ? 'True' : 'False'}',
-                          );
-                        },
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(Constants.sizeBorderRadius),
+                items:
+                    container?.volumeMounts
+                        ?.map(
+                          (volumeMount) => AppVerticalListSimpleModel(
+                            onTap: () {
+                              showSnackbar(
+                                context,
+                                volumeMount?.name ?? '',
+                                'Path: ${volumeMount?.mountPath}\nSub-Path: ${volumeMount?.subPath ?? '-'}\nReadonly: ${volumeMount?.readOnly == true ? 'True' : 'False'}',
+                              );
+                            },
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(Constants.sizeBorderRadius),
+                                  ),
+                                ),
+                                height: 54,
+                                width: 54,
+                                padding: const EdgeInsets.all(
+                                  Constants.spacingIcon54x54,
+                                ),
+                                child: SvgPicture.asset(
+                                  'assets/resources/persistentvolumes.svg',
+                                ),
                               ),
-                            ),
-                            height: 54,
-                            width: 54,
-                            padding: const EdgeInsets.all(
-                              Constants.spacingIcon54x54,
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/resources/persistentvolumes.svg',
-                            ),
-                          ),
-                          const SizedBox(width: Constants.spacingSmall),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  volumeMount.name,
-                                  style: primaryTextStyle(context),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                              const SizedBox(width: Constants.spacingSmall),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      volumeMount?.name ?? '',
+                                      style: primaryTextStyle(context),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      volumeMount?.mountPath ?? '',
+                                      style: secondaryTextStyle(context),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  volumeMount.mountPath,
-                                  style: secondaryTextStyle(context),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(width: Constants.spacingSmall),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: Theme.of(context)
+                                    .extension<CustomColors>()!
+                                    .textSecondary
+                                    .withValues(alpha: Constants.opacityIcon),
+                                size: 24,
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: Constants.spacingSmall),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            color: Theme.of(context)
-                                .extension<CustomColors>()!
-                                .textSecondary
-                                .withValues(alpha: Constants.opacityIcon),
-                            size: 24,
-                          ),
-                        ],
-                      ),
-                    )
-                    .toList(),
+                        )
+                        .toList() ??
+                    [],
               ),
             ],
           ),
@@ -897,10 +931,11 @@ List<ApisMetricsV1beta1PodMetricsItemContainer>? _decodeContainerMetrics(
 
 /// [PodContainerPort] represents a single port of a Pod. It contains the name
 /// of the container ([containerName]) where the port is used and the [port]
-/// specification.
+/// specification. [port] is [podlistv1.ContainerPort] or
+/// [podlistv1.InitContainerPort].
 class PodContainerPort {
   String containerName;
-  IoK8sApiCoreV1ContainerPort port;
+  dynamic port;
 
   PodContainerPort({required this.containerName, required this.port});
 }
@@ -909,18 +944,26 @@ class PodContainerPort {
 /// ephemeral containers of a [pod]. The returned list is of the type
 /// `PodContainerPort`, so that we know to which container relates to which
 /// port.
-List<PodContainerPort>? _getPorts(IoK8sApiCoreV1Pod pod) {
+List<PodContainerPort>? _getPorts(podlistv1.PodlistV1Item pod) {
   final List<PodContainerPort> ports = [];
 
-  for (var container in pod.spec!.initContainers) {
-    for (var port in container.ports) {
-      ports.add(PodContainerPort(containerName: container.name, port: port));
+  if (pod.spec!.initContainers != null) {
+    for (var container in pod.spec!.initContainers!) {
+      if (container?.ports != null) {
+        for (var port in container!.ports!) {
+          ports.add(
+            PodContainerPort(containerName: container.name, port: port),
+          );
+        }
+      }
     }
   }
 
   for (var container in pod.spec!.containers) {
-    for (var port in container.ports) {
-      ports.add(PodContainerPort(containerName: container.name, port: port));
+    if (container?.ports != null) {
+      for (var port in container!.ports!) {
+        ports.add(PodContainerPort(containerName: container.name, port: port));
+      }
     }
   }
 
@@ -951,7 +994,7 @@ class PodDetails {
 }
 
 /// [_getPodDetails] returns the details of a Pod as [PodDetails].
-PodDetails _getPodDetails(IoK8sApiCoreV1Pod pod) {
+PodDetails _getPodDetails(podlistv1.PodlistV1Item pod) {
   int shouldReady = 0;
   int isReady = 0;
   int restarts = 0;
@@ -966,23 +1009,27 @@ PodDetails _getPodDetails(IoK8sApiCoreV1Pod pod) {
     );
   }
 
-  for (var containerStatus in pod.status!.containerStatuses) {
-    shouldReady++;
-    if (containerStatus.ready) {
-      isReady++;
-    }
+  if (pod.status!.containerStatuses != null) {
+    for (var containerStatus in pod.status!.containerStatuses!) {
+      shouldReady++;
+      if (containerStatus!.ready) {
+        isReady++;
+      }
 
-    restarts += containerStatus.restartCount;
+      restarts += containerStatus.restartCount;
 
-    if (containerStatus.lastState != null &&
-        containerStatus.lastState!.terminated != null &&
-        containerStatus.lastState!.terminated!.exitCode != 0 &&
-        containerStatus.lastState!.terminated!.finishedAt != null &&
-        DateTime.now()
-                .difference(containerStatus.lastState!.terminated!.finishedAt!)
-                .inHours <=
-            24) {
-      restartsWithinLast24Hours = true;
+      if (containerStatus.lastState != null &&
+          containerStatus.lastState!.terminated != null &&
+          containerStatus.lastState!.terminated!.exitCode != 0 &&
+          containerStatus.lastState!.terminated!.finishedAt != null &&
+          DateTime.now()
+                  .difference(
+                    containerStatus.lastState!.terminated!.finishedAt!,
+                  )
+                  .inHours <=
+              24) {
+        restartsWithinLast24Hours = true;
+      }
     }
   }
 
@@ -1005,32 +1052,41 @@ PodDetails _getPodDetails(IoK8sApiCoreV1Pod pod) {
 
 /// [_getPodStatus] returns the status of a Pod as a string. The status is
 /// determined by the phase of the Pod and the status of the containers.
-String _getPodStatus(IoK8sApiCoreV1Pod pod) {
+String _getPodStatus(podlistv1.PodlistV1Item pod) {
   switch (pod.status?.phase) {
-    case 'Succeeded':
-      for (var status in pod.status!.containerStatuses) {
-        if (status.state?.terminated != null) {
-          return status.state?.terminated?.reason ?? pod.status!.phase!;
+    case podlistv1.Phase.SUCCEEDED:
+      if (pod.status!.containerStatuses != null) {
+        for (var status in pod.status!.containerStatuses!) {
+          if (status?.state?.terminated != null) {
+            return status?.state?.terminated?.reason ?? pod.status!.phase!.name;
+          }
         }
       }
       break;
-    case 'Failed':
-      for (var condition in pod.status!.conditions) {
-        if (condition.type == 'Initialized' && condition.status == 'False') {
-          return 'Init:Error';
+    case podlistv1.Phase.FAILED:
+      if (pod.status!.conditions != null) {
+        for (var condition in pod.status!.conditions!) {
+          if (condition?.type == 'Initialized' &&
+              condition?.status == 'False') {
+            return 'Init:Error';
+          }
         }
       }
-      for (var status in pod.status!.containerStatuses) {
-        if (status.state?.terminated != null) {
-          return status.state?.terminated?.reason ?? pod.status!.phase!;
+      if (pod.status!.containerStatuses != null) {
+        for (var status in pod.status!.containerStatuses!) {
+          if (status?.state?.terminated != null) {
+            return status?.state?.terminated?.reason ?? pod.status!.phase!.name;
+          }
         }
       }
       break;
-    case 'Running':
-    case 'Pending':
-      for (var status in pod.status!.containerStatuses) {
-        if (status.state?.waiting != null) {
-          return status.state?.waiting?.reason ?? pod.status!.phase!;
+    case podlistv1.Phase.RUNNING:
+    case podlistv1.Phase.PENDING:
+      if (pod.status!.containerStatuses != null) {
+        for (var status in pod.status!.containerStatuses!) {
+          if (status?.state?.waiting != null) {
+            return status?.state?.waiting?.reason ?? pod.status!.phase!.name;
+          }
         }
       }
       break;
@@ -1041,14 +1097,16 @@ String _getPodStatus(IoK8sApiCoreV1Pod pod) {
       }
   }
 
-  return pod.status?.phase ?? '-';
+  return pod.status?.phase?.name ?? '-';
 }
 
 /// [_isPodWaitingContainers] returns true if a Pod has waiting containers.
-bool _isPodWaitingContainers(IoK8sApiCoreV1Pod pod) {
-  for (var status in pod.status!.containerStatuses) {
-    if (status.state?.waiting != null) {
-      return true;
+bool _isPodWaitingContainers(podlistv1.PodlistV1Item pod) {
+  if (pod.status!.containerStatuses != null) {
+    for (var status in pod.status!.containerStatuses!) {
+      if (status?.state?.waiting != null) {
+        return true;
+      }
     }
   }
   return false;
@@ -1056,25 +1114,29 @@ bool _isPodWaitingContainers(IoK8sApiCoreV1Pod pod) {
 
 /// [_isPodHealthy] returns true if a Pod is healthy. A Pod is healthy if all
 /// containers are running and the Pod is in the state 'Running'.
-bool _isPodHealthy(IoK8sApiCoreV1Pod pod) {
+bool _isPodHealthy(podlistv1.PodlistV1Item pod) {
   switch (pod.status?.phase) {
-    case 'Succeeded':
-      for (var status in pod.status!.containerStatuses) {
-        if (status.state?.terminated != null &&
-            status.state?.terminated?.exitCode != 0) {
-          return false;
+    case podlistv1.Phase.SUCCEEDED:
+      if (pod.status!.containerStatuses != null) {
+        for (var status in pod.status!.containerStatuses!) {
+          if (status?.state?.terminated != null &&
+              status?.state?.terminated?.exitCode != 0) {
+            return false;
+          }
         }
       }
       break;
-    case 'Pending':
+    case podlistv1.Phase.PENDING:
       if (_isPodWaitingContainers(pod)) {
         return false;
       }
       break;
-    case 'Running':
-      for (var condition in pod.status!.conditions) {
-        if (condition.status == 'False') {
-          return false;
+    case podlistv1.Phase.RUNNING:
+      if (pod.status!.conditions != null) {
+        for (var condition in pod.status!.conditions!) {
+          if (condition?.status == 'False') {
+            return false;
+          }
         }
       }
       if (_isPodWaitingContainers(pod)) {
@@ -1092,7 +1154,7 @@ bool _isPodHealthy(IoK8sApiCoreV1Pod pod) {
 /// usage, requests and limits. The metrics are formatted as
 /// `usage / requests / limits`.
 ResourceMetrics? _getResourceDetails(
-  IoK8sApiCoreV1Pod pod,
+  podlistv1.PodlistV1Item pod,
   ResourceMetrics? usage,
 ) {
   try {
@@ -1102,36 +1164,40 @@ ResourceMetrics? _getResourceDetails(
     var memoryLimits = 0.0;
 
     for (var i = 0; i < pod.spec!.containers.length; i++) {
-      if (pod.spec!.containers[i].resources != null) {
-        if (pod.spec!.containers[i].resources!.requests.containsKey('cpu')) {
+      if (pod.spec!.containers[i]?.resources?.requests != null) {
+        if (pod.spec!.containers[i]!.resources!.requests!.containsKey('cpu')) {
           cpuRequests =
               cpuRequests +
               cpuMetricsStringToDouble(
-                pod.spec!.containers[i].resources!.requests['cpu']!,
+                pod.spec!.containers[i]!.resources!.requests!['cpu']!,
               );
         }
 
-        if (pod.spec!.containers[i].resources!.requests.containsKey('memory')) {
+        if (pod.spec!.containers[i]!.resources!.requests!.containsKey(
+          'memory',
+        )) {
           memoryRequests =
               memoryRequests +
               memoryMetricsStringToDouble(
-                pod.spec!.containers[i].resources!.requests['memory']!,
+                pod.spec!.containers[i]!.resources!.requests!['memory']!,
               );
         }
+      }
 
-        if (pod.spec!.containers[i].resources!.limits.containsKey('cpu')) {
+      if (pod.spec!.containers[i]?.resources?.limits != null) {
+        if (pod.spec!.containers[i]!.resources!.limits!.containsKey('cpu')) {
           cpuLimits =
               cpuLimits +
               cpuMetricsStringToDouble(
-                pod.spec!.containers[i].resources!.limits['cpu']!,
+                pod.spec!.containers[i]!.resources!.limits!['cpu']!,
               );
         }
 
-        if (pod.spec!.containers[i].resources!.limits.containsKey('memory')) {
+        if (pod.spec!.containers[i]!.resources!.limits!.containsKey('memory')) {
           memoryLimits =
               memoryLimits +
               memoryMetricsStringToDouble(
-                pod.spec!.containers[i].resources!.limits['memory']!,
+                pod.spec!.containers[i]!.resources!.limits!['memory']!,
               );
         }
       }
@@ -1152,7 +1218,7 @@ ResourceMetrics? _getResourceDetails(
 /// the [metrics] list. The returned metrics can then be used within the
 /// [ResourceItem] and the `_getResourceDetails`.
 ResourceMetrics? _getMetricsForPod(
-  IoK8sApiCoreV1Pod pod,
+  podlistv1.PodlistV1Item pod,
   List<ApisMetricsV1beta1PodMetricsItem>? metrics,
 ) {
   try {
@@ -1207,7 +1273,7 @@ ResourceMetrics? _getMetricsForPod(
 }
 
 String _getContainerState(
-  IoK8sApiCoreV1ContainerState? state, [
+  podlistv1.ContainerStatusState? state, [
   bool detailed = false,
 ]) {
   if (state == null) {
@@ -1241,7 +1307,42 @@ String _getContainerState(
   return '-';
 }
 
-List<String> _getProbe(IoK8sApiCoreV1Probe probe) {
+String _getContainerLastState(
+  podlistv1.ContainerStatusLastState? state, [
+  bool detailed = false,
+]) {
+  if (state == null) {
+    return '-';
+  }
+
+  if (state.waiting != null) {
+    if (detailed) {
+      return 'Waiting: ${state.waiting!.reason ?? '-'} / ${state.waiting!.message ?? '-'}';
+    }
+
+    return state.waiting!.reason ?? 'Waiting';
+  }
+
+  if (state.terminated != null) {
+    if (detailed) {
+      return 'Terminated with ${state.terminated!.exitCode} at ${formatTime(state.terminated?.finishedAt)}: ${state.terminated!.reason ?? '-'} / ${state.terminated!.message ?? '-'}';
+    }
+
+    return state.terminated!.reason ?? 'Terminated';
+  }
+
+  if (state.running != null) {
+    if (detailed) {
+      return 'Running since ${formatTime(state.running?.startedAt)}';
+    }
+
+    return 'Running';
+  }
+
+  return '-';
+}
+
+List<String> _getProbe(dynamic probe) {
   final List<String> list = [];
 
   if (probe.exec != null) {
@@ -1277,7 +1378,7 @@ List<String> _getProbe(IoK8sApiCoreV1Probe probe) {
   return list;
 }
 
-String _getValueFrom(IoK8sApiCoreV1EnvVarSource valueFrom) {
+String _getValueFrom(podlistv1.PurpleValueFrom valueFrom) {
   if (valueFrom.configMapKeyRef != null) {
     return 'configMapKeyRef(${valueFrom.configMapKeyRef!.name}: ${valueFrom.configMapKeyRef!.key})';
   }

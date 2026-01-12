@@ -2,16 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_list.dart';
+import 'package:kubenav/models/kubernetes/helmreleaselist_helm_v2.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart'
+    as details_item_conditions;
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -32,14 +33,13 @@ final Resource fluxResourceHelmRelease = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoFluxcdToolkitHelmV2HelmReleaseList.fromJson(parsed)?.items ?? [];
+    final items = HelmreleaselistHelmV2.fromJson(parsed).items;
 
     return items.map((e) {
       final status =
-          e.status?.conditions != null && e.status!.conditions!.isNotEmpty
+          e!.status?.conditions != null && e.status!.conditions!.isNotEmpty
           ? e.status!.conditions!
-                .where((e) => e.type == 'Ready')
+                .where((e) => e!.type == 'Ready')
                 .firstOrNull
                 ?.status
           : 'Unknown';
@@ -57,17 +57,17 @@ final Resource fluxResourceHelmRelease = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitHelmV2HelmReleaseList.fromJson(parsed)?.items ?? [];
+    return HelmreleaselistHelmV2.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoFluxcdToolkitHelmV2HelmRelease).metadata?.name ?? '';
+    return (item as Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoFluxcdToolkitHelmV2HelmRelease).metadata?.namespace;
+    return (item as Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitHelmV2HelmRelease.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -77,7 +77,7 @@ final Resource fluxResourceHelmRelease = Resource(
     return json.decode(json.encode(item));
   },
   listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
-    final item = listItem.item as IoFluxcdToolkitHelmV2HelmRelease;
+    final item = listItem.item as Item;
     final status = listItem.status;
 
     return ResourcesListItem(
@@ -88,29 +88,63 @@ final Resource fluxResourceHelmRelease = Resource(
       status: status,
       details: [
         'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.status : '-'}',
-        'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.message : '-'}',
+        'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e!.type == 'Ready').firstOrNull?.status : '-'}',
+        'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e!.type == 'Ready').firstOrNull?.message : '-'}',
         'Age: ${getAge(item.metadata?.creationTimestamp)}',
       ],
     );
   },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoFluxcdToolkitHelmV2HelmRelease;
+    final item = listItem as Item;
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
-      'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.status : '-'}',
-      'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e.type == 'Ready').firstOrNull?.message : '-'}',
+      'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e!.type == 'Ready').firstOrNull?.status : '-'}',
+      'Status: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? item.status!.conditions!.where((e) => e!.type == 'Ready').firstOrNull?.message : '-'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
   detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
-    final item = detailsItem as IoFluxcdToolkitHelmV2HelmRelease;
+    final item = detailsItem as Item;
 
     return Column(
       children: [
-        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-        DetailsItemConditions(conditions: item.status?.conditions),
+        details_item_metadata.DetailsItemMetadata(
+          kind: item.kind?.name,
+          metadata: details_item_metadata.Metadata(
+            name: item.metadata?.name,
+            namespace: item.metadata?.namespace,
+            labels: item.metadata?.labels,
+            annotations: item.metadata?.annotations,
+            creationTimestamp: item.metadata?.creationTimestamp,
+            ownerReferences: item.metadata?.ownerReferences
+                ?.map(
+                  (ownerReference) => details_item_metadata.OwnerReference(
+                    apiVersion: ownerReference?.apiVersion ?? '',
+                    blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                    controller: ownerReference?.controller,
+                    kind: ownerReference?.kind ?? '',
+                    name: ownerReference?.name ?? '',
+                    uid: ownerReference?.uid ?? '',
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+        details_item_conditions.DetailsItemConditions(
+          conditions: item.status?.conditions
+              ?.map(
+                (condition) => details_item_conditions.Condition(
+                  type: condition?.type ?? '',
+                  status: condition?.status.name ?? '',
+                  lastTransitionTime:
+                      condition?.lastTransitionTime ?? DateTime.now(),
+                  reason: condition?.reason ?? '',
+                  message: condition?.message ?? '',
+                ),
+              )
+              .toList(),
+        ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Configuration',
@@ -127,7 +161,7 @@ final Resource fluxResourceHelmRelease = Resource(
               onTap:
                   item.spec?.chart?.spec.sourceRef.kind != null &&
                       kindToFluxResource.containsKey(
-                        item.spec!.chart?.spec.sourceRef.kind!.value,
+                        item.spec!.chart?.spec.sourceRef.kind.name,
                       )
                   ? (int index) {
                       final resource =
@@ -136,8 +170,8 @@ final Resource fluxResourceHelmRelease = Resource(
                               .chart
                               ?.spec
                               .sourceRef
-                              .kind!
-                              .value];
+                              .kind
+                              .name];
 
                       if (resource != null) {
                         navigate(
@@ -155,7 +189,7 @@ final Resource fluxResourceHelmRelease = Resource(
                         showSnackbar(
                           context,
                           'Source',
-                          '${item.spec!.chart?.spec.sourceRef.kind!.value} (${item.spec?.chart?.spec.sourceRef.namespace ?? item.metadata?.namespace ?? ''}/${item.spec?.chart?.spec.sourceRef.name ?? ''})',
+                          '${item.spec!.chart?.spec.sourceRef.kind.name} (${item.spec?.chart?.spec.sourceRef.namespace ?? item.metadata?.namespace ?? ''}/${item.spec?.chart?.spec.sourceRef.name ?? ''})',
                         );
                       }
                     }
@@ -204,7 +238,7 @@ final Resource fluxResourceHelmRelease = Resource(
             ),
             DetailsItemModel(
               name: 'Last Applied Revision',
-              values: item.status?.history.firstOrNull?.chartVersion,
+              values: item.status?.history?.firstOrNull?.chartVersion,
             ),
             DetailsItemModel(
               name: 'Last Attempted Revision',

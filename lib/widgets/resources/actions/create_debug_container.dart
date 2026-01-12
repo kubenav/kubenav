@@ -9,8 +9,7 @@ import 'package:highlight/languages/yaml.dart' as highlight_yaml;
 import 'package:provider/provider.dart';
 import 'package:yaml/yaml.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_ephemeral_container.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
+import 'package:kubenav/models/kubernetes/podlist_v1.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/helpers_service.dart';
@@ -53,7 +52,7 @@ tty: true''';
 /// The [PrepareJSONPatchData] class is used to prepare the data for the JSON
 /// patch via the [_prepareJSONPatch] function.
 class PrepareJSONPatchData {
-  IoK8sApiCoreV1Pod pod;
+  PodlistV1Item pod;
   String editorFormat;
   String ephemeralContainer;
 
@@ -68,21 +67,17 @@ class PrepareJSONPatchData {
 /// string for the [HelpersService.createJSONPatch] function. We do this in an
 /// additional function so this can be run in an isolate.
 List<String> _prepareJSONPatch(PrepareJSONPatchData data) {
-  final copy = IoK8sApiCoreV1Pod.fromJson(resourcePod.toJson(data.pod))!;
+  final copy = PodlistV1Item.fromJson(resourcePod.toJson(data.pod));
   final ephemeralContainer = data.editorFormat == 'json'
-      ? IoK8sApiCoreV1EphemeralContainer.fromJson(
-          json.decode(data.ephemeralContainer),
-        )
-      : IoK8sApiCoreV1EphemeralContainer.fromJson(
-          loadYaml(data.ephemeralContainer),
-        );
+      ? EphemeralContainer.fromJson(json.decode(data.ephemeralContainer))
+      : EphemeralContainer.fromJson(loadYaml(data.ephemeralContainer));
 
   if (copy.spec!.ephemeralContainers == null) {
-    copy.spec!.ephemeralContainers = [ephemeralContainer!];
+    copy.spec!.ephemeralContainers = [ephemeralContainer];
   } else {
     copy.spec!.ephemeralContainers = [
       ...copy.spec!.ephemeralContainers!,
-      ephemeralContainer!,
+      ephemeralContainer,
     ];
   }
 
@@ -101,7 +96,7 @@ class CreateDebugContainer extends StatefulWidget {
 
   final String name;
   final String namespace;
-  final IoK8sApiCoreV1Pod pod;
+  final PodlistV1Item pod;
 
   @override
   State<CreateDebugContainer> createState() => _CreateDebugContainerState();

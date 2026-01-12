@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application.dart';
+import 'package:kubenav/models/kubernetes/applicationlist_argoproj_v1alpha1.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -56,7 +56,7 @@ class _PluginArgoSyncState extends State<PluginArgoSync> {
         _isLoading = true;
       });
 
-      if (widget.item is! IoArgoprojV1alpha1Application) {
+      if (widget.item is! Item) {
         throw 'Unsupported Resource';
       }
 

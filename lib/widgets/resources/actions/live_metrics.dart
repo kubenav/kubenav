@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
+import 'package:kubenav/models/kubernetes/podlist_v1.dart' as podlistv1;
 import 'package:kubenav/models/kubernetes_extensions/pod_metrics.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
@@ -60,7 +60,7 @@ class PodResourceForLiveMetrics {
 }
 
 PodResourceForLiveMetrics? getResourcesForLiveMetrics(
-  IoK8sApiCoreV1Pod? pod,
+  podlistv1.PodlistV1Item? pod,
   String selectedContainer,
 ) {
   try {
@@ -74,40 +74,46 @@ PodResourceForLiveMetrics? getResourcesForLiveMetrics(
     var memoryLimits = 0.0;
 
     for (var i = 0; i < pod.spec!.containers.length; i++) {
-      if (pod.spec!.containers[i].resources != null) {
+      if (pod.spec!.containers[i]?.resources?.requests != null) {
         if (selectedContainer == '' ||
-            selectedContainer == pod.spec!.containers[i].name) {
-          if (pod.spec!.containers[i].resources!.requests.containsKey('cpu')) {
+            selectedContainer == pod.spec!.containers[i]!.name) {
+          if (pod.spec!.containers[i]!.resources!.requests!.containsKey(
+            'cpu',
+          )) {
             cpuRequests =
                 cpuRequests +
                 cpuMetricsStringToDouble(
-                  pod.spec!.containers[i].resources!.requests['cpu']!,
+                  pod.spec!.containers[i]!.resources!.requests!['cpu']!,
                 );
           }
 
-          if (pod.spec!.containers[i].resources!.requests.containsKey(
+          if (pod.spec!.containers[i]!.resources!.requests!.containsKey(
             'memory',
           )) {
             memoryRequests =
                 memoryRequests +
                 memoryMetricsStringToDouble(
-                  pod.spec!.containers[i].resources!.requests['memory']!,
+                  pod.spec!.containers[i]!.resources!.requests!['memory']!,
                 );
           }
+        }
 
-          if (pod.spec!.containers[i].resources!.limits.containsKey('cpu')) {
+        if (pod.spec!.containers[i]?.resources?.limits != null) {
+          if (pod.spec!.containers[i]!.resources!.limits!.containsKey('cpu')) {
             cpuLimits =
                 cpuLimits +
                 cpuMetricsStringToDouble(
-                  pod.spec!.containers[i].resources!.limits['cpu']!,
+                  pod.spec!.containers[i]!.resources!.limits!['cpu']!,
                 );
           }
 
-          if (pod.spec!.containers[i].resources!.limits.containsKey('memory')) {
+          if (pod.spec!.containers[i]!.resources!.limits!.containsKey(
+            'memory',
+          )) {
             memoryLimits =
                 memoryLimits +
                 memoryMetricsStringToDouble(
-                  pod.spec!.containers[i].resources!.limits['memory']!,
+                  pod.spec!.containers[i]!.resources!.limits!['memory']!,
                 );
           }
         }
@@ -148,7 +154,7 @@ class LiveMetrics extends StatefulWidget {
 
   final String name;
   final String namespace;
-  final IoK8sApiCoreV1Pod pod;
+  final podlistv1.PodlistV1Item pod;
   final String selectedContainer;
 
   @override
@@ -765,7 +771,7 @@ class LiveMetricsContainers extends StatelessWidget {
 
   final String name;
   final String namespace;
-  final IoK8sApiCoreV1Pod pod;
+  final podlistv1.PodlistV1Item pod;
 
   @override
   Widget build(BuildContext context) {
@@ -775,7 +781,7 @@ class LiveMetricsContainers extends StatelessWidget {
         (index) => AppActionsWidgetAction(
           title: index == pod.spec!.containers.length
               ? 'All Containers'
-              : pod.spec?.containers[index].name ?? '',
+              : pod.spec?.containers[index]?.name ?? '',
           color: Theme.of(context).colorScheme.primary,
           onTap: () {
             Navigator.pop(context);
@@ -787,7 +793,7 @@ class LiveMetricsContainers extends StatelessWidget {
                 pod: pod,
                 selectedContainer: index == pod.spec!.containers.length
                     ? ''
-                    : pod.spec?.containers[index].name ?? '',
+                    : pod.spec?.containers[index]?.name ?? '',
               ),
             );
           },

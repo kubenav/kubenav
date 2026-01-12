@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:json_path/json_path.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_object_reference.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_rbac_v1_policy_rule.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_label_selector.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_owner_reference.dart';
 import 'package:kubenav/repositories/crd_cache_repository.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/navigate.dart';
@@ -47,6 +43,25 @@ String timeDiff(DateTime? start, DateTime? end) {
   return '${age.inSeconds}s';
 }
 
+class Selector {
+  List<MatchExpression?>? matchExpressions;
+  Map<String, String?>? matchLabels;
+
+  Selector({this.matchExpressions, this.matchLabels});
+}
+
+class MatchExpression {
+  String key;
+  String matchExpressionOperator;
+  List<String?>? values;
+
+  MatchExpression({
+    required this.key,
+    required this.matchExpressionOperator,
+    this.values,
+  });
+}
+
 /// [getSelector] returns a selector string which can be used in a Kubernetes
 /// API request to the the all resources, which are matching the given selector.
 /// For example this can be used to get all Pods for a Deployment by using the
@@ -55,12 +70,12 @@ String timeDiff(DateTime? start, DateTime? end) {
 /// TODO: Currently we only have implemented this function for the `matchLabels`
 /// field in the selector. in the future we should also implement it for
 /// `matchExpressions`.
-String getSelector(IoK8sApimachineryPkgApisMetaV1LabelSelector? selector) {
+String getSelector(Selector? selector) {
   if (selector == null) {
     return '';
   }
 
-  if (selector.matchLabels.isNotEmpty) {
+  if (selector.matchLabels != null && selector.matchLabels!.isNotEmpty) {
     return getMatchLabelsSelector(selector.matchLabels);
   }
 
@@ -69,13 +84,15 @@ String getSelector(IoK8sApimachineryPkgApisMetaV1LabelSelector? selector) {
 
 /// [getMatchLabelsSelector] builds the selector the [matchLabels] values of a
 /// selector. The [matchLabels] argument must be of type `Map<String, String>`.
-String getMatchLabelsSelector(Map<String, String> matchLabels) {
-  if (matchLabels.isEmpty) {
+String getMatchLabelsSelector(Map<String, String?>? matchLabels) {
+  if (matchLabels == null || matchLabels.isEmpty) {
     return '';
   }
 
   List<String> labelSelectors = [];
-  matchLabels.forEach((key, value) => labelSelectors.add('$key=$value'));
+  matchLabels.forEach(
+    (key, value) => labelSelectors.add('$key=${value ?? ''}'),
+  );
 
   return 'labelSelector=${Uri.encodeComponent(labelSelectors.join(','))}';
 }
@@ -88,47 +105,6 @@ String formatTime(DateTime? timestamp) {
   }
 
   return '${timestamp.year.toString()}-${timestamp.month.toString().padLeft(2, '0')}-${timestamp.day.toString().padLeft(2, '0')} ${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}:${timestamp.second.toString().padLeft(2, '0')}';
-}
-
-/// [Rule] is our internal format of a rule in a ClusterRole or Role. It
-/// contains the [resource] name and a list of all [nonResourceURLs],
-/// [resourceNames] and [verbs]. The [resource] consists of the `resource` name
-/// and `apiGroup`.
-class Rule {
-  String resource;
-  List<String> nonResourceURLs;
-  List<String> resourceNames;
-  List<String> verbs;
-
-  Rule({
-    required this.resource,
-    required this.nonResourceURLs,
-    required this.resourceNames,
-    required this.verbs,
-  });
-}
-
-/// [formatRules] returns a `List` of rules in our internal [Rule] format from
-/// the given [rules] list from a ClusterRole or Role.
-List<Rule> formatRules(List<IoK8sApiRbacV1PolicyRule> rules) {
-  final List<Rule> formattedRules = [];
-
-  for (var rule in rules) {
-    for (var apiGroup in rule.apiGroups) {
-      for (var resource in rule.resources) {
-        formattedRules.add(
-          Rule(
-            resource: '$resource${apiGroup != '' ? '.$apiGroup' : ''}',
-            nonResourceURLs: rule.nonResourceURLs,
-            resourceNames: rule.resourceNames,
-            verbs: rule.verbs,
-          ),
-        );
-      }
-    }
-  }
-
-  return formattedRules;
 }
 
 /// [cpuMetricsStringToDouble] converts the given [metric] `String` into an
@@ -250,6 +226,26 @@ String getAdditionalPrinterColumnValue(
   return formattedValue;
 }
 
+class Reference {
+  String? apiVersion;
+  String? fieldPath;
+  String? kind;
+  String? name;
+  String? namespace;
+  String? resourceVersion;
+  String? uid;
+
+  Reference({
+    this.apiVersion,
+    this.fieldPath,
+    this.kind,
+    this.name,
+    this.namespace,
+    this.resourceVersion,
+    this.uid,
+  });
+}
+
 /// [goToReference] allows us to navigate to the provided [reference]. It
 /// returns a `navigate` function or null for a provided reference. The
 /// reference can be a [IoK8sApiCoreV1ObjectReference] as it is used in events
@@ -257,86 +253,64 @@ String getAdditionalPrinterColumnValue(
 /// manifests. If the reference is a owner reference we also need a [namespace].
 Future<void> goToReference(
   BuildContext context,
-  dynamic reference,
+  Reference reference,
   String? namespace,
 ) async {
-  if (reference is IoK8sApiCoreV1ObjectReference) {
-    if (kindToResource.containsKey(reference.kind)) {
-      navigate(
-        context,
-        ResourcesDetails(
-          name: reference.name ?? '',
-          namespace: reference.namespace,
-          resource: kindToResource[reference.kind]!,
-        ),
-      );
-      return;
-    }
-  }
-
-  if (reference is IoK8sApimachineryPkgApisMetaV1OwnerReference) {
-    if (kindToResource.containsKey(reference.kind)) {
-      navigate(
-        context,
-        ResourcesDetails(
-          resource: kindToResource[reference.kind]!,
-          name: reference.name,
-          namespace: namespace,
-        ),
-      );
-      return;
-    }
+  if (kindToResource.containsKey(reference.kind)) {
+    navigate(
+      context,
+      ResourcesDetails(
+        resource: kindToResource[reference.kind]!,
+        name: reference.name ?? '',
+        namespace: reference.namespace ?? namespace,
+      ),
+    );
+    return;
   }
 
   try {
     final crd = await CRDsCacheRepository().getCRD(
       context,
-      reference.kind,
-      reference.apiVersion,
+      reference.kind ?? '',
+      reference.apiVersion ?? '',
     );
 
     if (crd != null) {
-      if (reference.kind == crd.spec.names.kind) {
-        for (var version in crd.spec.versions) {
-          if (reference.apiVersion == '${crd.spec.group}/${version.name}') {
-            if (context.mounted) {
-              final customResource = buildCustomResource(
-                crd.spec.names.plural,
-                crd.spec.names.singular ?? crd.spec.names.plural,
-                '${crd.spec.group}/${version.name}',
-                '/apis/${crd.spec.group}/${version.name}',
-                crd.spec.names.plural,
-                crd.spec.scope,
-                version.additionalPrinterColumns
-                    .where((e) => e.priority == null || e.priority == 0)
-                    .map(
-                      (e) => AdditionalPrinterColumns(
-                        description: e.description ?? '',
-                        jsonPath: e.jsonPath,
-                        name: e.name,
-                        type: e.type,
-                      ),
-                    )
-                    .toList(),
-              );
+      if (reference.kind == crd.spec?.names.kind) {
+        if (crd.spec?.versions != null) {
+          for (var version in crd.spec!.versions) {
+            if (reference.apiVersion == '${crd.spec?.group}/${version.name}') {
+              if (context.mounted) {
+                final customResource = buildCustomResource(
+                  crd.spec?.names.plural ?? '',
+                  crd.spec?.names.singular ?? crd.spec?.names.plural ?? '',
+                  '${crd.spec?.group}/${version.name}',
+                  '/apis/${crd.spec?.group}/${version.name}',
+                  crd.spec?.names.plural ?? '',
+                  crd.spec?.scope ?? '',
+                  version.additionalPrinterColumns
+                      .where((e) => e.priority == null || e.priority == 0)
+                      .map(
+                        (e) => AdditionalPrinterColumns(
+                          description: e.description ?? '',
+                          jsonPath: e.jsonPath,
+                          name: e.name,
+                          type: e.type,
+                        ),
+                      )
+                      .toList(),
+                );
 
-              String? ns;
-              if (reference is IoK8sApiCoreV1ObjectReference) {
-                ns = reference.namespace;
+                navigate(
+                  context,
+                  ResourcesDetails(
+                    namespace: reference.namespace ?? namespace,
+                    name: reference.name ?? '',
+                    resource: customResource,
+                  ),
+                );
+                return;
               }
-              if (reference is IoK8sApimachineryPkgApisMetaV1OwnerReference) {
-                ns = namespace;
-              }
-
-              navigate(
-                context,
-                ResourcesDetails(
-                  namespace: ns,
-                  name: reference.name,
-                  resource: customResource,
-                ),
-              );
-              return;
             }
           }
         }

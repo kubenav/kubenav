@@ -2,15 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_certificates_v1_certificate_signing_request.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_certificates_v1_certificate_signing_request_condition.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_certificates_v1_certificate_signing_request_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart'
+    as details_item_conditions;
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
+import 'package:kubenav/models/kubernetes/certificatesigningrequestlist_certificates_v1.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
@@ -29,14 +28,12 @@ final resourceCertificateSigningRequest = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiCertificatesV1CertificateSigningRequestList.fromJson(
-          parsed,
-        )?.items ??
-        [];
+    final items = CertificatesigningrequestlistCertificatesV1.fromJson(
+      parsed,
+    ).items;
 
     return items.map((e) {
-      final condition = _getCondition(e.status?.conditions);
+      final condition = _getCondition(e?.status?.conditions);
 
       return ResourceItem(
         item: e,
@@ -51,25 +48,17 @@ final resourceCertificateSigningRequest = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCertificatesV1CertificateSigningRequestList.fromJson(
-          parsed,
-        )?.items ??
-        [];
+    return CertificatesigningrequestlistCertificatesV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiCertificatesV1CertificateSigningRequest)
-            .metadata
-            ?.name ??
-        '';
+    return (item as Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiCertificatesV1CertificateSigningRequest)
-        .metadata
-        ?.namespace;
+    return (item as Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCertificatesV1CertificateSigningRequest.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -80,8 +69,7 @@ final resourceCertificateSigningRequest = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item =
-            listItem.item as IoK8sApiCertificatesV1CertificateSigningRequest;
+        final item = listItem.item as Item;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -100,7 +88,7 @@ final resourceCertificateSigningRequest = Resource(
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiCertificatesV1CertificateSigningRequest;
+    final item = listItem as Item;
 
     return [
       'Signer Name: ${item.spec.signerName}',
@@ -112,23 +100,42 @@ final resourceCertificateSigningRequest = Resource(
   },
   detailsItemBuilder:
       (BuildContext context, Resource resource, dynamic detailsItem) {
-        final item =
-            detailsItem as IoK8sApiCertificatesV1CertificateSigningRequest;
+        final item = detailsItem as Item;
 
         return Column(
           children: [
-            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-            DetailsItemConditions(
+            details_item_metadata.DetailsItemMetadata(
+              kind: item.kind?.name,
+              metadata: details_item_metadata.Metadata(
+                name: item.metadata?.name,
+                namespace: item.metadata?.namespace,
+                labels: item.metadata?.labels,
+                annotations: item.metadata?.annotations,
+                creationTimestamp: item.metadata?.creationTimestamp,
+                ownerReferences: item.metadata?.ownerReferences
+                    ?.map(
+                      (ownerReference) => details_item_metadata.OwnerReference(
+                        apiVersion: ownerReference?.apiVersion ?? '',
+                        blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                        controller: ownerReference?.controller,
+                        kind: ownerReference?.kind ?? '',
+                        name: ownerReference?.name ?? '',
+                        uid: ownerReference?.uid ?? '',
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            details_item_conditions.DetailsItemConditions(
               conditions: item.status?.conditions
-                  .map(
-                    (e) => IoK8sApimachineryPkgApisMetaV1Condition(
+                  ?.map(
+                    (condition) => details_item_conditions.Condition(
+                      type: condition?.type ?? '',
+                      status: condition?.status ?? '',
                       lastTransitionTime:
-                          e.lastTransitionTime ?? DateTime.now(),
-                      message: e.message ?? '',
-                      observedGeneration: null,
-                      reason: e.reason ?? '',
-                      status: e.status,
-                      type: e.type,
+                          condition?.lastTransitionTime ?? DateTime.now(),
+                      reason: condition?.reason ?? '',
+                      message: condition?.message ?? '',
                     ),
                   )
                   .toList(),
@@ -176,19 +183,17 @@ final resourceCertificateSigningRequest = Resource(
       },
 );
 
-String _getCondition(
-  List<IoK8sApiCertificatesV1CertificateSigningRequestCondition>? conditions,
-) {
+String _getCondition(List<Condition?>? conditions) {
   if (conditions == null || conditions.isEmpty) {
     return 'Pending';
   }
 
   for (final condition in conditions) {
-    if (condition.type == 'Approved') {
+    if (condition?.type == 'Approved') {
       return 'Approved';
-    } else if (condition.type == 'Denied') {
+    } else if (condition?.type == 'Denied') {
       return 'Denied';
-    } else if (condition.type == 'Failed') {
+    } else if (condition?.type == 'Failed') {
       return 'Failed';
     }
   }

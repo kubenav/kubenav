@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' show Provider;
 
 import 'package:kubenav/models/cluster_provider.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
+import 'package:kubenav/models/kubernetes/podlist_v1.dart' as podlistv1;
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -42,9 +42,9 @@ class GetLogsPods extends StatefulWidget {
 class _GetLogsPodsState extends State<GetLogsPods> {
   bool _isLoading = false;
   String _error = '';
-  List<IoK8sApiCoreV1Pod> _pods = <IoK8sApiCoreV1Pod>[];
-  List<IoK8sApiCoreV1Pod> _selectedPods = <IoK8sApiCoreV1Pod>[];
-  IoK8sApiCoreV1Pod? _pod;
+  List<podlistv1.PodlistV1Item> _pods = <podlistv1.PodlistV1Item>[];
+  List<podlistv1.PodlistV1Item> _selectedPods = <podlistv1.PodlistV1Item>[];
+  podlistv1.PodlistV1Item? _pod;
 
   /// [_getPods] gets all Pods for the provided Deployment, DaemonSet or
   /// StatefulSet.
@@ -68,20 +68,35 @@ class _GetLogsPodsState extends State<GetLogsPods> {
         clustersRepository.activeClusterId,
       );
 
+      final selector = getSelector(
+        Selector(
+          matchLabels: widget.item.spec.selector.matchLabels,
+          matchExpressions: widget.item.spec.selector.matchExpressions
+              ?.map(
+                (e) => MatchExpression(
+                  key: e!.key,
+                  matchExpressionOperator: e.matchExpressionOperator,
+                  values: e.values,
+                ),
+              )
+              .toList(),
+        ),
+      );
+
       final result =
           await KubernetesService(
             cluster: cluster!,
             proxy: appRepository.settings.proxy,
             timeout: appRepository.settings.timeout,
           ).getRequest(
-            '${resourcePod.path}/namespaces/${widget.namespace}/${resourcePod.resource}?${getSelector(widget.item.spec.selector)}',
+            '${resourcePod.path}/namespaces/${widget.namespace}/${resourcePod.resource}?$selector',
           );
 
       final pods = await compute(resourcePod.decodeList, result);
 
       setState(() {
         _isLoading = false;
-        _pods = pods as List<IoK8sApiCoreV1Pod>;
+        _pods = pods as List<podlistv1.PodlistV1Item>;
         if (pods.isNotEmpty) {
           _pod = pods.first;
         }

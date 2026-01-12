@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_acme_v1_order.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_acme_v1_order_list.dart';
+import 'package:kubenav/models/kubernetes/orderlist_acme_v1.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -11,7 +10,8 @@ import 'package:kubenav/widgets/plugins/cert-manager/resources/plugin_cert_manag
 import 'package:kubenav/widgets/plugins/cert-manager/resources/plugin_cert_manager_resources_clusterissuers.dart';
 import 'package:kubenav/widgets/plugins/cert-manager/resources/plugin_cert_manager_resources_issuers.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -31,10 +31,10 @@ final Resource certManagerResourceOrder = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoCertManagerAcmeV1OrderList.fromJson(parsed)?.items ?? [];
+    final items = OrderlistAcmeV1.fromJson(parsed).items;
 
     return items.map((e) {
-      final state = e.status?.state?.value;
+      final state = e!.status?.state?.name;
 
       return ResourceItem(
         item: e,
@@ -49,17 +49,17 @@ final Resource certManagerResourceOrder = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoCertManagerAcmeV1OrderList.fromJson(parsed)?.items ?? [];
+    return OrderlistAcmeV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoCertManagerAcmeV1Order).metadata.name ?? '';
+    return (item as Item).metadata.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoCertManagerAcmeV1Order).metadata.namespace;
+    return (item as Item).metadata.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoCertManagerAcmeV1Order.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -70,7 +70,7 @@ final Resource certManagerResourceOrder = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoCertManagerAcmeV1Order;
+        final item = listItem.item as Item;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -81,7 +81,7 @@ final Resource certManagerResourceOrder = Resource(
           status: status,
           details: [
             'Namespace: ${item.metadata.namespace ?? '-'}',
-            'State: ${item.status?.state?.value ?? '-'}',
+            'State: ${item.status?.state?.name ?? '-'}',
             'Reason: ${item.status?.reason ?? '-'}',
             'Issuer: ${item.spec.issuerRef.name}',
             'Age: ${getAge(item.metadata.creationTimestamp)}',
@@ -89,11 +89,11 @@ final Resource certManagerResourceOrder = Resource(
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoCertManagerAcmeV1Order;
+    final item = listItem as Item;
 
     return [
       'Namespace: ${item.metadata.namespace ?? '-'}',
-      'State: ${item.status?.state?.value ?? '-'}',
+      'State: ${item.status?.state?.name ?? '-'}',
       'Reason: ${item.status?.reason ?? '-'}',
       'Issuer: ${item.spec.issuerRef.name}',
       'Age: ${getAge(item.metadata.creationTimestamp)}',
@@ -101,11 +101,32 @@ final Resource certManagerResourceOrder = Resource(
   },
   detailsItemBuilder:
       (BuildContext context, Resource resource, dynamic detailsItem) {
-        final item = detailsItem as IoCertManagerAcmeV1Order;
+        final item = detailsItem as Item;
 
         return Column(
           children: [
-            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            details_item_metadata.DetailsItemMetadata(
+              kind: item.kind?.name,
+              metadata: details_item_metadata.Metadata(
+                name: item.metadata.name,
+                namespace: item.metadata.namespace,
+                labels: item.metadata.labels,
+                annotations: item.metadata.annotations,
+                creationTimestamp: item.metadata.creationTimestamp,
+                ownerReferences: item.metadata.ownerReferences
+                    ?.map(
+                      (ownerReference) => details_item_metadata.OwnerReference(
+                        apiVersion: ownerReference?.apiVersion ?? '',
+                        blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                        controller: ownerReference?.controller,
+                        kind: ownerReference?.kind ?? '',
+                        name: ownerReference?.name ?? '',
+                        uid: ownerReference?.uid ?? '',
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
             const SizedBox(height: Constants.spacingMiddle),
             DetailsItem(
               title: 'Configuration',
@@ -147,7 +168,7 @@ final Resource certManagerResourceOrder = Resource(
               details: [
                 DetailsItemModel(
                   name: 'State',
-                  values: item.status?.state?.value,
+                  values: item.status?.state?.name,
                 ),
                 DetailsItemModel(name: 'Reason', values: item.status?.reason),
               ],

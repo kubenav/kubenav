@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_persistent_volume_claim.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_persistent_volume_claim_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
+import 'package:kubenav/models/kubernetes/persistentvolumeclaimlist_v1.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart'
+    as details_item_conditions;
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -35,15 +35,14 @@ final Resource resourcePersistentVolumeClaim = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiCoreV1PersistentVolumeClaimList.fromJson(parsed)?.items ?? [];
+    final items = PersistentvolumeclaimlistV1.fromJson(parsed).items;
 
     return items
         .map(
           (e) => ResourceItem(
             item: e,
             metrics: null,
-            status: e.status?.phase != 'Bound'
+            status: e?.status?.phase != Phase.BOUND
                 ? ResourceStatus.danger
                 : ResourceStatus.success,
           ),
@@ -52,18 +51,17 @@ final Resource resourcePersistentVolumeClaim = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1PersistentVolumeClaimList.fromJson(parsed)?.items ??
-        [];
+    return PersistentvolumeclaimlistV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiCoreV1PersistentVolumeClaim).metadata?.name ?? '';
+    return (item as Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiCoreV1PersistentVolumeClaim).metadata?.namespace;
+    return (item as Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1PersistentVolumeClaim.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -74,7 +72,7 @@ final Resource resourcePersistentVolumeClaim = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoK8sApiCoreV1PersistentVolumeClaim;
+        final item = listItem.item as Item;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -87,42 +85,63 @@ final Resource resourcePersistentVolumeClaim = Resource(
             'Namespace: ${item.metadata?.namespace ?? '-'}',
             'Status: ${item.status?.phase ?? '-'}',
             'Volume: ${item.spec?.volumeName ?? '-'}',
-            'Capacity: ${item.status?.capacity['storage'] ?? '-'}',
-            'Access Mode: ${item.spec?.accessModes.join(', ') ?? '-'}',
+            'Capacity: ${item.status?.capacity?['storage'] ?? '-'}',
+            'Access Mode: ${item.spec?.accessModes?.join(', ') ?? '-'}',
             'Storage Class: ${item.spec?.storageClassName ?? '-'}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiCoreV1PersistentVolumeClaim;
+    final item = listItem as Item;
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
       'Status: ${item.status?.phase ?? '-'}',
       'Volume: ${item.spec?.volumeName ?? '-'}',
-      'Capacity: ${item.status?.capacity['storage'] ?? '-'}',
-      'Access Mode: ${item.spec?.accessModes.join(', ') ?? '-'}',
+      'Capacity: ${item.status?.capacity?['storage'] ?? '-'}',
+      'Access Mode: ${item.spec?.accessModes?.join(', ') ?? '-'}',
       'Storage Class: ${item.spec?.storageClassName ?? '-'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
   detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
-    final item = detailsItem as IoK8sApiCoreV1PersistentVolumeClaim;
+    final item = detailsItem as Item;
 
     return Column(
       children: [
-        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-        DetailsItemConditions(
+        details_item_metadata.DetailsItemMetadata(
+          kind: item.kind?.name,
+          metadata: details_item_metadata.Metadata(
+            name: item.metadata?.name,
+            namespace: item.metadata?.namespace,
+            labels: item.metadata?.labels,
+            annotations: item.metadata?.annotations,
+            creationTimestamp: item.metadata?.creationTimestamp,
+            ownerReferences: item.metadata?.ownerReferences
+                ?.map(
+                  (ownerReference) => details_item_metadata.OwnerReference(
+                    apiVersion: ownerReference?.apiVersion ?? '',
+                    blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                    controller: ownerReference?.controller,
+                    kind: ownerReference?.kind ?? '',
+                    name: ownerReference?.name ?? '',
+                    uid: ownerReference?.uid ?? '',
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+        details_item_conditions.DetailsItemConditions(
           conditions: item.status?.conditions
-              .map(
-                (e) => IoK8sApimachineryPkgApisMetaV1Condition(
-                  lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
-                  message: e.message ?? '',
-                  observedGeneration: null,
-                  reason: e.reason ?? '',
-                  status: e.status,
-                  type: e.type,
+              ?.map(
+                (condition) => details_item_conditions.Condition(
+                  type: condition?.type ?? '',
+                  status: condition?.status ?? '',
+                  lastTransitionTime:
+                      condition?.lastTransitionTime ?? DateTime.now(),
+                  reason: condition?.reason ?? '',
+                  message: condition?.message ?? '',
                 ),
               )
               .toList(),
@@ -154,9 +173,9 @@ final Resource resourcePersistentVolumeClaim = Resource(
             DetailsItemModel(
               name: 'Requested Storage',
               values:
-                  item.spec?.resources != null &&
-                      item.spec!.resources!.requests.containsKey('storage')
-                  ? item.spec?.resources!.requests['storage']
+                  item.spec?.resources?.requests != null &&
+                      item.spec!.resources!.requests!.containsKey('storage')
+                  ? item.spec?.resources!.requests!['storage']
                   : null,
             ),
             DetailsItemModel(
@@ -194,8 +213,8 @@ final Resource resourcePersistentVolumeClaim = Resource(
               name: 'Storage',
               values:
                   item.status?.capacity != null &&
-                      item.status!.capacity.containsKey('storage')
-                  ? item.status?.capacity['storage']
+                      item.status!.capacity!.containsKey('storage')
+                  ? item.status?.capacity!['storage']
                   : null,
             ),
           ],

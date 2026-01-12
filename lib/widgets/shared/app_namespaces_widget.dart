@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_namespace.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_namespace_list.dart';
+import 'package:kubenav/models/kubernetes/namespacelist_v1.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -20,11 +19,13 @@ import 'package:kubenav/widgets/shared/app_list_item.dart';
 
 /// [_decode] is a helper function to decode the result of the Kubernetes API
 /// call to fetch all Namespaces of the currently active cluster. The function
-/// returns a list of [IoK8sApiCoreV1Namespace] and is used in the [compute]
-/// function to decode the result in an isolate.
-List<IoK8sApiCoreV1Namespace> _decode(String result) {
+/// returns a list of [Item] and is used in the [compute] function to decode the
+/// result in an isolate.
+List<Item> _decode(String result) {
   final parsed = json.decode(result);
-  return IoK8sApiCoreV1NamespaceList.fromJson(parsed)!.items;
+  return NamespacelistV1.fromJson(
+    parsed,
+  ).items.where((item) => item != null).map((item) => item!).toList();
 }
 
 /// [AppNamespacesWidget] is a widget which can be used to switch the namespace
@@ -43,11 +44,11 @@ class AppNamespacesWidget extends StatefulWidget {
 }
 
 class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
-  late Future<List<IoK8sApiCoreV1Namespace>> _futureFetchNamespaces;
+  late Future<List<Item>> _futureFetchNamespaces;
   String _filter = '';
 
   /// [_fetchNamespaces] fetches all Namespaces of the currently active cluster.
-  Future<List<IoK8sApiCoreV1Namespace>> _fetchNamespaces() async {
+  Future<List<Item>> _fetchNamespaces() async {
     AppRepository appRepository = Provider.of<AppRepository>(
       context,
       listen: false,
@@ -73,9 +74,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
   /// [_getFilteredNamespaces] filters the given list of [namespaces] by the
   /// setted [_filter]. When the [_filter] is not empty the name of an item must
   /// contain the filter keyword.
-  List<IoK8sApiCoreV1Namespace> _getFilteredNamespaces(
-    List<IoK8sApiCoreV1Namespace> namespaces,
-  ) {
+  List<Item> _getFilteredNamespaces(List<Item> namespaces) {
     return _filter == ''
         ? namespaces
         : namespaces
@@ -270,10 +269,7 @@ class _AppNamespacesWidgetState extends State<AppNamespacesWidget> {
           child: FutureBuilder(
             future: _futureFetchNamespaces,
             builder:
-                (
-                  BuildContext context,
-                  AsyncSnapshot<List<IoK8sApiCoreV1Namespace>> snapshot,
-                ) {
+                (BuildContext context, AsyncSnapshot<List<Item>> snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.none:
                     case ConnectionState.waiting:

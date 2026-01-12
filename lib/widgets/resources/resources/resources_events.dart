@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_event.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_event_list.dart';
+import 'package:kubenav/models/kubernetes/eventlist_v1.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_prometheus_charts_widget.dart';
@@ -26,14 +26,14 @@ final resourceEvent = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1EventList.fromJson(parsed)?.items ?? [];
+    final items = EventlistV1.fromJson(parsed).items;
 
     return items
         .map(
           (e) => ResourceItem(
             item: e,
             metrics: null,
-            status: e.type == 'Normal'
+            status: e?.type == 'Normal'
                 ? ResourceStatus.success
                 : ResourceStatus.warning,
           ),
@@ -42,17 +42,17 @@ final resourceEvent = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1EventList.fromJson(parsed)?.items ?? [];
+    return EventlistV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiCoreV1Event).metadata.name ?? '';
+    return (item as Item).metadata.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiCoreV1Event).metadata.namespace;
+    return (item as Item).metadata.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1Event.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -62,7 +62,7 @@ final resourceEvent = Resource(
     return json.decode(json.encode(item));
   },
   listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
-    final item = listItem.item as IoK8sApiCoreV1Event;
+    final item = listItem.item as Item;
     final status = listItem.status;
 
     return ResourcesListItem(
@@ -82,7 +82,7 @@ final resourceEvent = Resource(
     );
   },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiCoreV1Event;
+    final item = listItem as Item;
 
     return [
       'Namespace: ${item.metadata.namespace ?? '-'}',
@@ -95,11 +95,32 @@ final resourceEvent = Resource(
   },
   detailsItemBuilder:
       (BuildContext context, Resource resource, dynamic detailsItem) {
-        final item = detailsItem as IoK8sApiCoreV1Event;
+        final item = detailsItem as Item;
 
         return Column(
           children: [
-            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            details_item_metadata.DetailsItemMetadata(
+              kind: item.kind?.name,
+              metadata: details_item_metadata.Metadata(
+                name: item.metadata.name,
+                namespace: item.metadata.namespace,
+                labels: item.metadata.labels,
+                annotations: item.metadata.annotations,
+                creationTimestamp: item.metadata.creationTimestamp,
+                ownerReferences: item.metadata.ownerReferences
+                    ?.map(
+                      (ownerReference) => details_item_metadata.OwnerReference(
+                        apiVersion: ownerReference?.apiVersion ?? '',
+                        blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                        controller: ownerReference?.controller,
+                        kind: ownerReference?.kind ?? '',
+                        name: ownerReference?.name ?? '',
+                        uid: ownerReference?.uid ?? '',
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
             const SizedBox(height: Constants.spacingMiddle),
             DetailsItem(
               title: 'Details',
@@ -122,7 +143,7 @@ final resourceEvent = Resource(
                 DetailsItemModel(name: 'Count', values: item.count),
                 DetailsItemModel(
                   name: 'Source',
-                  values: item.source_?.component,
+                  values: item.source?.component,
                 ),
                 DetailsItemModel(
                   name: 'Reporting Component',
@@ -135,7 +156,19 @@ final resourceEvent = Resource(
               title: 'Involved Object',
               goTo: 'View',
               goToOnTap: () {
-                goToReference(context, item.involvedObject, null);
+                goToReference(
+                  context,
+                  Reference(
+                    apiVersion: item.involvedObject.apiVersion,
+                    fieldPath: item.involvedObject.fieldPath,
+                    kind: item.involvedObject.kind,
+                    name: item.involvedObject.name,
+                    namespace: item.involvedObject.namespace,
+                    resourceVersion: item.involvedObject.resourceVersion,
+                    uid: item.involvedObject.uid,
+                  ),
+                  null,
+                );
               },
               details: [
                 DetailsItemModel(

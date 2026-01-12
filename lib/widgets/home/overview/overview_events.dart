@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_event.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_event_list.dart';
+import 'package:kubenav/models/kubernetes/eventlist_v1.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -18,11 +17,11 @@ import 'package:kubenav/widgets/resources/resources_list.dart';
 import 'package:kubenav/widgets/shared/app_error_widget.dart';
 
 /// [_decodeResult] decodes the result from the Kubernetes API and returns a
-/// list of [IoK8sApiCoreV1Event]. We only return the first 25 events, if there
+/// list of [Item]. We only return the first 25 events, if there
 /// are more events available.
-List<IoK8sApiCoreV1Event> _decodeResult(String result) {
+List<Item> _decodeResult(String result) {
   final parsed = json.decode(result);
-  final events = IoK8sApiCoreV1EventList.fromJson(parsed)?.items ?? [];
+  final events = EventlistV1.fromJson(parsed).items.map((e) => e!).toList();
 
   events.sort(
     (a, b) => (b.lastTimestamp ?? b.eventTime ?? b.metadata.creationTimestamp)!
@@ -52,13 +51,13 @@ class OverviewEvents extends StatefulWidget {
 }
 
 class _OverviewEventsState extends State<OverviewEvents> {
-  late Future<List<IoK8sApiCoreV1Event>> _futureFetchEvents;
+  late Future<List<Item>> _futureFetchEvents;
 
   /// [_fetchEvents] gets a list of all events for the currently active cluster,
   /// where the type of the event is `Warning`. When the Kubernetes API returns
   /// a list of events, we sort the events by their `lastTimestamp` field and
   /// return the first 25 events.
-  Future<List<IoK8sApiCoreV1Event>> _fetchEvents() async {
+  Future<List<Item>> _fetchEvents() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -89,7 +88,7 @@ class _OverviewEventsState extends State<OverviewEvents> {
 
   /// [buildEventItem] builds the widget for a single event using the
   /// [ListItemWidget] from the resources page.
-  Widget buildEventItem(IoK8sApiCoreV1Event event) {
+  Widget buildEventItem(Item event) {
     return ResourcesListItem(
       name: event.metadata.name ?? '',
       namespace: event.metadata.namespace,
@@ -137,79 +136,74 @@ class _OverviewEventsState extends State<OverviewEvents> {
 
     return FutureBuilder(
       future: _futureFetchEvents,
-      builder:
-          (
-            BuildContext context,
-            AsyncSnapshot<List<IoK8sApiCoreV1Event>> snapshot,
-          ) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return buildContainer(
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
+      builder: (BuildContext context, AsyncSnapshot<List<Item>> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return buildContainer(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: Constants.spacingMiddle,
+                      right: Constants.spacingMiddle,
+                    ),
+                    child: CircularProgressIndicator(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          default:
+            if (snapshot.hasError) {
+              return buildContainer(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Padding(
                         padding: const EdgeInsets.only(
                           left: Constants.spacingMiddle,
                           right: Constants.spacingMiddle,
                         ),
-                        child: CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.primary,
+                        child: AppErrorWidget(
+                          message: 'Failed to Load ${resourceEvent.plural}',
+                          details: snapshot.error.toString(),
+                          icon: 'assets/resources/${resourceEvent.icon}.svg',
                         ),
                       ),
-                    ],
-                  ),
-                );
-              default:
-                if (snapshot.hasError) {
-                  return buildContainer(
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: Constants.spacingMiddle,
-                              right: Constants.spacingMiddle,
-                            ),
-                            child: AppErrorWidget(
-                              message: 'Failed to Load ${resourceEvent.plural}',
-                              details: snapshot.error.toString(),
-                              icon:
-                                  'assets/resources/${resourceEvent.icon}.svg',
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
-                  );
-                }
-
-                if (snapshot.data == null || snapshot.data!.isEmpty) {
-                  return Container();
-                }
-
-                return buildContainer(
-                  ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.only(
-                      right: Constants.spacingMiddle,
-                      left: Constants.spacingMiddle,
-                    ),
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: Constants.spacingMiddle),
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      return buildEventItem(snapshot.data![index]);
-                    },
-                  ),
-                );
+                  ],
+                ),
+              );
             }
-          },
+
+            if (snapshot.data == null || snapshot.data!.isEmpty) {
+              return Container();
+            }
+
+            return buildContainer(
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.only(
+                  right: Constants.spacingMiddle,
+                  left: Constants.spacingMiddle,
+                ),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: Constants.spacingMiddle),
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  return buildEventItem(snapshot.data![index]);
+                },
+              ),
+            );
+        }
+      },
     );
   }
 }

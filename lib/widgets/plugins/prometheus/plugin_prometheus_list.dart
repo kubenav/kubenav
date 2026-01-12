@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_config_map.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_config_map_list.dart';
+import 'package:kubenav/models/kubernetes/configmaplist_v1.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -25,9 +24,9 @@ import 'package:kubenav/widgets/shared/app_list_item.dart';
 import 'package:kubenav/widgets/shared/app_namespaces_widget.dart';
 import 'package:kubenav/widgets/shared/app_resource_actions.dart';
 
-IoK8sApiCoreV1ConfigMapList? _decodeResult(String result) {
+ConfigmaplistV1 _decodeResult(String result) {
   final parsed = json.decode(result);
-  return IoK8sApiCoreV1ConfigMapList.fromJson(parsed);
+  return ConfigmaplistV1.fromJson(parsed);
 }
 
 /// The [PluginPrometheusList] widget is used to render a list of Prometheus
@@ -43,12 +42,12 @@ class PluginPrometheusList extends StatefulWidget {
 }
 
 class _PluginPrometheusListState extends State<PluginPrometheusList> {
-  late Future<List<IoK8sApiCoreV1ConfigMap>> _futureFetchDashboards;
+  late Future<List<Item>> _futureFetchDashboards;
 
   /// [_fetchDashboards] fetches all Prometheus dashboards. Prometheus
   /// dashboards can be created via ConfigMaps and the
   /// "kubenav.io/prometheus=dashboard" label.
-  Future<List<IoK8sApiCoreV1ConfigMap>> _fetchDashboards() async {
+  Future<List<Item>> _fetchDashboards() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
       listen: false,
@@ -75,13 +74,13 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
 
     Logger.log(
       'PluginPrometheusList fetchDashboards',
-      '${configMapsList?.items.length} ConfigMaps Returned',
+      '${configMapsList.items.length} ConfigMaps Returned',
     );
 
-    final List<IoK8sApiCoreV1ConfigMap> configMaps = [];
-    if (configMapsList != null && configMapsList.items.isNotEmpty) {
+    final List<Item> configMaps = [];
+    if (configMapsList.items.isNotEmpty) {
       for (var item in configMapsList.items) {
-        configMaps.add(item);
+        configMaps.add(item!);
       }
     }
 
@@ -90,7 +89,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
 
   /// [_buildItem] returns the widget for a single dashboard which is displayed
   /// in the list of dashboards.
-  Widget _buildItem(IoK8sApiCoreV1ConfigMap configMap) {
+  Widget _buildItem(Item configMap) {
     return AppListItem(
       onTap: () {
         navigate(
@@ -132,7 +131,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
                     ),
                     Text(
                       Characters(
-                            'Description: ${configMap.data.containsKey('description') ? configMap.data['description'] : ''}',
+                            'Description: ${configMap.data != null && configMap.data!.containsKey('description') ? configMap.data!['description'] : ''}',
                           )
                           .replaceAll(Characters(''), Characters('\u{200B}'))
                           .toString(),
@@ -220,10 +219,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
               FutureBuilder(
                 future: _futureFetchDashboards,
                 builder:
-                    (
-                      BuildContext context,
-                      AsyncSnapshot<List<IoK8sApiCoreV1ConfigMap>> snapshot,
-                    ) {
+                    (BuildContext context, AsyncSnapshot<List<Item>> snapshot) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.none:
                         case ConnectionState.waiting:

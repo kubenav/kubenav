@@ -2,10 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_acme_v1_order.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_certificate_request.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_certificate_request_list.dart';
+import 'package:kubenav/models/kubernetes/certificaterequestlist_cert_manager_v1.dart';
+import 'package:kubenav/models/kubernetes/orderlist_acme_v1.dart' as orderlist;
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -14,8 +12,10 @@ import 'package:kubenav/widgets/plugins/cert-manager/resources/plugin_cert_manag
 import 'package:kubenav/widgets/plugins/cert-manager/resources/plugin_cert_manager_resources_issuers.dart';
 import 'package:kubenav/widgets/plugins/cert-manager/resources/plugin_cert_manager_resources_orders.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart'
+    as details_item_conditions;
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -36,33 +36,32 @@ final Resource certManagerResourceCertificateRequest = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoCertManagerV1CertificateRequestList.fromJson(parsed)?.items ?? [];
+    final items = CertificaterequestlistCertManagerV1.fromJson(parsed).items;
 
     return items.map((e) {
       final ready =
-          e.status?.conditions != null && e.status!.conditions.isNotEmpty
-          ? e.status!.conditions
-                .where((e) => e.type == 'Ready')
+          e!.status?.conditions != null && e.status!.conditions!.isNotEmpty
+          ? e.status!.conditions!
+                .where((e) => e!.type == 'Ready')
                 .firstOrNull
                 ?.status
-                .value
+                .name
           : 'Unknown';
       final approved =
-          e.status?.conditions != null && e.status!.conditions.isNotEmpty
-          ? e.status!.conditions
-                .where((e) => e.type == 'Approved')
+          e.status?.conditions != null && e.status!.conditions!.isNotEmpty
+          ? e.status!.conditions!
+                .where((e) => e!.type == 'Approved')
                 .firstOrNull
                 ?.status
-                .value
+                .name
           : 'Unknown';
       final denied =
-          e.status?.conditions != null && e.status!.conditions.isNotEmpty
-          ? e.status!.conditions
-                .where((e) => e.type == 'Denied')
+          e.status?.conditions != null && e.status!.conditions!.isNotEmpty
+          ? e.status!.conditions!
+                .where((e) => e!.type == 'Denied')
                 .firstOrNull
                 ?.status
-                .value
+                .name
           : 'Unknown';
 
       return ResourceItem(
@@ -80,17 +79,17 @@ final Resource certManagerResourceCertificateRequest = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoCertManagerV1CertificateRequestList.fromJson(parsed)?.items ?? [];
+    return CertificaterequestlistCertManagerV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoCertManagerV1CertificateRequest).metadata?.name ?? '';
+    return (item as Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoCertManagerV1CertificateRequest).metadata?.namespace;
+    return (item as Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoCertManagerV1CertificateRequest.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -100,7 +99,7 @@ final Resource certManagerResourceCertificateRequest = Resource(
     return json.decode(json.encode(item));
   },
   listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
-    final item = listItem.item as IoCertManagerV1CertificateRequest;
+    final item = listItem.item as Item;
     final status = listItem.status;
 
     return ResourcesListItem(
@@ -111,9 +110,9 @@ final Resource certManagerResourceCertificateRequest = Resource(
       status: status,
       details: [
         'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Approved: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Approved').firstOrNull?.status ?? '-') : '-'}',
-        'Denied: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Denied').firstOrNull?.status ?? '-') : '-'}',
-        'Ready: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
+        'Approved: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions!.where((e) => e!.type == 'Approved').firstOrNull?.status ?? '-') : '-'}',
+        'Denied: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions!.where((e) => e!.type == 'Denied').firstOrNull?.status ?? '-') : '-'}',
+        'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions!.where((e) => e!.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
         'Issuer: ${item.spec?.issuerRef.name ?? '-'}',
         'Requestor: ${item.spec?.username ?? '-'}',
         'Age: ${getAge(item.metadata?.creationTimestamp)}',
@@ -121,34 +120,55 @@ final Resource certManagerResourceCertificateRequest = Resource(
     );
   },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoCertManagerV1CertificateRequest;
+    final item = listItem as Item;
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
-      'Approved: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Approved').firstOrNull?.status ?? '-') : '-'}',
-      'Denied: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Denied').firstOrNull?.status ?? '-') : '-'}',
-      'Ready: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
+      'Approved: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions!.where((e) => e!.type == 'Approved').firstOrNull?.status ?? '-') : '-'}',
+      'Denied: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions!.where((e) => e!.type == 'Denied').firstOrNull?.status ?? '-') : '-'}',
+      'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions!.where((e) => e!.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
       'Issuer: ${item.spec?.issuerRef.name ?? '-'}',
       'Requestor: ${item.spec?.username ?? '-'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
   detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
-    final item = detailsItem as IoCertManagerV1CertificateRequest;
+    final item = detailsItem as Item;
 
     return Column(
       children: [
-        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-        DetailsItemConditions(
+        details_item_metadata.DetailsItemMetadata(
+          kind: item.kind?.name,
+          metadata: details_item_metadata.Metadata(
+            name: item.metadata?.name,
+            namespace: item.metadata?.namespace,
+            labels: item.metadata?.labels,
+            annotations: item.metadata?.annotations,
+            creationTimestamp: item.metadata?.creationTimestamp,
+            ownerReferences: item.metadata?.ownerReferences
+                ?.map(
+                  (ownerReference) => details_item_metadata.OwnerReference(
+                    apiVersion: ownerReference?.apiVersion ?? '',
+                    blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                    controller: ownerReference?.controller,
+                    kind: ownerReference?.kind ?? '',
+                    name: ownerReference?.name ?? '',
+                    uid: ownerReference?.uid ?? '',
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+        details_item_conditions.DetailsItemConditions(
           conditions: item.status?.conditions
-              .map(
-                (e) => IoK8sApimachineryPkgApisMetaV1Condition(
-                  lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
-                  message: e.message ?? '',
-                  observedGeneration: 0,
-                  reason: e.reason ?? '',
-                  status: e.status.value,
-                  type: e.type,
+              ?.map(
+                (condition) => details_item_conditions.Condition(
+                  type: condition?.type ?? '',
+                  status: condition?.status.name ?? '',
+                  lastTransitionTime:
+                      condition?.lastTransitionTime ?? DateTime.now(),
+                  reason: condition?.reason ?? '',
+                  message: condition?.message ?? '',
                 ),
               )
               .toList(),
@@ -193,20 +213,20 @@ final Resource certManagerResourceCertificateRequest = Resource(
               name: 'Approved',
               values:
                   item.status?.conditions != null &&
-                      item.status!.conditions.isNotEmpty
-                  ? item.status!.conditions
-                        .where((e) => e.type == 'Approved')
+                      item.status!.conditions!.isNotEmpty
+                  ? item.status!.conditions!
+                        .where((e) => e!.type == 'Approved')
                         .first
-                        .status
+                        ?.status
                   : null,
             ),
             DetailsItemModel(
               name: 'Denied',
               values:
                   item.status?.conditions != null &&
-                      item.status!.conditions.isNotEmpty
-                  ? item.status!.conditions
-                        .where((e) => e.type == 'Denied')
+                      item.status!.conditions!.isNotEmpty
+                  ? item.status!.conditions!
+                        .where((e) => e!.type == 'Denied')
                         .firstOrNull
                         ?.status
                   : null,
@@ -215,9 +235,9 @@ final Resource certManagerResourceCertificateRequest = Resource(
               name: 'Ready',
               values:
                   item.status?.conditions != null &&
-                      item.status!.conditions.isNotEmpty
-                  ? item.status!.conditions
-                        .where((e) => e.type == 'Ready')
+                      item.status!.conditions!.isNotEmpty
+                  ? item.status!.conditions!
+                        .where((e) => e!.type == 'Ready')
                         .firstOrNull
                         ?.status
                   : null,
@@ -226,9 +246,9 @@ final Resource certManagerResourceCertificateRequest = Resource(
               name: 'Status',
               values:
                   item.status?.conditions != null &&
-                      item.status!.conditions.isNotEmpty
-                  ? item.status!.conditions
-                        .where((e) => e.type == 'Ready')
+                      item.status!.conditions!.isNotEmpty
+                  ? item.status!.conditions!
+                        .where((e) => e!.type == 'Ready')
                         .firstOrNull
                         ?.message
                   : null,
@@ -245,13 +265,14 @@ final Resource certManagerResourceCertificateRequest = Resource(
           namespace: item.metadata?.namespace,
           selector: '',
           filter: (List<dynamic> previewItems) {
-            final orders = previewItems as List<IoCertManagerAcmeV1Order>;
+            final orders = previewItems as List<orderlist.Item>;
 
             return orders
                 .where(
                   (order) =>
-                      order.metadata.ownerReferences.length == 1 &&
-                      order.metadata.ownerReferences[0].name ==
+                      order.metadata.ownerReferences != null &&
+                      order.metadata.ownerReferences!.length == 1 &&
+                      order.metadata.ownerReferences![0]?.name ==
                           item.metadata?.name,
                 )
                 .toList();

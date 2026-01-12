@@ -2,13 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_network_policy.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_network_policy_list.dart';
+import 'package:kubenav/models/kubernetes/networkpolicylist_networking_v1.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -30,11 +29,10 @@ final resourceNetworkPolicy = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiNetworkingV1NetworkPolicyList.fromJson(parsed)?.items ?? [];
+    final items = NetworkpolicylistNetworkingV1.fromJson(parsed).items;
 
     return items.map((e) {
-      final podSelector = e.spec?.podSelector.matchLabels.entries
+      final podSelector = e?.spec?.podSelector?.matchLabels?.entries
           .map((e) => '${e.key}=${e.value}')
           .toList();
 
@@ -49,17 +47,17 @@ final resourceNetworkPolicy = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiNetworkingV1NetworkPolicyList.fromJson(parsed)?.items ?? [];
+    return NetworkpolicylistNetworkingV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiNetworkingV1NetworkPolicy).metadata?.name ?? '';
+    return (item as Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiNetworkingV1NetworkPolicy).metadata?.namespace;
+    return (item as Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiNetworkingV1NetworkPolicy.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -70,10 +68,10 @@ final resourceNetworkPolicy = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoK8sApiNetworkingV1NetworkPolicy;
+        final item = listItem.item as Item;
         final status = listItem.status;
 
-        final podSelector = item.spec?.podSelector.matchLabels.entries
+        final podSelector = item.spec?.podSelector?.matchLabels?.entries
             .map((e) => '${e.key}=${e.value}')
             .toList();
 
@@ -91,9 +89,9 @@ final resourceNetworkPolicy = Resource(
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiNetworkingV1NetworkPolicy;
+    final item = listItem as Item;
 
-    final podSelector = item.spec?.podSelector.matchLabels.entries
+    final podSelector = item.spec?.podSelector?.matchLabels?.entries
         .map((e) => '${e.key}=${e.value}')
         .toList();
 
@@ -105,19 +103,39 @@ final resourceNetworkPolicy = Resource(
   },
   detailsItemBuilder:
       (BuildContext context, Resource resource, dynamic detailsItem) {
-        final item = detailsItem as IoK8sApiNetworkingV1NetworkPolicy;
+        final item = detailsItem as Item;
 
         return Column(
           children: [
-            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-            DetailsItemConditions(conditions: item.status?.conditions),
+            details_item_metadata.DetailsItemMetadata(
+              kind: item.kind?.name,
+              metadata: details_item_metadata.Metadata(
+                name: item.metadata?.name,
+                namespace: item.metadata?.namespace,
+                labels: item.metadata?.labels,
+                annotations: item.metadata?.annotations,
+                creationTimestamp: item.metadata?.creationTimestamp,
+                ownerReferences: item.metadata?.ownerReferences
+                    ?.map(
+                      (ownerReference) => details_item_metadata.OwnerReference(
+                        apiVersion: ownerReference?.apiVersion ?? '',
+                        blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                        controller: ownerReference?.controller,
+                        kind: ownerReference?.kind ?? '',
+                        name: ownerReference?.name ?? '',
+                        uid: ownerReference?.uid ?? '',
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
             const SizedBox(height: Constants.spacingMiddle),
             DetailsItem(
               title: 'Configuration',
               details: [
                 DetailsItemModel(
                   name: 'Pod Selector',
-                  values: item.spec?.podSelector.matchLabels.entries
+                  values: item.spec?.podSelector?.matchLabels?.entries
                       .map((e) => '${e.key}=${e.value}')
                       .toList(),
                 ),
@@ -127,11 +145,11 @@ final resourceNetworkPolicy = Resource(
                 ),
                 DetailsItemModel(
                   name: 'Egress Rules',
-                  values: item.spec?.egress.length,
+                  values: item.spec?.egress?.length,
                 ),
                 DetailsItemModel(
                   name: 'Ingress Rules',
-                  values: item.spec?.ingress.length,
+                  values: item.spec?.ingress?.length,
                 ),
               ],
             ),
@@ -139,7 +157,20 @@ final resourceNetworkPolicy = Resource(
             DetailsResourcesPreview(
               resource: resourcePod,
               namespace: item.metadata?.namespace,
-              selector: getSelector(item.spec?.podSelector),
+              selector: getSelector(
+                Selector(
+                  matchLabels: item.spec?.podSelector?.matchLabels,
+                  matchExpressions: item.spec?.podSelector?.matchExpressions
+                      ?.map(
+                        (e) => MatchExpression(
+                          key: e!.key,
+                          matchExpressionOperator: e.matchExpressionOperator,
+                          values: e.values,
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
               filter: null,
             ),
             const SizedBox(height: Constants.spacingMiddle),

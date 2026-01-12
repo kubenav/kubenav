@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_node.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_node_condition.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_node_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
+import 'package:kubenav/models/kubernetes/nodelist_v1.dart';
 import 'package:kubenav/models/kubernetes_extensions/node_metrics.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
@@ -17,8 +14,10 @@ import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/utils/themes.dart';
 import 'package:kubenav/widgets/home/overview/overview_metrics.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart'
+    as details_item_conditions;
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -41,7 +40,7 @@ final resourceNode = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1NodeList.fromJson(parsed)?.items ?? [];
+    final items = NodelistV1.fromJson(parsed).items;
 
     List<ApisMetricsV1beta1NodeMetricsItem>? metricsItems;
     if (data.metrics != null && data.metrics != '') {
@@ -56,9 +55,9 @@ final resourceNode = Resource(
       return ResourceItem(
         item: e,
         metrics: metrics,
-        status: !_isNodeReady(e.status!.conditions)
+        status: !_isNodeReady(e?.status?.conditions)
             ? ResourceStatus.danger
-            : e.spec!.unschedulable == true
+            : e?.spec?.unschedulable == true
             ? ResourceStatus.warning
             : ResourceStatus.success,
       );
@@ -66,17 +65,17 @@ final resourceNode = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1NodeList.fromJson(parsed)?.items ?? [];
+    return NodelistV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiCoreV1Node).metadata?.name ?? '';
+    return (item as Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
     return null;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1Node.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -86,13 +85,13 @@ final resourceNode = Resource(
     return json.decode(json.encode(item));
   },
   listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
-    final item = listItem.item as IoK8sApiCoreV1Node;
+    final item = listItem.item as Item;
     final status = listItem.status;
 
     final nodeStatus = _getNodeStatus(item);
-    final roles = item.metadata?.labels['kubernetes.azure.com/role'] ?? '-';
+    final roles = item.metadata?.labels?['kubernetes.azure.com/role'] ?? '-';
     final version = item.status?.nodeInfo?.kubeletVersion ?? '-';
-    final nodeAllocatableResources = getAllocatableResources(item);
+    final nodeAllocatableResources = _getAllocatableResources(item);
 
     return ResourcesListItem(
       name: item.metadata?.name ?? '',
@@ -111,10 +110,10 @@ final resourceNode = Resource(
     );
   },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiCoreV1Node;
+    final item = listItem as Item;
 
     final nodeStatus = _getNodeStatus(item);
-    final roles = item.metadata?.labels['kubernetes.azure.com/role'] ?? '-';
+    final roles = item.metadata?.labels?['kubernetes.azure.com/role'] ?? '-';
     final version = item.status?.nodeInfo?.kubeletVersion ?? '-';
 
     return [
@@ -125,21 +124,42 @@ final resourceNode = Resource(
     ];
   },
   detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
-    final item = detailsItem as IoK8sApiCoreV1Node;
+    final item = detailsItem as Item;
 
     return Column(
       children: [
-        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-        DetailsItemConditions(
+        details_item_metadata.DetailsItemMetadata(
+          kind: item.kind?.name,
+          metadata: details_item_metadata.Metadata(
+            name: item.metadata?.name,
+            namespace: item.metadata?.namespace,
+            labels: item.metadata?.labels,
+            annotations: item.metadata?.annotations,
+            creationTimestamp: item.metadata?.creationTimestamp,
+            ownerReferences: item.metadata?.ownerReferences
+                ?.map(
+                  (ownerReference) => details_item_metadata.OwnerReference(
+                    apiVersion: ownerReference?.apiVersion ?? '',
+                    blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                    controller: ownerReference?.controller,
+                    kind: ownerReference?.kind ?? '',
+                    name: ownerReference?.name ?? '',
+                    uid: ownerReference?.uid ?? '',
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+        details_item_conditions.DetailsItemConditions(
           conditions: item.status?.conditions
-              .map(
-                (e) => IoK8sApimachineryPkgApisMetaV1Condition(
-                  lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
-                  message: e.message ?? '',
-                  observedGeneration: null,
-                  reason: e.reason ?? '',
-                  status: e.status,
-                  type: e.type,
+              ?.map(
+                (condition) => details_item_conditions.Condition(
+                  type: condition?.type ?? '',
+                  status: condition?.status ?? '',
+                  lastTransitionTime:
+                      condition?.lastTransitionTime ?? DateTime.now(),
+                  reason: condition?.reason ?? '',
+                  message: condition?.message ?? '',
                 ),
               )
               .toList(),
@@ -154,7 +174,7 @@ final resourceNode = Resource(
             ),
             DetailsItemModel(
               name: 'Boot ID',
-              values: item.status?.nodeInfo?.bootID,
+              values: item.status?.nodeInfo?.bootId,
             ),
             DetailsItemModel(
               name: 'Container Runtime Version',
@@ -174,7 +194,7 @@ final resourceNode = Resource(
             ),
             DetailsItemModel(
               name: 'Machine ID',
-              values: item.status?.nodeInfo?.machineID,
+              values: item.status?.nodeInfo?.machineId,
             ),
             DetailsItemModel(
               name: 'Operating System',
@@ -184,11 +204,11 @@ final resourceNode = Resource(
               name: 'OS Image',
               values: item.status?.nodeInfo?.osImage,
             ),
-            DetailsItemModel(name: 'Pod CIDR', values: item.spec?.podCIDR),
-            DetailsItemModel(name: 'Pod CIDRs', values: item.spec?.podCIDRs),
+            DetailsItemModel(name: 'Pod CIDR', values: item.spec?.podCidr),
+            DetailsItemModel(name: 'Pod CIDRs', values: item.spec?.podCidRs),
             DetailsItemModel(
               name: 'System UUID',
-              values: item.status?.nodeInfo?.systemUUID,
+              values: item.status?.nodeInfo?.systemUuid,
             ),
           ],
         ),
@@ -199,14 +219,14 @@ final resourceNode = Resource(
             DetailsItemModel(
               name: 'Status',
               values: item.status?.conditions
-                  .where((condition) => condition.status == 'True')
-                  .map((condition) => condition.type)
+                  ?.where((condition) => condition?.status == 'True')
+                  .map((condition) => condition?.type)
                   .toList(),
             ),
             DetailsItemModel(
               name: 'Addresses',
               values: item.status?.addresses
-                  .map((address) => '${address.type}: ${address.address}')
+                  ?.map((address) => '${address?.type}: ${address?.address}')
                   .toList(),
             ),
           ],
@@ -217,7 +237,7 @@ final resourceNode = Resource(
         DetailsItem(
           title: 'Resources',
           details:
-              item.status?.allocatable.entries
+              item.status?.allocatable?.entries
                   .map(
                     (allocatable) => DetailsItemModel(
                       name: allocatable.key,
@@ -226,7 +246,7 @@ final resourceNode = Resource(
                         showSnackbar(
                           context,
                           allocatable.key,
-                          'Allocatable: ${allocatable.value}\nCapacity: ${item.status!.capacity.containsKey(allocatable.key) ? item.status?.capacity[allocatable.key] : '-'}',
+                          'Allocatable: ${allocatable.value}\nCapacity: ${item.status!.capacity != null && item.status!.capacity!.containsKey(allocatable.key) ? item.status?.capacity![allocatable.key] : '-'}',
                         );
                       },
                     ),
@@ -239,10 +259,14 @@ final resourceNode = Resource(
           title: 'Images',
           items:
               item.status?.images
-                  .map(
+                  ?.map(
                     (image) => AppVerticalListSimpleModel(
                       onTap: () {
-                        showSnackbar(context, 'Names', image.names.join('\n'));
+                        showSnackbar(
+                          context,
+                          'Names',
+                          image?.names?.join('\n') ?? '-',
+                        );
                       },
                       children: [
                         Container(
@@ -268,14 +292,14 @@ final resourceNode = Resource(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                image.names.firstOrNull ?? '-',
+                                image?.names?.firstOrNull ?? '-',
                                 style: primaryTextStyle(context),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                image.sizeBytes != null
-                                    ? formatBytes(image.sizeBytes!)
+                                image?.sizeBytes != null
+                                    ? formatBytes(image!.sizeBytes!)
                                     : '-',
                                 style: secondaryTextStyle(context),
                                 maxLines: 2,
@@ -394,9 +418,13 @@ final resourceNode = Resource(
   },
 );
 
-bool _isNodeReady(List<IoK8sApiCoreV1NodeCondition> conditions) {
+bool _isNodeReady(List<Condition?>? conditions) {
+  if (conditions == null || conditions.isEmpty) {
+    return false;
+  }
+
   for (var condition in conditions) {
-    if (condition.type == 'Ready' && condition.status == 'True') {
+    if (condition?.type == 'Ready' && condition?.status == 'True') {
       return true;
     }
   }
@@ -404,12 +432,16 @@ bool _isNodeReady(List<IoK8sApiCoreV1NodeCondition> conditions) {
   return false;
 }
 
-String _getNodeStatus(IoK8sApiCoreV1Node node) {
+String _getNodeStatus(Item node) {
   List<String> statuses = [];
 
-  for (var condition in node.status!.conditions) {
-    if (condition.status == 'True') {
-      statuses.add(condition.type);
+  if (node.status?.conditions == null) {
+    return 'Unknown';
+  }
+
+  for (var condition in node.status!.conditions!) {
+    if (condition?.status == 'True' && condition?.type != null) {
+      statuses.add(condition!.type);
     }
   }
 
@@ -429,16 +461,16 @@ String _getNodeStatus(IoK8sApiCoreV1Node node) {
 }
 
 ResourceMetrics? _getMetricsForNode(
-  IoK8sApiCoreV1Node node,
+  Item? node,
   List<ApisMetricsV1beta1NodeMetricsItem>? metrics,
 ) {
   try {
-    if (node.metadata == null || metrics == null || metrics.isEmpty) {
+    if (node?.metadata == null || metrics == null || metrics.isEmpty) {
       return null;
     }
 
     final nodeMetricsItem = metrics
-        .where((item) => item.metadata?.name == node.metadata!.name)
+        .where((item) => item.metadata?.name == node?.metadata?.name)
         .toList();
 
     if (nodeMetricsItem.length != 1 || nodeMetricsItem[0].usage == null) {
@@ -467,7 +499,7 @@ ResourceMetrics? _getMetricsForNode(
   }
 }
 
-ResourceMetrics? getAllocatableResources(IoK8sApiCoreV1Node node) {
+ResourceMetrics? _getAllocatableResources(Item node) {
   if (node.status == null) {
     return null;
   }
@@ -475,14 +507,16 @@ ResourceMetrics? getAllocatableResources(IoK8sApiCoreV1Node node) {
   var cpu = 0.0;
   var memory = 0.0;
 
-  if (node.status!.allocatable.containsKey('cpu')) {
-    cpu = cpu + cpuMetricsStringToDouble(node.status!.allocatable['cpu']!);
+  if (node.status!.allocatable != null &&
+      node.status!.allocatable!.containsKey('cpu')) {
+    cpu = cpu + cpuMetricsStringToDouble(node.status!.allocatable!['cpu']!);
   }
 
-  if (node.status!.allocatable.containsKey('memory')) {
+  if (node.status!.allocatable != null &&
+      node.status!.allocatable!.containsKey('memory')) {
     memory =
         memory +
-        memoryMetricsStringToDouble(node.status!.allocatable['memory']!);
+        memoryMetricsStringToDouble(node.status!.allocatable!['memory']!);
   }
 
   return ResourceMetrics(

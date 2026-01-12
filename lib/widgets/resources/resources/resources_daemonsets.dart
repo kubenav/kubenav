@@ -2,15 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_daemon_set.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_daemon_set_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
+import 'package:kubenav/models/kubernetes/daemonsetlist_apps_v1.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart'
+    as details_item_conditions;
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -33,14 +33,14 @@ final resourceDaemonSet = Resource(
       '{"apiVersion":"apps/v1","kind":"DaemonSet","metadata":{"name":"","namespace":""},"spec":{"selector":{"matchLabels":{"app":"nginx"}},"template":{"metadata":{"labels":{"app":"nginx"}},"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}',
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiAppsV1DaemonSetList.fromJson(parsed)?.items ?? [];
+    final items = DaemonsetlistAppsV1.fromJson(parsed).items;
 
     return items
         .map(
           (e) => ResourceItem(
             item: e,
             metrics: null,
-            status: e.status!.desiredNumberScheduled == 0
+            status: e!.status!.desiredNumberScheduled == 0
                 ? ResourceStatus.warning
                 : e.status!.desiredNumberScheduled !=
                           e.status!.currentNumberScheduled ||
@@ -59,17 +59,17 @@ final resourceDaemonSet = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiAppsV1DaemonSetList.fromJson(parsed)?.items ?? [];
+    return DaemonsetlistAppsV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiAppsV1DaemonSet).metadata?.name ?? '';
+    return (item as DaemonsetlistAppsV1Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiAppsV1DaemonSet).metadata?.namespace;
+    return (item as DaemonsetlistAppsV1Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiAppsV1DaemonSet.fromJson(parsed);
+    return DaemonsetlistAppsV1Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -80,11 +80,11 @@ final resourceDaemonSet = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoK8sApiAppsV1DaemonSet;
+        final item = listItem.item as DaemonsetlistAppsV1Item;
         final status = listItem.status;
 
         final nodeSelector =
-            item.spec?.template.spec?.nodeSelector.entries
+            item.spec?.template.spec?.nodeSelector?.entries
                 .map((e) => '${e.key}=${e.value}')
                 .toList() ??
             [];
@@ -109,10 +109,10 @@ final resourceDaemonSet = Resource(
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiAppsV1DaemonSet;
+    final item = listItem as DaemonsetlistAppsV1Item;
 
     final nodeSelector =
-        item.spec?.template.spec?.nodeSelector.entries
+        item.spec?.template.spec?.nodeSelector?.entries
             .map((e) => '${e.key}=${e.value}')
             .toList() ??
         [];
@@ -130,21 +130,42 @@ final resourceDaemonSet = Resource(
     ];
   },
   detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
-    final item = detailsItem as IoK8sApiAppsV1DaemonSet;
+    final item = detailsItem as DaemonsetlistAppsV1Item;
 
     return Column(
       children: [
-        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-        DetailsItemConditions(
+        details_item_metadata.DetailsItemMetadata(
+          kind: item.kind?.name,
+          metadata: details_item_metadata.Metadata(
+            name: item.metadata?.name,
+            namespace: item.metadata?.namespace,
+            labels: item.metadata?.labels,
+            annotations: item.metadata?.annotations,
+            creationTimestamp: item.metadata?.creationTimestamp,
+            ownerReferences: item.metadata?.ownerReferences
+                ?.map(
+                  (ownerReference) => details_item_metadata.OwnerReference(
+                    apiVersion: ownerReference?.apiVersion ?? '',
+                    blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                    controller: ownerReference?.controller,
+                    kind: ownerReference?.kind ?? '',
+                    name: ownerReference?.name ?? '',
+                    uid: ownerReference?.uid ?? '',
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+        details_item_conditions.DetailsItemConditions(
           conditions: item.status?.conditions
-              .map(
-                (e) => IoK8sApimachineryPkgApisMetaV1Condition(
-                  lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
-                  message: e.message ?? '',
-                  observedGeneration: null,
-                  reason: e.reason ?? '',
-                  status: e.status,
-                  type: e.type,
+              ?.map(
+                (condition) => details_item_conditions.Condition(
+                  type: condition?.type ?? '',
+                  status: condition?.status ?? '',
+                  lastTransitionTime:
+                      condition?.lastTransitionTime ?? DateTime.now(),
+                  reason: condition?.reason ?? '',
+                  message: condition?.message ?? '',
                 ),
               )
               .toList(),
@@ -163,7 +184,7 @@ final resourceDaemonSet = Resource(
             ),
             DetailsItemModel(
               name: 'Selector',
-              values: item.spec?.selector.matchLabels.entries
+              values: item.spec?.selector.matchLabels?.entries
                   .map((matchLabel) => '${matchLabel.key}=${matchLabel.value}')
                   .toList(),
             ),
@@ -200,7 +221,21 @@ final resourceDaemonSet = Resource(
         DetailsResourcesPreview(
           resource: resourcePod,
           namespace: item.metadata?.namespace,
-          selector: getSelector(item.spec?.selector),
+          selector: getSelector(
+            Selector(
+              matchLabels: item.spec?.selector.matchLabels,
+              matchExpressions: item.spec?.selector.matchExpressions
+                  ?.map(
+                    (e) => MatchExpression(
+                      key: e!.key,
+                      matchExpressionOperator: e.matchExpressionOperator,
+                      values: e.values,
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+
           filter: null,
         ),
         const SizedBox(height: Constants.spacingMiddle),

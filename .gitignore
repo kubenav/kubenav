@@ -54,3 +54,5 @@ app.*.map.json
 
 # Temporarily created files
 /tmp
+/utils/schemas/crds
+/utils/schemas/schemas

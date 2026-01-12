@@ -2,14 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1_pod_disruption_budget.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1_pod_disruption_budget_list.dart';
+import 'package:kubenav/models/kubernetes/poddisruptionbudgetlist_policy_v1.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
-import 'package:kubenav/utils/resources.dart';
+import 'package:kubenav/utils/resources.dart' as resources;
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart'
+    as details_item_conditions;
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -31,8 +32,7 @@ final resourcePodDisruptionBudget = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiPolicyV1PodDisruptionBudgetList.fromJson(parsed)?.items ?? [];
+    final items = PoddisruptionbudgetlistPolicyV1.fromJson(parsed).items;
 
     return items
         .map(
@@ -40,7 +40,7 @@ final resourcePodDisruptionBudget = Resource(
             item: e,
             metrics: null,
             status:
-                e.status!.desiredHealthy == 0 ||
+                e!.status!.desiredHealthy == 0 ||
                     e.status!.disruptionsAllowed == 0
                 ? ResourceStatus.warning
                 : e.status!.currentHealthy < e.status!.desiredHealthy
@@ -52,18 +52,17 @@ final resourcePodDisruptionBudget = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiPolicyV1PodDisruptionBudgetList.fromJson(parsed)?.items ??
-        [];
+    return PoddisruptionbudgetlistPolicyV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiPolicyV1PodDisruptionBudget).metadata?.name ?? '';
+    return (item as Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiPolicyV1PodDisruptionBudget).metadata?.namespace;
+    return (item as Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiPolicyV1PodDisruptionBudget.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -74,7 +73,7 @@ final resourcePodDisruptionBudget = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoK8sApiPolicyV1PodDisruptionBudget;
+        final item = listItem.item as Item;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -88,35 +87,69 @@ final resourcePodDisruptionBudget = Resource(
             'Min. Available: ${item.spec?.minAvailable ?? '-'}',
             'Max. Unavailable: ${item.spec?.maxUnavailable ?? '-'}',
             'Allowed Disruptions: ${item.status?.disruptionsAllowed ?? 0}',
-            'Age: ${getAge(item.metadata?.creationTimestamp)}',
+            'Age: ${resources.getAge(item.metadata?.creationTimestamp)}',
           ],
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiPolicyV1PodDisruptionBudget;
+    final item = listItem as Item;
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
       'Min. Available: ${item.spec?.minAvailable ?? '-'}',
       'Max. Unavailable: ${item.spec?.maxUnavailable ?? '-'}',
       'Allowed Disruptions: ${item.status?.disruptionsAllowed ?? 0}',
-      'Age: ${getAge(item.metadata?.creationTimestamp)}',
+      'Age: ${resources.getAge(item.metadata?.creationTimestamp)}',
     ];
   },
   detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
-    final item = detailsItem as IoK8sApiPolicyV1PodDisruptionBudget;
+    final item = detailsItem as Item;
 
     return Column(
       children: [
-        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-        DetailsItemConditions(conditions: item.status?.conditions),
+        details_item_metadata.DetailsItemMetadata(
+          kind: item.kind?.name,
+          metadata: details_item_metadata.Metadata(
+            name: item.metadata?.name,
+            namespace: item.metadata?.namespace,
+            labels: item.metadata?.labels,
+            annotations: item.metadata?.annotations,
+            creationTimestamp: item.metadata?.creationTimestamp,
+            ownerReferences: item.metadata?.ownerReferences
+                ?.map(
+                  (ownerReference) => details_item_metadata.OwnerReference(
+                    apiVersion: ownerReference?.apiVersion ?? '',
+                    blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                    controller: ownerReference?.controller,
+                    kind: ownerReference?.kind ?? '',
+                    name: ownerReference?.name ?? '',
+                    uid: ownerReference?.uid ?? '',
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+        details_item_conditions.DetailsItemConditions(
+          conditions: item.status?.conditions
+              ?.map(
+                (condition) => details_item_conditions.Condition(
+                  type: condition?.type ?? '',
+                  status: condition?.status ?? '',
+                  lastTransitionTime:
+                      condition?.lastTransitionTime ?? DateTime.now(),
+                  reason: condition?.reason ?? '',
+                  message: condition?.message ?? '',
+                ),
+              )
+              .toList(),
+        ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Configuration',
           details: [
             DetailsItemModel(
               name: 'Selector',
-              values: item.spec?.selector?.matchLabels.entries
+              values: item.spec?.selector?.matchLabels?.entries
                   .map(
                     (matchLabels) => '${matchLabels.key}=${matchLabels.value}',
                   )
@@ -162,7 +195,21 @@ final resourcePodDisruptionBudget = Resource(
         DetailsResourcesPreview(
           resource: resourcePod,
           namespace: item.metadata?.namespace,
-          selector: getSelector(item.spec?.selector),
+          selector: resources.getSelector(
+            resources.Selector(
+              matchLabels: item.spec?.selector?.matchLabels,
+              matchExpressions: item.spec?.selector?.matchExpressions
+                  ?.map(
+                    (e) => resources.MatchExpression(
+                      key: e!.key,
+                      matchExpressionOperator: e.matchExpressionOperator,
+                      values: e.values,
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+
           filter: null,
         ),
         const SizedBox(height: Constants.spacingMiddle),

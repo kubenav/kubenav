@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_certificates_v1_certificate_signing_request.dart';
+import 'package:kubenav/models/kubernetes/certificatesigningrequestlist_certificates_v1.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -22,7 +22,7 @@ class CSRApprove extends StatefulWidget {
   });
 
   final String name;
-  final IoK8sApiCertificatesV1CertificateSigningRequest csr;
+  final Item csr;
   final Resource resource;
 
   @override

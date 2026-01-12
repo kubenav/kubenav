@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_app_project.dart';
-import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_app_project_list.dart';
+import 'package:kubenav/models/kubernetes/appprojectlist_argoproj_v1alpha1.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/plugins/argo/resources/plugin_argo_resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -27,8 +27,7 @@ final Resource argoResourceProject = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoArgoprojV1alpha1AppProjectList.fromJson(parsed)?.items ?? [];
+    final items = AppprojectlistArgoprojV1Alpha1.fromJson(parsed).items;
 
     return items.map((e) {
       return ResourceItem(
@@ -40,17 +39,17 @@ final Resource argoResourceProject = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoArgoprojV1alpha1AppProjectList.fromJson(parsed)?.items ?? [];
+    return AppprojectlistArgoprojV1Alpha1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoArgoprojV1alpha1AppProject).metadata.name ?? '';
+    return (item as AppprojectlistArgoprojV1Alpha1Item).metadata.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoArgoprojV1alpha1AppProject).metadata.namespace;
+    return (item as AppprojectlistArgoprojV1Alpha1Item).metadata.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoArgoprojV1alpha1AppProject.fromJson(parsed);
+    return AppprojectlistArgoprojV1Alpha1Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -61,7 +60,7 @@ final Resource argoResourceProject = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoArgoprojV1alpha1AppProject;
+        final item = listItem.item as AppprojectlistArgoprojV1Alpha1Item;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -77,7 +76,7 @@ final Resource argoResourceProject = Resource(
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoArgoprojV1alpha1AppProject;
+    final item = listItem as AppprojectlistArgoprojV1Alpha1Item;
 
     return [
       'Namespace: ${item.metadata.namespace ?? '-'}',
@@ -86,11 +85,32 @@ final Resource argoResourceProject = Resource(
   },
   detailsItemBuilder:
       (BuildContext context, Resource resource, dynamic detailsItem) {
-        final item = detailsItem as IoArgoprojV1alpha1AppProject;
+        final item = detailsItem as AppprojectlistArgoprojV1Alpha1Item;
 
         return Column(
           children: [
-            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            details_item_metadata.DetailsItemMetadata(
+              kind: item.kind?.name,
+              metadata: details_item_metadata.Metadata(
+                name: item.metadata.name,
+                namespace: item.metadata.namespace,
+                labels: item.metadata.labels,
+                annotations: item.metadata.annotations,
+                creationTimestamp: item.metadata.creationTimestamp,
+                ownerReferences: item.metadata.ownerReferences
+                    ?.map(
+                      (ownerReference) => details_item_metadata.OwnerReference(
+                        apiVersion: ownerReference?.apiVersion ?? '',
+                        blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                        controller: ownerReference?.controller,
+                        kind: ownerReference?.kind ?? '',
+                        name: ownerReference?.name ?? '',
+                        uid: ownerReference?.uid ?? '',
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
             const SizedBox(height: Constants.spacingMiddle),
             DetailsItem(
               title: 'Details',
@@ -102,7 +122,9 @@ final Resource argoResourceProject = Resource(
                 // TODO: There are more details to show than just enabled or not
                 DetailsItemModel(
                   name: 'SyncWindows',
-                  values: item.spec.syncWindows.isEmpty
+                  values:
+                      item.spec.syncWindows != null &&
+                          item.spec.syncWindows!.isEmpty
                       ? 'No sync windows'
                       : 'Sync windows defined',
                 ),

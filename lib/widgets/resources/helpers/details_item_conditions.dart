@@ -1,18 +1,33 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/shared/app_list_item.dart';
 
+class Condition {
+  DateTime lastTransitionTime;
+  String message;
+  String reason;
+  String status;
+  String type;
+
+  Condition({
+    required this.lastTransitionTime,
+    required this.message,
+    required this.reason,
+    required this.status,
+    required this.type,
+  });
+}
+
 /// The [DetailsItemConditions] widget is used to show the conditions of a
 /// Kubernetes resource.
 class DetailsItemConditions extends StatelessWidget {
   const DetailsItemConditions({super.key, required this.conditions});
 
-  final List<IoK8sApimachineryPkgApisMetaV1Condition>? conditions;
+  final List<Condition?>? conditions;
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +66,14 @@ class DetailsItemConditions extends StatelessWidget {
                     onTap: () {
                       showSnackbar(
                         context,
-                        conditions![index].type,
-                        'Status: ${conditions![index].status}\nLast Transition Time: ${getAge(conditions![index].lastTransitionTime)}\nReason: ${conditions![index].reason}\nMessage: ${conditions![index].message}',
+                        conditions![index]!.type,
+                        'Status: ${conditions![index]!.status}\nLast Transition Time: ${getAge(conditions![index]!.lastTransitionTime)}\nReason: ${conditions![index]!.reason}\nMessage: ${conditions![index]!.message}',
                       );
                     },
                     child: Row(
                       children: [
                         Icon(
-                          conditions![index].status == 'True'
+                          conditions![index]!.status == 'True'
                               ? Icons.radio_button_checked
                               : Icons.radio_button_unchecked,
                           size: 24,
@@ -68,7 +83,7 @@ class DetailsItemConditions extends StatelessWidget {
                         Expanded(
                           flex: 1,
                           child: Text(
-                            conditions![index].type,
+                            conditions![index]!.type,
                             style: normalTextStyle(context),
                             overflow: TextOverflow.ellipsis,
                           ),

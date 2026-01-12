@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_service.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_service_list.dart';
+import 'package:kubenav/models/kubernetes/servicelist_v1.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/portforwarding_repository.dart';
@@ -13,8 +12,10 @@ import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/utils/showmodal.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart'
+    as details_item_conditions;
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -36,7 +37,7 @@ final resourceService = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1ServiceList.fromJson(parsed)?.items ?? [];
+    final items = ServicelistV1.fromJson(parsed).items;
 
     return items
         .map(
@@ -50,17 +51,17 @@ final resourceService = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1ServiceList.fromJson(parsed)?.items ?? [];
+    return ServicelistV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiCoreV1Service).metadata?.name ?? '';
+    return (item as Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiCoreV1Service).metadata?.namespace;
+    return (item as Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1Service.fromJson(parsed);
+    return Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -70,16 +71,16 @@ final resourceService = Resource(
     return json.decode(json.encode(item));
   },
   listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
-    final item = listItem.item as IoK8sApiCoreV1Service;
+    final item = listItem.item as Item;
     final status = listItem.status;
 
     final externalIP = item.status?.loadBalancer?.ingress
-        .map((ingress) => ingress.ip)
+        ?.map((ingress) => ingress?.ip)
         .toList();
     final ports = item.spec?.ports
-        .map(
+        ?.map(
           (port) =>
-              '${port.port}${port.protocol != null ? '/${port.protocol}' : ''} (${port.name ?? ''}${port.appProtocol != null ? '/${port.appProtocol}' : ''})',
+              '${port?.port}${port?.protocol != null ? '/${port?.protocol}' : ''} (${port?.name ?? ''}${port?.appProtocol != null ? '/${port?.appProtocol}' : ''})',
         )
         .toList();
 
@@ -92,7 +93,7 @@ final resourceService = Resource(
       details: [
         'Namespace: ${item.metadata?.namespace ?? '-'}',
         'Type: ${item.spec?.type ?? '-'}',
-        'Cluster IP: ${item.spec?.clusterIP ?? '-'}',
+        'Cluster IP: ${item.spec?.clusterIp ?? '-'}',
         'External IP: ${externalIP != null && externalIP.isNotEmpty ? externalIP.join(', ') : '-'}',
         'Port(s): ${ports != null && ports.isNotEmpty ? ports.join(', ') : '-'}',
         'Age: ${getAge(item.metadata?.creationTimestamp)}',
@@ -100,22 +101,22 @@ final resourceService = Resource(
     );
   },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiCoreV1Service;
+    final item = listItem as Item;
 
     final externalIP = item.status?.loadBalancer?.ingress
-        .map((ingress) => ingress.ip)
+        ?.map((ingress) => ingress?.ip)
         .toList();
     final ports = item.spec?.ports
-        .map(
+        ?.map(
           (port) =>
-              '${port.port}${port.protocol != null ? '/${port.protocol}' : ''} (${port.name ?? ''}${port.appProtocol != null ? '/${port.appProtocol}' : ''})',
+              '${port?.port}${port?.protocol != null ? '/${port?.protocol}' : ''} (${port?.name ?? ''}${port?.appProtocol != null ? '/${port?.appProtocol}' : ''})',
         )
         .toList();
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
       'Type: ${item.spec?.type ?? '-'}',
-      'Cluster IP: ${item.spec?.clusterIP ?? '-'}',
+      'Cluster IP: ${item.spec?.clusterIp ?? '-'}',
       'External IP: ${externalIP != null && externalIP.isNotEmpty ? externalIP.join(', ') : '-'}',
       'Port(s): ${ports != null && ports.isNotEmpty ? ports.join(', ') : '-'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
@@ -123,7 +124,7 @@ final resourceService = Resource(
   },
   detailsItemBuilder:
       (BuildContext context, Resource resource, dynamic detailsItem) {
-        final item = detailsItem as IoK8sApiCoreV1Service;
+        final item = detailsItem as Item;
 
         return ServiceItem(resource: resource, service: item);
       },
@@ -133,7 +134,7 @@ class ServiceItem extends StatelessWidget {
   const ServiceItem({super.key, required this.resource, required this.service});
 
   final Resource resource;
-  final IoK8sApiCoreV1Service service;
+  final Item service;
 
   Future<void> _portForward(
     BuildContext context,
@@ -189,15 +190,49 @@ class ServiceItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        DetailsItemMetadata(kind: service.kind, metadata: service.metadata),
-        DetailsItemConditions(conditions: service.status?.conditions),
+        details_item_metadata.DetailsItemMetadata(
+          kind: service.kind?.name,
+          metadata: details_item_metadata.Metadata(
+            name: service.metadata?.name,
+            namespace: service.metadata?.namespace,
+            labels: service.metadata?.labels,
+            annotations: service.metadata?.annotations,
+            creationTimestamp: service.metadata?.creationTimestamp,
+            ownerReferences: service.metadata?.ownerReferences
+                ?.map(
+                  (ownerReference) => details_item_metadata.OwnerReference(
+                    apiVersion: ownerReference?.apiVersion ?? '',
+                    blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                    controller: ownerReference?.controller,
+                    kind: ownerReference?.kind ?? '',
+                    name: ownerReference?.name ?? '',
+                    uid: ownerReference?.uid ?? '',
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+        details_item_conditions.DetailsItemConditions(
+          conditions: service.status?.conditions
+              ?.map(
+                (condition) => details_item_conditions.Condition(
+                  type: condition?.type ?? '',
+                  status: condition?.status ?? '',
+                  lastTransitionTime:
+                      condition?.lastTransitionTime ?? DateTime.now(),
+                  reason: condition?.reason ?? '',
+                  message: condition?.message ?? '',
+                ),
+              )
+              .toList(),
+        ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Configuration',
           details: [
             DetailsItemModel(
               name: 'Selectors',
-              values: service.spec?.selector.entries
+              values: service.spec?.selector?.entries
                   .map((selector) => '${selector.key}=${selector.value}')
                   .toList(),
             ),
@@ -205,23 +240,23 @@ class ServiceItem extends StatelessWidget {
             DetailsItemModel(
               name: 'Ports',
               values: service.spec?.ports
-                  .map(
+                  ?.map(
                     (port) =>
-                        '${port.port}${port.nodePort != null ? '/${port.nodePort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''} -> ${port.targetPort}',
+                        '${port?.port}${port?.nodePort != null ? '/${port?.nodePort}' : ''}${port?.protocol != null ? '/${port?.protocol}' : ''}${port?.name != null ? ' (${port?.name})' : ''} -> ${port?.targetPort}',
                   )
                   .toList(),
               onTap: (index) {
                 _portForward(
                   context,
                   service.metadata?.namespace ?? '',
-                  service.spec?.selector.entries
+                  service.spec?.selector?.entries
                           .map(
                             (selector) => '${selector.key}=${selector.value}',
                           )
                           .toList()
                           .join(',') ??
                       '',
-                  service.spec?.ports[index].targetPort.toString() ?? '',
+                  service.spec?.ports?[index]?.targetPort.toString() ?? '',
                 );
               },
             ),
@@ -241,7 +276,7 @@ class ServiceItem extends StatelessWidget {
           details: [
             DetailsItemModel(
               name: 'Cluster IP',
-              values: service.spec?.clusterIP,
+              values: service.spec?.clusterIp,
             ),
             DetailsItemModel(
               name: 'Cluster IPs',
@@ -250,7 +285,7 @@ class ServiceItem extends StatelessWidget {
             DetailsItemModel(
               name: 'External IPs',
               values: service.spec?.externalIPs
-                  .map((externalIP) => externalIP)
+                  ?.map((externalIP) => externalIP)
                   .toList(),
             ),
             DetailsItemModel(
@@ -260,7 +295,7 @@ class ServiceItem extends StatelessWidget {
             DetailsItemModel(
               name: 'Load Balancer IP',
               values: service.status!.loadBalancer?.ingress
-                  .map((ingress) => ingress.ip ?? '-')
+                  ?.map((ingress) => ingress?.ip ?? '-')
                   .toList(),
             ),
           ],
@@ -269,7 +304,7 @@ class ServiceItem extends StatelessWidget {
         DetailsResourcesPreview(
           resource: resourcePod,
           namespace: service.metadata?.namespace,
-          selector: getMatchLabelsSelector(service.spec!.selector),
+          selector: getMatchLabelsSelector(service.spec?.selector),
           filter: null,
         ),
         const SizedBox(height: Constants.spacingMiddle),

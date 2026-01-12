@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2beta2_helm_release.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_kustomize_v1_kustomization.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_git_repository.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_bucket.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_helm_chart.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_helm_repository.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_oci_repository.dart';
+import 'package:kubenav/models/kubernetes/bucketlist_source_v1.dart'
+    as bucketlist;
+import 'package:kubenav/models/kubernetes/gitrepositorylist_source_v1.dart'
+    as gitrepositorylist;
+import 'package:kubenav/models/kubernetes/helmchartlist_source_v1.dart'
+    as helmchartlist;
+import 'package:kubenav/models/kubernetes/helmreleaselist_helm_v2.dart'
+    as helmreleaselist;
+import 'package:kubenav/models/kubernetes/helmrepositorylist_source_v1.dart'
+    as helmrepositorylist;
+import 'package:kubenav/models/kubernetes/kustomizationlist_kustomize_v1.dart'
+    as kustomizationlist;
+import 'package:kubenav/models/kubernetes/ocirepositorylist_source_v1.dart'
+    as ocirepositorylist;
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -61,13 +68,13 @@ class _PluginFluxResumeState extends State<PluginFluxResume> {
         _isLoading = true;
       });
 
-      if (widget.item is! IoFluxcdToolkitSourceV1GitRepository &&
-          widget.item is! IoFluxcdToolkitSourceV1beta2OCIRepository &&
-          widget.item is! IoFluxcdToolkitSourceV1beta2Bucket &&
-          widget.item is! IoFluxcdToolkitSourceV1beta2HelmRepository &&
-          widget.item is! IoFluxcdToolkitSourceV1beta2HelmChart &&
-          widget.item is! IoFluxcdToolkitKustomizeV1Kustomization &&
-          widget.item is! IoFluxcdToolkitHelmV2beta2HelmRelease) {
+      if (widget.item is! gitrepositorylist.Item &&
+          widget.item is! ocirepositorylist.Item &&
+          widget.item is! bucketlist.Item &&
+          widget.item is! helmrepositorylist.Item &&
+          widget.item is! helmchartlist.Item &&
+          widget.item is! kustomizationlist.Item &&
+          widget.item is! helmreleaselist.Item) {
         throw 'Unsupported Resource';
       }
 

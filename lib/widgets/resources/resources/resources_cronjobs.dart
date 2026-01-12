@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_cron_job.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_cron_job_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_job.dart';
+import 'package:kubenav/models/kubernetes/cronjoblist_batch_v1.dart';
+import 'package:kubenav/models/kubernetes/joblist_batch_v1.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
+import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart'
+    as details_item_metadata;
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
@@ -30,14 +30,14 @@ final resourceCronJob = Resource(
       '{"apiVersion":"batch/v1","kind":"CronJob","metadata":{"name":"","namespace":""},"spec":{"schedule":"5 4 * * *","suspend":false,"successfulJobsHistoryLimit":1,"failedJobsHistoryLimit":1,"jobTemplate":{"spec":{"backoffLimit":0,"template":{"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}}}',
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiBatchV1CronJobList.fromJson(parsed)?.items ?? [];
+    final items = CronjoblistBatchV1.fromJson(parsed).items;
 
     return items
         .map(
           (e) => ResourceItem(
             item: e,
             metrics: null,
-            status: e.spec?.suspend == false
+            status: e?.spec?.suspend == false
                 ? ResourceStatus.success
                 : ResourceStatus.warning,
           ),
@@ -46,17 +46,17 @@ final resourceCronJob = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiBatchV1CronJobList.fromJson(parsed)?.items ?? [];
+    return CronjoblistBatchV1.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoK8sApiBatchV1CronJob).metadata?.name ?? '';
+    return (item as CronjoblistBatchV1Item).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoK8sApiBatchV1CronJob).metadata?.namespace;
+    return (item as CronjoblistBatchV1Item).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiBatchV1CronJob.fromJson(parsed);
+    return CronjoblistBatchV1Item.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -67,7 +67,7 @@ final resourceCronJob = Resource(
   },
   listItemBuilder:
       (BuildContext context, Resource resource, ResourceItem listItem) {
-        final item = listItem.item as IoK8sApiBatchV1CronJob;
+        final item = listItem.item as CronjoblistBatchV1Item;
         final status = listItem.status;
 
         return ResourcesListItem(
@@ -80,31 +80,52 @@ final resourceCronJob = Resource(
             'Namespace: ${item.metadata?.namespace ?? '-'}',
             'Schedule: ${item.spec?.schedule ?? '-'}',
             'Suspend: ${item.spec?.suspend == false ? 'False' : 'True'}',
-            'Active: ${item.status?.active.length ?? 0}',
+            'Active: ${item.status?.active?.length ?? 0}',
             'Last Schedule: ${getAge(item.status?.lastScheduleTime)}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
         );
       },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoK8sApiBatchV1CronJob;
+    final item = listItem as CronjoblistBatchV1Item;
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
       'Schedule: ${item.spec?.schedule ?? '-'}',
       'Suspend: ${item.spec?.suspend == false ? 'False' : 'True'}',
-      'Active: ${item.status?.active.length ?? 0}',
+      'Active: ${item.status?.active?.length ?? 0}',
       'Last Schedule: ${getAge(item.status?.lastScheduleTime)}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
   detailsItemBuilder:
       (BuildContext context, Resource resource, dynamic detailsItem) {
-        final item = detailsItem as IoK8sApiBatchV1CronJob;
+        final item = detailsItem as CronjoblistBatchV1Item;
 
         return Column(
           children: [
-            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            details_item_metadata.DetailsItemMetadata(
+              kind: item.kind?.name,
+              metadata: details_item_metadata.Metadata(
+                name: item.metadata?.name,
+                namespace: item.metadata?.namespace,
+                labels: item.metadata?.labels,
+                annotations: item.metadata?.annotations,
+                creationTimestamp: item.metadata?.creationTimestamp,
+                ownerReferences: item.metadata?.ownerReferences
+                    ?.map(
+                      (ownerReference) => details_item_metadata.OwnerReference(
+                        apiVersion: ownerReference?.apiVersion ?? '',
+                        blockOwnerDeletion: ownerReference?.blockOwnerDeletion,
+                        controller: ownerReference?.controller,
+                        kind: ownerReference?.kind ?? '',
+                        name: ownerReference?.name ?? '',
+                        uid: ownerReference?.uid ?? '',
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
             const SizedBox(height: Constants.spacingMiddle),
             DetailsItem(
               title: 'Configuration',
@@ -141,7 +162,7 @@ final resourceCronJob = Resource(
                       .spec
                       ?.selector
                       ?.matchLabels
-                      .entries
+                      ?.entries
                       .map(
                         (matchLabel) => '${matchLabel.key}=${matchLabel.value}',
                       )
@@ -181,14 +202,14 @@ final resourceCronJob = Resource(
               namespace: item.metadata?.namespace,
               selector: '',
               filter: (List<dynamic> previewItems) {
-                final jobs = previewItems as List<IoK8sApiBatchV1Job>;
+                final jobs = previewItems as List<JoblistBatchV1Item>;
 
                 return jobs
                     .where(
                       (job) =>
                           job.metadata?.ownerReferences != null &&
-                          job.metadata?.ownerReferences.length == 1 &&
-                          job.metadata?.ownerReferences[0].name ==
+                          job.metadata?.ownerReferences!.length == 1 &&
+                          job.metadata?.ownerReferences![0]?.name ==
                               item.metadata?.name,
                     )
                     .toList();
