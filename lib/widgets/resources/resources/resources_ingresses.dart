@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_ingress.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_ingress_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -31,12 +30,12 @@ final resourceIngress = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiNetworkingV1IngressList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiNetworkingV1IngressList.fromJson(parsed).items;
 
     return items.map((e) {
-      final hosts = e.spec?.rules.map((rule) => rule.host).toList();
+      final hosts = e.spec?.rules?.map((rule) => rule.host).toList();
       final address = e.status?.loadBalancer?.ingress
-          .where((e) => e.ip != null)
+          ?.where((e) => e.ip != null)
           .map((e) => e.ip)
           .toList();
 
@@ -52,7 +51,7 @@ final resourceIngress = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiNetworkingV1IngressList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiNetworkingV1IngressList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiNetworkingV1Ingress).metadata?.name ?? '';
@@ -75,9 +74,9 @@ final resourceIngress = Resource(
     final item = listItem.item as IoK8sApiNetworkingV1Ingress;
     final status = listItem.status;
 
-    final hosts = item.spec?.rules.map((rule) => rule.host).toList();
+    final hosts = item.spec?.rules?.map((rule) => rule.host).toList();
     final address = item.status?.loadBalancer?.ingress
-        .where((e) => e.ip != null)
+        ?.where((e) => e.ip != null)
         .map((e) => e.ip)
         .toList();
 
@@ -98,9 +97,9 @@ final resourceIngress = Resource(
   previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiNetworkingV1Ingress;
 
-    final hosts = item.spec?.rules.map((rule) => rule.host).toList();
+    final hosts = item.spec?.rules?.map((rule) => rule.host).toList();
     final address = item.status?.loadBalancer?.ingress
-        .where((e) => e.ip != null)
+        ?.where((e) => e.ip != null)
         .map((e) => e.ip)
         .toList();
 
@@ -145,7 +144,7 @@ final resourceIngress = Resource(
                 DetailsItemModel(
                   name: 'Address',
                   values: item.status?.loadBalancer?.ingress
-                      .where((e) => e.ip != null)
+                      ?.where((e) => e.ip != null)
                       .map((e) => e.ip ?? '-')
                       .toList(),
                 ),
@@ -172,28 +171,28 @@ final resourceIngress = Resource(
 );
 
 List<Widget> _buildRules(IoK8sApiNetworkingV1Ingress ingress) {
-  if (ingress.spec == null || ingress.spec!.rules.isEmpty) {
+  if (ingress.spec?.rules == null || ingress.spec!.rules!.isEmpty) {
     return [Container()];
   }
 
   final List<Widget> ruleWidgets = [];
 
-  for (var i = 0; i < ingress.spec!.rules.length; i++) {
+  for (var i = 0; i < ingress.spec!.rules!.length; i++) {
     ruleWidgets.add(const SizedBox(height: Constants.spacingMiddle));
     ruleWidgets.add(
       DetailsItem(
         title: 'Rule ${i + 1}',
         details: [
-          DetailsItemModel(name: 'Host', values: ingress.spec?.rules[i].host),
+          DetailsItemModel(name: 'Host', values: ingress.spec!.rules![i].host),
           DetailsItemModel(
             name: 'Paths',
-            values: ingress.spec?.rules[i].http?.paths
+            values: ingress.spec!.rules![i].http?.paths
                 .map((e) => e.path ?? '-')
                 .toList(),
           ),
           DetailsItemModel(
             name: 'Backend',
-            values: ingress.spec!.rules[i].http?.paths
+            values: ingress.spec!.rules![i].http?.paths
                 .map((e) => e.backend.service?.name ?? '-')
                 .toList(),
           ),

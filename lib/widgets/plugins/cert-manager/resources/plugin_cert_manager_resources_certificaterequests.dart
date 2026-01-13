@@ -2,10 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_acme_v1_order.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_certificate_request.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_certificate_request_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -36,30 +33,29 @@ final Resource certManagerResourceCertificateRequest = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoCertManagerV1CertificateRequestList.fromJson(parsed)?.items ?? [];
+    final items = IoCertManagerV1CertificateRequestList.fromJson(parsed).items;
 
     return items.map((e) {
       final ready =
-          e.status?.conditions != null && e.status!.conditions.isNotEmpty
+          e.status?.conditions != null && e.status!.conditions!.isNotEmpty
           ? e.status!.conditions
-                .where((e) => e.type == 'Ready')
+                ?.where((e) => e.type == 'Ready')
                 .firstOrNull
                 ?.status
                 .value
           : 'Unknown';
       final approved =
-          e.status?.conditions != null && e.status!.conditions.isNotEmpty
+          e.status?.conditions != null && e.status!.conditions!.isNotEmpty
           ? e.status!.conditions
-                .where((e) => e.type == 'Approved')
+                ?.where((e) => e.type == 'Approved')
                 .firstOrNull
                 ?.status
                 .value
           : 'Unknown';
       final denied =
-          e.status?.conditions != null && e.status!.conditions.isNotEmpty
+          e.status?.conditions != null && e.status!.conditions!.isNotEmpty
           ? e.status!.conditions
-                .where((e) => e.type == 'Denied')
+                ?.where((e) => e.type == 'Denied')
                 .firstOrNull
                 ?.status
                 .value
@@ -80,7 +76,7 @@ final Resource certManagerResourceCertificateRequest = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoCertManagerV1CertificateRequestList.fromJson(parsed)?.items ?? [];
+    return IoCertManagerV1CertificateRequestList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoCertManagerV1CertificateRequest).metadata?.name ?? '';
@@ -111,9 +107,9 @@ final Resource certManagerResourceCertificateRequest = Resource(
       status: status,
       details: [
         'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Approved: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Approved').firstOrNull?.status ?? '-') : '-'}',
-        'Denied: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Denied').firstOrNull?.status ?? '-') : '-'}',
-        'Ready: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
+        'Approved: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions?.where((e) => e.type == 'Approved').firstOrNull?.status ?? '-') : '-'}',
+        'Denied: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions?.where((e) => e.type == 'Denied').firstOrNull?.status ?? '-') : '-'}',
+        'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions?.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
         'Issuer: ${item.spec?.issuerRef.name ?? '-'}',
         'Requestor: ${item.spec?.username ?? '-'}',
         'Age: ${getAge(item.metadata?.creationTimestamp)}',
@@ -125,9 +121,9 @@ final Resource certManagerResourceCertificateRequest = Resource(
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
-      'Approved: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Approved').firstOrNull?.status ?? '-') : '-'}',
-      'Denied: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Denied').firstOrNull?.status ?? '-') : '-'}',
-      'Ready: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
+      'Approved: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions?.where((e) => e.type == 'Approved').firstOrNull?.status ?? '-') : '-'}',
+      'Denied: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions?.where((e) => e.type == 'Denied').firstOrNull?.status ?? '-') : '-'}',
+      'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions?.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
       'Issuer: ${item.spec?.issuerRef.name ?? '-'}',
       'Requestor: ${item.spec?.username ?? '-'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
@@ -141,13 +137,13 @@ final Resource certManagerResourceCertificateRequest = Resource(
         DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(
           conditions: item.status?.conditions
-              .map(
+              ?.map(
                 (e) => IoK8sApimachineryPkgApisMetaV1Condition(
                   lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
                   message: e.message ?? '',
                   observedGeneration: 0,
                   reason: e.reason ?? '',
-                  status: e.status.value,
+                  status: e.status.value ?? '',
                   type: e.type,
                 ),
               )
@@ -193,9 +189,9 @@ final Resource certManagerResourceCertificateRequest = Resource(
               name: 'Approved',
               values:
                   item.status?.conditions != null &&
-                      item.status!.conditions.isNotEmpty
+                      item.status!.conditions!.isNotEmpty
                   ? item.status!.conditions
-                        .where((e) => e.type == 'Approved')
+                        ?.where((e) => e.type == 'Approved')
                         .first
                         .status
                   : null,
@@ -204,9 +200,9 @@ final Resource certManagerResourceCertificateRequest = Resource(
               name: 'Denied',
               values:
                   item.status?.conditions != null &&
-                      item.status!.conditions.isNotEmpty
+                      item.status!.conditions!.isNotEmpty
                   ? item.status!.conditions
-                        .where((e) => e.type == 'Denied')
+                        ?.where((e) => e.type == 'Denied')
                         .firstOrNull
                         ?.status
                   : null,
@@ -215,9 +211,9 @@ final Resource certManagerResourceCertificateRequest = Resource(
               name: 'Ready',
               values:
                   item.status?.conditions != null &&
-                      item.status!.conditions.isNotEmpty
+                      item.status!.conditions!.isNotEmpty
                   ? item.status!.conditions
-                        .where((e) => e.type == 'Ready')
+                        ?.where((e) => e.type == 'Ready')
                         .firstOrNull
                         ?.status
                   : null,
@@ -226,9 +222,9 @@ final Resource certManagerResourceCertificateRequest = Resource(
               name: 'Status',
               values:
                   item.status?.conditions != null &&
-                      item.status!.conditions.isNotEmpty
+                      item.status!.conditions!.isNotEmpty
                   ? item.status!.conditions
-                        .where((e) => e.type == 'Ready')
+                        ?.where((e) => e.type == 'Ready')
                         .firstOrNull
                         ?.message
                   : null,
@@ -250,8 +246,8 @@ final Resource certManagerResourceCertificateRequest = Resource(
             return orders
                 .where(
                   (order) =>
-                      order.metadata.ownerReferences.length == 1 &&
-                      order.metadata.ownerReferences[0].name ==
+                      order.metadata.ownerReferences?.length == 1 &&
+                      order.metadata.ownerReferences?[0].name ==
                           item.metadata?.name,
                 )
                 .toList();

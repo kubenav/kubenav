@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_deployment.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_apps_v1_deployment_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -33,7 +31,7 @@ final resourceDeployment = Resource(
       '{"apiVersion":"apps/v1","kind":"Deployment","metadata":{"name":"","namespace":""},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"nginx"}},"template":{"metadata":{"labels":{"app":"nginx"}},"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}',
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiAppsV1DeploymentList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiAppsV1DeploymentList.fromJson(parsed).items;
 
     return items
         .map(
@@ -53,7 +51,7 @@ final resourceDeployment = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiAppsV1DeploymentList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiAppsV1DeploymentList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiAppsV1Deployment).metadata?.name ?? '';
@@ -113,7 +111,7 @@ final resourceDeployment = Resource(
         DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(
           conditions: item.status?.conditions
-              .map(
+              ?.map(
                 (e) => IoK8sApimachineryPkgApisMetaV1Condition(
                   lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
                   message: e.message ?? '',
@@ -144,11 +142,11 @@ final resourceDeployment = Resource(
             ),
             DetailsItemModel(
               name: 'Update Strategy',
-              values: item.spec?.strategy?.type,
+              values: item.spec?.strategy?.type?.value,
             ),
             DetailsItemModel(
               name: 'Selector',
-              values: item.spec?.selector.matchLabels.entries
+              values: item.spec?.selector.matchLabels?.entries
                   .map((matchLabel) => '${matchLabel.key}=${matchLabel.value}')
                   .toList(),
             ),

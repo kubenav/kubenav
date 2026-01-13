@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kubenav/models/cluster_provider.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';

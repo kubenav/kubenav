@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_cron_job.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_cron_job_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_job.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
@@ -30,7 +28,7 @@ final resourceCronJob = Resource(
       '{"apiVersion":"batch/v1","kind":"CronJob","metadata":{"name":"","namespace":""},"spec":{"schedule":"5 4 * * *","suspend":false,"successfulJobsHistoryLimit":1,"failedJobsHistoryLimit":1,"jobTemplate":{"spec":{"backoffLimit":0,"template":{"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}}}',
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiBatchV1CronJobList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiBatchV1CronJobList.fromJson(parsed).items;
 
     return items
         .map(
@@ -46,7 +44,7 @@ final resourceCronJob = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiBatchV1CronJobList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiBatchV1CronJobList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiBatchV1CronJob).metadata?.name ?? '';
@@ -80,7 +78,7 @@ final resourceCronJob = Resource(
             'Namespace: ${item.metadata?.namespace ?? '-'}',
             'Schedule: ${item.spec?.schedule ?? '-'}',
             'Suspend: ${item.spec?.suspend == false ? 'False' : 'True'}',
-            'Active: ${item.status?.active.length ?? 0}',
+            'Active: ${item.status?.active?.length ?? '-'}',
             'Last Schedule: ${getAge(item.status?.lastScheduleTime)}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
@@ -93,7 +91,7 @@ final resourceCronJob = Resource(
       'Namespace: ${item.metadata?.namespace ?? '-'}',
       'Schedule: ${item.spec?.schedule ?? '-'}',
       'Suspend: ${item.spec?.suspend == false ? 'False' : 'True'}',
-      'Active: ${item.status?.active.length ?? 0}',
+      'Active: ${item.status?.active?.length ?? '-'}',
       'Last Schedule: ${getAge(item.status?.lastScheduleTime)}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
@@ -112,7 +110,7 @@ final resourceCronJob = Resource(
                 DetailsItemModel(name: 'Schedule', values: item.spec?.schedule),
                 DetailsItemModel(
                   name: 'Concurrency Policy',
-                  values: item.spec?.concurrencyPolicy,
+                  values: item.spec?.concurrencyPolicy?.value,
                 ),
                 DetailsItemModel(
                   name: 'Suspend',
@@ -141,7 +139,7 @@ final resourceCronJob = Resource(
                       .spec
                       ?.selector
                       ?.matchLabels
-                      .entries
+                      ?.entries
                       .map(
                         (matchLabel) => '${matchLabel.key}=${matchLabel.value}',
                       )
@@ -187,8 +185,8 @@ final resourceCronJob = Resource(
                     .where(
                       (job) =>
                           job.metadata?.ownerReferences != null &&
-                          job.metadata?.ownerReferences.length == 1 &&
-                          job.metadata?.ownerReferences[0].name ==
+                          job.metadata?.ownerReferences?.length == 1 &&
+                          job.metadata?.ownerReferences![0].name ==
                               item.metadata?.name,
                     )
                     .toList();

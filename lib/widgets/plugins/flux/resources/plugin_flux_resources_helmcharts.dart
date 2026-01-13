@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_helm_chart.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1_helm_chart_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -32,8 +31,7 @@ final Resource fluxResourceHelmChart = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoFluxcdToolkitSourceV1HelmChartList.fromJson(parsed)?.items ?? [];
+    final items = IoFluxcdToolkitSourceV1HelmChartList.fromJson(parsed).items;
 
     return items.map((e) {
       final status =
@@ -57,7 +55,7 @@ final Resource fluxResourceHelmChart = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitSourceV1HelmChartList.fromJson(parsed)?.items ?? [];
+    return IoFluxcdToolkitSourceV1HelmChartList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoFluxcdToolkitSourceV1HelmChart).metadata?.name ?? '';
@@ -110,7 +108,20 @@ final Resource fluxResourceHelmChart = Resource(
     return Column(
       children: [
         DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-        DetailsItemConditions(conditions: item.status?.conditions),
+        DetailsItemConditions(
+          conditions: item.status?.conditions
+              ?.map(
+                (e) => IoK8sApimachineryPkgApisMetaV1Condition(
+                  lastTransitionTime: e.lastTransitionTime,
+                  message: e.message,
+                  observedGeneration: 0,
+                  reason: e.reason,
+                  status: e.status.value ?? '',
+                  type: e.type,
+                ),
+              )
+              .toList(),
+        ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Configuration',

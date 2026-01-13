@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_app_project.dart';
-import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_app_project_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/plugins/argo/resources/plugin_argo_resources.dart';
@@ -27,8 +26,7 @@ final Resource argoResourceProject = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoArgoprojV1alpha1AppProjectList.fromJson(parsed)?.items ?? [];
+    final items = IoArgoprojV1alpha1AppProjectList.fromJson(parsed).items;
 
     return items.map((e) {
       return ResourceItem(
@@ -40,7 +38,7 @@ final Resource argoResourceProject = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoArgoprojV1alpha1AppProjectList.fromJson(parsed)?.items ?? [];
+    return IoArgoprojV1alpha1AppProjectList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoArgoprojV1alpha1AppProject).metadata.name ?? '';
@@ -72,7 +70,7 @@ final Resource argoResourceProject = Resource(
           status: status,
           details: [
             'Namespace: ${item.metadata.namespace ?? '-'}',
-            'CreatedAt: ${getAge(item.metadata.creationTimestamp)}',
+            'Created At: ${getAge(item.metadata.creationTimestamp)}',
           ],
         );
       },
@@ -81,7 +79,7 @@ final Resource argoResourceProject = Resource(
 
     return [
       'Namespace: ${item.metadata.namespace ?? '-'}',
-      'CreatedAt: ${getAge(item.metadata.creationTimestamp)}',
+      'Created At: ${getAge(item.metadata.creationTimestamp)}',
     ];
   },
   detailsItemBuilder:
@@ -101,8 +99,10 @@ final Resource argoResourceProject = Resource(
                 ),
                 // TODO: There are more details to show than just enabled or not
                 DetailsItemModel(
-                  name: 'SyncWindows',
-                  values: item.spec.syncWindows.isEmpty
+                  name: 'Sync Windows',
+                  values:
+                      item.spec.syncWindows != null &&
+                          item.spec.syncWindows!.isEmpty
                       ? 'No sync windows'
                       : 'Sync windows defined',
                 ),

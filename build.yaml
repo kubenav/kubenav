@@ -1,0 +1,13 @@
+targets:
+  $default:
+    sources:
+      - lib/**
+      - utils/schemas/schemas/**
+    builders:
+      swagger_dart_code_generator:
+        options:
+          input_folder: utils/schemas/schemas/
+          output_folder: lib/models/kubernetes/
+          with_base_url: false
+          build_only_models: true
+          separate_models: true

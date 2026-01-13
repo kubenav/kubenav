@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_kustomize_v1_kustomization.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_kustomize_v1_kustomization_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -32,9 +31,9 @@ final Resource fluxResourceKustomization = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoFluxcdToolkitKustomizeV1KustomizationList.fromJson(parsed)?.items ??
-        [];
+    final items = IoFluxcdToolkitKustomizeV1KustomizationList.fromJson(
+      parsed,
+    ).items;
 
     return items.map((e) {
       final status =
@@ -58,10 +57,7 @@ final Resource fluxResourceKustomization = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitKustomizeV1KustomizationList.fromJson(
-          parsed,
-        )?.items ??
-        [];
+    return IoFluxcdToolkitKustomizeV1KustomizationList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoFluxcdToolkitKustomizeV1Kustomization).metadata?.name ??
@@ -117,7 +113,20 @@ final Resource fluxResourceKustomization = Resource(
     return Column(
       children: [
         DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-        DetailsItemConditions(conditions: item.status?.conditions),
+        DetailsItemConditions(
+          conditions: item.status?.conditions
+              ?.map(
+                (e) => IoK8sApimachineryPkgApisMetaV1Condition(
+                  lastTransitionTime: e.lastTransitionTime,
+                  message: e.message,
+                  observedGeneration: 0,
+                  reason: e.reason,
+                  status: e.status.value ?? '',
+                  type: e.type,
+                ),
+              )
+              .toList(),
+        ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Configuration',

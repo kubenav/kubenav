@@ -9,8 +9,7 @@ import 'package:highlight/languages/yaml.dart' as highlight_yaml;
 import 'package:provider/provider.dart';
 import 'package:yaml/yaml.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_ephemeral_container.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/helpers_service.dart';
@@ -68,22 +67,19 @@ class PrepareJSONPatchData {
 /// string for the [HelpersService.createJSONPatch] function. We do this in an
 /// additional function so this can be run in an isolate.
 List<String> _prepareJSONPatch(PrepareJSONPatchData data) {
-  final copy = IoK8sApiCoreV1Pod.fromJson(resourcePod.toJson(data.pod))!;
+  final copy = IoK8sApiCoreV1Pod.fromJson(resourcePod.toJson(data.pod));
   final ephemeralContainer = data.editorFormat == 'json'
       ? IoK8sApiCoreV1EphemeralContainer.fromJson(
           json.decode(data.ephemeralContainer),
         )
       : IoK8sApiCoreV1EphemeralContainer.fromJson(
-          loadYaml(data.ephemeralContainer),
+          json.decode(json.encode(loadYaml(data.ephemeralContainer))),
         );
 
   if (copy.spec!.ephemeralContainers == null) {
-    copy.spec!.ephemeralContainers = [ephemeralContainer!];
+    copy.spec!.copyWith(ephemeralContainers: [ephemeralContainer]);
   } else {
-    copy.spec!.ephemeralContainers = [
-      ...copy.spec!.ephemeralContainers!,
-      ephemeralContainer!,
-    ];
+    copy.spec!.ephemeralContainers!.add(ephemeralContainer);
   }
 
   final source = resourcePod.encodeItem(data.pod);

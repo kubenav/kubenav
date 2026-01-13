@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_certificate_request.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -50,16 +50,16 @@ class _PluginCertManagerDenyState extends State<PluginCertManagerDeny> {
       });
 
       final now = DateTime.now().toRFC3339();
-      final conditionIndex = widget.cr.status?.conditions.indexWhere(
+      final conditionIndex = widget.cr.status?.conditions?.indexWhere(
         (e) => e.type == 'Denied',
       );
 
       final String body =
           widget.cr.status?.conditions == null ||
-              widget.cr.status!.conditions.isEmpty
+              widget.cr.status!.conditions!.isEmpty
           ? '[{"op":"add","path":"/status/conditions","value":[{"type":"Denied","status":"True","lastTransitionTime":"$now","reason":"KubenavCertManager","message":"manually denied by kubenav"}]}]'
           : conditionIndex == null
-          ? '[{"op":"add","path":"/status/conditions/${widget.cr.status?.conditions != null ? widget.cr.status!.conditions.length + 1 : 0}","value":{"type":"Denied","status":"True","lastTransitionTime":"$now","reason":"KubenavCertManager","message":"manually denied by kubenav"}}]'
+          ? '[{"op":"add","path":"/status/conditions/${widget.cr.status?.conditions != null ? widget.cr.status!.conditions!.length + 1 : 0}","value":{"type":"Denied","status":"True","lastTransitionTime":"$now","reason":"KubenavCertManager","message":"manually denied by kubenav"}}]'
           : '[{"op":"replace","path":"/status/conditions/$conditionIndex","value":{"type":"Denied","status":"True","lastTransitionTime":"$now","reason":"KubenavCertManager","message":"manually denied by kubenav"}}]';
 
       final cluster = await clustersRepository.getClusterWithCredentials(

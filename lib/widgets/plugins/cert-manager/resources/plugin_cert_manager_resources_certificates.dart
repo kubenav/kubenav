@@ -2,12 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_certificate.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_certificate_list.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_certificate_request.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_certificate_spec_private_key.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_certificate_spec_subject.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -39,13 +34,13 @@ final Resource certManagerResourceCertificate = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoCertManagerV1CertificateList.fromJson(parsed)?.items ?? [];
+    final items = IoCertManagerV1CertificateList.fromJson(parsed).items;
 
     return items.map((e) {
       final status =
-          e.status?.conditions != null && e.status!.conditions.isNotEmpty
+          e.status?.conditions != null && e.status!.conditions!.isNotEmpty
           ? e.status!.conditions
-                .where((e) => e.type == 'Ready')
+                ?.where((e) => e.type == 'Ready')
                 .firstOrNull
                 ?.status
                 .value
@@ -64,7 +59,7 @@ final Resource certManagerResourceCertificate = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoCertManagerV1CertificateList.fromJson(parsed)?.items ?? [];
+    return IoCertManagerV1CertificateList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoCertManagerV1Certificate).metadata?.name ?? '';
@@ -96,7 +91,7 @@ final Resource certManagerResourceCertificate = Resource(
           status: status,
           details: [
             'Namespace: ${item.metadata?.namespace ?? '-'}',
-            'Ready: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
+            'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions?.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
             'Secret Name: ${item.spec?.secretName ?? '-'}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
@@ -107,7 +102,7 @@ final Resource certManagerResourceCertificate = Resource(
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
-      'Ready: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
+      'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions?.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
       'Secret Name: ${item.spec?.secretName ?? '-'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
@@ -120,13 +115,13 @@ final Resource certManagerResourceCertificate = Resource(
         DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(
           conditions: item.status?.conditions
-              .map(
+              ?.map(
                 (e) => IoK8sApimachineryPkgApisMetaV1Condition(
                   lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
                   message: e.message ?? '',
                   observedGeneration: e.observedGeneration,
                   reason: e.reason ?? '',
-                  status: e.status.value,
+                  status: e.status.value ?? '',
                   type: e.type,
                 ),
               )
@@ -185,7 +180,7 @@ final Resource certManagerResourceCertificate = Resource(
             ),
             DetailsItemModel(
               name: 'Usages',
-              values: item.spec?.usages.map((e) => e.value).toList(),
+              values: item.spec?.usages?.map((e) => e.value).toList(),
             ),
             DetailsItemModel(
               name: 'Issuer',
@@ -222,9 +217,9 @@ final Resource certManagerResourceCertificate = Resource(
               name: 'Ready',
               values:
                   item.status?.conditions != null &&
-                      item.status!.conditions.isNotEmpty
+                      item.status!.conditions!.isNotEmpty
                   ? item.status!.conditions
-                        .where((e) => e.type == 'Ready')
+                        ?.where((e) => e.type == 'Ready')
                         .firstOrNull
                         ?.status
                   : null,
@@ -233,9 +228,9 @@ final Resource certManagerResourceCertificate = Resource(
               name: 'Status',
               values:
                   item.status?.conditions != null &&
-                      item.status!.conditions.isNotEmpty
+                      item.status!.conditions!.isNotEmpty
                   ? item.status!.conditions
-                        .where((e) => e.type == 'Ready')
+                        ?.where((e) => e.type == 'Ready')
                         .firstOrNull
                         ?.message
                   : null,
@@ -271,8 +266,8 @@ final Resource certManagerResourceCertificate = Resource(
                 .where(
                   (cr) =>
                       cr.metadata?.ownerReferences != null &&
-                      cr.metadata?.ownerReferences.length == 1 &&
-                      cr.metadata?.ownerReferences[0].name ==
+                      cr.metadata?.ownerReferences?.length == 1 &&
+                      cr.metadata?.ownerReferences?[0].name ==
                           item.metadata?.name,
                 )
                 .toList();
@@ -292,7 +287,7 @@ final Resource certManagerResourceCertificate = Resource(
   },
 );
 
-Widget _buildX509Subject(IoCertManagerV1CertificateSpecSubject? subject) {
+Widget _buildX509Subject(IoCertManagerV1Certificate$Spec$Subject? subject) {
   if (subject == null) {
     return Container();
   }
@@ -326,7 +321,9 @@ Widget _buildX509Subject(IoCertManagerV1CertificateSpecSubject? subject) {
   );
 }
 
-Widget _buildPrivateKey(IoCertManagerV1CertificateSpecPrivateKey? privateKey) {
+Widget _buildPrivateKey(
+  IoCertManagerV1Certificate$Spec$PrivateKey? privateKey,
+) {
   if (privateKey == null) {
     return Container();
   }

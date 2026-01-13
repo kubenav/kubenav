@@ -62,7 +62,7 @@ class DetailsItem extends StatelessWidget {
     dynamic values,
     void Function(int index)? onTap,
   ) {
-    if (values is List<String>) {
+    if (values is List<String> || values is List<String?>) {
       return Flexible(
         child: Wrap(
           children: List.generate(

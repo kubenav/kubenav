@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_rbac_v1_role.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_rbac_v1_role_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -32,7 +31,7 @@ final resourceRole = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiRbacV1RoleList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiRbacV1RoleList.fromJson(parsed).items;
 
     return items
         .map(
@@ -46,7 +45,7 @@ final resourceRole = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiRbacV1RoleList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiRbacV1RoleList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiRbacV1Role).metadata?.name ?? '';
@@ -77,7 +76,7 @@ final resourceRole = Resource(
           item: item,
           status: status,
           details: [
-            'Rules: ${item.rules.length}',
+            'Rules: ${item.rules?.length ?? '-'}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
         );
@@ -86,14 +85,14 @@ final resourceRole = Resource(
     final item = listItem as IoK8sApiRbacV1Role;
 
     return [
-      'Rules: ${item.rules.length}',
+      'Rules: ${item.rules?.length ?? '-'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
   detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
     final item = detailsItem as IoK8sApiRbacV1Role;
 
-    final rules = formatRules(item.rules);
+    final rules = formatRules(item.rules ?? []);
 
     return Column(
       children: [

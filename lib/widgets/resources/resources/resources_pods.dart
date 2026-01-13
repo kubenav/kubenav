@@ -6,15 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_port.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_state.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_container_status.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_env_var_source.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_probe.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
+import 'package:kubenav/models/kubernetes/schema.enums.swagger.dart' as enums;
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/models/kubernetes_extensions/pod_metrics.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/repositories/app_repository.dart';
@@ -56,7 +49,7 @@ final resourcePod = Resource(
       '{"apiVersion":"v1","kind":"Pod","metadata":{"name":"","namespace":""},"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}',
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1PodList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiCoreV1PodList.fromJson(parsed).items;
 
     List<ApisMetricsV1beta1PodMetricsItem>? metricsItems;
     if (data.metrics != null && data.metrics != '') {
@@ -74,7 +67,7 @@ final resourcePod = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1PodList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiCoreV1PodList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiCoreV1Pod).metadata?.name ?? '';
@@ -240,7 +233,7 @@ class PodItem extends StatelessWidget {
         DetailsItemMetadata(kind: pod.kind, metadata: pod.metadata),
         DetailsItemConditions(
           conditions: pod.status?.conditions
-              .map(
+              ?.map(
                 (e) => IoK8sApimachineryPkgApisMetaV1Condition(
                   lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
                   message: e.message ?? '',
@@ -277,7 +270,7 @@ class PodItem extends StatelessWidget {
             ),
             DetailsItemModel(
               name: 'Restart Policy',
-              values: pod.spec?.restartPolicy,
+              values: pod.spec?.restartPolicy?.value,
             ),
             DetailsItemModel(
               name: 'Termination Grace Period Seconds',
@@ -285,14 +278,12 @@ class PodItem extends StatelessWidget {
             ),
             DetailsItemModel(
               name: 'Ports',
-              values: ports != null
-                  ? ports
-                        .map(
-                          (port) =>
-                              '${port.containerName}: ${port.port.containerPort}${port.port.protocol != null ? '/${port.port.protocol}' : ''}${port.port.name != null ? ' (${port.port.name})' : ''}',
-                        )
-                        .toList()
-                  : '-',
+              values: ports
+                  ?.map(
+                    (port) =>
+                        '${port.containerName}: ${port.port.containerPort}${port.port.protocol?.value != null ? '/${port.port.protocol!.value}' : ''}${port.port.name != null ? ' (${port.port.name})' : ''}',
+                  )
+                  .toList(),
               onTap: (index) {
                 if (ports != null) {
                   _portForward(
@@ -312,7 +303,7 @@ class PodItem extends StatelessWidget {
             DetailsItemModel(name: 'Ready', values: podDetails.ready),
             DetailsItemModel(name: 'Restarts', values: podDetails.restarts),
             DetailsItemModel(name: 'Status', values: podDetails.statusText),
-            DetailsItemModel(name: 'QoS', values: pod.status?.qosClass),
+            DetailsItemModel(name: 'QoS', values: pod.status?.qosClass?.value),
             DetailsItemModel(name: 'Pod IP', values: pod.status?.podIP),
             DetailsItemModel(name: 'Host IP', values: pod.status?.hostIP),
           ],
@@ -334,10 +325,11 @@ class PodItem extends StatelessWidget {
                     );
                   default:
                     return DetailsContainers(
-                      initContainers: pod.spec!.initContainers,
+                      initContainers: pod.spec!.initContainers ?? [],
                       containers: pod.spec!.containers,
-                      initContainerStatuses: pod.status!.initContainerStatuses,
-                      containerStatuses: pod.status!.containerStatuses,
+                      initContainerStatuses:
+                          pod.status!.initContainerStatuses ?? [],
+                      containerStatuses: pod.status!.containerStatuses ?? [],
                       containerMetrics: snapshot.data ?? [],
                     );
                 }
@@ -485,8 +477,8 @@ class DetailsContainers extends StatelessWidget {
       'Ready: ${status[0].ready ? 'True' : 'False'}',
       'Restarts: ${status[0].restartCount}',
       'State: ${_getContainerState(status[0].state)}',
-      'CPU: ${filteredContainerMetrics.isNotEmpty && filteredContainerMetrics[0].usage?.cpu != null ? formatCpuMetric(cpuMetricsStringToDouble(filteredContainerMetrics[0].usage!.cpu!)) : '-'} / ${container.resources != null && container.resources!.requests.containsKey('cpu') ? container.resources!.requests['cpu'] : '-'} / ${container.resources != null && container.resources!.limits.containsKey('cpu') ? container.resources!.limits['cpu'] : '-'}',
-      'Memory: ${filteredContainerMetrics.isNotEmpty && filteredContainerMetrics[0].usage?.memory != null ? formatMemoryMetric(memoryMetricsStringToDouble(filteredContainerMetrics[0].usage!.memory!)) : '-'} / ${container.resources != null && container.resources!.requests.containsKey('memory') ? container.resources!.requests['memory'] : '-'} / ${container.resources != null && container.resources!.limits.containsKey('memory') ? container.resources!.limits['memory'] : '-'}',
+      'CPU: ${filteredContainerMetrics.isNotEmpty && filteredContainerMetrics[0].usage?.cpu != null ? formatCpuMetric(cpuMetricsStringToDouble(filteredContainerMetrics[0].usage!.cpu!)) : '-'} / ${container.resources?.requests != null && container.resources!.requests!.containsKey('cpu') ? container.resources!.requests!['cpu'] : '-'} / ${container.resources?.limits != null && container.resources!.limits!.containsKey('cpu') ? container.resources!.limits!['cpu'] : '-'}',
+      'Memory: ${filteredContainerMetrics.isNotEmpty && filteredContainerMetrics[0].usage?.memory != null ? formatMemoryMetric(memoryMetricsStringToDouble(filteredContainerMetrics[0].usage!.memory!)) : '-'} / ${container.resources?.requests != null && container.resources!.requests!.containsKey('memory') ? container.resources!.requests!['memory'] : '-'} / ${container.resources?.limits != null && container.resources!.limits!.containsKey('memory') ? container.resources!.limits!['memory'] : '-'}',
     ];
   }
 
@@ -633,25 +625,30 @@ class DetailsContainer extends StatelessWidget {
                   ),
                   DetailsItemModel(
                     name: 'Image Pull Policy',
-                    values: container.imagePullPolicy ?? '-',
+                    values: container.imagePullPolicy?.value ?? '-',
                   ),
                   DetailsItemModel(
                     name: 'Command',
-                    values: container.command.isNotEmpty
+                    values:
+                        container.command != null &&
+                            container.command!.isNotEmpty
                         ? container.command
                         : '-',
                   ),
                   DetailsItemModel(
                     name: 'Arguments',
-                    values: container.args.isNotEmpty ? container.args : '-',
+                    values: container.args != null && container.args!.isNotEmpty
+                        ? container.args
+                        : '-',
                   ),
                   DetailsItemModel(
                     name: 'Ports',
-                    values: container.ports.isNotEmpty
-                        ? container.ports
+                    values:
+                        container.ports != null && container.ports!.isNotEmpty
+                        ? container.ports!
                               .map(
                                 (port) =>
-                                    '${port.containerPort}${port.hostPort != null ? '/${port.hostPort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''}',
+                                    '${port.containerPort}${port.hostPort != null ? '/${port.hostPort}' : ''}${port.protocol?.value != null ? '/${port.protocol!.value}' : ''}${port.name != null ? ' (${port.name})' : ''}',
                               )
                               .toList()
                         : '-',
@@ -696,17 +693,17 @@ class DetailsContainer extends StatelessWidget {
                   DetailsItemModel(
                     name: 'CPU Requests',
                     values:
-                        container.resources != null &&
-                            container.resources!.requests.containsKey('cpu')
-                        ? container.resources!.requests['cpu']
+                        container.resources?.requests != null &&
+                            container.resources!.requests!.containsKey('cpu')
+                        ? container.resources!.requests!['cpu']
                         : '-',
                   ),
                   DetailsItemModel(
                     name: 'CPU Limits',
                     values:
-                        container.resources != null &&
-                            container.resources!.limits.containsKey('cpu')
-                        ? container.resources!.limits['cpu']
+                        container.resources?.limits != null &&
+                            container.resources!.limits!.containsKey('cpu')
+                        ? container.resources!.limits!['cpu']
                         : '-',
                   ),
                   DetailsItemModel(
@@ -724,17 +721,17 @@ class DetailsContainer extends StatelessWidget {
                   DetailsItemModel(
                     name: 'Memory Requests',
                     values:
-                        container.resources != null &&
-                            container.resources!.requests.containsKey('memory')
-                        ? container.resources!.requests['memory']
+                        container.resources?.requests != null &&
+                            container.resources!.requests!.containsKey('memory')
+                        ? container.resources!.requests!['memory']
                         : '-',
                   ),
                   DetailsItemModel(
                     name: 'Memory Limits',
                     values:
-                        container.resources != null &&
-                            container.resources!.limits.containsKey('memory')
-                        ? container.resources!.limits['memory']
+                        container.resources?.limits != null &&
+                            container.resources!.limits!.containsKey('memory')
+                        ? container.resources!.limits!['memory']
                         : '-',
                   ),
                 ],
@@ -742,140 +739,144 @@ class DetailsContainer extends StatelessWidget {
               const SizedBox(height: Constants.spacingMiddle),
               AppVerticalListSimpleWidget(
                 title: 'Environment Variables',
-                items: container.env
-                    .map(
-                      (env) => AppVerticalListSimpleModel(
-                        onTap: () {
-                          showSnackbar(
-                            context,
-                            env.name,
-                            env.value != null
-                                ? env.value!
-                                : env.valueFrom != null
-                                ? _getValueFrom(env.valueFrom!)
-                                : '-',
-                          );
-                        },
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(Constants.sizeBorderRadius),
+                items:
+                    container.env
+                        ?.map(
+                          (env) => AppVerticalListSimpleModel(
+                            onTap: () {
+                              showSnackbar(
+                                context,
+                                env.name,
+                                env.value != null
+                                    ? env.value!
+                                    : env.valueFrom != null
+                                    ? _getValueFrom(env.valueFrom!)
+                                    : '-',
+                              );
+                            },
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(Constants.sizeBorderRadius),
+                                  ),
+                                ),
+                                height: 54,
+                                width: 54,
+                                padding: const EdgeInsets.all(
+                                  Constants.spacingIcon54x54,
+                                ),
+                                child: SvgPicture.asset(
+                                  'assets/resources/secrets.svg',
+                                ),
                               ),
-                            ),
-                            height: 54,
-                            width: 54,
-                            padding: const EdgeInsets.all(
-                              Constants.spacingIcon54x54,
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/resources/secrets.svg',
-                            ),
-                          ),
-                          const SizedBox(width: Constants.spacingSmall),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  env.name,
-                                  style: primaryTextStyle(context),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                              const SizedBox(width: Constants.spacingSmall),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      env.name,
+                                      style: primaryTextStyle(context),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      env.value != null
+                                          ? env.value!
+                                          : env.valueFrom != null
+                                          ? _getValueFrom(env.valueFrom!)
+                                          : '-',
+                                      style: secondaryTextStyle(context),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  env.value != null
-                                      ? env.value!
-                                      : env.valueFrom != null
-                                      ? _getValueFrom(env.valueFrom!)
-                                      : '-',
-                                  style: secondaryTextStyle(context),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(width: Constants.spacingSmall),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: Theme.of(context)
+                                    .extension<CustomColors>()!
+                                    .textSecondary
+                                    .withValues(alpha: Constants.opacityIcon),
+                                size: 24,
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: Constants.spacingSmall),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            color: Theme.of(context)
-                                .extension<CustomColors>()!
-                                .textSecondary
-                                .withValues(alpha: Constants.opacityIcon),
-                            size: 24,
-                          ),
-                        ],
-                      ),
-                    )
-                    .toList(),
+                        )
+                        .toList() ??
+                    [],
               ),
               const SizedBox(height: Constants.spacingMiddle),
               AppVerticalListSimpleWidget(
                 title: 'Volume Mounts',
-                items: container.volumeMounts
-                    .map(
-                      (volumeMount) => AppVerticalListSimpleModel(
-                        onTap: () {
-                          showSnackbar(
-                            context,
-                            volumeMount.name,
-                            'Path: ${volumeMount.mountPath}\nSub-Path: ${volumeMount.subPath ?? '-'}\nReadonly: ${volumeMount.readOnly == true ? 'True' : 'False'}',
-                          );
-                        },
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(Constants.sizeBorderRadius),
+                items:
+                    container.volumeMounts
+                        ?.map(
+                          (volumeMount) => AppVerticalListSimpleModel(
+                            onTap: () {
+                              showSnackbar(
+                                context,
+                                volumeMount.name,
+                                'Path: ${volumeMount.mountPath}\nSub-Path: ${volumeMount.subPath ?? '-'}\nReadonly: ${volumeMount.readOnly == true ? 'True' : 'False'}',
+                              );
+                            },
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(Constants.sizeBorderRadius),
+                                  ),
+                                ),
+                                height: 54,
+                                width: 54,
+                                padding: const EdgeInsets.all(
+                                  Constants.spacingIcon54x54,
+                                ),
+                                child: SvgPicture.asset(
+                                  'assets/resources/persistentvolumes.svg',
+                                ),
                               ),
-                            ),
-                            height: 54,
-                            width: 54,
-                            padding: const EdgeInsets.all(
-                              Constants.spacingIcon54x54,
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/resources/persistentvolumes.svg',
-                            ),
-                          ),
-                          const SizedBox(width: Constants.spacingSmall),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  volumeMount.name,
-                                  style: primaryTextStyle(context),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                              const SizedBox(width: Constants.spacingSmall),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      volumeMount.name,
+                                      style: primaryTextStyle(context),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      volumeMount.mountPath,
+                                      style: secondaryTextStyle(context),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  volumeMount.mountPath,
-                                  style: secondaryTextStyle(context),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(width: Constants.spacingSmall),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: Theme.of(context)
+                                    .extension<CustomColors>()!
+                                    .textSecondary
+                                    .withValues(alpha: Constants.opacityIcon),
+                                size: 24,
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: Constants.spacingSmall),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            color: Theme.of(context)
-                                .extension<CustomColors>()!
-                                .textSecondary
-                                .withValues(alpha: Constants.opacityIcon),
-                            size: 24,
-                          ),
-                        ],
-                      ),
-                    )
-                    .toList(),
+                        )
+                        .toList() ??
+                    [],
               ),
             ],
           ),
@@ -912,15 +913,23 @@ class PodContainerPort {
 List<PodContainerPort>? _getPorts(IoK8sApiCoreV1Pod pod) {
   final List<PodContainerPort> ports = [];
 
-  for (var container in pod.spec!.initContainers) {
-    for (var port in container.ports) {
-      ports.add(PodContainerPort(containerName: container.name, port: port));
+  if (pod.spec!.initContainers != null) {
+    for (var container in pod.spec!.initContainers!) {
+      if (container.ports != null) {
+        for (var port in container.ports!) {
+          ports.add(
+            PodContainerPort(containerName: container.name, port: port),
+          );
+        }
+      }
     }
   }
 
   for (var container in pod.spec!.containers) {
-    for (var port in container.ports) {
-      ports.add(PodContainerPort(containerName: container.name, port: port));
+    if (container.ports != null) {
+      for (var port in container.ports!) {
+        ports.add(PodContainerPort(containerName: container.name, port: port));
+      }
     }
   }
 
@@ -966,23 +975,27 @@ PodDetails _getPodDetails(IoK8sApiCoreV1Pod pod) {
     );
   }
 
-  for (var containerStatus in pod.status!.containerStatuses) {
-    shouldReady++;
-    if (containerStatus.ready) {
-      isReady++;
-    }
+  if (pod.status!.containerStatuses != null) {
+    for (var containerStatus in pod.status!.containerStatuses!) {
+      shouldReady++;
+      if (containerStatus.ready) {
+        isReady++;
+      }
 
-    restarts += containerStatus.restartCount;
+      restarts += containerStatus.restartCount;
 
-    if (containerStatus.lastState != null &&
-        containerStatus.lastState!.terminated != null &&
-        containerStatus.lastState!.terminated!.exitCode != 0 &&
-        containerStatus.lastState!.terminated!.finishedAt != null &&
-        DateTime.now()
-                .difference(containerStatus.lastState!.terminated!.finishedAt!)
-                .inHours <=
-            24) {
-      restartsWithinLast24Hours = true;
+      if (containerStatus.lastState != null &&
+          containerStatus.lastState!.terminated != null &&
+          containerStatus.lastState!.terminated!.exitCode != 0 &&
+          containerStatus.lastState!.terminated!.finishedAt != null &&
+          DateTime.now()
+                  .difference(
+                    containerStatus.lastState!.terminated!.finishedAt!,
+                  )
+                  .inHours <=
+              24) {
+        restartsWithinLast24Hours = true;
+      }
     }
   }
 
@@ -1007,30 +1020,44 @@ PodDetails _getPodDetails(IoK8sApiCoreV1Pod pod) {
 /// determined by the phase of the Pod and the status of the containers.
 String _getPodStatus(IoK8sApiCoreV1Pod pod) {
   switch (pod.status?.phase) {
-    case 'Succeeded':
-      for (var status in pod.status!.containerStatuses) {
-        if (status.state?.terminated != null) {
-          return status.state?.terminated?.reason ?? pod.status!.phase!;
+    case enums.IoK8sApiCoreV1PodStatusPhase.succeeded:
+      if (pod.status!.containerStatuses != null) {
+        for (var status in pod.status!.containerStatuses!) {
+          if (status.state?.terminated != null) {
+            return status.state?.terminated?.reason ??
+                pod.status?.phase?.value ??
+                '-';
+          }
         }
       }
       break;
-    case 'Failed':
-      for (var condition in pod.status!.conditions) {
-        if (condition.type == 'Initialized' && condition.status == 'False') {
-          return 'Init:Error';
+    case enums.IoK8sApiCoreV1PodStatusPhase.failed:
+      if (pod.status!.conditions != null) {
+        for (var condition in pod.status!.conditions!) {
+          if (condition.type == 'Initialized' && condition.status == 'False') {
+            return 'Init:Error';
+          }
         }
       }
-      for (var status in pod.status!.containerStatuses) {
-        if (status.state?.terminated != null) {
-          return status.state?.terminated?.reason ?? pod.status!.phase!;
+      if (pod.status!.containerStatuses != null) {
+        for (var status in pod.status!.containerStatuses!) {
+          if (status.state?.terminated != null) {
+            return status.state?.terminated?.reason ??
+                pod.status?.phase?.value ??
+                '-';
+          }
         }
       }
       break;
-    case 'Running':
-    case 'Pending':
-      for (var status in pod.status!.containerStatuses) {
-        if (status.state?.waiting != null) {
-          return status.state?.waiting?.reason ?? pod.status!.phase!;
+    case enums.IoK8sApiCoreV1PodStatusPhase.running:
+    case enums.IoK8sApiCoreV1PodStatusPhase.pending:
+      if (pod.status!.containerStatuses != null) {
+        for (var status in pod.status!.containerStatuses!) {
+          if (status.state?.waiting != null) {
+            return status.state?.waiting?.reason ??
+                pod.status?.phase?.value ??
+                '-';
+          }
         }
       }
       break;
@@ -1041,14 +1068,16 @@ String _getPodStatus(IoK8sApiCoreV1Pod pod) {
       }
   }
 
-  return pod.status?.phase ?? '-';
+  return pod.status?.phase?.value ?? '-';
 }
 
 /// [_isPodWaitingContainers] returns true if a Pod has waiting containers.
 bool _isPodWaitingContainers(IoK8sApiCoreV1Pod pod) {
-  for (var status in pod.status!.containerStatuses) {
-    if (status.state?.waiting != null) {
-      return true;
+  if (pod.status!.containerStatuses != null) {
+    for (var status in pod.status!.containerStatuses!) {
+      if (status.state?.waiting != null) {
+        return true;
+      }
     }
   }
   return false;
@@ -1058,23 +1087,27 @@ bool _isPodWaitingContainers(IoK8sApiCoreV1Pod pod) {
 /// containers are running and the Pod is in the state 'Running'.
 bool _isPodHealthy(IoK8sApiCoreV1Pod pod) {
   switch (pod.status?.phase) {
-    case 'Succeeded':
-      for (var status in pod.status!.containerStatuses) {
-        if (status.state?.terminated != null &&
-            status.state?.terminated?.exitCode != 0) {
-          return false;
+    case enums.IoK8sApiCoreV1PodStatusPhase.succeeded:
+      if (pod.status!.containerStatuses != null) {
+        for (var status in pod.status!.containerStatuses!) {
+          if (status.state?.terminated != null &&
+              status.state?.terminated?.exitCode != 0) {
+            return false;
+          }
         }
       }
       break;
-    case 'Pending':
+    case enums.IoK8sApiCoreV1PodStatusPhase.pending:
       if (_isPodWaitingContainers(pod)) {
         return false;
       }
       break;
-    case 'Running':
-      for (var condition in pod.status!.conditions) {
-        if (condition.status == 'False') {
-          return false;
+    case enums.IoK8sApiCoreV1PodStatusPhase.running:
+      if (pod.status!.conditions != null) {
+        for (var condition in pod.status!.conditions!) {
+          if (condition.status == 'False') {
+            return false;
+          }
         }
       }
       if (_isPodWaitingContainers(pod)) {
@@ -1102,36 +1135,40 @@ ResourceMetrics? _getResourceDetails(
     var memoryLimits = 0.0;
 
     for (var i = 0; i < pod.spec!.containers.length; i++) {
-      if (pod.spec!.containers[i].resources != null) {
-        if (pod.spec!.containers[i].resources!.requests.containsKey('cpu')) {
+      if (pod.spec!.containers[i].resources?.requests != null) {
+        if (pod.spec!.containers[i].resources!.requests!.containsKey('cpu')) {
           cpuRequests =
               cpuRequests +
               cpuMetricsStringToDouble(
-                pod.spec!.containers[i].resources!.requests['cpu']!,
+                pod.spec!.containers[i].resources!.requests!['cpu'],
               );
         }
 
-        if (pod.spec!.containers[i].resources!.requests.containsKey('memory')) {
+        if (pod.spec!.containers[i].resources!.requests!.containsKey(
+          'memory',
+        )) {
           memoryRequests =
               memoryRequests +
               memoryMetricsStringToDouble(
-                pod.spec!.containers[i].resources!.requests['memory']!,
+                pod.spec!.containers[i].resources!.requests!['memory'],
               );
         }
+      }
 
-        if (pod.spec!.containers[i].resources!.limits.containsKey('cpu')) {
+      if (pod.spec!.containers[i].resources?.limits != null) {
+        if (pod.spec!.containers[i].resources!.limits!.containsKey('cpu')) {
           cpuLimits =
               cpuLimits +
               cpuMetricsStringToDouble(
-                pod.spec!.containers[i].resources!.limits['cpu']!,
+                pod.spec!.containers[i].resources!.limits!['cpu'],
               );
         }
 
-        if (pod.spec!.containers[i].resources!.limits.containsKey('memory')) {
+        if (pod.spec!.containers[i].resources!.limits!.containsKey('memory')) {
           memoryLimits =
               memoryLimits +
               memoryMetricsStringToDouble(
-                pod.spec!.containers[i].resources!.limits['memory']!,
+                pod.spec!.containers[i].resources!.limits!['memory'],
               );
         }
       }
@@ -1244,24 +1281,43 @@ String _getContainerState(
 List<String> _getProbe(IoK8sApiCoreV1Probe probe) {
   final List<String> list = [];
 
-  if (probe.exec != null) {
-    list.add(probe.exec!.command.join(', '));
+  if (probe.exec?.command != null) {
+    list.add("command=${probe.exec!.command!.join(', ')}");
   }
 
-  if (probe.httpGet != null) {
-    list.add(
-      '${probe.httpGet!.scheme?.toLowerCase()}://${probe.httpGet!.host ?? 'localhost'}:${probe.httpGet!.port}${probe.httpGet!.path}',
-    );
+  if (probe.httpGet?.scheme?.value != null) {
+    list.add('schema=${probe.httpGet!.scheme!.value}');
+  }
+  if (probe.httpGet?.host != null) {
+    list.add('host=${probe.httpGet!.host}');
+  }
+  if (probe.httpGet?.port != null) {
+    list.add('port=${probe.httpGet!.port}');
+  }
+  if (probe.httpGet?.path != null) {
+    list.add('path=${probe.httpGet!.path}');
+  }
+
+  if (probe.tcpSocket?.host != null) {
+    list.add('host=${probe.tcpSocket!.host}');
+  }
+  if (probe.tcpSocket?.port != null) {
+    list.add('port=${probe.tcpSocket!.port}');
+  }
+
+  if (probe.grpc?.port != null) {
+    list.add('port=${probe.grpc!.port}');
+  }
+  if (probe.grpc?.service != null) {
+    list.add('service=${probe.grpc!.service}');
   }
 
   if (probe.initialDelaySeconds != null) {
     list.add('delay=${probe.initialDelaySeconds}s');
   }
-
   if (probe.timeoutSeconds != null) {
     list.add('timeout=${probe.timeoutSeconds}s');
   }
-
   if (probe.periodSeconds != null) {
     list.add('period=${probe.periodSeconds}s');
   }
@@ -1269,7 +1325,6 @@ List<String> _getProbe(IoK8sApiCoreV1Probe probe) {
   if (probe.successThreshold != null) {
     list.add('#success=${probe.successThreshold}');
   }
-
   if (probe.failureThreshold != null) {
     list.add('#failure=${probe.failureThreshold}');
   }

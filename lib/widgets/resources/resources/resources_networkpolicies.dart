@@ -2,12 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_network_policy.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_network_policy_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
-import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
@@ -30,11 +28,10 @@ final resourceNetworkPolicy = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiNetworkingV1NetworkPolicyList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiNetworkingV1NetworkPolicyList.fromJson(parsed).items;
 
     return items.map((e) {
-      final podSelector = e.spec?.podSelector.matchLabels.entries
+      final podSelector = e.spec?.podSelector?.matchLabels?.entries
           .map((e) => '${e.key}=${e.value}')
           .toList();
 
@@ -49,7 +46,7 @@ final resourceNetworkPolicy = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiNetworkingV1NetworkPolicyList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiNetworkingV1NetworkPolicyList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiNetworkingV1NetworkPolicy).metadata?.name ?? '';
@@ -73,7 +70,7 @@ final resourceNetworkPolicy = Resource(
         final item = listItem.item as IoK8sApiNetworkingV1NetworkPolicy;
         final status = listItem.status;
 
-        final podSelector = item.spec?.podSelector.matchLabels.entries
+        final podSelector = item.spec?.podSelector?.matchLabels?.entries
             .map((e) => '${e.key}=${e.value}')
             .toList();
 
@@ -93,7 +90,7 @@ final resourceNetworkPolicy = Resource(
   previewItemBuilder: (dynamic listItem) {
     final item = listItem as IoK8sApiNetworkingV1NetworkPolicy;
 
-    final podSelector = item.spec?.podSelector.matchLabels.entries
+    final podSelector = item.spec?.podSelector?.matchLabels?.entries
         .map((e) => '${e.key}=${e.value}')
         .toList();
 
@@ -110,28 +107,27 @@ final resourceNetworkPolicy = Resource(
         return Column(
           children: [
             DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-            DetailsItemConditions(conditions: item.status?.conditions),
             const SizedBox(height: Constants.spacingMiddle),
             DetailsItem(
               title: 'Configuration',
               details: [
                 DetailsItemModel(
                   name: 'Pod Selector',
-                  values: item.spec?.podSelector.matchLabels.entries
+                  values: item.spec?.podSelector?.matchLabels?.entries
                       .map((e) => '${e.key}=${e.value}')
                       .toList(),
                 ),
                 DetailsItemModel(
                   name: 'Policy Types',
-                  values: item.spec?.policyTypes,
+                  values: item.spec?.policyTypes?.map((e) => e.value).toList(),
                 ),
                 DetailsItemModel(
                   name: 'Egress Rules',
-                  values: item.spec?.egress.length,
+                  values: item.spec?.egress?.length,
                 ),
                 DetailsItemModel(
                   name: 'Ingress Rules',
-                  values: item.spec?.ingress.length,
+                  values: item.spec?.ingress?.length,
                 ),
               ],
             ),

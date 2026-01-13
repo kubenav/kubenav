@@ -169,7 +169,7 @@ class _DeleteResourceState extends State<DeleteResource> {
                     ),
                     onChanged: (String? value) {
                       setState(() {
-                        _propagationPolicy = value ?? '';
+                        _propagationPolicy = value;
                       });
                     },
                     items: [

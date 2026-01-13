@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_event.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_event_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
@@ -26,7 +25,7 @@ final resourceEvent = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1EventList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiCoreV1EventList.fromJson(parsed).items;
 
     return items
         .map(
@@ -42,7 +41,7 @@ final resourceEvent = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1EventList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiCoreV1EventList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiCoreV1Event).metadata.name ?? '';
@@ -122,7 +121,7 @@ final resourceEvent = Resource(
                 DetailsItemModel(name: 'Count', values: item.count),
                 DetailsItemModel(
                   name: 'Source',
-                  values: item.source_?.component,
+                  values: item.source?.component,
                 ),
                 DetailsItemModel(
                   name: 'Reporting Component',

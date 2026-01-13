@@ -2,19 +2,19 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_issuer.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_v1_issuer_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
+import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/plugins/cert-manager/resources/plugin_cert_manager_resources.dart';
-import 'package:kubenav/widgets/plugins/cert-manager/resources/plugin_cert_manager_resources_clusterissuers.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item_conditions.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item_metadata.dart';
 import 'package:kubenav/widgets/resources/helpers/details_resources_preview.dart';
 import 'package:kubenav/widgets/resources/resources/resources.dart';
 import 'package:kubenav/widgets/resources/resources/resources_events.dart';
+import 'package:kubenav/widgets/resources/resources/resources_secrets.dart';
+import 'package:kubenav/widgets/resources/resources_details.dart';
 import 'package:kubenav/widgets/resources/resources_list.dart';
 
 final Resource certManagerResourceIssuer = Resource(
@@ -31,12 +31,12 @@ final Resource certManagerResourceIssuer = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoCertManagerV1IssuerList.fromJson(parsed)?.items ?? [];
+    final items = IoCertManagerV1IssuerList.fromJson(parsed).items;
 
     return items.map((e) {
       final status =
-          e.status?.conditions != null && e.status!.conditions.isNotEmpty
-          ? e.status!.conditions
+          e.status?.conditions != null && e.status!.conditions!.isNotEmpty
+          ? e.status!.conditions!
                 .where((e) => e.type == 'Ready')
                 .firstOrNull
                 ?.status
@@ -56,7 +56,7 @@ final Resource certManagerResourceIssuer = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoCertManagerV1IssuerList.fromJson(parsed)?.items ?? [];
+    return IoCertManagerV1IssuerList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoCertManagerV1Issuer).metadata?.name ?? '';
@@ -88,7 +88,7 @@ final Resource certManagerResourceIssuer = Resource(
           status: status,
           details: [
             'Namespace: ${item.metadata?.namespace ?? '-'}',
-            'Ready: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
+            'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions?.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
         );
@@ -98,7 +98,7 @@ final Resource certManagerResourceIssuer = Resource(
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
-      'Ready: ${item.status?.conditions != null && item.status!.conditions.isNotEmpty ? (item.status!.conditions.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
+      'Ready: ${item.status?.conditions != null && item.status!.conditions!.isNotEmpty ? (item.status!.conditions?.where((e) => e.type == 'Ready').firstOrNull?.status ?? '-') : '-'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
@@ -111,41 +111,41 @@ final Resource certManagerResourceIssuer = Resource(
             DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
             DetailsItemConditions(
               conditions: item.status?.conditions
-                  .map(
+                  ?.map(
                     (e) => IoK8sApimachineryPkgApisMetaV1Condition(
                       lastTransitionTime:
                           e.lastTransitionTime ?? DateTime.now(),
                       message: e.message ?? '',
                       observedGeneration: e.observedGeneration,
                       reason: e.reason ?? '',
-                      status: e.status.value,
+                      status: e.status.value ?? '',
                       type: e.type,
                     ),
                   )
                   .toList(),
             ),
             const SizedBox(height: Constants.spacingMiddle),
-            buildACME(
+            _buildACME(
               context,
               item.metadata?.namespace ?? 'cert-manager',
               item.spec.acme,
             ),
-            buildCA(
+            _buildCA(
               context,
               item.metadata?.namespace ?? 'cert-manager',
               item.spec.ca,
             ),
-            buildSelfSigned(
+            _buildSelfSigned(
               context,
               item.metadata?.namespace ?? 'cert-manager',
               item.spec.selfSigned,
             ),
-            buildVault(
+            _buildVault(
               context,
               item.metadata?.namespace ?? 'cert-manager',
               item.spec.vault,
             ),
-            buildVenafi(
+            _buildVenafi(
               context,
               item.metadata?.namespace ?? 'cert-manager',
               item.spec.venafi,
@@ -157,9 +157,9 @@ final Resource certManagerResourceIssuer = Resource(
                   name: 'Ready',
                   values:
                       item.status?.conditions != null &&
-                          item.status!.conditions.isNotEmpty
+                          item.status!.conditions!.isNotEmpty
                       ? item.status!.conditions
-                            .where((e) => e.type == 'Ready')
+                            ?.where((e) => e.type == 'Ready')
                             .firstOrNull
                             ?.status
                       : null,
@@ -191,3 +191,186 @@ final Resource certManagerResourceIssuer = Resource(
         );
       },
 );
+
+Widget _buildACME(
+  BuildContext context,
+  String namespace,
+  IoCertManagerV1Issuer$Spec$Acme? acme,
+) {
+  if (acme == null) {
+    return Container();
+  }
+
+  return Column(
+    children: [
+      DetailsItem(
+        title: 'Configuration',
+        details: [
+          DetailsItemModel(name: 'Email', values: acme.email),
+          DetailsItemModel(name: 'Server', values: acme.server),
+          DetailsItemModel(
+            name: 'Preferred Chain',
+            values: acme.preferredChain,
+          ),
+          DetailsItemModel(name: 'CA Bundle', values: acme.caBundle),
+          DetailsItemModel(name: 'Skip TLS Verify', values: acme.skipTLSVerify),
+          DetailsItemModel(
+            name: 'Solvers',
+            values: acme.solvers
+                ?.map((e) => e.dns01 != null ? 'DNS01' : 'HTTP01')
+                .toList(),
+          ),
+          DetailsItemModel(
+            name: 'Private Key Secret',
+            values: acme.privateKeySecretRef.name,
+            onTap: (index) {
+              navigate(
+                context,
+                ResourcesDetails(
+                  name: acme.privateKeySecretRef.name,
+                  namespace: namespace,
+                  resource: resourceSecret,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      const SizedBox(height: Constants.spacingMiddle),
+    ],
+  );
+}
+
+Widget _buildCA(
+  BuildContext context,
+  String namespace,
+  IoCertManagerV1Issuer$Spec$Ca? ca,
+) {
+  if (ca == null) {
+    return Container();
+  }
+
+  return Column(
+    children: [
+      DetailsItem(
+        title: 'Configuration',
+        details: [
+          DetailsItemModel(
+            name: 'Secret Name',
+            values: ca.secretName,
+            onTap: (index) {
+              navigate(
+                context,
+                ResourcesDetails(
+                  name: ca.secretName,
+                  namespace: namespace,
+                  resource: resourceSecret,
+                ),
+              );
+            },
+          ),
+          DetailsItemModel(
+            name: 'CRL Distribution Points',
+            values: ca.crlDistributionPoints,
+          ),
+          DetailsItemModel(name: 'OCSP Servers', values: ca.ocspServers),
+          DetailsItemModel(
+            name: 'Issuing Certificate Urls',
+            values: ca.issuingCertificateURLs,
+          ),
+        ],
+      ),
+      const SizedBox(height: Constants.spacingMiddle),
+    ],
+  );
+}
+
+Widget _buildSelfSigned(
+  BuildContext context,
+  String namespace,
+  IoCertManagerV1Issuer$Spec$SelfSigned? selfSigned,
+) {
+  if (selfSigned == null) {
+    return Container();
+  }
+
+  return Column(
+    children: [
+      DetailsItem(
+        title: 'Configuration',
+        details: [
+          DetailsItemModel(
+            name: 'CRL Distribution Points',
+            values:
+                selfSigned.crlDistributionPoints != null &&
+                    selfSigned.crlDistributionPoints!.isNotEmpty
+                ? selfSigned.crlDistributionPoints
+                : '-',
+          ),
+        ],
+      ),
+      const SizedBox(height: Constants.spacingMiddle),
+    ],
+  );
+}
+
+Widget _buildVault(
+  BuildContext context,
+  String namespace,
+  IoCertManagerV1Issuer$Spec$Vault? vault,
+) {
+  if (vault == null) {
+    return Container();
+  }
+
+  return Column(
+    children: [
+      DetailsItem(
+        title: 'Configuration',
+        details: [
+          DetailsItemModel(name: 'Server', values: vault.server),
+          DetailsItemModel(name: 'Path', values: vault.path),
+          DetailsItemModel(name: 'Namespace', values: vault.namespace),
+          DetailsItemModel(name: 'CA Bundle', values: vault.caBundle),
+          DetailsItemModel(
+            name: 'CA Bundle Secret',
+            values: vault.caBundleSecretRef?.name,
+            onTap: vault.caBundleSecretRef?.name == null
+                ? null
+                : (index) {
+                    navigate(
+                      context,
+                      ResourcesDetails(
+                        name: vault.caBundleSecretRef!.name,
+                        namespace: namespace,
+                        resource: resourceSecret,
+                      ),
+                    );
+                  },
+          ),
+        ],
+      ),
+      const SizedBox(height: Constants.spacingMiddle),
+    ],
+  );
+}
+
+Widget _buildVenafi(
+  BuildContext context,
+  String namespace,
+  IoCertManagerV1Issuer$Spec$Venafi? venafi,
+) {
+  if (venafi == null) {
+    return Container();
+  }
+
+  return Column(
+    children: [
+      DetailsItem(
+        title: 'Configuration',
+        details: [DetailsItemModel(name: 'Zone', values: venafi.zone)],
+      ),
+      const SizedBox(height: Constants.spacingMiddle),
+    ],
+  );
+}

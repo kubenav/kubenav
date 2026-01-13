@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_config_map.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_config_map_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -132,7 +131,7 @@ class _PluginPrometheusListState extends State<PluginPrometheusList> {
                     ),
                     Text(
                       Characters(
-                            'Description: ${configMap.data.containsKey('description') ? configMap.data['description'] : ''}',
+                            'Description: ${configMap.data != null && configMap.data!.containsKey('description') ? configMap.data!['description'] : ''}',
                           )
                           .replaceAll(Characters(''), Characters('\u{200B}'))
                           .toString(),

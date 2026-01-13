@@ -2,10 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_certificates_v1_certificate_signing_request.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_certificates_v1_certificate_signing_request_condition.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_certificates_v1_certificate_signing_request_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
@@ -29,11 +26,9 @@ final resourceCertificateSigningRequest = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiCertificatesV1CertificateSigningRequestList.fromJson(
-          parsed,
-        )?.items ??
-        [];
+    final items = IoK8sApiCertificatesV1CertificateSigningRequestList.fromJson(
+      parsed,
+    ).items;
 
     return items.map((e) {
       final condition = _getCondition(e.status?.conditions);
@@ -52,9 +47,8 @@ final resourceCertificateSigningRequest = Resource(
   decodeList: (String data) {
     final parsed = json.decode(data);
     return IoK8sApiCertificatesV1CertificateSigningRequestList.fromJson(
-          parsed,
-        )?.items ??
-        [];
+      parsed,
+    ).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiCertificatesV1CertificateSigningRequest)
@@ -120,7 +114,7 @@ final resourceCertificateSigningRequest = Resource(
             DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
             DetailsItemConditions(
               conditions: item.status?.conditions
-                  .map(
+                  ?.map(
                     (e) => IoK8sApimachineryPkgApisMetaV1Condition(
                       lastTransitionTime:
                           e.lastTransitionTime ?? DateTime.now(),
@@ -148,7 +142,10 @@ final resourceCertificateSigningRequest = Resource(
                 ),
                 DetailsItemModel(name: 'Request', values: item.spec.request),
                 DetailsItemModel(name: 'Groups', values: item.spec.groups),
-                DetailsItemModel(name: 'Usages', values: item.spec.usages),
+                DetailsItemModel(
+                  name: 'Usages',
+                  values: item.spec.usages?.map((e) => e.value).toList(),
+                ),
               ],
             ),
             const SizedBox(height: Constants.spacingMiddle),

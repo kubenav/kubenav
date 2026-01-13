@@ -5,8 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_config_map.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_config_map_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -35,7 +34,7 @@ final resourceConfigMap = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1ConfigMapList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiCoreV1ConfigMapList.fromJson(parsed).items;
 
     return items
         .map(
@@ -49,7 +48,7 @@ final resourceConfigMap = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1ConfigMapList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiCoreV1ConfigMapList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiCoreV1ConfigMap).metadata?.name ?? '';
@@ -81,7 +80,7 @@ final resourceConfigMap = Resource(
           status: status,
           details: [
             'Namespace: ${item.metadata?.namespace ?? '-'}',
-            'Data: ${item.data.entries.length}',
+            'Data: ${item.data?.entries.length}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
         );
@@ -91,7 +90,7 @@ final resourceConfigMap = Resource(
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
-      'Data: ${item.data.entries.length}',
+      'Data: ${item.data?.entries.length}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
@@ -105,66 +104,68 @@ final resourceConfigMap = Resource(
             const SizedBox(height: Constants.spacingMiddle),
             AppVerticalListSimpleWidget(
               title: 'Data',
-              items: item.data.entries
-                  .map(
-                    (data) => AppVerticalListSimpleModel(
-                      onTap: () {
-                        showModal(
-                          context,
-                          _buildBottomSheet(context, data.key, data.value),
-                        );
-                      },
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(Constants.sizeBorderRadius),
+              items:
+                  item.data?.entries
+                      .map(
+                        (data) => AppVerticalListSimpleModel(
+                          onTap: () {
+                            showModal(
+                              context,
+                              _buildBottomSheet(context, data.key, data.value),
+                            );
+                          },
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primary,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(Constants.sizeBorderRadius),
+                                ),
+                              ),
+                              height: 54,
+                              width: 54,
+                              padding: const EdgeInsets.all(
+                                Constants.spacingIcon54x54,
+                              ),
+                              child: SvgPicture.asset(
+                                'assets/resources/configmaps.svg',
+                              ),
                             ),
-                          ),
-                          height: 54,
-                          width: 54,
-                          padding: const EdgeInsets.all(
-                            Constants.spacingIcon54x54,
-                          ),
-                          child: SvgPicture.asset(
-                            'assets/resources/configmaps.svg',
-                          ),
-                        ),
-                        const SizedBox(width: Constants.spacingSmall),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                data.key,
-                                style: primaryTextStyle(context),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                            const SizedBox(width: Constants.spacingSmall),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data.key,
+                                    style: primaryTextStyle(context),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    data.value,
+                                    style: secondaryTextStyle(context),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
                               ),
-                              Text(
-                                data.value,
-                                style: secondaryTextStyle(context),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(width: Constants.spacingSmall),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              color: Theme.of(context)
+                                  .extension<CustomColors>()!
+                                  .textSecondary
+                                  .withValues(alpha: Constants.opacityIcon),
+                              size: 24,
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: Constants.spacingSmall),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: Theme.of(context)
-                              .extension<CustomColors>()!
-                              .textSecondary
-                              .withValues(alpha: Constants.opacityIcon),
-                          size: 24,
-                        ),
-                      ],
-                    ),
-                  )
-                  .toList(),
+                      )
+                      .toList() ??
+                  [],
             ),
             const SizedBox(height: Constants.spacingMiddle),
             DetailsResourcesPreview(

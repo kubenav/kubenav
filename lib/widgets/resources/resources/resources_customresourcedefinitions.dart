@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_apiextensions_apiserver_pkg_apis_apiextensions_v1_custom_resource_definition.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apiextensions_apiserver_pkg_apis_apiextensions_v1_custom_resource_definition_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
@@ -40,8 +37,7 @@ final resourceCustomResourceDefinition = Resource(
     final items =
         IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinitionList.fromJson(
           parsed,
-        )?.items ??
-        [];
+        ).items;
     return items
         .map(
           (e) => ResourceItem(
@@ -55,9 +51,8 @@ final resourceCustomResourceDefinition = Resource(
   decodeList: (String data) {
     final parsed = json.decode(data);
     return IoK8sApiextensionsApiserverPkgApisApiextensionsV1CustomResourceDefinitionList.fromJson(
-          parsed,
-        )?.items ??
-        [];
+      parsed,
+    ).items;
   },
   getName: (dynamic item) {
     return (item
@@ -161,16 +156,19 @@ final resourceCustomResourceDefinition = Resource(
                       item.spec.names.plural,
                       item.spec.scope,
                       version.additionalPrinterColumns
-                          .where((e) => e.priority == null || e.priority == 0)
-                          .map(
-                            (e) => AdditionalPrinterColumns(
-                              description: e.description ?? '',
-                              jsonPath: e.jsonPath,
-                              name: e.name,
-                              type: e.type,
-                            ),
-                          )
-                          .toList(),
+                              ?.where(
+                                (e) => e.priority == null || e.priority == 0,
+                              )
+                              .map(
+                                (e) => AdditionalPrinterColumns(
+                                  description: e.description ?? '',
+                                  jsonPath: e.jsonPath,
+                                  name: e.name,
+                                  type: e.type,
+                                ),
+                              )
+                              .toList() ??
+                          [],
                     );
 
                     navigate(
@@ -381,9 +379,7 @@ class CustomResourceItem extends StatelessWidget {
           final value = IoK8sApimachineryPkgApisMetaV1Condition.fromJson(
             condition,
           );
-          if (value != null) {
-            conditions.add(value);
-          }
+          conditions.add(value);
         }
 
         return conditions;

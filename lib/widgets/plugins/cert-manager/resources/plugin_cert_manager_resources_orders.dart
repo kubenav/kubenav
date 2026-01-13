@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_acme_v1_order.dart';
-import 'package:kubenav/models/plugins/cert-manager/io_cert_manager_acme_v1_order_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -31,7 +30,7 @@ final Resource certManagerResourceOrder = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoCertManagerAcmeV1OrderList.fromJson(parsed)?.items ?? [];
+    final items = IoCertManagerAcmeV1OrderList.fromJson(parsed).items;
 
     return items.map((e) {
       final state = e.status?.state?.value;
@@ -49,7 +48,7 @@ final Resource certManagerResourceOrder = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoCertManagerAcmeV1OrderList.fromJson(parsed)?.items ?? [];
+    return IoCertManagerAcmeV1OrderList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoCertManagerAcmeV1Order).metadata.name ?? '';

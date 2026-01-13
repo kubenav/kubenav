@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_event.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_event_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -22,7 +21,7 @@ import 'package:kubenav/widgets/shared/app_error_widget.dart';
 /// are more events available.
 List<IoK8sApiCoreV1Event> _decodeResult(String result) {
   final parsed = json.decode(result);
-  final events = IoK8sApiCoreV1EventList.fromJson(parsed)?.items ?? [];
+  final events = IoK8sApiCoreV1EventList.fromJson(parsed).items;
 
   events.sort(
     (a, b) => (b.lastTimestamp ?? b.eventTime ?? b.metadata.creationTimestamp)!

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
 
@@ -19,7 +19,7 @@ class DetailsItemMetadata extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ownerReferences = metadata?.ownerReferences
-        .map(
+        ?.map(
           (ownerReference) => '${ownerReference.kind} (${ownerReference.name})',
         )
         .toList();
@@ -36,13 +36,13 @@ class DetailsItemMetadata extends StatelessWidget {
         ),
         DetailsItemModel(
           name: 'Labels',
-          values: metadata?.labels.entries
+          values: metadata?.labels?.entries
               .map((e) => '${e.key}: ${e.value}')
               .toList(),
         ),
         DetailsItemModel(
           name: 'Annotations',
-          values: metadata?.annotations.entries
+          values: metadata?.annotations?.entries
               .map((e) => '${e.key}: ${e.value}')
               .toList(),
         ),
@@ -52,7 +52,7 @@ class DetailsItemMetadata extends StatelessWidget {
           onTap: (int index) {
             goToReference(
               context,
-              metadata?.ownerReferences[index],
+              metadata?.ownerReferences?[index],
               metadata?.namespace,
             );
           },

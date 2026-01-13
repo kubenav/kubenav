@@ -2,9 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_namespace.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_namespace_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
+import 'package:kubenav/models/kubernetes/schema.enums.swagger.dart' as enums;
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -35,14 +34,16 @@ final resourceNamespace = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1NamespaceList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiCoreV1NamespaceList.fromJson(parsed).items;
 
     return items
         .map(
           (e) => ResourceItem(
             item: e,
             metrics: null,
-            status: e.status?.phase == 'Active'
+            status:
+                e.status?.phase ==
+                    enums.IoK8sApiCoreV1NamespaceStatusPhase.active
                 ? ResourceStatus.success
                 : ResourceStatus.warning,
           ),
@@ -51,7 +52,7 @@ final resourceNamespace = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1NamespaceList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiCoreV1NamespaceList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiCoreV1Namespace).metadata?.name ?? '';
@@ -82,7 +83,7 @@ final resourceNamespace = Resource(
           item: item,
           status: status,
           details: [
-            'Status: ${item.status?.phase ?? '-'}',
+            'Status: ${item.status?.phase?.value ?? '-'}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
         );
@@ -103,7 +104,7 @@ final resourceNamespace = Resource(
         DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(
           conditions: item.status?.conditions
-              .map(
+              ?.map(
                 (e) => IoK8sApimachineryPkgApisMetaV1Condition(
                   lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
                   message: e.message ?? '',
@@ -119,7 +120,7 @@ final resourceNamespace = Resource(
         DetailsItem(
           title: 'Status',
           details: [
-            DetailsItemModel(name: 'Phase', values: item.status!.phase),
+            DetailsItemModel(name: 'Phase', values: item.status!.phase?.value),
           ],
         ),
         const SizedBox(height: Constants.spacingMiddle),

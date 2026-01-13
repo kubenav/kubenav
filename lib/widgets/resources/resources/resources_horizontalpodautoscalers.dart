@@ -2,10 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_autoscaling_v2_horizontal_pod_autoscaler.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_autoscaling_v2_horizontal_pod_autoscaler_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_owner_reference.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -32,11 +29,9 @@ final resourceHorizontalPodAutoscaler = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiAutoscalingV2HorizontalPodAutoscalerList.fromJson(
-          parsed,
-        )?.items ??
-        [];
+    final items = IoK8sApiAutoscalingV2HorizontalPodAutoscalerList.fromJson(
+      parsed,
+    ).items;
 
     return items.map((e) {
       final currentReplicas = e.status!.currentReplicas ?? 0;
@@ -59,9 +54,8 @@ final resourceHorizontalPodAutoscaler = Resource(
   decodeList: (String data) {
     final parsed = json.decode(data);
     return IoK8sApiAutoscalingV2HorizontalPodAutoscalerList.fromJson(
-          parsed,
-        )?.items ??
-        [];
+      parsed,
+    ).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiAutoscalingV2HorizontalPodAutoscaler)
@@ -125,7 +119,7 @@ final resourceHorizontalPodAutoscaler = Resource(
         DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(
           conditions: item.status?.conditions
-              .map(
+              ?.map(
                 (e) => IoK8sApimachineryPkgApisMetaV1Condition(
                   lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
                   message: e.message ?? '',

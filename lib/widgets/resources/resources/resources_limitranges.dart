@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_limit_range.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_limit_range_item.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_limit_range_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -30,7 +28,7 @@ final resourceLimitRange = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1LimitRangeList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiCoreV1LimitRangeList.fromJson(parsed).items;
 
     return items
         .map(
@@ -44,7 +42,7 @@ final resourceLimitRange = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1LimitRangeList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiCoreV1LimitRangeList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiCoreV1LimitRange).metadata?.name ?? '';
@@ -145,25 +143,25 @@ List<Widget> _buildLimits(List<IoK8sApiCoreV1LimitRangeItem>? limits) {
           DetailsItemModel(name: 'Type', values: limits[i].type),
           DetailsItemModel(
             name: 'Defaults',
-            values: limits[i].default_.entries.map((e) {
+            values: limits[i].$default?.entries.map((e) {
               return '${e.key}: ${e.value}';
             }).toList(),
           ),
           DetailsItemModel(
             name: 'Default Requests',
-            values: limits[i].defaultRequest.entries.map((e) {
+            values: limits[i].defaultRequest?.entries.map((e) {
               return '${e.key}: ${e.value}';
             }).toList(),
           ),
           DetailsItemModel(
             name: 'Max',
-            values: limits[i].max.entries.map((e) {
+            values: limits[i].max?.entries.map((e) {
               return '${e.key}: ${e.value}';
             }).toList(),
           ),
           DetailsItemModel(
             name: 'Min',
-            values: limits[i].min.entries.map((e) {
+            values: limits[i].min?.entries.map((e) {
               return '${e.key}: ${e.value}';
             }).toList(),
           ),
@@ -192,9 +190,9 @@ Map<String, List<String>> _buildMetrics(
   for (var i = 0; i < limits.length; i++) {
     final type = limits[i].type;
 
-    for (var j = 0; j < limits[i].default_.keys.length; j++) {
-      final resource = limits[i].default_.keys.elementAt(j);
-      metrics['$type: $resource'] = [type, resource];
+    for (var j = 0; j < (limits[i].$default?.keys.length ?? 0); j++) {
+      final resource = limits[i].$default?.keys.elementAt(j);
+      metrics['$type: $resource'] = [type, resource ?? ''];
     }
   }
 

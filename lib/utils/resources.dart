@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:json_path/json_path.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_object_reference.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_rbac_v1_policy_rule.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_label_selector.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_owner_reference.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/repositories/crd_cache_repository.dart';
 import 'package:kubenav/utils/logger.dart';
 import 'package:kubenav/utils/navigate.dart';
@@ -60,7 +57,7 @@ String getSelector(IoK8sApimachineryPkgApisMetaV1LabelSelector? selector) {
     return '';
   }
 
-  if (selector.matchLabels.isNotEmpty) {
+  if (selector.matchLabels != null && selector.matchLabels!.isNotEmpty) {
     return getMatchLabelsSelector(selector.matchLabels);
   }
 
@@ -69,8 +66,8 @@ String getSelector(IoK8sApimachineryPkgApisMetaV1LabelSelector? selector) {
 
 /// [getMatchLabelsSelector] builds the selector the [matchLabels] values of a
 /// selector. The [matchLabels] argument must be of type `Map<String, String>`.
-String getMatchLabelsSelector(Map<String, String> matchLabels) {
-  if (matchLabels.isEmpty) {
+String getMatchLabelsSelector(Map<String, dynamic>? matchLabels) {
+  if (matchLabels == null || matchLabels.isEmpty) {
     return '';
   }
 
@@ -114,16 +111,18 @@ List<Rule> formatRules(List<IoK8sApiRbacV1PolicyRule> rules) {
   final List<Rule> formattedRules = [];
 
   for (var rule in rules) {
-    for (var apiGroup in rule.apiGroups) {
-      for (var resource in rule.resources) {
-        formattedRules.add(
-          Rule(
-            resource: '$resource${apiGroup != '' ? '.$apiGroup' : ''}',
-            nonResourceURLs: rule.nonResourceURLs,
-            resourceNames: rule.resourceNames,
-            verbs: rule.verbs,
-          ),
-        );
+    if (rule.apiGroups != null && rule.resources != null) {
+      for (var apiGroup in rule.apiGroups!) {
+        for (var resource in rule.resources!) {
+          formattedRules.add(
+            Rule(
+              resource: '$resource${apiGroup != '' ? '.$apiGroup' : ''}',
+              nonResourceURLs: rule.nonResourceURLs ?? [],
+              resourceNames: rule.resourceNames ?? [],
+              verbs: rule.verbs,
+            ),
+          );
+        }
       }
     }
   }
@@ -308,16 +307,17 @@ Future<void> goToReference(
                 crd.spec.names.plural,
                 crd.spec.scope,
                 version.additionalPrinterColumns
-                    .where((e) => e.priority == null || e.priority == 0)
-                    .map(
-                      (e) => AdditionalPrinterColumns(
-                        description: e.description ?? '',
-                        jsonPath: e.jsonPath,
-                        name: e.name,
-                        type: e.type,
-                      ),
-                    )
-                    .toList(),
+                        ?.where((e) => e.priority == null || e.priority == 0)
+                        .map(
+                          (e) => AdditionalPrinterColumns(
+                            description: e.description ?? '',
+                            jsonPath: e.jsonPath,
+                            name: e.name,
+                            type: e.type,
+                          ),
+                        )
+                        .toList() ??
+                    [],
               );
 
               String? ns;
