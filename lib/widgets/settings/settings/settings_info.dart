@@ -39,7 +39,7 @@ SOFTWARE.''';
 
 /// The [SettingsInfo] displays some general information and links for the app.
 /// These information contain the installed app version, the license text, and
-/// the links to our website, GitHub and Twitter.
+/// the links to our website and GitHub.
 class SettingsInfo extends StatefulWidget {
   const SettingsInfo({super.key});
 
@@ -210,30 +210,6 @@ class _SettingsInfoState extends State<SettingsInfo> {
             Expanded(
               flex: 1,
               child: Text('GitHub', style: normalTextStyle(context)),
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: Theme.of(context)
-                  .extension<CustomColors>()!
-                  .textPrimary
-                  .withValues(alpha: Constants.opacityIcon),
-              size: 16,
-            ),
-          ],
-        ),
-        AppVerticalListSimpleModel(
-          onTap: () {
-            openUrl('https://twitter.com/kubenav');
-          },
-          children: [
-            Icon(
-              CustomIcons.twitter,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(width: Constants.spacingSmall),
-            Expanded(
-              flex: 1,
-              child: Text('Twitter', style: normalTextStyle(context)),
             ),
             Icon(
               Icons.arrow_forward_ios,
