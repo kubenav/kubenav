@@ -55,22 +55,20 @@ class _CronJobSuspendState extends State<CronJobSuspend> {
         _isLoading = true;
       });
 
-      final String body = widget.cronJob.spec?.suspend != null
-          ? '[{ "op": "replace", "path": "/spec/suspend", "value": true }]'
-          : '[{ "op": "add", "path": "/spec/suspend", "value": true }]';
+      final String body = '{"spec": {"suspend": true}}';
 
       final cluster = await clustersRepository.getClusterWithCredentials(
         clustersRepository.activeClusterId,
       );
 
       final url =
-          '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}/${widget.name}';
+          '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}/${widget.name}?fieldManager=kubenav';
 
       await KubernetesService(
         cluster: cluster!,
         proxy: appRepository.settings.proxy,
         timeout: appRepository.settings.timeout,
-      ).patchRequest(url, body);
+      ).patchRequest(PatchType.mergePatch, url, body);
 
       setState(() {
         _isLoading = false;

@@ -47,21 +47,20 @@ class _CSRApproveState extends State<CSRApprove> {
         _isLoading = true;
       });
 
-      final now = DateTime.now().toRFC3339();
       final String body =
-          '[{"op":"add","path":"/status/conditions","value":[{"type":"Approved","status":"True","reason":"KubenavApprove","message":"This CSR was approved by kubenav certificate approve.","lastUpdateTime":"$now","lastTransitionTime":null}]}]';
+          '{"status": {"conditions": [{"type": "Approved", "status": "True", "reason": "KubenavApprove", "message": "This CSR was approved by kubenav certificate approve.", "lastUpdateTime": "${DateTime.now().toRFC3339()}", "lastTransitionTime": null}]}}';
 
       final cluster = await clustersRepository.getClusterWithCredentials(
         clustersRepository.activeClusterId,
       );
       final url =
-          '${widget.resource.path}/${widget.resource.resource}/${widget.name}/approval';
+          '${widget.resource.path}/${widget.resource.resource}/${widget.name}/approval?fieldManager=kubenav';
 
       await KubernetesService(
         cluster: cluster!,
         proxy: appRepository.settings.proxy,
         timeout: appRepository.settings.timeout,
-      ).patchRequest(url, body);
+      ).patchRequest(PatchType.mergePatch, url, body);
 
       setState(() {
         _isLoading = false;

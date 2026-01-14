@@ -111,7 +111,7 @@ class _CreateJobState extends State<CreateJob> {
           clustersRepository.activeClusterId,
         );
         final url =
-            '${resourceJob.path}/namespaces/${widget.namespace}/${resourceJob.resource}';
+            '${resourceJob.path}/namespaces/${widget.namespace}/${resourceJob.resource}?fieldManager=kubenav';
 
         await KubernetesService(
           cluster: cluster!,

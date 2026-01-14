@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -55,31 +54,20 @@ class _RestartResourceState extends State<RestartResource> {
         _isLoading = true;
       });
 
-      final item = await compute(widget.resource.toJson, widget.item);
-      final now = DateTime.now().toIso8601String();
-
       final String body =
-          item['spec'] != null &&
-              item['spec']['template'] != null &&
-              item['spec']['template']['metadata'] != null &&
-              item['spec']['template']['metadata']['annotations'] != null
-          ? item['spec']['template']['metadata']['annotations']['kubenav.io/restartedAt'] !=
-                    null
-                ? '[{"op": "replace", "path": "/spec/template/metadata/annotations/kubenav.io~1restartedAt", "value": "$now"}]'
-                : '[{"op": "add", "path": "/spec/template/metadata/annotations/kubenav.io~1restartedAt", "value": "$now"}]'
-          : '[{"op": "add", "path": "/spec/template/metadata/annotations", "value": {"kubenav.io/restartedAt": "$now"}}]';
+          '{"spec": {"template": {"metadata": {"annotations": {"kubenav.io/restartedAt": "${DateTime.now().toIso8601String()}"}}}}}';
 
       final cluster = await clustersRepository.getClusterWithCredentials(
         clustersRepository.activeClusterId,
       );
       final url =
-          '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}/${widget.name}';
+          '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}/${widget.name}?fieldManager=kubenav';
 
       await KubernetesService(
         cluster: cluster!,
         proxy: appRepository.settings.proxy,
         timeout: appRepository.settings.timeout,
-      ).patchRequest(url, body);
+      ).patchRequest(PatchType.mergePatch, url, body);
 
       setState(() {
         _isLoading = false;

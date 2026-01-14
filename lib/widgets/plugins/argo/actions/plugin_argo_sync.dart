@@ -77,7 +77,7 @@ class _PluginArgoSyncState extends State<PluginArgoSync> {
         cluster: cluster!,
         proxy: appRepository.settings.proxy,
         timeout: appRepository.settings.timeout,
-      ).patchRequest(url, body);
+      ).patchRequest(PatchType.jsonPatch, url, body);
 
       setState(() {
         _isLoading = false;

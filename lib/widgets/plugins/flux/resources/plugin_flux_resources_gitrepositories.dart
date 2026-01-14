@@ -39,6 +39,7 @@ final Resource fluxResourceGitRepository = Resource(
                 .where((e) => e.type == 'Ready')
                 .firstOrNull
                 ?.status
+                .value
           : 'Unknown';
 
       return ResourceItem(

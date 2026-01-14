@@ -46,21 +46,19 @@ class _NodeCordonState extends State<NodeCordon> {
         _isLoading = true;
       });
 
-      final String body = widget.node.spec?.unschedulable == null
-          ? '[{"op":"add","path":"/spec/unschedulable","value":true}]'
-          : '[{"op":"replace","path":"/spec/unschedulable","value":true}]';
+      final String body = '{"spec": {"unschedulable": true}}';
 
       final cluster = await clustersRepository.getClusterWithCredentials(
         clustersRepository.activeClusterId,
       );
       final url =
-          '${widget.resource.path}/${widget.resource.resource}/${widget.name}';
+          '${widget.resource.path}/${widget.resource.resource}/${widget.name}?fieldManager=kubenav';
 
       await KubernetesService(
         cluster: cluster!,
         proxy: appRepository.settings.proxy,
         timeout: appRepository.settings.timeout,
-      ).patchRequest(url, body);
+      ).patchRequest(PatchType.mergePatch, url, body);
 
       setState(() {
         _isLoading = false;

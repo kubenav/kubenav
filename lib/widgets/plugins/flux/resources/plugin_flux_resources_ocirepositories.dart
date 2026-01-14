@@ -28,7 +28,7 @@ final Resource fluxResourceOCIRepository = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoFluxcdToolkitSourceV1beta2OCIRepositoryList.fromJson(
+    final items = IoFluxcdToolkitSourceV1OCIRepositoryList.fromJson(
       parsed,
     ).items;
 
@@ -39,6 +39,7 @@ final Resource fluxResourceOCIRepository = Resource(
                 .where((e) => e.type == 'Ready')
                 .firstOrNull
                 ?.status
+                .value
           : 'Unknown';
 
       return ResourceItem(
@@ -54,20 +55,17 @@ final Resource fluxResourceOCIRepository = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitSourceV1beta2OCIRepositoryList.fromJson(parsed).items;
+    return IoFluxcdToolkitSourceV1OCIRepositoryList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoFluxcdToolkitSourceV1beta2OCIRepository).metadata?.name ??
-        '';
+    return (item as IoFluxcdToolkitSourceV1OCIRepository).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoFluxcdToolkitSourceV1beta2OCIRepository)
-        .metadata
-        ?.namespace;
+    return (item as IoFluxcdToolkitSourceV1OCIRepository).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitSourceV1beta2OCIRepository.fromJson(parsed);
+    return IoFluxcdToolkitSourceV1OCIRepository.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -77,7 +75,7 @@ final Resource fluxResourceOCIRepository = Resource(
     return json.decode(json.encode(item));
   },
   listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
-    final item = listItem.item as IoFluxcdToolkitSourceV1beta2OCIRepository;
+    final item = listItem.item as IoFluxcdToolkitSourceV1OCIRepository;
     final status = listItem.status;
 
     return ResourcesListItem(
@@ -95,7 +93,7 @@ final Resource fluxResourceOCIRepository = Resource(
     );
   },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoFluxcdToolkitSourceV1beta2OCIRepository;
+    final item = listItem as IoFluxcdToolkitSourceV1OCIRepository;
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
@@ -106,7 +104,7 @@ final Resource fluxResourceOCIRepository = Resource(
   },
   detailsItemBuilder:
       (BuildContext context, Resource resource, dynamic detailsItem) {
-        final item = detailsItem as IoFluxcdToolkitSourceV1beta2OCIRepository;
+        final item = detailsItem as IoFluxcdToolkitSourceV1OCIRepository;
 
         return Column(
           children: [
