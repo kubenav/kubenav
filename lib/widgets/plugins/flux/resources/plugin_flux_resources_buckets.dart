@@ -28,7 +28,7 @@ final Resource fluxResourceBucket = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoFluxcdToolkitSourceV1beta2BucketList.fromJson(parsed).items;
+    final items = IoFluxcdToolkitSourceV1BucketList.fromJson(parsed).items;
 
     return items.map((e) {
       final status =
@@ -37,6 +37,7 @@ final Resource fluxResourceBucket = Resource(
                 .where((e) => e.type == 'Ready')
                 .firstOrNull
                 ?.status
+                .value
           : 'Unknown';
 
       return ResourceItem(
@@ -52,17 +53,17 @@ final Resource fluxResourceBucket = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitSourceV1beta2BucketList.fromJson(parsed).items;
+    return IoFluxcdToolkitSourceV1BucketList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
-    return (item as IoFluxcdToolkitSourceV1beta2Bucket).metadata?.name ?? '';
+    return (item as IoFluxcdToolkitSourceV1Bucket).metadata?.name ?? '';
   },
   getNamespace: (dynamic item) {
-    return (item as IoFluxcdToolkitSourceV1beta2Bucket).metadata?.namespace;
+    return (item as IoFluxcdToolkitSourceV1Bucket).metadata?.namespace;
   },
   decodeItem: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitSourceV1beta2Bucket.fromJson(parsed);
+    return IoFluxcdToolkitSourceV1Bucket.fromJson(parsed);
   },
   encodeItem: (dynamic item) {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -72,7 +73,7 @@ final Resource fluxResourceBucket = Resource(
     return json.decode(json.encode(item));
   },
   listItemBuilder: (BuildContext context, Resource resource, ResourceItem listItem) {
-    final item = listItem.item as IoFluxcdToolkitSourceV1beta2Bucket;
+    final item = listItem.item as IoFluxcdToolkitSourceV1Bucket;
     final status = listItem.status;
 
     return ResourcesListItem(
@@ -90,7 +91,7 @@ final Resource fluxResourceBucket = Resource(
     );
   },
   previewItemBuilder: (dynamic listItem) {
-    final item = listItem as IoFluxcdToolkitSourceV1beta2Bucket;
+    final item = listItem as IoFluxcdToolkitSourceV1Bucket;
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
@@ -101,7 +102,7 @@ final Resource fluxResourceBucket = Resource(
   },
   detailsItemBuilder:
       (BuildContext context, Resource resource, dynamic detailsItem) {
-        final item = detailsItem as IoFluxcdToolkitSourceV1beta2Bucket;
+        final item = detailsItem as IoFluxcdToolkitSourceV1Bucket;
 
         return Column(
           children: [

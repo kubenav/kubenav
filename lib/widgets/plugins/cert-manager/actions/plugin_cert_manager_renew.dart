@@ -78,7 +78,7 @@ class _PluginCertManagerRenewState extends State<PluginCertManagerRenew> {
         cluster: cluster!,
         proxy: appRepository.settings.proxy,
         timeout: appRepository.settings.timeout,
-      ).patchRequest(url, body);
+      ).patchRequest(PatchType.jsonPatch, url, body);
 
       setState(() {
         _isLoading = false;

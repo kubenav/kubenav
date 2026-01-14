@@ -161,7 +161,7 @@ class _EditResourceState extends State<EditResource> {
         cluster: cluster!,
         proxy: appRepository.settings.proxy,
         timeout: appRepository.settings.timeout,
-      ).patchRequest(url, jsonPatchBody);
+      ).patchRequest(PatchType.jsonPatch, url, jsonPatchBody);
 
       setState(() {
         _isLoading = false;

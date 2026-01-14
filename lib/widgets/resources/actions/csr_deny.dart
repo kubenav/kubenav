@@ -47,21 +47,20 @@ class _CSRDenyState extends State<CSRDeny> {
         _isLoading = true;
       });
 
-      final now = DateTime.now().toRFC3339();
       final String body =
-          '[{"op":"add","path":"/status/conditions","value":[{"type":"Denied","status":"True","reason":"KubenavDeny","message":"This CSR was denied by kubenav certificate deny.","lastUpdateTime":"$now","lastTransitionTime":null}]}]';
+          '{"status": {"conditions": [{"type": "Denied", "status": "True", "reason": "KubenavDeny", "message": "This CSR was denied by kubenav certificate deny.", "lastUpdateTime": "${DateTime.now().toRFC3339()}", "lastTransitionTime": null}]}}';
 
       final cluster = await clustersRepository.getClusterWithCredentials(
         clustersRepository.activeClusterId,
       );
       final url =
-          '${widget.resource.path}/${widget.resource.resource}/${widget.name}/approval';
+          '${widget.resource.path}/${widget.resource.resource}/${widget.name}/approval?fieldManager=kubenav';
 
       await KubernetesService(
         cluster: cluster!,
         proxy: appRepository.settings.proxy,
         timeout: appRepository.settings.timeout,
-      ).patchRequest(url, body);
+      ).patchRequest(PatchType.mergePatch, url, body);
 
       setState(() {
         _isLoading = false;

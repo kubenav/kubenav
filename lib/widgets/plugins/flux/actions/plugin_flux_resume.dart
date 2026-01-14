@@ -56,32 +56,29 @@ class _PluginFluxResumeState extends State<PluginFluxResume> {
       });
 
       if (widget.item is! IoFluxcdToolkitSourceV1GitRepository &&
-          widget.item is! IoFluxcdToolkitSourceV1beta2OCIRepository &&
-          widget.item is! IoFluxcdToolkitSourceV1beta2Bucket &&
-          widget.item is! IoFluxcdToolkitSourceV1beta2HelmRepository &&
-          widget.item is! IoFluxcdToolkitSourceV1beta2HelmChart &&
+          widget.item is! IoFluxcdToolkitSourceV1OCIRepository &&
+          widget.item is! IoFluxcdToolkitSourceV1Bucket &&
+          widget.item is! IoFluxcdToolkitSourceV1HelmRepository &&
+          widget.item is! IoFluxcdToolkitSourceV1HelmChart &&
           widget.item is! IoFluxcdToolkitKustomizeV1Kustomization &&
-          widget.item is! IoFluxcdToolkitHelmV2beta2HelmRelease) {
+          widget.item is! IoFluxcdToolkitHelmV2HelmRelease) {
         throw 'Unsupported Resource';
       }
 
-      final String body =
-          widget.item.spec != null && widget.item.spec.suspend != null
-          ? '[{ "op": "replace", "path": "/spec/suspend", "value": false }]'
-          : '[{ "op": "add", "path": "/spec/suspend", "value": false }]';
+      final String body = '{"spec": {"suspend": false}}';
 
       final cluster = await clustersRepository.getClusterWithCredentials(
         clustersRepository.activeClusterId,
       );
 
       final url =
-          '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}/${widget.name}';
+          '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}/${widget.name}?fieldManager=kubenav';
 
       await KubernetesService(
         cluster: cluster!,
         proxy: appRepository.settings.proxy,
         timeout: appRepository.settings.timeout,
-      ).patchRequest(url, body);
+      ).patchRequest(PatchType.mergePatch, url, body);
 
       setState(() {
         _isLoading = false;

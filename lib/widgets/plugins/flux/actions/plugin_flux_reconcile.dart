@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -60,41 +59,30 @@ class _PluginFluxReconcileState extends State<PluginFluxReconcile> {
       });
 
       if (widget.item is! IoFluxcdToolkitSourceV1GitRepository &&
-          widget.item is! IoFluxcdToolkitSourceV1beta2OCIRepository &&
-          widget.item is! IoFluxcdToolkitSourceV1beta2Bucket &&
-          widget.item is! IoFluxcdToolkitSourceV1beta2HelmRepository &&
-          widget.item is! IoFluxcdToolkitSourceV1beta2HelmChart &&
+          widget.item is! IoFluxcdToolkitSourceV1OCIRepository &&
+          widget.item is! IoFluxcdToolkitSourceV1Bucket &&
+          widget.item is! IoFluxcdToolkitSourceV1HelmRepository &&
+          widget.item is! IoFluxcdToolkitSourceV1HelmChart &&
           widget.item is! IoFluxcdToolkitKustomizeV1Kustomization &&
-          widget.item is! IoFluxcdToolkitHelmV2beta2HelmRelease) {
+          widget.item is! IoFluxcdToolkitHelmV2HelmRelease) {
         throw 'Unsupported Resource';
       }
 
-      final item = await compute(widget.resource.toJson, widget.item);
-      final now = DateTime.now().toRFC3339Nano();
-
       final String body =
-          item['metadata'] != null &&
-              item['metadata']['annotations'] != null &&
-              !item['metadata']['annotations'].isEmpty
-          ? item['metadata']['annotations'].containsKey(
-                  'reconcile.fluxcd.io/requestedAt',
-                )
-                ? '[{"op": "replace", "path": "/metadata/annotations/reconcile.fluxcd.io~1requestedAt", "value": "$now"}]'
-                : '[{"op": "add", "path": "/metadata/annotations/reconcile.fluxcd.io~1requestedAt", "value": "$now"}]'
-          : '[{"op": "add", "path": "/metadata/annotations", "value": {"reconcile.fluxcd.io/requestedAt": "$now"}}]';
+          '{"metadata": {"annotations": {"reconcile.fluxcd.io/requestedAt": "${DateTime.now().toRFC3339Nano()}"}}}';
 
       final cluster = await clustersRepository.getClusterWithCredentials(
         clustersRepository.activeClusterId,
       );
 
       final url =
-          '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}/${widget.name}';
+          '${widget.resource.path}/namespaces/${widget.namespace}/${widget.resource.resource}/${widget.name}?fieldManager=kubenav';
 
       await KubernetesService(
         cluster: cluster!,
         proxy: appRepository.settings.proxy,
         timeout: appRepository.settings.timeout,
-      ).patchRequest(url, body);
+      ).patchRequest(PatchType.mergePatch, url, body);
 
       setState(() {
         _isLoading = false;

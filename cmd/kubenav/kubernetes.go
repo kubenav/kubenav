@@ -49,8 +49,12 @@ func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, cl
 		responseResult = clientset.RESTClient().Get().RequestURI(requestURL).Do(ctx)
 	case http.MethodDelete:
 		responseResult = clientset.RESTClient().Delete().RequestURI(requestURL).Body([]byte(requestBody)).Do(ctx)
-	case http.MethodPatch:
+	case fmt.Sprintf("%s %s", http.MethodPatch, types.JSONPatchType):
 		responseResult = clientset.RESTClient().Patch(types.JSONPatchType).RequestURI(requestURL).Body([]byte(requestBody)).Do(ctx)
+	case fmt.Sprintf("%s %s", http.MethodPatch, types.MergePatchType):
+		responseResult = clientset.RESTClient().Patch(types.MergePatchType).RequestURI(requestURL).Body([]byte(requestBody)).Do(ctx)
+	case fmt.Sprintf("%s %s", http.MethodPatch, types.StrategicMergePatchType):
+		responseResult = clientset.RESTClient().Patch(types.StrategicMergePatchType).RequestURI(requestURL).Body([]byte(requestBody)).Do(ctx)
 	case http.MethodPost:
 		responseResult = clientset.RESTClient().Post().RequestURI(requestURL).Body([]byte(requestBody)).Do(ctx)
 	case http.MethodPut:

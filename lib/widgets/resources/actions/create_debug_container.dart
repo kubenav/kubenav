@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:code_text_field/code_text_field.dart';
@@ -12,7 +11,6 @@ import 'package:yaml/yaml.dart';
 import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
-import 'package:kubenav/services/helpers_service.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
@@ -49,42 +47,15 @@ stdin: true
 tty: true''';
 }
 
-/// The [PrepareJSONPatchData] class is used to prepare the data for the JSON
-/// patch via the [_prepareJSONPatch] function.
-class PrepareJSONPatchData {
-  IoK8sApiCoreV1Pod pod;
-  String editorFormat;
-  String ephemeralContainer;
+/// [_Name] is a helper class to create the strategic merge patch for adding
+/// an ephemeral container to a Pod. It is used to set the order of the
+/// ephemeral containers within the Pod spec.
+class _Name {
+  String name;
 
-  PrepareJSONPatchData({
-    required this.pod,
-    required this.editorFormat,
-    required this.ephemeralContainer,
-  });
-}
+  _Name({required this.name});
 
-/// The [_prepareJSONPatch] function is used to prepare the source and target
-/// string for the [HelpersService.createJSONPatch] function. We do this in an
-/// additional function so this can be run in an isolate.
-List<String> _prepareJSONPatch(PrepareJSONPatchData data) {
-  final copy = IoK8sApiCoreV1Pod.fromJson(resourcePod.toJson(data.pod));
-  final ephemeralContainer = data.editorFormat == 'json'
-      ? IoK8sApiCoreV1EphemeralContainer.fromJson(
-          json.decode(data.ephemeralContainer),
-        )
-      : IoK8sApiCoreV1EphemeralContainer.fromJson(
-          json.decode(json.encode(loadYaml(data.ephemeralContainer))),
-        );
-
-  if (copy.spec!.ephemeralContainers == null) {
-    copy.spec!.copyWith(ephemeralContainers: [ephemeralContainer]);
-  } else {
-    copy.spec!.ephemeralContainers!.add(ephemeralContainer);
-  }
-
-  final source = resourcePod.encodeItem(data.pod);
-  final target = resourcePod.encodeItem(copy);
-  return [source, target];
+  Map<String, dynamic> toJson() => {'name': name};
 }
 
 class CreateDebugContainer extends StatefulWidget {
@@ -125,11 +96,10 @@ class _CreateDebugContainerState extends State<CreateDebugContainer> {
   }
 
   /// [_create] creates a new ephemeral container for the Pod. For that we
-  /// create a copy of the [widget.item] and add the new container to the
-  /// spec. We then create a json patch and send it to the Kubernetes API
-  /// server. When the API call succeeds we display a snackbar with the success
-  /// message and close the widget. If the API call fails we only show a
-  /// snackbar with the error.
+  /// create a strategic merge patch. The json patch is then send to the
+  /// Kubernetes API server. When the API call succeeds we display a snackbar
+  /// with the success message and close the widget. If the API call fails we
+  /// only show a snackbar with the error.
   Future<void> _create() async {
     ClustersRepository clustersRepository = Provider.of<ClustersRepository>(
       context,
@@ -145,26 +115,22 @@ class _CreateDebugContainerState extends State<CreateDebugContainer> {
         _isLoading = true;
       });
 
-      final prepared = await compute(
-        _prepareJSONPatch,
-        PrepareJSONPatchData(
-          pod: widget.pod,
-          editorFormat: appRepository.settings.editorFormat,
-          ephemeralContainer: _codeController.text,
-        ),
-      );
-      final jsonPatch = await HelpersService().createJSONPatch(
-        prepared[0],
-        prepared[1],
-      );
+      final ephemeralContainer = appRepository.settings.editorFormat == 'json'
+          ? json.decode(_codeController.text)
+          : json.decode(json.encode(loadYaml(_codeController.text)));
+      final names =
+          widget.pod.spec?.ephemeralContainers
+              ?.map((e) => _Name(name: e.name))
+              .toList() ??
+          [];
+      names.add(_Name(name: ephemeralContainer['name']));
 
-      if (jsonPatch == '') {
-        throw Exception('Failed to Create JSON Patch');
-      }
+      final String body =
+          widget.pod.spec?.ephemeralContainers == null ||
+              widget.pod.spec!.ephemeralContainers!.isEmpty
+          ? '{"spec":{"ephemeralContainers":[${json.encode(ephemeralContainer)}]}}'
+          : '{"spec":{"\$setElementOrder/ephemeralContainers":[${names.map((e) => json.encode(e.toJson())).join(',')}],"ephemeralContainers":[${json.encode(ephemeralContainer)}]}}';
 
-      final jsonPatchBody = jsonPatch.startsWith('[') && jsonPatch.endsWith(']')
-          ? jsonPatch
-          : '[$jsonPatch]';
       final cluster = await clustersRepository.getClusterWithCredentials(
         clustersRepository.activeClusterId,
       );
@@ -173,15 +139,15 @@ class _CreateDebugContainerState extends State<CreateDebugContainer> {
 
       Logger.log(
         'CreateDebugContainer _create',
-        'Apply JSON Patch for $url',
-        jsonPatchBody,
+        'Apply Strategic Merge Patch for $url',
+        body,
       );
 
       await KubernetesService(
         cluster: cluster!,
         proxy: appRepository.settings.proxy,
         timeout: appRepository.settings.timeout,
-      ).patchRequest(url, jsonPatchBody);
+      ).patchRequest(PatchType.strategicMergePatch, url, body);
 
       setState(() {
         _isLoading = false;

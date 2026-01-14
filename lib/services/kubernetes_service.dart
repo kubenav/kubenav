@@ -11,6 +11,24 @@ import 'package:kubenav/models/plugins/helm.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/logger.dart';
 
+/// [PatchType] is an enum value which represents all supported patch types by
+/// the Kubernetes API.
+enum PatchType { jsonPatch, mergePatch, strategicMergePatch }
+
+extension PatchTypeExtension on PatchType {
+  /// [header] return the correct content type header for the given patch type.
+  String header() {
+    switch (this) {
+      case PatchType.jsonPatch:
+        return 'application/json-patch+json';
+      case PatchType.mergePatch:
+        return 'application/merge-patch+json';
+      case PatchType.strategicMergePatch:
+        return 'application/strategic-merge-patch+json';
+    }
+  }
+}
+
 /// [KubernetesService] implements a service to interactiv with the Kubernetes
 /// functions from our Go code. The implementation details of each Go function
 /// can be found in the `cmd/kubenav/kubernetes.go` file.
@@ -152,9 +170,20 @@ class KubernetesService {
   /// cluster. Besides the [url] of the resource, which should be patched, we
   /// also have to pass a [body] to the function. The [body] must be a valid
   /// json patch.
-  Future<void> patchRequest(String url, String body) async {
+  Future<void> patchRequest(
+    PatchType patchType,
+    String url,
+    String body,
+  ) async {
     try {
-      await kubernetesRequest(cluster, proxy, timeout, 'PATCH', url, body);
+      await kubernetesRequest(
+        cluster,
+        proxy,
+        timeout,
+        'PATCH ${patchType.header()}',
+        url,
+        body,
+      );
       return;
     } catch (err) {
       Logger.log('KubernetesService patchRequest', 'Patch request failed', err);
