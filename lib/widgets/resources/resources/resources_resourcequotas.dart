@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_resource_quota.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_resource_quota_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_resource_quota_status.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -30,7 +28,7 @@ final resourceResourceQuota = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1ResourceQuotaList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiCoreV1ResourceQuotaList.fromJson(parsed).items;
 
     return items
         .map(
@@ -44,7 +42,7 @@ final resourceResourceQuota = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1ResourceQuotaList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiCoreV1ResourceQuotaList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiCoreV1ResourceQuota).metadata?.name ?? '';
@@ -100,11 +98,11 @@ final resourceResourceQuota = Resource(
         DetailsItem(
           title: 'Request',
           details:
-              item.status?.hard.keys.map((key) {
+              item.status?.hard?.keys.map((key) {
                 return DetailsItemModel(
                   name: key,
                   values:
-                      '${item.status!.used.containsKey(key) ? item.status?.used[key] : '-'}/${item.status?.hard[key]}',
+                      '${item.status?.used != null && item.status!.used!.containsKey(key) ? item.status!.used![key] : '-'}/${item.status!.hard![key]}',
                 );
               }).toList() ??
               [],
@@ -122,7 +120,7 @@ final resourceResourceQuota = Resource(
           item: item,
           toJson: resource.toJson,
           defaultCharts:
-              item.status?.hard.keys
+              item.status?.hard?.keys
                   .map(
                     (e) => Chart(
                       title: e,

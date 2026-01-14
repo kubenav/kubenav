@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/terminal_repository.dart';
@@ -159,7 +159,7 @@ class _GetTerminalState extends State<GetTerminal> {
     }
 
     if (widget.pod.spec?.initContainers != null) {
-      for (var initContainer in widget.pod.spec!.initContainers) {
+      for (var initContainer in widget.pod.spec!.initContainers!) {
         tmpContainers.add(initContainer.name);
       }
     }
@@ -178,19 +178,19 @@ class _GetTerminalState extends State<GetTerminal> {
       /// state. If the annotation is not available we use the first container
       /// from the list.
       if (widget.pod.metadata?.annotations != null &&
-          widget.pod.metadata!.annotations.containsKey(
+          widget.pod.metadata!.annotations!.containsKey(
             'kubectl.kubernetes.io/default-container',
           ) &&
           tmpContainers.contains(
             widget
                 .pod
                 .metadata!
-                .annotations['kubectl.kubernetes.io/default-container'],
+                .annotations!['kubectl.kubernetes.io/default-container'],
           )) {
         _container = widget
             .pod
             .metadata!
-            .annotations['kubectl.kubernetes.io/default-container']!;
+            .annotations!['kubectl.kubernetes.io/default-container'];
       } else {
         _container = tmpContainers[0];
       }

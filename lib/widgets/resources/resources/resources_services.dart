@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_service.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_service_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/repositories/portforwarding_repository.dart';
@@ -36,7 +35,7 @@ final resourceService = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1ServiceList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiCoreV1ServiceList.fromJson(parsed).items;
 
     return items
         .map(
@@ -50,7 +49,7 @@ final resourceService = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1ServiceList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiCoreV1ServiceList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiCoreV1Service).metadata?.name ?? '';
@@ -74,10 +73,10 @@ final resourceService = Resource(
     final status = listItem.status;
 
     final externalIP = item.status?.loadBalancer?.ingress
-        .map((ingress) => ingress.ip)
+        ?.map((ingress) => ingress.ip)
         .toList();
     final ports = item.spec?.ports
-        .map(
+        ?.map(
           (port) =>
               '${port.port}${port.protocol != null ? '/${port.protocol}' : ''} (${port.name ?? ''}${port.appProtocol != null ? '/${port.appProtocol}' : ''})',
         )
@@ -91,7 +90,7 @@ final resourceService = Resource(
       status: status,
       details: [
         'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Type: ${item.spec?.type ?? '-'}',
+        'Type: ${item.spec?.type?.value ?? '-'}',
         'Cluster IP: ${item.spec?.clusterIP ?? '-'}',
         'External IP: ${externalIP != null && externalIP.isNotEmpty ? externalIP.join(', ') : '-'}',
         'Port(s): ${ports != null && ports.isNotEmpty ? ports.join(', ') : '-'}',
@@ -103,10 +102,10 @@ final resourceService = Resource(
     final item = listItem as IoK8sApiCoreV1Service;
 
     final externalIP = item.status?.loadBalancer?.ingress
-        .map((ingress) => ingress.ip)
+        ?.map((ingress) => ingress.ip)
         .toList();
     final ports = item.spec?.ports
-        .map(
+        ?.map(
           (port) =>
               '${port.port}${port.protocol != null ? '/${port.protocol}' : ''} (${port.name ?? ''}${port.appProtocol != null ? '/${port.appProtocol}' : ''})',
         )
@@ -114,7 +113,7 @@ final resourceService = Resource(
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
-      'Type: ${item.spec?.type ?? '-'}',
+      'Type: ${item.spec?.type?.value ?? '-'}',
       'Cluster IP: ${item.spec?.clusterIP ?? '-'}',
       'External IP: ${externalIP != null && externalIP.isNotEmpty ? externalIP.join(', ') : '-'}',
       'Port(s): ${ports != null && ports.isNotEmpty ? ports.join(', ') : '-'}',
@@ -197,41 +196,41 @@ class ServiceItem extends StatelessWidget {
           details: [
             DetailsItemModel(
               name: 'Selectors',
-              values: service.spec?.selector.entries
+              values: service.spec?.selector?.entries
                   .map((selector) => '${selector.key}=${selector.value}')
                   .toList(),
             ),
-            DetailsItemModel(name: 'Type', values: service.spec?.type),
+            DetailsItemModel(name: 'Type', values: service.spec?.type?.value),
             DetailsItemModel(
               name: 'Ports',
               values: service.spec?.ports
-                  .map(
+                  ?.map(
                     (port) =>
-                        '${port.port}${port.nodePort != null ? '/${port.nodePort}' : ''}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''} -> ${port.targetPort}',
+                        '${port.port}${port.nodePort != null ? '/${port.nodePort}' : ''}${port.protocol?.value != null ? '/${port.protocol!.value}' : ''}${port.name != null ? ' (${port.name})' : ''} -> ${port.targetPort}',
                   )
                   .toList(),
               onTap: (index) {
                 _portForward(
                   context,
                   service.metadata?.namespace ?? '',
-                  service.spec?.selector.entries
+                  service.spec?.selector?.entries
                           .map(
                             (selector) => '${selector.key}=${selector.value}',
                           )
                           .toList()
                           .join(',') ??
                       '',
-                  service.spec?.ports[index].targetPort.toString() ?? '',
+                  service.spec?.ports?[index].targetPort.toString() ?? '',
                 );
               },
             ),
             DetailsItemModel(
               name: 'Session Affinity',
-              values: service.spec?.sessionAffinity,
+              values: service.spec?.sessionAffinity?.value,
             ),
             DetailsItemModel(
               name: 'External Traffic Policy',
-              values: service.spec?.externalTrafficPolicy,
+              values: service.spec?.externalTrafficPolicy?.value,
             ),
           ],
         ),
@@ -250,7 +249,7 @@ class ServiceItem extends StatelessWidget {
             DetailsItemModel(
               name: 'External IPs',
               values: service.spec?.externalIPs
-                  .map((externalIP) => externalIP)
+                  ?.map((externalIP) => externalIP)
                   .toList(),
             ),
             DetailsItemModel(
@@ -260,7 +259,7 @@ class ServiceItem extends StatelessWidget {
             DetailsItemModel(
               name: 'Load Balancer IP',
               values: service.status!.loadBalancer?.ingress
-                  .map((ingress) => ingress.ip ?? '-')
+                  ?.map((ingress) => ingress.ip ?? '-')
                   .toList(),
             ),
           ],

@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_persistent_volume.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_persistent_volume_list.dart';
+import 'package:kubenav/models/kubernetes/schema.enums.swagger.dart' as enums;
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
@@ -33,15 +33,16 @@ final Resource resourcePersistentVolume = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiCoreV1PersistentVolumeList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiCoreV1PersistentVolumeList.fromJson(parsed).items;
 
     return items
         .map(
           (e) => ResourceItem(
             item: e,
             metrics: null,
-            status: e.status?.phase != 'Bound'
+            status:
+                e.status?.phase !=
+                    enums.IoK8sApiCoreV1PersistentVolumeStatusPhase.bound
                 ? ResourceStatus.danger
                 : ResourceStatus.success,
           ),
@@ -50,7 +51,7 @@ final Resource resourcePersistentVolume = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1PersistentVolumeList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiCoreV1PersistentVolumeList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiCoreV1PersistentVolume).metadata?.name ?? '';
@@ -80,10 +81,10 @@ final Resource resourcePersistentVolume = Resource(
       item: item,
       status: status,
       details: [
-        'Capacity: ${item.spec?.capacity != null && item.spec!.capacity.containsKey('storage') ? item.spec?.capacity['storage'] : '-'}',
-        'Access Modes: ${item.spec?.accessModes.join(', ') ?? '-'}',
-        'Reclaim Policy: ${item.spec?.persistentVolumeReclaimPolicy ?? '-'}',
-        'Status: ${item.status?.phase ?? '-'}',
+        'Capacity: ${item.spec?.capacity != null && item.spec!.capacity!.containsKey('storage') ? item.spec!.capacity!['storage'] : '-'}',
+        'Access Modes: ${item.spec?.accessModes?.map((e) => e.value).join(', ') ?? '-'}',
+        'Reclaim Policy: ${item.spec?.persistentVolumeReclaimPolicy?.value ?? '-'}',
+        'Status: ${item.status?.phase?.value ?? '-'}',
         'Claim: ${item.spec?.claimRef?.namespace ?? '-'}/${item.spec?.claimRef?.name ?? '-'}',
         'Storage Class: ${item.spec?.storageClassName ?? '-'}',
         'Reason: ${item.status?.reason ?? '-'}',
@@ -95,10 +96,10 @@ final Resource resourcePersistentVolume = Resource(
     final item = listItem as IoK8sApiCoreV1PersistentVolume;
 
     return [
-      'Capacity: ${item.spec?.capacity != null && item.spec!.capacity.containsKey('storage') ? item.spec?.capacity['storage'] : '-'}',
-      'Access Modes: ${item.spec?.accessModes.join(', ') ?? '-'}',
-      'Reclaim Policy: ${item.spec?.persistentVolumeReclaimPolicy ?? '-'}',
-      'Status: ${item.status?.phase ?? '-'}',
+      'Capacity: ${item.spec?.capacity != null && item.spec!.capacity!.containsKey('storage') ? item.spec!.capacity!['storage'] : '-'}',
+      'Access Modes: ${item.spec?.accessModes?.map((e) => e.value).join(', ') ?? '-'}',
+      'Reclaim Policy: ${item.spec?.persistentVolumeReclaimPolicy?.value ?? '-'}',
+      'Status: ${item.status?.phase?.value ?? '-'}',
       'Claim: ${item.spec?.claimRef?.namespace ?? '-'}/${item.spec?.claimRef?.name ?? '-'}',
       'Storage Class: ${item.spec?.storageClassName ?? '-'}',
       'Reason: ${item.status?.reason ?? '-'}',
@@ -133,18 +134,18 @@ final Resource resourcePersistentVolume = Resource(
             ),
             DetailsItemModel(
               name: 'Reclaim Policy',
-              values: item.spec?.persistentVolumeReclaimPolicy,
+              values: item.spec?.persistentVolumeReclaimPolicy?.value,
             ),
             DetailsItemModel(
               name: 'Access Modes',
-              values: item.spec?.accessModes,
+              values: item.spec?.accessModes?.map((e) => e.value).toList(),
             ),
             DetailsItemModel(
               name: 'Storage',
               values:
                   item.spec?.capacity != null &&
-                      item.spec!.capacity.containsKey('storage')
-                  ? item.spec?.capacity['storage']
+                      item.spec!.capacity!.containsKey('storage')
+                  ? item.spec?.capacity!['storage']
                   : null,
             ),
             DetailsItemModel(
@@ -157,7 +158,7 @@ final Resource resourcePersistentVolume = Resource(
         DetailsItem(
           title: 'Status',
           details: [
-            DetailsItemModel(name: 'Status', values: item.status?.phase),
+            DetailsItemModel(name: 'Status', values: item.status?.phase?.value),
             DetailsItemModel(
               name: 'Claim',
               values:

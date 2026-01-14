@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_pod.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/models/kubernetes_extensions/pod_metrics.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
@@ -74,40 +74,44 @@ PodResourceForLiveMetrics? getResourcesForLiveMetrics(
     var memoryLimits = 0.0;
 
     for (var i = 0; i < pod.spec!.containers.length; i++) {
-      if (pod.spec!.containers[i].resources != null) {
+      if (pod.spec!.containers[i].resources?.requests != null) {
         if (selectedContainer == '' ||
             selectedContainer == pod.spec!.containers[i].name) {
-          if (pod.spec!.containers[i].resources!.requests.containsKey('cpu')) {
+          if (pod.spec!.containers[i].resources!.requests!.containsKey('cpu')) {
             cpuRequests =
                 cpuRequests +
                 cpuMetricsStringToDouble(
-                  pod.spec!.containers[i].resources!.requests['cpu']!,
+                  pod.spec!.containers[i].resources!.requests!['cpu'],
                 );
           }
 
-          if (pod.spec!.containers[i].resources!.requests.containsKey(
+          if (pod.spec!.containers[i].resources!.requests!.containsKey(
             'memory',
           )) {
             memoryRequests =
                 memoryRequests +
                 memoryMetricsStringToDouble(
-                  pod.spec!.containers[i].resources!.requests['memory']!,
+                  pod.spec!.containers[i].resources!.requests!['memory'],
                 );
           }
+        }
 
-          if (pod.spec!.containers[i].resources!.limits.containsKey('cpu')) {
+        if (pod.spec!.containers[i].resources?.limits != null) {
+          if (pod.spec!.containers[i].resources!.limits!.containsKey('cpu')) {
             cpuLimits =
                 cpuLimits +
                 cpuMetricsStringToDouble(
-                  pod.spec!.containers[i].resources!.limits['cpu']!,
+                  pod.spec!.containers[i].resources!.limits!['cpu'],
                 );
           }
 
-          if (pod.spec!.containers[i].resources!.limits.containsKey('memory')) {
+          if (pod.spec!.containers[i].resources!.limits!.containsKey(
+            'memory',
+          )) {
             memoryLimits =
                 memoryLimits +
                 memoryMetricsStringToDouble(
-                  pod.spec!.containers[i].resources!.limits['memory']!,
+                  pod.spec!.containers[i].resources!.limits!['memory'],
                 );
           }
         }

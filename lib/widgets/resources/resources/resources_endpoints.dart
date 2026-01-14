@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_endpoints.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_endpoints_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -29,20 +28,20 @@ final resourceEndpoint = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1EndpointsList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiCoreV1EndpointsList.fromJson(parsed).items;
 
     return items.map((e) {
       final ips = e.subsets
-          .map(
-            (subset) => subset.addresses.map((address) => address.ip).toList(),
+          ?.map(
+            (subset) => subset.addresses?.map((address) => address.ip).toList(),
           )
-          .expand((e) => e)
+          .expand((e) => e!)
           .toList();
 
       return ResourceItem(
         item: e,
         metrics: null,
-        status: ips.isNotEmpty
+        status: ips?.isNotEmpty ?? false
             ? ResourceStatus.success
             : ResourceStatus.warning,
       );
@@ -50,7 +49,7 @@ final resourceEndpoint = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1EndpointsList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiCoreV1EndpointsList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiCoreV1Endpoints).metadata?.name ?? '';
@@ -75,11 +74,11 @@ final resourceEndpoint = Resource(
         final status = listItem.status;
 
         final ips = item.subsets
-            .map(
+            ?.map(
               (subset) =>
-                  subset.addresses.map((address) => address.ip).toList(),
+                  subset.addresses?.map((address) => address.ip).toList(),
             )
-            .expand((e) => e)
+            .expand((e) => e!)
             .toList();
 
         return ResourcesListItem(
@@ -90,7 +89,7 @@ final resourceEndpoint = Resource(
           status: status,
           details: [
             'Namespace: ${item.metadata?.namespace ?? '-'}',
-            'Endpoints: ${ips.isNotEmpty ? ips.join(', ') : '-'}',
+            'Endpoints: ${ips != null && ips.isNotEmpty ? ips.join(', ') : '-'}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
         );
@@ -99,13 +98,15 @@ final resourceEndpoint = Resource(
     final item = listItem as IoK8sApiCoreV1Endpoints;
 
     final ips = item.subsets
-        .map((subset) => subset.addresses.map((address) => address.ip).toList())
-        .expand((e) => e)
+        ?.map(
+          (subset) => subset.addresses?.map((address) => address.ip).toList(),
+        )
+        .expand((e) => e!)
         .toList();
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
-      'Endpoints: ${ips.isNotEmpty ? ips.join(', ') : '-'}',
+      'Endpoints: ${ips != null && ips.isNotEmpty ? ips.join(', ') : '-'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
@@ -158,7 +159,7 @@ List<Widget> _buildSubsets(
 ) {
   final List<Widget> ruleWidgets = [];
 
-  for (var i = 0; i < endpoint.subsets.length; i++) {
+  for (var i = 0; i < (endpoint.subsets?.length ?? 0); i++) {
     ruleWidgets.add(const SizedBox(height: Constants.spacingMiddle));
     ruleWidgets.add(
       DetailsItem(
@@ -166,8 +167,8 @@ List<Widget> _buildSubsets(
         details: [
           DetailsItemModel(
             name: 'Addresses',
-            values: endpoint.subsets[i].addresses
-                .map(
+            values: endpoint.subsets?[i].addresses
+                ?.map(
                   (address) =>
                       '${address.ip}${address.hostname != null
                           ? ' (${address.hostname})'
@@ -179,10 +180,10 @@ List<Widget> _buildSubsets(
                 )
                 .toList(),
             onTap: (int index) {
-              if (endpoint.subsets[i].addresses[index].targetRef != null) {
+              if (endpoint.subsets?[i].addresses?[index].targetRef != null) {
                 goToReference(
                   context,
-                  endpoint.subsets[i].addresses[index].targetRef,
+                  endpoint.subsets?[i].addresses?[index].targetRef,
                   endpoint.metadata?.namespace,
                 );
               }
@@ -190,8 +191,8 @@ List<Widget> _buildSubsets(
           ),
           DetailsItemModel(
             name: 'Ports',
-            values: endpoint.subsets[i].ports
-                .map(
+            values: endpoint.subsets?[i].ports
+                ?.map(
                   (port) =>
                       '${port.port}${port.protocol != null ? '/${port.protocol}' : ''}${port.name != null ? ' (${port.name})' : ''}',
                 )

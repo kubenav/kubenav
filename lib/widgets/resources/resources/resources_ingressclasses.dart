@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_object_reference.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_ingress_class.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_networking_v1_ingress_class_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
@@ -29,8 +27,7 @@ final resourceIngressClass = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiNetworkingV1IngressClassList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiNetworkingV1IngressClassList.fromJson(parsed).items;
 
     return items.map((e) {
       return ResourceItem(
@@ -42,7 +39,7 @@ final resourceIngressClass = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiNetworkingV1IngressClassList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiNetworkingV1IngressClassList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiNetworkingV1IngressClass).metadata?.name ?? '';

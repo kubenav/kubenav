@@ -5,8 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_secret.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_secret_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -36,7 +35,7 @@ final resourceSecret = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1SecretList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiCoreV1SecretList.fromJson(parsed).items;
 
     return items
         .map(
@@ -50,7 +49,7 @@ final resourceSecret = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1SecretList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiCoreV1SecretList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiCoreV1Secret).metadata?.name ?? '';
@@ -83,7 +82,7 @@ final resourceSecret = Resource(
           details: [
             'Namespace: ${item.metadata?.namespace ?? '-'}',
             'Type: ${item.type ?? '-'}',
-            'Data: ${item.data.entries.length}',
+            'Data: ${item.data?.entries.length}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
         );
@@ -94,7 +93,7 @@ final resourceSecret = Resource(
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
       'Type: ${item.type ?? '-'}',
-      'Data: ${item.data.entries.length}',
+      'Data: ${item.data?.entries.length}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
@@ -136,10 +135,10 @@ final resourceSecret = Resource(
 List<Widget> _buildData(
   BuildContext context,
   String title,
-  Map<String, String> data,
+  Map<String, dynamic>? data,
   bool isBase64,
 ) {
-  if (data.keys.isEmpty) {
+  if (data?.keys == null || data!.keys.isEmpty) {
     return [];
   }
 

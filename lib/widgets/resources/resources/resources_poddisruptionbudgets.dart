@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1_pod_disruption_budget.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_policy_v1_pod_disruption_budget_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -31,8 +30,9 @@ final resourcePodDisruptionBudget = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiPolicyV1PodDisruptionBudgetList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiPolicyV1PodDisruptionBudgetList.fromJson(
+      parsed,
+    ).items;
 
     return items
         .map(
@@ -52,8 +52,7 @@ final resourcePodDisruptionBudget = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiPolicyV1PodDisruptionBudgetList.fromJson(parsed)?.items ??
-        [];
+    return IoK8sApiPolicyV1PodDisruptionBudgetList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiPolicyV1PodDisruptionBudget).metadata?.name ?? '';
@@ -116,7 +115,7 @@ final resourcePodDisruptionBudget = Resource(
           details: [
             DetailsItemModel(
               name: 'Selector',
-              values: item.spec?.selector?.matchLabels.entries
+              values: item.spec?.selector?.matchLabels?.entries
                   .map(
                     (matchLabels) => '${matchLabels.key}=${matchLabels.value}',
                   )

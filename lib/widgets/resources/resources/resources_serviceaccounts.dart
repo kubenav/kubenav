@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_service_account.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_service_account_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
@@ -35,8 +34,7 @@ final resourceServiceAccount = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiCoreV1ServiceAccountList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiCoreV1ServiceAccountList.fromJson(parsed).items;
 
     return items
         .map(
@@ -50,7 +48,7 @@ final resourceServiceAccount = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1ServiceAccountList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiCoreV1ServiceAccountList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiCoreV1ServiceAccount).metadata?.name ?? '';
@@ -82,7 +80,7 @@ final resourceServiceAccount = Resource(
           status: status,
           details: [
             'Namespace: ${item.metadata?.namespace ?? '-'}',
-            'Secrets: ${item.secrets.length}',
+            'Secrets: ${item.secrets?.length ?? '-'}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
         );
@@ -92,7 +90,7 @@ final resourceServiceAccount = Resource(
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
-      'Secrets: ${item.secrets.length}',
+      'Secrets: ${item.secrets?.length ?? '-'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
@@ -105,66 +103,73 @@ final resourceServiceAccount = Resource(
         const SizedBox(height: Constants.spacingMiddle),
         AppVerticalListSimpleWidget(
           title: 'Secrets',
-          items: item.secrets
-              .map(
-                (secret) => AppVerticalListSimpleModel(
-                  onTap: () {
-                    navigate(
-                      context,
-                      ResourcesDetails(
-                        name: secret.name ?? '',
-                        namespace: secret.namespace ?? item.metadata?.namespace,
-                        resource: resourceSecret,
-                      ),
-                    );
-                  },
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(Constants.sizeBorderRadius),
+          items:
+              item.secrets
+                  ?.map(
+                    (secret) => AppVerticalListSimpleModel(
+                      onTap: () {
+                        navigate(
+                          context,
+                          ResourcesDetails(
+                            name: secret.name ?? '',
+                            namespace:
+                                secret.namespace ?? item.metadata?.namespace,
+                            resource: resourceSecret,
+                          ),
+                        );
+                      },
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(Constants.sizeBorderRadius),
+                            ),
+                          ),
+                          height: 54,
+                          width: 54,
+                          padding: const EdgeInsets.all(
+                            Constants.spacingIcon54x54,
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/resources/secrets.svg',
+                          ),
                         ),
-                      ),
-                      height: 54,
-                      width: 54,
-                      padding: const EdgeInsets.all(Constants.spacingIcon54x54),
-                      child: SvgPicture.asset('assets/resources/secrets.svg'),
-                    ),
-                    const SizedBox(width: Constants.spacingSmall),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            secret.name ?? '-',
-                            style: primaryTextStyle(context),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                        const SizedBox(width: Constants.spacingSmall),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                secret.name ?? '-',
+                                style: primaryTextStyle(context),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                'Namespace: ${secret.namespace ?? item.metadata?.namespace ?? '-'}',
+                                style: secondaryTextStyle(context),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
-                          Text(
-                            'Namespace: ${secret.namespace ?? item.metadata?.namespace ?? '-'}',
-                            style: secondaryTextStyle(context),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: Constants.spacingSmall),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Theme.of(context)
+                              .extension<CustomColors>()!
+                              .textSecondary
+                              .withValues(alpha: Constants.opacityIcon),
+                          size: 24,
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: Constants.spacingSmall),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      color: Theme.of(context)
-                          .extension<CustomColors>()!
-                          .textSecondary
-                          .withValues(alpha: Constants.opacityIcon),
-                      size: 24,
-                    ),
-                  ],
-                ),
-              )
-              .toList(),
+                  )
+                  .toList() ??
+              [],
         ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsResourcesPreview(

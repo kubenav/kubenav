@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_storage_v1_storage_class.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_storage_v1_storage_class_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
@@ -28,8 +27,7 @@ final resourceStorageClass = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiStorageV1StorageClassList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiStorageV1StorageClassList.fromJson(parsed).items;
 
     return items
         .map(
@@ -43,7 +41,7 @@ final resourceStorageClass = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiStorageV1StorageClassList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiStorageV1StorageClassList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiStorageV1StorageClass).metadata?.name ?? '';
@@ -75,8 +73,8 @@ final resourceStorageClass = Resource(
           status: status,
           details: [
             'Provisioner: ${item.provisioner}',
-            'Reclaim Policy: ${item.reclaimPolicy ?? '-'}',
-            'Volume Binding Mode: ${item.volumeBindingMode ?? '-'}',
+            'Reclaim Policy: ${item.reclaimPolicy?.value ?? '-'}',
+            'Volume Binding Mode: ${item.volumeBindingMode?.value ?? '-'}',
             'Allow Volume Expansion: ${item.allowVolumeExpansion != null && item.allowVolumeExpansion == true ? 'True' : 'False'}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
           ],
@@ -87,8 +85,8 @@ final resourceStorageClass = Resource(
 
     return [
       'Provisioner: ${item.provisioner}',
-      'Reclaim Policy: ${item.reclaimPolicy ?? '-'}',
-      'Volume Binding Mode: ${item.volumeBindingMode ?? '-'}',
+      'Reclaim Policy: ${item.reclaimPolicy?.value ?? '-'}',
+      'Volume Binding Mode: ${item.volumeBindingMode?.value ?? '-'}',
       'Allow Volume Expansion: ${item.allowVolumeExpansion != null && item.allowVolumeExpansion == true ? 'True' : 'False'}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
@@ -106,13 +104,13 @@ final resourceStorageClass = Resource(
             DetailsItemModel(
               name: 'Default',
               values:
-                  item.metadata != null &&
-                      item.metadata!.annotations.containsKey(
+                  item.metadata?.annotations != null &&
+                      item.metadata!.annotations!.containsKey(
                         'storageclass.kubernetes.io/is-default-class',
                       ) &&
                       item
                               .metadata!
-                              .annotations['storageclass.kubernetes.io/is-default-class']!
+                              .annotations!['storageclass.kubernetes.io/is-default-class']!
                               .toLowerCase() ==
                           'true'
                   ? 'Yes'
@@ -121,7 +119,7 @@ final resourceStorageClass = Resource(
             DetailsItemModel(name: 'Provisioner', values: item.provisioner),
             DetailsItemModel(
               name: 'Parameters',
-              values: item.parameters.entries
+              values: item.parameters?.entries
                   .map((e) => '${e.key}=${e.value}')
                   .toList(),
             ),
@@ -136,11 +134,11 @@ final resourceStorageClass = Resource(
             DetailsItemModel(name: 'Mount Options', values: item.mountOptions),
             DetailsItemModel(
               name: 'Reclaim Policy',
-              values: item.reclaimPolicy,
+              values: item.reclaimPolicy?.value,
             ),
             DetailsItemModel(
               name: 'Volume Bind Mode',
-              values: item.volumeBindingMode,
+              values: item.volumeBindingMode?.value,
             ),
           ],
         ),

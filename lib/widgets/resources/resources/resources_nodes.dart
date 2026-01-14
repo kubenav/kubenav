@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_node.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_node_condition.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_node_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/models/kubernetes_extensions/node_metrics.dart';
 import 'package:kubenav/models/plugins/prometheus.dart';
 import 'package:kubenav/utils/constants.dart';
@@ -41,7 +38,7 @@ final resourceNode = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiCoreV1NodeList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiCoreV1NodeList.fromJson(parsed).items;
 
     List<ApisMetricsV1beta1NodeMetricsItem>? metricsItems;
     if (data.metrics != null && data.metrics != '') {
@@ -56,7 +53,7 @@ final resourceNode = Resource(
       return ResourceItem(
         item: e,
         metrics: metrics,
-        status: !_isNodeReady(e.status!.conditions)
+        status: !_isNodeReady(e.status!.conditions ?? [])
             ? ResourceStatus.danger
             : e.spec!.unschedulable == true
             ? ResourceStatus.warning
@@ -66,7 +63,7 @@ final resourceNode = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiCoreV1NodeList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiCoreV1NodeList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiCoreV1Node).metadata?.name ?? '';
@@ -90,7 +87,7 @@ final resourceNode = Resource(
     final status = listItem.status;
 
     final nodeStatus = _getNodeStatus(item);
-    final roles = item.metadata?.labels['kubernetes.azure.com/role'] ?? '-';
+    final roles = item.metadata?.labels?['kubernetes.azure.com/role'] ?? '-';
     final version = item.status?.nodeInfo?.kubeletVersion ?? '-';
     final nodeAllocatableResources = getAllocatableResources(item);
 
@@ -114,7 +111,7 @@ final resourceNode = Resource(
     final item = listItem as IoK8sApiCoreV1Node;
 
     final nodeStatus = _getNodeStatus(item);
-    final roles = item.metadata?.labels['kubernetes.azure.com/role'] ?? '-';
+    final roles = item.metadata?.labels?['kubernetes.azure.com/role'] ?? '-';
     final version = item.status?.nodeInfo?.kubeletVersion ?? '-';
 
     return [
@@ -132,7 +129,7 @@ final resourceNode = Resource(
         DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
         DetailsItemConditions(
           conditions: item.status?.conditions
-              .map(
+              ?.map(
                 (e) => IoK8sApimachineryPkgApisMetaV1Condition(
                   lastTransitionTime: e.lastTransitionTime ?? DateTime.now(),
                   message: e.message ?? '',
@@ -199,14 +196,14 @@ final resourceNode = Resource(
             DetailsItemModel(
               name: 'Status',
               values: item.status?.conditions
-                  .where((condition) => condition.status == 'True')
+                  ?.where((condition) => condition.status == 'True')
                   .map((condition) => condition.type)
                   .toList(),
             ),
             DetailsItemModel(
               name: 'Addresses',
               values: item.status?.addresses
-                  .map((address) => '${address.type}: ${address.address}')
+                  ?.map((address) => '${address.type}: ${address.address}')
                   .toList(),
             ),
           ],
@@ -217,7 +214,7 @@ final resourceNode = Resource(
         DetailsItem(
           title: 'Resources',
           details:
-              item.status?.allocatable.entries
+              item.status?.allocatable?.entries
                   .map(
                     (allocatable) => DetailsItemModel(
                       name: allocatable.key,
@@ -226,7 +223,7 @@ final resourceNode = Resource(
                         showSnackbar(
                           context,
                           allocatable.key,
-                          'Allocatable: ${allocatable.value}\nCapacity: ${item.status!.capacity.containsKey(allocatable.key) ? item.status?.capacity[allocatable.key] : '-'}',
+                          'Allocatable: ${allocatable.value}\nCapacity: ${item.status?.capacity != null && item.status!.capacity!.containsKey(allocatable.key) ? item.status!.capacity![allocatable.key] : '-'}',
                         );
                       },
                     ),
@@ -239,10 +236,14 @@ final resourceNode = Resource(
           title: 'Images',
           items:
               item.status?.images
-                  .map(
+                  ?.map(
                     (image) => AppVerticalListSimpleModel(
                       onTap: () {
-                        showSnackbar(context, 'Names', image.names.join('\n'));
+                        showSnackbar(
+                          context,
+                          'Names',
+                          image.names?.join('\n') ?? '-',
+                        );
                       },
                       children: [
                         Container(
@@ -268,7 +269,7 @@ final resourceNode = Resource(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                image.names.firstOrNull ?? '-',
+                                image.names?.firstOrNull ?? '-',
                                 style: primaryTextStyle(context),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -407,9 +408,11 @@ bool _isNodeReady(List<IoK8sApiCoreV1NodeCondition> conditions) {
 String _getNodeStatus(IoK8sApiCoreV1Node node) {
   List<String> statuses = [];
 
-  for (var condition in node.status!.conditions) {
-    if (condition.status == 'True') {
-      statuses.add(condition.type);
+  if (node.status!.conditions != null) {
+    for (var condition in node.status!.conditions!) {
+      if (condition.status == 'True') {
+        statuses.add(condition.type);
+      }
     }
   }
 
@@ -475,14 +478,16 @@ ResourceMetrics? getAllocatableResources(IoK8sApiCoreV1Node node) {
   var cpu = 0.0;
   var memory = 0.0;
 
-  if (node.status!.allocatable.containsKey('cpu')) {
-    cpu = cpu + cpuMetricsStringToDouble(node.status!.allocatable['cpu']!);
+  if (node.status?.allocatable != null &&
+      node.status!.allocatable!.containsKey('cpu')) {
+    cpu = cpu + cpuMetricsStringToDouble(node.status!.allocatable!['cpu']!);
   }
 
-  if (node.status!.allocatable.containsKey('memory')) {
+  if (node.status?.allocatable != null &&
+      node.status!.allocatable!.containsKey('memory')) {
     memory =
         memory +
-        memoryMetricsStringToDouble(node.status!.allocatable['memory']!);
+        memoryMetricsStringToDouble(node.status!.allocatable!['memory']!);
   }
 
   return ResourceMetrics(

@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_job.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_job_list.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_condition.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/resources/helpers/details_item.dart';
@@ -32,14 +30,14 @@ final resourceJob = Resource(
       '{"apiVersion":"batch/v1","kind":"Job","metadata":{"name":"","namespace":""},"spec":{"backoffLimit":0,"completions":1,"parallelism":1,"template":{"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}',
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiBatchV1JobList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiBatchV1JobList.fromJson(parsed).items;
 
     return items.map((e) {
       final completions = e.spec?.completions ?? 0;
       final succeeded = e.status?.succeeded ?? 0;
       final unhealthy =
           e.status?.conditions
-              .where(
+              ?.where(
                 (c) =>
                     c.reason == 'BackoffLimitExceeded' ||
                     c.reason == 'DeadlineExceeded',
@@ -60,7 +58,7 @@ final resourceJob = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiBatchV1JobList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiBatchV1JobList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiBatchV1Job).metadata?.name ?? '';
@@ -116,7 +114,7 @@ final resourceJob = Resource(
             DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
             DetailsItemConditions(
               conditions: item.status?.conditions
-                  .map(
+                  ?.map(
                     (e) => IoK8sApimachineryPkgApisMetaV1Condition(
                       lastTransitionTime:
                           e.lastTransitionTime ?? DateTime.now(),

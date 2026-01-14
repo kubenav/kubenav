@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_helm_v2_helm_release_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -32,8 +31,7 @@ final Resource fluxResourceHelmRelease = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoFluxcdToolkitHelmV2HelmReleaseList.fromJson(parsed)?.items ?? [];
+    final items = IoFluxcdToolkitHelmV2HelmReleaseList.fromJson(parsed).items;
 
     return items.map((e) {
       final status =
@@ -57,7 +55,7 @@ final Resource fluxResourceHelmRelease = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitHelmV2HelmReleaseList.fromJson(parsed)?.items ?? [];
+    return IoFluxcdToolkitHelmV2HelmReleaseList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoFluxcdToolkitHelmV2HelmRelease).metadata?.name ?? '';
@@ -110,7 +108,20 @@ final Resource fluxResourceHelmRelease = Resource(
     return Column(
       children: [
         DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-        DetailsItemConditions(conditions: item.status?.conditions),
+        DetailsItemConditions(
+          conditions: item.status?.conditions
+              ?.map(
+                (e) => IoK8sApimachineryPkgApisMetaV1Condition(
+                  lastTransitionTime: e.lastTransitionTime,
+                  message: e.message,
+                  observedGeneration: 0,
+                  reason: e.reason,
+                  status: e.status.value ?? '',
+                  type: e.type,
+                ),
+              )
+              .toList(),
+        ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsItem(
           title: 'Configuration',
@@ -127,7 +138,7 @@ final Resource fluxResourceHelmRelease = Resource(
               onTap:
                   item.spec?.chart?.spec.sourceRef.kind != null &&
                       kindToFluxResource.containsKey(
-                        item.spec!.chart?.spec.sourceRef.kind!.value,
+                        item.spec!.chart?.spec.sourceRef.kind.value,
                       )
                   ? (int index) {
                       final resource =
@@ -136,7 +147,7 @@ final Resource fluxResourceHelmRelease = Resource(
                               .chart
                               ?.spec
                               .sourceRef
-                              .kind!
+                              .kind
                               .value];
 
                       if (resource != null) {
@@ -155,7 +166,7 @@ final Resource fluxResourceHelmRelease = Resource(
                         showSnackbar(
                           context,
                           'Source',
-                          '${item.spec!.chart?.spec.sourceRef.kind!.value} (${item.spec?.chart?.spec.sourceRef.namespace ?? item.metadata?.namespace ?? ''}/${item.spec?.chart?.spec.sourceRef.name ?? ''})',
+                          '${item.spec!.chart?.spec.sourceRef.kind.value} (${item.spec?.chart?.spec.sourceRef.namespace ?? item.metadata?.namespace ?? ''}/${item.spec?.chart?.spec.sourceRef.name ?? ''})',
                         );
                       }
                     }
@@ -204,7 +215,7 @@ final Resource fluxResourceHelmRelease = Resource(
             ),
             DetailsItemModel(
               name: 'Last Applied Revision',
-              values: item.status?.history.firstOrNull?.chartVersion,
+              values: item.status?.history?.firstOrNull?.chartVersion,
             ),
             DetailsItemModel(
               name: 'Last Attempted Revision',

@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_oci_repository.dart';
-import 'package:kubenav/models/plugins/flux/io_fluxcd_toolkit_source_v1beta2_oci_repository_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/resources.dart';
 import 'package:kubenav/widgets/plugins/flux/resources/plugin_flux_resources.dart';
@@ -29,9 +28,9 @@ final Resource fluxResourceOCIRepository = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoFluxcdToolkitSourceV1beta2OCIRepositoryList.fromJson(parsed)?.items ??
-        [];
+    final items = IoFluxcdToolkitSourceV1beta2OCIRepositoryList.fromJson(
+      parsed,
+    ).items;
 
     return items.map((e) {
       final status =
@@ -55,10 +54,7 @@ final Resource fluxResourceOCIRepository = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoFluxcdToolkitSourceV1beta2OCIRepositoryList.fromJson(
-          parsed,
-        )?.items ??
-        [];
+    return IoFluxcdToolkitSourceV1beta2OCIRepositoryList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoFluxcdToolkitSourceV1beta2OCIRepository).metadata?.name ??
@@ -115,7 +111,20 @@ final Resource fluxResourceOCIRepository = Resource(
         return Column(
           children: [
             DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-            DetailsItemConditions(conditions: item.status?.conditions),
+            DetailsItemConditions(
+              conditions: item.status?.conditions
+                  ?.map(
+                    (e) => IoK8sApimachineryPkgApisMetaV1Condition(
+                      lastTransitionTime: e.lastTransitionTime,
+                      message: e.message,
+                      observedGeneration: 0,
+                      reason: e.reason,
+                      status: e.status.value ?? '',
+                      type: e.type,
+                    ),
+                  )
+                  .toList(),
+            ),
             const SizedBox(height: Constants.spacingMiddle),
             DetailsItem(
               title: 'Configuration',

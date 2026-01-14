@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_namespace.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_core_v1_namespace_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -24,7 +23,7 @@ import 'package:kubenav/widgets/shared/app_list_item.dart';
 /// function to decode the result in an isolate.
 List<IoK8sApiCoreV1Namespace> _decode(String result) {
   final parsed = json.decode(result);
-  return IoK8sApiCoreV1NamespaceList.fromJson(parsed)!.items;
+  return IoK8sApiCoreV1NamespaceList.fromJson(parsed).items;
 }
 
 /// [AppNamespacesWidget] is a widget which can be used to switch the namespace

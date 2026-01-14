@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application.dart';
-import 'package:kubenav/models/plugins/argo/io_argoproj_v1alpha1_application_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/navigate.dart';
 import 'package:kubenav/utils/resources.dart';
@@ -29,8 +28,7 @@ final Resource argoResourceApplication = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoArgoprojV1alpha1ApplicationList.fromJson(parsed)?.items ?? [];
+    final items = IoArgoprojV1alpha1ApplicationList.fromJson(parsed).items;
 
     return items.map((e) {
       final status = e.status?.health?.status ?? 'Unknown';
@@ -48,7 +46,7 @@ final Resource argoResourceApplication = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoArgoprojV1alpha1ApplicationList.fromJson(parsed)?.items ?? [];
+    return IoArgoprojV1alpha1ApplicationList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoArgoprojV1alpha1Application).metadata.name ?? '';
@@ -80,10 +78,10 @@ final Resource argoResourceApplication = Resource(
           status: status,
           details: [
             'Namespace: ${item.metadata.namespace ?? '-'}',
-            'AppHealth: ${item.status?.health?.status ?? '-'}',
-            'SyncStatus: ${item.status?.sync_?.status ?? '-'}',
-            'CreatedAt: ${getAge(item.metadata.creationTimestamp)}',
-            'LastSync: ${getAge(item.status?.operationState?.finishedAt)}',
+            'App Health: ${item.status?.health?.status ?? '-'}',
+            'Sync Status: ${item.status?.$sync?.status ?? '-'}',
+            'Created At: ${getAge(item.metadata.creationTimestamp)}',
+            'Last Sync: ${getAge(item.status?.operationState?.finishedAt)}',
           ],
         );
       },
@@ -92,10 +90,10 @@ final Resource argoResourceApplication = Resource(
 
     return [
       'Namespace: ${item.metadata.namespace ?? '-'}',
-      'AppHealth: ${item.status?.health?.status ?? '-'}',
-      'SyncStatus: ${item.status?.sync_?.status ?? '-'}',
-      'CreatedAt: ${getAge(item.metadata.creationTimestamp)}',
-      'LastSync: ${getAge(item.status?.operationState?.finishedAt)}',
+      'App Health: ${item.status?.health?.status ?? '-'}',
+      'Sync Status: ${item.status?.$sync?.status ?? '-'}',
+      'Created At: ${getAge(item.metadata.creationTimestamp)}',
+      'Last Sync: ${getAge(item.status?.operationState?.finishedAt)}',
     ];
   },
   detailsItemBuilder:
@@ -112,7 +110,9 @@ final Resource argoResourceApplication = Resource(
                 DetailsItemModel(name: 'Project', values: item.spec.project),
                 DetailsItemModel(
                   name: 'Info',
-                  values: item.spec.info.isNotEmpty ? item.spec.info : null,
+                  values: item.spec.info != null && item.spec.info!.isNotEmpty
+                      ? item.spec.info!.map((e) => e.value).toList()
+                      : null,
                 ),
                 DetailsItemModel(
                   name: 'Cluster',
@@ -121,34 +121,38 @@ final Resource argoResourceApplication = Resource(
                       item.spec.destination.name,
                 ),
                 DetailsItemModel(
-                  name: 'SourceType',
+                  name: 'Source Type',
                   values: item.status?.sourceType ?? '-',
                 ),
                 DetailsItemModel(
-                  name: 'RepoURL',
-                  values: item.spec.source_?.repoURL ?? '-',
+                  name: 'Repo URL',
+                  values: item.spec.source?.repoURL ?? '-',
                 ),
                 DetailsItemModel(
-                  name: 'TargetRevision',
-                  values: item.spec.source_?.targetRevision ?? '-',
+                  name: 'Target Revision',
+                  values: item.spec.source?.targetRevision ?? '-',
                 ),
                 DetailsItemModel(
                   name: 'Path',
-                  values: item.spec.source_?.path ?? '-',
+                  values: item.spec.source?.path ?? '-',
                 ),
                 DetailsItemModel(
-                  name: 'SyncPolicy',
+                  name: 'Sync Policy',
                   values: item.spec.syncPolicy != null
                       ? 'Auto sync enabled'
                       : 'Auto sync disabled',
                 ),
                 DetailsItemModel(
                   name: 'Prune',
-                  values: item.spec.syncPolicy?.automated?.prune,
+                  values: item.spec.syncPolicy?.automated?.prune == true
+                      ? 'True'
+                      : 'False',
                 ),
                 DetailsItemModel(
                   name: 'SelfHeal',
-                  values: item.spec.syncPolicy?.automated?.selfHeal,
+                  values: item.spec.syncPolicy?.automated?.selfHeal == true
+                      ? 'True'
+                      : 'False',
                 ),
               ],
             ),
@@ -157,19 +161,19 @@ final Resource argoResourceApplication = Resource(
               title: 'Status',
               details: [
                 DetailsItemModel(
-                  name: 'AppHealth',
+                  name: 'App Health',
                   values: item.status?.health?.status,
                 ),
                 DetailsItemModel(
-                  name: 'SyncStatus',
-                  values: item.status?.sync_?.status,
+                  name: 'Sync Status',
+                  values: item.status?.$sync?.status,
                 ),
                 DetailsItemModel(
-                  name: 'LastSync',
+                  name: 'Last Sync',
                   values: getAge(item.status?.operationState?.finishedAt),
                 ),
                 DetailsItemModel(
-                  name: 'LastReconcile',
+                  name: 'Last Reconcile',
                   values: getAge(item.status?.reconciledAt),
                 ),
                 DetailsItemModel(
@@ -185,18 +189,18 @@ final Resource argoResourceApplication = Resource(
                 // health and sync status per resource.
                 DetailsItemModel(
                   name: 'Resources',
-                  values: item.status?.resources.map((e) {
+                  values: item.status?.resources?.map((e) {
                     return '${e.kind}/${e.name}';
                   }).toList(),
                   onTap: (index) {
-                    final res = item.status!.resources[index];
-                    if (kindToResource.containsKey(res.kind)) {
+                    final res = item.status?.resources?[index];
+                    if (kindToResource.containsKey(res?.kind)) {
                       navigate(
                         context,
                         ResourcesDetails(
-                          name: res.name as String,
-                          namespace: res.namespace,
-                          resource: kindToResource[res.kind]!,
+                          name: res?.name ?? '',
+                          namespace: res?.namespace,
+                          resource: kindToResource[res?.kind]!,
                         ),
                       );
                       return;

@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_cron_job.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_batch_v1_job.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_object_meta.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_apimachinery_pkg_apis_meta_v1_owner_reference.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/repositories/app_repository.dart';
 import 'package:kubenav/repositories/clusters_repository.dart';
 import 'package:kubenav/services/kubernetes_service.dart';
@@ -80,9 +77,11 @@ class _CreateJobState extends State<CreateJob> {
           'cronjob.kubernetes.io/instantiate': 'manual',
         };
         if (widget.cronJob.spec?.jobTemplate.metadata?.annotations != null) {
-          annotations.addAll(
-            widget.cronJob.spec!.jobTemplate.metadata!.annotations,
-          );
+          for (final key
+              in widget.cronJob.spec!.jobTemplate.metadata!.annotations!.keys) {
+            annotations[key] =
+                widget.cronJob.spec!.jobTemplate.metadata!.annotations![key]!;
+          }
         }
 
         final job = IoK8sApiBatchV1Job(

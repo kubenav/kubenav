@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-import 'package:kubenav/models/kubernetes/io_k8s_api_rbac_v1_cluster_role_binding.dart';
-import 'package:kubenav/models/kubernetes/io_k8s_api_rbac_v1_cluster_role_binding_list.dart';
+import 'package:kubenav/models/kubernetes/schema.models.swagger.dart';
 import 'package:kubenav/utils/constants.dart';
 import 'package:kubenav/utils/helpers.dart';
 import 'package:kubenav/utils/navigate.dart';
@@ -37,8 +36,7 @@ final resourceRoleBinding = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items =
-        IoK8sApiRbacV1ClusterRoleBindingList.fromJson(parsed)?.items ?? [];
+    final items = IoK8sApiRbacV1ClusterRoleBindingList.fromJson(parsed).items;
 
     return items
         .map(
@@ -52,7 +50,7 @@ final resourceRoleBinding = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiRbacV1ClusterRoleBindingList.fromJson(parsed)?.items ?? [];
+    return IoK8sApiRbacV1ClusterRoleBindingList.fromJson(parsed).items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiRbacV1ClusterRoleBinding).metadata?.name ?? '';
@@ -138,62 +136,66 @@ final resourceRoleBinding = Resource(
         const SizedBox(height: Constants.spacingMiddle),
         AppVerticalListSimpleWidget(
           title: 'Subjects',
-          items: item.subjects
-              .map(
-                (subject) => AppVerticalListSimpleModel(
-                  onTap: kindToResource.containsKey(subject.kind)
-                      ? () {
-                          navigate(
-                            context,
-                            ResourcesDetails(
-                              name: subject.name,
-                              namespace: subject.namespace,
-                              resource: kindToResource[subject.kind]!,
+          items:
+              item.subjects
+                  ?.map(
+                    (subject) => AppVerticalListSimpleModel(
+                      onTap: kindToResource.containsKey(subject.kind)
+                          ? () {
+                              navigate(
+                                context,
+                                ResourcesDetails(
+                                  name: subject.name,
+                                  namespace: subject.namespace,
+                                  resource: kindToResource[subject.kind]!,
+                                ),
+                              );
+                            }
+                          : null,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(Constants.sizeBorderRadius),
                             ),
-                          );
-                        }
-                      : null,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(Constants.sizeBorderRadius),
+                          ),
+                          height: 54,
+                          width: 54,
+                          padding: const EdgeInsets.all(
+                            Constants.spacingIcon54x54,
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/resources/clusterrolebindings.svg',
+                          ),
                         ),
-                      ),
-                      height: 54,
-                      width: 54,
-                      padding: const EdgeInsets.all(Constants.spacingIcon54x54),
-                      child: SvgPicture.asset(
-                        'assets/resources/clusterrolebindings.svg',
-                      ),
-                    ),
-                    const SizedBox(width: Constants.spacingSmall),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            subject.kind,
-                            style: primaryTextStyle(context),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                        const SizedBox(width: Constants.spacingSmall),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                subject.kind,
+                                style: primaryTextStyle(context),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                '${subject.namespace != null ? '${subject.namespace}/' : ''}${subject.name}',
+                                style: secondaryTextStyle(context),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
-                          Text(
-                            '${subject.namespace != null ? '${subject.namespace}/' : ''}${subject.name}',
-                            style: secondaryTextStyle(context),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
+                        ),
+                        ..._buildIcon(context, subject.kind),
+                      ],
                     ),
-                    ..._buildIcon(context, subject.kind),
-                  ],
-                ),
-              )
-              .toList(),
+                  )
+                  .toList() ??
+              [],
         ),
         const SizedBox(height: Constants.spacingMiddle),
         DetailsResourcesPreview(
