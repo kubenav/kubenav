@@ -54,6 +54,12 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+  <false/>
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>Required by an external library, not used by the app</string>
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>Required by an external library, not used by the app</string>
+  <key>NSCameraUsageDescription</key>
+  <string>Required by an external library, not used by the app</string>
 </dict>
 </plist>
