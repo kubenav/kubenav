@@ -60,7 +60,7 @@ Tools • Dart 3.10.4 • DevTools 2.51.1
 
 $ go version
 
-go version go1.24.0 darwin/arm64
+go version go1.25.5 darwin/arm64
 ```
 
 ### Working with the Go Code
