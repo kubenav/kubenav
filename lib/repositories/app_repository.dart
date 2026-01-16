@@ -601,7 +601,7 @@ class AppRepositorySettingsPrometheus {
           data.containsKey('insecureSkipTLSVerify') &&
               data['insecureSkipTLSVerify'] != null
           ? data['insecureSkipTLSVerify']
-          : '',
+          : false,
       clientCertificate:
           data.containsKey('clientCertificate') &&
               data['clientCertificate'] != null
