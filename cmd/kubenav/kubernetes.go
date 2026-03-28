@@ -38,8 +38,6 @@ func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, cl
 		return "", err
 	}
 
-	requestURL = strings.TrimRight(clusterServer, "/") + requestURL
-
 	var responseResult rest.Result
 	var statusCode int
 	ctx := context.Background()
@@ -128,7 +126,7 @@ func kubernetesGetLogs(clientset *kubernetes.Clientset, clusterServer, name, nam
 	var statusCode int
 	ctx := context.Background()
 
-	requestURL := fmt.Sprintf("%s/api/v1/namespaces/%s/pods/%s/log?container=%s&sinceSeconds=%d&previous=%t", clusterServer, namespace, name, container, since, previous)
+	requestURL := fmt.Sprintf("/api/v1/namespaces/%s/pods/%s/log?container=%s&sinceSeconds=%d&previous=%t", namespace, name, container, since, previous)
 	responseResult := clientset.RESTClient().Get().RequestURI(requestURL).Do(ctx)
 
 	if responseResult.Error() != nil {

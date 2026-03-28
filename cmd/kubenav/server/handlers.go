@@ -124,7 +124,7 @@ func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 		errCh := make(chan error, 1)
 
 		go func() {
-			err := pf.Start(restConfig, fmt.Sprintf("/api/v1/namespaces/%s/pods/%s/portforward", request.PodNamespace, request.PodName), request.PodPort)
+			err := pf.Start(restConfig, request.ClusterServer, fmt.Sprintf("/api/v1/namespaces/%s/pods/%s/portforward", request.PodNamespace, request.PodName), request.PodPort)
 			if err != nil {
 				errCh <- err
 			}
@@ -241,7 +241,7 @@ func terminalHandler(w http.ResponseWriter, r *http.Request) {
 	//
 	// We also validating the user defined shell and fallback to "sh" when it
 	// was invalid.
-	reqURL, err := url.Parse(fmt.Sprintf("%s/api/v1/namespaces/%s/pods/%s/exec?container=%s&command=%s&stdin=true&stdout=true&stderr=true&tty=true", restConfig.Host, namespace, name, container, shell))
+	reqURL, err := url.Parse(fmt.Sprintf("%s/api/v1/namespaces/%s/pods/%s/exec?container=%s&command=%s&stdin=true&stdout=true&stderr=true&tty=true", clusterServer, namespace, name, container, shell))
 	if err != nil {
 		msg, _ := json.Marshal(terminal.Message{
 			Op:   "stdout",

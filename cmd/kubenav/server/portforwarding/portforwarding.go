@@ -123,19 +123,8 @@ func CreateSession(sessionPrefix, name, namespace, container string, remotePort 
 // Start starts the port forwarding request. For that we are need a rest config
 // to interact with the Kubernets API, the request path for the port forwarding
 // endpoint and the remote port shich should be forwarded.
-func (s *Session) Start(restConfig *rest.Config, path string, remotePort int64) error {
-	// In the first step we have to create the full request url. For this we are
-	// joining the host from the rest config, with the given path. In the case
-	// that the host ends with a "/" and the path starts with a "/" we are
-	// removing the "/" from the path, so that the request url doesn't contain
-	// "//". To use the request url in the port forwarding request we have to
-	// parse it.
-	requestURL := restConfig.Host + path
-	if strings.HasSuffix(restConfig.Host, "/") && strings.HasPrefix(path, "/") {
-		requestURL = strings.TrimSuffix(restConfig.Host, "/") + path
-	}
-
-	parsedRequestURL, err := url.Parse(requestURL)
+func (s *Session) Start(restConfig *rest.Config, clusterServer, path string, remotePort int64) error {
+	requestURL, err := url.Parse(strings.TrimSuffix(clusterServer, "/") + path)
 	if err != nil {
 		return err
 	}
@@ -149,7 +138,7 @@ func (s *Session) Start(restConfig *rest.Config, path string, remotePort int64) 
 		return err
 	}
 
-	dialer := spdy.NewDialer(upgrader, &http.Client{Transport: transport}, http.MethodPost, parsedRequestURL)
+	dialer := spdy.NewDialer(upgrader, &http.Client{Transport: transport}, http.MethodPost, requestURL)
 	pf, err := portforward.New(dialer, []string{fmt.Sprintf("%d:%d", s.LocalPort, remotePort)}, s.StopCh, s.ReadyCh, s.Streams.Out, s.Streams.ErrOut)
 	if err != nil {
 		return err
