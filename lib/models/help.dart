@@ -484,6 +484,8 @@ You can use the Prometheus plugin with a public available Prometheus instance or
 To use a public available Prometheus instance you have to provide the **Address** field in the configuration. You can also provide a **Username**, **Password** and **Token** in the credentials section.
 
 To use a Prometheus instance running as Pod inside your cluster, the **Address field must be empty**. Instead you can provide a **Namespace**, **Label Selector**, **Container** and **Port** to use a Pod from your cluser. You can also specify an optional **Path** under which the Prometheus API is served from this port. The credentials section can also be used with the in-cluster configuration.
+
+The Prometheus plugin relies on the `kubelet` and `kube-state-metrics` metrics to show the default metrics for your workloads. So make sure that these metrics are available in your cluster, otherwise the plugin won't work.
           ''',
         ),
         HelpItem(
