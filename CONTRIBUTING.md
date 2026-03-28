@@ -60,20 +60,16 @@ Tools • Dart 3.10.4 • DevTools 2.51.1
 
 $ go version
 
-go version go1.25.5 darwin/arm64
+go version go1.26.1 darwin/arm64
 ```
 
 ### Working with the Go Code
 
 The Go code for kubenav can be found in the `cmd` folder and we are using the
-[`gomobile`](https://github.com/golang/go/wiki/Mobile) tools. They can be
-installed by running the following two commands:
+[`gomobile`](https://github.com/golang/go/wiki/Mobile) tools:
 
 ```sh
-go install golang.org/x/mobile/cmd/gomobile@latest
-gomobile init
-
-go get golang.org/x/mobile/cmd/gomobile
+go tool gomobile init
 ```
 
 To build the code via the `gomobile` command the `ANDROID_HOME` and
