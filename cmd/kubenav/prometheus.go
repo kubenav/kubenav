@@ -89,7 +89,7 @@ func PrometheusGetData(clusterServer, clusterCertificateAuthorityData string, cl
 	// to the Prometheus API. The session is closed as soon as we retrieved the
 	// data from the Prometheus API.
 	if requestData.Prometheus.Address == "" {
-		pf, err := getPortForwardingSession(restConfig, clientset, requestData)
+		pf, err := getPortForwardingSession(restConfig, clientset, clusterServer, requestData)
 		if err != nil {
 			return "", err
 		}
@@ -216,7 +216,7 @@ func PrometheusGetData(clusterServer, clusterCertificateAuthorityData string, cl
 	return string(metricsData), nil
 }
 
-func getPortForwardingSession(restConfig *rest.Config, clientset *kubernetes.Clientset, requestData requestData) (*portforwarding.Session, error) {
+func getPortForwardingSession(restConfig *rest.Config, clientset *kubernetes.Clientset, clusterServer string, requestData requestData) (*portforwarding.Session, error) {
 	// Get a list of all Pods, which are matching the users specified namespace
 	// and label selector. If the list of Pods is empty we return an error. If
 	// not we continue with establishing the port forwarding session.
@@ -243,7 +243,7 @@ func getPortForwardingSession(restConfig *rest.Config, clientset *kubernetes.Cli
 	errCh := make(chan error, 1)
 
 	go func() {
-		err := pf.Start(restConfig, fmt.Sprintf("/api/v1/namespaces/%s/pods/%s/portforward", podList.Items[0].Namespace, podList.Items[0].Name), requestData.Prometheus.Port)
+		err := pf.Start(restConfig, clusterServer, fmt.Sprintf("/api/v1/namespaces/%s/pods/%s/portforward", podList.Items[0].Namespace, podList.Items[0].Name), requestData.Prometheus.Port)
 		if err != nil {
 			errCh <- err
 		}
