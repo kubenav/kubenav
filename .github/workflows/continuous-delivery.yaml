@@ -29,8 +29,7 @@ jobs:
 
       - name: Generate Bindings
         run: |
-          go install golang.org/x/mobile/cmd/gomobile@latest
-          gomobile init
+          go tool gomobile init
           make bindings-ios
 
       - name: Setup Flutter
@@ -124,8 +123,7 @@ jobs:
       - name: Generate Bindings
         run: |
           echo "$ANDROID_NDK_HOME"
-          go install golang.org/x/mobile/cmd/gomobile@latest
-          gomobile init
+          go tool gomobile init
           make bindings-android
 
       - name: Setup Flutter

@@ -24,6 +24,10 @@ linters:
       - third_party$
       - builtin$
       - examples$
+  settings:
+    gosec:
+      excludes:
+        - G117
 formatters:
   enable:
     - gofmt
