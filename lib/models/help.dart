@@ -289,7 +289,7 @@ export SECRET_NAME=\$(kubectl get sa --namespace kubenav kubenav -o=jsonpath='{.
 To get the certificate and access token to authenticate against the Kubernetes API we can run the following:
 
 ```sh
-kubectl get secret \$SECRET_NAME -o=jsonpath='{.data.ca.crt}' | base64 --decode
+kubectl get secret \$SECRET_NAME -o=jsonpath='{.data.ca.crt}'
 kubectl get secret \$SECRET_NAME -o=jsonpath='{.data.token}' | base64 --decode
 ```
 
