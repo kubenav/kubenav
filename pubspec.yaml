@@ -20,8 +20,8 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 5.5.0+119
 
 environment:
-  flutter: 3.38.5
-  sdk: ^3.10.4
+  flutter: 3.41.6
+  sdk: ^3.11.3
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
