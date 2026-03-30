@@ -56,7 +56,7 @@ dependencies:
   json_path: ^0.9.0
   jwt_decode: ^0.3.1
   local_auth: ^3.0.1
-  package_info_plus: ^9.0.0
+  package_info_plus: ^9.0.1
   path_provider: ^2.1.5
   provider: ^6.1.5
   quick_actions: ^1.1.0
@@ -83,7 +83,7 @@ dev_dependencies:
   chopper_generator: ^8.6.1
   flutter_launcher_icons: ^0.14.4
   import_sorter: ^4.6.0
-  json_serializable: ^6.11.4
+  json_serializable: ^6.13.1
   swagger_dart_code_generator: ^4.1.1
 
 # For information on the generic Dart part of this file, see the
