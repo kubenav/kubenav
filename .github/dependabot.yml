@@ -7,8 +7,9 @@ updates:
       interval: "monthly"
     assignees:
       - "ricoberger"
-    labels:
-      - "changelog: changed"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
     groups:
       github-actions:
         patterns:
@@ -20,8 +21,9 @@ updates:
       interval: "monthly"
     assignees:
       - "ricoberger"
-    labels:
-      - "changelog: changed"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
     groups:
       pub:
         patterns:
@@ -33,8 +35,9 @@ updates:
       interval: "monthly"
     assignees:
       - "ricoberger"
-    labels:
-      - "changelog: changed"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
     groups:
       gomod:
         patterns:

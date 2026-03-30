@@ -1,7 +1,6 @@
+# yaml-language-server: $schema=https://golangci-lint.run/jsonschema/golangci.jsonschema.json
 ---
 version: "2"
-run:
-  modules-download-mode: readonly
 linters:
   default: none
   enable:
@@ -20,14 +19,6 @@ linters:
       - common-false-positives
       - legacy
       - std-error-handling
-    paths:
-      - third_party$
-      - builtin$
-      - examples$
-  settings:
-    gosec:
-      excludes:
-        - G117
 formatters:
   enable:
     - gofmt
@@ -36,9 +27,3 @@ formatters:
     goimports:
       local-prefixes:
         - github.com/kubenav/kubenav
-  exclusions:
-    generated: lax
-    paths:
-      - third_party$
-      - builtin$
-      - examples$
