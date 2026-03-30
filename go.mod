@@ -23,10 +23,10 @@ require (
 	golang.org/x/mobile v0.0.0-20260312152759-81488f6aeb60
 	golang.org/x/oauth2 v0.34.0
 	helm.sh/helm/v3 v3.20.1
-	k8s.io/api v0.35.1
-	k8s.io/apimachinery v0.35.1
-	k8s.io/cli-runtime v0.35.1
-	k8s.io/client-go v0.35.1
+	k8s.io/api v0.35.3
+	k8s.io/apimachinery v0.35.3
+	k8s.io/cli-runtime v0.35.3
+	k8s.io/client-go v0.35.3
 	sigs.k8s.io/yaml v1.6.0
 )
 
