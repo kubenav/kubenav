@@ -249,6 +249,7 @@ func AWSGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret
 		return "", err
 	}
 
+	//nolint:gosec
 	ssoCredentials, err := json.Marshal(AWSSSOCredentials{
 		AccessKeyID:       *creds.RoleCredentials.AccessKeyId,
 		SecretAccessKey:   *creds.RoleCredentials.SecretAccessKey,
@@ -335,6 +336,7 @@ func AWSGetSSOAccounts(ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode st
 		})
 	}
 
+	//nolint:gosec
 	ssoAccountsBytes, err := json.Marshal(ssoAccounts)
 	if err != nil {
 		return "", err

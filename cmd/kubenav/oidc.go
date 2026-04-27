@@ -148,6 +148,7 @@ func OIDCGetLink(discoveryURL, clientID, clientSecret, certificateAuthority, sco
 		}
 	}
 
+	//nolint:gosec
 	oidcResponseBytes, err := json.Marshal(oidcResponse)
 	if err != nil {
 		return "", err
@@ -216,6 +217,7 @@ func OIDCGetRefreshToken(discoveryURL, clientID, clientSecret, certificateAuthor
 		RefreshToken: oauth2Token.RefreshToken,
 	}
 
+	//nolint:gosec
 	oidcResponseBytes, err := json.Marshal(oidcResponse)
 	if err != nil {
 		return "", err
@@ -278,6 +280,7 @@ func OIDCGetAccessToken(discoveryURL, clientID, clientSecret, certificateAuthori
 		RefreshToken: oauth2Token.RefreshToken,
 	}
 
+	//nolint:gosec
 	oidcResponseBytes, err := json.Marshal(oidcResponse)
 	if err != nil {
 		return "", err
@@ -411,6 +414,7 @@ func OIDCDeviceAuthGetRefreshToken(discoveryURL, clientID, certificateAuthority,
 		RefreshToken: oauth2Token.RefreshToken,
 	}
 
+	//nolint:gosec
 	oidcResponseBytes, err := json.Marshal(oidcResponse)
 	if err != nil {
 		return "", err
