@@ -1,6 +1,6 @@
 module github.com/kubenav/kubenav
 
-go 1.26.1
+go 1.26.2
 
 replace golang.org/x/oauth2 => github.com/kubenav/oauth2 v0.0.0-20260104091156-ef95ecfdba80
 
