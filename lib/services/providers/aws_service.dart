@@ -326,6 +326,10 @@ class AWSService {
         throw Exception('An unknown error occured');
       }
 
+      if (result == 'null') {
+        return [];
+      }
+
       List<dynamic> tmpClusters = json.decode(result);
       List<AWSCluster> clusters = [];
       for (var tmpCluster in tmpClusters) {

@@ -157,7 +157,7 @@ func AWSGetToken(accessKeyID, secretKey, region, sessionToken, roleArn, clusterI
 		return "", err
 	}
 
-	return fmt.Sprintf("k8s-aws-v1.%s", base64.RawStdEncoding.EncodeToString([]byte(out.URL))), nil
+	return fmt.Sprintf("k8s-aws-v1.%s", base64.RawURLEncoding.EncodeToString([]byte(out.URL))), nil
 }
 
 // AWSGetSSOConfig registers a new AWS SSO client and starts the device
@@ -218,7 +218,7 @@ func AWSGetSSOToken(accountID, roleName, ssoRegion, ssoClientID, ssoClientSecret
 	grantType := "urn:ietf:params:oauth:grant-type:device_code"
 
 	if accessToken != "" {
-		if accessTokenExpire < (time.Now().Unix()-60)*1000 {
+		if accessTokenExpire < (time.Now().Unix()+60)*1000 {
 			return "", fmt.Errorf("aws_sso_access_token_is_expired")
 		}
 	} else {
@@ -295,45 +295,67 @@ func AWSGetSSOAccounts(ssoRegion, ssoClientID, ssoClientSecret, ssoDeviceCode st
 
 	svcsso := sso.NewFromConfig(aws.Config{Region: ssoRegion})
 
-	accounts, err := svcsso.ListAccounts(ctx, &sso.ListAccountsInput{
-		AccessToken: &accessToken,
-	})
-	if err != nil {
-		return "", err
-	}
-
-	if accounts == nil || accounts.AccountList == nil {
-		return "", fmt.Errorf("no accounts were found")
-	}
-
 	var ssoAccounts []AWSSSOAccount
 
-	for _, account := range accounts.AccountList {
-		roles, err := svcsso.ListAccountRoles(ctx, &sso.ListAccountRolesInput{
-			AccountId:   account.AccountId,
+	var accountsNextToken *string
+	for {
+		accounts, err := svcsso.ListAccounts(ctx, &sso.ListAccountsInput{
 			AccessToken: &accessToken,
+			NextToken:   accountsNextToken,
 		})
 		if err != nil {
 			return "", err
 		}
 
-		var ssoRoles []string
-
-		if roles != nil {
-			for _, role := range roles.RoleList {
-				if role.RoleName != nil {
-					ssoRoles = append(ssoRoles, *role.RoleName)
-				}
-			}
+		if accounts == nil || accounts.AccountList == nil {
+			break
 		}
 
-		ssoAccounts = append(ssoAccounts, AWSSSOAccount{
-			AccountID:         *account.AccountId,
-			AccountName:       *account.AccountName,
-			Roles:             ssoRoles,
-			AccessToken:       accessToken,
-			AccessTokenExpire: accessTokenExpire,
-		})
+		for _, account := range accounts.AccountList {
+			var ssoRoles []string
+
+			var rolesNextToken *string
+			for {
+				roles, err := svcsso.ListAccountRoles(ctx, &sso.ListAccountRolesInput{
+					AccountId:   account.AccountId,
+					AccessToken: &accessToken,
+					NextToken:   rolesNextToken,
+				})
+				if err != nil {
+					return "", err
+				}
+
+				if roles != nil {
+					for _, role := range roles.RoleList {
+						if role.RoleName != nil {
+							ssoRoles = append(ssoRoles, *role.RoleName)
+						}
+					}
+				}
+
+				if roles == nil || roles.NextToken == nil {
+					break
+				}
+				rolesNextToken = roles.NextToken
+			}
+
+			ssoAccounts = append(ssoAccounts, AWSSSOAccount{
+				AccountID:         *account.AccountId,
+				AccountName:       *account.AccountName,
+				Roles:             ssoRoles,
+				AccessToken:       accessToken,
+				AccessTokenExpire: accessTokenExpire,
+			})
+		}
+
+		if accounts.NextToken == nil {
+			break
+		}
+		accountsNextToken = accounts.NextToken
+	}
+
+	if len(ssoAccounts) == 0 {
+		return "", fmt.Errorf("no accounts were found")
 	}
 
 	//nolint:gosec
