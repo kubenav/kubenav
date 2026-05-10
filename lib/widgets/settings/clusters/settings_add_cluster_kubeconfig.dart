@@ -52,7 +52,7 @@ class _SettingsAddClusterKubeconfigState
   /// the `type` and `allowedExtensions` fields again.
   Future<void> _selectKubeconfigFile() async {
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
+      FilePickerResult? result = await FilePicker.pickFiles(
         allowMultiple: false,
         // type: FileType.custom,
         // allowedExtensions: ['yaml', 'yml', 'txt', 'conf'],
