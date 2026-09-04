@@ -12,6 +12,7 @@ class Cluster {
   String clusterProviderId;
   String clusterProviderInternal;
   String clusterServer;
+  String clusterTLSServerName;
   String clusterCertificateAuthorityData;
   bool clusterInsecureSkipTLSVerify;
   String userClientCertificateData;
@@ -29,6 +30,7 @@ class Cluster {
     required this.clusterProviderId,
     this.clusterProviderInternal = '',
     required this.clusterServer,
+    this.clusterTLSServerName = '',
     this.clusterCertificateAuthorityData = '',
     this.clusterInsecureSkipTLSVerify = false,
     this.userClientCertificateData = '',
@@ -56,6 +58,7 @@ class Cluster {
       clusterServer: data.containsKey('clusterServer')
           ? data['clusterServer']
           : '',
+      clusterTLSServerName: data['clusterTLSServerName'] as String? ?? '',
       clusterCertificateAuthorityData:
           data.containsKey('clusterCertificateAuthorityData')
           ? data['clusterCertificateAuthorityData']
@@ -92,6 +95,7 @@ class Cluster {
       'clusterProviderId': clusterProviderId,
       'clusterProviderInternal': clusterProviderInternal,
       'clusterServer': clusterServer,
+      'clusterTLSServerName': clusterTLSServerName,
       'clusterCertificateAuthorityData': clusterCertificateAuthorityData,
       'clusterInsecureSkipTLSVerify': clusterInsecureSkipTLSVerify,
       'userClientCertificateData': userClientCertificateData,

@@ -25,6 +25,7 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     if (call.method == "kubernetesRequest") {
       val clusterServer = call.argument<String>("clusterServer")
+      val clusterTLSServerName = call.argument<String>("clusterTLSServerName")
       val clusterCertificateAuthorityData = call.argument<String>("clusterCertificateAuthorityData")
       val clusterInsecureSkipTLSVerify = call.argument<Boolean>("clusterInsecureSkipTLSVerify")
       val userClientCertificateData = call.argument<String>("userClientCertificateData")
@@ -38,10 +39,10 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val requestURL = call.argument<String>("requestURL")
       val requestBody = call.argument<String>("requestBody")
 
-      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || requestMethod == null || requestURL == null || requestBody == null) {
+      if (clusterServer == null || clusterTLSServerName == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || requestMethod == null || requestURL == null || requestBody == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        kubernetesRequest(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, requestMethod, requestURL, requestBody, result)
+        kubernetesRequest(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, requestMethod, requestURL, requestBody, result)
       }
     } else if (call.method == "prettifyYAML") {
       val jsonStr = call.argument<String>("jsonStr")
@@ -62,6 +63,7 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       }
     } else if (call.method == "kubernetesGetLogs") {
       val clusterServer = call.argument<String>("clusterServer")
+      val clusterTLSServerName = call.argument<String>("clusterTLSServerName")
       val clusterCertificateAuthorityData = call.argument<String>("clusterCertificateAuthorityData")
       val clusterInsecureSkipTLSVerify = call.argument<Boolean>("clusterInsecureSkipTLSVerify")
       val userClientCertificateData = call.argument<String>("userClientCertificateData")
@@ -78,10 +80,10 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val filter = call.argument<String>("filter")
       val previous = call.argument<Boolean>("previous")
 
-      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || names == null || namespace == null || container == null || since == null || filter == null || previous == null) {
+      if (clusterServer == null || clusterTLSServerName == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || names == null || namespace == null || container == null || since == null || filter == null || previous == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        kubernetesGetLogs(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, names, namespace, container, since, filter, previous, result)
+        kubernetesGetLogs(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, names, namespace, container, since, filter, previous, result)
       }
     } else if (call.method == "kubernetesStartServer") {
       kubernetesStartServer(result)
@@ -159,6 +161,7 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       }
     } else if (call.method == "helmListReleases") {
       val clusterServer = call.argument<String>("clusterServer")
+      val clusterTLSServerName = call.argument<String>("clusterTLSServerName")
       val clusterCertificateAuthorityData = call.argument<String>("clusterCertificateAuthorityData")
       val clusterInsecureSkipTLSVerify = call.argument<Boolean>("clusterInsecureSkipTLSVerify")
       val userClientCertificateData = call.argument<String>("userClientCertificateData")
@@ -170,13 +173,14 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val timeout = call.argument<Number>("timeout")?.toLong()
       val namespace = call.argument<String>("namespace")
 
-      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null) {
+      if (clusterServer == null || clusterTLSServerName == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        helmListReleases(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, result)
+        helmListReleases(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, result)
       }
     } else if (call.method == "helmGetRelease") {
       val clusterServer = call.argument<String>("clusterServer")
+      val clusterTLSServerName = call.argument<String>("clusterTLSServerName")
       val clusterCertificateAuthorityData = call.argument<String>("clusterCertificateAuthorityData")
       val clusterInsecureSkipTLSVerify = call.argument<Boolean>("clusterInsecureSkipTLSVerify")
       val userClientCertificateData = call.argument<String>("userClientCertificateData")
@@ -190,13 +194,14 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val name = call.argument<String>("name")
       val version = call.argument<Number>("version")?.toLong()
 
-      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null || name == null || version == null) {
+      if (clusterServer == null || clusterTLSServerName == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null || name == null || version == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        helmGetRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, result)
+        helmGetRelease(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, result)
       }
     } else if (call.method == "helmListReleaseHistory") {
       val clusterServer = call.argument<String>("clusterServer")
+      val clusterTLSServerName = call.argument<String>("clusterTLSServerName")
       val clusterCertificateAuthorityData = call.argument<String>("clusterCertificateAuthorityData")
       val clusterInsecureSkipTLSVerify = call.argument<Boolean>("clusterInsecureSkipTLSVerify")
       val userClientCertificateData = call.argument<String>("userClientCertificateData")
@@ -209,13 +214,14 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val namespace = call.argument<String>("namespace")
       val name = call.argument<String>("name")
 
-      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null || name == null) {
+      if (clusterServer == null || clusterTLSServerName == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null || name == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        helmListReleaseHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, result)
+        helmListReleaseHistory(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, result)
       }
     } else if (call.method == "helmRollbackRelease") {
       val clusterServer = call.argument<String>("clusterServer")
+      val clusterTLSServerName = call.argument<String>("clusterTLSServerName")
       val clusterCertificateAuthorityData = call.argument<String>("clusterCertificateAuthorityData")
       val clusterInsecureSkipTLSVerify = call.argument<Boolean>("clusterInsecureSkipTLSVerify")
       val userClientCertificateData = call.argument<String>("userClientCertificateData")
@@ -230,13 +236,14 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val version = call.argument<Number>("version")?.toLong()
       val options = call.argument<String>("options")
 
-      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null || name == null || version == null || options == null) {
+      if (clusterServer == null || clusterTLSServerName == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null || name == null || version == null || options == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        helmRollbackRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, options, result)
+        helmRollbackRelease(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, options, result)
       }
     } else if (call.method == "helmUninstallRelease") {
       val clusterServer = call.argument<String>("clusterServer")
+      val clusterTLSServerName = call.argument<String>("clusterTLSServerName")
       val clusterCertificateAuthorityData = call.argument<String>("clusterCertificateAuthorityData")
       val clusterInsecureSkipTLSVerify = call.argument<Boolean>("clusterInsecureSkipTLSVerify")
       val userClientCertificateData = call.argument<String>("userClientCertificateData")
@@ -250,10 +257,10 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val name = call.argument<String>("name")
       val options = call.argument<String>("options")
 
-      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null || name == null || options == null) {
+      if (clusterServer == null || clusterTLSServerName == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || namespace == null || name == null || options == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        helmUninstallRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, options, result)
+        helmUninstallRelease(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, options, result)
       }
     } else if (call.method == "oidcGetLink") {
       val discoveryURL = call.argument<String>("discoveryURL")
@@ -333,6 +340,7 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       }
     } else if (call.method == "prometheusGetData") {
       val clusterServer = call.argument<String>("clusterServer")
+      val clusterTLSServerName = call.argument<String>("clusterTLSServerName")
       val clusterCertificateAuthorityData = call.argument<String>("clusterCertificateAuthorityData")
       val clusterInsecureSkipTLSVerify = call.argument<Boolean>("clusterInsecureSkipTLSVerify")
       val userClientCertificateData = call.argument<String>("userClientCertificateData")
@@ -344,10 +352,10 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
       val timeout = call.argument<Number>("timeout")?.toLong()
       val request = call.argument<String>("request")
 
-      if (clusterServer == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || request == null) {
+      if (clusterServer == null || clusterTLSServerName == null || clusterCertificateAuthorityData == null || clusterInsecureSkipTLSVerify == null || userClientCertificateData == null || userClientKeyData == null || userToken == null || userUsername == null || userPassword == null || proxy == null || timeout == null || request == null) {
         result.error("BAD_ARGUMENTS", null, null)
       } else {
-        prometheusGetData(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, request, result)
+        prometheusGetData(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, request, result)
       }
     } else if (call.method == "verifyIAP") {
       result.notImplemented()
@@ -356,9 +364,9 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun kubernetesRequest(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, requestMethod: String, requestURL: String, requestBody: String, result: MethodChannel.Result) {
+  private fun kubernetesRequest(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, requestMethod: String, requestURL: String, requestBody: String, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.kubernetesRequest(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, requestMethod, requestURL, requestBody)
+      val data: String = Kubenav.kubernetesRequest(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, requestMethod, requestURL, requestBody)
       result.success(data)
     } catch (e: Exception) {
       result.error("KUBERNETES_REQUEST_FAILED", e.localizedMessage, null)
@@ -383,9 +391,9 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun kubernetesGetLogs(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, names: String, namespace: String, container: String, since: Long, filter: String, previous: Boolean, result: MethodChannel.Result) {
+  private fun kubernetesGetLogs(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, names: String, namespace: String, container: String, since: Long, filter: String, previous: Boolean, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.kubernetesGetLogs(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, names, namespace, container, since, filter, previous)
+      val data: String = Kubenav.kubernetesGetLogs(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, names, namespace, container, since, filter, previous)
       result.success(data)
     } catch (e: Exception) {
       result.error("KUBERNETES_GET_LOGS_FAILED", e.localizedMessage, null)
@@ -454,45 +462,45 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun helmListReleases(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, result: MethodChannel.Result) {
+  private fun helmListReleases(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.helmListReleases(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace)
+      val data: String = Kubenav.helmListReleases(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace)
       result.success(data)
     } catch (e: Exception) {
       result.error("HELM_LIST_RELEASES_FAILED", e.localizedMessage, null)
     }
   }
 
-  private fun helmGetRelease(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, version: Long, result: MethodChannel.Result) {
+  private fun helmGetRelease(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, version: Long, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.helmGetRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version)
+      val data: String = Kubenav.helmGetRelease(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version)
       result.success(data)
     } catch (e: Exception) {
       result.error("HELM_GET_RELEASES_FAILED", e.localizedMessage, null)
     }
   }
 
-  private fun helmListReleaseHistory(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, result: MethodChannel.Result) {
+  private fun helmListReleaseHistory(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.helmListReleaseHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name)
+      val data: String = Kubenav.helmListReleaseHistory(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name)
       result.success(data)
     } catch (e: Exception) {
       result.error("HELM_GET_LIST_RELEASE_HISTORY_FAILED", e.localizedMessage, null)
     }
   }
 
-  private fun helmRollbackRelease(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, version: Long, options: String, result: MethodChannel.Result) {
+  private fun helmRollbackRelease(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, version: Long, options: String, result: MethodChannel.Result) {
     try {
-      Kubenav.helmRollbackRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, options)
+      Kubenav.helmRollbackRelease(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, options)
       result.success("")
     } catch (e: Exception) {
       result.error("HELM_ROLLBACK_RELEASE_FAILED", e.localizedMessage, null)
     }
   }
 
-  private fun helmUninstallRelease(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, options: String, result: MethodChannel.Result) {
+  private fun helmUninstallRelease(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, namespace: String, name: String, options: String, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.helmUninstallRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, options)
+      val data: String = Kubenav.helmUninstallRelease(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, options)
       result.success(data)
     } catch (e: Exception) {
       result.error("HELM_UNINSTALL_RELEASE_FAILED", e.localizedMessage, null)
@@ -544,9 +552,9 @@ class KubenavPlugin : FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun prometheusGetData(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, request: String, result: MethodChannel.Result) {
+  private fun prometheusGetData(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Boolean, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Long, request: String, result: MethodChannel.Result) {
     try {
-      val data: String = Kubenav.prometheusGetData(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, request)
+      val data: String = Kubenav.prometheusGetData(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, request)
       result.success(data)
     } catch (e: Exception) {
       result.error("PROMETHEUS_GET_DATA_FAILED", e.localizedMessage, null)

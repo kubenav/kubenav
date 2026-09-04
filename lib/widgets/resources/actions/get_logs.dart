@@ -102,6 +102,7 @@ class _GetLogsState extends State<GetLogs> {
               'ws://localhost:14122/logs?name=${widget.names}&namespace=${widget.namespace}&container=$_container&since=$_since',
               headers: <String, dynamic>{
                 'X-CLUSTER-SERVER': cluster.clusterServer,
+                'X-CLUSTER-TLS-SERVER-NAME': cluster.clusterTLSServerName,
                 'X-CLUSTER-CERTIFICATE-AUTHORITY-DATA':
                     cluster.clusterCertificateAuthorityData,
                 'X-CLUSTER-INSECURE-SKIP-TLS-VERIFY':

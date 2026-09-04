@@ -15,6 +15,7 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     if call.method == "kubernetesRequest" {
       if let args = call.arguments as? Dictionary<String, Any>,
         let clusterServer = args["clusterServer"] as? String,
+        let clusterTLSServerName = args["clusterTLSServerName"] as? String,
         let clusterCertificateAuthorityData = args["clusterCertificateAuthorityData"] as? String,
         let clusterInsecureSkipTLSVerify = args["clusterInsecureSkipTLSVerify"] as? Bool,
         let userClientCertificateData = args["userClientCertificateData"] as? String,
@@ -28,7 +29,7 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let requestURL = args["requestURL"] as? String,
         let requestBody = args["requestBody"] as? String
       {
-        kubernetesRequest(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, requestMethod: requestMethod, requestURL: requestURL, requestBody: requestBody, result: result)
+        kubernetesRequest(clusterServer: clusterServer, clusterTLSServerName: clusterTLSServerName, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, requestMethod: requestMethod, requestURL: requestURL, requestBody: requestBody, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -52,6 +53,7 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     } else if call.method == "kubernetesGetLogs" {
       if let args = call.arguments as? Dictionary<String, Any>,
         let clusterServer = args["clusterServer"] as? String,
+        let clusterTLSServerName = args["clusterTLSServerName"] as? String,
         let clusterCertificateAuthorityData = args["clusterCertificateAuthorityData"] as? String,
         let clusterInsecureSkipTLSVerify = args["clusterInsecureSkipTLSVerify"] as? Bool,
         let userClientCertificateData = args["userClientCertificateData"] as? String,
@@ -68,7 +70,7 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let filter = args["filter"] as? String,
         let previous = args["previous"] as? Bool
       {
-        kubernetesGetLogs(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, names: names, namespace: namespace, container: container, since: since, filter: filter, previous: previous, result: result)
+        kubernetesGetLogs(clusterServer: clusterServer, clusterTLSServerName: clusterTLSServerName, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, names: names, namespace: namespace, container: container, since: since, filter: filter, previous: previous, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -149,6 +151,7 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     } else if call.method == "helmListReleases" {
       if let args = call.arguments as? Dictionary<String, Any>,
         let clusterServer = args["clusterServer"] as? String,
+        let clusterTLSServerName = args["clusterTLSServerName"] as? String,
         let clusterCertificateAuthorityData = args["clusterCertificateAuthorityData"] as? String,
         let clusterInsecureSkipTLSVerify = args["clusterInsecureSkipTLSVerify"] as? Bool,
         let userClientCertificateData = args["userClientCertificateData"] as? String,
@@ -160,13 +163,14 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let timeout = args["timeout"] as? Int64,
         let namespace = args["namespace"] as? String
       {
-        helmListReleases(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, namespace: namespace, result: result)
+        helmListReleases(clusterServer: clusterServer, clusterTLSServerName: clusterTLSServerName, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, namespace: namespace, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
     } else if call.method == "helmGetRelease" {
       if let args = call.arguments as? Dictionary<String, Any>,
         let clusterServer = args["clusterServer"] as? String,
+        let clusterTLSServerName = args["clusterTLSServerName"] as? String,
         let clusterCertificateAuthorityData = args["clusterCertificateAuthorityData"] as? String,
         let clusterInsecureSkipTLSVerify = args["clusterInsecureSkipTLSVerify"] as? Bool,
         let userClientCertificateData = args["userClientCertificateData"] as? String,
@@ -180,13 +184,14 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let name = args["name"] as? String,
         let version = args["version"] as? Int64
       {
-        helmGetRelease(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, namespace: namespace, name: name, version: version, result: result)
+        helmGetRelease(clusterServer: clusterServer, clusterTLSServerName: clusterTLSServerName, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, namespace: namespace, name: name, version: version, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
     } else if call.method == "helmListReleaseHistory" {
       if let args = call.arguments as? Dictionary<String, Any>,
         let clusterServer = args["clusterServer"] as? String,
+        let clusterTLSServerName = args["clusterTLSServerName"] as? String,
         let clusterCertificateAuthorityData = args["clusterCertificateAuthorityData"] as? String,
         let clusterInsecureSkipTLSVerify = args["clusterInsecureSkipTLSVerify"] as? Bool,
         let userClientCertificateData = args["userClientCertificateData"] as? String,
@@ -199,13 +204,14 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let namespace = args["namespace"] as? String,
         let name = args["name"] as? String
       {
-        helmListReleaseHistory(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, namespace: namespace, name: name, result: result)
+        helmListReleaseHistory(clusterServer: clusterServer, clusterTLSServerName: clusterTLSServerName, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, namespace: namespace, name: name, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
     } else if call.method == "helmRollbackRelease" {
       if let args = call.arguments as? Dictionary<String, Any>,
         let clusterServer = args["clusterServer"] as? String,
+        let clusterTLSServerName = args["clusterTLSServerName"] as? String,
         let clusterCertificateAuthorityData = args["clusterCertificateAuthorityData"] as? String,
         let clusterInsecureSkipTLSVerify = args["clusterInsecureSkipTLSVerify"] as? Bool,
         let userClientCertificateData = args["userClientCertificateData"] as? String,
@@ -220,13 +226,14 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let version = args["version"] as? Int64,
         let options = args["options"] as? String
       {
-        helmRollbackRelease(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, namespace: namespace, name: name, version: version, options: options, result: result)
+        helmRollbackRelease(clusterServer: clusterServer, clusterTLSServerName: clusterTLSServerName, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, namespace: namespace, name: name, version: version, options: options, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
     } else if call.method == "helmUninstallRelease" {
       if let args = call.arguments as? Dictionary<String, Any>,
         let clusterServer = args["clusterServer"] as? String,
+        let clusterTLSServerName = args["clusterTLSServerName"] as? String,
         let clusterCertificateAuthorityData = args["clusterCertificateAuthorityData"] as? String,
         let clusterInsecureSkipTLSVerify = args["clusterInsecureSkipTLSVerify"] as? Bool,
         let userClientCertificateData = args["userClientCertificateData"] as? String,
@@ -240,7 +247,7 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let name = args["name"] as? String,
         let options = args["options"] as? String
       {
-        helmUninstallRelease(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, namespace: namespace, name: name, options: options, result: result)
+        helmUninstallRelease(clusterServer: clusterServer, clusterTLSServerName: clusterTLSServerName, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, namespace: namespace, name: name, options: options, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -323,6 +330,7 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     } else if call.method == "prometheusGetData" {
       if let args = call.arguments as? Dictionary<String, Any>,
         let clusterServer = args["clusterServer"] as? String,
+        let clusterTLSServerName = args["clusterTLSServerName"] as? String,
         let clusterCertificateAuthorityData = args["clusterCertificateAuthorityData"] as? String,
         let clusterInsecureSkipTLSVerify = args["clusterInsecureSkipTLSVerify"] as? Bool,
         let userClientCertificateData = args["userClientCertificateData"] as? String,
@@ -334,7 +342,7 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
         let timeout = args["timeout"] as? Int64,
         let request = args["request"] as? String
       {
-        prometheusGetData(clusterServer: clusterServer, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, request: request, result: result)
+        prometheusGetData(clusterServer: clusterServer, clusterTLSServerName: clusterTLSServerName, clusterCertificateAuthorityData: clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify: clusterInsecureSkipTLSVerify, userClientCertificateData: userClientCertificateData, userClientKeyData: userClientKeyData, userToken: userToken, userUsername: userUsername, userPassword: userPassword, proxy: proxy, timeout: timeout, request: request, result: result)
       } else {
         result(FlutterError(code: "BAD_ARGUMENTS", message: nil, details: nil))
       }
@@ -345,10 +353,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func kubernetesRequest(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, requestMethod: String, requestURL: String, requestBody: String, result: FlutterResult) {
+  private func kubernetesRequest(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, requestMethod: String, requestURL: String, requestBody: String, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavKubernetesRequest(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, requestMethod, requestURL, requestBody, &error)
+    let data = KubenavKubernetesRequest(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, requestMethod, requestURL, requestBody, &error)
     if error != nil {
       result(FlutterError(code: "KUBERNETES_REQUEST_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
@@ -378,10 +386,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func kubernetesGetLogs(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, names: String, namespace: String, container: String, since: Int64, filter: String, previous: Bool, result: FlutterResult) {
+  private func kubernetesGetLogs(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, names: String, namespace: String, container: String, since: Int64, filter: String, previous: Bool, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavKubernetesGetLogs(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, names, namespace, container, since, filter, previous, &error)
+    let data = KubenavKubernetesGetLogs(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, names, namespace, container, since, filter, previous, &error)
     if error != nil {
       result(FlutterError(code: "KUBERNETES_GET_LOGS_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
@@ -462,10 +470,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func helmListReleases(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, namespace: String, result: FlutterResult) {
+  private func helmListReleases(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, namespace: String, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavHelmListReleases(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, &error)
+    let data = KubenavHelmListReleases(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, &error)
     if error != nil {
       result(FlutterError(code: "HELM_LIST_RELEASES_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
@@ -473,10 +481,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func helmGetRelease(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, namespace: String, name: String, version: Int64, result: FlutterResult) {
+  private func helmGetRelease(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, namespace: String, name: String, version: Int64, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavHelmGetRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, &error)
+    let data = KubenavHelmGetRelease(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, &error)
     if error != nil {
       result(FlutterError(code: "HELM_GET_RELEASE_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
@@ -484,10 +492,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func helmListReleaseHistory(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, namespace: String, name: String, result: FlutterResult) {
+  private func helmListReleaseHistory(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, namespace: String, name: String, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavHelmListReleaseHistory(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, &error)
+    let data = KubenavHelmListReleaseHistory(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, &error)
     if error != nil {
       result(FlutterError(code: "HELM_LIST_RELEASE_HISTORY_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
@@ -495,10 +503,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func helmRollbackRelease(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, namespace: String, name: String, version: Int64, options: String, result: FlutterResult) {
+  private func helmRollbackRelease(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, namespace: String, name: String, version: Int64, options: String, result: FlutterResult) {
     var error: NSError?
 
-    KubenavHelmRollbackRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, options, &error)
+    KubenavHelmRollbackRelease(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, version, options, &error)
     if error != nil {
       result(FlutterError(code: "HELM_ROLLBACK_RELEASE_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
@@ -506,10 +514,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func helmUninstallRelease(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, namespace: String, name: String, options: String, result: FlutterResult) {
+  private func helmUninstallRelease(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, namespace: String, name: String, options: String, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavHelmUninstallRelease(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, options, &error)
+    let data = KubenavHelmUninstallRelease(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, namespace, name, options, &error)
     if error != nil {
       result(FlutterError(code: "HELM_UNINSTALL_RELEASE_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
@@ -572,10 +580,10 @@ public class KubenavPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func prometheusGetData(clusterServer: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, request: String, result: FlutterResult) {
+  private func prometheusGetData(clusterServer: String, clusterTLSServerName: String, clusterCertificateAuthorityData: String, clusterInsecureSkipTLSVerify: Bool, userClientCertificateData: String, userClientKeyData: String, userToken: String, userUsername: String, userPassword: String, proxy: String, timeout: Int64, request: String, result: FlutterResult) {
     var error: NSError?
 
-    let data = KubenavPrometheusGetData(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, request, &error)
+    let data = KubenavPrometheusGetData(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout, request, &error)
     if error != nil {
       result(FlutterError(code: "PROMETHEUS_GET_DATA_FAILED", message: error?.localizedDescription ?? "", details: nil))
     } else {
