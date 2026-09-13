@@ -61,6 +61,22 @@ enum IoCertManagerAcmeV1Challenge$Spec$Solver$Dns01$AzureDNSEnvironment {
   );
 }
 
+enum IoCertManagerAcmeV1Challenge$Spec$Solver$Dns01$AzureDNSZoneType {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('AzurePublicZone')
+  azurepubliczone('AzurePublicZone'),
+  @JsonValue('AzurePrivateZone')
+  azureprivatezone('AzurePrivateZone');
+
+  final String? value;
+
+  const IoCertManagerAcmeV1Challenge$Spec$Solver$Dns01$AzureDNSZoneType(
+    this.value,
+  );
+}
+
 enum IoCertManagerAcmeV1Challenge$Spec$Solver$Dns01CnameStrategy {
   @JsonValue(null)
   swaggerGeneratedUnknown(null),
@@ -204,7 +220,9 @@ enum IoCertManagerV1Certificate$Spec$Keystores$Pkcs12Profile {
   @JsonValue('LegacyDES')
   legacydes('LegacyDES'),
   @JsonValue('Modern2023')
-  modern2023('Modern2023');
+  modern2023('Modern2023'),
+  @JsonValue('Modern2026')
+  modern2026('Modern2026');
 
   final String? value;
 
@@ -253,6 +271,20 @@ enum IoCertManagerV1Certificate$Spec$PrivateKeyRotationPolicy {
   final String? value;
 
   const IoCertManagerV1Certificate$Spec$PrivateKeyRotationPolicy(this.value);
+}
+
+enum IoCertManagerV1Certificate$Spec$RenewalPolicy {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('RenewBefore')
+  renewbefore('RenewBefore'),
+  @JsonValue('Disabled')
+  disabled('Disabled');
+
+  final String? value;
+
+  const IoCertManagerV1Certificate$Spec$RenewalPolicy(this.value);
 }
 
 enum IoCertManagerV1Certificate$SpecSignatureAlgorithm {
@@ -463,6 +495,22 @@ enum IoCertManagerV1ClusterIssuer$Spec$Acme$Solvers$Item$Dns01$AzureDNSEnvironme
   );
 }
 
+enum IoCertManagerV1ClusterIssuer$Spec$Acme$Solvers$Item$Dns01$AzureDNSZoneType {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('AzurePublicZone')
+  azurepubliczone('AzurePublicZone'),
+  @JsonValue('AzurePrivateZone')
+  azureprivatezone('AzurePrivateZone');
+
+  final String? value;
+
+  const IoCertManagerV1ClusterIssuer$Spec$Acme$Solvers$Item$Dns01$AzureDNSZoneType(
+    this.value,
+  );
+}
+
 enum IoCertManagerV1ClusterIssuer$Spec$Acme$Solvers$Item$Dns01CnameStrategy {
   @JsonValue(null)
   swaggerGeneratedUnknown(null),
@@ -549,6 +597,22 @@ enum IoCertManagerV1Issuer$Spec$Acme$Solvers$Item$Dns01$AzureDNSEnvironment {
   );
 }
 
+enum IoCertManagerV1Issuer$Spec$Acme$Solvers$Item$Dns01$AzureDNSZoneType {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('AzurePublicZone')
+  azurepubliczone('AzurePublicZone'),
+  @JsonValue('AzurePrivateZone')
+  azureprivatezone('AzurePrivateZone');
+
+  final String? value;
+
+  const IoCertManagerV1Issuer$Spec$Acme$Solvers$Item$Dns01$AzureDNSZoneType(
+    this.value,
+  );
+}
+
 enum IoCertManagerV1Issuer$Spec$Acme$Solvers$Item$Dns01CnameStrategy {
   @JsonValue(null)
   swaggerGeneratedUnknown(null),
@@ -595,6 +659,64 @@ enum IoCertManagerV1Issuer$Status$Conditions$ItemStatus {
   final String? value;
 
   const IoCertManagerV1Issuer$Status$Conditions$ItemStatus(this.value);
+}
+
+enum IoFluxcdExtensionsSourceV1beta1ArtifactGenerator$Spec$Artifacts$Item$Copy$ItemStrategy {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('Overwrite')
+  overwrite('Overwrite'),
+  @JsonValue('Merge')
+  merge('Merge'),
+  @JsonValue('Extract')
+  extract('Extract');
+
+  final String? value;
+
+  const IoFluxcdExtensionsSourceV1beta1ArtifactGenerator$Spec$Artifacts$Item$Copy$ItemStrategy(
+    this.value,
+  );
+}
+
+enum IoFluxcdExtensionsSourceV1beta1ArtifactGenerator$Spec$Sources$ItemKind {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('Bucket')
+  bucket('Bucket'),
+  @JsonValue('GitRepository')
+  gitrepository('GitRepository'),
+  @JsonValue('OCIRepository')
+  ocirepository('OCIRepository'),
+  @JsonValue('HelmChart')
+  helmchart('HelmChart'),
+  @JsonValue('ExternalArtifact')
+  externalartifact('ExternalArtifact');
+
+  final String? value;
+
+  const IoFluxcdExtensionsSourceV1beta1ArtifactGenerator$Spec$Sources$ItemKind(
+    this.value,
+  );
+}
+
+enum IoFluxcdExtensionsSourceV1beta1ArtifactGenerator$Status$Conditions$ItemStatus {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('True')
+  $true('True'),
+  @JsonValue('False')
+  $false('False'),
+  @JsonValue('Unknown')
+  unknown('Unknown');
+
+  final String? value;
+
+  const IoFluxcdExtensionsSourceV1beta1ArtifactGenerator$Status$Conditions$ItemStatus(
+    this.value,
+  );
 }
 
 enum IoFluxcdToolkitHelmV2HelmRelease$Spec$Chart$SpecReconcileStrategy {
@@ -709,6 +831,40 @@ enum IoFluxcdToolkitHelmV2HelmRelease$Spec$Install$StrategyName {
   const IoFluxcdToolkitHelmV2HelmRelease$Spec$Install$StrategyName(this.value);
 }
 
+enum IoFluxcdToolkitHelmV2HelmRelease$SpecPostRenderStrategy {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('nohooks')
+  nohooks('nohooks'),
+  @JsonValue('combined')
+  combined('combined'),
+  @JsonValue('separate')
+  separate('separate');
+
+  final String? value;
+
+  const IoFluxcdToolkitHelmV2HelmRelease$SpecPostRenderStrategy(this.value);
+}
+
+enum IoFluxcdToolkitHelmV2HelmRelease$Spec$RollbackServerSideApply {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('enabled')
+  enabled('enabled'),
+  @JsonValue('disabled')
+  disabled('disabled'),
+  @JsonValue('auto')
+  auto('auto');
+
+  final String? value;
+
+  const IoFluxcdToolkitHelmV2HelmRelease$Spec$RollbackServerSideApply(
+    this.value,
+  );
+}
+
 enum IoFluxcdToolkitHelmV2HelmRelease$Spec$UninstallDeletionPropagation {
   @JsonValue(null)
   swaggerGeneratedUnknown(null),
@@ -723,6 +879,22 @@ enum IoFluxcdToolkitHelmV2HelmRelease$Spec$UninstallDeletionPropagation {
   final String? value;
 
   const IoFluxcdToolkitHelmV2HelmRelease$Spec$UninstallDeletionPropagation(
+    this.value,
+  );
+}
+
+enum IoFluxcdToolkitHelmV2HelmRelease$Spec$UpgradeChartNameChangeStrategy {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('InPlaceUpdate')
+  inplaceupdate('InPlaceUpdate'),
+  @JsonValue('Reinstall')
+  reinstall('Reinstall');
+
+  final String? value;
+
+  const IoFluxcdToolkitHelmV2HelmRelease$Spec$UpgradeChartNameChangeStrategy(
     this.value,
   );
 }
@@ -759,6 +931,24 @@ enum IoFluxcdToolkitHelmV2HelmRelease$Spec$Upgrade$RemediationStrategy {
   );
 }
 
+enum IoFluxcdToolkitHelmV2HelmRelease$Spec$UpgradeServerSideApply {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('enabled')
+  enabled('enabled'),
+  @JsonValue('disabled')
+  disabled('disabled'),
+  @JsonValue('auto')
+  auto('auto');
+
+  final String? value;
+
+  const IoFluxcdToolkitHelmV2HelmRelease$Spec$UpgradeServerSideApply(
+    this.value,
+  );
+}
+
 enum IoFluxcdToolkitHelmV2HelmRelease$Spec$Upgrade$StrategyName {
   @JsonValue(null)
   swaggerGeneratedUnknown(null),
@@ -785,6 +975,20 @@ enum IoFluxcdToolkitHelmV2HelmRelease$Spec$ValuesFrom$ItemKind {
   final String? value;
 
   const IoFluxcdToolkitHelmV2HelmRelease$Spec$ValuesFrom$ItemKind(this.value);
+}
+
+enum IoFluxcdToolkitHelmV2HelmRelease$Spec$WaitStrategyName {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('poller')
+  poller('poller'),
+  @JsonValue('legacy')
+  legacy('legacy');
+
+  final String? value;
+
+  const IoFluxcdToolkitHelmV2HelmRelease$Spec$WaitStrategyName(this.value);
 }
 
 enum IoFluxcdToolkitHelmV2HelmRelease$Status$Conditions$ItemStatus {
@@ -817,228 +1021,6 @@ enum IoFluxcdToolkitHelmV2HelmRelease$StatusLastAttemptedReleaseAction {
   final String? value;
 
   const IoFluxcdToolkitHelmV2HelmRelease$StatusLastAttemptedReleaseAction(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$Chart$SpecReconcileStrategy {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('ChartVersion')
-  chartversion('ChartVersion'),
-  @JsonValue('Revision')
-  revision('Revision');
-
-  final String? value;
-
-  const IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$Chart$SpecReconcileStrategy(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$Chart$Spec$SourceRefKind {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('HelmRepository')
-  helmrepository('HelmRepository'),
-  @JsonValue('GitRepository')
-  gitrepository('GitRepository'),
-  @JsonValue('Bucket')
-  bucket('Bucket');
-
-  final String? value;
-
-  const IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$Chart$Spec$SourceRefKind(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$Chart$Spec$VerifyProvider {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('cosign')
-  cosign('cosign'),
-  @JsonValue('notation')
-  notation('notation');
-
-  final String? value;
-
-  const IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$Chart$Spec$VerifyProvider(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$ChartRefKind {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('OCIRepository')
-  ocirepository('OCIRepository'),
-  @JsonValue('HelmChart')
-  helmchart('HelmChart');
-
-  final String? value;
-
-  const IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$ChartRefKind(this.value);
-}
-
-enum IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$DriftDetectionMode {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('enabled')
-  enabled('enabled'),
-  @JsonValue('warn')
-  warn('warn'),
-  @JsonValue('disabled')
-  disabled('disabled');
-
-  final String? value;
-
-  const IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$DriftDetectionMode(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$InstallCrds {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('Skip')
-  skip('Skip'),
-  @JsonValue('Create')
-  create('Create'),
-  @JsonValue('CreateReplace')
-  createreplace('CreateReplace');
-
-  final String? value;
-
-  const IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$InstallCrds(this.value);
-}
-
-enum IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$PostRenderers$Item$Kustomize$PatchesJson6902$Item$Patch$ItemOp {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('test')
-  test('test'),
-  @JsonValue('remove')
-  remove('remove'),
-  @JsonValue('add')
-  add('add'),
-  @JsonValue('replace')
-  replace('replace'),
-  @JsonValue('move')
-  move('move'),
-  @JsonValue('copy')
-  copy('copy');
-
-  final String? value;
-
-  const IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$PostRenderers$Item$Kustomize$PatchesJson6902$Item$Patch$ItemOp(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$UninstallDeletionPropagation {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('background')
-  background('background'),
-  @JsonValue('foreground')
-  foreground('foreground'),
-  @JsonValue('orphan')
-  orphan('orphan');
-
-  final String? value;
-
-  const IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$UninstallDeletionPropagation(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$UpgradeCrds {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('Skip')
-  skip('Skip'),
-  @JsonValue('Create')
-  create('Create'),
-  @JsonValue('CreateReplace')
-  createreplace('CreateReplace');
-
-  final String? value;
-
-  const IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$UpgradeCrds(this.value);
-}
-
-enum IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$Upgrade$RemediationStrategy {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('rollback')
-  rollback('rollback'),
-  @JsonValue('uninstall')
-  uninstall('uninstall');
-
-  final String? value;
-
-  const IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$Upgrade$RemediationStrategy(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$ValuesFrom$ItemKind {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('Secret')
-  secret('Secret'),
-  @JsonValue('ConfigMap')
-  configmap('ConfigMap');
-
-  final String? value;
-
-  const IoFluxcdToolkitHelmV2beta2HelmRelease$Spec$ValuesFrom$ItemKind(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitHelmV2beta2HelmRelease$Status$Conditions$ItemStatus {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('True')
-  $true('True'),
-  @JsonValue('False')
-  $false('False'),
-  @JsonValue('Unknown')
-  unknown('Unknown');
-
-  final String? value;
-
-  const IoFluxcdToolkitHelmV2beta2HelmRelease$Status$Conditions$ItemStatus(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitHelmV2beta2HelmRelease$StatusLastAttemptedReleaseAction {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('install')
-  install('install'),
-  @JsonValue('upgrade')
-  upgrade('upgrade');
-
-  final String? value;
-
-  const IoFluxcdToolkitHelmV2beta2HelmRelease$StatusLastAttemptedReleaseAction(
     this.value,
   );
 }
@@ -1147,6 +1129,22 @@ enum IoFluxcdToolkitImageV1ImageRepository$Status$Conditions$ItemStatus {
   );
 }
 
+enum IoFluxcdToolkitImageV1ImageUpdateAutomation$Spec$Git$Commit$SigningKeyType {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('gpg')
+  gpg('gpg'),
+  @JsonValue('ssh')
+  ssh('ssh');
+
+  final String? value;
+
+  const IoFluxcdToolkitImageV1ImageUpdateAutomation$Spec$Git$Commit$SigningKeyType(
+    this.value,
+  );
+}
+
 enum IoFluxcdToolkitImageV1ImageUpdateAutomation$Spec$SourceRefKind {
   @JsonValue(null)
   swaggerGeneratedUnknown(null),
@@ -1193,154 +1191,18 @@ enum IoFluxcdToolkitImageV1ImageUpdateAutomation$Status$Conditions$ItemStatus {
   );
 }
 
-enum IoFluxcdToolkitImageV1beta2ImagePolicy$SpecDigestReflectionPolicy {
+enum IoFluxcdToolkitKustomizeV1Kustomization$SpecBuildMetadata {
   @JsonValue(null)
   swaggerGeneratedUnknown(null),
 
-  @JsonValue('Always')
-  always('Always'),
-  @JsonValue('IfNotPresent')
-  ifnotpresent('IfNotPresent'),
-  @JsonValue('Never')
-  never('Never');
+  @JsonValue('originAnnotations')
+  originannotations('originAnnotations'),
+  @JsonValue('transformerAnnotations')
+  transformerannotations('transformerAnnotations');
 
   final String? value;
 
-  const IoFluxcdToolkitImageV1beta2ImagePolicy$SpecDigestReflectionPolicy(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitImageV1beta2ImagePolicy$Spec$Policy$AlphabeticalOrder {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('asc')
-  asc('asc'),
-  @JsonValue('desc')
-  desc('desc');
-
-  final String? value;
-
-  const IoFluxcdToolkitImageV1beta2ImagePolicy$Spec$Policy$AlphabeticalOrder(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitImageV1beta2ImagePolicy$Spec$Policy$NumericalOrder {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('asc')
-  asc('asc'),
-  @JsonValue('desc')
-  desc('desc');
-
-  final String? value;
-
-  const IoFluxcdToolkitImageV1beta2ImagePolicy$Spec$Policy$NumericalOrder(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitImageV1beta2ImagePolicy$Status$Conditions$ItemStatus {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('True')
-  $true('True'),
-  @JsonValue('False')
-  $false('False'),
-  @JsonValue('Unknown')
-  unknown('Unknown');
-
-  final String? value;
-
-  const IoFluxcdToolkitImageV1beta2ImagePolicy$Status$Conditions$ItemStatus(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitImageV1beta2ImageRepository$SpecProvider {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('generic')
-  generic('generic'),
-  @JsonValue('aws')
-  aws('aws'),
-  @JsonValue('azure')
-  azure('azure'),
-  @JsonValue('gcp')
-  gcp('gcp');
-
-  final String? value;
-
-  const IoFluxcdToolkitImageV1beta2ImageRepository$SpecProvider(this.value);
-}
-
-enum IoFluxcdToolkitImageV1beta2ImageRepository$Status$Conditions$ItemStatus {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('True')
-  $true('True'),
-  @JsonValue('False')
-  $false('False'),
-  @JsonValue('Unknown')
-  unknown('Unknown');
-
-  final String? value;
-
-  const IoFluxcdToolkitImageV1beta2ImageRepository$Status$Conditions$ItemStatus(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitImageV1beta2ImageUpdateAutomation$Spec$SourceRefKind {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('GitRepository')
-  gitrepository('GitRepository');
-
-  final String? value;
-
-  const IoFluxcdToolkitImageV1beta2ImageUpdateAutomation$Spec$SourceRefKind(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitImageV1beta2ImageUpdateAutomation$Spec$UpdateStrategy {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('Setters')
-  setters('Setters');
-
-  final String? value;
-
-  const IoFluxcdToolkitImageV1beta2ImageUpdateAutomation$Spec$UpdateStrategy(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitImageV1beta2ImageUpdateAutomation$Status$Conditions$ItemStatus {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('True')
-  $true('True'),
-  @JsonValue('False')
-  $false('False'),
-  @JsonValue('Unknown')
-  unknown('Unknown');
-
-  final String? value;
-
-  const IoFluxcdToolkitImageV1beta2ImageUpdateAutomation$Status$Conditions$ItemStatus(
-    this.value,
-  );
+  const IoFluxcdToolkitKustomizeV1Kustomization$SpecBuildMetadata(this.value);
 }
 
 enum IoFluxcdToolkitKustomizeV1Kustomization$Spec$DecryptionProvider {
@@ -1391,6 +1253,22 @@ enum IoFluxcdToolkitKustomizeV1Kustomization$Spec$PostBuild$SubstituteFrom$ItemK
   );
 }
 
+enum IoFluxcdToolkitKustomizeV1Kustomization$Spec$PostBuildSubstituteStrategy {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('WithVariables')
+  withvariables('WithVariables'),
+  @JsonValue('Always')
+  always('Always');
+
+  final String? value;
+
+  const IoFluxcdToolkitKustomizeV1Kustomization$Spec$PostBuildSubstituteStrategy(
+    this.value,
+  );
+}
+
 enum IoFluxcdToolkitKustomizeV1Kustomization$Spec$SourceRefKind {
   @JsonValue(null)
   swaggerGeneratedUnknown(null),
@@ -1427,112 +1305,6 @@ enum IoFluxcdToolkitKustomizeV1Kustomization$Status$Conditions$ItemStatus {
   );
 }
 
-enum IoFluxcdToolkitKustomizeV1beta2Kustomization$Spec$DecryptionProvider {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('sops')
-  sops('sops');
-
-  final String? value;
-
-  const IoFluxcdToolkitKustomizeV1beta2Kustomization$Spec$DecryptionProvider(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitKustomizeV1beta2Kustomization$Spec$PatchesJson6902$Item$Patch$ItemOp {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('test')
-  test('test'),
-  @JsonValue('remove')
-  remove('remove'),
-  @JsonValue('add')
-  add('add'),
-  @JsonValue('replace')
-  replace('replace'),
-  @JsonValue('move')
-  move('move'),
-  @JsonValue('copy')
-  copy('copy');
-
-  final String? value;
-
-  const IoFluxcdToolkitKustomizeV1beta2Kustomization$Spec$PatchesJson6902$Item$Patch$ItemOp(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitKustomizeV1beta2Kustomization$Spec$PostBuild$SubstituteFrom$ItemKind {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('Secret')
-  secret('Secret'),
-  @JsonValue('ConfigMap')
-  configmap('ConfigMap');
-
-  final String? value;
-
-  const IoFluxcdToolkitKustomizeV1beta2Kustomization$Spec$PostBuild$SubstituteFrom$ItemKind(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitKustomizeV1beta2Kustomization$Spec$SourceRefKind {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('OCIRepository')
-  ocirepository('OCIRepository'),
-  @JsonValue('GitRepository')
-  gitrepository('GitRepository'),
-  @JsonValue('Bucket')
-  bucket('Bucket');
-
-  final String? value;
-
-  const IoFluxcdToolkitKustomizeV1beta2Kustomization$Spec$SourceRefKind(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitKustomizeV1beta2Kustomization$SpecValidation {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('none')
-  none('none'),
-  @JsonValue('client')
-  $client('client'),
-  @JsonValue('server')
-  server('server');
-
-  final String? value;
-
-  const IoFluxcdToolkitKustomizeV1beta2Kustomization$SpecValidation(this.value);
-}
-
-enum IoFluxcdToolkitKustomizeV1beta2Kustomization$Status$Conditions$ItemStatus {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('True')
-  $true('True'),
-  @JsonValue('False')
-  $false('False'),
-  @JsonValue('Unknown')
-  unknown('Unknown');
-
-  final String? value;
-
-  const IoFluxcdToolkitKustomizeV1beta2Kustomization$Status$Conditions$ItemStatus(
-    this.value,
-  );
-}
-
 enum IoFluxcdToolkitNotificationV1Receiver$Spec$Resources$ItemKind {
   @JsonValue(null)
   swaggerGeneratedUnknown(null),
@@ -1556,7 +1328,11 @@ enum IoFluxcdToolkitNotificationV1Receiver$Spec$Resources$ItemKind {
   @JsonValue('ImageUpdateAutomation')
   imageupdateautomation('ImageUpdateAutomation'),
   @JsonValue('OCIRepository')
-  ocirepository('OCIRepository');
+  ocirepository('OCIRepository'),
+  @JsonValue('ArtifactGenerator')
+  artifactgenerator('ArtifactGenerator'),
+  @JsonValue('ExternalArtifact')
+  externalartifact('ExternalArtifact');
 
   final String? value;
 
@@ -1573,6 +1349,8 @@ enum IoFluxcdToolkitNotificationV1Receiver$SpecType {
   generic('generic'),
   @JsonValue('generic-hmac')
   genericHmac('generic-hmac'),
+  @JsonValue('generic-oidc')
+  genericOidc('generic-oidc'),
   @JsonValue('github')
   github('github'),
   @JsonValue('gitlab')
@@ -1617,232 +1395,6 @@ enum IoFluxcdToolkitNotificationV1Receiver$Status$Conditions$ItemStatus {
   );
 }
 
-enum IoFluxcdToolkitNotificationV1beta2Alert$SpecEventSeverity {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('info')
-  info('info'),
-  @JsonValue('error')
-  error('error');
-
-  final String? value;
-
-  const IoFluxcdToolkitNotificationV1beta2Alert$SpecEventSeverity(this.value);
-}
-
-enum IoFluxcdToolkitNotificationV1beta2Alert$Spec$EventSources$ItemKind {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('Bucket')
-  bucket('Bucket'),
-  @JsonValue('GitRepository')
-  gitrepository('GitRepository'),
-  @JsonValue('Kustomization')
-  kustomization('Kustomization'),
-  @JsonValue('HelmRelease')
-  helmrelease('HelmRelease'),
-  @JsonValue('HelmChart')
-  helmchart('HelmChart'),
-  @JsonValue('HelmRepository')
-  helmrepository('HelmRepository'),
-  @JsonValue('ImageRepository')
-  imagerepository('ImageRepository'),
-  @JsonValue('ImagePolicy')
-  imagepolicy('ImagePolicy'),
-  @JsonValue('ImageUpdateAutomation')
-  imageupdateautomation('ImageUpdateAutomation'),
-  @JsonValue('OCIRepository')
-  ocirepository('OCIRepository');
-
-  final String? value;
-
-  const IoFluxcdToolkitNotificationV1beta2Alert$Spec$EventSources$ItemKind(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitNotificationV1beta2Alert$Status$Conditions$ItemStatus {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('True')
-  $true('True'),
-  @JsonValue('False')
-  $false('False'),
-  @JsonValue('Unknown')
-  unknown('Unknown');
-
-  final String? value;
-
-  const IoFluxcdToolkitNotificationV1beta2Alert$Status$Conditions$ItemStatus(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitNotificationV1beta2Provider$SpecType {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('slack')
-  slack('slack'),
-  @JsonValue('discord')
-  discord('discord'),
-  @JsonValue('msteams')
-  msteams('msteams'),
-  @JsonValue('rocket')
-  rocket('rocket'),
-  @JsonValue('generic')
-  generic('generic'),
-  @JsonValue('generic-hmac')
-  genericHmac('generic-hmac'),
-  @JsonValue('github')
-  github('github'),
-  @JsonValue('gitlab')
-  gitlab('gitlab'),
-  @JsonValue('gitea')
-  gitea('gitea'),
-  @JsonValue('bitbucketserver')
-  bitbucketserver('bitbucketserver'),
-  @JsonValue('bitbucket')
-  bitbucket('bitbucket'),
-  @JsonValue('azuredevops')
-  azuredevops('azuredevops'),
-  @JsonValue('googlechat')
-  googlechat('googlechat'),
-  @JsonValue('googlepubsub')
-  googlepubsub('googlepubsub'),
-  @JsonValue('webex')
-  webex('webex'),
-  @JsonValue('sentry')
-  sentry('sentry'),
-  @JsonValue('azureeventhub')
-  azureeventhub('azureeventhub'),
-  @JsonValue('telegram')
-  telegram('telegram'),
-  @JsonValue('lark')
-  lark('lark'),
-  @JsonValue('matrix')
-  matrix('matrix'),
-  @JsonValue('opsgenie')
-  opsgenie('opsgenie'),
-  @JsonValue('alertmanager')
-  alertmanager('alertmanager'),
-  @JsonValue('grafana')
-  grafana('grafana'),
-  @JsonValue('githubdispatch')
-  githubdispatch('githubdispatch'),
-  @JsonValue('pagerduty')
-  pagerduty('pagerduty'),
-  @JsonValue('datadog')
-  datadog('datadog');
-
-  final String? value;
-
-  const IoFluxcdToolkitNotificationV1beta2Provider$SpecType(this.value);
-}
-
-enum IoFluxcdToolkitNotificationV1beta2Provider$Status$Conditions$ItemStatus {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('True')
-  $true('True'),
-  @JsonValue('False')
-  $false('False'),
-  @JsonValue('Unknown')
-  unknown('Unknown');
-
-  final String? value;
-
-  const IoFluxcdToolkitNotificationV1beta2Provider$Status$Conditions$ItemStatus(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitNotificationV1beta2Receiver$Spec$Resources$ItemKind {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('Bucket')
-  bucket('Bucket'),
-  @JsonValue('GitRepository')
-  gitrepository('GitRepository'),
-  @JsonValue('Kustomization')
-  kustomization('Kustomization'),
-  @JsonValue('HelmRelease')
-  helmrelease('HelmRelease'),
-  @JsonValue('HelmChart')
-  helmchart('HelmChart'),
-  @JsonValue('HelmRepository')
-  helmrepository('HelmRepository'),
-  @JsonValue('ImageRepository')
-  imagerepository('ImageRepository'),
-  @JsonValue('ImagePolicy')
-  imagepolicy('ImagePolicy'),
-  @JsonValue('ImageUpdateAutomation')
-  imageupdateautomation('ImageUpdateAutomation'),
-  @JsonValue('OCIRepository')
-  ocirepository('OCIRepository');
-
-  final String? value;
-
-  const IoFluxcdToolkitNotificationV1beta2Receiver$Spec$Resources$ItemKind(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitNotificationV1beta2Receiver$SpecType {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('generic')
-  generic('generic'),
-  @JsonValue('generic-hmac')
-  genericHmac('generic-hmac'),
-  @JsonValue('github')
-  github('github'),
-  @JsonValue('gitlab')
-  gitlab('gitlab'),
-  @JsonValue('bitbucket')
-  bitbucket('bitbucket'),
-  @JsonValue('harbor')
-  harbor('harbor'),
-  @JsonValue('dockerhub')
-  dockerhub('dockerhub'),
-  @JsonValue('quay')
-  quay('quay'),
-  @JsonValue('gcr')
-  gcr('gcr'),
-  @JsonValue('nexus')
-  nexus('nexus'),
-  @JsonValue('acr')
-  acr('acr');
-
-  final String? value;
-
-  const IoFluxcdToolkitNotificationV1beta2Receiver$SpecType(this.value);
-}
-
-enum IoFluxcdToolkitNotificationV1beta2Receiver$Status$Conditions$ItemStatus {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('True')
-  $true('True'),
-  @JsonValue('False')
-  $false('False'),
-  @JsonValue('Unknown')
-  unknown('Unknown');
-
-  final String? value;
-
-  const IoFluxcdToolkitNotificationV1beta2Receiver$Status$Conditions$ItemStatus(
-    this.value,
-  );
-}
-
 enum IoFluxcdToolkitNotificationV1beta3Alert$SpecEventSeverity {
   @JsonValue(null)
   swaggerGeneratedUnknown(null),
@@ -1880,7 +1432,11 @@ enum IoFluxcdToolkitNotificationV1beta3Alert$Spec$EventSources$ItemKind {
   @JsonValue('ImageUpdateAutomation')
   imageupdateautomation('ImageUpdateAutomation'),
   @JsonValue('OCIRepository')
-  ocirepository('OCIRepository');
+  ocirepository('OCIRepository'),
+  @JsonValue('ArtifactGenerator')
+  artifactgenerator('ArtifactGenerator'),
+  @JsonValue('ExternalArtifact')
+  externalartifact('ExternalArtifact');
 
   final String? value;
 
@@ -1911,6 +1467,8 @@ enum IoFluxcdToolkitNotificationV1beta3Provider$SpecType {
   gitlab('gitlab'),
   @JsonValue('gitea')
   gitea('gitea'),
+  @JsonValue('giteapullrequestcomment')
+  giteapullrequestcomment('giteapullrequestcomment'),
   @JsonValue('bitbucketserver')
   bitbucketserver('bitbucketserver'),
   @JsonValue('bitbucket')
@@ -1941,6 +1499,10 @@ enum IoFluxcdToolkitNotificationV1beta3Provider$SpecType {
   grafana('grafana'),
   @JsonValue('githubdispatch')
   githubdispatch('githubdispatch'),
+  @JsonValue('githubpullrequestcomment')
+  githubpullrequestcomment('githubpullrequestcomment'),
+  @JsonValue('gitlabmergerequestcomment')
+  gitlabmergerequestcomment('gitlabmergerequestcomment'),
   @JsonValue('pagerduty')
   pagerduty('pagerduty'),
   @JsonValue('datadog')
@@ -2029,6 +1591,8 @@ enum IoFluxcdToolkitSourceV1GitRepository$SpecProvider {
 
   @JsonValue('generic')
   generic('generic'),
+  @JsonValue('aws')
+  aws('aws'),
   @JsonValue('azure')
   azure('azure'),
   @JsonValue('github')
@@ -2269,298 +1833,6 @@ enum IoFluxcdToolkitSourceV1OCIRepository$Status$ObservedLayerSelectorOperation 
   );
 }
 
-enum IoFluxcdToolkitSourceV1beta2Bucket$SpecProvider {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('generic')
-  generic('generic'),
-  @JsonValue('aws')
-  aws('aws'),
-  @JsonValue('gcp')
-  gcp('gcp'),
-  @JsonValue('azure')
-  azure('azure');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2Bucket$SpecProvider(this.value);
-}
-
-enum IoFluxcdToolkitSourceV1beta2Bucket$Spec$StsProvider {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('aws')
-  aws('aws'),
-  @JsonValue('ldap')
-  ldap('ldap');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2Bucket$Spec$StsProvider(this.value);
-}
-
-enum IoFluxcdToolkitSourceV1beta2Bucket$Status$Conditions$ItemStatus {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('True')
-  $true('True'),
-  @JsonValue('False')
-  $false('False'),
-  @JsonValue('Unknown')
-  unknown('Unknown');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2Bucket$Status$Conditions$ItemStatus(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitSourceV1beta2GitRepository$SpecGitImplementation {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('go-git')
-  goGit('go-git'),
-  @JsonValue('libgit2')
-  libgit2('libgit2');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2GitRepository$SpecGitImplementation(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitSourceV1beta2GitRepository$Spec$VerifyMode {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('head')
-  head('head');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2GitRepository$Spec$VerifyMode(this.value);
-}
-
-enum IoFluxcdToolkitSourceV1beta2GitRepository$Status$Conditions$ItemStatus {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('True')
-  $true('True'),
-  @JsonValue('False')
-  $false('False'),
-  @JsonValue('Unknown')
-  unknown('Unknown');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2GitRepository$Status$Conditions$ItemStatus(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitSourceV1beta2HelmChart$SpecReconcileStrategy {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('ChartVersion')
-  chartversion('ChartVersion'),
-  @JsonValue('Revision')
-  revision('Revision');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2HelmChart$SpecReconcileStrategy(this.value);
-}
-
-enum IoFluxcdToolkitSourceV1beta2HelmChart$Spec$SourceRefKind {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('HelmRepository')
-  helmrepository('HelmRepository'),
-  @JsonValue('GitRepository')
-  gitrepository('GitRepository'),
-  @JsonValue('Bucket')
-  bucket('Bucket');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2HelmChart$Spec$SourceRefKind(this.value);
-}
-
-enum IoFluxcdToolkitSourceV1beta2HelmChart$Spec$VerifyProvider {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('cosign')
-  cosign('cosign'),
-  @JsonValue('notation')
-  notation('notation');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2HelmChart$Spec$VerifyProvider(this.value);
-}
-
-enum IoFluxcdToolkitSourceV1beta2HelmChart$Status$Conditions$ItemStatus {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('True')
-  $true('True'),
-  @JsonValue('False')
-  $false('False'),
-  @JsonValue('Unknown')
-  unknown('Unknown');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2HelmChart$Status$Conditions$ItemStatus(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitSourceV1beta2HelmRepository$SpecProvider {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('generic')
-  generic('generic'),
-  @JsonValue('aws')
-  aws('aws'),
-  @JsonValue('azure')
-  azure('azure'),
-  @JsonValue('gcp')
-  gcp('gcp');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2HelmRepository$SpecProvider(this.value);
-}
-
-enum IoFluxcdToolkitSourceV1beta2HelmRepository$SpecType {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('default')
-  $default('default'),
-  @JsonValue('oci')
-  oci('oci');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2HelmRepository$SpecType(this.value);
-}
-
-enum IoFluxcdToolkitSourceV1beta2HelmRepository$Status$Conditions$ItemStatus {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('True')
-  $true('True'),
-  @JsonValue('False')
-  $false('False'),
-  @JsonValue('Unknown')
-  unknown('Unknown');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2HelmRepository$Status$Conditions$ItemStatus(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitSourceV1beta2OCIRepository$Spec$LayerSelectorOperation {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('extract')
-  extract('extract'),
-  @JsonValue('copy')
-  copy('copy');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2OCIRepository$Spec$LayerSelectorOperation(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitSourceV1beta2OCIRepository$SpecProvider {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('generic')
-  generic('generic'),
-  @JsonValue('aws')
-  aws('aws'),
-  @JsonValue('azure')
-  azure('azure'),
-  @JsonValue('gcp')
-  gcp('gcp');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2OCIRepository$SpecProvider(this.value);
-}
-
-enum IoFluxcdToolkitSourceV1beta2OCIRepository$Spec$VerifyProvider {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('cosign')
-  cosign('cosign'),
-  @JsonValue('notation')
-  notation('notation');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2OCIRepository$Spec$VerifyProvider(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitSourceV1beta2OCIRepository$Status$Conditions$ItemStatus {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('True')
-  $true('True'),
-  @JsonValue('False')
-  $false('False'),
-  @JsonValue('Unknown')
-  unknown('Unknown');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2OCIRepository$Status$Conditions$ItemStatus(
-    this.value,
-  );
-}
-
-enum IoFluxcdToolkitSourceV1beta2OCIRepository$Status$ObservedLayerSelectorOperation {
-  @JsonValue(null)
-  swaggerGeneratedUnknown(null),
-
-  @JsonValue('extract')
-  extract('extract'),
-  @JsonValue('copy')
-  copy('copy');
-
-  final String? value;
-
-  const IoFluxcdToolkitSourceV1beta2OCIRepository$Status$ObservedLayerSelectorOperation(
-    this.value,
-  );
-}
-
 enum IoK8sApiAdmissionregistrationV1MatchResourcesMatchPolicy {
   @JsonValue(null)
   swaggerGeneratedUnknown(null),
@@ -2573,6 +1845,38 @@ enum IoK8sApiAdmissionregistrationV1MatchResourcesMatchPolicy {
   final String? value;
 
   const IoK8sApiAdmissionregistrationV1MatchResourcesMatchPolicy(this.value);
+}
+
+enum IoK8sApiAdmissionregistrationV1MutatingAdmissionPolicySpecFailurePolicy {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('Fail')
+  fail('Fail'),
+  @JsonValue('Ignore')
+  ignore('Ignore');
+
+  final String? value;
+
+  const IoK8sApiAdmissionregistrationV1MutatingAdmissionPolicySpecFailurePolicy(
+    this.value,
+  );
+}
+
+enum IoK8sApiAdmissionregistrationV1MutatingAdmissionPolicySpecReinvocationPolicy {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('IfNeeded')
+  ifneeded('IfNeeded'),
+  @JsonValue('Never')
+  never('Never');
+
+  final String? value;
+
+  const IoK8sApiAdmissionregistrationV1MutatingAdmissionPolicySpecReinvocationPolicy(
+    this.value,
+  );
 }
 
 enum IoK8sApiAdmissionregistrationV1MutatingWebhookFailurePolicy {
@@ -2635,6 +1939,20 @@ enum IoK8sApiAdmissionregistrationV1MutatingWebhookSideEffects {
   final String? value;
 
   const IoK8sApiAdmissionregistrationV1MutatingWebhookSideEffects(this.value);
+}
+
+enum IoK8sApiAdmissionregistrationV1MutationPatchType {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('ApplyConfiguration')
+  applyconfiguration('ApplyConfiguration'),
+  @JsonValue('JSONPatch')
+  jsonpatch('JSONPatch');
+
+  final String? value;
+
+  const IoK8sApiAdmissionregistrationV1MutationPatchType(this.value);
 }
 
 enum IoK8sApiAdmissionregistrationV1NamedRuleWithOperationsOperations {
