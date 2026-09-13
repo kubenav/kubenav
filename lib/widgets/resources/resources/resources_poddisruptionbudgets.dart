@@ -20,8 +20,7 @@ final resourcePodDisruptionBudget = Resource(
   category: ResourceCategories.configAndStorage,
   plural: 'PodDisruptionBudgets',
   singular: 'PodDisruptionBudget',
-  description:
-      'PDBs provide a way to limit the number of concurrent disruptions that your application experiences.',
+  description: 'PDBs provide a way to limit the number of concurrent disruptions that your application experiences.',
   path: '/apis/policy/v1',
   resource: 'poddisruptionbudgets',
   scope: ResourceScope.namespaced,
@@ -30,9 +29,8 @@ final resourcePodDisruptionBudget = Resource(
   template: resourceDefaultTemplate,
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
-    final items = IoK8sApiPolicyV1PodDisruptionBudgetList.fromJson(
-      parsed,
-    ).items;
+    final items = IoK8sApiPolicyV1PodDisruptionBudgetList.fromJson(parsed)
+        .items;
 
     return items
         .map(
@@ -40,10 +38,12 @@ final resourcePodDisruptionBudget = Resource(
             item: e,
             metrics: null,
             status:
-                e.status!.desiredHealthy == 0 ||
+                e.status!.currentHealthy == 0 ||
+                    e.status!.desiredHealthy == 0 ||
                     e.status!.disruptionsAllowed == 0
                 ? ResourceStatus.warning
-                : e.status!.currentHealthy < e.status!.desiredHealthy
+                : (e.status!.currentHealthy ?? 0) <
+                      (e.status!.desiredHealthy ?? 0)
                 ? ResourceStatus.danger
                 : ResourceStatus.success,
           ),
@@ -102,110 +102,108 @@ final resourcePodDisruptionBudget = Resource(
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
-  detailsItemBuilder: (BuildContext context, Resource resource, dynamic detailsItem) {
-    final item = detailsItem as IoK8sApiPolicyV1PodDisruptionBudget;
+  detailsItemBuilder:
+      (BuildContext context, Resource resource, dynamic detailsItem) {
+        final item = detailsItem as IoK8sApiPolicyV1PodDisruptionBudget;
 
-    return Column(
-      children: [
-        DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
-        DetailsItemConditions(conditions: item.status?.conditions),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Configuration',
-          details: [
-            DetailsItemModel(
-              name: 'Selector',
-              values: item.spec?.selector?.matchLabels?.entries
-                  .map(
-                    (matchLabels) => '${matchLabels.key}=${matchLabels.value}',
-                  )
-                  .toList(),
-            ),
-            DetailsItemModel(
-              name: 'Min. Available',
-              values: item.spec?.minAvailable,
-            ),
-            DetailsItemModel(
-              name: 'Max. Unavailable',
-              values: item.spec?.maxUnavailable,
-            ),
-          ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsItem(
-          title: 'Status',
-          details: [
-            DetailsItemModel(
-              name: 'Current Healthy',
-              values: item.status?.currentHealthy,
-            ),
-            DetailsItemModel(
-              name: 'Desired Healthy',
-              values: item.status?.desiredHealthy,
-            ),
-            DetailsItemModel(
-              name: 'Disruptions Allowed',
-              values: item.status?.disruptionsAllowed,
-            ),
-            DetailsItemModel(
-              name: 'Expected Pods',
-              values: item.status?.expectedPods,
-            ),
-            DetailsItemModel(
-              name: 'Observed Generation',
-              values: item.status?.observedGeneration,
-            ),
-          ],
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsResourcesPreview(
-          resource: resourcePod,
-          namespace: item.metadata?.namespace,
-          selector: getSelector(item.spec?.selector),
-          filter: null,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        DetailsResourcesPreview(
-          resource: resourceEvent,
-          namespace: item.metadata?.namespace,
-          selector:
-              'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
-          filter: null,
-        ),
-        const SizedBox(height: Constants.spacingMiddle),
-        AppPrometheusChartsWidget(
-          item: item,
-          toJson: resource.toJson,
-          defaultCharts: [
-            Chart(
-              title: 'Pods',
-              unit: '',
-              queries: [
-                Query(
-                  query:
-                      'kube_poddisruptionbudget_status_desired_healthy{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", poddisruptionbudget="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
-                  label: 'Desired',
+        return Column(
+          children: [
+            DetailsItemMetadata(kind: item.kind, metadata: item.metadata),
+            DetailsItemConditions(conditions: item.status?.conditions),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Configuration',
+              details: [
+                DetailsItemModel(
+                  name: 'Selector',
+                  values: item.spec?.selector?.matchLabels?.entries
+                      .map(
+                        (matchLabels) =>
+                            '${matchLabels.key}=${matchLabels.value}',
+                      )
+                      .toList(),
                 ),
-                Query(
-                  query:
-                      'kube_poddisruptionbudget_status_current_healthy{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", poddisruptionbudget="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
-                  label: 'Current',
+                DetailsItemModel(
+                  name: 'Min. Available',
+                  values: item.spec?.minAvailable,
                 ),
-                Query(
-                  query:
-                      'kube_poddisruptionbudget_status_pod_disruptions_allowed{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", poddisruptionbudget="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
-                  label: 'Allowed Disruptions',
+                DetailsItemModel(
+                  name: 'Max. Unavailable',
+                  values: item.spec?.maxUnavailable,
                 ),
-                Query(
-                  query:
-                      'kube_poddisruptionbudget_status_expected_pods{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", poddisruptionbudget="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
-                  label: 'Expected',
+              ],
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsItem(
+              title: 'Status',
+              details: [
+                DetailsItemModel(
+                  name: 'Current Healthy',
+                  values: item.status?.currentHealthy,
+                ),
+                DetailsItemModel(
+                  name: 'Desired Healthy',
+                  values: item.status?.desiredHealthy,
+                ),
+                DetailsItemModel(
+                  name: 'Disruptions Allowed',
+                  values: item.status?.disruptionsAllowed,
+                ),
+                DetailsItemModel(
+                  name: 'Expected Pods',
+                  values: item.status?.expectedPods,
+                ),
+                DetailsItemModel(
+                  name: 'Observed Generation',
+                  values: item.status?.observedGeneration,
+                ),
+              ],
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsResourcesPreview(
+              resource: resourcePod,
+              namespace: item.metadata?.namespace,
+              selector: getSelector(item.spec?.selector),
+              filter: null,
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+            DetailsResourcesPreview(
+              resource: resourceEvent,
+              namespace: item.metadata?.namespace,
+              selector:
+                  'fieldSelector=involvedObject.name=${item.metadata?.name ?? ''}',
+              filter: null,
+            ),
+            const SizedBox(height: Constants.spacingMiddle),
+            AppPrometheusChartsWidget(
+              item: item,
+              toJson: resource.toJson,
+              defaultCharts: [
+                Chart(
+                  title: 'Pods',
+                  unit: '',
+                  queries: [
+                    Query(
+                      query: 'kube_poddisruptionbudget_status_desired_healthy{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", poddisruptionbudget="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                      label: 'Desired',
+                    ),
+                    Query(
+                      query: 'kube_poddisruptionbudget_status_current_healthy{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", poddisruptionbudget="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                      label: 'Current',
+                    ),
+                    Query(
+                      query: 'kube_poddisruptionbudget_status_pod_disruptions_allowed{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", poddisruptionbudget="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                      label: 'Allowed Disruptions',
+                    ),
+                    Query(
+                      query: 'kube_poddisruptionbudget_status_expected_pods{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", poddisruptionbudget="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                      label: 'Expected',
+                    ),
+                  ],
                 ),
               ],
             ),
           ],
-        ),
-      ],
-    );
-  },
+        );
+      },
 );

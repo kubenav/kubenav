@@ -21,28 +21,35 @@ docker run \
   -v .:/output \
   -p 6443:6443 \
   --name kubenav-schemas \
-  rancher/k3s:v1.35.0-k3s1 server --disable-helm-controller --disable servicelb --disable traefik
+  rancher/k3s:v1.36.0-k3s1 server --disable-helm-controller --disable servicelb --disable traefik
 
 sleep 5
 export KUBECONFIG=kubeconfig.yaml
 sleep 5
 kubectl apply --server-side -f crds
 
-# Create a kubectl proxy to access the Kubernetes API of the kind cluster and
-# determine the IP address we can use for Docker
-nohup kubectl proxy --port=5555 --accept-hosts='^.*' > /dev/null 2>&1 &
-KUBECTL_PROXY_PID=$!
-
-sleep 5
+# Wait until all CRDs are "Established" before fetching the schema. A successful
+# "kubectl apply" only means the CRDs are stored, not that their schemas have
+# been aggregated into the OpenAPI document. The API server merges each CRD's
+# schema into "/openapi/v2" asynchronously, once the CRD becomes Established, so
+# fetching too early yields a spec that is missing (some of) the CRD
+# definitions, which later breaks the generated Dart code.
+kubectl wait --for=condition=Established --all crd --timeout=120s
 
 # Remove the schemas folder and create it again, then download the OpenAPI
-# schema from the Kubernetes API
+# schema from the Kubernetes API. We retry until the endpoint returns a
+# non-empty document instead of relying on a fixed sleep, which caused
+# "curl: (52) Empty reply from server" errors.
 rm -rf schemas
 mkdir -p schemas
-curl -vvv http://127.0.0.1:5555/openapi/v2 | jq . >schemas/schema.json
 
-# Stop the 'kubectl proxy' command
-kill $KUBECTL_PROXY_PID
+for i in $(seq 1 30); do
+  if kubectl get --raw /openapi/v2 | jq . >schemas/schema.json 2>/dev/null && [ -s schemas/schema.json ]; then
+    break
+  fi
+  echo "openapi/v2 not ready yet, retrying (${i})..."
+  sleep 2
+done
 
 # Delete the K3s cluster and the Kubeconfig
 docker rm -f kubenav-schemas

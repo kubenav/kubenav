@@ -76,11 +76,11 @@ class _CreateJobState extends State<CreateJob> {
         final Map<String, String> annotations = {
           'cronjob.kubernetes.io/instantiate': 'manual',
         };
-        if (widget.cronJob.spec?.jobTemplate.metadata?.annotations != null) {
+        if (widget.cronJob.spec.jobTemplate.metadata?.annotations != null) {
           for (final key
-              in widget.cronJob.spec!.jobTemplate.metadata!.annotations!.keys) {
+              in widget.cronJob.spec.jobTemplate.metadata!.annotations!.keys) {
             annotations[key] =
-                widget.cronJob.spec!.jobTemplate.metadata!.annotations![key]!;
+                widget.cronJob.spec.jobTemplate.metadata!.annotations![key]!;
           }
         }
 
@@ -90,7 +90,7 @@ class _CreateJobState extends State<CreateJob> {
           metadata: IoK8sApimachineryPkgApisMetaV1ObjectMeta(
             name: _nameController.text,
             namespace: widget.namespace,
-            labels: widget.cronJob.spec?.jobTemplate.metadata?.labels ?? {},
+            labels: widget.cronJob.spec.jobTemplate.metadata?.labels ?? {},
             annotations: annotations,
             ownerReferences: [
               IoK8sApimachineryPkgApisMetaV1OwnerReference(
@@ -103,7 +103,7 @@ class _CreateJobState extends State<CreateJob> {
               ),
             ],
           ),
-          spec: widget.cronJob.spec?.jobTemplate.spec,
+          spec: widget.cronJob.spec.jobTemplate.spec,
         );
         final String body = await compute(_createBody, job);
 

@@ -19,8 +19,7 @@ final resourceHorizontalPodAutoscaler = Resource(
   category: ResourceCategories.discoveryandloadbalancing,
   plural: 'HorizontalPodAutoscalers',
   singular: 'HorizontalPodAutoscaler',
-  description:
-      'A HorizontalPodAutoscaler automatically updates a workload resource, with the aim of automatically scaling the workload to match demand.',
+  description: 'A HorizontalPodAutoscaler automatically updates a workload resource, with the aim of automatically scaling the workload to match demand.',
   path: '/apis/autoscaling/v2',
   resource: 'horizontalpodautoscalers',
   scope: ResourceScope.namespaced,
@@ -36,8 +35,8 @@ final resourceHorizontalPodAutoscaler = Resource(
     return items.map((e) {
       final currentReplicas = e.status!.currentReplicas ?? 0;
       final desiredReplicas = e.status!.desiredReplicas;
-      final maxReplicas = e.spec?.maxReplicas ?? 0;
-      final minReplicas = e.spec?.minReplicas ?? 0;
+      final maxReplicas = e.spec.maxReplicas;
+      final minReplicas = e.spec.minReplicas;
 
       return ResourceItem(
         item: e,
@@ -45,7 +44,8 @@ final resourceHorizontalPodAutoscaler = Resource(
         status:
             currentReplicas == maxReplicas || currentReplicas != desiredReplicas
             ? ResourceStatus.warning
-            : currentReplicas < minReplicas || currentReplicas > maxReplicas
+            : currentReplicas < (minReplicas ?? 0) ||
+                  currentReplicas > maxReplicas
             ? ResourceStatus.danger
             : ResourceStatus.success,
       );
@@ -53,9 +53,8 @@ final resourceHorizontalPodAutoscaler = Resource(
   },
   decodeList: (String data) {
     final parsed = json.decode(data);
-    return IoK8sApiAutoscalingV2HorizontalPodAutoscalerList.fromJson(
-      parsed,
-    ).items;
+    return IoK8sApiAutoscalingV2HorizontalPodAutoscalerList.fromJson(parsed)
+        .items;
   },
   getName: (dynamic item) {
     return (item as IoK8sApiAutoscalingV2HorizontalPodAutoscaler)
@@ -91,10 +90,10 @@ final resourceHorizontalPodAutoscaler = Resource(
       status: status,
       details: [
         'Namespace: ${item.metadata?.namespace ?? '-'}',
-        'Reference: ${item.spec?.scaleTargetRef.kind ?? '-'}/${item.spec?.scaleTargetRef.name ?? '-'}',
+        'Reference: ${item.spec.scaleTargetRef.kind}/${item.spec.scaleTargetRef.name}',
         'Replicas: ${item.status?.currentReplicas ?? 0}/${item.status?.desiredReplicas}',
-        'Min. Pods: ${item.spec?.minReplicas ?? 0}',
-        'Max. Pods: ${item.spec?.maxReplicas ?? 0}',
+        'Min. Pods: ${item.spec.minReplicas}',
+        'Max. Pods: ${item.spec.maxReplicas}',
         'Age: ${getAge(item.metadata?.creationTimestamp)}',
       ],
     );
@@ -104,10 +103,10 @@ final resourceHorizontalPodAutoscaler = Resource(
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
-      'Reference: ${item.spec?.scaleTargetRef.kind ?? '-'}/${item.spec?.scaleTargetRef.name ?? '-'}',
+      'Reference: ${item.spec.scaleTargetRef.kind}/${item.spec.scaleTargetRef.name}',
       'Replicas: ${item.status?.currentReplicas ?? 0}/${item.status?.desiredReplicas}',
-      'Min. Pods: ${item.spec?.minReplicas ?? 0}',
-      'Max. Pods: ${item.spec?.maxReplicas ?? 0}',
+      'Min. Pods: ${item.spec.minReplicas}',
+      'Max. Pods: ${item.spec.maxReplicas}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
     ];
   },
@@ -137,23 +136,23 @@ final resourceHorizontalPodAutoscaler = Resource(
           details: [
             DetailsItemModel(
               name: 'Min. Replicas',
-              values: item.spec?.minReplicas,
+              values: item.spec.minReplicas,
             ),
             DetailsItemModel(
               name: 'Max. Replicas',
-              values: item.spec?.maxReplicas,
+              values: item.spec.maxReplicas,
             ),
             DetailsItemModel(
               name: 'Reference',
               values:
-                  '${item.spec?.scaleTargetRef.kind ?? '-'}/${item.spec?.scaleTargetRef.name ?? '-'}',
+                  '${item.spec.scaleTargetRef.kind}/${item.spec.scaleTargetRef.name}',
               onTap: (int index) {
                 goToReference(
                   context,
                   IoK8sApimachineryPkgApisMetaV1OwnerReference(
-                    apiVersion: item.spec?.scaleTargetRef.apiVersion ?? '',
-                    kind: item.spec?.scaleTargetRef.kind ?? '',
-                    name: item.spec?.scaleTargetRef.name ?? '',
+                    apiVersion: item.spec.scaleTargetRef.apiVersion ?? '',
+                    kind: item.spec.scaleTargetRef.kind,
+                    name: item.spec.scaleTargetRef.name,
                     uid: '',
                   ),
                   item.metadata?.namespace,
@@ -199,23 +198,19 @@ final resourceHorizontalPodAutoscaler = Resource(
               unit: '',
               queries: [
                 Query(
-                  query:
-                      'kube_horizontalpodautoscaler_status_desired_replicas{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", horizontalpodautoscaler="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                  query: 'kube_horizontalpodautoscaler_status_desired_replicas{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", horizontalpodautoscaler="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
                   label: 'Desired',
                 ),
                 Query(
-                  query:
-                      'kube_horizontalpodautoscaler_status_current_replicas{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", horizontalpodautoscaler="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                  query: 'kube_horizontalpodautoscaler_status_current_replicas{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", horizontalpodautoscaler="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
                   label: 'Current',
                 ),
                 Query(
-                  query:
-                      'kube_horizontalpodautoscaler_spec_min_replicas{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", horizontalpodautoscaler="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                  query: 'kube_horizontalpodautoscaler_spec_min_replicas{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", horizontalpodautoscaler="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
                   label: 'Min',
                 ),
                 Query(
-                  query:
-                      'kube_horizontalpodautoscaler_spec_max_replicas{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", horizontalpodautoscaler="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
+                  query: 'kube_horizontalpodautoscaler_spec_max_replicas{namespace="{{with .metadata}}{{with .namespace}}{{.}}{{end}}{{end}}", horizontalpodautoscaler="{{with .metadata}}{{with .name}}{{.}}{{end}}{{end}}"}',
                   label: 'Max',
                 ),
               ],
@@ -228,16 +223,16 @@ final resourceHorizontalPodAutoscaler = Resource(
 );
 
 List<Widget> _buildReference(IoK8sApiAutoscalingV2HorizontalPodAutoscaler hpa) {
-  if (hpa.spec!.scaleTargetRef.kind != 'Deployment' &&
-      hpa.spec!.scaleTargetRef.kind != 'StatefulSet') {
+  if (hpa.spec.scaleTargetRef.kind != 'Deployment' &&
+      hpa.spec.scaleTargetRef.kind != 'StatefulSet') {
     return [Container()];
   }
 
   return [
     DetailsResourcesPreview(
-      resource: kindToResource[hpa.spec!.scaleTargetRef.kind]!,
+      resource: kindToResource[hpa.spec.scaleTargetRef.kind]!,
       namespace: hpa.metadata?.namespace,
-      selector: 'fieldSelector=metadata.name=${hpa.spec!.scaleTargetRef.name}',
+      selector: 'fieldSelector=metadata.name=${hpa.spec.scaleTargetRef.name}',
       filter: null,
     ),
     const SizedBox(height: Constants.spacingMiddle),

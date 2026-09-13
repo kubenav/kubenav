@@ -24,8 +24,7 @@ final resourceCronJob = Resource(
   scope: ResourceScope.namespaced,
   additionalPrinterColumns: [],
   icon: 'cronjobs',
-  template:
-      '{"apiVersion":"batch/v1","kind":"CronJob","metadata":{"name":"","namespace":""},"spec":{"schedule":"5 4 * * *","suspend":false,"successfulJobsHistoryLimit":1,"failedJobsHistoryLimit":1,"jobTemplate":{"spec":{"backoffLimit":0,"template":{"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}}}',
+  template: '{"apiVersion":"batch/v1","kind":"CronJob","metadata":{"name":"","namespace":""},"spec":{"schedule":"5 4 * * *","suspend":false,"successfulJobsHistoryLimit":1,"failedJobsHistoryLimit":1,"jobTemplate":{"spec":{"backoffLimit":0,"template":{"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2"}]}}}}}}',
   decodeListData: (ResourcesListData data) {
     final parsed = json.decode(data.list);
     final items = IoK8sApiBatchV1CronJobList.fromJson(parsed).items;
@@ -35,7 +34,7 @@ final resourceCronJob = Resource(
           (e) => ResourceItem(
             item: e,
             metrics: null,
-            status: e.spec?.suspend == false
+            status: e.spec.suspend == false
                 ? ResourceStatus.success
                 : ResourceStatus.warning,
           ),
@@ -76,8 +75,8 @@ final resourceCronJob = Resource(
           status: status,
           details: [
             'Namespace: ${item.metadata?.namespace ?? '-'}',
-            'Schedule: ${item.spec?.schedule ?? '-'}',
-            'Suspend: ${item.spec?.suspend == false ? 'False' : 'True'}',
+            'Schedule: ${item.spec.schedule}',
+            'Suspend: ${item.spec.suspend == false ? 'False' : 'True'}',
             'Active: ${item.status?.active?.length ?? '-'}',
             'Last Schedule: ${getAge(item.status?.lastScheduleTime)}',
             'Age: ${getAge(item.metadata?.creationTimestamp)}',
@@ -89,8 +88,8 @@ final resourceCronJob = Resource(
 
     return [
       'Namespace: ${item.metadata?.namespace ?? '-'}',
-      'Schedule: ${item.spec?.schedule ?? '-'}',
-      'Suspend: ${item.spec?.suspend == false ? 'False' : 'True'}',
+      'Schedule: ${item.spec.schedule}',
+      'Suspend: ${item.spec.suspend == false ? 'False' : 'True'}',
       'Active: ${item.status?.active?.length ?? '-'}',
       'Last Schedule: ${getAge(item.status?.lastScheduleTime)}',
       'Age: ${getAge(item.metadata?.creationTimestamp)}',
@@ -107,35 +106,35 @@ final resourceCronJob = Resource(
             DetailsItem(
               title: 'Configuration',
               details: [
-                DetailsItemModel(name: 'Schedule', values: item.spec?.schedule),
+                DetailsItemModel(name: 'Schedule', values: item.spec.schedule),
                 DetailsItemModel(
                   name: 'Concurrency Policy',
-                  values: item.spec?.concurrencyPolicy?.value,
+                  values: item.spec.concurrencyPolicy?.value,
                 ),
                 DetailsItemModel(
                   name: 'Suspend',
                   values:
-                      item.spec?.suspend == null || item.spec?.suspend == false
+                      item.spec.suspend == null || item.spec.suspend == false
                       ? 'False'
                       : 'True',
                 ),
                 DetailsItemModel(
                   name: 'Successful Job History Limit',
-                  values: item.spec?.successfulJobsHistoryLimit,
+                  values: item.spec.successfulJobsHistoryLimit,
                 ),
                 DetailsItemModel(
                   name: 'Failed Job History Limit',
-                  values: item.spec?.failedJobsHistoryLimit,
+                  values: item.spec.failedJobsHistoryLimit,
                 ),
                 DetailsItemModel(
                   name: 'Starting Deadline Seconds',
-                  values: item.spec?.startingDeadlineSeconds,
+                  values: item.spec.startingDeadlineSeconds,
                 ),
                 DetailsItemModel(
                   name: 'Selector',
                   values: item
                       .spec
-                      ?.jobTemplate
+                      .jobTemplate
                       .spec
                       ?.selector
                       ?.matchLabels
@@ -147,19 +146,19 @@ final resourceCronJob = Resource(
                 ),
                 DetailsItemModel(
                   name: 'Parallelism',
-                  values: item.spec?.jobTemplate.spec?.parallelism,
+                  values: item.spec.jobTemplate.spec?.parallelism,
                 ),
                 DetailsItemModel(
                   name: 'Completions',
-                  values: item.spec?.jobTemplate.spec?.completions,
+                  values: item.spec.jobTemplate.spec?.completions,
                 ),
                 DetailsItemModel(
                   name: 'Active Deadline Seconds',
-                  values: item.spec?.jobTemplate.spec?.activeDeadlineSeconds,
+                  values: item.spec.jobTemplate.spec?.activeDeadlineSeconds,
                 ),
                 DetailsItemModel(
                   name: 'Backoff Limit',
-                  values: item.spec?.jobTemplate.spec?.backoffLimit,
+                  values: item.spec.jobTemplate.spec?.backoffLimit,
                 ),
               ],
             ),
