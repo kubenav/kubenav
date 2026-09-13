@@ -3,7 +3,6 @@ import java.io.FileInputStream
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
@@ -17,17 +16,14 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "io.kubenav.kubenav"
     compileSdk = flutter.compileSdkVersion
-    // Use 27.0.12077973 as NDK version instead of the default which is defined in ~/flutter/packages/flutter_tools/gradle/src/main/kotlin/FlutterExtension.kt
-    // ndkVersion = flutter.ndkVersion
-    ndkVersion = "27.0.12077973"
+    // Pin the NDK version explicitly instead of relying on flutter.ndkVersion
+    // (defined in ~/flutter/packages/flutter_tools/gradle/src/main/kotlin/FlutterExtension.kt).
+    // This value must match the version required by the bundled plugins.
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     defaultConfig {
@@ -77,6 +73,12 @@ android {
 
 flutter {
     source = "../.."
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
 }
 
 repositories {

@@ -103,23 +103,8 @@ class BookmarksRepository with ChangeNotifier {
   /// is lower then [current]) or from the bottom to the top ([start] is greater
   /// then [current]), to apply a different logic for the reordering.
   Future<void> reorder(int start, int current) async {
-    if (start < current) {
-      int end = current - 1;
-      Bookmark startItem = _bookmarks[start];
-      int i = 0;
-      int local = start;
-      do {
-        _bookmarks[local] = _bookmarks[++local];
-        i++;
-      } while (i < end - start);
-      _bookmarks[end] = startItem;
-    } else if (start > current) {
-      Bookmark startItem = _bookmarks[start];
-      for (int i = start; i > current; i--) {
-        _bookmarks[i] = _bookmarks[i - 1];
-      }
-      _bookmarks[current] = startItem;
-    }
+    final Bookmark startItem = _bookmarks.removeAt(start);
+    _bookmarks.insert(current, startItem);
 
     await _save();
     notifyListeners();

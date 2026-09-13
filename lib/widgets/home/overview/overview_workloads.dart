@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -91,7 +92,7 @@ class OverviewWorkloads extends StatelessWidget {
           height: 206,
           child: GridView.count(
             scrollDirection: Axis.horizontal,
-            cacheExtent: 1024,
+            scrollCacheExtent: const ScrollCacheExtent.pixels(1024),
             crossAxisCount: 2,
             childAspectRatio: 0.30,
             children: List.generate(resources.length, (index) {

@@ -511,7 +511,7 @@ class KubernetesService {
         return [];
       }
 
-      return compute(_decodeHelmListReleases, result);
+      return await compute(_decodeHelmListReleases, result);
     } catch (err) {
       Logger.log(
         'KubernetesService helmListReleases',
@@ -561,7 +561,7 @@ class KubernetesService {
         throw Exception('An unknown error occured');
       }
 
-      return compute(_decodeHelmGetRelease, result);
+      return await compute(_decodeHelmGetRelease, result);
     } catch (err) {
       Logger.log(
         'KubernetesService helmGetRelease',
@@ -618,7 +618,7 @@ class KubernetesService {
         return [];
       }
 
-      return compute(_decodeHelmListReleases, result);
+      return await compute(_decodeHelmListReleases, result);
     } catch (err) {
       Logger.log(
         'KubernetesService helmListReleaseHistory',

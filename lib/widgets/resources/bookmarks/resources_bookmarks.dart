@@ -141,7 +141,7 @@ class _ResourcesBookmarksState extends State<ResourcesBookmarks> {
                 shrinkWrap: true,
                 buildDefaultDragHandles: false,
                 physics: const NeverScrollableScrollPhysics(),
-                onReorder: (int start, int current) {
+                onReorderItem: (int start, int current) {
                   bookmarksRepository.reorder(start, current);
                 },
                 proxyDecorator:
