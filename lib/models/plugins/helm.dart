@@ -106,13 +106,18 @@ class Chart {
   });
 
   factory Chart.fromJson(Map<String, dynamic> data) {
+    final templates = data['templates'];
+
     return Chart(
       metadata: data.containsKey('metadata')
           ? Metadata.fromJson(data['metadata'])
           : null,
-      templates: data.containsKey('templates')
+      templates: templates is List
           ? List<File>.from(
-              data['templates'].map((template) => File.fromJson(template)),
+              templates.whereType<Map>().map(
+                (template) =>
+                    File.fromJson(Map<String, dynamic>.from(template)),
+              ),
             )
           : null,
       values: data.containsKey('values') ? data['values'] : null,

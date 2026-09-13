@@ -25,7 +25,7 @@ type client struct {
 
 func (c *client) ListReleases() ([]*release.Release, error) {
 	listClient := action.NewList(c.ActionConfig)
-	listClient.StateMask = action.ListDeployed
+	listClient.StateMask = action.ListAll
 
 	return listClient.Run()
 }
