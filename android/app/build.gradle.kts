@@ -15,7 +15,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "io.kubenav.kubenav"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     // Pin the NDK version explicitly instead of relying on flutter.ndkVersion
     // (defined in ~/flutter/packages/flutter_tools/gradle/src/main/kotlin/FlutterExtension.kt).
     // This value must match the version required by the bundled plugins.
@@ -32,7 +32,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
 
