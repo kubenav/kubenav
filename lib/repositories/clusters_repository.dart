@@ -394,27 +394,11 @@ class ClustersRepository with ChangeNotifier {
   /// because in some parts of the ui we are only displaying the top X clusters
   /// instead of all clusters.
   ///
-  /// We have to check if the user drags a cluster from top to bottom ([start]
-  /// is lower then [current]) or from the bottom to the top ([start] is greater
-  /// then [current]), to apply a different logic for the reordering.
+  /// The [current] index is already adjusted by the `onReorderItem` callback,
+  /// so we can move the item directly from [start] to [current].
   Future<void> reorderClusters(int start, int current) async {
-    if (start < current) {
-      int end = current - 1;
-      Cluster startItem = _clusters[start];
-      int i = 0;
-      int local = start;
-      do {
-        _clusters[local] = _clusters[++local];
-        i++;
-      } while (i < end - start);
-      _clusters[end] = startItem;
-    } else if (start > current) {
-      Cluster startItem = _clusters[start];
-      for (int i = start; i > current; i--) {
-        _clusters[i] = _clusters[i - 1];
-      }
-      _clusters[current] = startItem;
-    }
+    final Cluster startItem = _clusters.removeAt(start);
+    _clusters.insert(current, startItem);
 
     await _save();
     notifyListeners();

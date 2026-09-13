@@ -174,7 +174,7 @@ class _SettingsClustersState extends State<SettingsClusters> {
                 shrinkWrap: true,
                 buildDefaultDragHandles: false,
                 physics: const NeverScrollableScrollPhysics(),
-                onReorder: (int start, int current) {
+                onReorderItem: (int start, int current) {
                   clustersRepository.reorderClusters(start, current);
                 },
                 proxyDecorator:

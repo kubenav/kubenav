@@ -200,28 +200,12 @@ class AppRepository with ChangeNotifier {
   /// [reorderNamespaces] can be used to change the order of the namespaces
   /// (e.g. via ReorderableListView).
   ///
-  /// We have to check if the user drags a namespace from top to bottom ([start]
-  /// is lower then [current]) or from the bottom to the top ([start] is greater
-  /// then [current]), to apply a different logic for the reordering.
+  /// The [current] index is already adjusted by the `onReorderItem` callback,
+  /// so we can move the item directly from [start] to [current].
   Future<void> reorderNamespaces(int start, int current) async {
     try {
-      if (start < current) {
-        int end = current - 1;
-        String startItem = _settings.namespaces[start];
-        int i = 0;
-        int local = start;
-        do {
-          _settings.namespaces[local] = _settings.namespaces[++local];
-          i++;
-        } while (i < end - start);
-        _settings.namespaces[end] = startItem;
-      } else if (start > current) {
-        String startItem = _settings.namespaces[start];
-        for (int i = start; i > current; i--) {
-          _settings.namespaces[i] = _settings.namespaces[i - 1];
-        }
-        _settings.namespaces[current] = startItem;
-      }
+      final String startItem = _settings.namespaces.removeAt(start);
+      _settings.namespaces.insert(current, startItem);
 
       await _save();
       notifyListeners();
