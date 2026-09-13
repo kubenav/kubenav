@@ -67,6 +67,7 @@ class KubernetesService {
     final String result = await platform
         .invokeMethod('kubernetesRequest', <String, dynamic>{
           'clusterServer': cluster.clusterServer,
+          'clusterTLSServerName': cluster.clusterTLSServerName,
           'clusterCertificateAuthorityData':
               cluster.clusterCertificateAuthorityData,
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
@@ -241,6 +242,7 @@ class KubernetesService {
         'kubernetesGetLogs',
         <String, dynamic>{
           'clusterServer': cluster.clusterServer,
+          'clusterTLSServerName': cluster.clusterTLSServerName,
           'clusterCertificateAuthorityData':
               cluster.clusterCertificateAuthorityData,
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
@@ -364,6 +366,7 @@ class KubernetesService {
         body: json.encode({
           'contextName': cluster.name,
           'clusterServer': cluster.clusterServer,
+          'clusterTLSServerName': cluster.clusterTLSServerName,
           'clusterCertificateAuthorityData':
               cluster.clusterCertificateAuthorityData,
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
@@ -487,6 +490,7 @@ class KubernetesService {
         'helmListReleases',
         <String, dynamic>{
           'clusterServer': cluster.clusterServer,
+          'clusterTLSServerName': cluster.clusterTLSServerName,
           'clusterCertificateAuthorityData':
               cluster.clusterCertificateAuthorityData,
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
@@ -539,6 +543,7 @@ class KubernetesService {
         'helmGetRelease',
         <String, dynamic>{
           'clusterServer': cluster.clusterServer,
+          'clusterTLSServerName': cluster.clusterTLSServerName,
           'clusterCertificateAuthorityData':
               cluster.clusterCertificateAuthorityData,
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
@@ -589,6 +594,7 @@ class KubernetesService {
         'helmListReleaseHistory',
         <String, dynamic>{
           'clusterServer': cluster.clusterServer,
+          'clusterTLSServerName': cluster.clusterTLSServerName,
           'clusterCertificateAuthorityData':
               cluster.clusterCertificateAuthorityData,
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
@@ -646,6 +652,7 @@ class KubernetesService {
 
       await platform.invokeMethod('helmRollbackRelease', <String, dynamic>{
         'clusterServer': cluster.clusterServer,
+        'clusterTLSServerName': cluster.clusterTLSServerName,
         'clusterCertificateAuthorityData':
             cluster.clusterCertificateAuthorityData,
         'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
@@ -691,6 +698,7 @@ class KubernetesService {
         'helmUninstallRelease',
         <String, dynamic>{
           'clusterServer': cluster.clusterServer,
+          'clusterTLSServerName': cluster.clusterTLSServerName,
           'clusterCertificateAuthorityData':
               cluster.clusterCertificateAuthorityData,
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,
@@ -752,6 +760,7 @@ class KubernetesService {
         'prometheusGetData',
         <String, dynamic>{
           'clusterServer': cluster.clusterServer,
+          'clusterTLSServerName': cluster.clusterTLSServerName,
           'clusterCertificateAuthorityData':
               cluster.clusterCertificateAuthorityData,
           'clusterInsecureSkipTLSVerify': cluster.clusterInsecureSkipTLSVerify,

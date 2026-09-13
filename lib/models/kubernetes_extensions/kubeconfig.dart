@@ -133,6 +133,8 @@ class Kubeconfig {
                     clusterProviderType: clusterProviderType,
                     clusterProviderId: clusterProviderId,
                     clusterServer: cluster[0].cluster!.server!,
+                    clusterTLSServerName:
+                        cluster[0].cluster!.tlsServerName ?? '',
                     clusterCertificateAuthorityData:
                         cluster[0].cluster!.certificateAuthorityData ?? '',
                     clusterInsecureSkipTLSVerify:
@@ -181,11 +183,13 @@ class KubeconfigClusterCluster {
   String? certificateAuthorityData;
   bool? insecureSkipTlsVerify;
   String? server;
+  String? tlsServerName;
 
   KubeconfigClusterCluster({
     required this.certificateAuthorityData,
     required this.insecureSkipTlsVerify,
     required this.server,
+    required this.tlsServerName,
   });
 
   factory KubeconfigClusterCluster.fromJson(Map<String, dynamic> data) {
@@ -197,6 +201,9 @@ class KubeconfigClusterCluster {
           ? data['insecure-skip-tls-verify']
           : null,
       server: data.containsKey('server') ? data['server'] : null,
+      tlsServerName: data.containsKey('tls-server-name')
+          ? data['tls-server-name']
+          : null,
     );
   }
 
@@ -205,6 +212,7 @@ class KubeconfigClusterCluster {
       'certificate-authority-data': certificateAuthorityData,
       'insecure-skip-tls-verify': insecureSkipTlsVerify,
       'server': server,
+      'tls-server-name': tlsServerName,
     };
   }
 }

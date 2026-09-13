@@ -24,6 +24,7 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
   final _editClusterFormKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _clusterServerController = TextEditingController();
+  final _clusterTLSServerNameController = TextEditingController();
   final _clusterCertificateAuthorityDataController = TextEditingController();
   bool _clusterInsecureSkipTLSVerify = false;
   final _userClientCertificateDataController = TextEditingController();
@@ -69,6 +70,8 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
                 _clusterServerController.text.length - 1,
               )
             : _clusterServerController.text;
+        cluster.clusterTLSServerName = _clusterTLSServerNameController.text
+            .trim();
         cluster.clusterCertificateAuthorityData =
             _clusterCertificateAuthorityDataController.text.trim();
         cluster.clusterInsecureSkipTLSVerify = _clusterInsecureSkipTLSVerify;
@@ -112,6 +115,7 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
     super.initState();
     _nameController.text = widget.cluster.name;
     _clusterServerController.text = widget.cluster.clusterServer;
+    _clusterTLSServerNameController.text = widget.cluster.clusterTLSServerName;
     _clusterCertificateAuthorityDataController.text =
         widget.cluster.clusterCertificateAuthorityData;
     _clusterInsecureSkipTLSVerify = widget.cluster.clusterInsecureSkipTLSVerify;
@@ -128,6 +132,7 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
   void dispose() {
     _nameController.dispose();
     _clusterServerController.dispose();
+    _clusterTLSServerNameController.dispose();
     _clusterCertificateAuthorityDataController.dispose();
     _userClientCertificateDataController.dispose();
     _userClientKeyDataController.dispose();
@@ -191,6 +196,21 @@ class _SettingsEditClusterState extends State<SettingsEditCluster> {
                     labelText: 'Server',
                   ),
                   validator: _validator,
+                  onFieldSubmitted: (String value) {
+                    _editCluster();
+                  },
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                TextFormField(
+                  controller: _clusterTLSServerNameController,
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'TLS Server Name',
+                  ),
                   onFieldSubmitted: (String value) {
                     _editCluster();
                   },

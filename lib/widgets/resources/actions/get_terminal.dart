@@ -82,6 +82,7 @@ class _GetTerminalState extends State<GetTerminal> {
             'ws://localhost:14122/terminal?name=${widget.name}&namespace=${widget.namespace}&container=$_container&shell=$_shell',
             headers: <String, dynamic>{
               'X-CLUSTER-SERVER': cluster.clusterServer,
+              'X-CLUSTER-TLS-SERVER-NAME': cluster.clusterTLSServerName,
               'X-CLUSTER-CERTIFICATE-AUTHORITY-DATA':
                   cluster.clusterCertificateAuthorityData,
               'X-CLUSTER-INSECURE-SKIP-TLS-VERIFY':

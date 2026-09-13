@@ -33,14 +33,14 @@ type UninstallOptions struct {
 
 // HelmListReleases returns a list of Helm releases for the given cluster and
 // namespace. If an error occures during the process the error is returned.
-func HelmListReleases(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace string) (_ string, err error) {
+func HelmListReleases(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace string) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
-	restConfig, _, err := kube.NewClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
+	restConfig, _, err := kube.NewClient(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
 	if err != nil {
 		return "", err
 	}
@@ -70,14 +70,14 @@ func HelmListReleases(clusterServer, clusterCertificateAuthorityData string, clu
 // HelmGetRelease returns a single of Helm release. The Helm release is
 // identified by it's namespace, name and version. If an error occures during
 // the process the error is returned.
-func HelmGetRelease(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace, name string, version int64) (_ string, err error) {
+func HelmGetRelease(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace, name string, version int64) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
-	restConfig, _, err := kube.NewClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
+	restConfig, _, err := kube.NewClient(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
 	if err != nil {
 		return "", err
 	}
@@ -103,14 +103,14 @@ func HelmGetRelease(clusterServer, clusterCertificateAuthorityData string, clust
 // HelmListReleaseHistory returns the History of a release. The Helm release is
 // identified by it's namespace and name. If an error occures during the process
 // the error is returned.
-func HelmListReleaseHistory(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace, name string) (_ string, err error) {
+func HelmListReleaseHistory(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace, name string) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
-	restConfig, _, err := kube.NewClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
+	restConfig, _, err := kube.NewClient(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
 	if err != nil {
 		return "", err
 	}
@@ -140,14 +140,14 @@ func HelmListReleaseHistory(clusterServer, clusterCertificateAuthorityData strin
 // HelmRollbackRelease rolls back a Helm release. The Helm release is identified
 // by it's namespace and name. The Helm release is rolled back to the provided
 // version. If an error occures during the process the error is returned.
-func HelmRollbackRelease(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace, name string, version int64, options string) (err error) {
+func HelmRollbackRelease(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace, name string, version int64, options string) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
-	restConfig, _, err := kube.NewClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
+	restConfig, _, err := kube.NewClient(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
 	if err != nil {
 		return err
 	}
@@ -172,14 +172,14 @@ func HelmRollbackRelease(clusterServer, clusterCertificateAuthorityData string, 
 // identified by it's namespace and name. If an error occures during the process
 // the error is returned. If the operation was successful the uninstall message
 // is returned.
-func HelmUninstallRelease(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace, name string, options string) (_ string, err error) {
+func HelmUninstallRelease(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, namespace, name string, options string) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
-	restConfig, _, err := kube.NewClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
+	restConfig, _, err := kube.NewClient(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
 	if err != nil {
 		return "", err
 	}

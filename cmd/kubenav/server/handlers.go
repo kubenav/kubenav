@@ -78,7 +78,7 @@ func portForwardingHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		restConfig, clientset, err := kube.NewClient(request.ClusterServer, request.ClusterCertificateAuthorityData, request.ClusterInsecureSkipTLSVerify, request.UserClientCertificateData, request.UserClientKeyData, request.UserToken, request.UserUsername, request.UserPassword, request.Proxy, 0)
+		restConfig, clientset, err := kube.NewClient(request.ClusterServer, request.ClusterTLSServerName, request.ClusterCertificateAuthorityData, request.ClusterInsecureSkipTLSVerify, request.UserClientCertificateData, request.UserClientKeyData, request.UserToken, request.UserUsername, request.UserPassword, request.Proxy, 0)
 		if err != nil {
 			middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes API client: %s", err.Error()))
 			return
@@ -187,6 +187,7 @@ func terminalHandler(w http.ResponseWriter, r *http.Request) {
 	shell := r.URL.Query().Get("shell")
 
 	clusterServer := r.Header.Get("X-CLUSTER-SERVER")
+	clusterTLSServerName := r.Header.Get("X-CLUSTER-TLS-SERVER-NAME")
 	clusterCertificateAuthorityData := r.Header.Get("X-CLUSTER-CERTIFICATE-AUTHORITY-DATA")
 	clusterInsecureSkipTLSVerify := r.Header.Get("X-CLUSTER-INSECURE-SKIP-TLS-VERIFY")
 	userClientCertificateData := r.Header.Get("X-USER-CLIENT-CERTIFICATE-DATA")
@@ -201,7 +202,7 @@ func terminalHandler(w http.ResponseWriter, r *http.Request) {
 		parsedClusterInsecureSkipTLSVerify = false
 	}
 
-	restConfig, _, err := kube.NewClient(clusterServer, clusterCertificateAuthorityData, parsedClusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, 0)
+	restConfig, _, err := kube.NewClient(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, parsedClusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, 0)
 	if err != nil {
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes client: %s", err.Error()))
 		return
@@ -287,6 +288,7 @@ func logsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	clusterServer := r.Header.Get("X-CLUSTER-SERVER")
+	clusterTLSServerName := r.Header.Get("X-CLUSTER-TLS-SERVER-NAME")
 	clusterCertificateAuthorityData := r.Header.Get("X-CLUSTER-CERTIFICATE-AUTHORITY-DATA")
 	clusterInsecureSkipTLSVerify := r.Header.Get("X-CLUSTER-INSECURE-SKIP-TLS-VERIFY")
 	userClientCertificateData := r.Header.Get("X-USER-CLIENT-CERTIFICATE-DATA")
@@ -301,7 +303,7 @@ func logsHandler(w http.ResponseWriter, r *http.Request) {
 		parsedClusterInsecureSkipTLSVerify = false
 	}
 
-	_, clientset, err := kube.NewClient(clusterServer, clusterCertificateAuthorityData, parsedClusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, 0)
+	_, clientset, err := kube.NewClient(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, parsedClusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, 0)
 	if err != nil {
 		middleware.Errorf(w, r, err, http.StatusBadRequest, fmt.Sprintf("Could not create Kubernetes client: %s", err.Error()))
 		return

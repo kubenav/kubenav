@@ -26,6 +26,7 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
   final _addClusterOIDCFormKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _clusterServerController = TextEditingController();
+  final _clusterTLSServerNameController = TextEditingController();
   final _clusterCertificateAuthorityDataController = TextEditingController();
   bool _clusterInsecureSkipTLSVerify = false;
   final _namespaceController = TextEditingController();
@@ -68,6 +69,7 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
                   _clusterServerController.text.length - 1,
                 )
               : _clusterServerController.text,
+          clusterTLSServerName: _clusterTLSServerNameController.text.trim(),
           clusterCertificateAuthorityData:
               _clusterCertificateAuthorityDataController.text.trim(),
           clusterInsecureSkipTLSVerify: _clusterInsecureSkipTLSVerify,
@@ -158,6 +160,21 @@ class _SettingsAddClusterOIDCState extends State<SettingsAddClusterOIDC> {
                     labelText: 'Server',
                   ),
                   validator: _validator,
+                  onFieldSubmitted: (String value) {
+                    _addCluster();
+                  },
+                ),
+                const SizedBox(height: Constants.spacingMiddle),
+                TextFormField(
+                  controller: _clusterTLSServerNameController,
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'TLS Server Name',
+                  ),
                   onFieldSubmitted: (String value) {
                     _addCluster();
                   },

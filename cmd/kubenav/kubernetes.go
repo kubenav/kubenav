@@ -26,14 +26,14 @@ import (
 // The "requestMethod", "requestURL" and "requestBody" arguments are then used
 // for the actually request. E.g. to get all Pods from the Kubernetes API the
 // method "GET" and the URL "/api/v1/pods" can be used.
-func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, requestMethod, requestURL, requestBody string) (_ string, err error) {
+func KubernetesRequest(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, requestMethod, requestURL, requestBody string) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
-	_, clientset, err := kube.NewClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
+	_, clientset, err := kube.NewClient(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
 	if err != nil {
 		return "", err
 	}
@@ -84,14 +84,14 @@ func KubernetesRequest(clusterServer, clusterCertificateAuthorityData string, cl
 // are provided via the "names" parameter, which must be a comma separated list
 // of the Pod names. To use this function a user must also provide the
 // namespace, container, since and previous parameter.
-func KubernetesGetLogs(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, names, namespace, container string, since int64, filter string, previous bool) (_ string, err error) {
+func KubernetesGetLogs(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64, names, namespace, container string, since int64, filter string, previous bool) (_ string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("panic: %#v", r)
 		}
 	}()
 
-	_, clientset, err := kube.NewClient(clusterServer, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
+	_, clientset, err := kube.NewClient(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData, clusterInsecureSkipTLSVerify, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy, timeout)
 	if err != nil {
 		return "", err
 	}

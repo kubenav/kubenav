@@ -11,7 +11,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
-func NewClient(clusterServer, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64) (*rest.Config, *kubernetes.Clientset, error) {
+func NewClient(clusterServer, clusterTLSServerName, clusterCertificateAuthorityData string, clusterInsecureSkipTLSVerify bool, userClientCertificateData, userClientKeyData, userToken, userUsername, userPassword, proxy string, timeout int64) (*rest.Config, *kubernetes.Clientset, error) {
 	// If a token is provided, we must ensure that the username and password are
 	// empty. Otherwise the app would crash in such cases.
 	if userToken != "" {
@@ -51,6 +51,8 @@ users:
 		return nil, nil, err
 	}
 
+	restClient.ServerName = clusterTLSServerName
+
 	if timeout > 0 {
 		restClient.Timeout = time.Duration(timeout) * time.Second
 	}
@@ -61,7 +63,7 @@ users:
 			return nil, nil, err
 		}
 
-		restClient.Transport = &http.Transport{Proxy: http.ProxyURL(proxyURL)}
+		restClient.Proxy = http.ProxyURL(proxyURL)
 	}
 
 	clientset, err := kubernetes.NewForConfig(restClient)

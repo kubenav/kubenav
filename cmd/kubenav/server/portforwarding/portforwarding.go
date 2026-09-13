@@ -22,6 +22,7 @@ import (
 // well as the pod name and namespace and the port which should be forwarded.
 type CreateRequest struct {
 	ClusterServer                   string `json:"clusterServer"`
+	ClusterTLSServerName            string `json:"clusterTLSServerName"`
 	ClusterCertificateAuthorityData string `json:"clusterCertificateAuthorityData"`
 	ClusterInsecureSkipTLSVerify    bool   `json:"clusterInsecureSkipTLSVerify"`
 	UserClientCertificateData       string `json:"userClientCertificateData"`
