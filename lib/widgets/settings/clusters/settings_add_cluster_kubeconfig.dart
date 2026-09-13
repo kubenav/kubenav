@@ -52,14 +52,13 @@ class _SettingsAddClusterKubeconfigState
   /// the `type` and `allowedExtensions` fields again.
   Future<void> _selectKubeconfigFile() async {
     try {
-      FilePickerResult? result = await FilePicker.pickFiles(
-        allowMultiple: false,
+      final PlatformFile? result = await FilePicker.pickFile(
         // type: FileType.custom,
         // allowedExtensions: ['yaml', 'yml', 'txt', 'conf'],
       );
 
-      if (result != null && result.files.single.path != null) {
-        final File file = File(result.files.single.path!);
+      if (result != null && result.path != null) {
+        final File file = File(result.path!);
         final kubeconfigFileContent = await file.readAsString();
         _kubeconfigController.text = kubeconfigFileContent;
       }
