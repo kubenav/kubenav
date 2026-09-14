@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      discussions: write
     steps:
       - name: Release
         uses: softprops/action-gh-release@v3
@@ -19,3 +20,4 @@ jobs:
         with:
           generate_release_notes: true
           make_latest: true
+          discussion_category_name: announcements
